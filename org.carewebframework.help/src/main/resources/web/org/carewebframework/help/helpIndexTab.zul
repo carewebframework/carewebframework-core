@@ -1,0 +1,10 @@
+<vbox width="100%" vflex="1">
+	<label value="Quick find"/>
+	<textbox id="txtFind" width="90%"/>
+	<label value="Index"/>
+	<listbox id="lstKeywords" vflex="1">
+		<listitem label="Building index, please wait..."/>
+	</listbox>
+	<label value="Topics"/>
+	<listbox id="lstTopics" vflex="1"/>
+</vbox>

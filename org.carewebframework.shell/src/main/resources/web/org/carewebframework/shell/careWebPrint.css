@@ -1,0 +1,42 @@
+@CHARSET "UTF-8";
+
+/*
+	Style sheet for printing.
+*/
+
+.cwf-topToolbar {
+	display: none;
+}
+
+.cwf-pluginWithToolbar {
+	position: relative;
+	overflow: visible;
+}
+
+.cwf-pluginWithoutToolbar {
+	position: relative;
+	overflow: visible;
+}
+
+/* Used for print to ensure all data is on the page with 'shrink to fit' option */
+.z-window-embedded,.z-window-modal,.z-window-overlapped,.z-window-popup,.z-window-highlighted
+{
+	margin: 0;
+	overflow: visible !important;
+	padding: 0;
+	zoom: normal !important;
+}
+
+/* Used for print to ensure all data is on the page with 'shrink to fit' option */
+.z-window-modal-cnt-noborder,.z-window-highlighted-cnt-noborder,.z-window-embedded-cnt-noborder,.z-window-overlapped-cnt-noborder,.z-window-popup-cnt-noborder
+{
+	border: 0;
+	overflow: visible !important;
+	zoom: normal !important;
+}
+
+/* Hide paging header and footer */
+.z-grid-pgi-t,.z-grid-pgi-b,.z-listbox-pgi-t,.z-listbox-pgi-b 
+{
+	display: none !important;
+}

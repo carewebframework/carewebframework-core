@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page id="PrintPreview" title="${labels.cwf.print.dialog.title}" cacheable="false"?>
+<zk>
+	<window>
+		<div id="printPreviewRoot" />
+
+		<script type="text/javascript" defer="true">
+			window.cwf_print = opener.cwf_print;
+			opener.cwf_print = null;
+			window.cwf_print('#${printPreviewRoot.uuid}');
+		</script>
+
+	</window>
+
+</zk>

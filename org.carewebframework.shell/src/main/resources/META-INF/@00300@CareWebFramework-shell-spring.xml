@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:cwp="http://www.carewebframework.org/schema/plugin"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans
+		 http://www.springframework.org/schema/beans/spring-beans.xsd
+		 http://www.carewebframework.org/schema/plugin
+		 http://www.carewebframework.org/schema/plugin/plugin-extensions.xsd">
+
+	<beans profile="root">
+		<!-- helpRegistry: Represents a registry of all known CareWeb help modules. -->
+		<bean id="helpRegistry" class="org.carewebframework.shell.help.HelpRegistry"
+			factory-method="getInstance" />
+
+		<!-- pluginRegistry: Represents a registry of all known CareWeb plugins. -->
+		<bean id="pluginRegistry" class="org.carewebframework.shell.plugins.PluginRegistry"
+			factory-method="getInstance" />
+
+		<!-- themeRegistry: Represents a registry of all known CareWeb themes. -->
+		<bean id="themeRegistry" class="org.carewebframework.shell.themes.ThemeRegistry"
+			factory-method="getInstance" />
+
+		<!-- Default layout service implementation. -->
+		<bean id="layoutService" class="org.carewebframework.shell.layout.LayoutService">
+			<constructor-arg ref="propertyService" />
+		</bean>
+
+		<!-- Controller for about dialog. -->
+		<bean id="aboutDialogController" class="org.carewebframework.shell.AboutDialog"
+			scope="prototype">
+			<property name="icon" value="${labels.cwf.shell.about.icon}" />
+			<property name="source" value="${labels.cwf.shell.about.source}" />
+		</bean>
+
+		<!-- Stock UI component definitions follow. -->
+		<cwp:plugin id="_desktop"
+			class="org.carewebframework.shell.layout.UIElementDesktop" name="${labels.cwf.shell.plugin._desktop.name}"
+			description="${labels.cwf.shell.plugin._desktop.description}">
+			<cwp:serialization>
+				<cwp:property id="icon" type="icon"
+					name="${labels.cwf.shell.plugin._desktop.icon.name}" description="${labels.cwf.shell.plugin._desktop.icon.description}" />
+				<cwp:property id="title"
+					name="${labels.cwf.shell.plugin._desktop.title.name}" description="${labels.cwf.shell.plugin._desktop.title.description}" />
+				<cwp:property id="menubar" type="menuitems"
+					name="${labels.cwf.shell.plugin._desktop.menubar.name}" description="${labels.cwf.shell.plugin._desktop.menubar.description}" />
+				<cwp:property id="toolbar" type="children"
+					name="${labels.cwf.shell.plugin._desktop.toolbar.name}" description="${labels.cwf.shell.plugin._desktop.toolbar.description}" />
+			</cwp:serialization>
+		</cwp:plugin>
+
+		<cwp:plugin id="tabview" category="Stock Objects"
+			class="org.carewebframework.shell.layout.UIElementTabView" name="${labels.cwf.shell.plugin.tabview.name}"
+			description="${labels.cwf.shell.plugin.tabview.description}">
+			<cwp:serialization>
+				<cwp:property id="orientation" type="choice"
+					name="${labels.cwf.shell.plugin.tabview.orientation.name}" description="${labels.cwf.shell.plugin.tabview.orientation.description}">
+					<cwp:config>
+						<cwp:entry key="values">horizontal,vertical</cwp:entry>
+					</cwp:config>
+				</cwp:property>
+				<cwp:property id="color" type="color"
+					name="${labels.cwf.shell.plugin.tabview.color.name}" description="${labels.cwf.shell.plugin.tabview.color.description}" />
+				<cwp:property id="" type="tabs"
+					name="${labels.cwf.shell.plugin.tabview.tabs.name}" description="${labels.cwf.shell.plugin.tabview.tabs.description}" />
+			</cwp:serialization>
+		</cwp:plugin>
+
+		<cwp:plugin id="tabpane" category="Stock Objects"
+			class="org.carewebframework.shell.layout.UIElementTabPane" name="${labels.cwf.shell.plugin.tabpane.name}"
+			description="${labels.cwf.shell.plugin.tabpane.description}">
+			<cwp:serialization>
+				<cwp:property id="label"
+					default="${labels.cwf.shell.plugin.tabpane.label.default_}" name="${labels.cwf.shell.plugin.tabpane.label.name}"
+					description="${labels.cwf.shell.plugin.tabpane.label.description}" />
+				<cwp:property id="hint"
+					name="${labels.cwf.shell.plugin.tabpane.hint.name}" description="${labels.cwf.shell.plugin.tabpane.hint.description}" />
+				<cwp:property id="color" type="color"
+					name="${labels.cwf.shell.plugin.tabpane.color.name}" description="${labels.cwf.shell.plugin.tabpane.color.description}" />
+			</cwp:serialization>
+		</cwp:plugin>
+
+		<cwp:plugin id="tabmenu" category="Stock Objects"
+			class="org.carewebframework.shell.layout.UIElementTabMenu" name="${labels.cwf.shell.plugin.tabmenu.name}"
+			description="${labels.cwf.shell.plugin.tabmenu.description}">
+			<cwp:serialization>
+				<cwp:property id="" type="tabmenuitems"
+					name="${labels.cwf.shell.plugin.tabmenu.tabmenuitems.name}" description="${labels.cwf.shell.plugin.tabmenu.tabmenuitems.description}" />
+			</cwp:serialization>
+		</cwp:plugin>
+
+		<cwp:plugin id="tabmenupane" category="Stock Objects"
+			class="org.carewebframework.shell.layout.UIElementTabMenuPane" name="${labels.cwf.shell.plugin.tabmenupane.name}"
+			description="${labels.cwf.shell.plugin.tabmenupane.description}">
+			<cwp:serialization>
+				<cwp:property id="label"
+					default="${labels.cwf.shell.plugin.tabmenupane.label.default_}" name="${labels.cwf.shell.plugin.tabmenupane.label.name}"
+					description="${labels.cwf.shell.plugin.tabmenupane.label.description}" />
+				<cwp:property id="hint"
+					name="${labels.cwf.shell.plugin.tabmenupane.hint.name}" description="${labels.cwf.shell.plugin.tabmenupane.hint.description}" />
+				<cwp:property id="color" type="color"
+					name="${labels.cwf.shell.plugin.tabmenupane.color.name}" description="${labels.cwf.shell.plugin.tabmenupane.color.description}" />
+			</cwp:serialization>
+		</cwp:plugin>
+
+		<cwp:plugin id="treeview" category="Stock Objects"
+			class="org.carewebframework.shell.layout.UIElementTreeView" name="${labels.cwf.shell.plugin.treeview.name}"
+			description="${labels.cwf.shell.plugin.treeview.description}">
+			<cwp:serialization>
+				<cwp:property id="caption"
+					name="${labels.cwf.shell.plugin.treeview.caption.name}" description="${labels.cwf.shell.plugin.treeview.caption.description}" />
+				<cwp:property id="color"
+					name="${labels.cwf.shell.plugin.treeview.color.name}" type="color"
+					description="${labels.cwf.shell.plugin.treeview.color.description}" />
+				<cwp:property id="open"
+					name="${labels.cwf.shell.plugin.treeview.open.name}" type="boolean"
+					getter="isOpen" description="${labels.cwf.shell.plugin.treeview.open.description}">
+					<cwp:config>
+						<cwp:entry key="true">expanded</cwp:entry>
+						<cwp:entry key="false">collapsed</cwp:entry>
+					</cwp:config>
+				</cwp:property>
+				<cwp:property id=""
+					name="${labels.cwf.shell.plugin.treeview.nodes.name}" type="nodes"
+					description="${labels.cwf.shell.plugin.treeview.nodes.description}" />
+			</cwp:serialization>
+		</cwp:plugin>
+
+		<cwp:plugin id="treepane" category="Stock Objects"
+			class="org.carewebframework.shell.layout.UIElementTreePane" name="${labels.cwf.shell.plugin.treepane.name}"
+			description="${labels.cwf.shell.plugin.treepane.description}">
+			<cwp:serialization>
+				<cwp:property id="label"
+					default="${labels.cwf.shell.plugin.treepane.label.default_}" name="${labels.cwf.shell.plugin.treepane.label.name}"
+					description="${labels.cwf.shell.plugin.treepane.label.description}" />
+				<cwp:property id="hint"
+					name="${labels.cwf.shell.plugin.treepane.hint.name}" description="${labels.cwf.shell.plugin.treepane.hint.description}" />
+				<cwp:property id="color"
+					name="${labels.cwf.shell.plugin.treepane.color.name}" type="color"
+					description="${labels.cwf.shell.plugin.treepane.color.description}" />
+			</cwp:serialization>
+		</cwp:plugin>
+
+		<cwp:plugin id="splitterview" category="Stock Objects"
+			class="org.carewebframework.shell.layout.UIElementSplitterView" name="${labels.cwf.shell.plugin.splitterview.name}"
+			description="${labels.cwf.shell.plugin.splitterview.description}">
+			<cwp:serialization>
+				<cwp:property id="orientation" type="choice"
+					name="${labels.cwf.shell.plugin.splitterview.orientation.name}"
+					description="${labels.cwf.shell.plugin.splitterview.orientation.description}">
+					<cwp:config>
+						<cwp:entry key="values">horizontal,vertical</cwp:entry>
+					</cwp:config>
+				</cwp:property>
+				<cwp:property id="color" type="color"
+					name="${labels.cwf.shell.plugin.splitterview.color.name}" description="${labels.cwf.shell.plugin.splitterview.color.description}" />
+				<cwp:property id="" type="panes"
+					name="${labels.cwf.shell.plugin.splitterview.panes.name}" description="${labels.cwf.shell.plugin.splitterview.panes.description}" />
+			</cwp:serialization>
+		</cwp:plugin>
+
+		<cwp:plugin id="splitterpane" category="Stock Objects"
+			class="org.carewebframework.shell.layout.UIElementSplitterPane" name="${labels.cwf.shell.plugin.splitterpane.name}"
+			description="${labels.cwf.shell.plugin.splitterpane.description}">
+			<cwp:serialization>
+				<cwp:property id="caption"
+					name="${labels.cwf.shell.plugin.splitterpane.caption.name}" description="${labels.cwf.shell.plugin.splitterpane.caption.description}" />
+				<cwp:property id="color" type="color"
+					name="${labels.cwf.shell.plugin.splitterpane.color.name}" description="${labels.cwf.shell.plugin.splitterpane.color.description}" />
+				<cwp:property id="relative" type="boolean" getter="isRelative"
+					name="${labels.cwf.shell.plugin.splitterpane.relative.name}" description="${labels.cwf.shell.plugin.splitterpane.relative.description}">
+					<cwp:config>
+						<cwp:entry key="true">yes</cwp:entry>
+						<cwp:entry key="false">no</cwp:entry>
+					</cwp:config>
+				</cwp:property>
+				<cwp:property id="size" type="double" editable="false"
+					name="${labels.cwf.shell.plugin.splitterpane.size.name}" description="${labels.cwf.shell.plugin.splitterpane.size.description}" />
+			</cwp:serialization>
+		</cwp:plugin>
+
+		<cwp:plugin id="stepview" category="Stock Objects"
+			class="org.carewebframework.shell.layout.UIElementStepView" name="${labels.cwf.shell.plugin.stepview.name}"
+			description="${labels.cwf.shell.plugin.stepview.description}">
+			<cwp:serialization>
+				<cwp:property id="caption"
+					name="${labels.cwf.shell.plugin.stepview.caption.name}" description="${labels.cwf.shell.plugin.stepview.caption.description}" />
+				<cwp:property id="color" type="color"
+					name="${labels.cwf.shell.plugin.stepview.color.name}" description="${labels.cwf.shell.plugin.stepview.color.description}" />
+				<cwp:property id="noHome" type="boolean"
+					name="${labels.cwf.shell.plugin.stepview.nohome.name}" description="${labels.cwf.shell.plugin.stepview.nohome.description}">
+					<cwp:config>
+						<cwp:entry key="true">hide</cwp:entry>
+						<cwp:entry key="false">show</cwp:entry>
+					</cwp:config>
+				</cwp:property>
+				<cwp:property id="noNavigation" type="boolean"
+					name="${labels.cwf.shell.plugin.stepview.nonav.name}" description="${labels.cwf.shell.plugin.stepview.nonav.description}">
+					<cwp:config>
+						<cwp:entry key="true">hide</cwp:entry>
+						<cwp:entry key="false">show</cwp:entry>
+					</cwp:config>
+				</cwp:property>
+				<cwp:property id="" type="step"
+					name="${labels.cwf.shell.plugin.stepview.step.name}" description="${labels.cwf.shell.plugin.stepview.step.description}" />
+			</cwp:serialization>
+		</cwp:plugin>
+
+		<cwp:plugin id="steppane" category="Stock Objects"
+			class="org.carewebframework.shell.layout.UIElementStepPane" name="${labels.cwf.shell.plugin.steppane.name}"
+			description="${labels.cwf.shell.plugin.steppane.description}">
+			<cwp:serialization>
+				<cwp:property id="label"
+					name="${labels.cwf.shell.plugin.steppane.label.name}" description="${labels.cwf.shell.plugin.steppane.label.description}" />
+				<cwp:property id="icon" type="icon"
+					name="${labels.cwf.shell.plugin.steppane.icon.name}" description="${labels.cwf.shell.plugin.steppane.icon.description}" />
+				<cwp:property id="hint"
+					name="${labels.cwf.shell.plugin.steppane.hint.name}" description="${labels.cwf.shell.plugin.steppane.hint.description}" />
+				<cwp:property id="color" type="color"
+					name="${labels.cwf.shell.plugin.steppane.color.name}" description="${labels.cwf.shell.plugin.steppane.color.description}" />
+			</cwp:serialization>
+		</cwp:plugin>
+
+		<cwp:plugin id="toolbar" category="Stock Objects"
+			class="org.carewebframework.shell.layout.UIElementToolbar" name="${labels.cwf.shell.plugin.toolbar.name}"
+			description="${labels.cwf.shell.plugin.toolbar.description}">
+			<cwp:serialization>
+				<cwp:property id=""
+					name="${labels.cwf.shell.plugin.toolbar.children.name}" type="children"
+					description="${labels.cwf.shell.plugin.toolbar.children.description}" />
+			</cwp:serialization>
+		</cwp:plugin>
+
+		<cwp:plugin id="_toolbar" category="Internal"
+			class="org.carewebframework.shell.layout.UIElementToolbar" name="${labels.cwf.shell.plugin._toolbar.name}"
+			description="${labels.cwf.shell.plugin.toolbar.description}">
+			<cwp:serialization>
+				<cwp:property id="" type="children"
+					name="${labels.cwf.shell.plugin._toolbar.children.name}" description="${labels.cwf.shell.plugin._toolbar.children.description}" />
+			</cwp:serialization>
+		</cwp:plugin>
+
+		<cwp:plugin id="menubar" category="Stock Objects"
+			class="org.carewebframework.shell.layout.UIElementMenubar" name="${labels.cwf.shell.plugin.menubar.name}"
+			description="${labels.cwf.shell.plugin.menubar.description}">
+			<cwp:serialization>
+				<cwp:property id=""
+					name="${labels.cwf.shell.plugin.menubar.menuitems.name}" type="menuitems"
+					description="${labels.cwf.shell.plugin.menubar.menuitems.description}" />
+			</cwp:serialization>
+		</cwp:plugin>
+
+		<cwp:plugin id="_menubar" category="Internal"
+			class="org.carewebframework.shell.layout.UIElementMenubar" name="${labels.cwf.shell.plugin._menubar.name}"
+			description="${labels.cwf.shell.plugin._menubar.description}">
+			<cwp:serialization>
+				<cwp:property id="" type="menuitems"
+					name="${labels.cwf.shell.plugin._menubar.menuitems.name}" description="${labels.cwf.shell.plugin._menubar.menuitems.description}" />
+			</cwp:serialization>
+		</cwp:plugin>
+
+		<cwp:plugin id="menuitem" category="Stock Objects"
+			class="org.carewebframework.shell.layout.UIElementMenuItem" name="${labels.cwf.shell.plugin.menuitem.name}"
+			description="${labels.cwf.shell.plugin.menuitem.description}">
+			<cwp:serialization>
+				<cwp:property id="label"
+					default="${labels.cwf.shell.plugin.menuitem.label.default_}" name="${labels.cwf.shell.plugin.menuitem.label.name}"
+					description="${labels.cwf.shell.plugin.menuitem.label.description}" />
+				<cwp:property id="hint"
+					name="${labels.cwf.shell.plugin.menuitem.hint.name}" description="${labels.cwf.shell.plugin.menuitem.hint.description}" />
+				<cwp:property id="action" type="action"
+					name="${labels.cwf.shell.plugin.menuitem.action.name}" description="${labels.cwf.shell.plugin.menuitem.action.description}" />
+				<cwp:property id="color" type="color"
+					name="${labels.cwf.shell.plugin.menuitem.color.name}" description="${labels.cwf.shell.plugin.menuitem.color.description}" />
+			</cwp:serialization>
+		</cwp:plugin>
+
+		<cwp:plugin id="frame" category="Stock Objects"
+			class="org.carewebframework.shell.layout.UIElementFrame" name="${labels.cwf.shell.plugin.frame.name}"
+			description="${labels.cwf.shell.plugin.frame.description}">
+			<cwp:serialization>
+				<cwp:property id="url" name="${labels.cwf.shell.plugin.frame.url.name}"
+					description="${labels.cwf.shell.plugin.frame.url.description}" />
+			</cwp:serialization>
+		</cwp:plugin>
+
+		<cwp:plugin id="button" category="Stock Objects"
+			class="org.carewebframework.shell.layout.UIElementButton" name="${labels.cwf.shell.plugin.button.name}"
+			description="${labels.cwf.shell.plugin.button.description}">
+			<cwp:serialization>
+				<cwp:property id="label"
+					default="${labels.cwf.shell.plugin.button.label.default_}" name="${labels.cwf.shell.plugin.button.label.name}"
+					description="${labels.cwf.shell.plugin.button.label.description}" />
+				<cwp:property id="icon" type="icon"
+					name="${labels.cwf.shell.plugin.button.icon.name}" description="${labels.cwf.shell.plugin.button.icon.description}" />
+				<cwp:property id="hint"
+					name="${labels.cwf.shell.plugin.button.hint.name}" description="${labels.cwf.shell.plugin.button.hint.description}" />
+				<cwp:property id="action" type="action"
+					name="${labels.cwf.shell.plugin.button.action.name}" description="${labels.cwf.shell.plugin.button.action.description}" />
+			</cwp:serialization>
+		</cwp:plugin>
+
+		<cwp:plugin id="link" category="Stock Objects"
+			class="org.carewebframework.shell.layout.UIElementLink" name="${labels.cwf.shell.plugin.link.name}"
+			description="${labels.cwf.shell.plugin.link.description}">
+			<cwp:serialization>
+				<cwp:property id="label"
+					default="${labels.cwf.shell.plugin.link.label.default_}" name="${labels.cwf.shell.plugin.link.label.name}"
+					description="${labels.cwf.shell.plugin.link.label.description}" />
+				<cwp:property id="color" type="color"
+					default="${labels.cwf.shell.plugin.link.color.default_}" name="${labels.cwf.shell.plugin.link.color.name}"
+					description="${labels.cwf.shell.plugin.link.color.description}" />
+				<cwp:property id="icon" type="icon"
+					name="${labels.cwf.shell.plugin.link.icon.name}" description="${labels.cwf.shell.plugin.link.icon.description}" />
+				<cwp:property id="hint" name="${labels.cwf.shell.plugin.link.hint.name}"
+					description="${labels.cwf.shell.plugin.link.hint.description}" />
+				<cwp:property id="action" type="action"
+					name="${labels.cwf.shell.plugin.link.action.name}" description="${labels.cwf.shell.plugin.link.action.description}" />
+			</cwp:serialization>
+		</cwp:plugin>
+
+		<cwp:plugin id="layout"
+			class="org.carewebframework.shell.layout.UIElementLayout" name="${labels.cwf.shell.plugin.layout.name}"
+			description="${labels.cwf.shell.plugin.layout.description}">
+			<cwp:serialization>
+				<cwp:property id="shared" type="boolean" editable="false"
+					name="${labels.cwf.shell.plugin.layout.shared.name}" description="${labels.cwf.shell.plugin.layout.shared.description}" />
+				<cwp:property id="layoutName" editable="false"
+					name="${labels.cwf.shell.plugin.layout.layoutname.name}" description="${labels.cwf.shell.plugin.layout.layoutname.description}" />
+				<cwp:property id="linked" type="boolean"
+					name="${labels.cwf.shell.plugin.layout.linked.name}" description="${labels.cwf.shell.plugin.layout.linked.description}" />
+			</cwp:serialization>
+		</cwp:plugin>
+
+	</beans>
+
+	<beans profile="desktop">
+
+		<!-- A registry of startup routines. -->
+		<bean id="careWebStartup" class="org.carewebframework.shell.CareWebStartup" />
+
+	</beans>
+</beans>

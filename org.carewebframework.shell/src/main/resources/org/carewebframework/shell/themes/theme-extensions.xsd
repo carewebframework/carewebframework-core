@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema 
+	xmlns="http://www.carewebframework.org/schema/theme"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	targetNamespace="http://www.carewebframework.org/schema/theme"
+	elementFormDefault="qualified" 
+	attributeFormDefault="unqualified">
+	<xsd:import namespace="http://www.springframework.org/schema/beans" />
+	<xsd:element name="theme">
+		<xsd:complexType>
+			<xsd:complexContent>
+				<xsd:extension base="beans:identifiedType">
+					<xsd:choice />
+					<xsd:attribute name="url" use="required" type="xsd:anyURI" />
+					<xsd:attribute name="description" use="optional" />
+					<xsd:attribute name="creator" use="optional" />
+					<xsd:attribute name="copyright" use="optional" />
+					<xsd:attribute name="version" use="optional" />
+					<xsd:attribute name="released" use="optional" type="xsd:date" />
+				</xsd:extension>
+			</xsd:complexContent>
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>

@@ -1,0 +1,3 @@
+http\://www.carewebframework.org/schema/plugin/plugin-extensions.xsd=org/carewebframework/shell/plugins/plugin-extensions.xsd
+http\://www.carewebframework.org/schema/help/help-extensions.xsd=org/carewebframework/shell/help/help-extensions.xsd
+http\://www.carewebframework.org/schema/theme/theme-extensions.xsd=org/carewebframework/shell/themes/theme-extensions.xsd

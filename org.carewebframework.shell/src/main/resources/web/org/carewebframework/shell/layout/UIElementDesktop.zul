@@ -1,0 +1,32 @@
+<window height="100%" width="100%" border="none">
+	<caption sclass="cwf-desktop-titlebar">
+		<hbox id="titlebar" width="100%" spacing="3px">
+			<cell style="vertical-align:middle;padding-right:4px" visible="false">
+				<image id="icon" />
+			</cell>
+			<cell id="titleCell" sclass="cwf-desktop-title">
+				<label id="title" value="${labels.cwf.shell.plugin._desktop.title}" />
+			</cell>
+			<cell>
+				<menubar id="menubar1"
+					style="border:none;background:none" />
+			</cell>
+			<cell>
+				<menubar id="menubar2"
+					style="border:none;background:none">
+					<menu id="helpMenu" label="${labels.cwf.shell.plugin._desktop.menu.help.label}">
+						<menupopup id="helpMenuRoot">
+							<menuitem id="mnuAbout" label="${labels.cwf.shell.plugin._desktop.menu.about.label}" />
+							<menuitem id="mnuTOC" visible="false" label="${labels.cwf.shell.plugin._desktop.menu.toc.label}" />
+							<menuseparator id="helpSeparator" visible="false" />
+						</menupopup>
+					</menu>
+				</menubar>
+			</cell>
+			<cell hflex="1">
+				<toolbar id="toolbar1" align="end" height="100%" />
+			</cell>
+		</hbox>
+	</caption>
+	<div id="desktopRoot" height="100%" width="100%" />
+</window>

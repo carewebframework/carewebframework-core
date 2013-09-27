@@ -1,0 +1,23 @@
+<zk xmlns="http://www.zkoss.org/2005/zul"
+	xmlns:h="http://www.w3.org/1999/xhtml" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+
+<window closable="true" maximizable="true" minimizable="false" sizable="true" border="normal"
+	minheight="50" minwidth="200"
+	left="50%" top="50%"
+	title="Popup Message"
+	contentSclass="cwf-popup"
+	zclass="z-window-highlighted"
+	style="position:absolute">
+		<label id="messagetext" value="message text" multiline="true"/>
+</window>
+
+<style>
+	.cwf-popup {
+		background:yellow;
+		text-align:center;
+	}
+</style>
+
+</zk>

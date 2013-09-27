@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:cwp="http://www.carewebframework.org/schema/plugin"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.carewebframework.org/schema/plugin
+		http://www.carewebframework.org/schema/plugin/plugin-extensions.xsd">
+
+	<beans profile="root-test">
+
+		<cwp:plugin id="testplugin1" name="Test Plugin 1"
+			url="~./org/carewebframework/shell/plugins/testplugin1.zul"
+			description="Plugin for unit tests">
+			<cwp:serialization>
+				<cwp:property id="prop1" name="Test Property #1"
+					description="Test text property" />
+				<cwp:property id="prop2" name="Test Property #2" type="integer"
+					description="Test integer property" />
+				<cwp:property id="prop3" name="Test Property #3" type="boolean"
+					description="Test Boolean property" getter="isProp3" />
+			</cwp:serialization>
+		</cwp:plugin>
+
+	</beans>
+
+</beans>

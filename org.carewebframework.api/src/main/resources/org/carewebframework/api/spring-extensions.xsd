@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns="http://www.carewebframework.org/schema/spring"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+	targetNamespace="http://www.carewebframework.org/schema/spring"
+	elementFormDefault="qualified">
+
+	<xsd:attribute name="override" type="OVERRIDE_TYPE">
+		<xsd:annotation>
+			<xsd:documentation>
+	Determines the behavior when a bean id collision occurs:
+		default : Use the default behavior defined by the application context.
+		always  : Always override any existing definition.
+		never   : Never override any existing definition, raising an exception when a collision occurs.
+		ignore  : Never override any existing definition, silently ignoring any collisions.
+			</xsd:documentation>
+		</xsd:annotation>
+	</xsd:attribute>
+
+	<xsd:simpleType name="OVERRIDE_TYPE">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="default" />
+			<xsd:enumeration value="always" />
+			<xsd:enumeration value="never" />
+			<xsd:enumeration value="ignore" />
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:attribute name="final" type="xsd:boolean" default="false">
+		<xsd:annotation>
+			<xsd:documentation>
+	If set to true, any attempt to override the associated bean will fail.
+			</xsd:documentation>
+		</xsd:annotation>
+	</xsd:attribute>
+
+</xsd:schema>

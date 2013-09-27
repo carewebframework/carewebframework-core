@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?taglib uri="http://www.carewebframework.org/tld/security" prefix="sec"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:h="http://www.w3.org/1999/xhtml"
+	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd ">
+		
+		<!-- Current Configuration assumes you have authenticated to see this resource (i.e. unauthenticated requests are mapped 
+			 to login screen.  However, this could change... we may eventually want to allow access to 'free' resources / info -->
+		<panel id="panel" framable="true" title="Access Denied">
+			<caption>
+				<div id="div" align="center">
+					<label if="${sec:isAuthenticated()}" value="${sec:getUsername()}, you do not have authorization to view this resource"/>
+					<label unless="${sec:isAuthenticated()}" value="You do not have authorization to view this resource, please login"/>
+				</div>
+			</caption>
+			<toolbar mold="panel" align="center">
+				<button id="btnLogin" label="Login" href="/login/loginWindow.zul" unless="${sec:isAuthenticated()}"/>
+				<button id="btnHome" label="Home" href="/" if="${sec:isAuthenticated()}"/>
+				<button id="btnLogout" label="logout" if="${sec:isAuthenticated()}" href="/logout" />
+			</toolbar>
+		</panel>
+</zk>

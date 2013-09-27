@@ -1,0 +1,65 @@
+<zk>
+	<window border="normal" height="500px"
+		width="450px" position="center"
+		use="org.carewebframework.shell.designer.LayoutDesigner">
+		<caption label="${labels.cwf.shell.designer.layout.designer.caption}" style="font-weight:bold"/>
+		<toolbar>
+			<toolbarbutton id="btnCut"
+				tooltiptext="${labels.cwf.shell.designer.layout.designer.cut.hint}"
+				style="background:transparent"
+				image="~./org/carewebframework/shell/images/cut.png" />
+			<toolbarbutton id="btnCopy"
+				tooltiptext="${labels.cwf.shell.designer.layout.designer.copy.hint}"
+				style="background:transparent"
+				image="~./org/carewebframework/shell/images/copy.png" />
+			<toolbarbutton id="btnPaste"
+				tooltiptext="${labels.cwf.shell.designer.layout.designer.paste.hint}"
+				style="background:transparent"
+				image="~./org/carewebframework/shell/images/paste.png" />
+			<toolbarbutton id="btnView"
+				tooltiptext="${labels.cwf.shell.designer.layout.designer.view.hint}"
+				style="background:transparent"
+				image="~./org/carewebframework/shell/images/view.png" />
+			<separator orient="vertical" width="15px" />
+			<toolbarbutton id="btnAdd"
+				tooltiptext="${labels.cwf.shell.designer.layout.designer.add.hint}"
+				style="background:transparent"
+				image="~./org/carewebframework/shell/images/add.png" />
+			<toolbarbutton id="btnDelete"
+				tooltiptext="${labels.cwf.shell.designer.layout.designer.delete.hint}"
+				style="background:transparent"
+				image="~./org/carewebframework/shell/images/delete.png" />
+			<separator orient="vertical" width="15px" />
+			<toolbarbutton id="btnLeft"
+				tooltiptext="${labels.cwf.shell.designer.layout.designer.promote.hint}"
+				style="background:transparent"
+				image="~./org/carewebframework/shell/images/arrowL.png" />
+			<toolbarbutton id="btnRight"
+				tooltiptext="${labels.cwf.shell.designer.layout.designer.demote.hint}"
+				style="background:transparent"
+				image="~./org/carewebframework/shell/images/arrowR.png" />
+			<separator orient="vertical" width="15px" />
+			<toolbarbutton id="btnProperties"
+				tooltiptext="${labels.cwf.shell.designer.layout.designer.properties.hint}"
+				style="background:transparent"
+				image="~./org/carewebframework/shell/images/properties.png" />
+			<toolbarbutton id="btnAbout"
+				tooltiptext="${labels.cwf.shell.designer.layout.designer.about.hint}"
+				style="background:transparent"
+				image="~./org/carewebframework/shell/images/about.png" />
+			<separator orient="vertical" width="15px" />
+			<toolbarbutton id="btnToFront"
+				tooltiptext="${labels.cwf.shell.designer.layout.designer.tofront.hint}"
+				style="background:transparent"
+				image="~./org/carewebframework/shell/images/bringToFront.png" />
+			<toolbarbutton id="btnRefresh"
+				tooltiptext="${labels.cwf.shell.designer.layout.designer.refresh.hint}"
+				style="background:transparent"
+				image="~./org/carewebframework/shell/images/refresh.png" />
+		</toolbar>
+		<tree id="tree" vflex="true" zclass="z-dottree"
+			style="text-overflow:ellipsis;white-space:nowrap;overflow:auto;border:none;margin-bottom:12px">
+			<treechildren />
+		</tree>
+	</window>
+</zk>

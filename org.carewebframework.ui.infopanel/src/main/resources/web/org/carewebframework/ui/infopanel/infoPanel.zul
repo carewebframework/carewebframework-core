@@ -1,0 +1,46 @@
+<zk xmlns="http://www.zkoss.org/2005/zul"
+	xmlns:w="http://www.zkoss.org/2005/zk/client"
+	xmlns:h="http://www.w3.org/1999/xhtml"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+	<style
+		src="~./org/carewebframework/ui/infopanel/infoPanel.css" />
+
+	<panel id="infoPanel" framable="false" height="100%" width="100%"
+		sclass="cwf-infopanel" border="normal"
+		apply="${infoPanelController}">
+		<toolbar zclass="z-panel">
+			<menubar id="menubar" sclass="cwf-infopanel-zenMenu" height="20px"/>
+		</toolbar>
+		<panelchildren>
+			<borderlayout width="100%" height="100%">
+				<center autoscroll="true" border="none"
+					style="overflow:auto">
+					<div id="dropRoot" style="padding:5px" hflex="1" vflex="1"/>
+				</center>
+				<south id="alertPanel" size="35px"
+					flex="true" border="none"
+					style="overflow:auto" visible="false">
+					<div hflex="1" vflex="1">
+						<toolbar id="alertToolbar"
+							zclass="z-panel-header" height="10px"
+							sclass="cwf-infopanel-zenMenu" style="padding-bottom:15px"
+							forward="onDoubleClick=alertIcon.onClick">
+							<span style="float:left">
+								<label id="alertTitle"
+									value="Alert Manager" />
+							</span>
+							<span id="alertIcon" style="float:right"
+								zclass="z-borderlayout-icon" />
+						</toolbar>
+						<grid id="alertGrid" mold="paging" vflex="1" 
+							pagingPosition="top" sclass="cwf-infopanel-alertgrid"
+							pageSize="1">
+							<rows id="alertRoot" />
+						</grid>
+					</div>
+				</south>
+			</borderlayout>
+		</panelchildren>
+	</panel>
+</zk>

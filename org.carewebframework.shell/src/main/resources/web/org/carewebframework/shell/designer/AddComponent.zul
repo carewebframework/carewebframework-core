@@ -1,0 +1,17 @@
+<zk>
+	<window border="normal" height="400px"
+		width="300px"
+		use="org.carewebframework.shell.designer.AddComponent">
+		<panel vflex="1">
+			<panelchildren>
+				<tree id="tree" vflex="true"
+					style="background:none;border:none;text-overflow:ellipsis;white-space:nowrap" />
+			</panelchildren>
+			<toolbar align="end">
+				<button id="btnOK" label="${labels.cwf.shell.designer.add.component.btn.ok.label}" disabled="true" />
+				<button id="btnCancel" label="${labels.cwf.shell.designer.add.component.btn.cancel.label}" />
+				<separator orient="vertical" width="20px" />
+			</toolbar>
+		</panel>
+	</window>
+</zk>

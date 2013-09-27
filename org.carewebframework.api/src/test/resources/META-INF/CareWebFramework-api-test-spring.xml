@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:cwf="http://www.carewebframework.org/schema/spring"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+		http://www.carewebframework.org/schema/spring
+		http://www.carewebframework.org/schema/spring/spring-extensions.xsd">
+
+	<beans profile="root-test">
+		<bean id="propertyService" class="org.carewebframework.api.property.MockPropertyService"
+			cwf:override="ignore" />
+
+		<bean id="securityService" class="org.carewebframework.api.security.MockSecurityService"
+			cwf:override="ignore">
+			<constructor-arg>
+				<bean class="org.carewebframework.api.security.MockUser">
+					<constructor-arg value="1" />
+					<constructor-arg value="username" />
+					<constructor-arg value="User, Mock" />
+				</bean>
+			</constructor-arg>
+		</bean>
+
+		<bean id="keystore-test" class="org.carewebframework.api.security.DigitalSignature">
+			<constructor-arg value="${org.carewebframework.keystore.path}" />
+			<property name="keyName" value="${org.carewebframework.keystore.keyname}" />
+			<property name="privateKeyPassword" value="${org.carewebframework.keystore.private}" />
+		</bean>
+	</beans>
+</beans>

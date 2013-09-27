@@ -1,0 +1,30 @@
+<zk>
+	<grid oddRowSclass="none" sizedByContent="true" width="300px">
+		<columns>
+			<column hflex="10" />
+			<column hflex="6" />
+			<column hflex="5" align="center" />
+		</columns>
+		<rows>
+			<row>
+				<datebox id="datebox" vflex="1" hflex="1" />
+				<timebox id="timebox" vflex="1" hflex="1" />
+				<button id="btnOK" label="${labels.cwf.datetime.btn.ok.label}" width="55px" />
+			</row>
+			<row>
+				<toolbar sclass="cwf-datetimebox-tbar" width="100%">
+					<a id="btnToday" label="${labels.cwf.datetime.btn.today.label}" />
+				</toolbar>
+				<toolbar sclass="cwf-datetimebox-tbar" width="100%">
+					<a id="btnNow" label="${labels.cwf.datetime.btn.now.label}" />
+					<separator orient="vertical" width="5px" />
+					<a id="btnClear" label="${labels.cwf.datetime.btn.clear.label}" />
+				</toolbar>
+				<button id="btnCancel" label="${labels.cwf.datetime.btn.cancel.label}" width="55px" />
+			</row>
+			<row spans="3" style="text-align:center">
+				<label id="error" style="color:red" />
+			</row>
+		</rows>
+	</grid>
+</zk>

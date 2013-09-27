@@ -1,0 +1,54 @@
+<?variable-resolver class="org.carewebframework.ui.FrameworkVariableResolver"?>
+
+<div id="errorContent" apply="${exceptionController}">
+	<grid id="expandViewGrid" fixedLayout="true">
+		<columns sizable="false" visible="false">
+			<column visible="true"/>
+			<column width="100%" />
+		</columns>
+		<rows>
+			<row>
+				<div />
+				<html style="" content="${labels.cwf.error.dialog.message}" />
+			</row>
+			<row>
+				<detail id="detail">
+					<grid id="exceptionDetail" fixedLayout="true"
+						height="350px">
+						<columns sizable="false" visible="false">
+							<column width="20%" />
+							<column width="80%" />
+						</columns>
+						<rows>
+							<row>
+								<label value="${labels.cwf.error.dialog.cls.label}" />
+								<label id="lblExceptionClass"/>
+							</row>
+							<row>
+								<label value="${labels.cwf.error.dialog.msg.label}" />
+								<label id="lblMessage" />
+							</row>
+							<row>
+								<label value="${labels.cwf.error.dialog.code.label}" />
+								<label id="lblCode" />
+							</row>
+							<row>
+								<label value="${labels.cwf.error.dialog.status.label}" />
+								<label id="lblStatusCode" />
+							</row>
+							<row valign="top">
+								<label value="${labels.cwf.error.dialog.trace.label}" />
+								<textbox id="txtStackTrace" rows="15"
+									width="100%" />
+							</row>
+						</rows>
+					</grid>
+				</detail>
+				<hbox pack="end" width="100%">
+					<button id="btnDetail" label="${labels.cwf.error.dialog.btn.detail.label}" />
+					<button id="btnClose" label="${labels.cwf.error.dialog.btn.close.label}" />
+				</hbox>
+			</row>
+		</rows>
+	</grid>
+</div>

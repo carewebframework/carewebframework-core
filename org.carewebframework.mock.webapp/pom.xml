@@ -1,0 +1,81 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.carewebframework</groupId>
+		<artifactId>org.carewebframework</artifactId>
+		<version>3.0.0.BUILD-SNAPSHOT</version>
+	</parent>
+	<artifactId>org.carewebframework.mock.webapp</artifactId>
+	<packaging>war</packaging>
+	<name>CareWeb Framework Mock Web Application</name>
+	<properties>
+		<org.carewebframework.security.artifact>org.carewebframework.mock.security.impl</org.carewebframework.security.artifact>
+	</properties>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.carewebframework</groupId>
+				<artifactId>org.carewebframework.maven.plugin.themegenerator</artifactId>
+				<configuration>
+					<themes>
+						<theme>
+							<themeName>green</themeName>
+							<baseColor>003300</baseColor>
+						</theme>
+						<theme>
+							<themeName>lilac</themeName>
+							<baseColor>3e48ac</baseColor>
+						</theme>
+					</themes>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	<dependencies>
+		<!-- Insert any plugins to be tested here. -->
+		<dependency>
+			<groupId>org.carewebframework</groupId>
+			<artifactId>org.carewebframework.ui.popupsupport</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.carewebframework</groupId>
+			<artifactId>org.carewebframework.ui.statuspanel</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.carewebframework</groupId>
+			<artifactId>org.carewebframework.ui.infopanel</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.carewebframework</groupId>
+			<artifactId>org.carewebframework.ui.currentdatetime</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
+		<!-- CareWeb Framework Components -->
+		<dependency>
+			<groupId>org.carewebframework</groupId>
+			<artifactId>org.carewebframework.security.spring</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.carewebframework</groupId>
+			<artifactId>org.carewebframework.testharness</artifactId>
+		</dependency>
+		<!-- Security -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId>
+		</dependency>
+		<!-- ZK Libraries -->
+		<dependency>
+			<groupId>org.zkoss.zk</groupId>
+			<artifactId>zhtml</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.zkoss.zk</groupId>
+			<artifactId>zkplus</artifactId>
+		</dependency>
+	</dependencies>
+</project>

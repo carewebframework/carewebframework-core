@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:cwf="http://www.carewebframework.org/schema/spring"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+		http://www.carewebframework.org/schema/spring
+		http://www.carewebframework.org/schema/spring/spring-extensions.xsd">
+
+	<beans profile="root">
+
+		<bean class="org.carewebframework.ui.Application" factory-method="getInstance" />
+
+		<!-- Allows access to a desktop-scoped bean in root context. -->
+		<bean class="org.springframework.beans.factory.config.CustomScopeConfigurer">
+			<property name="scopes">
+				<map>
+					<entry key="desktop">
+						<bean class="org.carewebframework.ui.spring.DesktopScope" />
+					</entry>
+				</map>
+			</property>
+		</bean>
+
+		<!-- Allows the application to locate the Spring application context -->
+		<bean id="appContextFinder" class="org.carewebframework.ui.spring.AppContextFinder"
+			cwf:override="always" />
+
+		<!-- Registry for thread listeners. -->
+		<bean class="org.carewebframework.ui.thread.ThreadListenerRegistry"
+			factory-method="getInstance" />
+
+		<!-- Registry for shared icon libraries. -->
+		<bean id="iconLibraryRegistry" class="org.carewebframework.ui.icons.IconLibraryRegistry"
+			factory-method="getInstance" />
+
+		<!-- A registry of actions -->
+		<bean id="actionRegistry" class="org.carewebframework.ui.action.ActionRegistry"
+			factory-method="getInstance" />
+
+		<!-- List of shortcut bindings for commands. -->
+		<bean id="commandShortcuts" class="org.carewebframework.ui.command.CommandShortcuts">
+			<constructor-arg value="${cwf.shortcuts:classpath:shortcut.properties}" />
+		</bean>
+
+		<!-- Default controller for framework-aware applications. -->
+		<bean id="frameworkController" class="org.carewebframework.ui.FrameworkController"
+			scope="prototype" />
+
+		<!-- Controller for exception dialog. -->
+		<bean id="exceptionController" class="org.carewebframework.ui.ExceptionController"
+			scope="prototype" />
+
+		<!-- Controller for XML source viewer. -->
+		<bean id="xmlViewerController" class="org.carewebframework.ui.xml.XMLViewerController"
+			scope="prototype" />
+
+		<!-- Controller for manifest viewer. -->
+		<bean id="manifestViewer" class="org.carewebframework.ui.zk.ManifestViewer"
+			scope="prototype" />
+
+	</beans>
+
+	<beans profile="desktop">
+
+		<!-- Manages subscription and publication of generic events. -->
+		<bean id="eventManager" class="org.carewebframework.ui.event.EventManager"
+			destroy-method="destroy" cwf:override="always">
+			<property name="desktop" ref="desktop" />
+		</bean>
+
+		<bean id="globalEventDispatcher" class="org.carewebframework.ui.event.GlobalEventDispatcher"
+			init-method="init" destroy-method="destroy" cwf:override="always">
+			<property name="localEventDispatcher" ref="eventManager" />
+		</bean>
+
+		<!-- A registry of all supported commands. -->
+		<bean id="commandRegistry" class="org.carewebframework.ui.command.CommandRegistry">
+			<constructor-arg ref="commandShortcuts" />
+		</bean>
+
+		<bean id="desktopMonitor" class="org.carewebframework.ui.DesktopMonitor"
+			init-method="init" destroy-method="tearDown">
+			<constructor-arg ref="desktop" />
+			<property name="maximumInactivityInterval"
+				value="${org.carewebframework.ui.DesktopMonitor.MAXIMUM_INACTIVITY_INTERVAL}" />
+			<property name="countdownInterval"
+				value="${org.carewebframework.ui.DesktopMonitor.COUNTDOWN_INTERVAL}" />
+			<property name="baselineInactivityDuration"
+				value="${org.carewebframework.ui.DesktopMonitor.BASELINE_INACTIVITY_DURATION}" />
+			<property name="lockInactivityDuration"
+				value="${org.carewebframework.ui.DesktopMonitor.LOCK_INACTIVITY_DURATION}" />
+			<property name="baselineCountdownDuration"
+				value="${org.carewebframework.ui.DesktopMonitor.BASELINE_COUNTDOWN_DURATION}" />
+			<property name="lockCountdownDuration"
+				value="${org.carewebframework.ui.DesktopMonitor.LOCK_COUNTDOWN_DURATION}" />
+			<property name="securityService" ref="securityService" />
+			<property name="eventManager" ref="eventManager" />
+			<property name="desktopMonitorLockingExclusions">
+				<bean class="org.springframework.util.StringUtils"
+					factory-method="commaDelimitedListToSet">
+					<constructor-arg type="java.lang.String"
+						value="${org.carewebframework.ui.DesktopMonitor.EXCLUDE_APPS_FROM_LOCKING}" />
+				</bean>
+			</property>
+		</bean>
+
+		<bean id="popupManager" class="org.carewebframework.ui.zk.PopupManager"
+			destroy-method="destroy">
+		</bean>
+
+	</beans>
+</beans>
+

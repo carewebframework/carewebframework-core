@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- zk.xml
+	Purpose:
+		
+	Description:
+		
+	History:
+		Sun Mar 26 16:29:07     2006, Created by tomyeh
+
+Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+-->
+
+<zk>
+
+	<system-config>
+		<disable-event-thread>false</disable-event-thread>
+	</system-config>
+
+	<!-- Optional -->
+	<session-config>
+		<session-timeout>900</session-timeout><!-- 15minutes -->
+		<timer-keep-alive>false</timer-keep-alive>
+		<max-desktops-per-session>15</max-desktops-per-session>
+		<max-requests-per-session>5</max-requests-per-session>
+		<max-pushes-per-session>-1</max-pushes-per-session>
+	</session-config>
+
+	<desktop-config>
+		<desktop-timeout>900</desktop-timeout>
+		<theme-provider-class>org.carewebframework.shell.themes.ThemeProvider</theme-provider-class>
+	</desktop-config>
+	
+	<device-config>
+		<device-type>ajax</device-type>
+		<timeout-uri>/logout</timeout-uri>
+		<server-push-class>org.zkoss.zk.ui.impl.PollingServerPush
+		</server-push-class>
+		<unavailable-message><![CDATA[
+	 <p style="color:red">Sorry, JavaScript must be enabled in order for you to use this application.</p>
+	     ]]></unavailable-message>
+		<embed><![CDATA[
+	 <script type="text/javascript">
+	     AU_progressbar = function (id, msg) {
+	         Boot_progressbox(id, msg, 0, 0, true, true);
+	     };
+	 </script>
+	     ]]></embed>
+	</device-config>
+	
+	<language-mapping>
+		<language-name>xml</language-name>
+		<extension>zxml</extension>
+	</language-mapping>
+
+	<listener>
+		<listener-class>org.carewebframework.ui.LifecycleEventDispatcher
+		</listener-class>
+	</listener>
+	
+	 <listener>
+		<listener-class>org.carewebframework.ui.zk.Text2ImageExtendlet</listener-class>
+	 </listener>	
+ 
+ 	<!-- Optional -->
+	<listener>
+		<description>[Optional] Monitor the statistic</description>
+		<listener-class>org.zkoss.zk.ui.util.Statistic</listener-class>
+	</listener>
+
+	<listener>
+		<description>ThreadLocal Synchronization Listener
+		</description>
+		<listener-class>org.zkoss.zkplus.util.ThreadLocalListener
+		</listener-class>
+	</listener>
+
+	<preference>
+		<name>ThreadLocal</name>
+		<value>
+			org.springframework.security.core.context.ThreadLocalSecurityContextHolderStrategy=contextHolder;
+			org.springframework.security.core.context.InheritableThreadLocalSecurityContextHolderStrategy=contextHolder;
+			org.springframework.web.context.request.RequestContextHolder=requestAttributesHolder,inheritableRequestAttributesHolder;
+		</value>
+	</preference>
+
+	<!-- Configure the error page -->
+	<error-page>
+		<exception-type>java.lang.Throwable</exception-type>
+		<location>~./org/carewebframework/ui/zk/errorUpdating.zul</location>
+	</error-page>
+	
+
+	<client-config>
+		<debug-js>true</debug-js>
+	</client-config>
+	
+	<library-property>
+		<name>org.zkoss.zul.progressbox.position</name>
+		<value>center</value>
+	</library-property>
+		
+</zk>

@@ -1,0 +1,321 @@
+@CHARSET "UTF-8";
+
+/*
+	Global stylesheet for CareWeb application.  Styles here will be applied to all components.
+*/
+
+.z-window-modal-header {
+	font-weight: bold;
+}
+
+.z-toolbar-start {
+	clear: none;
+	float: none;
+}
+
+.z-west-splt, .z-east-splt {
+    width: 6px;
+    background: none;
+}
+
+.z-north-splt, .z-south-splt {
+    height: 6px;
+    background: none;
+}
+
+.cwf-desktop-titlebar {
+	background: none;
+	border: none;
+}
+
+.cwf-desktop-title * {
+	font-weight: bold;
+	white-space: nowrap;
+	padding-right: 5px;
+}
+
+.cwf-desktop-title {
+ 	border-right: solid 1px gray;
+	padding-top: 6px;
+ }
+
+.cwf-desktop-notitle {
+ 	border-right: none;
+ 	padding-top: 0px;
+ }
+
+.cwf-plugin-container {
+	position: relative;
+	display: inline-block;
+	overflow: auto
+}
+
+.cwf-toolbar-container {
+	display: inline-block;
+}
+
+.cwf-anchor {
+	background: transparent!important;
+	border: none!important;
+	text-decoration: underline!important;
+	margin: 4px!important;
+}
+
+.cwf-topToolbar {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+}
+
+.cwf-pluginWithToolbar {
+	position: absolute;
+	overflow: auto;
+	top: 30px;
+	bottom: 0px;
+	right: 0px;
+	left: 0px;
+}
+
+.cwf-pluginWithoutToolbar {
+	position: absolute;
+	overflow: auto;
+	top: 0px;
+	bottom: 0px;
+	right: 0px;
+	left: 0px;
+}
+
+/* Suppress display of check box in list header */
+.cwf-listheader-nocheckbox input {
+	display: none;
+}
+
+.cwf-tabbox .z-tabs-cnt {
+	min-height: 20px;
+}
+
+.cwf-tab-disabled .z-tab-text {
+	opacity: .5;
+}
+
+.cwf-tab-panel {
+	padding: 0;
+}
+
+.cwf-tree-node-disabled * {
+	color: gray;
+}
+
+.cwf-treeview .z-tree-body {
+	padding-right: 10px;
+}
+
+.cwf-treeview .z-tree {
+	border: none;
+	background: transparent;
+}
+
+.cwf-treeview .z-treecell-cnt {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.cwf-header-cell * {
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+	background: none!important;
+	border: none!important;
+}
+
+.cwf-header-row {
+	padding: 5px;
+	overflow: hidden;
+}
+
+.cwf-header-row * {
+	text-overflow: ellipsis!important;
+	white-space: nowrap!important;
+	vertical-align: middle!important;
+	overflow: visible;
+}
+
+.cwf-menu-header {
+    background: lightyellow;
+    border-bottom: 1px gray solid;
+}
+
+.cwf-menu-header.z-menuitem * {
+	font-weight: bold;
+	color: black!important;
+}
+
+.cwf-step-toolbar {
+    border: 0px;
+}
+
+.cwf-step-taskbar-left {
+	float: left;
+}
+
+.cwf-step-taskbar-right {
+	float: right;
+}
+
+.cwf-step-button {
+	font-size: 0.75em;
+	text-align: center;
+	vertical-align: middle;
+	border: 1px solid #666;
+	background-color: #F0F0F0 !important;
+	min-height: 25px;
+    max-width: 100px;
+	min-width: 0px;
+    cursor: pointer;
+    white-space: pre-wrap;
+    display: inline-block;
+	line-height: 20px;
+	margin: 2px 0px;
+}
+
+.cwf-step-button:hover {
+	outline: 2px solid #CDE9FD;
+}
+
+.cwf-step-button-selected {
+	background-color: #D0D0D0 !important;
+	outline: 2px solid #E9FDCD !important;
+	cursor: default;
+}
+
+.cwf-step-button-disabled {
+	color: gray !important;
+}
+
+.cwf-step-separator {
+	display: inline-block;
+	vertical-align: middle;
+	background-image: url('images/stepConnector.png');
+	background-repeat: no-repeat;
+    height: 10px;
+    width: 10px;
+    margin: 4px 4px 4px 6px;
+}
+
+.cwf-step-toolbar {
+    min-height: 30px;
+}
+
+.cwf-step-toolbar table {
+	width: 100%;
+}
+
+.cwf-step-nonav button {
+	background: transparent!important;
+	border-width: 0;
+	color: white;
+	margin: 0 0 2px 0;
+	padding: 0 2px 0 2px;
+}
+
+.cwf-step-nonav .cwf-step-separator {
+	visibility: hidden;
+	width: 0;
+}
+
+.cwf-step-nonav .z-toolbar-panel-hor {
+    text-align: center;
+}
+
+.cwf-propertygrid-selectedrow .z-label {
+    font-weight: bold;
+}
+
+.cwf-propertygrid-selectedrow td {
+    background-color: lightyellow!important;
+}
+
+.cwf-propertygrid-info {
+	background-color: lightyellow;
+	border: none;
+}
+
+.cwf-propertygrid-info .z-caption {
+	font-weight: bold;
+}
+
+.cwf-propertygrid-info .z-caption span {
+	background: lightyellow;
+}
+
+.cwf-propertygrid-info .z-groupbox {
+    margin-right: 1px;
+}
+
+.cwf-propertygrid-info .z-groupbox-cnt {
+	overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.cwf-propertygrid-grid .z-row>td {
+    border: none!important;
+	border-bottom: 1px solid lightgray!important;
+	border-left: 1px solid white!important;
+	border-right: 1px solid lightgray!important;
+}
+
+.cwf-menubar {
+	min-height: 20px;
+}
+
+.cwf-tab-menubar {
+	background: none;
+	border: none!important;
+	padding: 0;
+}
+
+.cwf-tab-menubar .z-menu-inner-l,
+.cwf-tab-menubar .z-menu-inner-r {
+    display: none;
+}
+
+.cwf-tab-menubar .z-menu-inner-m {
+    height: inherit!important;
+    padding: 0!important;
+    background: none;
+}
+
+.cwf-tab-menubar .z-menu-inner-m>div {
+    margin-top: -5px!important;
+}
+
+.cwf-tab-menubar .z-menu-btn {
+    padding: 0!important;
+}
+
+.cwf-tab-menu-seld a {
+	font-weight: bold;
+}
+
+@media print {
+
+	/* used for print to ensure all data is on the page with 'shrink to fit' option */
+	.z-window-embedded,.z-window-modal,.z-window-overlapped,.z-window-popup,.z-window-highlighted
+	{
+		margin: 0;
+		overflow: visible !important;
+		padding: 0;
+		zoom: normal !important;
+	}
+
+	/* used for print to ensure all data is on the page with 'shrink to fit' option */
+	.z-window-modal-cnt-noborder,.z-window-highlighted-cnt-noborder,.z-window-embedded-cnt-noborder,.z-window-overlapped-cnt-noborder,.z-window-popup-cnt-noborder
+	{
+		border: 0;
+		overflow: visible !important;
+		zoom: normal !important;
+	}
+
+}
+

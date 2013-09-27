@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page id="CWF_Logout" automaticTimeout="false"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd ">
+	<separator height="20%" />
+	<window title="${labels.logout.window.title}" border="normal"
+		contentStyle="text-align:center;padding:20px" mode="highlighted"
+		apply="org.carewebframework.security.spring.LogoutController">
+		<label id="lblMessage" value="${labels.logout.message.dflt}"
+			style="color:red;font-weight:bold;white-space:pre-wrap" />
+		<separator bar="true" height="20px" />
+		<button id="btnLogin"
+			label="${labels.logout.form.button.login.label}" />
+	</window>
+</zk>

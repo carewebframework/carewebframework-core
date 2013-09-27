@@ -1,0 +1,36 @@
+<menu use="org.carewebframework.shell.designer.DesignMenu">
+	<menupopup id="menupopup">
+		<menuitem id="mnuDesignMode" checkmark="true"
+			label="${labels.cwf.shell.designer.menu.designmode.label}"
+			tooltiptext="${labels.cwf.shell.designer.menu.designmode.hint}" />
+		<menuitem id="mnuDesktopProperties"
+			label="${labels.cwf.shell.designer.menu.desktop.properties.label}"
+			tooltiptext="${labels.cwf.shell.designer.menu.desktop.properties.hint}" />
+		<menuitem id="mnuClearDesktop"
+			label="${labels.cwf.shell.designer.menu.desktop.clear.label}"
+			tooltiptext="${labels.cwf.shell.designer.menu.desktop.clear.hint}" />
+		<menuitem id="mnuLayoutDesigner"
+			label="${labels.cwf.shell.designer.menu.layout.designer.label}"
+			tooltiptext="${labels.cwf.shell.designer.menu.layout.designer.hint}" />
+		<menuitem id="mnuLayoutManager"
+			label="${labels.cwf.shell.designer.menu.layout.manager.label}"
+			tooltiptext="${labels.cwf.shell.designer.menu.layout.manager.hint}" />
+		<menuitem id="mnuLoadLayout"
+			label="${labels.cwf.shell.designer.menu.layout.load.label}"
+			tooltiptext="${labels.cwf.shell.designer.menu.layout.load.hint}" />
+		<menuitem id="mnuSaveSharedLayout"
+			label="${labels.cwf.shell.designer.menu.layout.save.shared.label}"
+			tooltiptext="${labels.cwf.shell.designer.menu.layout.save.shared.hint}" />
+		<menuitem id="mnuSavePrivateLayout"
+			label="${labels.cwf.shell.designer.menu.layout.save.private_.label}"
+			tooltiptext="${labels.cwf.shell.designer.menu.layout.save.private_.hint}" />
+		<menuitem id="mnuShowZul"
+			label="${labels.cwf.shell.designer.menu.zk.viewer.label}"
+			tooltiptext="${labels.cwf.shell.designer.menu.zk.viewer.hint}" />
+		<menuseparator />
+		<menuitem id="mnuLogout"
+			label="${labels.cwf.shell.designer.menu.logout.label}"
+			tooltiptext="${labels.cwf.shell.designer.menu.logout.hint}" />
+	</menupopup>
+</menu>
+

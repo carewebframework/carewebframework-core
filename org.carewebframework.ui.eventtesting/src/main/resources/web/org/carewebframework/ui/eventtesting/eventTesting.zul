@@ -1,0 +1,88 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+
+<zscript>
+	import org.carewebframework.*;
+	import org.carewebframework.api.event.*;
+	EventManager eventManager = FrameworkUtil.getEventManager();
+	
+	class Listener implements IGenericEvent {
+    	void eventCallback(String eventName, String eventData) {
+    		getFellow("eventResults").setText(eventName + ": " + eventData);
+    	}
+	}
+	
+	Listener listener = new Listener();
+</zscript>
+
+<window title="Remote Event Testing" border="normal" height="100%" width="100%"
+	use="org.carewebframework.ui.eventtesting.EventTesting">
+<borderlayout>
+	<west splittable="true" size="50%">
+		<panel title="Publish Test Events" height="100%">
+			<panelchildren>
+				<grid width="100%" height="100%">
+					<columns>
+						<column align="right"/>
+						<column align="left"/>
+					</columns>
+					<rows>
+						<row>
+							<label value="Event Name:"/> 
+							<textbox id="eventName" width="100%"/>
+						</row>
+						<row>
+							<label value="Event Recipients:"/>
+							<textbox id="eventRecipients" width="100%"/>
+						</row>
+						<row>
+							<vbox>
+								<label value="Event Data:"/> 
+								<separator orient="horizontal" height="30px"/>
+								<checkbox id="autoGenerate" label="Auto generate"/>
+							</vbox>
+							<textbox id="eventData" multiline="true" width="100%" height="300px"/>
+						</row>
+					</rows>
+				</grid>
+			</panelchildren>
+			<toolbar align="end">
+				<button label="Reset" id="btnReset"/>
+				<separator orient="vertical" width="20px"/>
+				<button label="Send" id="btnSend"/>
+				<separator orient="vertical" width="15px"/>
+			</toolbar>
+		</panel>
+	</west>
+	<center>
+		<panel title="Subscribe/Unsubscribe" height="100%">
+			<panelchildren>
+				<listbox id="eventList" checkmark="true" multiple="true" height="100%">
+					<listitem label="PING" checkable="true"/>
+					<listitem label="POPUP" checkable="true"/>
+					<listitem label="STATUS" checkable="true"/>
+				</listbox>
+			</panelchildren>
+			<toolbar>
+				<textbox id="newEvent" width="60%"/>
+				<button id="addEvent" label="Add Event"/>
+			</toolbar>
+		</panel>
+	</center>
+	<east splittable="true" size="25%">
+		<panel title="Received Events" height="100%">
+			<panelchildren>
+				<textbox id="eventResults" multiline="true" width="100%" height="100%" readonly="true"/>
+			</panelchildren>
+			<toolbar align="end">
+				<button id="btnClear" label="Clear"/>
+				<separator orient="vertical" width="15px"/>
+			</toolbar>
+		</panel>
+	</east>
+	<south size="5%">
+		<label id="info"/>
+	</south>
+</borderlayout>
+</window>
+</zk>

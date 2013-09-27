@@ -1,0 +1,35 @@
+@CHARSET "UTF-8";
+
+.sharedForms-captioned-header .z-caption .z-caption-l {
+	font-size: 1.25em;
+	padding: 2px 5px 2px 5px;
+}
+
+.sharedForms-captioned-caption-hidden .z-caption {
+	display: none;		
+}
+
+.sharedForms-captioned-caption-title .z-caption-l {
+	text-align: left;
+	padding: 1px;	
+}
+
+.sharedForms-captioned-caption-left .z-caption-l {
+	text-align: left;	
+	padding: 1px;	
+}
+
+.sharedForms-captioned-caption-right .z-caption-l {
+	text-align: right;	
+	padding: 1px;	
+}
+
+.sharedForms-captioned-caption-center .z-caption-l {
+	text-align: center;
+	padding: 1px;	
+}
+
+.sharedForms-captioned-caption-frame .z-caption-l {
+	text-align: left;
+}
+

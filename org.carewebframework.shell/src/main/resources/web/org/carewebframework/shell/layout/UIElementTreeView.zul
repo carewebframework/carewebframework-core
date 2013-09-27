@@ -1,0 +1,25 @@
+<zk xmlns="http://www.zkoss.org/2005/zul"
+	xmlns:h="http://www.w3.org/1999/xhtml"
+	xmlns:w="http://www.zkoss.org/2005/zk/client"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+
+	<window height="100%" width="100%">
+		<borderlayout height="100%" width="100%">
+			<west id="selectorPane" splittable="true" collapsible="true"
+				width="200px"
+				w:onClick="jq(this).find('.z-west-colpsd').trigger('click');">
+				<div height="100%" width="100%" sclass="cwf-treeview"
+					style="overflow:auto">
+					<tree id="tree" sizedByContent="false" hflex="1">
+						<treechildren />
+					</tree>
+				</div>
+			</west>
+			<center zindex="99">
+				<div id="innerPane" height="100%" width="100%" />
+			</center>
+		</borderlayout>
+	</window>
+
+</zk>

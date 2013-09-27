@@ -1,0 +1,14 @@
+<!-- 
+	ZK Taglibs class searches for /metainfo/tld/config.xml resources on classpath to load taglibs.
+	ZK taglib directive use does not appear to be JSP 1.2+ compliant (i.e. can't place tld within META-INF).
+ -->
+<config>
+	<taglib>		
+	    <taglib-uri>http://www.carewebframework.org/tld/core</taglib-uri>
+	    <taglib-location>/web/org/carewebframework/ui/tld/core.tld</taglib-location>
+	</taglib>
+	<taglib>		
+	    <taglib-uri>http://www.carewebframework.org/tld/security</taglib-uri>
+	    <taglib-location>/web/org/carewebframework/ui/tld/security.tld</taglib-location>
+	</taglib>
+</config>

@@ -1,0 +1,29 @@
+<zk xmlns="http://www.zkoss.org/2005/zul"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:h="http://www.w3.org/1999/xhtml"
+	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd ">
+	<menupopup
+		use="org.carewebframework.shell.designer.DesignContextMenu">
+		<menuitem id="mnuHeader" sclass="cwf-menu-header"
+			disabled="true" />
+		<menuitem id="mnuAdd"
+			label="${labels.cwf.shell.designer.menu.add.label}" />
+		<menuitem id="mnuDelete"
+			label="${labels.cwf.shell.designer.menu.delete.label}" />
+		<menuseparator />
+		<menuitem id="mnuCopy"
+			label="${labels.cwf.shell.designer.menu.copy.label}" />
+		<menuitem id="mnuCut"
+			label="${labels.cwf.shell.designer.menu.cut.label}" />
+		<menuitem id="mnuPaste"
+			label="${labels.cwf.shell.designer.menu.paste.label}" />
+		<menuitem id="mnuView"
+			label="${labels.cwf.shell.designer.menu.view.label}" />
+		<menuseparator />
+		<menuitem id="mnuProperties"
+			label="${labels.cwf.shell.designer.menu.properties.label}" />
+		<menuitem id="mnuAbout"
+			label="${labels.cwf.shell.designer.menu.about.label}" />
+	</menupopup>
+
+</zk>

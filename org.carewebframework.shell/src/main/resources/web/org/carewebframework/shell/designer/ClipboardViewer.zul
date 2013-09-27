@@ -1,0 +1,35 @@
+<zk xmlns="http://www.zkoss.org/2005/zul"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:h="http://www.w3.org/1999/xhtml"
+	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd ">
+
+	<window title="${labels.cwf.shell.clipboard.viewer.title}" width="400px"
+		height="400px"
+		use="org.carewebframework.shell.designer.ClipboardViewer">
+		<borderlayout>
+			<center>
+				<textbox id="txtData" multiline="true" height="100%"
+					width="100%" style="overflow:auto" />
+			</center>
+			<south>
+				<toolbar align="end">
+					<button id="btnSave"
+						label="${labels.cwf.shell.clipboard.viewer.btn.save.label}"
+						tooltiptext="${labels.cwf.shell.clipboard.viewer.btn.save.hint}" />
+					<button id="btnRestore"
+						label="${labels.cwf.shell.clipboard.viewer.btn.restore.label}"
+						tooltiptext="${labels.cwf.shell.clipboard.viewer.btn.restore.hint}" />
+					<separator orient="vertical" width="40px" />
+					<button id="btnOK"
+						label="${labels.cwf.shell.clipboard.viewer.btn.ok.label}"
+						tooltiptext="${labels.cwf.shell.clipboard.viewer.btn.ok.hint}" />
+					<button id="btnCancel"
+						label="${labels.cwf.shell.clipboard.viewer.btn.cancel.label}"
+						tooltiptext="${labels.cwf.shell.clipboard.viewer.btn.cancel.hint}" />
+					<separator orient="vertical" width="20px" />
+				</toolbar>
+			</south>
+		</borderlayout>
+	</window>
+
+</zk>

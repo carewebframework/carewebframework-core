@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- -Spring Security Prototype -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+   		http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+		http://www.springframework.org/schema/security
+		http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+
+	<!-- ******************** Security Management Layer ********************* -->
+	<!-- Filter chain proxy determines which filter chain applies for a given 
+		URL pattern. -->
+	<bean id="filterChainProxy" class="org.springframework.security.web.FilterChainProxy">
+		<constructor-arg>
+			<list>
+				<!-- This is the primary framework authentication. -->
+				<security:filter-chain pattern="/**"
+					filters="
+	           securityContextPersistenceFilter,
+	           securityLogoutFilter,
+	           securityAuthenticationProcessingFilter,
+	           securityAnonymousAuthenticationFilter,
+	           securityExceptionTranslationFilter,
+	           securityFilterSecurityInterceptor" />
+			</list>
+		</constructor-arg>
+	</bean>
+
+	<!-- This defines security requirements for specific URL patterns. -->
+	<bean id="securityFilterSecurityInterceptor" parent="securityFilterSecurityInterceptorBase">
+		<property name="securityMetadataSource">
+			<security:filter-security-metadata-source>
+				<security:intercept-url pattern="/admin/**"
+					access="ROLE_ADMINISTRATOR" />
+				<security:intercept-url pattern="/secure/**"
+					access="ROLE_USER" />
+				<security:intercept-url pattern="/test/**"
+					access="ROLE_USER" />
+				<security:intercept-url pattern="/login/**"
+					access="IS_AUTHENTICATED_ANONYMOUSLY" />
+				<security:intercept-url pattern="/*.zul"
+					access="ROLE_USER" />
+			</security:filter-security-metadata-source>
+		</property>
+	</bean>
+
+</beans>

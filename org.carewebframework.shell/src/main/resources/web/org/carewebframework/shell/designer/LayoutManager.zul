@@ -1,0 +1,47 @@
+<zk>
+	<window border="normal" height="300px" width="500px"
+		contentStyle="padding:0"
+		use="org.carewebframework.shell.designer.LayoutManager">
+		<panel vflex="1">
+			<toolbar mold="panel" style="background-color:lightyellow"
+				align="center">
+				<label id="lblPrompt" />
+			</toolbar>
+			<panelchildren style="overflow:auto">
+				<listbox id="lstLayouts"
+					style="border-left:0; border-right:0" vflex="1" />
+			</panelchildren>
+			<toolbar align="end">
+				<radiogroup id="radioGroup" orient="horizontal">
+					<radio style="padding-right: 10px" selected="true"
+						label="${labels.cwf.shell.designer.layout.manager.radio.shared.label}" />
+					<radio
+						label="${labels.cwf.shell.designer.layout.manager.radio.private_.label}" />
+				</radiogroup>
+				<separator orient="vertical" />
+				<button id="btnOK"
+					label="${labels.cwf.shell.designer.layout.manager.btn.ok.label}" />
+				<button id="btnCancel"
+					label="${labels.cwf.shell.designer.layout.manager.btn.cancel.label}"
+					forward="onClose" />
+			</toolbar>
+			<toolbar id="tbarManage" align="end">
+				<button id="btnImport"
+					label="${labels.cwf.shell.designer.layout.manager.btn.import_.label}" />
+				<button id="btnExport"
+					label="${labels.cwf.shell.designer.layout.manager.btn.export.label}" />
+				<separator orient="vertical" />
+				<button id="btnClone"
+					label="${labels.cwf.shell.designer.layout.manager.btn.clone.label}" />
+				<button id="btnRename"
+					label="${labels.cwf.shell.designer.layout.manager.btn.rename.label}" />
+				<button id="btnDelete"
+					label="${labels.cwf.shell.designer.layout.manager.btn.delete.label}" />
+				<separator orient="vertical" />
+				<button id="btnClose"
+					label="${labels.cwf.shell.designer.layout.manager.btn.close.label}"
+					forward="onClose" />
+			</toolbar>
+		</panel>
+	</window>
+</zk>

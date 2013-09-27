@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app id="WebApp_ID" version="2.4"
+	xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+	<display-name>CareWeb</display-name>
+	<!--
+		- Loads the root application context of this web app at startup, - by
+		default from "/WEB-INF/applicationContext.xml". - Note that you need
+		to fall back to Spring's ContextLoaderServlet for - J2EE servers that
+		do not follow the Servlet 2.4 initialization order. - - Use
+		WebApplicationContextUtils.getWebApplicationContext(servletContext) -
+		to access it anywhere in the web application, outside of the
+		framework. - - The root context is the parent of all servlet-specific
+		contexts. - This means that its beans are automatically available in
+		these child contexts, - both for getBean(name) calls and (external)
+		bean references.
+		
+		We specify a subclass of the XmlWebApplicationContext that simply disallows
+		overriding bean definitions.
+	-->
+	<context-param>
+		<param-name>contextClass</param-name>
+		<param-value>org.carewebframework.ui.spring.FrameworkAppContext</param-value>
+	</context-param>
+	
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+
+	<listener>
+		<listener-class>
+			org.springframework.web.context.request.RequestContextListener</listener-class>
+	</listener>
+
+	<!--
+     - Spring Security Filter Chains
+     -->
+	<filter>
+		<filter-name>filterChainProxy</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>filterChainProxy</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<listener>
+		<description>
+  	Used to cleanup when a session is destroyed</description>
+		<display-name>ZK Session Cleaner</display-name>
+		<listener-class>org.zkoss.zk.ui.http.HttpSessionListener</listener-class>
+	</listener>
+	<servlet>
+		<description>
+  	The servlet loads the DSP pages.</description>
+		<servlet-name>dspLoader</servlet-name>
+		<servlet-class>org.zkoss.web.servlet.dsp.InterpreterServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+  	ZK loader for ZUML pages</description>
+		<servlet-name>zkLoader</servlet-name>
+		<servlet-class>org.zkoss.zk.ui.http.DHtmlLayoutServlet</servlet-class>
+		<init-param>
+			<param-name>update-uri</param-name>
+			<param-value>/zkau</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet>
+		<description>
+  	The asynchronous update engine for ZK</description>
+		<servlet-name>auEngine</servlet-name>
+		<servlet-class>org.zkoss.zk.au.http.DHtmlUpdateServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+  		Framework servlet to receive requests from components and then delegate to an implementation of org.carewebframework.ui.IRequestProcessor for actual processing.
+  		</description>
+		<servlet-name>requestProcessingServlet</servlet-name>
+		<servlet-class>org.carewebframework.ui.RequestProcessingServlet</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>requestProcessingServlet</servlet-name>
+		<url-pattern>/processor/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>dspLoader</servlet-name>
+		<url-pattern>*.dsp</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>zkLoader</servlet-name>
+		<url-pattern>*.zul</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>zkLoader</servlet-name>
+		<url-pattern>*.zhtml</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>auEngine</servlet-name>
+		<url-pattern>/zkau/*</url-pattern>
+	</servlet-mapping>
+
+	<error-page>
+		<!-- Exception-type of Throwable is handled by zk (zk.xml). Specifying 
+			Throwable exception-type handling in both web.xml and zk.xml causes IllegalStateException 
+			(response already committed). -->
+		<error-code>500</error-code>
+		<location>/zkau/web/org/carewebframework/ui/zk/errorLoading.zul</location>
+	</error-page>
+	<error-page>
+		<error-code>404</error-code>
+		<location>/zkau/web/org/carewebframework/ui/zk/errorLoading.zul</location>
+	</error-page>
+	<!--
+		MaxInactiveInterval (in minutes).
+	-->
+	<session-config>
+		<session-timeout>15</session-timeout>
+	</session-config>
+	<welcome-file-list>
+		<welcome-file>index.zul</welcome-file>
+		<welcome-file>careWeb.zul</welcome-file>
+	</welcome-file-list>
+</web-app>

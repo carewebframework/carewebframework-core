@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:cwf="http://www.carewebframework.org/schema/spring" 
+	xmlns:amq="http://activemq.apache.org/schema/core"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/util
+  		http://www.springframework.org/schema/util/spring-util.xsd
+		http://www.carewebframework.org/schema/spring
+		http://www.carewebframework.org/schema/spring/spring-extensions.xsd	
+  		http://activemq.apache.org/schema/core 
+  		http://activemq.apache.org/schema/core/activemq-core.xsd">
+
+	<beans profile="root">
+
+	<!-- Create an embedded ActiveMQ Broker. Using delegation in order to guarantee 
+		shutdown (i.e. destroy-method). Note: we could have reworked the XML to bypass 
+		the amq namespace. -->
+	<bean id="brokerServiceDelegator" class="org.carewebframework.activemq.BrokerServiceDelegator"
+		init-method="start" destroy-method="stop">
+		<property name="brokerService">
+			<amq:broker id="broker" useJmx="true" persistent="true"
+				brokerName="${jms.broker.local.name}" useShutdownHook="false" start="false">
+				<amq:managementContext>
+					<amq:managementContext createConnector="false" />
+				</amq:managementContext>
+				<amq:networkConnectors>
+					<!-- Given Hub & Spoke topology, networkTTL must be greater than 1 for spokes to see other spoke consumers. -->
+					<amq:networkConnector uri="${jms.broker.network.uri}"
+						name="remoteJMSNetworkConnector" duplex="true" networkTTL="3" />
+				</amq:networkConnectors>
+				<amq:persistenceAdapter>
+					<amq:kahaDB directory="${jms.broker.local.persistence.dir}"
+						journalMaxFileLength="${jms.broker.local.persistence.maxsize}" />
+				</amq:persistenceAdapter>
+				<amq:transportConnectors>
+					<amq:transportConnector
+						uri="${jms.broker.local.transport.connector.url}" />
+				</amq:transportConnectors>
+			</amq:broker>
+		</property>
+	</bean>
+
+		<!-- Common JmsTemplates -->
+		<bean id="jmsTopicTemplate" class="org.springframework.jms.core.JmsTemplate">
+			<constructor-arg type="javax.jms.ConnectionFactory"
+				ref="jmsLocalConnectionFactory" />
+			<property name="pubSubDomain" value="true" />
+		</bean>
+
+		<bean id="jmsQueueTemplate" class="org.springframework.jms.core.JmsTemplate">
+			<constructor-arg type="javax.jms.ConnectionFactory"
+				ref="jmsLocalConnectionFactory" />
+		</bean>
+
+	<!-- Local JMS ConnectionFactory to use. -->
+	<bean id="jmsLocalConnectionFactory"
+		class="org.springframework.jms.connection.CachingConnectionFactory"
+		depends-on="brokerServiceDelegator" destroy-method="destroy">
+		<property name="targetConnectionFactory">
+			<bean class="org.apache.activemq.ActiveMQConnectionFactory">
+				<property name="brokerURL" value="${jms.broker.local.url}" />
+			</bean>
+		</property>
+		<property name="sessionCacheSize" value="${jms.connection.factory.session.cache.size}" />
+		<!-- Caching MessageConsumers will leave subscription open until Session is removed from pool.  -->
+		<property name="cacheConsumers" value="false"/>
+		<property name="clientId" ref="jmsConnectionClientId"/>
+	</bean>
+
+	<!-- The preferred way to assign a JMS client's client identifier is for 
+		it to be configured in a client-specific ConnectionFactory object and transparently 
+		assigned to the Connection object it creates. -->
+	<bean id="jmsConnectionClientId" class="java.lang.String">
+		<constructor-arg value="${jms.connection.client.id}"
+			type="java.lang.String" />
+	</bean>
+
+	</beans>
+
+	<beans profile="desktop">
+
+		<!-- globalEventDispatcher: Mediates communications between the local and 
+			the global event manager, in this case a JMS messaging server. -->
+		<bean id="globalEventDispatcher" init-method="init"
+			destroy-method="destroy" cwf:override="always"
+			class="org.carewebframework.activemq.GlobalEventDispatcher">
+			<property name="factory" ref="jmsLocalConnectionFactory" />
+			<property name="jmsTopicTemplate" ref="jmsTopicTemplate" />
+			<property name="localEventDispatcher" ref="eventManager" />
+			<property name="clientId" ref="jmsConnectionClientId" />
+			<!--TODO re-consider desktop.id with new code - pretty sure it won't work as expected with merged CWI-1357 commit (i.e. should be single value across desktops / see spring's caching connection factory) -->
+			<!--
+			<property name="clientId">
+				<util:property-path path="desktop.id" />
+			</property>
+			-->
+		</bean>
+
+	</beans>
+</beans>

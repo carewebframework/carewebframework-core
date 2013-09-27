@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<!-- Parent module (pom). Declares resources/properties, dependency management. 
+		Inherits from CareWebFramework POM. -->
+	<parent>
+		<groupId>org.carewebframework</groupId>
+		<artifactId>org.carewebframework.lib.plugin</artifactId>
+		<version>${cwfVersion}</version>
+	</parent>
+	<groupId>${groupId}</groupId>
+	<artifactId>${artifactId}</artifactId>
+	<version>${version}</version>
+	<name>${cwpName}</name>
+	<properties>
+		<!-- Uncomment and update (if necessary) maven.careweb.help.x properties 
+			when your plugin has help content -->
+		<!-- <maven.careweb.help.moduleId>${cwpLowerCaseName}Help</maven.careweb.help.moduleId> -->
+		<!-- <maven.careweb.help.moduleName>${cwpCamelCaseName} Help</maven.careweb.help.moduleName> -->
+		<!-- <maven.careweb.help.moduleSource>${cwpCamelCaseName}-Help.jar</maven.careweb.help.moduleSource> -->
+	</properties>
+	<dependencies>
+	</dependencies>
+</project>

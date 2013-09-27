@@ -1,0 +1,24 @@
+<zk xmlns="http://www.zkoss.org/2005/zul"
+	xmlns:h="http://www.w3.org/1999/xhtml"
+	xmlns:w="http://www.zkoss.org/2005/zk/client"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+
+	<idspace width="100%" height="100%">
+		<panel id="panel" width="100%" height="100%">
+			<toolbar id="toolbar" mold="panel" align="center" sclass="cwf-step-toolbar">
+				<hbox id="tbarLeft" sclass="cwf-step-taskbar-left" hflex="min" align="center">
+					<toolbarbutton id="btnHome"
+						image="~./org/carewebframework/shell/images/home.png" />
+					<toolbarbutton id="btnLeft"
+						image="~./org/carewebframework/shell/images/arrowL.png" />
+					<toolbarbutton id="btnRight"
+						image="~./org/carewebframework/shell/images/arrowR.png" />
+				</hbox>
+				<div id="tbarCenter" sclass="cwf-step-taskbar" hflex="1" />
+				<hbox id="tbarRight" sclass="cwf-step-taskbar-right" hflex="min" align="center"/>
+			</toolbar>
+			<panelchildren id="inner" style="overflow:auto" />
+		</panel>
+	</idspace>
+</zk>

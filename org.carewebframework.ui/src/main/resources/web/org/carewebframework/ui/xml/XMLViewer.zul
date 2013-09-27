@@ -1,0 +1,15 @@
+<window title="ZK Markup" closable="true" sizable="true" width="75%"
+	height="75%" apply="${xmlViewerController}">
+	<panel id="panel" height="100%" width="100%">
+		<panelchildren>
+			<tree id="tree" hflex="1" vflex="true" />
+		</panelchildren>
+		<toolbar align="end">
+			<label id="lblNotFound" value="Text not found"
+				style="color: gray" visible="false" />
+			<textbox id="textbox" forward="onOK=onSearch" width="350px"
+				focus="true" />
+			<button label="Search" forward="onClick=onSearch" />
+		</toolbar>
+	</panel>
+</window>

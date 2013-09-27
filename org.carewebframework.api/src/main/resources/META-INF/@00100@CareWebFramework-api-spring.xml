@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:task="http://www.springframework.org/schema/task"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/task
+		http://www.springframework.org/schema/task/spring-task.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<beans profile="root">
+
+		<context:annotation-config />
+
+ 		<context:property-placeholder
+			location="classpath*:/META-INF/*-default.properties,${propertysource.org.carewebframework:classpath:cwf*.properties}"
+			ignore-resource-not-found="true"  />
+
+		<bean id="appContextFinder" class="org.carewebframework.api.spring.AppContextFinder">
+			<property name="appFramework" ref="appFramework" />
+		</bean>
+
+		<!-- Maintains an iterable list of all manifests in the class path. -->
+		<bean id="manifestIterator" class="org.carewebframework.api.ManifestIterator"
+			factory-method="getInstance" init-method="init" />
+
+		<!-- Maintains a registry of all context serializers. -->
+		<bean id="contextSerializerRegistry"
+			class="org.carewebframework.api.context.ContextSerializerRegistry"
+			factory-method="getInstance" />
+
+		<!-- Maintains a registry of all aliases. -->
+		<bean id="aliasRegistry" class="org.carewebframework.api.AliasRegistry"
+			factory-method="getInstance">
+			<property name="propertyFile" value="${org.carewebframework.authority.aliases:}" />
+		</bean>
+
+		<task:annotation-driven executor="taskExecutor"
+			scheduler="taskScheduler" />
+
+		<!-- Unbound queues (default) can lead to memory exceptions. Shutdown is 
+			called upon bean destruction. taskExecutor and taskScheduler will be of types 
+			ExecutorService and ScheduledExecutorService respectively. When a task is 
+			rejected, a thread pool executor will throw a RejectedExecutionException 
+			(default policy). -->
+		<bean id="taskExecutor"
+			class="org.springframework.scheduling.concurrent.ThreadPoolExecutorFactoryBean"
+			init-method="initialize" destroy-method="destroy">
+			<property name="threadNamePrefix"
+				value="${task.executor.thread.factory.threadnameprefix}" />
+			<property name="corePoolSize" value="${task.executor.core.pool.size}" />
+			<property name="maxPoolSize" value="${task.executor.max.pool.size}" />
+			<property name="queueCapacity" value="${task.executor.queue.capacity}" />
+			<property name="waitForTasksToCompleteOnShutdown"
+				value="${task.executor.waitfortaskstocompleteonshutdown}" />
+			<property name="awaitTerminationSeconds" value="${task.executor.awaitterminationseconds}" />
+		</bean>
+
+		<bean id="taskScheduler"
+			class="org.springframework.scheduling.concurrent.ScheduledExecutorFactoryBean"
+			init-method="initialize" destroy-method="destroy">
+			<property name="threadNamePrefix"
+				value="${task.scheduler.thread.factory.threadnameprefix}" />
+			<property name="poolSize" value="${task.scheduler.pool.size}" />
+			<property name="waitForTasksToCompleteOnShutdown"
+				value="${task.scheduler.waitfortaskstocompleteonshutdown}" />
+			<property name="awaitTerminationSeconds" value="${task.scheduler.awaitterminationseconds}" />
+		</bean>
+		
+		<!-- JMX Management -->
+		<bean id="mbeanServer" class="org.springframework.jmx.support.MBeanServerFactoryBean">
+			<!-- indicate to first look for a server -->
+			<property name="locateExistingServerIfPossible" value="true" />
+			<!-- search for the MBeanServer instance with the given agentId <property 
+				name="agentId" value=""/> -->
+		</bean>
+
+		<!-- Decorate your beans with Spring's @ManagedXXX annotations. This exporter 
+			will discover beans that implement the MBean interface as well as those annotated 
+			with @ManagedResource -->
+		<bean id="mbeanExporter"
+			class="org.springframework.jmx.export.annotation.AnnotationMBeanExporter">
+			<property name="server" ref="mbeanServer" />
+			<property name="namingStrategy" ref="mbeanNamingStrategy" />
+			<property name="registrationBehaviorName" value="REGISTRATION_IGNORE_EXISTING" />
+		</bean>
+
+		<!-- Default NamingStrategy -->
+		<bean id="mbeanNamingStrategy" class="org.springframework.jmx.export.naming.KeyNamingStrategy"/>
+	</beans>
+
+	<beans profile="desktop">
+
+		<!-- Framework support -->
+		<bean id="appFramework" class="org.carewebframework.api.AppFramework">
+		</bean>
+
+		<!-- Manages subscription and publication of generic events. -->
+		<bean id="eventManager" class="org.carewebframework.api.event.EventManager"
+			destroy-method="destroy">
+		</bean>
+
+		<!-- Manages all shared contexts. -->
+		<bean id="contextManager" class="org.carewebframework.api.context.ContextManager">
+			<property name="eventManager" ref="eventManager" />
+			<property name="appFramework" ref="appFramework" />
+		</bean>
+
+		<!-- Template for managed contexts. -->
+		<bean id="managedContext" abstract="true">
+			<property name="contextManager" ref="contextManager" />
+			<property name="eventManager" ref="eventManager" />
+			<property name="appFramework" ref="appFramework" />
+		</bean>
+
+		<!-- Shared user context. -->
+		<bean id="userContext" parent="managedContext"
+			class="org.carewebframework.api.context.UserContext">
+			<constructor-arg value="#{securityService.authenticatedUser}" />
+		</bean>
+
+
+	</beans>
+</beans>

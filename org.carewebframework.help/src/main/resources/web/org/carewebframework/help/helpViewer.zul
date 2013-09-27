@@ -1,0 +1,34 @@
+<window id="win" border="none" height="200px"
+	use="org.carewebframework.help.HelpViewer">
+	<borderlayout>
+		<west size="33%" splittable="true">
+			<div height="100%" width="100%">
+				<tabbox id="tbxNavigator" height="100%"
+					visible="false">
+					<tabs id="tbViews" />
+					<tabpanels id="tpViews" />
+				</tabbox>
+				<label id="lblLoading" sclass="z-toolbar"
+					style="font-size:1.25em;padding-top:40px;height:100%;text-align:center"
+					value="Loading..." />
+			</div>
+		</west>
+		<center>
+			<div width="100%" height="100%">
+				<toolbar height="32px">
+					<button id="btnPrevious"
+						tooltiptext="${labels.cwf.help.viewer.btn.previous.hint}" />
+					<button id="btnNext"
+						tooltiptext="${labels.cwf.help.viewer.btn.next.hint}" />
+					<separator orient="vertical" />
+					<button id="btnOpen"
+						tooltiptext="${labels.cwf.help.viewer.btn.open.hint}" />
+					<button id="btnPrint"
+						tooltiptext="${labels.cwf.help.viewer.btn.print.hint}" />
+				</toolbar>
+				<iframe id="iframe" name="help_frame" vflex="1"
+					width="100%" />
+			</div>
+		</center>
+	</borderlayout>
+</window>

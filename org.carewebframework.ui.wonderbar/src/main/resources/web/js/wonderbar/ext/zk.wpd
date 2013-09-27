@@ -1,0 +1,8 @@
+<package name="wonderbar.ext" language="xul/html" depends="zul.wgt,zul.inp">
+	<widget name="Wonderbar" />
+	<widget name="WonderbarDefaults" />
+	<widget name="WonderbarItems" />
+	<widget name="WonderbarItem" />
+	<widget name="WonderbarGroup" />
+	<widget name="WonderbarSeparator" />
+</package>

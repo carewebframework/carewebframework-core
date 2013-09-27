@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:cwp="http://www.carewebframework.org/schema/plugin" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.carewebframework.org/schema/plugin
+		http://www.carewebframework.org/schema/plugin/plugin-extensions.xsd">
+
+	<beans profile="root">
+
+		<cwp:plugin id="eventTesting" name="Event Testing"
+			url="~./org/carewebframework/ui/eventtesting/eventTesting.zul">
+			<cwp:resource>
+			</cwp:resource>
+			<cwp:security requiresAll="false">
+			</cwp:security>
+		</cwp:plugin>
+
+	</beans>
+
+</beans>

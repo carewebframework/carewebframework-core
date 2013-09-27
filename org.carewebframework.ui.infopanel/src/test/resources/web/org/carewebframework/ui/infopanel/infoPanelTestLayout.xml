@@ -1,0 +1,12 @@
+<layout name="TESTHARNESS" title="CareWeb Test Harness" version="1.0">
+	<_menubar />
+	<_toolbar />
+	<splitterview orientation="horizontal">
+		<splitterpane size="50" relative="true">
+			<infoPanelTestPlugin />
+		</splitterpane>
+		<splitterpane size="50" relative="true">
+			<infoPanelPlugin />
+		</splitterpane>
+	</splitterview>
+</layout>

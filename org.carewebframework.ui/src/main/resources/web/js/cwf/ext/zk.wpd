@@ -1,0 +1,10 @@
+<package name="cwf.ext" language="xul/html" depends="zul,zul.wgt,zul.db,zul.menu">
+	<widget name="Datebox"/>
+	<widget name="SplitterView"/>
+	<widget name="SplitterPane"/>
+	<widget name="ColorPicker"/>
+	<widget name="IconPicker"/>
+	<widget name="CapsLockLabel"/>
+	<widget name="MessageWindow"/>
+	<widget name="MenuEx"/>
+</package>

@@ -1,0 +1,6 @@
+@CHARSET "UTF-8";
+
+.testPrint, .testPrint .z-label {
+	color: red;
+	font-weight: bold;
+}

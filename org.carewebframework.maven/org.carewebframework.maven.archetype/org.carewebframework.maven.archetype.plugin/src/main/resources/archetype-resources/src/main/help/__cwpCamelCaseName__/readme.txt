@@ -1,0 +1,1 @@
+This directory contains a plugin's help content (RoboHelp files).  RoboHelp then generates a jar, which should be checked into the root of /src/main/help

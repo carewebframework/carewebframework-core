@@ -1,0 +1,48 @@
+<zk xmlns="http://www.zkoss.org/2005/zul"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:h="http://www.w3.org/1999/xhtml"
+	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd ">
+
+	<window border="normal" height="400px" width="400px"
+		zclass="z-window-modal"
+		use="org.carewebframework.shell.designer.PropertyGrid">
+		<borderlayout height="100%" width="100%">
+			<north splittable="true" style="overflow:hidden;border:none"
+				height="75%">
+				<grid id="gridProperties" width="99%" vflex="true"
+					sclass="cwf-propertygrid-grid">
+					<columns sizable="true">
+						<column id="colProperty"
+							label="${labels.cwf.shell.designer.property.grid.column.name}"
+							style="text-align:center" width="50%" />
+						<column id="colValue"
+							label="${labels.cwf.shell.designer.property.grid.column.value}"
+							style="text-align:center" width="50%" />
+					</columns>
+					<rows></rows>
+				</grid>
+			</north>
+			<center sclass="cwf-propertygrid-info">
+				<groupbox closable="false" hflex="1" vflex="1">
+					<caption id="capPropertyName"
+						label="${labels.cwf.shell.designer.property.grid.gbox.caption}" />
+					<label id="lblPropertyInfo" multiline="true" />
+				</groupbox>
+			</center>
+			<south style="border:none">
+				<toolbar id="toolbar" align="end">
+					<button id="btnApply"
+						label="${labels.cwf.shell.designer.property.grid.btn.apply.label}" />
+					<button id="btnRestore"
+						label="${labels.cwf.shell.designer.property.grid.btn.restore.label}" />
+					<separator orient="vertical" width="40px" />
+					<button id="btnOK"
+						label="${labels.cwf.shell.designer.property.grid.btn.ok.label}" />
+					<button id="btnCancel"
+						label="${labels.cwf.shell.designer.property.grid.btn.cancel.label}" />
+					<separator orient="vertical" width="20px" />
+				</toolbar>
+			</south>
+		</borderlayout>
+	</window>
+</zk>

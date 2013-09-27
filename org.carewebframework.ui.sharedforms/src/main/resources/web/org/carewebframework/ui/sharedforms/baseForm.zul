@@ -1,0 +1,17 @@
+<?init class="org.carewebframework.ui.zk.Composition"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul"
+	xmlns:h="http://www.w3.org/1999/xhtml"
+	xmlns:w="http://www.zkoss.org/2005/zk/client"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+
+	<div self="@define(sharedFormsRoot)" context="menu" height="100%"
+		width="100%">
+		<div self="@insert(sharedFormsBase)" height="100%" width="100%" />
+		<menupopup self="@insert(sharedFormsMenu)" id="menu" />
+	</div>
+
+	<style
+		src="~./org/carewebframework/ui/sharedforms/sharedForms.css" />
+</zk>

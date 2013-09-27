@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:cwf="http://www.carewebframework.org/schema/spring" 
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.carewebframework.org/schema/spring 
+		http://www.carewebframework.org/schema/spring/spring-extensions.xsd">
+
+	<beans profile="root">
+
+		<!-- Service for reading and writing persisted properties. -->
+		<bean id="propertyService" class="org.carewebframework.api.property.MockPropertyService">
+			<constructor-arg value="classpath:mock.properties"/>
+		</bean>
+
+		<bean id="securityService" class="org.carewebframework.mock.security.impl.SecurityServiceImpl">
+			<property name="logoutTarget" value="${org.carewebframework.security.logoutFormUrl:}" />
+		</bean>
+
+		<bean id="securityAuthenticationProvider" class="org.carewebframework.mock.security.impl.MockAuthenticationProvider">
+		</bean>
+	
+		<bean id="loginPaneController" class="org.carewebframework.mock.security.impl.LoginPaneController"
+			scope="prototype">
+		</bean>
+
+		<bean id="loginWindowController"
+			class="org.carewebframework.mock.security.impl.LoginWindowController"
+			scope="prototype" />
+			
+	</beans>
+
+	<beans profile="desktop">
+		<!-- 
+		<bean id="userContext" parent="managedContext" cwf:override="always"
+			class="org.regenstrief.cwf.api.context.UserContext" depends-on="contextFactory">
+			<constructor-arg value="#{securityService.authenticatedUser}" />
+		</bean>
+		-->
+
+	</beans>
+</beans>

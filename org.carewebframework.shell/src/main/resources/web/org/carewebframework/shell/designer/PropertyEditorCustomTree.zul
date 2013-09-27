@@ -1,0 +1,39 @@
+<splitterview width="100%" height="100%" horizontal="true">
+	<splitterpane relativeSize="30">
+		<panel height="100%" width="100%">
+			<toolbar>
+				<toolbarbutton id="btnUp"
+					tooltiptext="${labels.cwf.shell.designer.propedit.custom.btn.up.hint}"
+					style="background:transparent"
+					image="~./org/carewebframework/shell/images/arrowU.png" />
+				<toolbarbutton id="btnDown"
+					tooltiptext="${labels.cwf.shell.designer.propedit.custom.btn.down.hint}"
+					style="background:transparent"
+					image="~./org/carewebframework/shell/images/arrowD.png" />
+				<toolbarbutton id="btnLeft"
+					tooltiptext="${labels.cwf.shell.designer.propedit.custom.btn.promote.hint}"
+					style="background:transparent"
+					image="~./org/carewebframework/shell/images/arrowL.png" />
+				<toolbarbutton id="btnRight"
+					tooltiptext="${labels.cwf.shell.designer.propedit.custom.btn.demote.hint}"
+					style="background:transparent"
+					image="~./org/carewebframework/shell/images/arrowR.png" />
+				<toolbarbutton id="btnAdd"
+					tooltiptext="${labels.cwf.shell.designer.propedit.custom.btn.add.hint}"
+					style="background:transparent"
+					image="~./org/carewebframework/shell/images/add.png" />
+				<toolbarbutton id="btnDelete"
+					tooltiptext="${labels.cwf.shell.designer.propedit.custom.btn.delete.hint}"
+					style="background:transparent"
+					image="~./org/carewebframework/shell/images/delete.png" />
+			</toolbar>
+			<panelchildren style="overflow:auto">
+				<tree id="tree"
+					style="text-overflow:ellipsis;white-space:nowrap">
+					<treechildren id="root" />
+				</tree>
+			</panelchildren>
+		</panel>
+	</splitterpane>
+	<splitterpane id="gridParent" relativeSize="70" />
+</splitterview>

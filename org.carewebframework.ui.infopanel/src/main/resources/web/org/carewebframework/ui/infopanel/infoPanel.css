@@ -1,0 +1,37 @@
+@CHARSET "UTF-8";
+
+.cwf-infopanel-container {
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+.cwf-infopanel-container .z-panel-header {
+	color: #000000;
+	font-family: arial;
+	padding: 2px 5px 1px;
+	text-align: center;
+	border-bottom: solid lightBlue 1px !important;
+	background: transparent;
+}
+
+.cwf-infopanel-zenMenu {
+	background-color: #1f4d69; 
+	background-image: none;
+}
+
+.cwf-infopanel-zenMenu .z-menu-btn,
+.cwf-infopanel-zenMenu .z-label {
+	font-family: arial;
+	color: #FFFFFF;
+	font-size: 14px;
+}
+	
+.cwf-infopanel .z-south-colpsd {
+	height: 0!important;
+	display: none!important
+}
+	
+.cwf-infopanel-alertgrid {
+	border-style: none;
+	overflow: auto;
+}

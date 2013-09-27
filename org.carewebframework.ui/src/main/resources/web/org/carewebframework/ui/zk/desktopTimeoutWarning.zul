@@ -1,0 +1,20 @@
+<zk>
+	<window zclass="cwf-timeout">
+		<vlayout>
+			<div id="timeoutPanel" sclass="cwf-timeout-panel">
+				<label id="lblDuration" style="font-weight:bold" />
+				<separator orient="vertical" width="40px" />
+				<button id="btnKeepOpen"
+					label="${labels.cwf.timeout.keepalive.label}" />
+			</div>
+			<div id="lockPanel" sclass="cwf-timeout-lock-panel">
+				<label id="lblLocked" style="display:block;margin-bottom:20px" />
+				<textbox id="txtPassword" type="password" forward="onOK=btnUnlock.onClick" />
+				<button id="btnUnlock" label="${labels.cwf.timeout.unlock.label}" />
+				<space />
+				<button id="btnLogout" label="${labels.cwf.timeout.logout.label}" />
+				<label id="lblInfo" style="display:block;color:red;font-weight:bold;padding-top:5px" />
+			</div>
+		</vlayout>
+	</window>
+</zk>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:cwp="http://www.carewebframework.org/schema/plugin" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.carewebframework.org/schema/plugin
+		http://www.carewebframework.org/schema/plugin/plugin-extensions.xsd">
+
+	<beans profile="root">
+
+		<cwp:plugin id="settingsEditor"
+			url="~./org/carewebframework/ui/settings/main.zul" name="Settings Editor">
+
+			<cwp:serialization>
+				<cwp:property name="Settings Provider" id="provider" type="enum" 
+					description="This is the bean id of the settings provider to use.">
+					<cwp:config>
+						<cwp:entry key="bean">settingsProviderEnumerator</cwp:entry>
+					</cwp:config>
+				</cwp:property>
+				<cwp:property name="Settings Group" id="group"
+					description="This is the id of the settings group to edit." />
+			</cwp:serialization>
+		</cwp:plugin>
+
+	</beans>
+
+	<beans profile="desktop">
+
+		<bean name="settingsController" class="org.carewebframework.ui.settings.MainController"
+			scope="prototype" />
+
+		<bean name="settingsProviderEnumerator" class="org.carewebframework.api.spring.BeanEnumerator">
+			<constructor-arg value="org.carewebframework.ui.settings.ISettingsProvider" />
+		</bean>
+
+	</beans>
+
+</beans>

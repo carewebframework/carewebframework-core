@@ -1,0 +1,17 @@
+<layout name="MOCK-APP" title="CareWeb Mock Application" version="1.0">
+	<_menubar />
+	<_toolbar />
+	<splitterview orientation="vertical">
+		<splitterpane size="90" relative="true">
+			<tabview orientation="horizontal">
+				<tabpane label="Plugins">
+					<treeview caption="Plugins:" open="true">
+					</treeview>
+				</tabpane>
+			</tabview>
+		</splitterpane>
+		<splitterpane size="17" relative="false">
+			<statusPanel />
+		</splitterpane>
+	</splitterview>
+</layout>

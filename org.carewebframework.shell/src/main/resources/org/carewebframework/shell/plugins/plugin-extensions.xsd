@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema
+	xmlns="http://www.carewebframework.org/schema/plugin"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:beans="http://www.springframework.org/schema/beans"
+    targetNamespace="http://www.carewebframework.org/schema/plugin"
+    elementFormDefault="qualified"
+    attributeFormDefault="unqualified">
+    <xsd:import namespace="http://www.springframework.org/schema/beans" />
+    <xsd:element name="plugin" >
+        <xsd:complexType>
+            <xsd:complexContent>
+                <xsd:extension base="beans:identifiedType">
+                    <xsd:choice minOccurs="0" maxOccurs="unbounded">
+                        <xsd:element name="resource" minOccurs="0" maxOccurs="1">
+                            <xsd:complexType>
+                                <xsd:choice minOccurs="0" maxOccurs="unbounded">
+                                    <xsd:element name="button-resource">
+                                        <xsd:complexType>
+                                            <xsd:attribute name="caption" use="required" />
+                                            <xsd:attribute name="action" use="required" />
+                                            <xsd:attribute name="glyph" use="optional" />
+                                            <xsd:attribute name="tooltip" use="optional" />
+                                        </xsd:complexType>
+                                    </xsd:element>
+                                    <xsd:element name="help-resource">
+                                        <xsd:complexType>
+                                            <xsd:attribute name="path" use="optional" />
+                                            <xsd:attribute name="action" use="optional" />
+                                            <xsd:attribute name="module" use="optional" />
+                                            <xsd:attribute name="topic" use="optional" />
+                                        </xsd:complexType>
+                                    </xsd:element>
+                                    <xsd:element name="menu-resource">
+                                        <xsd:complexType>
+                                            <xsd:attribute name="path" use="required" />
+                                            <xsd:attribute name="action" use="required" />
+                                        </xsd:complexType>
+                                    </xsd:element>
+                                    <xsd:element name="property-resource">
+                                        <xsd:complexType>
+                                            <xsd:attribute name="group" use="required" />
+                                        </xsd:complexType>
+                                    </xsd:element>
+                                    <xsd:element name="css-resource">
+                                        <xsd:complexType>
+                                            <xsd:attribute name="url" use="required" />
+                                        </xsd:complexType>
+                                    </xsd:element>
+                                    <xsd:element name="bean-resource">
+                                        <xsd:complexType>
+                                            <xsd:attribute name="bean" use="required" />
+                                            <xsd:attribute name="required" default="true" type="xsd:boolean" />
+                                        </xsd:complexType>
+                                    </xsd:element>
+                                    <xsd:element name="command-resource">
+                                        <xsd:complexType>
+                                            <xsd:attribute name="name" use="required" />
+                                        </xsd:complexType>
+                                    </xsd:element>
+                                </xsd:choice>
+                            </xsd:complexType>
+                        </xsd:element>
+                        <xsd:element name="security" minOccurs="0" maxOccurs="1">
+                            <xsd:complexType>
+                                <xsd:choice minOccurs="0" maxOccurs="unbounded">
+                                    <xsd:element name="privilege">
+                                        <xsd:complexType>
+                                            <xsd:attribute name="name" use="required" />
+                                        </xsd:complexType>
+                                    </xsd:element>
+                                </xsd:choice>
+                                <xsd:attribute name="requiresAll" default="false" type="xsd:boolean"/>
+                            </xsd:complexType>
+                        </xsd:element>
+                        <xsd:element name="serialization"  minOccurs="0" maxOccurs="1">
+                            <xsd:complexType>
+                                <xsd:choice minOccurs="0" maxOccurs="unbounded">
+                                    <xsd:element name="property">
+                                        <xsd:complexType>
+	                                        <xsd:choice>
+	                                        	<xsd:element name="config" minOccurs="0" maxOccurs="1">
+	                                        		<xsd:complexType>
+	                                        			<xsd:choice>
+	                                        				<xsd:element name="entry" minOccurs="0" maxOccurs="unbounded">
+	                                        					<xsd:complexType mixed="true">
+	                                        						<xsd:attribute name="key" use="required" />
+	                                        					</xsd:complexType>
+	                                        				</xsd:element>
+	                                        			</xsd:choice>
+	                                        		</xsd:complexType>
+	                                        	</xsd:element>
+	                                        </xsd:choice>
+                                            <xsd:attribute name="id" use="required" />
+                                            <xsd:attribute name="name" use="required" />
+                                            <xsd:attribute name="type" use="optional" default="text" />
+                                            <xsd:attribute name="description" use="optional" />
+                                            <xsd:attribute name="getter" use="optional" />
+                                            <xsd:attribute name="setter" use="optional" />
+                                            <xsd:attribute name="default" use="optional" />
+                                            <xsd:attribute name="serializable" use="optional" type="xsd:boolean" default="true"/>
+                                            <xsd:attribute name="editable" use="optional" type="xsd:boolean" default="true"/>
+                                        </xsd:complexType>
+                                    </xsd:element>
+                                </xsd:choice>
+                            </xsd:complexType>
+                        </xsd:element>
+                    </xsd:choice>
+                    <xsd:attribute name="name" use="required" />
+                    <xsd:attribute name="url" use="optional" type="xsd:anyURI" />
+                    <xsd:attribute name="class" use="optional"/>
+                    <xsd:attribute name="description" use="optional"/>
+                    <xsd:attribute name="category" use="optional"/>
+                    <xsd:attribute name="source" use="optional"/>
+                    <xsd:attribute name="creator" use="optional"/>
+                    <xsd:attribute name="copyright" use="optional"/>
+                    <xsd:attribute name="version" use="optional"/>
+                    <xsd:attribute name="icon" use="optional" type="xsd:anyURI"/>
+                    <xsd:attribute name="released" use="optional" type="xsd:date"/>
+                    <xsd:attribute name="lazyLoad" use="optional" type="xsd:boolean" default="true"/>
+                </xsd:extension>
+            </xsd:complexContent>
+        </xsd:complexType>
+    </xsd:element>
+</xsd:schema>
