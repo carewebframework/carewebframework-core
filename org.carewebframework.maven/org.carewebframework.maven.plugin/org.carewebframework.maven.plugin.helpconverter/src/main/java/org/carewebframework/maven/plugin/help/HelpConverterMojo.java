@@ -9,32 +9,17 @@
  */
 package org.carewebframework.maven.plugin.help;
 
-/*
- * Copyright 2001-2005 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Enumeration;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
+import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
+import java.util.zip.ZipFile;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.commons.lang.StringUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Execute;
@@ -53,6 +38,36 @@ import org.codehaus.plexus.util.FileUtils;
 @Mojo(name = "prepare")
 @Execute(goal = "prepare", phase = LifecyclePhase.PROCESS_SOURCES)
 public class HelpConverterMojo extends BaseMojo {
+    
+    public interface ISourceArchive {
+        
+        Enumeration<? extends ZipEntry> entries();
+        
+        InputStream getInputStream(ZipEntry entry) throws IOException;
+        
+        boolean isHelpSetDefinition(ZipEntry entry);
+        
+        void close() throws IOException;
+        
+    }
+    
+    protected static class ZipFileEx extends ZipFile implements ISourceArchive {
+        
+        /**
+         * Filter for locating help set definition file.
+         */
+        private final WildcardFileFilter helpSetFilter = new WildcardFileFilter("*.hs");
+        
+        public ZipFileEx(String file) throws ZipException, IOException {
+            super(file);
+        }
+        
+        @Override
+        public boolean isHelpSetDefinition(ZipEntry entry) {
+            return !entry.isDirectory() && helpSetFilter.accept(new File(entry.getName()));
+        }
+        
+    }
     
     /**
      * Base folder.
@@ -75,8 +90,8 @@ public class HelpConverterMojo extends BaseMojo {
     /**
      * Help set format specifier.
      */
-    @Parameter(property = "maven.carewebframework.help.format")
-    private String format;
+    @Parameter(property = "maven.carewebframework.help.moduleFormat")
+    private String moduleFormat;
     
     /**
      * Module version
@@ -109,42 +124,34 @@ public class HelpConverterMojo extends BaseMojo {
             return;
         }
         
-        JarFile sourceJar = null;
-        String rootPath = "org/carewebframework/help/" + moduleId + "/";
+        ISourceArchive sourceArchive = null;
+        String rootPath = "org/carewebframework/help/content/" + moduleId + "/";
         String fullPath = "web/" + rootPath;
         
         try {
             String sourceFilename = FileUtils.normalize(baseDirectory + "/" + moduleSource);
             getLog().info("Extracting help module source from " + sourceFilename);
-            try {
-                sourceJar = new JarFile(sourceFilename);
-            } catch (ZipException e) {
-                if (ignoreMissingSource) {
-                    getLog().info("Ignoring help module source ZipException");
-                    return;
-                }
-                throw e;
-            }
+            sourceArchive = getSourceArchive(sourceFilename);
             File outputDirectory = newSubdirectory(buildDirectory, "help-module");
             File rootDirectory = newSubdirectory(outputDirectory, fullPath);
-            Enumeration<JarEntry> entries = sourceJar.entries();
+            Enumeration<? extends ZipEntry> entries = sourceArchive.entries();
             
             while (entries.hasMoreElements()) {
-                JarEntry entry = entries.nextElement();
+                ZipEntry entry = entries.nextElement();
                 String entryName = entry.getName();
                 
                 if (entryName.startsWith("META-INF/")) {
                     continue;
                 }
                 
-                if (hsFilePath == null && !entry.isDirectory() && entryName.toLowerCase().endsWith(".hs")) {
+                if (hsFilePath == null && sourceArchive.isHelpSetDefinition(entry)) {
                     hsFilePath = rootPath + entryName;
                 }
                 
                 if (entry.isDirectory()) {
                     newSubdirectory(rootDirectory, entry.getName());
                 } else {
-                    InputStream in = sourceJar.getInputStream(entry);
+                    InputStream in = sourceArchive.getInputStream(entry);
                     File outputFile = new File(rootDirectory, entry.getName());
                     FileOutputStream out = new FileOutputStream(outputFile);
                     IOUtils.copy(in, out);
@@ -158,13 +165,34 @@ public class HelpConverterMojo extends BaseMojo {
             throw new MojoExecutionException("Unexpected error.", e);
         } finally {
             try {
-                if (sourceJar != null) {
-                    sourceJar.close();
+                if (sourceArchive != null) {
+                    sourceArchive.close();
                 }
             } catch (IOException e) {
                 getLog().error("Error closing source file.", e);
             }
         }
+    }
+    
+    /**
+     * Returns an ISourceArchive implementation for the given archive name.
+     * 
+     * @param archiveName Name of the archive file.
+     * @return An ISourceArchive instance.
+     * @throws ZipException
+     * @throws IOException
+     */
+    protected ISourceArchive getSourceArchive(String archiveName) throws ZipException, IOException {
+        return new ZipFileEx(archiveName);
+    }
+    
+    /**
+     * Returns the file filter used to detect the help set definition file.
+     * 
+     * @return Help set file detection pattern.
+     */
+    protected String getHelpSetFilePattern() {
+        return "*.hs";
     }
     
     /**
@@ -179,7 +207,7 @@ public class HelpConverterMojo extends BaseMojo {
         }
         
         createConfigEntry(outputDirectory, "/help-config.xml", moduleId, moduleId, hsFilePath, moduleName,
-            getVersion(moduleVersion), format);
+            getVersion(moduleVersion), moduleFormat);
     }
     
 }
