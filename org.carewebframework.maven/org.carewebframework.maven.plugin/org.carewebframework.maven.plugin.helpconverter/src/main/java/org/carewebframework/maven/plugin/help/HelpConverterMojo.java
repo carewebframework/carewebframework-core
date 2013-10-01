@@ -14,12 +14,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.commons.lang.StringUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Execute;
@@ -53,18 +55,13 @@ public class HelpConverterMojo extends BaseMojo {
     
     protected static class ZipFileEx extends ZipFile implements ISourceArchive {
         
-        /**
-         * Filter for locating help set definition file.
-         */
-        private final WildcardFileFilter helpSetFilter = new WildcardFileFilter("*.hs");
-        
         public ZipFileEx(String file) throws ZipException, IOException {
             super(file);
         }
         
         @Override
         public boolean isHelpSetDefinition(ZipEntry entry) {
-            return !entry.isDirectory() && helpSetFilter.accept(new File(entry.getName()));
+            return entry.getName().endsWith(".hs");
         }
         
     }
@@ -111,8 +108,18 @@ public class HelpConverterMojo extends BaseMojo {
     @Parameter(property = "maven.carewebframework.help.ignoreMissingSource", defaultValue = "false", required = false)
     private boolean ignoreMissingSource;
     
+    /**
+     * Additional source archive loader classes. Format is:
+     * <p>
+     * format specifier = ISourceArchive implementation class
+     */
+    @Parameter(property = "maven.carewebframework.help.sourceLoaders")
+    private List<String> sourceLoaders;
+    
     // This is the relative path to the help set definition file.
     private String hsFilePath;
+    
+    private final Map<String, String> sourceLoaderMap = new HashMap<String, String>();
     
     /**
      * Main execution entry point for plug-in.
@@ -124,6 +131,9 @@ public class HelpConverterMojo extends BaseMojo {
             return;
         }
         
+        sourceLoaderMap.put("javahelp", ZipFileEx.class.getName());
+        sourceLoaderMap.put("ohj", ZipFileEx.class.getName());
+        processLoaders();
         ISourceArchive sourceArchive = null;
         String rootPath = "org/carewebframework/help/content/" + moduleId + "/";
         String fullPath = "web/" + rootPath;
@@ -175,24 +185,38 @@ public class HelpConverterMojo extends BaseMojo {
     }
     
     /**
+     * Adds any additional source loaders specified in configuration.
+     */
+    private void processLoaders() {
+        if (sourceLoaders != null) {
+            for (String sourceLoader : sourceLoaders) {
+                String[] pcs = sourceLoader.split("\\=", 2);
+                sourceLoaderMap.put(pcs[0], pcs[1]);
+            }
+        }
+    }
+    
+    /**
      * Returns an ISourceArchive implementation for the given archive name.
      * 
      * @param archiveName Name of the archive file.
      * @return An ISourceArchive instance.
-     * @throws ZipException
-     * @throws IOException
+     * @throws MojoExecutionException
      */
-    protected ISourceArchive getSourceArchive(String archiveName) throws ZipException, IOException {
-        return new ZipFileEx(archiveName);
-    }
-    
-    /**
-     * Returns the file filter used to detect the help set definition file.
-     * 
-     * @return Help set file detection pattern.
-     */
-    protected String getHelpSetFilePattern() {
-        return "*.hs";
+    private ISourceArchive getSourceArchive(String archiveName) throws MojoExecutionException {
+        String className = sourceLoaderMap.get(moduleFormat);
+        
+        if (className == null) {
+            throw new MojoExecutionException("No source loader found for module format: " + moduleFormat);
+        }
+        
+        try {
+            @SuppressWarnings("unchecked")
+            Class<? extends ISourceArchive> clazz = (Class<? extends ISourceArchive>) Class.forName(className);
+            return clazz.getConstructor(String.class).newInstance(archiveName);
+        } catch (Exception e) {
+            throw new MojoExecutionException("Error processing source archive.", e);
+        }
     }
     
     /**
