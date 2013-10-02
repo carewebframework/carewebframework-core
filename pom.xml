@@ -74,6 +74,7 @@
 		<module>org.carewebframework.api</module>
 		<module>org.carewebframework.ui</module>
 		<module>org.carewebframework.help</module>
+		<module>org.carewebframework.help.javahelp</module>
 		<module>org.carewebframework.shell</module>
 		<module>org.carewebframework.security.spring</module>
 		<module>org.carewebframework.activemq</module>
@@ -859,6 +860,13 @@
 			<dependency>
 				<groupId>org.carewebframework</groupId>
 				<artifactId>org.carewebframework.help</artifactId>
+				<version>${org.carewebframework.version}</version>
+				<type>jar</type>
+				<scope>compile</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.carewebframework</groupId>
+				<artifactId>org.carewebframework.help.javahelp</artifactId>
 				<version>${org.carewebframework.version}</version>
 				<type>jar</type>
 				<scope>compile</scope>
