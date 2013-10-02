@@ -11,15 +11,11 @@ package org.carewebframework.maven.plugin.help;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipException;
-import java.util.zip.ZipFile;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
@@ -30,41 +26,18 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 
 import org.carewebframework.maven.plugin.core.BaseMojo;
+import org.carewebframework.maven.plugin.help.SourceLoader.ISourceArchive;
+import org.carewebframework.maven.plugin.help.SourceLoader.ISourceArchiveEntry;
 
 import org.codehaus.plexus.util.FileUtils;
 
 /**
- * Goal which prepares a Help module in compressed (jar) format for repackaging into a
- * CareWeb-compliant help module.
+ * Goal which prepares a Help module in native format for repackaging into a CareWeb-compliant help
+ * module.
  */
 @Mojo(name = "prepare")
 @Execute(goal = "prepare", phase = LifecyclePhase.PROCESS_SOURCES)
 public class HelpConverterMojo extends BaseMojo {
-    
-    public interface ISourceArchive {
-        
-        Enumeration<? extends ZipEntry> entries();
-        
-        InputStream getInputStream(ZipEntry entry) throws IOException;
-        
-        boolean isHelpSetDefinition(ZipEntry entry);
-        
-        void close() throws IOException;
-        
-    }
-    
-    protected static class ZipFileEx extends ZipFile implements ISourceArchive {
-        
-        public ZipFileEx(String file) throws ZipException, IOException {
-            super(file);
-        }
-        
-        @Override
-        public boolean isHelpSetDefinition(ZipEntry entry) {
-            return entry.getName().endsWith(".hs");
-        }
-        
-    }
     
     /**
      * Base folder.
@@ -109,17 +82,16 @@ public class HelpConverterMojo extends BaseMojo {
     private boolean ignoreMissingSource;
     
     /**
-     * Additional source archive loader classes. Format is:
-     * <p>
-     * format specifier = ISourceArchive implementation class
+     * Additional archive loader classes.
      */
-    @Parameter(property = "maven.carewebframework.help.sourceLoaders")
-    private List<String> sourceLoaders;
+    @Parameter(property = "maven.carewebframework.help.archiveLoaders")
+    private List<SourceLoader> archiveLoaders;
     
     // This is the relative path to the help set definition file.
     private String hsFilePath;
     
-    private final Map<String, String> sourceLoaderMap = new HashMap<String, String>();
+    // Maps help format specifier to the associated source archive loader.
+    private final Map<String, SourceLoader> sourceArchiveMap = new HashMap<String, SourceLoader>();
     
     /**
      * Main execution entry point for plug-in.
@@ -131,9 +103,16 @@ public class HelpConverterMojo extends BaseMojo {
             return;
         }
         
-        sourceLoaderMap.put("javahelp", ZipFileEx.class.getName());
-        sourceLoaderMap.put("ohj", ZipFileEx.class.getName());
-        processLoaders();
+        registerLoader(new SourceLoader("javahelp", "*.hs", ZipSource.class.getName()));
+        registerLoader(new SourceLoader("ohj", "*.hs", ZipSource.class.getName()));
+        registerExternalLoaders();
+        
+        SourceLoader loader = sourceArchiveMap.get(moduleFormat);
+        
+        if (loader == null) {
+            throw new MojoExecutionException("No source loader found for format " + moduleFormat);
+        }
+        
         ISourceArchive sourceArchive = null;
         String rootPath = "org/carewebframework/help/content/" + moduleId + "/";
         String fullPath = "web/" + rootPath;
@@ -141,28 +120,28 @@ public class HelpConverterMojo extends BaseMojo {
         try {
             String sourceFilename = FileUtils.normalize(baseDirectory + "/" + moduleSource);
             getLog().info("Extracting help module source from " + sourceFilename);
-            sourceArchive = getSourceArchive(sourceFilename);
+            sourceArchive = loader.load(sourceFilename);
             File outputDirectory = newSubdirectory(buildDirectory, "help-module");
             File rootDirectory = newSubdirectory(outputDirectory, fullPath);
-            Enumeration<? extends ZipEntry> entries = sourceArchive.entries();
+            Iterator<? extends ISourceArchiveEntry> entries = sourceArchive.entries();
             
-            while (entries.hasMoreElements()) {
-                ZipEntry entry = entries.nextElement();
-                String entryName = entry.getName();
+            while (entries.hasNext()) {
+                ISourceArchiveEntry entry = entries.next();
+                String entryPath = entry.getRelativePath();
                 
-                if (entryName.startsWith("META-INF/")) {
+                if (entryPath.startsWith("META-INF/")) {
                     continue;
                 }
                 
-                if (hsFilePath == null && sourceArchive.isHelpSetDefinition(entry)) {
-                    hsFilePath = rootPath + entryName;
+                if (hsFilePath == null && loader.isHelpSetFile(entryPath)) {
+                    hsFilePath = rootPath + entryPath;
                 }
                 
                 if (entry.isDirectory()) {
-                    newSubdirectory(rootDirectory, entry.getName());
+                    newSubdirectory(rootDirectory, entryPath);
                 } else {
-                    InputStream in = sourceArchive.getInputStream(entry);
-                    File outputFile = new File(rootDirectory, entry.getName());
+                    InputStream in = entry.getInputStream();
+                    File outputFile = new File(rootDirectory, entryPath);
                     FileOutputStream out = new FileOutputStream(outputFile);
                     IOUtils.copy(in, out);
                     IOUtils.closeQuietly(in);
@@ -174,12 +153,8 @@ public class HelpConverterMojo extends BaseMojo {
         } catch (Exception e) {
             throw new MojoExecutionException("Unexpected error.", e);
         } finally {
-            try {
-                if (sourceArchive != null) {
-                    sourceArchive.close();
-                }
-            } catch (IOException e) {
-                getLog().error("Error closing source file.", e);
+            if (sourceArchive != null) {
+                sourceArchive.close();
             }
         }
     }
@@ -187,36 +162,16 @@ public class HelpConverterMojo extends BaseMojo {
     /**
      * Adds any additional source loaders specified in configuration.
      */
-    private void processLoaders() {
-        if (sourceLoaders != null) {
-            for (String sourceLoader : sourceLoaders) {
-                String[] pcs = sourceLoader.split("\\=", 2);
-                sourceLoaderMap.put(pcs[0], pcs[1]);
+    private void registerExternalLoaders() {
+        if (archiveLoaders != null) {
+            for (SourceLoader loader : archiveLoaders) {
+                registerLoader(loader);
             }
         }
     }
     
-    /**
-     * Returns an ISourceArchive implementation for the given archive name.
-     * 
-     * @param archiveName Name of the archive file.
-     * @return An ISourceArchive instance.
-     * @throws MojoExecutionException
-     */
-    private ISourceArchive getSourceArchive(String archiveName) throws MojoExecutionException {
-        String className = sourceLoaderMap.get(moduleFormat);
-        
-        if (className == null) {
-            throw new MojoExecutionException("No source loader found for module format: " + moduleFormat);
-        }
-        
-        try {
-            @SuppressWarnings("unchecked")
-            Class<? extends ISourceArchive> clazz = (Class<? extends ISourceArchive>) Class.forName(className);
-            return clazz.getConstructor(String.class).newInstance(archiveName);
-        } catch (Exception e) {
-            throw new MojoExecutionException("Error processing source archive.", e);
-        }
+    private void registerLoader(SourceLoader loader) {
+        sourceArchiveMap.put(loader.getFormatSpecifier(), loader);
     }
     
     /**
