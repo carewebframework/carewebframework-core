@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans
+		 http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<beans profile="root">
+		<!-- Register the help set factory for the JavaHelp format. -->
+		<bean factory-method="register" class="org.carewebframework.help.HelpSetFactory">
+			<constructor-arg value="org.carewebframework.help.javahelp.HelpSet_JavaHelp" />
+			<constructor-arg value="javahelp" />
+		</bean>
+	</beans>
+
+</beans>
