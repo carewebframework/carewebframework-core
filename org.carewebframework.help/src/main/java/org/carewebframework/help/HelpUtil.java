@@ -25,7 +25,7 @@ import org.zkoss.zk.ui.Executions;
  */
 public class HelpUtil {
     
-    public static boolean useViewerProxy = true;
+    private static boolean useViewerProxy = true;
     
     protected static final String RESOURCE_PREFIX = ZKUtil.getResourcePath(HelpUtil.class);
     
@@ -38,6 +38,19 @@ public class HelpUtil {
     /*package*/static final String HELP_QUEUE_PREFIX = "Help_Message_Queue";
     
     /*package*/static final InvocationRequest closeRequest = InvocationRequestQueue.createRequest("close");
+    
+    /**
+     * Determines whether the help viewer is displayed as an embedded popup dialog in the same
+     * browser viewport, or in a separate browser window.
+     * 
+     * @param value If true, displays the viewer in embedded mode.
+     * @return Previous setting.
+     */
+    public static boolean embeddedMode(boolean value) {
+        boolean oldValue = !useViewerProxy;
+        useViewerProxy = !value;
+        return oldValue;
+    }
     
     /**
      * Returns an instance of the viewer for the current desktop. If no instance yet exists, one is
