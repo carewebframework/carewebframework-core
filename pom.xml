@@ -38,10 +38,10 @@
 		<org.apache.activemq.version>5.8.0</org.apache.activemq.version>
 		<org.zkoss.zk.version>6.5.3</org.zkoss.zk.version>
 		<servlet.api.version>2.5</servlet.api.version>
-		<scm.scm>scm:svn</scm.scm>
-		<scm.root>https://tools.regenstrief.org/svn/GroupA-OSS</scm.root>
-		<scm.parent>org.carewebframework</scm.parent>
-		<scm.branch>trunk</scm.branch>
+		<scm.scm>scm:git</scm.scm>
+		<scm.root>https://github.com/carewebframework</scm.root>
+		<scm.parent>carewebframework-core</scm.parent>
+		<scm.branch>tree/master</scm.branch>
 		<scm.base>${scm.root}/${scm.parent}/${scm.branch}</scm.base>
 		<project.name>${project.artifactId}</project.name>
 
