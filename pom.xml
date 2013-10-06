@@ -41,8 +41,7 @@
 		<scm.scm>scm:git</scm.scm>
 		<scm.root>https://github.com/carewebframework</scm.root>
 		<scm.parent>carewebframework-core</scm.parent>
-		<scm.branch>tree/master</scm.branch>
-		<scm.base>${scm.root}/${scm.parent}/${scm.branch}</scm.base>
+		<scm.base>${scm.root}/${scm.parent}</scm.base>
 		<project.name>${project.artifactId}</project.name>
 
 		<!-- Maven Plugin Properties -->
@@ -55,17 +54,7 @@
 		<url>${scm.base}</url>
 	</scm>
 
-	<!-- TODO consider an open source Regenstrief parent to provide build consistency 
-		(i.e. pluginManagement) and repositories... -->
 	<distributionManagement>
-		<repository>
-			<id>internal</id>
-			<url>http://arm.regenstrief.org/archiva/repository/internal</url>
-		</repository>
-		<snapshotRepository>
-			<id>snapshots</id>
-			<url>http://arm.regenstrief.org/archiva/repository/snapshots</url>
-		</snapshotRepository>
 	</distributionManagement>
 
 	<modules>
