@@ -38,6 +38,9 @@
 		<org.apache.activemq.version>5.8.0</org.apache.activemq.version>
 		<org.zkoss.zk.version>6.5.3</org.zkoss.zk.version>
 		<servlet.api.version>2.5</servlet.api.version>
+
+		<!--Necessary for passing credentials.  Need respective server defined in settings.xml -->
+		<project.scm.id>github</project.scm.id>
 		<scm.scm>scm:git</scm.scm>
 		<scm.root>https://github.com/carewebframework</scm.root>
 		<scm.parent>carewebframework-core</scm.parent>
@@ -196,7 +199,7 @@
 						</execution>
 					</executions>
 				</plugin>
-				<!-- Used to obtain SCM (i.e. subversion) revision number and branch, 
+				<!-- Used to obtain SCM revision number and branch, 
 					included in manifest. Note: You will have to look at the war'd META-INF/MANIFEST.MF. 
 					These entries will not be found in work directory. -->
 				<plugin>
@@ -212,6 +215,7 @@
 						</execution>
 					</executions>
 					<configuration>
+						<!--<shortRevisionLength>5</shortRevisionLength>-->
 						<doCheck>false</doCheck>
 						<doUpdate>false</doUpdate>
 						<useLastCommittedRevision>true</useLastCommittedRevision>
