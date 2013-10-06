@@ -43,9 +43,9 @@
 		<project.scm.id>github</project.scm.id>
 		<scm.scm>scm:git</scm.scm>
 		<scm.root>https://github.com/carewebframework</scm.root>
-		<scm.parent>carewebframework-core.git</scm.parent>
+		<scm.parent>carewebframework-core</scm.parent>
+		<!--Removed branch to work with Maven release plugin. <scm.branch>tree/master</scm.branch>-->
 		<scm.base>${scm.root}/${scm.parent}</scm.base>
-
 		<project.name>${project.artifactId}</project.name>
 
 		<!-- Maven Plugin Properties -->

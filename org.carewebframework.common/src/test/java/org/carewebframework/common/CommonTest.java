@@ -174,12 +174,12 @@ public class CommonTest {
     public void testAge() {
         Date dob = DateUtil.toDate(27, 7, 1958);
         Date ref = DateUtil.toDate(1, 1, 2013);
-        assertEquals("54 yrs", DateUtil.getAgeForDisplay(dob, true, ref));
-        assertEquals("54 yr", DateUtil.getAgeForDisplay(dob, false, ref));
+        assertEquals("54 yrs", DateUtil.formatAge(dob, true, ref));
+        assertEquals("54 yr", DateUtil.formatAge(dob, false, ref));
         dob = DateUtil.toDate(15, 12, 2012);
-        assertEquals("17 days", DateUtil.getAgeForDisplay(dob, true, ref));
+        assertEquals("17 days", DateUtil.formatAge(dob, true, ref));
         dob = DateUtil.toDate(30, 10, 2012);
-        assertEquals("2 mos", DateUtil.getAgeForDisplay(dob, true, ref));
+        assertEquals("2 mos", DateUtil.formatAge(dob, true, ref));
     }
     
     @Test

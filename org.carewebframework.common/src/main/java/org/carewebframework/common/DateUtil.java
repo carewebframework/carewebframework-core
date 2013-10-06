@@ -554,8 +554,8 @@ public class DateUtil {
      * @param dob Date of person's birth
      * @return the age display string
      */
-    public static String getAgeForDisplay(Date dob) {
-        return getAgeForDisplay(dob, true, null);
+    public static String formatAge(Date dob) {
+        return formatAge(dob, true, null);
     }
     
     /**
@@ -574,16 +574,16 @@ public class DateUtil {
      * 
      * @param dob Date of person's birth
      * @param pluralize If true, pluralize the age units in the age display string.
-     * @param ref The date as of which to calculate the Person's age (null means today).
+     * @param refDate The date as of which to calculate the Person's age (null means today).
      * @return the age display string
      */
-    public static String getAgeForDisplay(Date dob, boolean pluralize, Date ref) {
+    public static String formatAge(Date dob, boolean pluralize, Date refDate) {
         if (dob == null) {
             return UNKNOWN;
         }
         
         Calendar asOf = Calendar.getInstance();
-        asOf.setTimeInMillis(ref == null ? System.currentTimeMillis() : ref.getTime());
+        asOf.setTimeInMillis(refDate == null ? System.currentTimeMillis() : refDate.getTime());
         Calendar bd = Calendar.getInstance();
         bd.setTime(dob);
         long birthDateInDays = (asOf.getTimeInMillis() - bd.getTimeInMillis()) / 1000 / 60 / 60 / 24;
