@@ -635,6 +635,11 @@
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
+				<groupId>commons-digester</groupId>
+				<artifactId>commons-digester</artifactId>
+				<version>2.1</version>
+			</dependency>
+			<dependency>
 				<groupId>org.apache.xbean</groupId>
 				<artifactId>xbean-spring</artifactId>
 				<version>3.13</version>
@@ -823,6 +828,11 @@
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
+			<dependency>
+				<groupId>org.apache.geronimo.specs</groupId>
+				<artifactId>geronimo-jms_1.1_spec</artifactId>
+				<version>1.1.1</version>
+			</dependency>
 			<!-- CareWeb Libraries -->
 			<dependency>
 				<groupId>org.carewebframework</groupId>
@@ -909,6 +919,11 @@
 				<version>${org.carewebframework.version}</version>
 				<type>jar</type>
 				<scope>compile</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.httpcomponents</groupId>
+				<artifactId>httpcore</artifactId>
+				<version>4.3</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
