@@ -10,6 +10,9 @@
 		<name>Regenstrief Center for Biomedical Informatics</name>
 		<url>http://www.carewebframework.org/</url>
 	</organization>
+	<prerequisites>
+		<maven>2.2.1</maven>
+	</prerequisites>
 	<licenses>
 		<license>
 			<name>MPL 2.0</name>
@@ -215,10 +218,11 @@
 						</execution>
 					</executions>
 					<configuration>
-						<!--<shortRevisionLength>5</shortRevisionLength>-->
+						<shortRevisionLength>8</shortRevisionLength>
 						<doCheck>false</doCheck>
 						<doUpdate>false</doUpdate>
-						<useLastCommittedRevision>true</useLastCommittedRevision>
+						<!--useLastCommittedRevision must be false for git-->
+						<useLastCommittedRevision>false</useLastCommittedRevision>
 						<revisionOnScmFailure />
 					</configuration>
 				</plugin>
