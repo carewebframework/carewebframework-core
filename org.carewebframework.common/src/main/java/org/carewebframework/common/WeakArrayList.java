@@ -47,7 +47,7 @@ public class WeakArrayList<E> extends AbstractList<E> {
     }
     
     /**
-     * Remove any garbage collected entries.
+     * Remove any garbage-collected entries.
      */
     public void cleanup() {
         Reference<? extends E> ref = null;
@@ -95,7 +95,8 @@ public class WeakArrayList<E> extends AbstractList<E> {
     }
     
     /**
-     * Returns a the element referenced at the specified index.
+     * Returns the element referenced at the specified index. If the element has already been
+     * garbage-collected, null is returned.
      */
     @Override
     public E get(int index) {

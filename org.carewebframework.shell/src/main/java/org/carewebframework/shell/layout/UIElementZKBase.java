@@ -9,9 +9,6 @@
  */
 package org.carewebframework.shell.layout;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.commons.lang.StringUtils;
 
 import org.carewebframework.shell.designer.DesignContextMenu;
@@ -262,7 +259,7 @@ public abstract class UIElementZKBase extends UIElementBase {
      * @param component Component to which to apply/remove the design context menu.
      * @param contextMenu The design menu if design mode is activated, or null if it is not.
      */
-    protected void setDesignContextMenu(Object component, Menupopup contextMenu) {
+    protected void setDesignContextMenu(Component component, Menupopup contextMenu) {
         if (component instanceof XulElement) {
             XulElement comp = (XulElement) component;
             
@@ -403,28 +400,6 @@ public abstract class UIElementZKBase extends UIElementBase {
      */
     protected void setEnableDesignModeMask(boolean value) {
         this.enableDesignModeMask = value;
-    }
-    
-    /**
-     * Removes any associated UI elements from the component subtree. This can be used by UI
-     * elements that have hierarchical relationships with their siblings where removing a UI element
-     * requires the removal of siblings belonging to its hierarchy.
-     * 
-     * @param comp
-     */
-    protected void removeAssociatedElements(Component comp) {
-        if (comp != null) {
-            List<Component> children = new ArrayList<Component>(comp.getChildren());
-            
-            for (Component child : children) {
-                removeAssociatedElements(child);
-                UIElementBase ele = (UIElementBase) child.removeAttribute(ASSOC_ELEMENT);
-                
-                if (ele != null) {
-                    ele.remove(true);
-                }
-            }
-        }
     }
     
     /**

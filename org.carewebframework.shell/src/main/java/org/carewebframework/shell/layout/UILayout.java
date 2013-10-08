@@ -122,33 +122,28 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
      * @throws Exception
      */
     private void internalSerialize(UIElementBase parent) throws Exception {
-        try {
-            parent.beforeSerialize();
-            PluginDefinition def = parent.getDefinition();
-            boolean isRoot = parent.getParent() == null;
+        PluginDefinition def = parent.getDefinition();
+        boolean isRoot = parent.getParent() == null;
+        
+        if (!isRoot) {
+            newChild(def.getId());
+        }
+        
+        for (PropertyInfo propInfo : def.getProperties()) {
+            Object value = propInfo.isSerializable() ? propInfo.getPropertyValue(parent) : null;
+            String val = value == null ? null : value.toString();
             
-            if (!isRoot) {
-                newChild(def.getId());
+            if (!ObjectUtils.equals(value, propInfo.getDefault())) {
+                writeString(propInfo.getId(), val);
             }
-            
-            for (PropertyInfo propInfo : def.getProperties()) {
-                Object value = propInfo.isSerializable() ? propInfo.getPropertyValue(parent) : null;
-                String val = value == null ? null : value.toString();
-                
-                if (!ObjectUtils.equals(value, propInfo.getDefault())) {
-                    writeString(propInfo.getId(), val);
-                }
-            }
-            
-            for (UIElementBase child : parent.getSerializableChildren()) {
-                internalSerialize(child);
-            }
-            
-            if (!isRoot) {
-                moveUp();
-            }
-        } finally {
-            parent.afterSerialize();
+        }
+        
+        for (UIElementBase child : parent.getSerializableChildren()) {
+            internalSerialize(child);
+        }
+        
+        if (!isRoot) {
+            moveUp();
         }
     }
     

@@ -433,8 +433,8 @@ public class StrUtil {
      * Formats a message. If the message begins with "@", the remainder is assumed to be a label
      * name that is resolved.
      * 
-     * @param locale Optional locale
      * @param msg Message to format or, if starts with "@", a label reference.
+     * @param locale Optional locale
      * @param args Optional replaceable parameters.
      * @return The formatted message.
      */

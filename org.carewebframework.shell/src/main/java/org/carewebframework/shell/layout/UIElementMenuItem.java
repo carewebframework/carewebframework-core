@@ -99,4 +99,17 @@ public class UIElementMenuItem extends UIElementActionBase {
         MenuUtil.updateStyles(menu);
     }
     
+    @Override
+    protected void bind() {
+        if (getParent() instanceof UIElementMenuItem) {
+            ((UIElementMenuItem) getParent()).menu.getMenupopup().appendChild(menu);
+        } else {
+            super.bind();
+        }
+    }
+    
+    @Override
+    protected void unbind() {
+        menu.detach();
+    }
 }

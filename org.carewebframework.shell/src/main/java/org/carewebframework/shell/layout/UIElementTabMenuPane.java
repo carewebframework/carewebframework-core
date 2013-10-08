@@ -48,7 +48,7 @@ public class UIElementTabMenuPane extends UIElementMenuItem {
         autoHide = true;
         fullSize(div);
         div.setSclass("cwf-tab-menupane");
-        associateComponent(div);
+        setInnerComponent(div);
         div.setVisible(false);
         getMenu().addEventListener(Events.ON_CLICK, listener);
     }
