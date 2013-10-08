@@ -642,14 +642,14 @@
 			<dependency>
 				<groupId>org.apache.xbean</groupId>
 				<artifactId>xbean-spring</artifactId>
-				<version>3.13</version>
+				<version>3.14</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.httpcomponents</groupId>
 				<artifactId>httpclient</artifactId>
-				<version>4.2.2</version>
+				<version>4.3.1</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
