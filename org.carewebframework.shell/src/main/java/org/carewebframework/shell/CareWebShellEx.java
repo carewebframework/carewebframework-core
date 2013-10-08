@@ -402,8 +402,7 @@ public class CareWebShellEx extends CareWebShell {
     
     /**
      * Returns the path resolver implementation. This implementation determines where in the layout
-     * the plugin should be placed based on a path. A default parentFinder implementation is
-     * provided.
+     * the plugin should be placed based on a path. A default implementation is provided.
      * 
      * @return
      */
@@ -420,7 +419,7 @@ public class CareWebShellEx extends CareWebShell {
      * 
      * @param pathResolver
      */
-    public void setParentFinder(PathResolver pathResolver) {
+    public void setPathResolver(PathResolver pathResolver) {
         if (this.pathResolver != null) {
             throw new UIException("A path resolver can only be set once.");
         }
