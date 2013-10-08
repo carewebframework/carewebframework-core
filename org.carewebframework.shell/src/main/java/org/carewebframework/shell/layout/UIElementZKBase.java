@@ -259,7 +259,7 @@ public abstract class UIElementZKBase extends UIElementBase {
      * @param component Component to which to apply/remove the design context menu.
      * @param contextMenu The design menu if design mode is activated, or null if it is not.
      */
-    protected void setDesignContextMenu(Object component, Menupopup contextMenu) {
+    protected void setDesignContextMenu(Component component, Menupopup contextMenu) {
         if (component instanceof XulElement) {
             XulElement comp = (XulElement) component;
             
