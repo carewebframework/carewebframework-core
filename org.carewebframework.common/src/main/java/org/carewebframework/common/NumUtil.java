@@ -24,7 +24,7 @@ public class NumUtil {
      * @return -1 if val1 < val2; 0 if val1 == val2; 1 if val1 > val2
      */
     public static int compare(int val1, int val2) {
-        return new Integer(val1).compareTo(val2);
+        return val1 == val2 ? 0 : val1 < val2 ? -1 : 1;
     }
     
     /**
@@ -35,7 +35,7 @@ public class NumUtil {
      * @return -1 if val1 < val2; 0 if val1 == val2; 1 if val1 > val2
      */
     public static int compare(double val1, double val2) {
-        return new Double(val1).compareTo(val2);
+        return Double.compare(val1, val2);
     }
     
     /**
