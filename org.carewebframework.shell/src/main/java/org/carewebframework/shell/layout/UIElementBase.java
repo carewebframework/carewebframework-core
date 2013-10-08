@@ -534,11 +534,11 @@ public abstract class UIElementBase {
     }
     
     /**
-     * The default behavior of activate is to propagate the call to all children. If a UI element
-     * needs to perform a special behavior when it is activated, it should override the
-     * activateChildren method. In the case where a UI element may have only one active child at a
-     * time, it should pass the activate call only to the active child and not call the inherited
-     * method.
+     * Activates or inactivates a UI element. In general, this method should not be overridden to
+     * introduce new behavior. Rather, if a UI element must change its visual state in response to a
+     * change in activation state, it should override the updateVisibility method. If a UI element
+     * requires special activation logic for its children (e.g., if it allows only one child to be
+     * active at a time), it should override the activateChildren method.
      * 
      * @param activate
      */
@@ -1267,7 +1267,7 @@ public abstract class UIElementBase {
     
     /**
      * Subclasses may override this to implement any additional operations that are necessary after
-     * this element is initialized (i.e., before property values and parent element are set).
+     * this element is initialized (i.e., after property values and parent element are set).
      * 
      * @param deserializing If true, initialization is occurring as a result of deserialization.
      * @throws Exception
