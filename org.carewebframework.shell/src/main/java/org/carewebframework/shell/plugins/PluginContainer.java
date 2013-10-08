@@ -853,7 +853,7 @@ public class PluginContainer extends Idspace {
      * @param resource CSS resource.
      */
     public void processResource(CSSResource resource) {
-        shell.registerCSSResource(resource);
+        shell.registerStyleSheet(resource.getUrl());
     }
     
     /**
