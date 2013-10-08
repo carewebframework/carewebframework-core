@@ -51,6 +51,7 @@
 		<project.name>${project.artifactId}</project.name>
 
 		<!-- Maven Plugin Properties -->
+		<maven.plugin.buildnumber.version>1.2</maven.plugin.buildnumber.version>
 		<tomcat.manager.url>http://localhost:8080/manager</tomcat.manager.url>
 		<tomcat.manager.server.id>tomcat.manager</tomcat.manager.server.id>
 	</properties>
@@ -208,7 +209,7 @@
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>buildnumber-maven-plugin</artifactId>
-					<version>1.2</version>
+					<version>${maven.plugin.buildnumber.version}</version>
 					<executions>
 						<execution>
 							<phase>validate</phase>
@@ -381,6 +382,34 @@
 						</archive>
 					</configuration>
 				</plugin>
+	            <!--This plugin's configuration is used to store Eclipse 
+	                m2e settings only. It has no influence on the Maven build itself. -->
+	            <plugin>
+	                <groupId>org.eclipse.m2e</groupId>
+	                <artifactId>lifecycle-mapping</artifactId>
+	                <version>1.0.0</version>
+	                <configuration>
+	                    <lifecycleMappingMetadata>
+	                        <pluginExecutions>
+	                            <pluginExecution>
+	                                <pluginExecutionFilter>
+										<groupId>org.codehaus.mojo</groupId>
+										<artifactId>buildnumber-maven-plugin</artifactId>
+	                                    <versionRange>[${maven.plugin.buildnumber.version},)</versionRange>
+	                                    <goals>
+	                                        <goal>create</goal>
+	                                    </goals>
+	                                </pluginExecutionFilter>
+	                                <action>
+							           <execute >
+							             <runOnIncremental>true</runOnIncremental>
+							           </execute >
+	                                </action>
+	                            </pluginExecution>
+	                        </pluginExecutions>
+	                    </lifecycleMappingMetadata>
+	                </configuration>
+	            </plugin>
 			</plugins>
 		</pluginManagement>
 		<plugins>
