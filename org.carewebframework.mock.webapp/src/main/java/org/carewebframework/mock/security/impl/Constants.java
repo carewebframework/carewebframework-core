@@ -13,8 +13,6 @@ import org.carewebframework.ui.zk.ZKUtil;
 
 /**
  * Package-wide constants.
- * 
- * @author dmartin
  */
 public final class Constants {
     

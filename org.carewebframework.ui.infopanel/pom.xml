@@ -5,6 +5,7 @@
 		<artifactId>org.carewebframework</artifactId>
 		<version>3.0.0.BUILD-SNAPSHOT</version>
 	</parent>
+	<name>CareWeb Framework UI InfoPanel</name>
 	<artifactId>org.carewebframework.ui.infopanel</artifactId>
 	<dependencies>
 		<dependency>

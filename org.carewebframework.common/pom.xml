@@ -6,7 +6,7 @@
 		<version>3.0.0.BUILD-SNAPSHOT</version>
 	</parent>
 	<artifactId>org.carewebframework.common</artifactId>
-	<name>Common Utilities</name>
+	<name>CareWeb Framework Common Utilities</name>
 	<dependencies>
 		<dependency>
 			<groupId>commons-io</groupId>
