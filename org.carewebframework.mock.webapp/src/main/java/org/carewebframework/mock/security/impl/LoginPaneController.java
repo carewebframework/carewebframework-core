@@ -72,7 +72,12 @@ public class LoginPaneController extends GenericForwardComposer<Component> {
         }
         
         String username = (String) session.removeAttribute(Constants.DEFAULT_USERNAME);
-        username = authError == null ? "" : username;
+        //previous logic implied that username would only have a value if there was an error.
+        //pre-populate with mock values
+        username = authError == null ? PropertyUtil.getValue("mock.username", null) : username;
+        if(authError == null){//keep consistent with previous logic (i.e. empty field values if authError is null)
+            j_password.setText(PropertyUtil.getValue("mock.password", null));
+        }
         showMessage(authError == null ? null : loginFailureMessage);
         j_username.setText(username);
         
