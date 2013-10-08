@@ -415,7 +415,7 @@ public class CareWebShell extends Div implements AfterCompose {
                 return;
             }
             
-            IHelpSet hs = resource.getHelpDefinition().getHelpSet();
+            IHelpSet hs = def.getHelpSet();
             
             if (hs == null) {
                 return;
