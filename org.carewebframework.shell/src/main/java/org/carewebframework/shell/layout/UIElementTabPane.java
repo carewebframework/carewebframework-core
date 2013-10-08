@@ -145,6 +145,7 @@ public class UIElementTabPane extends UIElementZKBase {
      * @param value
      */
     public void setLabel(String value) {
+        tab.setLabel(value);
         caption.setLabel(value);
     }
     
