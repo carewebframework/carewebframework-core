@@ -9,23 +9,24 @@
  */
 package org.carewebframework.mock.security.impl;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.carewebframework.api.domain.IUser;
 import org.carewebframework.api.property.PropertyUtil;
 import org.carewebframework.security.spring.AbstractAuthenticationProvider;
 import org.carewebframework.security.spring.CWFAuthenticationDetails;
-
 import org.springframework.security.authentication.BadCredentialsException;
 
 /**
  * Provides authentication support for the framework. Takes provided authentication credentials and
  * authenticates them against the database.
- * 
- * @author dmartin
  */
 public class MockAuthenticationProvider extends AbstractAuthenticationProvider {
-    
+
+    /**
+     * No-arg constructor.
+     */
     public MockAuthenticationProvider() {
         super(false);
     }
@@ -36,6 +37,49 @@ public class MockAuthenticationProvider extends AbstractAuthenticationProvider {
     
     protected MockAuthenticationProvider(List<String> grantedAuthorities) {
         super(grantedAuthorities);
+    }
+    
+    private static class MockIUser implements IUser, Serializable {
+
+        private static final long serialVersionUID = 1L;
+
+        private long id = 123;
+        
+        private String uname;
+        
+        public MockIUser(String username){
+            this.uname = username;
+        }
+        
+        @Override
+        public long getDomainId() {
+            return id;
+        }
+        
+        @Override
+        public void setDomainId(long id) {
+            this.id = id;
+        }
+        
+        @Override
+        public Object getProxiedObject() {
+            return this;
+        }
+        
+        @Override
+        public void setUsername(String username) {
+            uname = username;
+        }
+        
+        @Override
+        public String getUsername() {
+            return uname;
+        }
+        
+        @Override
+        public String getFullName() {
+            return PropertyUtil.getValue("mock.fullname", null);
+        }
     }
     
     /**
@@ -59,43 +103,7 @@ public class MockAuthenticationProvider extends AbstractAuthenticationProvider {
             throw new BadCredentialsException("Authentication failed.");
         }
         
-        return new IUser() {
-            
-            long id = 123;
-            
-            String uname = username;
-            
-            @Override
-            public long getDomainId() {
-                return id;
-            }
-            
-            @Override
-            public void setDomainId(long id) {
-                this.id = id;
-            }
-            
-            @Override
-            public Object getProxiedObject() {
-                return this;
-            }
-            
-            @Override
-            public void setUsername(String username) {
-                uname = username;
-            }
-            
-            @Override
-            public String getUsername() {
-                return uname;
-            }
-            
-            @Override
-            public String getFullName() {
-                return PropertyUtil.getValue("mock.fullname", null);
-            }
-            
-        };
+        return new MockIUser(username);
     }
     
     private boolean check(String property, String value) {

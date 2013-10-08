@@ -29,8 +29,6 @@ import org.zkoss.zul.Textbox;
 
 /**
  * Controller for the login component.
- * 
- * @author dmartin
  */
 public class LoginPaneController extends GenericForwardComposer<Component> {
     
