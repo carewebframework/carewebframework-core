@@ -7,7 +7,7 @@
 		<version>3.0.0.BUILD-SNAPSHOT</version>
 	</parent>
 	<artifactId>org.carewebframework.ui.wonderbar</artifactId>
-	<name>Wonderbar Component</name>
+	<name>CareWeb Framework UI Wonderbar Component</name>
 	<dependencies>
 		<dependency>
 			<groupId>org.zkoss.zk</groupId>

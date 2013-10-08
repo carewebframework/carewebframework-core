@@ -7,7 +7,7 @@
 		<version>3.0.0.BUILD-SNAPSHOT</version>
 	</parent>
 	<artifactId>org.carewebframework.security.spring</artifactId>
-	<name>Spring Security Adaptor</name>
+	<name>CareWeb Framework Spring Security Adaptor</name>
 	<dependencies>
 		<dependency>
 			<groupId>javax.servlet</groupId>

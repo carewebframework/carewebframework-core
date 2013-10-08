@@ -7,7 +7,7 @@
 		<version>3.0.0.BUILD-SNAPSHOT</version>
 	</parent>
 	<artifactId>org.carewebframework.testharness</artifactId>
-	<name>TestHarness Base Support</name>
+	<name>CareWeb Framework TestHarness Base Support</name>
 	<dependencies>
 		<!-- CareWeb Framework Components -->
 		<dependency>

@@ -7,7 +7,7 @@
 		<version>3.0.0.BUILD-SNAPSHOT</version>
 	</parent>
 	<artifactId>org.carewebframework.activemq</artifactId>
-	<name>ActiveMQ Adaptor</name>
+	<name>CareWeb Framework ActiveMQ Adaptor</name>
 	<description>
 		Provides an implementation of the global event dispatcher using the ActiveMQ Java Messaging
 		Service.

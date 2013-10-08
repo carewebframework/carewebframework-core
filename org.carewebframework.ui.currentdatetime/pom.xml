@@ -6,6 +6,7 @@
 		<artifactId>org.carewebframework</artifactId>
 		<version>3.0.0.BUILD-SNAPSHOT</version>
 	</parent>
+	<name>CareWeb Framework Current Date Time</name>
 	<artifactId>org.carewebframework.ui.currentdatetime</artifactId>
 	<dependencies>
 		<dependency>

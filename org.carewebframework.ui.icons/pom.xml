@@ -6,7 +6,7 @@
 		<version>3.0.0.BUILD-SNAPSHOT</version>
 	</parent>
 	<artifactId>org.carewebframework.ui.icons</artifactId>
-	<name>Silk Icon Library</name>
+	<name>CareWeb Framework Silk Icon Library</name>
 	<licenses>
 		<license>
 			<name>
