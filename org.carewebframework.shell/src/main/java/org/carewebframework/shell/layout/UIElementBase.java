@@ -1276,23 +1276,4 @@ public abstract class UIElementBase {
         
     }
     
-    /**
-     * Subclasses may override this to implement any additional operations that are necessary before
-     * this element is serialized.
-     * 
-     * @throws Exception
-     */
-    public void beforeSerialize() throws Exception {
-        
-    }
-    
-    /**
-     * Subclasses may override this to implement any additional operations that are necessary after
-     * this element has been serialized.
-     * 
-     * @throws Exception
-     */
-    public void afterSerialize() throws Exception {
-        
-    }
 }
