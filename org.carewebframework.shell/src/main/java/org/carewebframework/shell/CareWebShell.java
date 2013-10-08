@@ -34,7 +34,6 @@ import org.carewebframework.shell.layout.UIElementZKBase;
 import org.carewebframework.shell.layout.UILayout;
 import org.carewebframework.shell.plugins.PluginContainer;
 import org.carewebframework.shell.plugins.PluginDefinition;
-import org.carewebframework.shell.plugins.PluginResource.CSSResource;
 import org.carewebframework.shell.plugins.PluginResource.HelpResource;
 import org.carewebframework.ui.Application;
 import org.carewebframework.ui.FrameworkWebSupport;
@@ -416,7 +415,7 @@ public class CareWebShell extends Div implements AfterCompose {
                 return;
             }
             
-            IHelpSet hs = resource.getHelpDefinition().getHelpSet();
+            IHelpSet hs = def.getHelpSet();
             
             if (hs == null) {
                 return;
@@ -430,14 +429,12 @@ public class CareWebShell extends Div implements AfterCompose {
     }
     
     /**
-     * Registers a CSS resource. If the resource has not already been registered, creates a style
-     * component and adds it to the current page.
+     * Registers an external style sheet. If the style sheet has not already been registered,
+     * creates a style component and adds it to the current page.
      * 
-     * @param resource
+     * @param url
      */
-    public void registerCSSResource(CSSResource resource) {
-        String url = resource.getUrl();
-        
+    public void registerStyleSheet(String url) {
         for (Object style : registeredStyles.getChildren()) {
             if (((Style) style).getSrc().equals(url)) {
                 return;
