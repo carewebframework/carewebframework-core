@@ -225,7 +225,7 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
      * Load the layout from a file.
      * 
      * @param url Resource path.
-     * @throws Exception when problem retrieving resource via uri path
+     * @throws Exception when problem retrieving resource via url.
      */
     public void loadFromUrl(String url) throws Exception {
         InputStream strm = null;
