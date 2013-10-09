@@ -6,11 +6,11 @@
 		<artifactId>org.carewebframework</artifactId>
 		<version>3.0.0.BUILD-SNAPSHOT</version>
 	</parent>
-	<artifactId>org.carewebframework.mock.webapp</artifactId>
+	<artifactId>org.carewebframework.testharness.webapp</artifactId>
 	<packaging>war</packaging>
-	<name>CareWeb Framework Mock Web Application</name>
+	<name>CareWeb Framework Test Harness</name>
 	<properties>
-		<org.carewebframework.security.artifact>org.carewebframework.mock.security.impl</org.carewebframework.security.artifact>
+		<org.carewebframework.security.artifact>org.carewebframework.testharness.security.impl</org.carewebframework.security.artifact>
 	</properties>
 	<build>
 		<plugins>

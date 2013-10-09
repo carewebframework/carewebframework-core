@@ -7,7 +7,7 @@
  * Disclaimer of Warranty and Limitation of Liability available at
  * http://www.carewebframework.org/licensing/disclaimer.
  */
-package org.carewebframework.mock.security.impl;
+package org.carewebframework.testharness.security.impl;
 
 import org.carewebframework.ui.zk.ZKUtil;
 

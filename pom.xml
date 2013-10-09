@@ -86,7 +86,7 @@
 		<module>org.carewebframework.ext</module>
 		<module>org.carewebframework.lib</module>
 		<module>org.carewebframework.testharness</module>
-		<module>org.carewebframework.mock.webapp</module>
+		<module>org.carewebframework.testharness.webapp</module>
 	</modules>
 	<build>
 		<pluginManagement>
