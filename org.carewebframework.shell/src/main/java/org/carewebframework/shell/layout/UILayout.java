@@ -224,18 +224,18 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
     /**
      * Load the layout from a file.
      * 
-     * @param uri path
+     * @param url Resource path.
      * @throws Exception when problem retrieving resource via uri path
      */
-    public void loadFromUrl(String uri) throws Exception {
+    public void loadFromUrl(String url) throws Exception {
         InputStream strm = null;
         
         try {
             reset();
-            strm = Executions.getCurrent().getDesktop().getWebApp().getResourceAsStream(uri);
+            strm = Executions.getCurrent().getDesktop().getWebApp().getResourceAsStream(url);
             
             if (strm == null) {
-                throw new UIException("Unable to locate layout resource: " + uri);
+                throw new UIException("Unable to locate layout resource: " + url);
             }
             
             document = XMLUtil.parseXMLFromStream(strm);
