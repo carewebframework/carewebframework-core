@@ -2,16 +2,13 @@
 #set( $symbol_dollar = '$' )
 #set( $symbol_escape = '\' )
 /**
- * The contents of this file are subject to the Regenstrief Public License
- * Version 1.0 (the "License"); you may not use this file except in compliance with the License.
- * Please contact Regenstrief Institute if you would like to obtain a copy of the license.
- *
- * Software distributed under the License is distributed on an "AS IS"
- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
- * License for the specific language governing rights and limitations
- * under the License.
- *
- * Copyright (C) Regenstrief Institute.  All Rights Reserved.
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
+ * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * http://mozilla.org/MPL/2.0/.
+ * 
+ * This Source Code Form is also subject to the terms of the Health-Related Additional
+ * Disclaimer of Warranty and Limitation of Liability available at
+ * http://www.carewebframework.org/licensing/disclaimer.
  */
 package ${package}.controller;
 
@@ -25,15 +22,12 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zul.Label;
 
 /**
- * This is a sample controller that subclasses the FrameworkController class which provides some
+ * This is a sample controller that subclasses the PluginController class which provides some
  * convenience methods for accessing framework services and can automatically register the
  * controller with the framework so that it may receive context change events (if controller is-an
- * instanceof a supported context-related interface). This particular controller illustrates
- * registering a patient context listener so that it may receive notification of patient context
- * changes. This controller also illustrates registration of a member as a CareWeb Framework plugin
- * event listener so that it may receive notification when the plugin is activated and inactivated
- * within the CareWeb Framework. This is useful if one wants to defer certain expensive operations
- * until the component is actually visible.
+ * instanceof a supported context-related interface).  This controller illustrates use of the
+ * IPluginEvent interface to receive notification when the plugin is activated and inactivated
+ * within the CareWeb Framework. 
  *
  */
 public class ${cwpCamelCaseName}Controller extends PluginController {

@@ -35,6 +35,11 @@
 	<dependencies>
 		<!-- Insert any plugins to be tested here. -->
 		<dependency>
+			<groupId>my.maven.project</groupId>
+			<artifactId>sample</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
 			<groupId>org.carewebframework</groupId>
 			<artifactId>org.carewebframework.ui.popupsupport</artifactId>
 			<version>${project.parent.version}</version>

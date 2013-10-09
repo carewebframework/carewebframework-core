@@ -16,9 +16,10 @@
 	<properties>
 		<!-- Uncomment and update (if necessary) maven.careweb.help.x properties 
 			when your plugin has help content -->
-		<!-- <maven.careweb.help.moduleId>${cwpLowerCaseName}Help</maven.careweb.help.moduleId> -->
-		<!-- <maven.careweb.help.moduleName>${cwpCamelCaseName} Help</maven.careweb.help.moduleName> -->
-		<!-- <maven.careweb.help.moduleSource>${cwpCamelCaseName}-Help.jar</maven.careweb.help.moduleSource> -->
+		<!-- <maven.carewebframework.help.moduleId>${cwpLowerCaseName}Help</maven.carewebframework.help.moduleId> -->
+		<!-- <maven.carewebframework.help.moduleName>${cwpCamelCaseName} Help</maven.carewebframework.help.moduleName> -->
+		<!-- <maven.carewebframework.help.moduleSource>${cwpCamelCaseName}-Help.jar</carewebframework.careweb.help.moduleSource> -->
+		<!-- <maven.carewebframework.help.moduleFormat>javahelp</carewebframework.careweb.help.moduleFormat> -->
 	</properties>
 	<dependencies>
 	</dependencies>
