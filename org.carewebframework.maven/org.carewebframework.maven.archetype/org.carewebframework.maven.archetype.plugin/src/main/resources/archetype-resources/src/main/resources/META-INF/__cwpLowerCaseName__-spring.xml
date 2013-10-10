@@ -20,10 +20,10 @@
 			url="~./${packageInPathFormat}/${cwpLowerCaseName}.zul">
 			<cwp:resource>
 				<cwp:button-resource caption="${symbol_dollar}{labels.${cwpLowerCaseName}.button.caption}" 
-					action='zscript:Messagebox.show(org.zkoss.util.resource.Labels.getLabel("${cwpLowerCaseName}.button.click.msg"));'/>
+					action='zscript:Messagebox.show("${symbol_dollar}{labels.${cwpLowerCaseName}.button.click.msg}");'/>
 				<cwp:help-resource module="${cwpLowerCaseName}Help"/>
 				<cwp:menu-resource path="${cwpCamelCaseName}${symbol_escape}Click Me" 
-					action='zscript:Messagebox.show(org.zkoss.util.resource.Labels.getLabel("${cwpLowerCaseName}.menu.click.msg"));'/>
+					action='zscript:Messagebox.show("${symbol_dollar}{labels.${cwpLowerCaseName}.menu.click.msg}");'/>
 				<cwp:property-resource group="plugin${cwpCamelCaseName}PropGroupName"/>
 			</cwp:resource>
 			<!-- You may specify plugin level security constraints here:
