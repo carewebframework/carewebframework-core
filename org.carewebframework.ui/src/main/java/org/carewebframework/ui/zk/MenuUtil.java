@@ -305,11 +305,11 @@ public class MenuUtil {
      */
     public static void updateStyles(Component comp) {
         if (comp instanceof Menupopup) {
-            boolean hasChildren = comp.getFirstChild() != null;
+            boolean hasChildren = ZKUtil.firstVisibleChild(comp, false) != null;
             ((Menupopup) comp).setZclass(hasChildren ? null : "cwf-menupopup-empty");
         } else if (comp instanceof Menu) {
-            Component child = comp.getFirstChild();
-            boolean hasChildren = child != null && child.getFirstChild() != null;
+            Component child = ZKUtil.firstVisibleChild(comp, false);
+            boolean hasChildren = child != null && ZKUtil.firstVisibleChild(child, false) != null;
             ((Menu) comp).setZclass(hasChildren ? null : "z-menuitem");
         }
         
