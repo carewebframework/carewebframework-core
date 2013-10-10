@@ -75,7 +75,7 @@ public class UIElementTabPane extends UIElementZKBase {
     }
     
     /**
-     * Sets the visibility of the tab and tab panel.
+     * Sets the visibility and selection state of the tab.
      */
     @Override
     protected void updateVisibility(boolean visible, boolean activated) {
