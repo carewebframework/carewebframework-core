@@ -67,6 +67,11 @@ public class UIElementMenuItem extends UIElementActionBase {
             return result;
         }
         
+        /**
+         * Adjust visibility of parent menu elements.
+         * 
+         * @param visible
+         */
         private void adjustVisibility(boolean visible) {
             Component parent = ZKUtil.findAncestor(this, Menupopup.class);
             
