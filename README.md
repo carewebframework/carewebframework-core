@@ -36,7 +36,7 @@ extracted from the JDK download.
 ### Check out sources
 `git clone https://github.com/carewebframework/carewebframework-core.git`
 
-### Install all CareWeb Framework-\* jars into your local Maven repository/cache
+### Install all CareWeb Framework jars into your local Maven repository/cache
 Make sure to cd into the carewebframework-core directory and then execute
 `mvn clean install`
 
@@ -64,4 +64,4 @@ The CareWeb Framework is released under version 2.0 of the [Mozilla Public Licen
 [Git]: http://help.github.com/set-up-git-redirect
 [Pull requests]: http://help.github.com/send-pull-requests
 [contributor guidelines]: #
-[Mozila Public License]: https://github.com/carewebframework/carewebframework-core/blob/master/LICENSE.md
+[Mozilla Public License]: https://github.com/carewebframework/carewebframework-core/blob/master/LICENSE.md
