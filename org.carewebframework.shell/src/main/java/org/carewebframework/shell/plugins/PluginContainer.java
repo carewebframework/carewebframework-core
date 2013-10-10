@@ -814,7 +814,7 @@ public class PluginContainer extends Idspace {
     public void processResource(ButtonResource resource) {
         Button button = new Button(resource.getCaption());
         button.setTooltiptext(resource.getTooltip());
-        button.setImage(resource.getGlyph());
+        button.setImage(resource.getIcon());
         ActionListener.addAction(button, resource.getAction());
         addToolbarComponent(button);
     }

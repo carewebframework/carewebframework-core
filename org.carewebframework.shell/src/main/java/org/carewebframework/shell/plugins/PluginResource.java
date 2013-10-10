@@ -196,8 +196,8 @@ public abstract class PluginResource {
         // Text to appear when the mouse cursor hovers over the button.
         private String tooltip;
         
-        // The url of the glyph to appear on the button.
-        private String glyph;
+        // The url of the icon to appear on the button.
+        private String icon;
         
         /**
          * Returns the value of the button's caption text.
@@ -259,17 +259,17 @@ public abstract class PluginResource {
          * 
          * @return Url of the image.
          */
-        public String getGlyph() {
-            return glyph;
+        public String getIcon() {
+            return icon;
         }
         
         /**
          * Sets the url of an image to display on the button.
          * 
-         * @param glyph Url of the image.
+         * @param icon Url of the image.
          */
-        public void setGlyph(String glyph) {
-            this.glyph = glyph;
+        public void setIcon(String icon) {
+            this.icon = icon;
         }
         
         /**

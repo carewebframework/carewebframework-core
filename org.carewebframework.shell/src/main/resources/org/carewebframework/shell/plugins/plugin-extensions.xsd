@@ -19,7 +19,7 @@
                                         <xsd:complexType>
                                             <xsd:attribute name="caption" use="required" />
                                             <xsd:attribute name="action" use="required" />
-                                            <xsd:attribute name="glyph" use="optional" />
+                                            <xsd:attribute name="icon" use="optional" />
                                             <xsd:attribute name="tooltip" use="optional" />
                                         </xsd:complexType>
                                     </xsd:element>
