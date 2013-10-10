@@ -128,7 +128,7 @@ public class MenuUtil {
      * 
      * @param parent The starting menu container.
      */
-    public static void adjustMenus(Component parent) {
+    public static void pruneMenus(Component parent) {
         while (parent != null && !(parent instanceof Menubar)) {
             if (parent.getChildren().isEmpty()) {
                 Component newParent = parent.getParent();

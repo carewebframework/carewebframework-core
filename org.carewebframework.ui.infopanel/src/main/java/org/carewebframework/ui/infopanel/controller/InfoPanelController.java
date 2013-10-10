@@ -127,7 +127,7 @@ public class InfoPanelController extends PluginController implements IInfoPanel 
         menuitem.detach();
         
         if (parent != null) {
-            MenuUtil.adjustMenus(parent);
+            MenuUtil.pruneMenus(parent);
         }
         
         if (log.isDebugEnabled()) {
