@@ -189,7 +189,7 @@ public class ActionListener implements EventListener<Event> {
      * @param eventName
      * @return A DeferredEventListener, or null if not found.
      */
-    private static ActionListener getListener(Component component, String eventName) {
+    public static ActionListener getListener(Component component, String eventName) {
         return (ActionListener) component.getAttribute(getAttrName(eventName));
     }
     
