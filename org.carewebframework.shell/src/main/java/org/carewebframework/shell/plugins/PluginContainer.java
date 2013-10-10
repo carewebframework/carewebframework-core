@@ -218,7 +218,7 @@ public class PluginContainer extends Idspace {
     public boolean setVisible(boolean visible) {
         boolean result = super.setVisible(visible);
         
-        if (registeredComponents != null) {
+        if (result != visible && registeredComponents != null) {
             for (Component component : registeredComponents) {
                 if (!visible) {
                     component.setAttribute(Constants.ATTR_VISIBLE, component.isVisible());
