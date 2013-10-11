@@ -6,7 +6,7 @@
 
 	<tlib-version>1.0</tlib-version>
 	<jsp-version>2.0</jsp-version>
-	<short-name>Regenstrief Web UIFramework EL Functions</short-name>
+	<short-name>CWF Core EL Functions</short-name>
 	<uri>http://www.carewebframework.org/tld/core</uri>
 	<description>
 		EL functions

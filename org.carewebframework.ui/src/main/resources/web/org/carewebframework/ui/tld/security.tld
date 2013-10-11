@@ -6,7 +6,7 @@
 
 	<tlib-version>1.0</tlib-version>
 	<jsp-version>2.0</jsp-version>
-	<short-name>Regenstrief Web UIFramework Security EL Functions</short-name>
+	<short-name>CWF Security EL Functions</short-name>
 	<uri>http://www.carewebframework.org/tld/security</uri>
 	<description>
 	EL functions to simulate spring security taglib.  (i.e. Useful for a zul page, which cannot use the spring security taglib).
