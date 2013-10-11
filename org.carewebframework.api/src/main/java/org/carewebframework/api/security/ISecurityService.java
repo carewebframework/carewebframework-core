@@ -92,25 +92,25 @@ public interface ISecurityService {
     boolean hasDebugRole();
     
     /**
-     * Returns true if the Authentication object has the specified <code>grantedAuthority</code>
+     * Returns true if the Authentication object has the specified <code>authority</code>
      * <p>
      * <i>Note:</i>Privileges are prefixed with "PRIV_" and roles are prefixed with "ROLE_"
      * </p>
      * 
-     * @param grantedAuthority String representation of an authority
+     * @param authority String representation of an authority
      * @return boolean true if found
      */
-    public boolean isGranted(String grantedAuthority);
+    public boolean isGranted(String authority);
     
     /**
      * Checks the current SecurityContext for the specified authorities.
      * 
-     * @param grantedAuthorities Comma-delimited string of granted authorities
+     * @param authorities Comma-delimited string of granted authorities
      * @param checkAllRoles boolean true-specified roles must be found in security context
      *            authorities, false-security context must contain at least 1 specified authority
      * @return True if Authentication is granted authorities
      */
-    public boolean isGranted(String grantedAuthorities, boolean checkAllRoles);
+    public boolean isGranted(String authorities, boolean checkAllRoles);
     
     /**
      * Returns a non-null value if logins are disabled.
