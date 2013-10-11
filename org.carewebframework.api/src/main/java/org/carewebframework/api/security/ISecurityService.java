@@ -106,11 +106,11 @@ public interface ISecurityService {
      * Checks the current SecurityContext for the specified authorities.
      * 
      * @param authorities Comma-delimited string of granted authorities
-     * @param checkAllRoles boolean true-specified roles must be found in security context
-     *            authorities, false-security context must contain at least 1 specified authority
+     * @param checkAll If true, all authorities must be granted. If false, only one of the listed
+     *            authorities must be granted.
      * @return True if Authentication is granted authorities
      */
-    public boolean isGranted(String authorities, boolean checkAllRoles);
+    public boolean isGranted(String authorities, boolean checkAll);
     
     /**
      * Returns a non-null value if logins are disabled.
