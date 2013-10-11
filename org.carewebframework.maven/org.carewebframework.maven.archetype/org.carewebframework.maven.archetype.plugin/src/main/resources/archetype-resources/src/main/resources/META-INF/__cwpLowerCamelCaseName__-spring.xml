@@ -24,7 +24,7 @@
 				<cwp:help-resource module="${cwpLowerCamelCaseName}Help"/>
 				<cwp:menu-resource path="${cwpUpperCamelCaseName}${symbol_escape}Click Me" 
 					action='zscript:Messagebox.show("${symbol_dollar}{labels.${cwpLowerCaseName}.menu.click.msg}");'/>
-				<cwp:property-resource group="plugin${cwpUpperCamelCaseName}PropGroupName"/>
+				<cwp:property-resource group="${cwpLowerCamelCaseName}PropGroupName"/>
 			</cwp:resource>
 			<!-- You may specify plugin level security constraints here:
 			<cwp:security requiresAll="false">
@@ -40,7 +40,7 @@
 
 	<beans profile="desktop">
 
-		<bean id="${cwpLowerCaseName}Controller" 
+		<bean id="${cwpLowerCamelCaseName}Controller" 
 			class="${package}.controller.${cwpUpperCamelCaseName}Controller" 
 			scope="prototype"/>
 	
