@@ -12,6 +12,8 @@
  */
 package ${package}.controller;
 
+import java.util.Date;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -36,7 +38,7 @@ public class ${cwpUpperCamelCaseName}Controller extends PluginController {
     
     private static final Log log = LogFactory.getLog(${cwpUpperCamelCaseName}Controller.class);
 
-    //private Label lblExample; // This value will be injected automatically by the parent class
+    private Label lblExample; // This value will be injected automatically by the parent class
 
     /**
      * @see org.carewebframework.ui.FrameworkController${symbol_pound}doAfterCompose(org.zkoss.zk.ui.Component)
@@ -45,6 +47,7 @@ public class ${cwpUpperCamelCaseName}Controller extends PluginController {
     public void doAfterCompose(final Component comp) throws Exception {
         super.doAfterCompose(comp);
         log.trace("Controller composed");
+        lblExample.setValue(new Date().toString());
     }
     
     /**
