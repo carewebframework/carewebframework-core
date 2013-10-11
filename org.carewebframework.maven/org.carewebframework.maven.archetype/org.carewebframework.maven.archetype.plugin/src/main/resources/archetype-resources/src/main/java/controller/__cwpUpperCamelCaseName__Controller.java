@@ -30,11 +30,11 @@ import org.zkoss.zul.Label;
  * within the CareWeb Framework. 
  *
  */
-public class ${cwpCamelCaseName}Controller extends PluginController {
+public class ${cwpUpperCamelCaseName}Controller extends PluginController {
 
     private static final long serialVersionUID = 1L;
     
-    private static final Log log = LogFactory.getLog(${cwpCamelCaseName}Controller.class);
+    private static final Log log = LogFactory.getLog(${cwpUpperCamelCaseName}Controller.class);
 
     //private Label lblExample; // This value will be injected automatically by the parent class
 

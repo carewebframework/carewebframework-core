@@ -10,7 +10,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
 
-	<div id="${cwpCamelCaseName}" apply="${symbol_dollar}{${cwpLowerCaseName}Controller}">
+	<div id="${cwpLowerCamelCaseName}" apply="${symbol_dollar}{${cwpLowerCaseName}Controller}">
 		<image src="${symbol_dollar}{rc:getIconPath('information.png')}"/>
 		<label value="${symbol_dollar}{labels.${cwpLowerCaseName}.welcome.msg}"/>
 		<separator bar="true"/>

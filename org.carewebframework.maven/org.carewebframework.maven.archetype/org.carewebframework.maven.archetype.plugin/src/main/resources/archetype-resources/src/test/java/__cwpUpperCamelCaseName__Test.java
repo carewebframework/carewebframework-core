@@ -28,9 +28,9 @@ import org.junit.Test;
 /**
  * Unit tests for ${cwpName}
  */
-public class ${cwpCamelCaseName}Test extends CommonTest {
+public class ${cwpUpperCamelCaseName}Test extends CommonTest {
     
-    private static final Log log = LogFactory.getLog(${cwpCamelCaseName}Test.class);
+    private static final Log log = LogFactory.getLog(${cwpUpperCamelCaseName}Test.class);
     
     private static final String HELLO_WORLD = "Hello World";
     

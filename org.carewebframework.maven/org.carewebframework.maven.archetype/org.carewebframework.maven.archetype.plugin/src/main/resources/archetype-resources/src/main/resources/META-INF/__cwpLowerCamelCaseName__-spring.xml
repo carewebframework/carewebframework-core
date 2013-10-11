@@ -16,8 +16,8 @@
 	<beans profile="root">
 		
 		<!-- This is the sample definition for a CareWeb plugin -->
-		<cwp:plugin id="${cwpLowerCaseName}" name="${cwpName}" 
-			url="~./${packageInPathFormat}/${cwpLowerCaseName}.zul">
+		<cwp:plugin id="${cwpLowerCamelCaseName}" name="${cwpName}" 
+			url="~./${packageInPathFormat}/${cwpLowerCamelCaseName}.zul">
 			<cwp:resource>
 				<cwp:button-resource caption="${symbol_dollar}{labels.${cwpLowerCaseName}.button.caption}" 
 					action='zscript:Messagebox.show("${symbol_dollar}{labels.${cwpLowerCaseName}.button.click.msg}");'/>

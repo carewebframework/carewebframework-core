@@ -12,17 +12,21 @@
 			<!-- Descriptive Name -->
 			<defaultValue>Example CareWeb Plugin</defaultValue>
 		</requiredProperty>
-		<requiredProperty key="cwpCamelCaseName">
+		<requiredProperty key="cwpUpperCamelCaseName">
 			<!-- Upper Camel Case Plugin Name/ID : No Spaces -->
 			<defaultValue>ExampleCareWebPlugin</defaultValue>
+		</requiredProperty>
+		<requiredProperty key="cwpLowerCamelCaseName">
+			<!-- Lower Camel Case Plugin Name/ID : No Spaces -->
+			<defaultValue>exampleCareWebPlugin</defaultValue>
 		</requiredProperty>
 		<requiredProperty key="cwpLowerCaseName">
 			<!-- Lower Case Plugin Name/ID : No Spaces -->
 			<defaultValue>examplecarewebplugin</defaultValue>
 		</requiredProperty>
 		<requiredProperty key="cwfVersion">
-			<!-- Descriptive Name -->
-			<defaultValue>${project.version}</defaultValue>
+			<!-- CareWeb Framework Version -->
+			<defaultValue>${project.parent.version}</defaultValue>
 		</requiredProperty>
 	</requiredProperties>
 	<fileSets>
