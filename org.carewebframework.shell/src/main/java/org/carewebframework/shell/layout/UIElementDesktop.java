@@ -110,7 +110,7 @@ public class UIElementDesktop extends UIElementZKBase {
             }
         });
         
-        if (SecurityUtil.isUserInAnyRoles(DesignConstants.DESIGN_MODE_PRIVS)) {
+        if (SecurityUtil.isGrantedAny(DesignConstants.DESIGN_MODE_PRIVS)) {
             designMenu = DesignMenu.create(this);
             menubar2.appendChild(designMenu);
         }

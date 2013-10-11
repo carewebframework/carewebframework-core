@@ -131,7 +131,7 @@ public class ExceptionController extends GenericForwardComposer<Component> {
         this.lblMessage.setValue(errMsg);
         this.lblStatusCode.setValue(String.valueOf(errStatusCode));
         
-        if (SecurityUtil.isUserInAnyRoles(Labels.getLabel("cwf.error.dialog.expanded"))) {
+        if (SecurityUtil.isGrantedAny(Labels.getLabel("cwf.error.dialog.expanded"))) {
             Events.echoEvent(Events.ON_CLICK, this.btnDetail, null);
         }
     }

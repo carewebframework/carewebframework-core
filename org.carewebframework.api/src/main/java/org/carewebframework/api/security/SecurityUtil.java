@@ -86,45 +86,45 @@ public class SecurityUtil {
      * <i>Note:</i>Privileges are prefixed with "PRIV_" and roles are prefixed with "ROLE_"
      * </p>
      * 
-     * @param grantedAuthority String representation of an authority
+     * @param authority String representation of an authority
      * @return boolean true if found
      * @see ISecurityService#isGranted(String)
      */
-    public static boolean isGranted(String grantedAuthority) {
-        return getSecurityService().isGranted(grantedAuthority);
+    public static boolean isGranted(String authority) {
+        return getSecurityService().isGranted(authority);
     }
     
     /**
      * Determines whether the authenticated user has any of the specified granted authorities
      * 
-     * @param roles Comma-delimited string of granted authorities
+     * @param authorities Comma-delimited string of granted authorities
      * @return boolean true only if user has 1 or more of the specified granted authorities
      * @see ISecurityService#isGranted(String, boolean)
      */
-    public static boolean isUserInAnyRoles(String roles) {
-        return getSecurityService().isGranted(roles, false);
+    public static boolean isGrantedAny(String authorities) {
+        return getSecurityService().isGranted(authorities, false);
     }
     
     /**
      * Determines whether the authenticated user contains NONE of the specified granted authorities
      * 
-     * @param roles Comma-delimited string of granted authorities
+     * @param authorities Comma-delimited string of granted authorities
      * @return boolean true only if user has NONE of the specified granted authorities
      * @see ISecurityService#isGranted(String, boolean)
      */
-    public static boolean isUserNotInAllRoles(String roles) {
-        return !getSecurityService().isGranted(roles, false);
+    public static boolean isGrantedNone(String authorities) {
+        return !getSecurityService().isGranted(authorities, false);
     }
     
     /**
      * Determines if a user has all specified granted authorities
      * 
-     * @param roles Comma-delimited string of granted authorities
+     * @param authorities Comma-delimited string of granted authorities
      * @return boolean true only if user has ALL specified granted authorities
      * @see ISecurityService#isGranted(String, boolean)
      */
-    public static boolean isUserInAllRoles(String roles) {
-        return getSecurityService().isGranted(roles, true);
+    public static boolean isGrantedAll(String authorities) {
+        return getSecurityService().isGranted(authorities, true);
     }
     
     /**

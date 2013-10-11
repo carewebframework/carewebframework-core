@@ -17,37 +17,37 @@
 		<function-class>org.carewebframework.api.security.SecurityUtil</function-class>
 		<function-signature>boolean isAuthenticated()</function-signature>
 		<description>
-			Returns whether or not the user has been authenticated
+			Returns whether or not the user has been authenticated.
 		</description>
 	</function>
 	<function>
-        <name>isUserInAnyRoles</name>
+        <name>isGrantedAny</name>
         <function-class>org.carewebframework.api.security.SecurityUtil</function-class>
         <function-signature>
-            boolean isUserInAnyRoles(java.lang.String)
+            boolean isGrantedAny(java.lang.String)
         </function-signature>
 		<description>
-			Returns true if the user is authorized in one or more of any number of potential roles
+			Returns true if the user is authorized in one or more of any number of potential authorities.
 		</description>
     </function>    
     <function>
-        <name>isUserNotInAllRoles</name>
+        <name>isGrantedNone</name>
         <function-class>org.carewebframework.api.security.SecurityUtil</function-class>
         <function-signature>
-            boolean isUserNotInAllRoles(java.lang.String)
+            boolean isGrantedNone(java.lang.String)
         </function-signature>
 		<description>
-			Returns true if user is not authorized for all given roles
+			Returns true if user is not authorized for all given authorities.
 		</description>
     </function>    
     <function>
-        <name>isUserInAllRoles</name>
+        <name>isGrantedAll</name>
         <function-class>org.carewebframework.api.security.SecurityUtil</function-class>
         <function-signature>
-            boolean isUserInAllRoles(java.lang.String)
+            boolean isGrantedAll(java.lang.String)
         </function-signature>
 		<description>
-			Returns true if user is authorized for all given roles
+			Returns true if user is authorized for all given authorities.
 		</description>
     </function>       
     <function>
