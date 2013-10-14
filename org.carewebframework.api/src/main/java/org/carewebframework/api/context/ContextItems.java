@@ -181,6 +181,15 @@ public class ContextItems {
         return items.get(lookupItemName(itemName, suffix, false));
     }
     
+    /**
+     * Returns an object of the specified class. The class must have an associated context
+     * serializer registered.
+     * 
+     * @param itemName Item name
+     * @param clazz Class of item to be returned.
+     * @return Deserialized item of specified class.
+     * @throws ContextException If no context serializer found.
+     */
     @SuppressWarnings("unchecked")
     public <T> T getItem(String itemName, Class<T> clazz) throws ContextException {
         String item = getItem(itemName);
