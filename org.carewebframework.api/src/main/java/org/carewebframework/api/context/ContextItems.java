@@ -236,6 +236,13 @@ public class ContextItems {
         }
     }
     
+    /**
+     * Sets a context item value.
+     * 
+     * @param itemName Item name.
+     * @param value The value to set. The value's class must have an associated context serializer
+     *            registered for it.
+     */
     public void setItem(String itemName, Object value) {
         if (value == null) {
             setItem(itemName, (String) null);
