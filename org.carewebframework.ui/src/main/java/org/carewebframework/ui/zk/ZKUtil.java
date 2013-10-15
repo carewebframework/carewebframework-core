@@ -827,32 +827,30 @@ public class ZKUtil {
     }
     
     /**
-     * Fires an event regardless of whether the desktop of the target is currently active.
+     * Fires an event, deferring delivery if the desktop of the target is not currently active.
      * 
      * @param event
      */
     public static void fireEvent(Event event) {
-        Desktop dtp = event.getTarget() == null ? null : event.getTarget().getDesktop();
-        
-        if (dtp == null || FrameworkWebSupport.getDesktop() == dtp) {
-            Events.sendEvent(event);
-        } else {
-            Executions.schedule(dtp, deferredDelivery, event);
-        }
+        fireEvent(event, deferredDelivery);
     }
     
     /**
-     * Fires an event regardless of whether the desktop of the target is currently active.
+     * Fires an event to the specified listener, deferring delivery if the desktop of the target is
+     * not currently active.
      * 
      * @param event
      * @param listener
-     * @throws Exception
      */
-    public static void fireEvent(Event event, EventListener<Event> listener) throws Exception {
+    public static void fireEvent(Event event, EventListener<Event> listener) {
         Desktop dtp = event.getTarget() == null ? null : event.getTarget().getDesktop();
         
         if (dtp == null || FrameworkWebSupport.getDesktop() == dtp) {
-            listener.onEvent(event);
+            try {
+                listener.onEvent(event);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         } else {
             Executions.schedule(dtp, listener, event);
         }
