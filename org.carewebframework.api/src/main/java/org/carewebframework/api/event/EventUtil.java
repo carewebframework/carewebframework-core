@@ -20,6 +20,15 @@ public class EventUtil {
     private static final Log log = LogFactory.getLog(EventUtil.class);
     
     /**
+     * Returns the event manager for this application context.
+     * 
+     * @return IEventManager
+     */
+    public static IEventManager getEventManager() {
+        return EventManager.getInstance();
+    }
+    
+    /**
      * Fires a generic event of type STATUS with no status text. Used to signal subscribers to clear
      * any status information.
      */
