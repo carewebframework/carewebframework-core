@@ -9,14 +9,36 @@
  */
 package org.carewebframework.ui.zk;
 
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.MoveEvent;
 
 /**
  * Used to prevent a modal window from being moved outside the view port.
  */
 public class MoveEventListener implements EventListener<MoveEvent> {
+    
+    private static final MoveEventListener moveEventListener = new MoveEventListener();
+    
+    /**
+     * Adds a move event listener to the specified component.
+     * 
+     * @param comp
+     */
+    public static void add(Component comp) {
+        comp.addEventListener(Events.ON_MOVE, moveEventListener);
+    }
+    
+    /**
+     * Removes a move event listener from the specified component.
+     * 
+     * @param comp
+     */
+    public static void remove(Component comp) {
+        comp.removeEventListener(Events.ON_MOVE, moveEventListener);
+    }
     
     @Override
     public void onEvent(MoveEvent moveEvent) throws Exception {
