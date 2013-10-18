@@ -516,7 +516,7 @@ wonderbar.ext.Wonderbar = zk.$extends(zul.inp.InputWidget, {
     }
 });
 
-//Override _renderItem to handle ZK item renderers.
+//Overriding _renderItem to handle ZK item renderers.
 
 jq.ui.autocomplete.prototype.cwf_renderItem = jq.ui.autocomplete.prototype._renderItem;
 
@@ -530,7 +530,7 @@ jq.ui.autocomplete.prototype._renderItem = function (ul, item) {
     }
 };
 
-//Override _renderMenu to detect category change.
+//Overriding _renderMenu to detect category change.
 
 jq.ui.autocomplete.prototype.cwf_renderMenu = jq.ui.autocomplete.prototype._renderMenu;
 
