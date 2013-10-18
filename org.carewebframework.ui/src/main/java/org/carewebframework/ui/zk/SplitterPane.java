@@ -133,7 +133,7 @@ public class SplitterPane extends XulElement {
     }
     
     /**
-     * Sets the absolute size of this region.
+     * Sets the absolute size of this pane.
      * 
      * @param size Size in pixels.
      */
@@ -142,7 +142,7 @@ public class SplitterPane extends XulElement {
     }
     
     /**
-     * Returns the absolute size of the region in pixels.
+     * Returns the absolute size of the pane in pixels.
      * 
      * @return Size in pixels.
      */
@@ -151,7 +151,7 @@ public class SplitterPane extends XulElement {
     }
     
     /**
-     * Sets the relative size of this region.
+     * Sets the relative size of this pane.
      * 
      * @param size Relative size in %.
      */
@@ -160,7 +160,7 @@ public class SplitterPane extends XulElement {
     }
     
     /**
-     * Returns the relative size of this region.
+     * Returns the relative size of this pane.
      * 
      * @return Relative size in %.
      */
