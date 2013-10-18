@@ -250,7 +250,7 @@ public class PromptDialog extends Window {
      * @param message Text message
      */
     public static void showInfo(final String message) {
-        showInfo(message, "Information");
+        showInfo(message, "@cwf.prompt.info.title");
     }
     
     /**
@@ -269,7 +269,7 @@ public class PromptDialog extends Window {
      * @param message Text message
      */
     public static void showWarning(final String message) {
-        showWarning(message, "Warning");
+        showWarning(message, "@cwf.prompt.warning.title");
     }
     
     /**
@@ -289,7 +289,7 @@ public class PromptDialog extends Window {
      * @param message Text message
      */
     public static void showError(final String message) {
-        showError(message, "Error");
+        showError(message, "@cwf.prompt.error.title");
     }
     
     /**
@@ -319,7 +319,7 @@ public class PromptDialog extends Window {
      * @return True if user clicked OK, false otherwise.
      */
     public static boolean confirm(final String message) {
-        return confirm(message, "Confirm");
+        return confirm(message, "@cwf.prompt.confirm.title");
     }
     
     /**
