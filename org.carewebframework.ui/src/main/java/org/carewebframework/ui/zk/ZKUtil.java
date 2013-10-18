@@ -247,7 +247,7 @@ public class ZKUtil {
     public static <T extends Component> T createDialog(Class<T> clazz) throws Exception {
         String zul = getResourcePath(clazz) + StringUtils.uncapitalize(clazz.getSimpleName()) + ".zul";
         T dialog = (T) ZKUtil.loadZulPage(zul, null);
-        dialog.addEventListener(Events.ON_MOVE, new MoveEventListener());
+        MoveEventListener.add(dialog);
         wireController(dialog);
         return dialog;
     }
