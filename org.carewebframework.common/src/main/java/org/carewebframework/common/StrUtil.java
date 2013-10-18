@@ -396,11 +396,15 @@ public class StrUtil {
         StringBuilder sb = new StringBuilder();
         
         for (String ln : list) {
-            if (sb.length() > 0) {
-                sb.append(delimiter);
-            }
+            ln = ln == null ? dflt : ln;
             
-            sb.append(ln == null ? dflt : ln);
+            if (ln != null) {
+                if (sb.length() > 0) {
+                    sb.append(delimiter);
+                }
+                
+                sb.append(ln);
+            }
         }
         
         return sb.toString();
