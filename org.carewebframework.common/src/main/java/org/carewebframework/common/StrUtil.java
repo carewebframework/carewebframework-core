@@ -421,6 +421,15 @@ public class StrUtil {
     }
     
     /**
+     * Returns the message source for resolving messages.
+     * 
+     * @return messageSource
+     */
+    public static MessageSource getMessageSource() {
+        return messageSource;
+    }
+    
+    /**
      * Sets a message source for resolving messages.
      * 
      * @param messageSource
