@@ -57,12 +57,12 @@ public class XMLUtil {
     /**
      * Parses XML from a file.
      * 
-     * @param fileName Full path to a file containing valid XML.
+     * @param filePath Full path to a file containing valid XML.
      * @return XML document.
      * @throws Exception
      */
-    public static Document parseXMLFromLocation(String fileName) throws Exception {
-        return parseXMLFromStream(new FileInputStream(fileName));
+    public static Document parseXMLFromLocation(String filePath) throws Exception {
+        return parseXMLFromStream(new FileInputStream(filePath));
     }
     
     /**
