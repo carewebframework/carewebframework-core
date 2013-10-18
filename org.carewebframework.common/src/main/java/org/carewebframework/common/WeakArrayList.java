@@ -49,7 +49,7 @@ public class WeakArrayList<E> extends AbstractList<E> {
     /**
      * Remove any garbage-collected entries.
      */
-    public void cleanup() {
+    public void compact() {
         Reference<? extends E> ref = null;
         
         while ((ref = referenceQueue.poll()) != null) {
