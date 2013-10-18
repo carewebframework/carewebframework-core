@@ -249,7 +249,7 @@ public class PopupDialog extends Window {
      * 
      * @return True if window action was canceled.
      */
-    public boolean isCancelled() {
+    public boolean isCanceled() {
         return cancelled;
     }
     
@@ -265,10 +265,10 @@ public class PopupDialog extends Window {
     /**
      * Closes the window with the specify cancel status.
      * 
-     * @param cancelled Cancel status for the closed window.
+     * @param canceled Cancel status for the closed window.
      */
-    public void close(final boolean cancelled) {
-        this.cancelled = cancelled;
+    public void close(final boolean canceled) {
+        this.cancelled = canceled;
         onClose();
         detach();
     }
