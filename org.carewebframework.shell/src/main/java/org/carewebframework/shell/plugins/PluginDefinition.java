@@ -37,9 +37,9 @@ public class PluginDefinition {
     private static final Log log = LogFactory.getLog(PluginDefinition.class);
     
     /**
-     * Represents a privilege declaration.
+     * Represents a security authority.
      */
-    public static class Privilege {
+    public static class Authority {
         
         private String name;
         
@@ -86,7 +86,7 @@ public class PluginDefinition {
     
     private final List<PluginResource> resources = new ArrayList<PluginResource>();
     
-    private final List<Privilege> privileges = new ArrayList<Privilege>();
+    private final List<Authority> authorities = new ArrayList<Authority>();
     
     private final List<PropertyInfo> properties = new ArrayList<PropertyInfo>();
     
@@ -236,9 +236,9 @@ public class PluginDefinition {
     }
     
     /**
-     * Sets the requiresAll flag. When true, this flag indicates that all associated privileges must
-     * be present in order to access the plugin. When false, any single associated privilege is
-     * sufficient for access. If no privileges are associated with the plugin, this setting is
+     * Sets the requiresAll flag. When true, this flag indicates that all associated authorities
+     * must be present in order to access the plugin. When false, any single associated authority is
+     * sufficient for access. If no authorities are associated with the plugin, this setting is
      * ignored.
      * 
      * @param requiresAll
@@ -248,9 +248,9 @@ public class PluginDefinition {
     }
     
     /**
-     * Returns the requiresAll flag. When true, this flag indicates that all associated privileges
-     * must be present in order to access the plugin. When false, any single associated privilege is
-     * sufficient for access. If no privileges are associated with the plugin, this setting is
+     * Returns the requiresAll flag. When true, this flag indicates that all associated authorities
+     * must be present in order to access the plugin. When false, any single associated authority is
+     * sufficient for access. If no authorities are associated with the plugin, this setting is
      * ignored.
      * 
      * @return The requiresAll flag.
@@ -320,21 +320,21 @@ public class PluginDefinition {
     }
     
     /**
-     * Returns the list of privileges required for access to this plugin. Never null.
+     * Returns the list of authorities required for access to this plugin. Never null.
      * 
-     * @return List of privileges.
+     * @return List of authorities.
      */
-    public List<Privilege> getPrivileges() {
-        return privileges;
+    public List<Authority> getAuthorities() {
+        return authorities;
     }
     
     /**
-     * Adds privileges from the list to the list of privileges associated with this plugin.
+     * Adds authorities from the list to the list of authorities associated with this plugin.
      * 
-     * @param privileges
+     * @param authorities
      */
-    public void setPrivileges(List<Privilege> privileges) {
-        this.privileges.addAll(privileges);
+    public void setAuthorities(List<Authority> authorities) {
+        this.authorities.addAll(authorities);
     }
     
     /**
@@ -555,13 +555,13 @@ public class PluginDefinition {
      * @return True if access to the plugin is restricted.
      */
     public boolean isForbidden() {
-        if (privileges.size() == 0) {
+        if (authorities.size() == 0) {
             return false; // If no restrictions, return false
         }
         
         boolean result = true;
         
-        for (Privilege priv : privileges) {
+        for (Authority priv : authorities) {
             result = !SecurityUtil.isGranted(priv.name);
             
             if (requiresAll == result) {

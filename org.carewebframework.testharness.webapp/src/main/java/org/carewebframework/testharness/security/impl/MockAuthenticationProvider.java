@@ -88,18 +88,18 @@ public class MockAuthenticationProvider extends AbstractAuthenticationProvider {
      * @param details Authentication details
      * @param username Username for the login.
      * @param password Password for the login (ignored if the user is pre-authenticated).
-     * @param authority Authority for which the login is requested.
+     * @param domain Domain for which the login is requested.
      * @return Authorization result
      */
     @Override
-    protected IUser login(CWFAuthenticationDetails details, String username, String password, String authority) {
-        IUser user = authenticate(username, password, authority);
+    protected IUser login(CWFAuthenticationDetails details, String username, String password, String domain) {
+        IUser user = authenticate(username, password, domain);
         details.setDetail("user", user);
         return user;
     }
     
-    private IUser authenticate(final String username, final String password, final String authority) {
-        if (!check("mock.username", username) || !check("mock.password", password) || !check("mock.authority", authority)) {
+    private IUser authenticate(final String username, final String password, final String domain) {
+        if (!check("mock.username", username) || !check("mock.password", password) || !check("mock.domain", domain)) {
             throw new BadCredentialsException("Authentication failed.");
         }
         
@@ -111,8 +111,8 @@ public class MockAuthenticationProvider extends AbstractAuthenticationProvider {
     }
     
     @Override
-    protected List<String> getPrivileges(IUser user) {
-        return user == null ? null : PropertyUtil.getValues("mock.privileges", null);
+    protected List<String> getAuthorities(IUser user) {
+        return user == null ? null : PropertyUtil.getValues("mock.authorities", null);
     }
     
 }

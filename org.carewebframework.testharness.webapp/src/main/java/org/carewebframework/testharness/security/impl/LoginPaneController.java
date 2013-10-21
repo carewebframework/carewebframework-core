@@ -104,9 +104,9 @@ public class LoginPaneController extends GenericForwardComposer<Component> {
     }
     
     /**
-     * Authority onSelect event handler.
+     * Domain onSelect event handler.
      */
-    public void onSelect$j_authority() {
+    public void onSelect$j_domain() {
         j_username.setFocus(true);
     }
     
@@ -122,7 +122,7 @@ public class LoginPaneController extends GenericForwardComposer<Component> {
      */
     private void doSubmit() {
         showMessage("");
-        String instId = PropertyUtil.getValue("mock.authority", null);
+        String instId = PropertyUtil.getValue("mock.domain", null);
         String username = j_username.getValue().trim();
         final String password = j_password.getValue();
         

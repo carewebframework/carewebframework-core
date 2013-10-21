@@ -70,7 +70,7 @@ public abstract class AbstractAuthenticationProvider implements AuthenticationPr
         CWFAuthenticationDetails details = (CWFAuthenticationDetails) authentication.getDetails();
         String username = (String) authentication.getPrincipal();
         String password = (String) authentication.getCredentials();
-        String authority = null;
+        String domain = null;
         
         if (log.isDebugEnabled()) {
             log.debug("User: " + username);
@@ -79,17 +79,17 @@ public abstract class AbstractAuthenticationProvider implements AuthenticationPr
         
         if (username != null) {
             String pcs[] = username.split("\\\\", 2);
-            authority = pcs[0];
+            domain = pcs[0];
             username = pcs.length > 1 ? pcs[1] : null;
         }
         
-        if (username == null || password == null || authority == null) {
+        if (username == null || password == null || domain == null) {
             throw new BadCredentialsException("Missing security credentials.");
         }
         
-        IUser user = login(details, username, password, authority);
+        IUser user = login(details, username, password, domain);
         List<GrantedAuthority> userPrivs = new ArrayList<GrantedAuthority>();
-        List<String> list = getPrivileges(user);
+        List<String> list = getAuthorities(user);
         Set<String> privs = list == null ? new HashSet<String>() : new HashSet<String>(list);
         
         for (String grantedRole : grantedRoles) {
@@ -114,7 +114,7 @@ public abstract class AbstractAuthenticationProvider implements AuthenticationPr
         return authentication;
     }
     
-    protected abstract List<String> getPrivileges(IUser user);
+    protected abstract List<String> getAuthorities(IUser user);
     
     /**
      * Performs a user login.
@@ -122,9 +122,9 @@ public abstract class AbstractAuthenticationProvider implements AuthenticationPr
      * @param details Authentication details
      * @param username Username for the login.
      * @param password Password for the login (ignored if the user is pre-authenticated).
-     * @param authorityName Authority for which the login is requested.
+     * @param domain Domain for which the login is requested.
      * @return User object
      */
-    protected abstract IUser login(CWFAuthenticationDetails details, String username, String password, String authorityName);
+    protected abstract IUser login(CWFAuthenticationDetails details, String username, String password, String domain);
     
 }

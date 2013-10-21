@@ -111,7 +111,7 @@ public class LoginWindowController extends GenericForwardComposer<Component> {
     /**
      * Reset timer when selected institution changes.
      */
-    public void onSelect$j_authority() {
+    public void onSelect$j_domain() {
         resetTimer();
     }
     

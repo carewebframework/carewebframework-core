@@ -64,7 +64,7 @@
                         <xsd:element name="security" minOccurs="0" maxOccurs="1">
                             <xsd:complexType>
                                 <xsd:choice minOccurs="0" maxOccurs="unbounded">
-                                    <xsd:element name="privilege">
+                                    <xsd:element name="authority">
                                         <xsd:complexType>
                                             <xsd:attribute name="name" use="required" />
                                         </xsd:complexType>

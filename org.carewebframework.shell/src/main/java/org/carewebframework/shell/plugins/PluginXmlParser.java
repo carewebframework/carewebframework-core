@@ -71,14 +71,14 @@ public class PluginXmlParser extends BaseXmlParser {
         
         if (securityTag != null) {
             addProperties(securityTag, builder);
-            ManagedList<AbstractBeanDefinition> privilegeList = new ManagedList<AbstractBeanDefinition>();
-            NodeList privileges = getTagChildren("security", element);
+            ManagedList<AbstractBeanDefinition> authorityList = new ManagedList<AbstractBeanDefinition>();
+            NodeList authorities = getTagChildren("security", element);
             
-            for (int i = 0; i < privileges.getLength(); i++) {
-                parsePrivileges((Element) privileges.item(i), builder, privilegeList);
+            for (int i = 0; i < authorities.getLength(); i++) {
+                parseAuthorities((Element) authorities.item(i), builder, authorityList);
             }
             
-            builder.addPropertyValue("privileges", privilegeList);
+            builder.addPropertyValue("authorities", authorityList);
         }
         
         Element serializationTag = findTag("serialization", element);
@@ -156,28 +156,28 @@ public class PluginXmlParser extends BaseXmlParser {
     }
     
     /**
-     * Parse the privilege list.
+     * Parse the authority list.
      * 
-     * @param element Root privilege tag.
+     * @param element Root authority tag.
      * @param builder Bean definition builder.
-     * @param privilegeList List of privileges to return.
+     * @param authorityList List of authorities to return.
      */
-    private void parsePrivileges(Element element, BeanDefinitionBuilder builder,
-                                 ManagedList<AbstractBeanDefinition> privilegeList) {
-        NodeList privileges = element.getChildNodes();
+    private void parseAuthorities(Element element, BeanDefinitionBuilder builder,
+                                  ManagedList<AbstractBeanDefinition> authorityList) {
+        NodeList authorities = element.getChildNodes();
         
-        for (int i = 0; i < privileges.getLength(); i++) {
-            Node node = privileges.item(i);
+        for (int i = 0; i < authorities.getLength(); i++) {
+            Node node = authorities.item(i);
             
             if (!(node instanceof Element)) {
                 continue;
             }
             
-            Element privilege = (Element) node;
-            BeanDefinitionBuilder privilegeBuilder = BeanDefinitionBuilder
-                    .genericBeanDefinition(PluginDefinition.Privilege.class);
-            addProperties(privilege, privilegeBuilder);
-            privilegeList.add(privilegeBuilder.getBeanDefinition());
+            Element authority = (Element) node;
+            BeanDefinitionBuilder authorityBuilder = BeanDefinitionBuilder
+                    .genericBeanDefinition(PluginDefinition.Authority.class);
+            addProperties(authority, authorityBuilder);
+            authorityList.add(authorityBuilder.getBeanDefinition());
         }
     }
     
