@@ -50,7 +50,7 @@ From root dir, cd in the org.carewebframework.testharness.webapp module director
 `mvn tomcat:run-war`
 
 Once tomcat has started, open browser and enter following URL
-`http://localhost:8080/org.carewebframework.testharness.webapp-3.0.0.BUILD-SNAPSHOT`
+`http://localhost:8080/org.carewebframework.testharness.webapp-3.0.0-SNAPSHOT`
 
 ## Contributing
 [Pull requests][] are welcome; see the [contributor guidelines][] for details.

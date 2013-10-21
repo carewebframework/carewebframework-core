@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.carewebframework</groupId>
 	<artifactId>org.carewebframework</artifactId>
-	<version>3.0.0.BUILD-SNAPSHOT</version>
+	<version>3.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>CareWeb Framework Root POM</name>
 	<organization>
@@ -34,7 +34,7 @@
 		</license>
 	</licenses>
 	<properties>
-		<org.carewebframework.version>3.0.0.BUILD-SNAPSHOT</org.carewebframework.version>
+		<org.carewebframework.version>3.0.0-SNAPSHOT</org.carewebframework.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<org.springframework.version>3.2.4.RELEASE</org.springframework.version>
 		<org.springframework.security.version>3.1.4.RELEASE</org.springframework.security.version>

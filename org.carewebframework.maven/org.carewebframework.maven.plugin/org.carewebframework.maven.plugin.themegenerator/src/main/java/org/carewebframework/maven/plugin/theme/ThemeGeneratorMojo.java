@@ -58,7 +58,7 @@ import org.carewebframework.maven.plugin.core.BaseMojo;
  *             <plugin>
  *                 <groupId>org.carewebframework</groupId>
  *                 <artifactId>org.carewebframework.maven.plugin.themegenerator</artifactId>
- *                 <version>3.0.0.BUILD-SNAPSHOT</version>
+ *                 <version>3.0.0-SNAPSHOT</version>
  *                 <configuration>
  *                     <themes>
  *                         <theme>
