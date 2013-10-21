@@ -126,7 +126,7 @@ public class CareWebShellEx extends CareWebShell {
      * @throws Exception
      */
     public UIElementBase addToolbarPlugin(String name) throws Exception {
-        return addToolbarPlugin(pluginByName(name));
+        return addToolbarPlugin(pluginById(name));
     }
     
     /**
@@ -141,44 +141,43 @@ public class CareWebShellEx extends CareWebShell {
     }
     
     /**
-     * Registers the plugin with the specified name with the specified path. If a tree path is
-     * absent, the plugin is associated with the tab itself.
+     * Registers the plugin with the specified id and path. If a tree path is absent, the plugin is
+     * associated with the tab itself.
      * 
      * @param path Format is &lt;tab name&gt;\&lt;tree node path&gt;
-     * @param name Name of plugin
+     * @param id Unique id of plugin
      * @return Container created for the plugin.
      * @throws Exception
      */
-    public UIElementBase registerFromName(String path, String name) throws Exception {
-        return registerFromName(path, name, null);
+    public UIElementBase registerFromId(String path, String id) throws Exception {
+        return registerFromId(path, id, null);
     }
     
     /**
-     * Registers the plugin with the specified name with the specified path. If a tree path is
-     * absent, the plugin is associated with the tab itself.
+     * Registers the plugin with the specified id and path. If a tree path is absent, the plugin is
+     * associated with the tab itself.
      * 
      * @param path Format is &lt;tab name&gt;\&lt;tree node path&gt;
-     * @param name Name of plugin
+     * @param id Name of plugin
      * @param propertySource Optional source for retrieving property values.
      * @return Container created for the plugin.
      * @throws Exception
      */
-    public UIElementBase registerFromName(String path, String name, IPropertyProvider propertySource) throws Exception {
-        return register(path, pluginByName(name), propertySource);
+    public UIElementBase registerFromId(String path, String id, IPropertyProvider propertySource) throws Exception {
+        return register(path, pluginById(id), propertySource);
     }
     
     /**
-     * Lookup a plugin definition by its name. Raises a runtime exception if the plugin is not
-     * found.
+     * Lookup a plugin definition by its id. Raises a runtime exception if the plugin is not found.
      * 
-     * @param name Plugin definition name.
+     * @param id Plugin id.
      * @return The plugin definition.
      */
-    private PluginDefinition pluginByName(String name) {
-        PluginDefinition def = pluginRegistry.get(name);
+    private PluginDefinition pluginById(String id) {
+        PluginDefinition def = pluginRegistry.get(id);
         
         if (def == null) {
-            throw new PluginRegistrationException(EXC_UNKNOWN_PLUGIN, name);
+            throw new PluginRegistrationException(EXC_UNKNOWN_PLUGIN, id);
         }
         
         return def;
