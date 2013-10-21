@@ -119,28 +119,6 @@ public class CareWebShellEx extends CareWebShell {
     }
     
     /**
-     * Adds a plugin directly to the toolbar.
-     * 
-     * @param name Plugin name.
-     * @return UI element encapsulating plugin.
-     * @throws Exception
-     */
-    public UIElementBase addToolbarPlugin(String name) throws Exception {
-        return addToolbarPlugin(pluginById(name));
-    }
-    
-    /**
-     * Adds a plugin directly to the toolbar.
-     * 
-     * @param def Plugin definition.
-     * @return UI element encapsulating plugin.
-     * @throws Exception
-     */
-    public UIElementBase addToolbarPlugin(PluginDefinition def) throws Exception {
-        return def.createElement(getUIDesktop().getToolbar(), null);
-    }
-    
-    /**
      * Registers the plugin with the specified id and path. If a tree path is absent, the plugin is
      * associated with the tab itself.
      * 
@@ -158,7 +136,7 @@ public class CareWebShellEx extends CareWebShell {
      * associated with the tab itself.
      * 
      * @param path Format is &lt;tab name&gt;\&lt;tree node path&gt;
-     * @param id Name of plugin
+     * @param id Unique id of plugin
      * @param propertySource Optional source for retrieving property values.
      * @return Container created for the plugin.
      * @throws Exception
