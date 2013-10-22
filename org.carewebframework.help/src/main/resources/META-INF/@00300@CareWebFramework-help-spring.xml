@@ -13,7 +13,7 @@
 		<!-- Set Help Subsystem Properties -->
 		<bean class="org.carewebframework.help.HelpUtil"
 			factory-method="embeddedMode">
-			<constructor-arg value="${org.carewebframework.help.embeddedView:false}" />
+			<constructor-arg value="${org.carewebframework.help.viewer.embedded:false}" />
 		</bean>
 
 	</beans>
