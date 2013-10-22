@@ -164,7 +164,7 @@ public class PluginContainer extends Idspace {
             destroying = true;
             shell.unregisterPlugin(this);
             executeAction(PluginAction.UNLOAD, false);
-            CommandUtil.disassociateAll(this);
+            CommandUtil.dissociateAll(this);
             
             if (pluginEventListeners1 != null) {
                 pluginEventListeners1.clear();

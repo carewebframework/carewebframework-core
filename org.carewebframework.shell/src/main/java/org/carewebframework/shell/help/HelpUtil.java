@@ -125,7 +125,7 @@ public class HelpUtil {
      */
     public static void dissociate(XulElement component) {
         if (component != null && component.hasAttribute(CSH_TARGET)) {
-            CommandUtil.disassociateCommand("help", component);
+            CommandUtil.dissociateCommand("help", component);
             component.removeAttribute(CSH_TARGET);
         }
     }

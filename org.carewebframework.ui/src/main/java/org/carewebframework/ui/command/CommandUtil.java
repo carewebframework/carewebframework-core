@@ -259,7 +259,7 @@ public class CommandUtil {
      * @param commandName Name of the command.
      * @param component Component to be associated.
      */
-    public static void disassociateCommand(String commandName, XulElement component) {
+    public static void dissociateCommand(String commandName, XulElement component) {
         Command command = getCommand(commandName, false);
         
         if (command != null) {
@@ -272,7 +272,7 @@ public class CommandUtil {
      * 
      * @param component
      */
-    public static void disassociateAll(XulElement component) {
+    public static void dissociateAll(XulElement component) {
         for (Command command : CommandRegistry.getInstance()) {
             command.unbind(component);
         }
