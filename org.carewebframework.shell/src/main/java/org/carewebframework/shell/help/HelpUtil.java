@@ -119,11 +119,11 @@ public class HelpUtil {
     }
     
     /**
-     * Disassociates context-sensitive help from a component.
+     * Dissociates context-sensitive help from a component.
      * 
      * @param component
      */
-    public static void disassociateCSH(XulElement component) {
+    public static void dissociate(XulElement component) {
         if (component != null && component.hasAttribute(CSH_TARGET)) {
             CommandUtil.disassociateCommand("help", component);
             component.removeAttribute(CSH_TARGET);
