@@ -87,24 +87,24 @@
 			init-method="init" destroy-method="tearDown">
 			<constructor-arg ref="desktop" />
 			<property name="maximumInactivityInterval"
-				value="${org.carewebframework.ui.DesktopMonitor.MAXIMUM_INACTIVITY_INTERVAL}" />
+				value="${org.carewebframework.ui.desktop.inactivity.interval.maximum}" />
 			<property name="countdownInterval"
-				value="${org.carewebframework.ui.DesktopMonitor.COUNTDOWN_INTERVAL}" />
+				value="${org.carewebframework.ui.desktop.countdown.interval}" />
 			<property name="baselineInactivityDuration"
-				value="${org.carewebframework.ui.DesktopMonitor.BASELINE_INACTIVITY_DURATION}" />
+				value="${org.carewebframework.ui.desktop.inactivity.duration.baseline}" />
 			<property name="lockInactivityDuration"
-				value="${org.carewebframework.ui.DesktopMonitor.LOCK_INACTIVITY_DURATION}" />
+				value="${org.carewebframework.ui.desktop.inactivity.duration.lock}" />
 			<property name="baselineCountdownDuration"
-				value="${org.carewebframework.ui.DesktopMonitor.BASELINE_COUNTDOWN_DURATION}" />
+				value="${org.carewebframework.ui.desktop.countdown.duration.baseline}" />
 			<property name="lockCountdownDuration"
-				value="${org.carewebframework.ui.DesktopMonitor.LOCK_COUNTDOWN_DURATION}" />
+				value="${org.carewebframework.ui.desktop.countdown.duration.lock}" />
 			<property name="securityService" ref="securityService" />
 			<property name="eventManager" ref="eventManager" />
 			<property name="desktopMonitorLockingExclusions">
 				<bean class="org.springframework.util.StringUtils"
 					factory-method="commaDelimitedListToSet">
 					<constructor-arg type="java.lang.String"
-						value="${org.carewebframework.ui.DesktopMonitor.EXCLUDE_APPS_FROM_LOCKING}" />
+						value="${org.carewebframework.ui.desktop.lock.exclusions}" />
 				</bean>
 			</property>
 		</bean>
