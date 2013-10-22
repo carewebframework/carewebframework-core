@@ -50,24 +50,24 @@
 			class="org.springframework.scheduling.concurrent.ThreadPoolExecutorFactoryBean"
 			init-method="initialize" destroy-method="destroy">
 			<property name="threadNamePrefix"
-				value="${task.executor.thread.factory.threadnameprefix}" />
-			<property name="corePoolSize" value="${task.executor.core.pool.size}" />
-			<property name="maxPoolSize" value="${task.executor.max.pool.size}" />
-			<property name="queueCapacity" value="${task.executor.queue.capacity}" />
+				value="${org.carewebframework.thread.executor.thread.name.prefix}" />
+			<property name="corePoolSize" value="${org.carewebframework.thread.executor.core.pool.size}" />
+			<property name="maxPoolSize" value="${org.carewebframework.thread.executor.max.pool.size}" />
+			<property name="queueCapacity" value="${org.carewebframework.thread.executor.queue.capacity}" />
 			<property name="waitForTasksToCompleteOnShutdown"
-				value="${task.executor.waitfortaskstocompleteonshutdown}" />
-			<property name="awaitTerminationSeconds" value="${task.executor.awaitterminationseconds}" />
+				value="${org.carewebframework.thread.executor.shutdown.wait}" />
+			<property name="awaitTerminationSeconds" value="${org.carewebframework.thread.executor.shutdown.timeout}" />
 		</bean>
 
 		<bean id="taskScheduler"
 			class="org.springframework.scheduling.concurrent.ScheduledExecutorFactoryBean"
 			init-method="initialize" destroy-method="destroy">
 			<property name="threadNamePrefix"
-				value="${task.scheduler.thread.factory.threadnameprefix}" />
-			<property name="poolSize" value="${task.scheduler.pool.size}" />
+				value="${org.carewebframework.thread.scheduler.thread.name.prefix}" />
+			<property name="poolSize" value="${org.carewebframework.thread.scheduler.pool.size}" />
 			<property name="waitForTasksToCompleteOnShutdown"
-				value="${task.scheduler.waitfortaskstocompleteonshutdown}" />
-			<property name="awaitTerminationSeconds" value="${task.scheduler.awaitterminationseconds}" />
+				value="${org.carewebframework.thread.scheduler.shutdown.wait}" />
+			<property name="awaitTerminationSeconds" value="${org.carewebframework.thread.scheduler.shutdown.timeout}" />
 		</bean>
 		
 		<!-- JMX Management -->
