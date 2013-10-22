@@ -98,7 +98,7 @@
 		<bean id="securityAuthenticationFailureHandler"
 			class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler">
 			<property name="defaultFailureUrl"
-				value="${org.carewebframework.security.loginFormUrl}" />
+				value="${org.carewebframework.security.login.url}" />
 		</bean>
 
 		<!-- Process form-based authentication. -->
@@ -149,7 +149,7 @@
 		<bean id="securityAuthenticationEntryPoint"
 			class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
 			<property name="loginFormUrl"
-				value="${org.carewebframework.security.loginFormUrl}" />
+				value="${org.carewebframework.security.login.url}" />
 			<property name="forceHttps" value="false" />
 		</bean>
 

@@ -16,7 +16,7 @@
 		</bean>
 
 		<bean id="securityService" class="org.carewebframework.testharness.security.impl.SecurityServiceImpl">
-			<property name="logoutTarget" value="${org.carewebframework.security.logoutFormUrl:}" />
+			<property name="logoutTarget" value="${org.carewebframework.security.logout.url:}" />
 		</bean>
 
 		<bean id="securityAuthenticationProvider" class="org.carewebframework.testharness.security.impl.MockAuthenticationProvider">
