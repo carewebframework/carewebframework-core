@@ -18,7 +18,9 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
 import org.carewebframework.api.test.CommonTest;
+
 import org.junit.Test;
 
 public class GenericEventTest extends CommonTest {
@@ -28,6 +30,8 @@ public class GenericEventTest extends CommonTest {
     private static final String EVENT_NAME1 = "Event";
     
     private static final String EVENT_NAME2 = "Event.Subevent";
+    
+    protected static int pollingInterval = 500;
     
     private int eventCount;
     
@@ -173,7 +177,7 @@ public class GenericEventTest extends CommonTest {
     private void doWait(int count) {
         while ((count-- > 0) && (this.tests.size() > this.expectedUndelivered)) {
             try {
-                Thread.sleep(500);
+                Thread.sleep(pollingInterval);
             } catch (final InterruptedException e) {
                 continue;
             }
