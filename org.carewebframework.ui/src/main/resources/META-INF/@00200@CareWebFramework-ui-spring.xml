@@ -33,7 +33,10 @@
 
 		<!-- Registry for shared icon libraries. -->
 		<bean id="iconLibraryRegistry" class="org.carewebframework.ui.icons.IconLibraryRegistry"
-			factory-method="getInstance" />
+			factory-method="init">
+			<constructor-arg value="${org.carewebframework.icons.library.default}" />
+			<constructor-arg value="${org.carewebframework.icons.dimensions.default}" />
+		</bean>
 
 		<!-- A registry of actions -->
 		<bean id="actionRegistry" class="org.carewebframework.ui.action.ActionRegistry"

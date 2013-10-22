@@ -16,12 +16,6 @@ import java.util.List;
  */
 public class IconUtil {
     
-    public static String defaultLibrary;
-    
-    public static String defaultDimensions = "16x16";
-    
-    private static IconLibraryRegistry registry;
-    
     /**
      * <p>
      * Returns the path to the icon resource.
@@ -52,7 +46,7 @@ public class IconUtil {
      * @return The icon path.
      */
     public static List<String> getMatching(final String iconName, final String dimensions, final String library) {
-        return getRegistry().getMatching(library == null ? defaultLibrary : library, iconName, dimensions);
+        return IconLibraryRegistry.getInstance().getMatching(library, iconName, dimensions);
     }
     
     /**
@@ -65,25 +59,8 @@ public class IconUtil {
      * @return The icon path.
      */
     public static String getIconPath(final String iconName, final String dimensions, final String library) {
-        getRegistry();
-        IIconLibrary lib = registry.get(library == null ? defaultLibrary : library);
-        return lib == null ? null : lib.getIconUrl(iconName, dimensions == null ? defaultDimensions : dimensions);
-    }
-    
-    private static IconLibraryRegistry getRegistry() {
-        return registry == null ? findRegistry() : registry;
-    }
-    
-    private static synchronized IconLibraryRegistry findRegistry() {
-        if (registry == null) {
-            registry = IconLibraryRegistry.getInstance();
-            
-            if (defaultLibrary == null) {
-                defaultLibrary = registry.iterator().next().getId();
-            }
-        }
-        
-        return registry;
+        IIconLibrary lib = IconLibraryRegistry.getInstance().get(library);
+        return lib == null ? null : lib.getIconUrl(iconName, dimensions);
     }
     
     /**

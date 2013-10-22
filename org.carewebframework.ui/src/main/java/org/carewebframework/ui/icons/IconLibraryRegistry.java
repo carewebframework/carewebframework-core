@@ -31,6 +31,16 @@ public class IconLibraryRegistry extends AbstractGlobalRegistry<String, IIconLib
     
     private static final IconLibraryRegistry instance = new IconLibraryRegistry();
     
+    private String defaultLibrary;
+    
+    private String defaultDimensions;
+    
+    public static IconLibraryRegistry init(String defaultLibrary, String defaultDimensions) {
+        instance.defaultLibrary = defaultLibrary;
+        instance.defaultDimensions = defaultDimensions;
+        return instance;
+    }
+    
     public static IconLibraryRegistry getInstance() {
         return instance;
     }
@@ -40,6 +50,11 @@ public class IconLibraryRegistry extends AbstractGlobalRegistry<String, IIconLib
      */
     private IconLibraryRegistry() {
         super();
+    }
+    
+    @Override
+    public IIconLibrary get(String library) {
+        return super.get(library == null ? getDefaultLibrary() : library);
     }
     
     @Override
@@ -64,6 +79,20 @@ public class IconLibraryRegistry extends AbstractGlobalRegistry<String, IIconLib
     }
     
     /**
+     * Returns the default icon library. If none has been explicitly set, assumes the first
+     * registered library to be default.
+     * 
+     * @return
+     */
+    public String getDefaultLibrary() {
+        if (defaultLibrary == null || defaultLibrary.isEmpty()) {
+            defaultLibrary = iterator().next().getId();
+        }
+        
+        return defaultLibrary;
+    }
+    
+    /**
      * Returns the paths to matching icon resources given name, dimensions, and library name, any
      * one of which may contain wildcard characters.
      * 
@@ -72,8 +101,10 @@ public class IconLibraryRegistry extends AbstractGlobalRegistry<String, IIconLib
      * @param dimensions Dimensions of the requested icon (e.g., "16x*").
      * @return The icon path.
      */
-    public List<String> getMatching(final String library, final String iconName, final String dimensions) {
+    public List<String> getMatching(String library, final String iconName, String dimensions) {
         SimpleRegexMatcher matcher = new SimpleRegexMatcher();
+        library = library == null ? getDefaultLibrary() : library;
+        dimensions = dimensions == null ? defaultDimensions : dimensions;
         
         List<String> results = null;
         
