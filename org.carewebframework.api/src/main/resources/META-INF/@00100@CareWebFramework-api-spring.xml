@@ -35,7 +35,7 @@
 		<!-- Maintains a registry of all aliases. -->
 		<bean id="aliasRegistry" class="org.carewebframework.api.AliasRegistry"
 			factory-method="getInstance">
-			<property name="propertyFile" value="${org.carewebframework.authority.aliases:}" />
+			<property name="propertyFile" value="${org.carewebframework.api.aliases:}" />
 		</bean>
 
 		<task:annotation-driven executor="taskExecutor"
