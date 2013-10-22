@@ -165,7 +165,7 @@ public class CareWebShell extends Div implements AfterCompose {
             desktop = new UIElementDesktop(this);
             ZKUtil.suppressContextMenu(this);
             appFramework.registerObject(userContextListener);
-            String confirmClose = FrameworkWebSupport.getFrameworkProperty("confirmClose", "CAREWEB.CONFIRMCLOSE");
+            String confirmClose = FrameworkWebSupport.getFrameworkProperty("confirmClose", "CAREWEB.CONFIRM.CLOSE");
             
             if (StringUtils.isEmpty(confirmClose) || BooleanUtils.toBoolean(confirmClose)) {
                 Clients.confirmClose(LBL_CONFIRM_CLOSE);
