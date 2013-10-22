@@ -34,7 +34,7 @@ public interface IIconLibrary {
     
     /**
      * Returns a list of urls for icons that match the criteria. Criteria may include wildcard
-     * characters. For example, <code>getMatch("weather*", "*x16")</code>
+     * characters. For example, <code>getMatching("weather*", "*x16")</code>
      * 
      * @param iconName Name of icon to match.
      * @param dimensions Desired dimensions to match.
