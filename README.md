@@ -4,7 +4,7 @@
 A modular, extensible framework for building clinical applications in a collaborative fashion, the CareWeb Framework is
 built upon established open source technologies.
 
-The framework also serves as the foundation for the rest of the CareWeb Framework projects. Browse the
+The framework serves as the foundation for the rest of the CareWeb Framework projects. Browse the
 repositories under the [CareWebFramework organization][] on GitHub for a full list.
 
 ## Downloading artifacts
