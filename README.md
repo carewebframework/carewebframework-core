@@ -1,4 +1,4 @@
-#Start
+#Getting Started
 
 ## CareWeb Framework
 A modular, extensible framework for building clinical applications in a collaborative fashion, the CareWeb Framework is
