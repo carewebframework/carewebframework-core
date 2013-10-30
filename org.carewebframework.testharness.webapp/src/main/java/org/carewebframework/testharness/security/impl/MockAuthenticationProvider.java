@@ -10,12 +10,17 @@
 package org.carewebframework.testharness.security.impl;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
+import org.carewebframework.api.domain.EntityIdentifier;
+import org.carewebframework.api.domain.IInstitution;
 import org.carewebframework.api.domain.IUser;
+import org.carewebframework.api.domain.Name;
 import org.carewebframework.api.property.PropertyUtil;
 import org.carewebframework.security.spring.AbstractAuthenticationProvider;
 import org.carewebframework.security.spring.CWFAuthenticationDetails;
+
 import org.springframework.security.authentication.BadCredentialsException;
 
 /**
@@ -23,7 +28,7 @@ import org.springframework.security.authentication.BadCredentialsException;
  * authenticates them against the database.
  */
 public class MockAuthenticationProvider extends AbstractAuthenticationProvider {
-
+    
     /**
      * No-arg constructor.
      */
@@ -40,14 +45,16 @@ public class MockAuthenticationProvider extends AbstractAuthenticationProvider {
     }
     
     private static class MockIUser implements IUser, Serializable {
-
+        
         private static final long serialVersionUID = 1L;
-
+        
         private long id = 123;
         
         private String uname;
         
-        public MockIUser(String username){
+        private Name name;
+        
+        public MockIUser(String username) {
             this.uname = username;
         }
         
@@ -77,8 +84,37 @@ public class MockAuthenticationProvider extends AbstractAuthenticationProvider {
         }
         
         @Override
-        public String getFullName() {
-            return PropertyUtil.getValue("mock.fullname", null);
+        public Name getName() {
+            if (name == null) {
+                name = new Name(PropertyUtil.getValue("mock.fullname", null));
+            }
+            
+            return name;
+        }
+        
+        @Override
+        public String getGender() {
+            return null;
+        }
+        
+        @Override
+        public Date getBirthDate() {
+            return null;
+        }
+        
+        @Override
+        public Date getDeathDate() {
+            return null;
+        }
+        
+        @Override
+        public IInstitution getInstitution() {
+            return null;
+        }
+        
+        @Override
+        public EntityIdentifier getIdentifier(String sysId) {
+            return null;
         }
     }
     

@@ -9,8 +9,13 @@
  */
 package org.carewebframework.api.security;
 
+import java.util.Date;
+
 import org.carewebframework.api.domain.DomainObject;
+import org.carewebframework.api.domain.EntityIdentifier;
+import org.carewebframework.api.domain.IInstitution;
 import org.carewebframework.api.domain.IUser;
+import org.carewebframework.api.domain.Name;
 
 /**
  * Mock user for testing.
@@ -21,12 +26,12 @@ public class MockUser extends DomainObject implements IUser {
     
     private String username;
     
-    private final String fullname;
+    private final Name name;
     
     public MockUser(long id, String username, String fullname) {
         super(id);
         this.username = username;
-        this.fullname = fullname;
+        this.name = new Name(fullname);
     }
     
     @Override
@@ -40,7 +45,33 @@ public class MockUser extends DomainObject implements IUser {
     }
     
     @Override
-    public String getFullName() {
-        return fullname;
+    public Name getName() {
+        return name;
+    }
+    
+    @Override
+    public String getGender() {
+        return null;
+    }
+    
+    @Override
+    public Date getBirthDate() {
+        return null;
+    }
+    
+    @Override
+    public Date getDeathDate() {
+        return null;
+    }
+    
+    @Override
+    public IInstitution getInstitution() {
+        return null;
+    }
+    
+    @Override
+    public EntityIdentifier getIdentifier(String sysId) {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

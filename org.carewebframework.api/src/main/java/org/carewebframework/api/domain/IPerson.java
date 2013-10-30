@@ -11,15 +11,10 @@ package org.carewebframework.api.domain;
 
 import java.util.Date;
 
-import org.carewebframework.api.domain.EntityIdentifier;
-import org.carewebframework.api.domain.IDomainObject;
-
 /**
  * Standard interface for accessing a person domain object.
  */
 public interface IPerson extends IDomainObject {
-    
-    int getGlobalId();
     
     String getGender();
     
@@ -27,7 +22,7 @@ public interface IPerson extends IDomainObject {
     
     Date getDeathDate();
     
-    String getFullName();
+    Name getName();
     
     IInstitution getInstitution();
     

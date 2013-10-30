@@ -13,12 +13,10 @@ package org.carewebframework.api.domain;
  * Standard interface for accessing a user domain object. This is used by the framework to access
  * the authenticated user in an implementation-independent fashion.
  */
-public interface IUser extends IDomainObject {
+public interface IUser extends IPerson {
     
     void setUsername(String username);
     
     String getUsername();
-    
-    String getFullName();
     
 }
