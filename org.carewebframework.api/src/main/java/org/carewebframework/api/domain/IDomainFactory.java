@@ -16,7 +16,7 @@ import java.util.List;
  * 
  * @param <T> The class of domain object serviced by the factory.
  */
-public interface IDomainService<T extends IDomainObject> {
+public interface IDomainFactory<T extends IDomainObject> {
     
     /**
      * Creates a new instance of an object of this domain.
