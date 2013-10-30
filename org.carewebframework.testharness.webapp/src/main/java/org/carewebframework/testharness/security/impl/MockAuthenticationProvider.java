@@ -16,7 +16,6 @@ import java.util.List;
 import org.carewebframework.api.domain.EntityIdentifier;
 import org.carewebframework.api.domain.IInstitution;
 import org.carewebframework.api.domain.IUser;
-import org.carewebframework.api.domain.Name;
 import org.carewebframework.api.property.PropertyUtil;
 import org.carewebframework.security.spring.AbstractAuthenticationProvider;
 import org.carewebframework.security.spring.CWFAuthenticationDetails;
@@ -52,8 +51,6 @@ public class MockAuthenticationProvider extends AbstractAuthenticationProvider {
         
         private String uname;
         
-        private Name name;
-        
         private String fullName;
         
         public MockIUser(String username) {
@@ -83,15 +80,6 @@ public class MockAuthenticationProvider extends AbstractAuthenticationProvider {
         @Override
         public String getUsername() {
             return uname;
-        }
-        
-        @Override
-        public Name getName() {
-            if (name == null) {
-                name = new Name(getFullName());
-            }
-            
-            return name;
         }
         
         @Override

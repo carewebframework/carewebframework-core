@@ -15,7 +15,6 @@ import org.carewebframework.api.domain.DomainObject;
 import org.carewebframework.api.domain.EntityIdentifier;
 import org.carewebframework.api.domain.IInstitution;
 import org.carewebframework.api.domain.IUser;
-import org.carewebframework.api.domain.Name;
 
 /**
  * Mock user for testing.
@@ -26,12 +25,12 @@ public class MockUser extends DomainObject implements IUser {
     
     private String username;
     
-    private final Name name;
+    private final String fullName;
     
-    public MockUser(long id, String username, String fullname) {
+    public MockUser(long id, String username, String fullName) {
         super(id);
         this.username = username;
-        this.name = new Name(fullname);
+        this.fullName = fullName;
     }
     
     @Override
@@ -45,13 +44,8 @@ public class MockUser extends DomainObject implements IUser {
     }
     
     @Override
-    public Name getName() {
-        return name;
-    }
-    
-    @Override
     public String getFullName() {
-        return name == null ? null : name.toString();
+        return fullName;
     }
     
     @Override

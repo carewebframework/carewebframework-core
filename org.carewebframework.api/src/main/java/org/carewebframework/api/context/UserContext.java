@@ -52,7 +52,7 @@ public class UserContext extends ManagedContext<IUser> {
     @Override
     public ContextItems toCCOWContext(IUser user) {
         contextItems.setItem(CCOW_USERNM, user.getUsername());
-        contextItems.setItem(CCOW_FULLNAME, user.getName());
+        contextItems.setItem(CCOW_FULLNAME, user.getFullName());
         return contextItems;
     }
     

@@ -22,8 +22,6 @@ public interface IPerson extends IDomainObject {
     
     Date getDeathDate();
     
-    Name getName();
-    
     String getFullName();
     
     IInstitution getInstitution();
