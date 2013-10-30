@@ -94,4 +94,8 @@ public class MockServerPush implements ServerPush {
         
         return result;
     }
+    
+    @Override
+    public void resume() {
+    }
 }
