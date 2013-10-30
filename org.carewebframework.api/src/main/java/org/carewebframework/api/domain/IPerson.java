@@ -24,6 +24,8 @@ public interface IPerson extends IDomainObject {
     
     Name getName();
     
+    String getFullName();
+    
     IInstitution getInstitution();
     
     EntityIdentifier getIdentifier(String sysId);

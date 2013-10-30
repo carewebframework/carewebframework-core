@@ -208,7 +208,8 @@ public class DesktopMonitor extends Thread {
             desktop.removeListener(this);
             timeoutWindow = (Window) desktop.getExecution().createComponents(DESKTOP_TIMEOUT_ZUL, null, null);
             ZKUtil.wireController(timeoutWindow, DesktopMonitor.this);
-            lblLocked.setValue(Mode.BASELINE.getLabel(TIMEOUT_EXPIRATION, securityService.getAuthenticatedUser().getName()));
+            lblLocked.setValue(Mode.BASELINE.getLabel(TIMEOUT_EXPIRATION, securityService.getAuthenticatedUser()
+                    .getFullName()));
             desktop.enableServerPush(true);
             desktop.addListener(desktopActivityMonitor);
             ThreadUtil.startThread(DesktopMonitor.this);

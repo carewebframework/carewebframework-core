@@ -50,6 +50,11 @@ public class MockUser extends DomainObject implements IUser {
     }
     
     @Override
+    public String getFullName() {
+        return name == null ? null : name.toString();
+    }
+    
+    @Override
     public String getGender() {
         return null;
     }
@@ -71,7 +76,6 @@ public class MockUser extends DomainObject implements IUser {
     
     @Override
     public EntityIdentifier getIdentifier(String sysId) {
-        // TODO Auto-generated method stub
         return null;
     }
 }

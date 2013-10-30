@@ -136,7 +136,7 @@ public abstract class AbstractGlobalEventDispatcher implements IGlobalEventDispa
     @Override
     public String getUserName() {
         IUser user = getUser();
-        return user == null || user.getName() == null ? "" : user.getName().toString();
+        return user == null ? "" : user.getFullName();
     }
     
     /**

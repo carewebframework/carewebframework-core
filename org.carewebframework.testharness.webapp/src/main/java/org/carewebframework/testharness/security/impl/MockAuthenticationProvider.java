@@ -54,6 +54,8 @@ public class MockAuthenticationProvider extends AbstractAuthenticationProvider {
         
         private Name name;
         
+        private String fullName;
+        
         public MockIUser(String username) {
             this.uname = username;
         }
@@ -86,10 +88,19 @@ public class MockAuthenticationProvider extends AbstractAuthenticationProvider {
         @Override
         public Name getName() {
             if (name == null) {
-                name = new Name(PropertyUtil.getValue("mock.fullname", null));
+                name = new Name(getFullName());
             }
             
             return name;
+        }
+        
+        @Override
+        public String getFullName() {
+            if (fullName == null) {
+                fullName = PropertyUtil.getValue("mock.fullname", null);
+            }
+            
+            return fullName;
         }
         
         @Override
