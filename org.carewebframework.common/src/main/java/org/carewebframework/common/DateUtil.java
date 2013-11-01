@@ -328,6 +328,18 @@ public class DateUtil {
     }
     
     /**
+     * Compares two dates. Allows nulls.
+     * 
+     * @param date1 First date to compare.
+     * @param date2 Second date to compare.
+     * @return Result of comparison.
+     */
+    public static int compare(Date date1, Date date2) {
+        long diff = date1 == date2 ? 0 : date1 == null ? -1 : date2 == null ? 1 : date1.getTime() - date2.getTime();
+        return diff < 0 ? -1 : diff > 0 ? 1 : 0;
+    }
+    
+    /**
      * Converts a date/time value to a string, using the format dd-mmm-yyyy hh:mm. Because we cannot
      * determine the absence of a time from a time of 24:00, we must assume a time of 24:00 means
      * that no time is present and strip that from the return value.

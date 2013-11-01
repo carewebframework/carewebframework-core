@@ -46,8 +46,24 @@ public class PropertyUtil {
      * @see IPropertyService#getValue
      */
     @SuppressWarnings("javadoc")
+    public static String getValue(String propertyName) {
+        return getPropertyService().getValue(propertyName, null);
+    }
+    
+    /**
+     * @see IPropertyService#getValue
+     */
+    @SuppressWarnings("javadoc")
     public static String getValue(String propertyName, String instanceName) {
         return getPropertyService().getValue(propertyName, instanceName);
+    }
+    
+    /**
+     * @see IPropertyService#getValues
+     */
+    @SuppressWarnings("javadoc")
+    public static List<String> getValues(String propertyName) {
+        return getPropertyService().getValues(propertyName, null);
     }
     
     /**
