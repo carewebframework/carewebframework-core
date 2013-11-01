@@ -6,11 +6,11 @@
 		<artifactId>org.carewebframework</artifactId>
 		<version>3.0.0-SNAPSHOT</version>
 	</parent>
-	<artifactId>org.carewebframework.maven</artifactId>
+	<artifactId>org.carewebframework.maven-parent</artifactId>
 	<packaging>pom</packaging>
 	<name>CareWeb Framework Maven Support Aggregator POM</name>
 	<modules>
-		<module>org.carewebframework.maven.archetype</module>
-		<module>org.carewebframework.maven.plugin</module>
+		<module>org.carewebframework.maven.archetype-parent</module>
+		<module>org.carewebframework.maven.plugin-parent</module>
 	</modules>
 </project>

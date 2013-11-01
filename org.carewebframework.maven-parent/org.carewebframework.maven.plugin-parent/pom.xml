@@ -3,17 +3,20 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.carewebframework</groupId>
-		<artifactId>org.carewebframework.maven</artifactId>
+		<artifactId>org.carewebframework.maven-parent</artifactId>
 		<version>3.0.0-SNAPSHOT</version>
 	</parent>
-	<artifactId>org.carewebframework.maven.plugin</artifactId>
+	
+	<artifactId>org.carewebframework.maven.plugin-parent</artifactId>
 	<packaging>pom</packaging>
 	<name>CareWeb Framework Maven Plugin Aggregator POM</name>
+	
 	<modules>
 		<module>org.carewebframework.maven.plugin.core</module>
 		<module>org.carewebframework.maven.plugin.helpconverter</module>
 		<module>org.carewebframework.maven.plugin.themegenerator</module>
 	</modules>
+	
 	<dependencyManagement>
 		<dependencies>
 			<dependency>

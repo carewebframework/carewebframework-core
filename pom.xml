@@ -66,7 +66,7 @@
 
 	<modules>
 		<module>org.carewebframework.common</module>
-		<module>org.carewebframework.maven</module>
+		<module>org.carewebframework.maven-parent</module>
 		<module>org.carewebframework.api</module>
 		<module>org.carewebframework.ui</module>
 		<module>org.carewebframework.help</module>
@@ -83,8 +83,8 @@
 		<module>org.carewebframework.ui.sharedforms</module>
 		<module>org.carewebframework.ui.settings</module>
 		<module>org.carewebframework.ui.wonderbar</module>
-		<module>org.carewebframework.ext</module>
-		<module>org.carewebframework.lib</module>
+		<module>org.carewebframework.ext-parent</module>
+		<module>org.carewebframework.lib-parent</module>
 		<module>org.carewebframework.testharness</module>
 		<module>org.carewebframework.testharness.webapp</module>
 	</modules>

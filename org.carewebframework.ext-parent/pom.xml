@@ -5,10 +5,11 @@
 		<artifactId>org.carewebframework</artifactId>
 		<version>3.0.0-SNAPSHOT</version>
 	</parent>
-	<artifactId>org.carewebframework.lib</artifactId>
+	<artifactId>org.carewebframework.ext-parent</artifactId>
 	<packaging>pom</packaging>
-	<name>CareWeb Framework Library Aggregator POM</name>
+	<name>CareWeb Framework Extensions Aggregator POM</name>
 	<modules>
-		<module>org.carewebframework.lib.plugin</module>
+		<module>org.carewebframework.ext.performance</module>
+		<module>org.carewebframework.ext.logging</module>
 	</modules>
 </project>
