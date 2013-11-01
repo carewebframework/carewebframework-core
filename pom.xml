@@ -2,17 +2,20 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.carewebframework</groupId>
-	<artifactId>org.carewebframework</artifactId>
+	<artifactId>org.carewebframework-parent</artifactId>
 	<version>3.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>CareWeb Framework Root POM</name>
+	
 	<organization>
 		<name>Regenstrief Center for Biomedical Informatics</name>
 		<url>http://www.carewebframework.org/</url>
 	</organization>
+	
 	<prerequisites>
-		<maven>2.2.1</maven>
+		<maven>3.0.5</maven>
 	</prerequisites>
+	
 	<licenses>
 		<license>
 			<name>MPL 2.0</name>
@@ -33,6 +36,7 @@
 			</comments>
 		</license>
 	</licenses>
+	
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<org.carewebframework.version>3.0.0-SNAPSHOT</org.carewebframework.version>
@@ -55,6 +59,7 @@
 		<tomcat.manager.url>http://localhost:8080/manager</tomcat.manager.url>
 		<tomcat.manager.server.id>tomcat.manager</tomcat.manager.server.id>
 	</properties>
+	
 	<scm>
 		<connection>${scm.scm}:${scm.base}</connection>
 		<developerConnection>${scm.scm}:${scm.base}</developerConnection>
@@ -88,6 +93,7 @@
 		<module>org.carewebframework.testharness</module>
 		<module>org.carewebframework.testharness.webapp</module>
 	</modules>
+	
 	<build>
 		<pluginManagement>
 			<plugins>
@@ -427,6 +433,7 @@
 			</plugin>
 		</plugins>
 	</build>
+	
 	<dependencyManagement>
 		<dependencies>
 			<!-- Spring Framework -->
