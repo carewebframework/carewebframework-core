@@ -46,4 +46,9 @@ public class EntityIdentifier {
         EntityIdentifier ei = (EntityIdentifier) object;
         return ei.id.equals(id) && ei.sysId.equals(sysId);
     }
+    
+    @Override
+    public String toString() {
+        return id;
+    }
 }
