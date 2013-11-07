@@ -19,7 +19,7 @@ import org.zkoss.zk.ui.Component;
 /**
  * Controller for settings plugin. The settings plugin is a generic plugin for managing settings of
  * various types using the framework's built-in property editor. It requires an implementation of
- * the ISettingsAdaptor which provides an interface to the underlying data store for the settings.
+ * the ISettingsProvider which provides an interface to the underlying data store for the settings.
  */
 public class MainController extends PluginController {
     
@@ -83,7 +83,7 @@ public class MainController extends PluginController {
     }
     
     /**
-     * Activates the property grid once the adaptor and group ids are set.
+     * Activates the property grid once the provider and group ids are set.
      */
     private void init() {
         if (provider != null) {
