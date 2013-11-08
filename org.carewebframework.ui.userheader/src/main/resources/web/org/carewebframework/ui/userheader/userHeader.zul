@@ -1,0 +1,24 @@
+<zk xmlns="http://www.zkoss.org/2005/zul"
+	xmlns:h="http://www.w3.org/1999/xhtml"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+
+	<vlayout apply="${userHeaderController}" spacing="0" height="100%"
+		width="100%">
+		<hlayout sclass="cwf-header-row" hflex="1" vflex="1">
+			<label id="userHeader" value="Current user" />
+		</hlayout>
+		<hlayout sclass="cwf-header-row" hflex="1" vflex="1">
+			<div hflex="1">
+				<a id="password" label="Change password"
+					tooltiptext="Click here to change your password." visible="true" />
+			</div>
+			<div style="text-align:right">
+				<a id="lock" label="Lock"
+					tooltiptext="Click here to lock the application." />
+				<a id="logout" label="Logout"
+					tooltiptext="Click here to logout." />
+			</div>
+		</hlayout>
+	</vlayout>
+</zk>

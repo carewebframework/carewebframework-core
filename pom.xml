@@ -87,6 +87,7 @@
 		<module>org.carewebframework.ui.eventtesting</module>
 		<module>org.carewebframework.ui.sharedforms</module>
 		<module>org.carewebframework.ui.settings</module>
+		<module>org.carewebframework.ui.userheader</module>
 		<module>org.carewebframework.ui.wonderbar</module>
 		<module>org.carewebframework.ext-parent</module>
 		<module>org.carewebframework.lib-parent</module>
