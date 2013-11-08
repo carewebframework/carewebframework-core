@@ -5,12 +5,11 @@
 		<artifactId>org.carewebframework-parent</artifactId>
 		<version>3.0.0-SNAPSHOT</version>
 	</parent>
-	<name>CareWeb Framework UI InfoPanel</name>
-	<artifactId>org.carewebframework.ui.infopanel</artifactId>
-	<dependencies>
-		<dependency>
-			<groupId>org.carewebframework</groupId>
-			<artifactId>org.carewebframework.shell</artifactId>
-		</dependency>
-	</dependencies>
+	<artifactId>org.carewebframework.help-parent</artifactId>
+	<packaging>pom</packaging>
+	<name>CareWeb Framework Help Components Aggregator POM</name>
+	<modules>
+		<module>org.carewebframework.help.core</module>
+		<module>org.carewebframework.help.javahelp</module>
+	</modules>
 </project>

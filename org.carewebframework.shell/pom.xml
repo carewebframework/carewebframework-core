@@ -35,7 +35,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.carewebframework</groupId>
-			<artifactId>org.carewebframework.help</artifactId>
+			<artifactId>org.carewebframework.help.core</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.zkoss.zk</groupId>
