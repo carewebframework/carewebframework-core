@@ -31,7 +31,6 @@ import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zk.ui.util.GenericForwardComposer;
 import org.zkoss.zul.Button;
-import org.zkoss.zul.Detail;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
@@ -60,7 +59,7 @@ public class ExceptionController extends GenericForwardComposer<Component> {
     
     private Textbox txtStackTrace;
     
-    private Detail detail;
+    private Component detail;
     
     private Button btnDetail;
     
@@ -163,7 +162,7 @@ public class ExceptionController extends GenericForwardComposer<Component> {
      * @param doOpen
      */
     private void setDetail(final boolean doOpen) {
-        this.detail.setOpen(doOpen);
+        this.detail.setVisible(doOpen);
         this.btnDetail.setLabel(doOpen ? "Hide Detail" : "Show Detail");
     }
     
@@ -178,6 +177,6 @@ public class ExceptionController extends GenericForwardComposer<Component> {
      * Event handler for "show detail" button
      */
     public void onClick$btnDetail() {
-        setDetail(!this.detail.isOpen());
+        setDetail(!this.detail.isVisible());
     }
 }
