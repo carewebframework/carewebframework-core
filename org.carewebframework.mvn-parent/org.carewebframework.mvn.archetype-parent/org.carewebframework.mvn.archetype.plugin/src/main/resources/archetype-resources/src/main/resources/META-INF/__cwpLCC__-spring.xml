@@ -1,0 +1,48 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:cwp="http://www.carewebframework.org/schema/plugin"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-3.1.xsd 
+		http://www.carewebframework.org/schema/plugin
+		http://www.carewebframework.org/schema/plugin/plugin-extensions.xsd">
+
+<!-- This profile is processed during web server startup -->
+
+	<beans profile="root">
+		
+		<!-- This is the sample definition for a CareWeb plugin -->
+		<cwp:plugin id="${cwpLCC}" name="${cwpName}" 
+			url="~./${packageInPathFormat}/${cwpLCC}.zul">
+			<cwp:resource>
+				<cwp:button-resource caption="${symbol_dollar}{labels.${cwpLC}.button.caption}" 
+					action='zscript:Messagebox.show("${symbol_dollar}{labels.${cwpLC}.button.click.msg}");'/>
+				<cwp:help-resource module="${cwpLCC}Help"/>
+				<cwp:menu-resource path="${cwpUCC}${symbol_escape}Click Me" 
+					action='zscript:Messagebox.show("${symbol_dollar}{labels.${cwpLC}.menu.click.msg}");'/>
+				<cwp:property-resource group="${cwpLCC}PropGroupName"/>
+			</cwp:resource>
+			<!-- You may specify plugin level security constraints here:
+			<cwp:security requiresAll="false">
+				<cwp:authority name="PRIV_CLINICAL_PRIVILEGED_DATA_HIV_OR_AIDS"/>
+				<cwp:authority name="PRIV_CLINICAL_PRIVILEGED_DATA_PSYCHIATRIC"/>
+			</cwp:security>
+			-->
+		</cwp:plugin>
+		
+	</beans>
+	
+<!-- This profile is processed for each managed desktop. -->
+
+	<beans profile="desktop">
+
+		<bean id="${cwpLCC}Controller" 
+			class="${package}.controller.${cwpUCC}Controller" 
+			scope="prototype"/>
+	
+	</beans>
+</beans>

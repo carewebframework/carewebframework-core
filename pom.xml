@@ -71,7 +71,7 @@
 
 	<modules>
 		<module>org.carewebframework.common</module>
-		<module>org.carewebframework.maven-parent</module>
+		<module>org.carewebframework.mvn-parent</module>
 		<module>org.carewebframework.api</module>
 		<module>org.carewebframework.ui</module>
 		<module>org.carewebframework.help-parent</module>
@@ -320,7 +320,7 @@
 				<!-- End common build plugins -->
 				<plugin>
 					<groupId>org.carewebframework</groupId>
-					<artifactId>org.carewebframework.maven.plugin.helpconverter</artifactId>
+					<artifactId>org.carewebframework.mvn.plugin.helpconverter</artifactId>
 					<version>${org.carewebframework.version}</version>
 					<executions>
 						<execution>
@@ -347,7 +347,7 @@
 				</plugin>
 				<plugin>
 					<groupId>org.carewebframework</groupId>
-					<artifactId>org.carewebframework.maven.plugin.themegenerator</artifactId>
+					<artifactId>org.carewebframework.mvn.plugin.themegenerator</artifactId>
 					<version>${org.carewebframework.version}</version>
 					<executions>
 						<execution>

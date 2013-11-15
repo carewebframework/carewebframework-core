@@ -16,7 +16,7 @@
 		<plugins>
 			<plugin>
 				<groupId>org.carewebframework</groupId>
-				<artifactId>org.carewebframework.maven.plugin.themegenerator</artifactId>
+				<artifactId>org.carewebframework.mvn.plugin.themegenerator</artifactId>
 				<configuration>
 					<themes>
 						<theme>

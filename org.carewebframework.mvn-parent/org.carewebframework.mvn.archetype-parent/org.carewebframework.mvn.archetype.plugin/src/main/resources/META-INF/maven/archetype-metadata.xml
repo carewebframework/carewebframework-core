@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<archetype-descriptor
+	xsi:schemaLocation="http://maven.apache.org/plugins/maven-archetype-plugin/archetype-descriptor/1.0.0 http://maven.apache.org/xsd/archetype-descriptor-1.0.0.xsd"
+	name="org.carewebframework.ui.component.sample"
+	xmlns="http://maven.apache.org/plugins/maven-archetype-plugin/archetype-descriptor/1.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<requiredProperties>
+		<!-- http://jira.codehaus.org/browse/ARCHETYPE-308 defaultValue would not 
+			prompt due. If you are using archetype:generate, answer "N" when prompted 
+			if the defaults are incorrect. -->
+		<requiredProperty key="cwpName">
+			<!-- Descriptive Name -->
+			<defaultValue>Example CareWeb Plugin</defaultValue>
+		</requiredProperty>
+		<requiredProperty key="cwpUCC">
+			<!-- Upper Camel Case Plugin Name/ID : No Spaces -->
+			<defaultValue>ExampleCareWebPlugin</defaultValue>
+		</requiredProperty>
+		<requiredProperty key="cwpLCC">
+			<!-- Lower Camel Case Plugin Name/ID : No Spaces -->
+			<defaultValue>exampleCareWebPlugin</defaultValue>
+		</requiredProperty>
+		<requiredProperty key="cwpLC">
+			<!-- Lower Case Plugin Name/ID : No Spaces -->
+			<defaultValue>examplecarewebplugin</defaultValue>
+		</requiredProperty>
+		<requiredProperty key="cwfVersion">
+			<!-- CareWeb Framework Version -->
+			<defaultValue>${project.parent.version}</defaultValue>
+		</requiredProperty>
+	</requiredProperties>
+	<fileSets>
+		<fileSet filtered="true" packaged="true" encoding="UTF-8">
+			<directory>src/main/java</directory>
+			<includes>
+				<include>**/*.java</include>
+			</includes>
+		</fileSet>
+		<fileSet filtered="true" encoding="UTF-8">
+			<directory>src/main/resources/META-INF</directory>
+			<includes>
+				<include>**/*.xml</include>
+				<include>**/*.properties</include>
+			</includes>
+		</fileSet>
+		<fileSet filtered="true" packaged="true" encoding="UTF-8">
+			<directory>src/main/resources/web</directory>
+			<includes>
+				<include>**/*.zul</include>
+				<include>**/*.properties</include>
+			</includes>
+		</fileSet>
+		<fileSet packaged="false" encoding="UTF-8">
+			<directory>src/main/assembly</directory>
+		</fileSet>
+		<fileSet filtered="true" packaged="false" encoding="UTF-8">
+			<directory>src/main/help</directory>
+		</fileSet>
+		
+		<fileSet filtered="true" packaged="true" encoding="UTF-8">
+			<directory>src/test/java</directory>
+			<includes>
+				<include>**/*.java</include>
+			</includes>
+		</fileSet>
+		<fileSet filtered="true" encoding="UTF-8">
+			<directory>src/test/resources</directory>
+			<includes>
+				<include>**/*.*</include>
+			</includes>
+		</fileSet>
+	</fileSets>
+</archetype-descriptor>
