@@ -57,7 +57,7 @@
 				<cwp:property id="orientation" type="choice"
 					name="${labels.cwf.shell.plugin.tabview.orientation.name}" description="${labels.cwf.shell.plugin.tabview.orientation.description}">
 					<cwp:config>
-						<cwp:entry key="values">horizontal,vertical</cwp:entry>
+						<cwp:entry key="values">horizontal,vertical,accordion</cwp:entry>
 					</cwp:config>
 				</cwp:property>
 				<cwp:property id="color" type="color"
@@ -74,6 +74,8 @@
 				<cwp:property id="label"
 					default="${labels.cwf.shell.plugin.tabpane.label.default_}" name="${labels.cwf.shell.plugin.tabpane.label.name}"
 					description="${labels.cwf.shell.plugin.tabpane.label.description}" />
+				<cwp:property id="icon" type="icon"
+					name="${labels.cwf.shell.plugin.tabpane.icon.name}" description="${labels.cwf.shell.plugin.tabpane.icon.description}" />
 				<cwp:property id="hint"
 					name="${labels.cwf.shell.plugin.tabpane.hint.name}" description="${labels.cwf.shell.plugin.tabpane.hint.description}" />
 				<cwp:property id="color" type="color"

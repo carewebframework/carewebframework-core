@@ -55,16 +55,22 @@ public class UIElementTabView extends UIElementZKBase {
      * @param orientation
      */
     public void setOrientation(String orientation) {
-        tabBox.setOrient(orientation);
+        if ("accordion".equals(orientation)) {
+            tabBox.setOrient("horizontal");
+            tabBox.setMold("accordion");
+        } else {
+            tabBox.setMold(null);
+            tabBox.setOrient(orientation);
+        }
     }
     
     /**
-     * Returns the orientation (horizontal or vertical).
+     * Returns the orientation (horizontal, vertical or accordion).
      * 
      * @return
      */
     public String getOrientation() {
-        return tabBox.getOrient();
+        return "accordion".equals(tabBox.getMold()) ? "accordion" : tabBox.getOrient();
     }
     
     /**

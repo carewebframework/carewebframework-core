@@ -150,6 +150,25 @@ public class UIElementTabPane extends UIElementZKBase {
     }
     
     /**
+     * Returns the tab icon.
+     * 
+     * @return
+     */
+    public String getIcon() {
+        return caption.getImage();
+    }
+    
+    /**
+     * Sets the tab icon.
+     * 
+     * @param value
+     */
+    public void setIcon(String value) {
+        tab.setImage(value);
+        caption.setImage(value);
+    }
+    
+    /**
      * Hint text should be applied to the tab.
      */
     @Override
