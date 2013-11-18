@@ -11,6 +11,8 @@ package org.carewebframework.ui.zk;
 
 import org.apache.commons.lang.StringUtils;
 
+import org.carewebframework.common.StrUtil;
+
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zul.Cell;
 import org.zkoss.zul.Column;
@@ -303,7 +305,7 @@ public abstract class AbstractRowRenderer<T, G> extends AbstractRenderer impleme
         detailColumns.setParent(detailGrid);
         
         for (int i = 0; i < colWidths.length; i++) {
-            String colLabel = colLabels == null || i >= colLabels.length ? " " : colLabels[i];
+            String colLabel = colLabels == null || i >= colLabels.length ? " " : StrUtil.formatMessage(colLabels[i]);
             Column col = new Column(colLabel);
             col.setWidth(colWidths[i]);
             col.setParent(detailColumns);
