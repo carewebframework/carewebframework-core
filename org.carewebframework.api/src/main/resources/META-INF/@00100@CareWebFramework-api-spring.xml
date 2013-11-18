@@ -89,7 +89,8 @@
 		</bean>
 
 		<!-- Default NamingStrategy -->
-		<bean id="mbeanNamingStrategy" class="org.springframework.jmx.export.naming.KeyNamingStrategy"/>
+		<bean id="mbeanNamingStrategy" class="org.springframework.jmx.export.naming.IdentityNamingStrategy" />
+
 	</beans>
 
 	<beans profile="desktop">
