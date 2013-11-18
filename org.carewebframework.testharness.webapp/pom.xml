@@ -41,11 +41,6 @@
 		</dependency>
 		<dependency>
 			<groupId>org.carewebframework</groupId>
-			<artifactId>org.carewebframework.ui.statuspanel</artifactId>
-			<version>${project.parent.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.carewebframework</groupId>
 			<artifactId>org.carewebframework.ui.infopanel</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
@@ -54,12 +49,17 @@
 			<artifactId>org.carewebframework.ui.currentdatetime</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
+		<!-- CareWeb Framework Components -->
 		<dependency>
 			<groupId>org.carewebframework</groupId>
 			<artifactId>org.carewebframework.ui.userheader</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
-		<!-- CareWeb Framework Components -->
+		<dependency>
+			<groupId>org.carewebframework</groupId>
+			<artifactId>org.carewebframework.ui.statuspanel</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>org.carewebframework</groupId>
 			<artifactId>org.carewebframework.security.spring</artifactId>
