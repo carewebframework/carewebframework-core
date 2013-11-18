@@ -18,6 +18,7 @@
 		<module>org.carewebframework.ui.popupsupport</module>
 		<module>org.carewebframework.ui.statuspanel</module>
 		<module>org.carewebframework.ui.eventtesting</module>
+		<module>org.carewebframework.ui.managementsupport</module>
 		<module>org.carewebframework.ui.sharedforms</module>
 		<module>org.carewebframework.ui.settings</module>
 		<module>org.carewebframework.ui.userheader</module>

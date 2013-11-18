@@ -78,9 +78,9 @@
 		<module>org.carewebframework.shell</module>
 		<module>org.carewebframework.security.spring</module>
 		<module>org.carewebframework.activemq</module>
-		<module>org.carewebframework.ui-parent</module>
 		<module>org.carewebframework.ext-parent</module>
 		<module>org.carewebframework.lib-parent</module>
+		<module>org.carewebframework.ui-parent</module>
 		<module>org.carewebframework.testharness</module>
 		<module>org.carewebframework.testharness.webapp</module>
 	</modules>
