@@ -282,6 +282,18 @@ public abstract class AbstractRowRenderer<T, G> extends AbstractRenderer impleme
      * @return
      */
     public Grid createDetailGrid(Component parent, String[] colWidths) {
+        return createDetailGrid(parent, colWidths, null);
+    }
+    
+    /**
+     * Creates a grid for detail view.
+     * 
+     * @param parent
+     * @param colWidths
+     * @param colLabels
+     * @return
+     */
+    public Grid createDetailGrid(Component parent, String[] colWidths, String[] colLabels) {
         final Grid detailGrid = new Grid();
         detailGrid.setOddRowSclass("none");
         detailGrid.setWidth("100%");
@@ -290,9 +302,10 @@ public abstract class AbstractRowRenderer<T, G> extends AbstractRenderer impleme
         detailColumns.setSizable(true);
         detailColumns.setParent(detailGrid);
         
-        for (String colWidth : colWidths) {
-            Column col = new Column(" ");
-            col.setWidth(colWidth);
+        for (int i = 0; i < colWidths.length; i++) {
+            String colLabel = colLabels == null || i >= colLabels.length ? " " : colLabels[i];
+            Column col = new Column(colLabel);
+            col.setWidth(colWidths[i]);
             col.setParent(detailColumns);
         }
         
