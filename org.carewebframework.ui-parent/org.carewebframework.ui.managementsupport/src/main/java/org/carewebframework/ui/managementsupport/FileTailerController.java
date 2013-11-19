@@ -20,11 +20,11 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import org.carewebframework.api.logging.ILogManager;
+import org.carewebframework.api.logging.LogFileTailer;
+import org.carewebframework.api.logging.LogFileTailerListener;
 import org.carewebframework.common.StrUtil;
-import org.carewebframework.logging.ILogManager;
 import org.carewebframework.shell.plugins.PluginController;
-import org.carewebframework.ui.managementsupport.model.FileTailer;
-import org.carewebframework.ui.managementsupport.model.FileTailerListener;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zul.Button;
@@ -61,7 +61,7 @@ public class FileTailerController extends PluginController {
     
     private final Deque<String> logFileBuffer = new ArrayDeque<String>();
     
-    private FileTailer tailer;
+    private LogFileTailer tailer;
     
     private final Map<String, File> logFiles = new HashMap<String, File>();
     
@@ -75,7 +75,7 @@ public class FileTailerController extends PluginController {
      * FileTailListener callback interface handles processing when notified that the file being
      * tailed has new lines
      */
-    private final FileTailerListener tailListener = new FileTailerListener() {
+    private final LogFileTailerListener tailListener = new LogFileTailerListener() {
         
         @Override
         public void newFileLine(final String line) {
@@ -145,8 +145,7 @@ public class FileTailerController extends PluginController {
     
     /**
      * Handles the Button onClick event for changing the state of the
-     * {@link org.carewebframework.ui.managementsupport.model.FileTailer} and the client
-     * org.zkoss.zul.Timer
+     * {@link org.carewebframework.api.logging.LogFileTailer} and the client org.zkoss.zul.Timer
      */
     public void onClick$btnToggle() {
         if (isTailerStarted) {
@@ -182,9 +181,9 @@ public class FileTailerController extends PluginController {
             final String logFilePath = selectedItem == null ? null : selectedItem.getLabel();
             
             if (tailer == null) {
-                log.trace("Creating FileTailer with " + logFilePath);
+                log.trace("Creating LogFileTailer with " + logFilePath);
                 try {
-                    tailer = new FileTailer(logFiles.get(logFilePath), TAIL_INTERVAL, false);
+                    tailer = new LogFileTailer(logFiles.get(logFilePath), TAIL_INTERVAL, false);
                     tailer.addFileTailerListener(tailListener);
                 } catch (final FileNotFoundException e) {
                     log.error(e.getMessage(), e);

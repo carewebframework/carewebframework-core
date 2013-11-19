@@ -7,7 +7,7 @@
  * Disclaimer of Warranty and Limitation of Liability available at
  * http://www.carewebframework.org/licensing/disclaimer.
  */
-package org.carewebframework.ui.managementsupport.model;
+package org.carewebframework.api.logging;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -34,11 +34,10 @@ import org.apache.commons.logging.LogFactory;
  * fires notifications containing new file lines, one at a time.
  * 
  * @author Steven Haines {@link "http://www.informit.com/guides/content.aspx?g=java&seqNum=226"}
- * @author Alex Franken
  */
-public class FileTailer implements Runnable {
+public class LogFileTailer implements Runnable {
     
-    private static final Log log = LogFactory.getLog(FileTailer.class);
+    private static final Log log = LogFactory.getLog(LogFileTailer.class);
     
     /**
      * How frequently to check for file changes; defaults to 5 seconds
@@ -73,7 +72,7 @@ public class FileTailer implements Runnable {
     /**
      * Set of listeners
      */
-    private final Set<FileTailerListener> listeners = new HashSet<FileTailerListener>();
+    private final Set<LogFileTailerListener> listeners = new HashSet<LogFileTailerListener>();
     
     /**
      * Creates a new file tailer that tails an existing file and checks the file for updates every
@@ -81,7 +80,7 @@ public class FileTailer implements Runnable {
      * 
      * @param file File
      */
-    public FileTailer(final File file) {
+    public LogFileTailer(final File file) {
         this.file = file;
     }
     
@@ -94,7 +93,7 @@ public class FileTailer implements Runnable {
      *            and continue tailing (true) or simply start tailing from the end of the file
      * @throws FileNotFoundException When no file found
      */
-    public FileTailer(final File file, final long interval, final boolean startAtBeginning) throws FileNotFoundException {
+    public LogFileTailer(final File file, final long interval, final boolean startAtBeginning) throws FileNotFoundException {
         if (file == null) {
             throw new NullPointerException("File argument cannot be null");
         } else if (!file.exists()) {
@@ -110,7 +109,7 @@ public class FileTailer implements Runnable {
      * 
      * @param l FileTailerListener
      */
-    public void addFileTailerListener(final FileTailerListener l) {
+    public void addFileTailerListener(final LogFileTailerListener l) {
         this.listeners.add(l);
     }
     
@@ -119,7 +118,7 @@ public class FileTailer implements Runnable {
      * 
      * @param l FileTailListener
      */
-    public void removeFileTailerListener(final FileTailerListener l) {
+    public void removeFileTailerListener(final LogFileTailerListener l) {
         this.listeners.remove(l);
     }
     
@@ -127,15 +126,15 @@ public class FileTailer implements Runnable {
      * @param line Data read from the <code>file</code>
      */
     protected void fireNewFileLine(final String line) {
-        for (final FileTailerListener fileTailerListener : this.listeners) {
-            final FileTailerListener l = fileTailerListener;
+        for (final LogFileTailerListener fileTailerListener : this.listeners) {
+            final LogFileTailerListener l = fileTailerListener;
             l.newFileLine(line);
         }
     }
     
     protected void fireMaxActiveIntervalExceeded() {
-        for (final FileTailerListener fileTailerListener : this.listeners) {
-            final FileTailerListener l = fileTailerListener;
+        for (final LogFileTailerListener fileTailerListener : this.listeners) {
+            final LogFileTailerListener l = fileTailerListener;
             l.tailerTerminated();
         }
     }

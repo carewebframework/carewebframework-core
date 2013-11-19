@@ -7,14 +7,14 @@
  * Disclaimer of Warranty and Limitation of Liability available at
  * http://www.carewebframework.org/licensing/disclaimer.
  */
-package org.carewebframework.ui.managementsupport.model;
+package org.carewebframework.api.logging;
 
 /**
  * Provides listener notification methods when a tailed file is updated
  * 
  * @author Steven Haines {@link "http://www.informit.com/guides/content.aspx?g=java&seqNum=226"}
  */
-public interface FileTailerListener {
+public interface LogFileTailerListener {
     
     /**
      * A new line has been added to the tailed file
@@ -24,8 +24,8 @@ public interface FileTailerListener {
     public void newFileLine(String line);
     
     /**
-     * FileTailer exceeded {@link FileTailer#getMaxActiveInterval()} Note that this means that
-     * {@link FileTailer#stopTailing()} was called
+     * FileTailer exceeded {@link LogFileTailer#getMaxActiveInterval()} Note that this means that
+     * {@link LogFileTailer#stopTailing()} was called
      */
     public void tailerTerminated();
 }
