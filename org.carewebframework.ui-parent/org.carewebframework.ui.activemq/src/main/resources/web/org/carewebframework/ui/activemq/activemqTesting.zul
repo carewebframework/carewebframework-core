@@ -1,0 +1,48 @@
+<zk xmlns="http://www.zkoss.org/2005/zul"
+	xmlns:h="http://www.w3.org/1999/xhtml"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.zkoss.org/2005/zul 
+		http://www.zkoss.org/2005/zul/zul.xsd">
+	<vlayout apply="${activemqTestingController}">
+		<grid>
+			<columns>
+				<column hflex="min" />
+				<column hflex="1" />
+			</columns>
+			<rows>
+				<row>
+					<vlayout>
+						<label value="${labels.cwf.activemq.row1.label1}" />
+						<label
+							value="${labels.cwf.activemq.row1.label2}" />
+					</vlayout>
+
+					<textbox id="txtDestinationName" hflex="1" />
+				</row>
+				<row>
+					<label value="${labels.cwf.activemq.row2.label1}" />
+					<textbox id="txtMessageData" hflex="1" rows="3" />
+				</row>
+				<row>
+					<vlayout>
+						<label value="${labels.cwf.activemq.row3.label1}" />
+						<label
+							value="${labels.cwf.activemq.row3.label2}" />
+					</vlayout>
+					<textbox id="txtTopicRecipients" hflex="1" />
+				</row>
+			</rows>
+		</grid>
+		<label id="lblMessage" style="color:red;font-weight: bold"
+			visible="false" />
+		<toolbar align="center">
+			<button id="btnProduceLocalMessage"
+				label="${labels.cwf.activemq.btn.local.label}" />
+			<button id="btnProduceTopicMessage"
+				label="${labels.cwf.activemq.btn.topic.label}" />
+			<button id="btnProduceQueueMessage"
+				label="${labels.cwf.activemq.btn.queue.label}" />
+		</toolbar>
+
+	</vlayout>
+</zk>

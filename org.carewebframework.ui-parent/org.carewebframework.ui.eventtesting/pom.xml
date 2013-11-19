@@ -8,7 +8,7 @@
 		<version>3.0.0-SNAPSHOT</version>
 	</parent>
 	
-	<name>CareWeb Framework UI Event Testing</name>
+	<name>CareWeb Framework Event Testing</name>
 	<artifactId>org.carewebframework.ui.eventtesting</artifactId>
 	
 	<dependencies>

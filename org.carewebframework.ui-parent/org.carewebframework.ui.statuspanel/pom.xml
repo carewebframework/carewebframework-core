@@ -8,7 +8,7 @@
 		<version>3.0.0-SNAPSHOT</version>
 	</parent>
 	
-	<name>CareWeb Framework UI StatusPanel</name>
+	<name>CareWeb Framework StatusPanel</name>
 	<artifactId>org.carewebframework.ui.statuspanel</artifactId>
 	
 	<dependencies>
