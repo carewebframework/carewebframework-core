@@ -10,11 +10,11 @@
 
 	<beans profile="root">
 
-		<cwp:plugin id="eventTesting" name="Event Testing"
+		<cwp:plugin id="eventTesting" name="Event Testing" 
+			category="${labels.cwf.shell.plugin.category.system}"
 			url="~./org/carewebframework/ui/eventtesting/eventTesting.zul">
-			<cwp:resource>
-			</cwp:resource>
 			<cwp:security requiresAll="false">
+				<cwp:authority name="PRIV_MONITOR_SYSTEM" />
 			</cwp:security>
 		</cwp:plugin>
 

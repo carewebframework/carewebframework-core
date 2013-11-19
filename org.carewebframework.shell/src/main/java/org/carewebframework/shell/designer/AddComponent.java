@@ -22,6 +22,7 @@ import org.carewebframework.ui.zk.PopupDialog;
 import org.carewebframework.ui.zk.TreeUtil;
 import org.carewebframework.ui.zk.ZKUtil;
 
+import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Tree;
@@ -162,7 +163,7 @@ public class AddComponent extends Window {
         
         if (StringUtils.isEmpty(category)) {
             if (UIElementPlugin.class.isAssignableFrom(def.getClazz())) {
-                category = "Plugins";
+                category = Labels.getLabel("cwf.shell.plugin.category._default");
             } else {
                 return null;
             }

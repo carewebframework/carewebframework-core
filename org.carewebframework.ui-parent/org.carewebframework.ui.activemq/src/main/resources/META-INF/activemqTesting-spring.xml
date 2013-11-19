@@ -9,7 +9,8 @@
 
 	<beans profile="root">
 
-		<cwp:plugin id="activemqTesting" name="ActiveMQ Testing"
+		<cwp:plugin id="activemqTesting" name="ActiveMQ Testing" 
+			category="${labels.cwf.shell.plugin.category.system}"
 			url="~./org/carewebframework/ui/activemq/activemqTesting.zul">
 			<cwp:security requiresAll="false">
 				<cwp:authority name="PRIV_MONITOR_SYSTEM" />

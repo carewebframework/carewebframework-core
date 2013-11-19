@@ -50,7 +50,7 @@
 			</cwp:serialization>
 		</cwp:plugin>
 
-		<cwp:plugin id="tabview" category="Stock Objects"
+		<cwp:plugin id="tabview" category="${labels.cwf.shell.plugin.category.stock}"
 			class="org.carewebframework.shell.layout.UIElementTabView" name="${labels.cwf.shell.plugin.tabview.name}"
 			description="${labels.cwf.shell.plugin.tabview.description}">
 			<cwp:serialization>
@@ -67,7 +67,7 @@
 			</cwp:serialization>
 		</cwp:plugin>
 
-		<cwp:plugin id="tabpane" category="Stock Objects"
+		<cwp:plugin id="tabpane" category="${labels.cwf.shell.plugin.category.stock}"
 			class="org.carewebframework.shell.layout.UIElementTabPane" name="${labels.cwf.shell.plugin.tabpane.name}"
 			description="${labels.cwf.shell.plugin.tabpane.description}">
 			<cwp:serialization>
@@ -83,7 +83,7 @@
 			</cwp:serialization>
 		</cwp:plugin>
 
-		<cwp:plugin id="tabmenu" category="Stock Objects"
+		<cwp:plugin id="tabmenu" category="${labels.cwf.shell.plugin.category.stock}"
 			class="org.carewebframework.shell.layout.UIElementTabMenu" name="${labels.cwf.shell.plugin.tabmenu.name}"
 			description="${labels.cwf.shell.plugin.tabmenu.description}">
 			<cwp:serialization>
@@ -92,7 +92,7 @@
 			</cwp:serialization>
 		</cwp:plugin>
 
-		<cwp:plugin id="tabmenupane" category="Stock Objects"
+		<cwp:plugin id="tabmenupane" category="${labels.cwf.shell.plugin.category.stock}"
 			class="org.carewebframework.shell.layout.UIElementTabMenuPane" name="${labels.cwf.shell.plugin.tabmenupane.name}"
 			description="${labels.cwf.shell.plugin.tabmenupane.description}">
 			<cwp:serialization>
@@ -106,7 +106,7 @@
 			</cwp:serialization>
 		</cwp:plugin>
 
-		<cwp:plugin id="treeview" category="Stock Objects"
+		<cwp:plugin id="treeview" category="${labels.cwf.shell.plugin.category.stock}"
 			class="org.carewebframework.shell.layout.UIElementTreeView" name="${labels.cwf.shell.plugin.treeview.name}"
 			description="${labels.cwf.shell.plugin.treeview.description}">
 			<cwp:serialization>
@@ -129,7 +129,7 @@
 			</cwp:serialization>
 		</cwp:plugin>
 
-		<cwp:plugin id="treepane" category="Stock Objects"
+		<cwp:plugin id="treepane" category="${labels.cwf.shell.plugin.category.stock}"
 			class="org.carewebframework.shell.layout.UIElementTreePane" name="${labels.cwf.shell.plugin.treepane.name}"
 			description="${labels.cwf.shell.plugin.treepane.description}">
 			<cwp:serialization>
@@ -144,7 +144,7 @@
 			</cwp:serialization>
 		</cwp:plugin>
 
-		<cwp:plugin id="splitterview" category="Stock Objects"
+		<cwp:plugin id="splitterview" category="${labels.cwf.shell.plugin.category.stock}"
 			class="org.carewebframework.shell.layout.UIElementSplitterView" name="${labels.cwf.shell.plugin.splitterview.name}"
 			description="${labels.cwf.shell.plugin.splitterview.description}">
 			<cwp:serialization>
@@ -162,7 +162,7 @@
 			</cwp:serialization>
 		</cwp:plugin>
 
-		<cwp:plugin id="splitterpane" category="Stock Objects"
+		<cwp:plugin id="splitterpane" category="${labels.cwf.shell.plugin.category.stock}"
 			class="org.carewebframework.shell.layout.UIElementSplitterPane" name="${labels.cwf.shell.plugin.splitterpane.name}"
 			description="${labels.cwf.shell.plugin.splitterpane.description}">
 			<cwp:serialization>
@@ -182,7 +182,7 @@
 			</cwp:serialization>
 		</cwp:plugin>
 
-		<cwp:plugin id="stepview" category="Stock Objects"
+		<cwp:plugin id="stepview" category="${labels.cwf.shell.plugin.category.stock}"
 			class="org.carewebframework.shell.layout.UIElementStepView" name="${labels.cwf.shell.plugin.stepview.name}"
 			description="${labels.cwf.shell.plugin.stepview.description}">
 			<cwp:serialization>
@@ -209,7 +209,7 @@
 			</cwp:serialization>
 		</cwp:plugin>
 
-		<cwp:plugin id="steppane" category="Stock Objects"
+		<cwp:plugin id="steppane" category="${labels.cwf.shell.plugin.category.stock}"
 			class="org.carewebframework.shell.layout.UIElementStepPane" name="${labels.cwf.shell.plugin.steppane.name}"
 			description="${labels.cwf.shell.plugin.steppane.description}">
 			<cwp:serialization>
@@ -224,7 +224,7 @@
 			</cwp:serialization>
 		</cwp:plugin>
 
-		<cwp:plugin id="toolbar" category="Stock Objects"
+		<cwp:plugin id="toolbar" category="${labels.cwf.shell.plugin.category.stock}"
 			class="org.carewebframework.shell.layout.UIElementToolbar" name="${labels.cwf.shell.plugin.toolbar.name}"
 			description="${labels.cwf.shell.plugin.toolbar.description}">
 			<cwp:serialization>
@@ -234,7 +234,7 @@
 			</cwp:serialization>
 		</cwp:plugin>
 
-		<cwp:plugin id="_toolbar" category="Internal"
+		<cwp:plugin id="_toolbar" category="${labels.cwf.shell.plugin.category.internal}"
 			class="org.carewebframework.shell.layout.UIElementToolbar" name="${labels.cwf.shell.plugin._toolbar.name}"
 			description="${labels.cwf.shell.plugin.toolbar.description}">
 			<cwp:serialization>
@@ -243,7 +243,7 @@
 			</cwp:serialization>
 		</cwp:plugin>
 
-		<cwp:plugin id="menubar" category="Stock Objects"
+		<cwp:plugin id="menubar" category="${labels.cwf.shell.plugin.category.stock}"
 			class="org.carewebframework.shell.layout.UIElementMenubar" name="${labels.cwf.shell.plugin.menubar.name}"
 			description="${labels.cwf.shell.plugin.menubar.description}">
 			<cwp:serialization>
@@ -253,7 +253,7 @@
 			</cwp:serialization>
 		</cwp:plugin>
 
-		<cwp:plugin id="_menubar" category="Internal"
+		<cwp:plugin id="_menubar" category="${labels.cwf.shell.plugin.category.internal}"
 			class="org.carewebframework.shell.layout.UIElementMenubar" name="${labels.cwf.shell.plugin._menubar.name}"
 			description="${labels.cwf.shell.plugin._menubar.description}">
 			<cwp:serialization>
@@ -262,7 +262,7 @@
 			</cwp:serialization>
 		</cwp:plugin>
 
-		<cwp:plugin id="menuitem" category="Stock Objects"
+		<cwp:plugin id="menuitem" category="${labels.cwf.shell.plugin.category.stock}"
 			class="org.carewebframework.shell.layout.UIElementMenuItem" name="${labels.cwf.shell.plugin.menuitem.name}"
 			description="${labels.cwf.shell.plugin.menuitem.description}">
 			<cwp:serialization>
@@ -278,7 +278,7 @@
 			</cwp:serialization>
 		</cwp:plugin>
 
-		<cwp:plugin id="frame" category="Stock Objects"
+		<cwp:plugin id="frame" category="${labels.cwf.shell.plugin.category.stock}"
 			class="org.carewebframework.shell.layout.UIElementFrame" name="${labels.cwf.shell.plugin.frame.name}"
 			description="${labels.cwf.shell.plugin.frame.description}">
 			<cwp:serialization>
@@ -287,7 +287,7 @@
 			</cwp:serialization>
 		</cwp:plugin>
 
-		<cwp:plugin id="button" category="Stock Objects"
+		<cwp:plugin id="button" category="${labels.cwf.shell.plugin.category.stock}"
 			class="org.carewebframework.shell.layout.UIElementButton" name="${labels.cwf.shell.plugin.button.name}"
 			description="${labels.cwf.shell.plugin.button.description}">
 			<cwp:serialization>
@@ -303,7 +303,7 @@
 			</cwp:serialization>
 		</cwp:plugin>
 
-		<cwp:plugin id="link" category="Stock Objects"
+		<cwp:plugin id="link" category="${labels.cwf.shell.plugin.category.stock}"
 			class="org.carewebframework.shell.layout.UIElementLink" name="${labels.cwf.shell.plugin.link.name}"
 			description="${labels.cwf.shell.plugin.link.description}">
 			<cwp:serialization>

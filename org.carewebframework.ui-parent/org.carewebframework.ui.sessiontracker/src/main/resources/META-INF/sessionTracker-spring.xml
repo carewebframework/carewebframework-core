@@ -9,7 +9,8 @@
 
 	<beans profile="root">
 
-		<cwp:plugin id="sessionTracker" name="Session Tracker"
+		<cwp:plugin id="sessionTracker" name="Session Tracker" 
+			category="${labels.cwf.shell.plugin.category.system}"
 			url="~./org/carewebframework/ui/sessiontracker/sessionTracker.zul">
 			<cwp:security requiresAll="false">
 				<cwp:authority name="PRIV_MONITOR_SYSTEM" />
