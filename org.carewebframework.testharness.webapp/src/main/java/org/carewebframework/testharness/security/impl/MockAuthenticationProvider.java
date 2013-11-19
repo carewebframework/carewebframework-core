@@ -17,6 +17,7 @@ import org.carewebframework.api.domain.EntityIdentifier;
 import org.carewebframework.api.domain.IInstitution;
 import org.carewebframework.api.domain.IUser;
 import org.carewebframework.api.property.PropertyUtil;
+import org.carewebframework.common.StrUtil;
 import org.carewebframework.security.spring.AbstractAuthenticationProvider;
 import org.carewebframework.security.spring.CWFAuthenticationDetails;
 
@@ -147,7 +148,7 @@ public class MockAuthenticationProvider extends AbstractAuthenticationProvider {
     
     @Override
     protected List<String> getAuthorities(IUser user) {
-        return user == null ? null : PropertyUtil.getValues("mock.authorities", null);
+        return user == null ? null : StrUtil.toList(PropertyUtil.getValue("mock.authorities", null), ",");
     }
     
 }
