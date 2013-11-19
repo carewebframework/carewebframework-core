@@ -12,14 +12,14 @@
 		<cwp:plugin id="managementSessionTracker" name="Session Tracker"
 			url="~./org/carewebframework/ui/managementsupport/sessionTracker.zul">
 			<cwp:security requiresAll="false">
-				<!--  <cwp:authority name="PRIV_MONITOR_SYSTEM" /> -->
+				<cwp:authority name="PRIV_MONITOR_SYSTEM" />
 			</cwp:security>
 		</cwp:plugin>
 
 		<cwp:plugin id="managementFileTailer" name="Log File Tailer"
 			url="~./org/carewebframework/ui/managementsupport/fileTailer.zul">
 			<cwp:security requiresAll="false">
-				<!--  <cwp:authority name="PRIV_MONITOR_SYSTEM" /> -->
+				<cwp:authority name="PRIV_MONITOR_SYSTEM" />
 			</cwp:security>
 		</cwp:plugin>
 
