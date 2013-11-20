@@ -24,7 +24,7 @@
 		<!-- Controller -->
 		<bean id="activemqTestingController" class="org.carewebframework.ui.activemq.MainController"
 			scope="prototype">
-			<property name="messagingSupport" ref="messagingSupport" />
+			<property name="messagingSupport" ref="jmsMessagingSupport" />
 		</bean>
 
 	</beans>

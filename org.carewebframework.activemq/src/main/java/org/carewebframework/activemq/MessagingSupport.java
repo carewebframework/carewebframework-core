@@ -16,9 +16,8 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.Session;
 
-import org.carewebframework.activemq.EventUtil;
 import org.carewebframework.api.event.EventManager;
-
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
 import org.springframework.jmx.export.annotation.ManagedOperation;
 import org.springframework.jmx.export.annotation.ManagedOperationParameter;
@@ -30,6 +29,19 @@ import org.springframework.jmx.export.annotation.ManagedResource;
  */
 @ManagedResource(description = "Runtime messaging support.")
 public class MessagingSupport {
+    
+    private JmsTemplate jmsTopicTemplate;
+    
+    private JmsTemplate jmsQueueTemplate;
+    
+    /**
+     * @param jmsTopicTemplate - Template for Topic usage
+     * @param jmsQueueTemplate - Template for Queue usage
+     */
+    public MessagingSupport(final JmsTemplate jmsTopicTemplate, final JmsTemplate jmsQueueTemplate) {
+        this.jmsTopicTemplate = jmsTopicTemplate;
+        this.jmsQueueTemplate = jmsQueueTemplate;
+    }
     
     /**
      * Produces local message. Uses EventManager.
@@ -55,7 +67,7 @@ public class MessagingSupport {
             @ManagedOperationParameter(name = "messageData", description = "The message data"),
             @ManagedOperationParameter(name = "recipients", description = "Comma delimited list of clientIDs (JMS Connection Clients)") })
     public void produceTopicMessage(final String eventName, final String messageData, final String recipients) {
-        EventUtil.getJmsTopicTemplate().send(EventUtil.getTopicName(eventName), new MessageCreator() {
+        this.jmsTopicTemplate.send(EventUtil.getTopicName(eventName), new MessageCreator() {
             
             @Override
             public Message createMessage(final Session session) throws JMSException {
@@ -76,7 +88,7 @@ public class MessagingSupport {
             @ManagedOperationParameter(name = "destinationName", description = "The destination name."),
             @ManagedOperationParameter(name = "messageData", description = "The message data") })
     public void produceQueueMessage(final String destinationName, final String messageData) {
-        EventUtil.getJmsQueueTemplate().send(destinationName, new MessageCreator() {
+        this.jmsQueueTemplate.send(destinationName, new MessageCreator() {
             
             @Override
             public Message createMessage(final Session session) throws JMSException {

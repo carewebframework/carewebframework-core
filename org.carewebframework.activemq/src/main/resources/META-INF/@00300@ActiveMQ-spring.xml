@@ -87,7 +87,10 @@
 		</bean>
 
 		<bean id="jmsMessagingSupport"
-			class="org.carewebframework.activemq.MessagingSupport" />
+			class="org.carewebframework.activemq.MessagingSupport">
+			<constructor-arg type="org.springframework.jms.core.JmsTemplate" ref="jmsTopicTemplate" index="0"/>
+			<constructor-arg type="org.springframework.jms.core.JmsTemplate" ref="jmsQueueTemplate" index="1"/>
+		</bean>
 			
 	</beans>
 
