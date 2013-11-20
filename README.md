@@ -7,11 +7,6 @@ built upon established open source technologies.
 The framework serves as the foundation for the rest of the CareWeb Framework projects. Browse the
 repositories under the [CareWebFramework organization][] on GitHub for a full list.
 
-## Downloading artifacts
-See [downloading CareWeb Framework artifacts][] for Maven repository information. Unable to
-use Maven or other transitive dependency management tools? See [building a
-distribution with dependencies][].
-
 ## Documentation
 TODO artifact repository or continuous integration server published javadoc, etc?
 
@@ -20,6 +15,15 @@ TODO
 
 ## Issue Tracking
 TODO
+
+## Downloading artifacts
+See [downloading CareWeb Framework artifacts][] for Maven repository information. Unable to
+use Maven or other transitive dependency management tools? See [building a
+distribution with dependencies][].
+### Transitive Dependencies
+The following dependencies are core to the CareWeb Framework
+* ZK Framework - Please see the following [ZK][] page for references and guidelines for using and obtaining ZK artifacts.
+* Spring Framework
 
 ## Building from source
 The CareWeb Framework uses a Maven-based build system. In the instructions
@@ -67,4 +71,5 @@ The CareWeb Framework is released under version 2.0 of the [Mozilla Public Licen
 [Git]: http://help.github.com/set-up-git-redirect
 [Pull requests]: http://help.github.com/send-pull-requests
 [contributor guidelines]: #
+[ZK]: #
 [Mozilla Public License]: https://github.com/carewebframework/carewebframework-core/blob/master/LICENSE.md
