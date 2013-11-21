@@ -35,7 +35,10 @@
 			<property name="clientId" value="${org.carewebframework.jms.factory.client.id:}" />
 		</bean>
 
-		<bean id="jmsMessagingSupport" class="org.carewebframework.jms.MessagingSupport" />
+		<bean id="jmsMessagingSupport" class="org.carewebframework.jms.MessagingSupport">
+			<constructor-arg ref="jmsTopicTemplate" />
+			<constructor-arg ref="jmsQueueTemplate" />
+		</bean>
 
 	</beans>
 
