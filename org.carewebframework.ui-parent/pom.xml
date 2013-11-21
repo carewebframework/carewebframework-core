@@ -18,7 +18,7 @@
 		<module>org.carewebframework.ui.popupsupport</module>
 		<module>org.carewebframework.ui.statuspanel</module>
 		<module>org.carewebframework.ui.eventtesting</module>
-		<module>org.carewebframework.ui.activemq</module>
+		<module>org.carewebframework.ui.jmstesting</module>
 		<module>org.carewebframework.ui.filetailer</module>
 		<module>org.carewebframework.ui.sessiontracker</module>
 		<module>org.carewebframework.ui.sharedforms</module>
