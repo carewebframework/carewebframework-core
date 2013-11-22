@@ -685,13 +685,26 @@ public class ZKUtil {
     }
     
     /**
-     * Returns named Vector attribute from the specified component.
+     * Returns named List attribute from the specified component.
      * 
      * @param c The component containing the desired attribute.
      * @param attr The name of the attribute.
      * @return Value of named attribute, or null if not found.
      */
     public static List<?> getAttributeList(Component c, String attr) {
+        return getAttribute(c, attr, List.class);
+    }
+    
+    /**
+     * Returns named List attribute from the specified component.
+     * 
+     * @param c The component containing the desired attribute.
+     * @param attr The name of the attribute.
+     * @param elementClass The expected class of the list elements.
+     * @return Value of named attribute, or null if not found.
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> List<T> getAttributeList(Component c, String attr, Class<T> elementClass) {
         return getAttribute(c, attr, List.class);
     }
     
