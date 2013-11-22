@@ -73,3 +73,4 @@ The CareWeb Framework is released under version 2.0 of the [Mozilla Public Licen
 [contributor guidelines]: #
 [ZK]: #
 [Mozilla Public License]: https://github.com/carewebframework/carewebframework-core/blob/master/LICENSE.md
+[![githalytics.com alpha](https://cruel-carlota.pagodabox.com/089df57f5244ce596d7d069013f85bdf "githalytics.com")](http://githalytics.com/carewebframework/carewebframework-core)
