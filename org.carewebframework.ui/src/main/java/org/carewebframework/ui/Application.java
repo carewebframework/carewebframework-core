@@ -529,9 +529,8 @@ public class Application {
         
         if (doRegister) {
             addDesktop(desktop);
-            final HttpServletRequest request = (HttpServletRequest) desktop.getExecution().getNativeRequest();
             
-            if (isManaged(request.getRequestURI())) {
+            if (isManaged(desktop)) {
                 AppContextFinder.createAppContext(desktop);
                 session.setAttribute(Constants.MANAGED + desktop.getId(), desktop.getId());
             }
@@ -554,10 +553,12 @@ public class Application {
     /**
      * Returns true if we are managing the lifecycle of the desktop loaded from the specified uri.
      * 
-     * @param url Url indicating the request path for the desktop.
-     * @return
+     * @param desktop Desktop instance.
+     * @return True if this is a managed desktop.
      */
-    private boolean isManaged(final String url) {
+    private boolean isManaged(Desktop desktop) {
+        final HttpServletRequest request = (HttpServletRequest) desktop.getExecution().getNativeRequest();
+        String url = request.getRequestURI();
         return (url != null) && !url.contains("/zkau/");
     }
     
