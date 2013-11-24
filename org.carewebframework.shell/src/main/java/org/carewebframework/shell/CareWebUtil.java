@@ -59,9 +59,19 @@ public class CareWebUtil {
      * Sends an informational message for display by desktop.
      * 
      * @param message Text of the message.
+     * @param caption Optional caption text.
+     */
+    public static void showMessage(String message, String caption) {
+        getShell().showMessage(message, caption);
+    }
+    
+    /**
+     * Sends an informational message for display by desktop.
+     * 
+     * @param message Text of the message.
      */
     public static void showMessage(String message) {
-        getShell().showMessage(message);
+        showMessage(message, null);
     }
     
     /**

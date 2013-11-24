@@ -620,36 +620,50 @@ public class CareWebShell extends Div implements AfterCompose {
      * Shows a slide-down message.
      * 
      * @param message
-     * @param color
+     * @param caption
      * @see org.carewebframework.ui.zk.MessageWindow#show(String, String)
      */
-    public void showMessage(String message, String color) {
-        messageWindow.show(message, color);
+    public void showMessage(String message, String caption) {
+        messageWindow.show(message, caption);
     }
     
     /**
      * Shows a slide-down message.
      * 
      * @param message
+     * @param caption
+     * @param color
+     * @see org.carewebframework.ui.zk.MessageWindow#show(String, String, String)
+     */
+    public void showMessage(String message, String caption, String color) {
+        messageWindow.show(message, caption, color);
+    }
+    
+    /**
+     * Shows a slide-down message.
+     * 
+     * @param message
+     * @param caption
      * @param color
      * @param duration
-     * @see org.carewebframework.ui.zk.MessageWindow#show(String, String, int)
+     * @see org.carewebframework.ui.zk.MessageWindow#show(String, String, String, int)
      */
-    public void showMessage(String message, String color, int duration) {
-        messageWindow.show(message, color, duration);
+    public void showMessage(String message, String caption, String color, int duration) {
+        messageWindow.show(message, caption, color, duration);
     }
     
     /**
      * Shows a slide-down message.
      * 
      * @param message
+     * @param caption
      * @param color
      * @param duration
      * @param tag
-     * @see org.carewebframework.ui.zk.MessageWindow#show(String, String, Integer, String)
+     * @see org.carewebframework.ui.zk.MessageWindow#show(String, String, String, Integer, String)
      */
-    public void showMessage(String message, String color, Integer duration, String tag) {
-        messageWindow.show(message, color, duration, tag);
+    public void showMessage(String message, String caption, String color, Integer duration, String tag) {
+        messageWindow.show(message, caption, color, duration, tag);
     }
     
     /**

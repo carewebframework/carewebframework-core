@@ -17,6 +17,10 @@ cwf.ext.MessageWindow = zk.$extends(zul.wgt.Div, {
 		var cave = jq('<div>').addClass(zcls + '-cave');
 		var cap = jq('<div>').addClass('z-toolbar ' + zcls + '-cap').appendTo(
 				cave);
+		
+		if (options.caption)
+			jq('<span>').addClass(zcls + '-title').text(options.caption).appendTo(cap);
+		
 		var btn = jq('<span>').addClass(zcls + '-btn').appendTo(cap);
 		var msg = jq('<div>').addClass(zcls + '-msg').appendTo(cave);
 

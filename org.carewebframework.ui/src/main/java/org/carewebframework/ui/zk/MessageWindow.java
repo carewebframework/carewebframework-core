@@ -50,8 +50,9 @@ public class MessageWindow extends XulElement {
         
         private final HashMap<String, Object> map = new HashMap<String, Object>();
         
-        public MessageInfo(String message, String color, Integer duration, String tag) {
+        public MessageInfo(String message, String caption, String color, Integer duration, String tag) {
             map.put("message", StrUtil.formatMessage(message));
+            map.put("caption", StrUtil.formatMessage(caption));
             map.put("color", color);
             map.put("duration", duration);
             map.put("tag", tag);
@@ -105,46 +106,59 @@ public class MessageWindow extends XulElement {
     }
     
     /**
-     * Displays a message with default color and duration.
+     * Displays a message with default caption, color and duration.
      * 
      * @param message Message text. If begins with &lt;html&gt; tag, is interpreted as html.
      */
     public void show(String message) {
-        show(message, null, null, null);
+        show(message, null, null, null, null);
+    }
+    
+    /**
+     * Displays a message with default color and duration.
+     * 
+     * @param message Message text. If begins with &lt;html&gt; tag, is interpreted as html.
+     * @param caption Optional caption text.
+     */
+    public void show(String message, String caption) {
+        show(message, caption, null, null, null);
     }
     
     /**
      * Displays a message with default duration.
      * 
      * @param message Message text. If begins with &lt;html&gt; tag, is interpreted as html.
+     * @param caption Optional caption text.
      * @param color Background color (html format).
      */
-    public void show(String message, String color) {
-        show(message, color, null, null);
+    public void show(String message, String caption, String color) {
+        show(message, caption, color, null, null);
     }
     
     /**
      * Displays a message.
      * 
      * @param message Message text. If begins with &lt;html&gt; tag, is interpreted as html.
+     * @param caption Optional caption text.
      * @param color Background color (html format). Null means default color.
      * @param duration Message duration (in milliseconds). A nonpositive value means default
      *            duration.
      */
-    public void show(String message, String color, int duration) {
-        show(message, color, duration <= 0 ? null : new Integer(duration), null);
+    public void show(String message, String caption, String color, int duration) {
+        show(message, caption, color, duration <= 0 ? null : new Integer(duration), null);
     }
     
     /**
      * Displays a message.
      * 
      * @param message Message text. If begins with &lt;html&gt; tag, is interpreted as html.
+     * @param caption Optional caption text.
      * @param color Background color (html format). Null means default color.
      * @param duration Message duration (in milliseconds). Null means default duration.
      * @param tag Tag to classify message for selective deletion. May be null.
      */
-    public void show(String message, String color, Integer duration, String tag) {
-        show(new MessageInfo(message, color, duration, tag));
+    public void show(String message, String caption, String color, Integer duration, String tag) {
+        show(new MessageInfo(message, caption, color, duration, tag));
     }
     
     /**

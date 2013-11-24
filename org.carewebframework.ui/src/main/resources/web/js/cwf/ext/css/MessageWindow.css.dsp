@@ -48,6 +48,11 @@
 	zoom: 1;
 }
 
+.cwf-messagewindow-title {
+	padding-left: 4px;
+	font-size: 85%;	
+}
+
 .cwf-messagewindow-msg {
 	clear: both;
 	padding: 5px;
