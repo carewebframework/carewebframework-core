@@ -551,7 +551,7 @@ public class Application {
     }
     
     /**
-     * Returns true if we are managing the lifecycle of the desktop loaded from the specified uri.
+     * Returns true if we are managing the lifecycle of the specified desktop.
      * 
      * @param desktop Desktop instance.
      * @return True if this is a managed desktop.
