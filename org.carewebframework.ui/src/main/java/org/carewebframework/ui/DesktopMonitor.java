@@ -22,6 +22,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import org.carewebframework.api.FrameworkUtil;
+import org.carewebframework.api.domain.IInstitution;
+import org.carewebframework.api.domain.IUser;
 import org.carewebframework.api.event.IEventManager;
 import org.carewebframework.api.event.IGenericEvent;
 import org.carewebframework.api.security.ISecurityService;
@@ -208,8 +210,11 @@ public class DesktopMonitor extends Thread {
             desktop.removeListener(this);
             timeoutWindow = (Window) desktop.getExecution().createComponents(DESKTOP_TIMEOUT_ZUL, null, null);
             ZKUtil.wireController(timeoutWindow, DesktopMonitor.this);
-            lblLocked.setValue(Mode.BASELINE.getLabel(TIMEOUT_EXPIRATION, securityService.getAuthenticatedUser()
-                    .getFullName()));
+            IUser user = securityService.getAuthenticatedUser();
+            IInstitution inst = user.getInstitution();
+            String instnm = inst == null ? "" : "@" + inst.getAbbreviation();
+            String usrnm = user.getFullName() + instnm;
+            lblLocked.setValue(Mode.BASELINE.getLabel(TIMEOUT_EXPIRATION, usrnm));
             desktop.enableServerPush(true);
             desktop.addListener(desktopActivityMonitor);
             ThreadUtil.startThread(DesktopMonitor.this);
