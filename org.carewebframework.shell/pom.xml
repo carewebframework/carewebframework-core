@@ -61,12 +61,12 @@
 		<dependency>
 			<groupId>org.carewebframework</groupId>
 			<artifactId>org.carewebframework.api</artifactId>
-			<classifier>tests</classifier>
+			<type>test-jar</type>
 		</dependency>
 		<dependency>
 			<groupId>org.carewebframework</groupId>
 			<artifactId>org.carewebframework.ui</artifactId>
-			<classifier>tests</classifier>
+			<type>test-jar</type>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>

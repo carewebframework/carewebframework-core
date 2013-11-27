@@ -41,7 +41,7 @@
 		<dependency>
 			<groupId>org.carewebframework</groupId>
 			<artifactId>org.carewebframework.api</artifactId>
-			<classifier>tests</classifier>
+			<type>test-jar</type>
 		</dependency>
 		<dependency>
 			<groupId>log4j</groupId>

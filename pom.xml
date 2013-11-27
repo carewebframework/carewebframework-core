@@ -872,8 +872,7 @@
 				<groupId>org.carewebframework</groupId>
 				<artifactId>org.carewebframework.api</artifactId>
 				<version>${org.carewebframework.version}</version>
-				<classifier>tests</classifier>
-				<type>jar</type>
+				<type>test-jar</type>	
 				<scope>test</scope>
 			</dependency>
 			<dependency>
@@ -887,8 +886,7 @@
 				<groupId>org.carewebframework</groupId>
 				<artifactId>org.carewebframework.ui</artifactId>
 				<version>${org.carewebframework.version}</version>
-				<classifier>tests</classifier>
-				<type>jar</type>
+				<type>test-jar</type>	
 				<scope>test</scope>
 			</dependency>
 			<dependency>
