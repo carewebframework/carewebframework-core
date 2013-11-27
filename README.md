@@ -66,7 +66,7 @@ Once tomcat has started, open browser and enter following URL
 The CareWeb Framework is released under version 2.0 of the [Mozilla Public License][] as amended by the
 [Health-Related Additional Disclaimer of Warranty and Limitation of Liability][].
 
-Use of the Enterprise Edition of the ZK Framework requires a valid [ZK Open Source License Agreement][], available
+Use of the Enterprise Edition of the ZK Framework (recommended) requires a valid [ZK Open Source License Agreement][], available
 on request from [ZK][] at no charge.
 
 [CareWebFramework organization]: https://github.com/carewebframework
