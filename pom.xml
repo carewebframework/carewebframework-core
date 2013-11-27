@@ -1,9 +1,8 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.carewebframework</groupId>
 	<artifactId>org.carewebframework-parent</artifactId>
-	<version>3.0.0-SNAPSHOT</version>
+	<version>3.0.0-M1</version>
 	<packaging>pom</packaging>
 	<name>CareWeb Framework Root POM</name>
 	
@@ -39,7 +38,7 @@
 	
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<org.carewebframework.version>3.0.0-SNAPSHOT</org.carewebframework.version>
+		<org.carewebframework.version>3.0.0-M1</org.carewebframework.version>
 		<org.springframework.version>3.2.5.RELEASE</org.springframework.version>
 		<org.springframework.security.version>3.1.4.RELEASE</org.springframework.security.version>
 		<org.apache.activemq.version>5.8.0</org.apache.activemq.version>
@@ -64,7 +63,8 @@
 		<connection>${scm.scm}:${scm.base}</connection>
 		<developerConnection>${scm.scm}:${scm.base}</developerConnection>
 		<url>${scm.base}</url>
-	</scm>
+	  <tag>3.0.0-M1</tag>
+  </scm>
 
 	<distributionManagement>
 	</distributionManagement>
@@ -398,9 +398,9 @@
 	                                    </goals>
 	                                </pluginExecutionFilter>
 	                                <action>
-							           <execute >
+							           <execute>
 							             <runOnIncremental>true</runOnIncremental>
-							           </execute >
+							           </execute>
 	                                </action>
 	                            </pluginExecution>
 	                        </pluginExecutions>
