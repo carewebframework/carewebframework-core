@@ -101,6 +101,8 @@ public class CareWebShell extends Div implements AfterCompose {
     
     private String defaultLayoutName;
     
+    private boolean autoStart;
+    
     private final IUserContextEvent userContextListener = new IUserContextEvent() {
         
         /**
@@ -287,8 +289,8 @@ public class CareWebShell extends Div implements AfterCompose {
             layout.loadFromUrl(resource);
         }
         
-        buildUI(layout);
         FrameworkUtil.setAppName(layout.getName());
+        buildUI(layout);
     }
     
     /**
@@ -341,6 +343,26 @@ public class CareWebShell extends Div implements AfterCompose {
     }
     
     /**
+     * Returns the auto-start setting.
+     * 
+     * @return True if the start method is to be called automatically after loading a layout. False
+     *         if the start method must be called manually.
+     */
+    public boolean isAutoStart() {
+        return autoStart;
+    }
+    
+    /**
+     * Sets the auto-start setting.
+     * 
+     * @param autoStart True if the start method is to be called automatically after loading a
+     *            layout. False if the start method must be called manually.
+     */
+    public void setAutoStart(boolean autoStart) {
+        this.autoStart = autoStart;
+    }
+    
+    /**
      * Build the UI based on the specified layout.
      * 
      * @param layout Layout for building UI.
@@ -354,6 +376,10 @@ public class CareWebShell extends Div implements AfterCompose {
         desktop.setTitle(layout.readString("title", ""));
         desktop.setAppId(FrameworkUtil.getAppName());
         desktop.activate(true);
+        
+        if (autoStart) {
+            start();
+        }
     }
     
     /**
