@@ -17,12 +17,11 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.DestructionAwareBeanPostProcessor;
 
 /**
- * Abstract base class for deriving registries that track managed beans of a given class or
- * interface type.
+ * Base class for deriving registries that track managed beans of a given class or interface type.
  * 
  * @param <T> The class or interface being tracked.
  */
-public class AbstractBeanRegistry<T> implements DestructionAwareBeanPostProcessor, Iterable<T> {
+public class BeanRegistry<T> implements DestructionAwareBeanPostProcessor, Iterable<T> {
     
     private final List<T> members = new ArrayList<T>();
     
@@ -33,7 +32,7 @@ public class AbstractBeanRegistry<T> implements DestructionAwareBeanPostProcesso
      * 
      * @param clazz
      */
-    protected AbstractBeanRegistry(Class<T> clazz) {
+    protected BeanRegistry(Class<T> clazz) {
         this.clazz = clazz;
     }
     
