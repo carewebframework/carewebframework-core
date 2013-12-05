@@ -11,14 +11,15 @@ package org.carewebframework.ui.thread;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.carewebframework.api.spring.AbstractBeanRegistry;
+
+import org.carewebframework.api.spring.BeanRegistry;
 
 /**
  * Tracks managed beans that implement the ThreadListenerRegistry.IThreadListener interface. These
  * beans will be notified when a new event thread or worker thread has been created or will be
  * destroyed.
  */
-public class ThreadListenerRegistry extends AbstractBeanRegistry<ThreadListenerRegistry.IThreadListener> {
+public class ThreadListenerRegistry extends BeanRegistry<ThreadListenerRegistry.IThreadListener> {
     
     private static final ThreadListenerRegistry instance = new ThreadListenerRegistry();
     
