@@ -242,7 +242,7 @@ public class InfoPanelController extends PluginController implements IInfoPanel 
      */
     @Override
     public void clearAlerts() {
-        List<?> children = this.alertRoot.getChildren();
+        List<Component> children = this.alertRoot.getChildren();
         
         while (children.size() > 0) {
             AlertContainer alertContainer = (AlertContainer) children.get(0);

@@ -90,7 +90,7 @@ public abstract class HelpTab extends Tabpanel implements IdSpace, ITopicListene
     private void addToTabbox() {
         int pos = -1;
         Tabbox parent = viewer.getTabbox();
-        List<?> children = parent.getTabpanels().getChildren();
+        List<Component> children = parent.getTabpanels().getChildren();
         
         for (int i = 0; i < children.size(); i++) {
             Object child = children.get(i);

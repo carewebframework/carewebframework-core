@@ -216,7 +216,7 @@ public class MenuUtil {
      * @param endIndex Index of last child to be sorted.
      */
     public static void sortMenu(Component parent, int startIndex, int endIndex) {
-        List<?> items = parent.getChildren();
+        List<Component> items = parent.getChildren();
         int bottom = startIndex + 1;
         
         for (int i = startIndex; i < endIndex;) {
