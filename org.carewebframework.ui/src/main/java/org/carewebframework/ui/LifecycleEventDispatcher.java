@@ -26,9 +26,9 @@ import org.zkoss.zk.ui.util.UiLifeCycle;
  * must be registered as a listener in the zk.xml configuration file as follows:
  * 
  * <pre>
- *  &lt;callback>
- *      &lt;callback-class>org.carewebframework.ui.LifecycleEventDispatcher&lt;/callback-class>
- *  &lt;/callback>
+ *  &lt;listener>
+ *      &lt;listener-class>org.carewebframework.ui.LifecycleEventDispatcher&lt;/listener-class>
+ *  &lt;/listener>
  * </pre>
  */
 public class LifecycleEventDispatcher implements DesktopInit, DesktopCleanup, SessionInit, SessionCleanup, UiLifeCycle {
