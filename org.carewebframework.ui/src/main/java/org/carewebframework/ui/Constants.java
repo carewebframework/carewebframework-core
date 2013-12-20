@@ -49,8 +49,6 @@ public class Constants {
     
     public static final String LOCK_EVENT = DESKTOP_EVENT + ".LOCK";
     
-    public static final String MANAGED = "@Desktop_Managed-";
-    
     /**
      * Event for requesting a view update.
      */

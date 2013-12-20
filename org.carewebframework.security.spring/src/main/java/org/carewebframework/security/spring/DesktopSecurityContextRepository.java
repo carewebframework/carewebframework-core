@@ -17,8 +17,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import org.carewebframework.ui.Constants;
-
 import org.springframework.security.authentication.AuthenticationTrustResolver;
 import org.springframework.security.authentication.AuthenticationTrustResolverImpl;
 import org.springframework.security.core.Authentication;
@@ -63,7 +61,8 @@ public class DesktopSecurityContextRepository implements SecurityContextReposito
      */
     public static SecurityContext getSecurityContext(HttpServletRequest request) {
         final HttpSession session = request.getSession(false);
-        return session == null ? SecurityContextHolder.createEmptyContext() : getSecurityContext(session, request.getParameter("dtid"));
+        return session == null ? SecurityContextHolder.createEmptyContext() : getSecurityContext(session,
+            request.getParameter("dtid"));
     }
     
     /**
@@ -97,20 +96,12 @@ public class DesktopSecurityContextRepository implements SecurityContextReposito
             return getSecurityContext(session, false);
         }
         
-        // If not null, this means this is a managed desktop.
-        String dtid2 = (String) session.getAttribute(Constants.MANAGED + dtid);
-        
-        // If this is a spawned desktop, use parent's security context.
-        if (dtid2 != null && !dtid.equals(dtid2)) {
-            return getSecurityContext(session, dtid2);
-        }
-        
         // Check for desktop-associated security context
         SecurityContext securityContext = (SecurityContext) session.getAttribute(key);
         
         // If no desktop security context, check session.
         if (securityContext == null) {
-            securityContext = getSecurityContext(session, dtid2 != null);
+            securityContext = getSecurityContext(session, true);
             
             // If session security context found and this is a managed desktop, move into desktop.
             if (securityContext != null) {

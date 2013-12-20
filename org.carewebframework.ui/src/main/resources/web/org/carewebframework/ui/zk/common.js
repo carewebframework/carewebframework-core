@@ -70,7 +70,7 @@ function (source, printStyles, printPreview) {
 		};
 	};
 
-	window.open(zk.ajaxURI('/web/org/carewebframework/ui/zk/printPreview.zul', {au:true}), 'PrintPreview');
+	window.open(zk.ajaxURI('/web/org/carewebframework/ui/zk/printPreview.zul?owner=' + zk.Desktop.$().id, {au:true}), 'PrintPreview');
 };
 
 /*

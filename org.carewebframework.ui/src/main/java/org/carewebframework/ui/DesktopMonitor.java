@@ -31,6 +31,7 @@ import org.carewebframework.api.thread.ThreadUtil;
 import org.carewebframework.common.DateUtil;
 import org.carewebframework.common.DateUtil.Accuracy;
 import org.carewebframework.common.StrUtil;
+import org.carewebframework.ui.Application.Command;
 import org.carewebframework.ui.zk.MessageWindow;
 import org.carewebframework.ui.zk.ZKUtil;
 
@@ -314,6 +315,7 @@ public class DesktopMonitor extends Thread {
                         setSclass(SCLASS_IDLE);
                         timeoutWindow.setMode(mode == Mode.LOCK ? "highlighted" : "embedded");
                         txtPassword.setFocus(mode == Mode.LOCK);
+                        Application.getDesktopInfo(desktop).sendToSpawned(mode == Mode.LOCK ? Command.LOCK : Command.UNLOCK);
                     }
                     break;
                 

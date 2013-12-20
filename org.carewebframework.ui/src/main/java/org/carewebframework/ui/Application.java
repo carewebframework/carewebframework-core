@@ -25,6 +25,7 @@ import org.apache.commons.logging.LogFactory;
 import org.carewebframework.api.FrameworkRuntimeException;
 import org.carewebframework.common.DateUtil;
 import org.carewebframework.common.DateUtil.ITimeZoneAccessor;
+import org.carewebframework.common.StrUtil;
 import org.carewebframework.ui.LifecycleEventListener.ILifecycleCallback;
 import org.carewebframework.ui.spring.AppContextFinder;
 import org.carewebframework.ui.spring.FrameworkAppContext;
@@ -35,11 +36,16 @@ import org.zkoss.zk.au.out.AuClientInfo;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.event.ClientInfoEvent;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zk.ui.util.UiLifeCycle;
+import org.zkoss.zul.Label;
 
 /**
  * Application singleton used to track active sessions and desktops.
@@ -49,6 +55,58 @@ public class Application {
     private static final Log log = LogFactory.getLog(Application.class);
     
     private static final Application instance = new Application();
+    
+    private static final String ATTR_SERVER_PUSH = "@requires-server-push";
+    
+    private static final String ID_LOCK_MESSAGE = "_lock_message";
+    
+    public enum Command {
+        CLOSE, LOCK, UNLOCK
+    };
+    
+    private static final EventListener<Event> desktopCommandListener = new EventListener<Event>() {
+        
+        @Override
+        public void onEvent(Event event) throws Exception {
+            switch ((Command) event.getData()) {
+                case CLOSE:
+                    Clients.evalJavaScript("window.close();");
+                    break;
+                
+                case LOCK:
+                    lock(true);
+                    break;
+                
+                case UNLOCK:
+                    lock(false);
+                    break;
+            }
+        }
+        
+        private void lock(boolean lock) {
+            Desktop dtp = Executions.getCurrent().getDesktop();
+            Component lbl = null;
+            
+            for (Page page : dtp.getPages()) {
+                for (Component root : page.getRoots()) {
+                    if (lbl == null && ID_LOCK_MESSAGE.equals(root.getId())) {
+                        lbl = root;
+                        lbl.setVisible(lock);
+                    } else {
+                        root.setVisible(!lock);
+                    }
+                }
+            }
+            
+            if (lock && lbl == null) {
+                Label label = new Label(StrUtil.formatMessage("@cwf.timeout.lock.spawned.message"));
+                label.setSclass("cwf-timeout-lock-spawned");
+                label.setId(ID_LOCK_MESSAGE);
+                label.setPage(dtp.getFirstPage());
+            }
+        }
+        
+    };
     
     /**
      * Tracks information about a session.
@@ -72,30 +130,53 @@ public class Application {
          * Adds a desktop to this session information.
          * 
          * @param desktop
-         * @return The number of active desktops including this one.
          */
-        private synchronized int addDesktop(final Desktop desktop) {
-            this.desktops.add(desktop);
-            final DesktopInfo desktopInfo = new DesktopInfo(desktop);
-            desktop.setAttribute(DesktopInfo.class.getName(), desktopInfo);
-            desktop.addListener(desktopInfo);
-            desktop.addListener(uiLifeCycle);
-            return this.desktops.size();
+        private void addDesktop(final Desktop desktop) {
+            synchronized (activeDesktops) {
+                activeDesktops.put(desktop.getId(), desktop);
+                this.desktops.add(desktop);
+                final DesktopInfo desktopInfo = new DesktopInfo(desktop);
+                desktop.setAttribute(DesktopInfo.class.getName(), desktopInfo);
+                desktop.addListener(desktopInfo);
+                desktop.addListener(uiLifeCycle);
+            }
         }
         
         /**
          * Removes a desktop from this session information.
          * 
          * @param desktop
-         * @return The number of active desktops remaining.
          */
-        private synchronized int removeDesktop(final Desktop desktop) {
-            if (this.desktops.remove(desktop)) {
-                desktop.removeListener(Application.getDesktopInfo(desktop));
-            } else {
-                log.warn(String.format("Desktop[%s] not found in managed list, already removed?", desktop));
+        private void removeDesktop(final Desktop desktop) {
+            synchronized (activeDesktops) {
+                activeDesktops.remove(desktop.getId());
+                
+                if (this.desktops.remove(desktop)) {
+                    DesktopInfo desktopInfo = getDesktopInfo(desktop);
+                    
+                    if (desktopInfo != null) {
+                        desktopInfo.destroy();
+                    }
+                    
+                    if (desktops.isEmpty()) {
+                        session.invalidate();
+                        log.debug("Session explicitly invalidated: " + session);
+                    }
+                } else {
+                    log.warn(String.format("Desktop[%s] not found in managed list, already removed?", desktop));
+                }
             }
-            return this.desktops.size();
+        }
+        
+        /**
+         * Called when session info object is to be destroyed.
+         */
+        private void destroy() {
+            for (Desktop desktop : getDesktops()) {
+                removeDesktop(desktop);
+            }
+            
+            session.invalidate();
         }
         
         /**
@@ -188,6 +269,8 @@ public class Application {
         
         private final String id;
         
+        private final String owner;
+        
         private final String userAgent;
         
         private final String remoteAddress;
@@ -202,7 +285,7 @@ public class Application {
         
         private final boolean isGecko;
         
-        private final Desktop desktop;
+        private List<String> spawned;
         
         private ClientInfoEvent clientInformation;
         
@@ -216,18 +299,75 @@ public class Application {
          * @param desktop
          */
         private DesktopInfo(final Desktop desktop) {
-            this.desktop = desktop;
             final Execution exec = desktop.getExecution();
+            
             if (exec == null) {
                 throw new FrameworkRuntimeException(EXC_ILLEGAL_STATE, null, DesktopInfo.this.toString());
             }
-            this.userAgent = exec.getUserAgent();
-            this.remoteAddress = exec.getRemoteAddr();
-            this.remoteHost = exec.getRemoteHost();
-            this.remoteUser = exec.getRemoteUser();
-            this.isExplorer = exec.getBrowser("ie") != null;
-            this.isGecko = exec.getBrowser("gecko") != null;
-            this.id = desktop.getId();
+            userAgent = exec.getUserAgent();
+            remoteAddress = exec.getRemoteAddr();
+            remoteHost = exec.getRemoteHost();
+            remoteUser = exec.getRemoteUser();
+            isExplorer = exec.getBrowser("ie") != null;
+            isGecko = exec.getBrowser("gecko") != null;
+            id = desktop.getId();
+            
+            if (isManaged(desktop)) {
+                owner = null;
+            } else {
+                String qs = desktop.getQueryString();
+                owner = qs == null ? null : FrameworkWebSupport.queryStringToMap(qs).get("owner");
+                
+                if (registerWithOwner(true)) {
+                    desktop.setAttribute(ATTR_SERVER_PUSH, true);
+                }
+            }
+        }
+        
+        public void destroy() {
+            Desktop dtp = getDesktop(id);
+            
+            if (dtp != null) {
+                dtp.removeListener(this);
+            }
+            registerWithOwner(false);
+            sendToSpawned(Command.CLOSE);
+        }
+        
+        public void sendToSpawned(Command command) {
+            if (spawned != null && !spawned.isEmpty()) {
+                for (String dtid : new ArrayList<String>(spawned)) {
+                    Desktop dtp = getDesktop(dtid);
+                    
+                    if (dtp != null) {
+                        try {
+                            Executions.schedule(dtp, desktopCommandListener, new Event("ON_COMMAND", null, command));
+                        } catch (Exception e) {
+                            log.error("Error sending command to spawned desktop.", e);
+                        }
+                    }
+                }
+            }
+            
+        }
+        
+        private boolean registerWithOwner(boolean register) {
+            if (owner != null && !owner.equals(id)) {
+                Desktop dtp = getDesktop(owner);
+                DesktopInfo dto = dtp == null ? null : getDesktopInfo(dtp);
+                
+                if (dto != null) {
+                    if (register) {
+                        dto.registerSpawned(id);
+                    } else {
+                        dto.unregisterSpawned(id);
+                    }
+                    
+                    return true;
+                }
+            }
+            
+            return false;
         }
         
         /**
@@ -235,6 +375,13 @@ public class Application {
          */
         public String getId() {
             return this.id;
+        }
+        
+        /**
+         * @return the owner id
+         */
+        public String getOwner() {
+            return this.owner;
         }
         
         /**
@@ -294,10 +441,27 @@ public class Application {
         }
         
         /**
-         * @return the desktop
+         * Registers a desktop spawned from this one.
+         * 
+         * @param id The id of the spawned desktop to register.
          */
-        public Desktop getDesktop() {
-            return this.desktop;
+        private void registerSpawned(String id) {
+            if (spawned == null) {
+                spawned = new ArrayList<String>();
+            }
+            
+            spawned.add(id);
+        }
+        
+        /**
+         * Unregisters a desktop spawned from this one.
+         * 
+         * @param id The id of the spawned desktop to unregister.
+         */
+        private void unregisterSpawned(String id) {
+            if (spawned != null) {
+                spawned.remove(id);
+            }
         }
         
         /**
@@ -309,11 +473,13 @@ public class Application {
             final ClientInfoEvent clientInfo = getClientInformation();
             final String screenDimensions = clientInfo == null ? "" : (clientInfo.getScreenWidth() + "x" + clientInfo
                     .getScreenHeight());
+            Desktop desktop = getDesktop(id);
             buffer.append("\n\t\tDesktopInfo");
-            buffer.append("\n\t\t\tDesktop: ").append(getDesktop());//includes Id
-            buffer.append("\n\t\t\tisAlive: ").append(getDesktop() == null || !getDesktop().isAlive() ? false : true);
+            buffer.append("\n\t\t\tDesktop: ").append(desktop);//includes Id
+            buffer.append("\n\t\t\tOwner: ").append(owner == null ? "none" : owner);
+            buffer.append("\n\t\t\tisAlive: ").append(desktop == null || !desktop.isAlive() ? false : true);
             buffer.append("\n\t\t\tisServerPushEnabled: ").append(
-                getDesktop() == null || !getDesktop().isServerPushEnabled() ? false : true);
+                desktop == null || !desktop.isServerPushEnabled() ? false : true);
             buffer.append("\n\t\t\tUserAgent: ").append(getUserAgent());
             buffer.append("\n\t\t\tUserAgent (According to ZK) ").append(
                 isGecko() ? "is Gecko based (i.e. Firefox)" : (isExplorer() ? "is IE based" : " may not be IE or Firefox"));
@@ -369,6 +535,10 @@ public class Application {
         public void afterPageAttached(Page page, Desktop desktop) {
             desktop.removeListener(this);
             page.addVariableResolver(new FrameworkVariableResolver());
+            
+            if (desktop.hasAttribute(ATTR_SERVER_PUSH)) {
+                desktop.enableServerPush(true);
+            }
         }
         
         @Override
@@ -439,6 +609,8 @@ public class Application {
     
     private final Map<String, SessionInfo> activeSessions = new ConcurrentHashMap<String, SessionInfo>();
     
+    private final Map<String, Desktop> activeDesktops = new ConcurrentHashMap<String, Desktop>();
+    
     /**
      * Returns the singleton instance of the Application object.
      * 
@@ -494,13 +666,15 @@ public class Application {
      * 
      * @param session Session to add.
      */
-    private synchronized void addSession(final Session session) {
-        final String id = ((HttpSession) session.getNativeSession()).getId();
-        
-        if (!this.activeSessions.containsKey(id)) {
-            final SessionInfo sessionInfo = new SessionInfo(session);
-            this.activeSessions.put(id, sessionInfo);
-            log.debug(sessionInfo);
+    private void addSession(final Session session) {
+        synchronized (activeSessions) {
+            final String id = ((HttpSession) session.getNativeSession()).getId();
+            
+            if (!this.activeSessions.containsKey(id)) {
+                final SessionInfo sessionInfo = new SessionInfo(session);
+                this.activeSessions.put(id, sessionInfo);
+                log.debug(sessionInfo);
+            }
         }
     }
     
@@ -509,9 +683,23 @@ public class Application {
      * 
      * @param session Session to remove.
      */
-    private synchronized void removeSession(final Session session) {
-        final String sessionId = ((HttpSession) session.getNativeSession()).getId();
-        this.activeSessions.remove(sessionId);
+    private void removeSession(final Session session) {
+        removeSessionInfo(getSessionInfo(session));
+    }
+    
+    /**
+     * Removes a session from the list of active sessions.
+     * 
+     * @param sessionInfo Session info to remove.
+     */
+    private void removeSessionInfo(final SessionInfo sessionInfo) {
+        if (sessionInfo != null) {
+            sessionInfo.destroy();
+            
+            synchronized (activeSessions) {
+                this.activeSessions.remove(sessionInfo.getNativeSession().getId());
+            }
+        }
     }
     
     /**
@@ -525,29 +713,26 @@ public class Application {
      *            has reached zero, the session is invalidated.
      */
     public void register(final Desktop desktop, final boolean doRegister) {
-        final Session session = desktop.getSession();
-        
         if (doRegister) {
             addDesktop(desktop);
             
             if (isManaged(desktop)) {
                 AppContextFinder.createAppContext(desktop);
-                session.setAttribute(Constants.MANAGED + desktop.getId(), desktop.getId());
             }
+            
         } else {
             if (FrameworkAppContext.getAppContext(desktop) != null) {
                 AppContextFinder.destroyAppContext(desktop);
             }
             
-            if (removeDesktop(desktop) == 0) {
-                if (log.isDebugEnabled()) {
-                    HttpSession sess = (HttpSession) session.getNativeSession();
-                    log.debug("Explicitly invalidating Session #" + sess.getId());
-                }
-                
-                session.invalidate();
-            }
+            removeDesktop(desktop);
         }
+    }
+    
+    public String getMasterId(String slaveId) {
+        Desktop slave = getDesktop(slaveId);
+        DesktopInfo dto = slave == null ? null : getDesktopInfo(slave);
+        return dto == null ? null : dto.getOwner();
     }
     
     /**
@@ -567,26 +752,42 @@ public class Application {
      * associated session).
      * 
      * @param desktop Desktop to add.
-     * @return The number of active desktops. Returns -1 if the desktop's session is not known.
      */
-    private int addDesktop(final Desktop desktop) {
+    private void addDesktop(final Desktop desktop) {
         final SessionInfo sessionInfo = getSessionInfo(desktop);
-        final int retVal = sessionInfo == null ? -1 : sessionInfo.addDesktop(desktop);
-        log.debug(sessionInfo);
-        return retVal;
+        
+        if (sessionInfo != null) {
+            sessionInfo.addDesktop(desktop);
+        }
     }
     
     /**
      * Removes a desktop from the list of active desktops.
      * 
      * @param desktop Desktop to remove.
-     * @return The number of active desktops. Returns -1 if the desktop's session is not known.
      */
-    private int removeDesktop(final Desktop desktop) {
+    private void removeDesktop(final Desktop desktop) {
         final SessionInfo sessionInfo = getSessionInfo(desktop);
-        int retVal = sessionInfo == null ? -1 : sessionInfo.removeDesktop(desktop);
-        log.debug(sessionInfo);
-        return retVal;
+        
+        if (sessionInfo != null) {
+            sessionInfo.removeDesktop(desktop);
+        }
+    }
+    
+    /**
+     * Returns the desktop instance from the list of registered desktops.
+     * 
+     * @param id Desktop id
+     * @return Corresponding desktop instance, or null if not found.
+     */
+    private Desktop getDesktop(String id) {
+        if (id == null) {
+            return null;
+        }
+        
+        synchronized (activeDesktops) {
+            return activeDesktops.get(id);
+        }
     }
     
     /**
@@ -596,7 +797,7 @@ public class Application {
      * @return The number of active desktops for this session, or 0 if the session is not known.
      */
     public int getDesktopCount(final HttpSession session) {
-        final SessionInfo sessionInfo = this.activeSessions.get(session.getId());
+        final SessionInfo sessionInfo = getSessionInfo(session);
         return sessionInfo == null ? 0 : sessionInfo.desktops.size();
     }
     
@@ -608,7 +809,28 @@ public class Application {
      * @return A SessionInfo instance, or null if one was not found.
      */
     public SessionInfo getSessionInfo(final Desktop desktop) {
-        final HttpSession session = (HttpSession) desktop.getSession().getNativeSession();
+        return getSessionInfo(desktop.getSession());
+    }
+    
+    /**
+     * Returns the SessionInfo object appropriate for the specified desktop (based on the session
+     * associated with the desktop).
+     * 
+     * @param session Session whose associated SessionInfo is sought.
+     * @return A SessionInfo instance, or null if one was not found.
+     */
+    public SessionInfo getSessionInfo(final Session session) {
+        return session == null ? null : getSessionInfo((HttpSession) session.getNativeSession());
+    }
+    
+    /**
+     * Returns the SessionInfo object appropriate for the specified desktop (based on the session
+     * associated with the desktop).
+     * 
+     * @param session Session whose associated SessionInfo is sought.
+     * @return A SessionInfo instance, or null if one was not found.
+     */
+    public SessionInfo getSessionInfo(final HttpSession session) {
         return session == null ? null : this.activeSessions.get(session.getId());
     }
 }

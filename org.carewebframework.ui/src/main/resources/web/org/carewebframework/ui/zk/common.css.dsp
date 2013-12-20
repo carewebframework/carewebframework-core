@@ -76,6 +76,11 @@
 	display: none;
 }
 
+.cwf-timeout-lock-spawned {
+	color: blue;
+	font-size: 2em;
+}
+
 .cwf-datetimebox-tbar {
 	background: none;
 	border: none;

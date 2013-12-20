@@ -24,6 +24,7 @@ import org.carewebframework.api.context.ContextManager;
 import org.carewebframework.api.context.IContextManager;
 import org.carewebframework.api.domain.IUser;
 import org.carewebframework.api.security.ISecurityService;
+import org.carewebframework.ui.Application;
 import org.carewebframework.ui.FrameworkWebSupport;
 
 import org.springframework.security.core.Authentication;
@@ -118,6 +119,7 @@ public abstract class AbstractSecurityService implements ISecurityService {
             log.debug("Redirecting Desktop to logout filter URI: " + contextDesktop);
             String queryParam = replaceParam(replaceParam(logoutTarget, "%target%", target), "%message%", message);
             contextDesktop.getExecution().sendRedirect(Constants.LOGOUT_URI + queryParam);
+            Application.getInstance().register(contextDesktop, false);
         }
         
         return result;
