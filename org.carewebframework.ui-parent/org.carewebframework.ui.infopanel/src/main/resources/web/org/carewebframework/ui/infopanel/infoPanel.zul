@@ -18,8 +18,7 @@
 					style="overflow:auto">
 					<div id="dropRoot" style="padding:5px" hflex="1" vflex="1"/>
 				</center>
-				<south id="alertPanel" size="35px"
-					flex="true" border="none"
+				<south id="alertPanel" size="35px" border="none"
 					style="overflow:auto" visible="false">
 					<div hflex="1" vflex="1">
 						<toolbar id="alertToolbar"
