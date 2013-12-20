@@ -34,7 +34,7 @@
 		style="margin-left:auto;margin-right:auto;border:2px solid black">
 		<div width="100%" height="90px">
 			<image id="imgInstitution" style="padding:5px;float:left" align="right" src="${labels.login.form.title.image}" />
-			<vbox height="100%" pack="middle"
+			<vbox height="100%" pack="middle" align="end"
 				style="float:right;color:#405C69;font-style:italic;padding:5px;padding-right:10px">
 				<label id="lblInstitution" value="Test Harness"
 					style="font-size:1.2em;font-weight:bold;display:block" />
