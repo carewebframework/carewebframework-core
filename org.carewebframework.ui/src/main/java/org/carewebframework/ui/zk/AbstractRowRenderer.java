@@ -303,8 +303,9 @@ public abstract class AbstractRowRenderer<T, G> extends AbstractRenderer impleme
         final Columns detailColumns = new Columns();
         detailColumns.setSizable(true);
         detailColumns.setParent(detailGrid);
+        int cols = Math.max(colWidths == null ? 0 : colWidths.length, colLabels == null ? 0 : colLabels.length);
         
-        for (int i = 0; i < colWidths.length; i++) {
+        for (int i = 0; i < cols; i++) {
             String colLabel = colLabels == null || i >= colLabels.length ? " " : StrUtil.formatMessage(colLabels[i]);
             Column col = new Column(colLabel);
             String colWidth = colWidths == null || i >= colWidths.length ? null : colWidths[i];
