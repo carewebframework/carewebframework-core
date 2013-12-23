@@ -170,7 +170,7 @@ public abstract class AbstractRowRenderer<T, G> extends AbstractRenderer impleme
             renderDetail(detail, (T) object);
             
             if (detail.getFirstChild() == null) {
-                detail.detach();
+                detail.setVisible(false);
             }
         }
     }
