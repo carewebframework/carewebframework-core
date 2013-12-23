@@ -307,7 +307,8 @@ public abstract class AbstractRowRenderer<T, G> extends AbstractRenderer impleme
         for (int i = 0; i < colWidths.length; i++) {
             String colLabel = colLabels == null || i >= colLabels.length ? " " : StrUtil.formatMessage(colLabels[i]);
             Column col = new Column(colLabel);
-            col.setWidth(colWidths[i]);
+            String colWidth = colWidths == null || i >= colWidths.length ? null : colWidths[i];
+            col.setWidth(colWidth);
             col.setParent(detailColumns);
         }
         
