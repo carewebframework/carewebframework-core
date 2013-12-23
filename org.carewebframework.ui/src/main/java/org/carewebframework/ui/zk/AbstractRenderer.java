@@ -142,7 +142,7 @@ public abstract class AbstractRenderer {
         String text = StringUtils.trimToEmpty(value == null ? null : value instanceof Date ? DateUtil
                 .formatDate((Date) value) : value instanceof String ? StrUtil.formatMessage((String) value) : value
                 .toString());
-        return text.isEmpty() ? "" : StrUtil.formatMessage(StringUtils.trimToEmpty(prefix)) + text;
+        return text.isEmpty() ? "" : StrUtil.formatMessage(StringUtils.defaultString(prefix)) + text;
     }
     
 }
