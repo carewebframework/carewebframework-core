@@ -12,6 +12,7 @@ package org.carewebframework.api.context;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import org.carewebframework.api.domain.IInstitution;
 import org.carewebframework.api.domain.IUser;
 
 /**
@@ -29,6 +30,48 @@ public class UserContext extends ManagedContext<IUser> {
     
     // This is the interface that every user context subscriber must implement.
     public interface IUserContextEvent extends IContextEvent {};
+    
+    /**
+     * Request a user context change.
+     * 
+     * @param user New user
+     */
+    public static void changeUser(IUser user) {
+        try {
+            getUserContext().requestContextChange(user);
+        } catch (Exception e) {
+            log.error("Error during user context change.", e);
+        }
+    }
+    
+    /**
+     * Returns the managed user context.
+     * 
+     * @return IDomainUser context
+     */
+    @SuppressWarnings("unchecked")
+    public static ISharedContext<IUser> getUserContext() {
+        return (ISharedContext<IUser>) ContextManager.getInstance().getSharedContext(UserContext.class.getName());
+    }
+    
+    /**
+     * Returns the user in the current context.
+     * 
+     * @return IDomainUser
+     */
+    public static IUser getActiveUser() {
+        return getUserContext().getContextObject(false);
+    }
+    
+    /**
+     * Returns the institution of the active user, or null if no active user.
+     * 
+     * @return Institution
+     */
+    public static IInstitution getInstitution() {
+        IUser user = getActiveUser();
+        return user == null ? null : user.getInstitution();
+    }
     
     /**
      * Create a shared user context with an initial null state.
@@ -78,38 +121,6 @@ public class UserContext extends ManagedContext<IUser> {
     @Override
     public int getPriority() {
         return -100;
-    }
-    
-    /**
-     * Request a user context change.
-     * 
-     * @param user New user
-     */
-    public static void changeUser(IUser user) {
-        try {
-            getUserContext().requestContextChange(user);
-        } catch (Exception e) {
-            log.error("Error during user context change.", e);
-        }
-    }
-    
-    /**
-     * Returns the managed user context.
-     * 
-     * @return IDomainUser context
-     */
-    @SuppressWarnings("unchecked")
-    public static ISharedContext<IUser> getUserContext() {
-        return (ISharedContext<IUser>) ContextManager.getInstance().getSharedContext(UserContext.class.getName());
-    }
-    
-    /**
-     * Returns the user in the current context.
-     * 
-     * @return IDomainUser
-     */
-    public static IUser getActiveUser() {
-        return getUserContext().getContextObject(false);
     }
     
 }
