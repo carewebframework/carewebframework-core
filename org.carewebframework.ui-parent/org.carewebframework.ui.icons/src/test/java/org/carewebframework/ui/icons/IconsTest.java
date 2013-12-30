@@ -26,6 +26,7 @@ public class IconsTest extends CommonTest {
         IIconLibrary lib = reg.get("silk");
         assertNotNull(lib);
         assertEquals("~./org/carewebframework/ui/icons/16x16/silk/help.png", lib.getIconUrl("help.png", "16x16"));
+        assertEquals("~./org/carewebframework/ui/icons/16x16/silk/help.png", lib.getIconUrl("help.png", null));
         assertEquals(1001, lib.getMatching("*", "16x16").size());
         assertEquals(0, lib.getMatching("*", "32x32").size());
         assertEquals(6, lib.getMatching("weather*", "16x16").size());

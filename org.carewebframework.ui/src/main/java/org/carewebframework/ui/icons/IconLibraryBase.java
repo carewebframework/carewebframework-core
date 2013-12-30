@@ -80,8 +80,16 @@ public class IconLibraryBase implements IIconLibrary, ApplicationContextAware {
         this.applicationContext = applicationContext;
     }
     
-    protected String formatURL(String iconName, String dimensions, String prefix) {
-        return prefix + resourcePath + dimensions + "/" + getId() + "/" + iconName;
+    protected String formatURL(String iconName, String dims, String prefix) {
+        if (dims == null) {
+            if (dimensions != null && dimensions.length > 0) {
+                dims = dimensions[0];
+            } else {
+                dims = "";
+            }
+        }
+        
+        return prefix + resourcePath + dims + "/" + getId() + "/" + iconName;
     }
     
 }
