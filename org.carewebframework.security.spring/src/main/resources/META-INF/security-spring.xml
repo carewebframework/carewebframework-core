@@ -65,6 +65,7 @@
 			class="org.springframework.security.web.authentication.AnonymousAuthenticationFilter">
 			<property name="key" value="ANONYMOUS" />
 			<property name="userAttribute" value="ANONYMOUS_USER,ROLE_ANONYMOUS" />
+			<property name="authenticationDetailsSource" ref="securityAuthenticationDetailsSource" />
 		</bean>
 
 		<bean id="securityAnonymousAuthenticationProvider"
