@@ -759,6 +759,7 @@ public class Application {
         if (sessionInfo != null) {
             sessionInfo.addDesktop(desktop);
         }
+        log.debug(sessionInfo);
     }
     
     /**
@@ -772,6 +773,7 @@ public class Application {
         if (sessionInfo != null) {
             sessionInfo.removeDesktop(desktop);
         }
+        log.debug(sessionInfo);
     }
     
     /**
