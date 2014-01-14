@@ -148,13 +148,14 @@ public class RequestUtil {
     }
     
     /**
-     * Get current request's session id
+     * Get current request's session id or null if session has not yet been created.
      * 
      * @throws IllegalStateException if called outside scope of an Execution/ServletRequest
-     * @return String representing session id
+     * @return String representing session id or null if session has not yet been created
      */
     public static String getSessionId() {
-        return assertRequest().getSession().getId();
+        HttpSession session = assertRequest().getSession(false);
+        return session == null ? null : session.getId();
     }
     
     private static HttpServletRequest assertRequest() {
