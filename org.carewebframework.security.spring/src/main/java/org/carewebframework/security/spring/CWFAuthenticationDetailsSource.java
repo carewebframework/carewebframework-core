@@ -24,7 +24,7 @@ public class CWFAuthenticationDetailsSource implements AuthenticationDetailsSour
     private static final Log log = LogFactory.getLog(CWFAuthenticationDetailsSource.class);
     
     /**
-     * Returns an instance of a CWAuthenticationDetails object.
+     * Returns an instance of a CWFAuthenticationDetails object.
      * 
      * @param request The servlet request object.
      */

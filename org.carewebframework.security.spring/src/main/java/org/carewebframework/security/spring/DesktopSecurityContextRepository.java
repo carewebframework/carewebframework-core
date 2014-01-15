@@ -61,7 +61,8 @@ public class DesktopSecurityContextRepository implements SecurityContextReposito
      */
     public static SecurityContext getSecurityContext(HttpServletRequest request) {
         final HttpSession session = request.getSession(false);
-        return session == null ? SecurityContextHolder.createEmptyContext() : getSecurityContext(session,
+        boolean ignore = "rmDesktop".equals(request.getParameter("cmd_0"));
+        return ignore || session == null ? SecurityContextHolder.createEmptyContext() : getSecurityContext(session,
             request.getParameter("dtid"));
     }
     
@@ -126,6 +127,18 @@ public class DesktopSecurityContextRepository implements SecurityContextReposito
         }
         
         return securityContext;
+    }
+    
+    /**
+     * Returns the desktop-specific (if desktop id available) or session-specific context key from
+     * the request.
+     * 
+     * @param request The request object.
+     * @return The context key (never null).
+     */
+    private static String getDesktopContextKey(HttpServletRequest request) {
+        String key = getDesktopContextKey(request.getParameter("dtid"));
+        return key == null ? CONTEXT_KEY : key;
     }
     
     /**
@@ -308,15 +321,22 @@ public class DesktopSecurityContextRepository implements SecurityContextReposito
          */
         @Override
         protected void saveContext(SecurityContext context) {
+            Authentication authentication = context.getAuthentication();
+            HttpSession httpSession = request.getSession(false);
+            
             // See SEC-776
-            if (authenticationTrustResolver.isAnonymous(context.getAuthentication())) {
+            if (authentication == null || authenticationTrustResolver.isAnonymous(authentication)) {
                 if (log.isDebugEnabled()) {
                     log.debug("SecurityContext contents are anonymous - context will not be stored in HttpSession. ");
                 }
+                
+                if (httpSession != null && !contextObject.equals(contextBeforeExecution)) {
+                    // SEC-1587 A non-anonymous context may still be in the session
+                    // SEC-1735 remove if the contextBeforeExecution was not anonymous
+                    httpSession.removeAttribute(getDesktopContextKey(request));
+                }
                 return;
             }
-            
-            HttpSession httpSession = request.getSession(false);
             
             if (httpSession == null) {
                 httpSession = createNewSessionIfAllowed(context);
@@ -325,9 +345,7 @@ public class DesktopSecurityContextRepository implements SecurityContextReposito
             // If HttpSession exists, store current SecurityContextHolder contents but only if
             // the SecurityContext has actually changed (see JIRA SEC-37)
             if (httpSession != null && contextChanged(context)) {
-                String key = getDesktopContextKey(request.getParameter("dtid"));
-                key = key == null ? CONTEXT_KEY : key;
-                httpSession.setAttribute(key, context);
+                httpSession.setAttribute(getDesktopContextKey(request), context);
                 
                 if (log.isDebugEnabled()) {
                     log.debug("SecurityContext stored to HttpSession: '" + context + "'");
