@@ -1,20 +1,21 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.carewebframework</groupId>
 	<artifactId>org.carewebframework-parent</artifactId>
 	<version>3.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>CareWeb Framework Root POM</name>
-	
+
 	<organization>
 		<name>Regenstrief Center for Biomedical Informatics</name>
 		<url>http://www.carewebframework.org/</url>
 	</organization>
-	
+
 	<prerequisites>
 		<maven>3.0.5</maven>
 	</prerequisites>
-	
+
 	<licenses>
 		<license>
 			<name>MPL 2.0</name>
@@ -35,7 +36,7 @@
 			</comments>
 		</license>
 	</licenses>
-	
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<org.carewebframework.version>3.0.0-SNAPSHOT</org.carewebframework.version>
@@ -45,7 +46,8 @@
 		<org.zkoss.zk.version>6.5.4</org.zkoss.zk.version>
 		<servlet.api.version>2.5</servlet.api.version>
 
-		<!--Necessary for passing credentials.  Need respective server defined in settings.xml -->
+		<!--Necessary for passing credentials. Need respective server defined in 
+			settings.xml -->
 		<project.scm.id>github</project.scm.id>
 		<scm.scm>scm:git</scm.scm>
 		<scm.root>https://github.com/carewebframework</scm.root>
@@ -58,13 +60,13 @@
 		<tomcat.manager.url>http://localhost:8080/manager</tomcat.manager.url>
 		<tomcat.manager.server.id>tomcat.manager</tomcat.manager.server.id>
 	</properties>
-	
+
 	<scm>
 		<connection>${scm.scm}:${scm.base}</connection>
 		<developerConnection>${scm.scm}:${scm.base}</developerConnection>
 		<url>${scm.base}</url>
-	  <tag>HEAD</tag>
-  </scm>
+		<tag>HEAD</tag>
+	</scm>
 
 	<distributionManagement>
 	</distributionManagement>
@@ -84,7 +86,7 @@
 		<module>org.carewebframework.testharness</module>
 		<module>org.carewebframework.testharness.webapp</module>
 	</modules>
-	
+
 	<build>
 		<pluginManagement>
 			<plugins>
@@ -200,9 +202,9 @@
 						</execution>
 					</executions>
 				</plugin>
-				<!-- Used to obtain SCM revision number and branch, 
-					included in manifest. Note: You will have to look at the war'd META-INF/MANIFEST.MF. 
-					These entries will not be found in work directory. -->
+				<!-- Used to obtain SCM revision number and branch, included in manifest. 
+					Note: You will have to look at the war'd META-INF/MANIFEST.MF. These entries 
+					will not be found in work directory. -->
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>buildnumber-maven-plugin</artifactId>
@@ -219,7 +221,7 @@
 						<shortRevisionLength>8</shortRevisionLength>
 						<doCheck>false</doCheck>
 						<doUpdate>false</doUpdate>
-						<!--useLastCommittedRevision must be false for git-->
+						<!--useLastCommittedRevision must be false for git -->
 						<useLastCommittedRevision>false</useLastCommittedRevision>
 						<revisionOnScmFailure />
 					</configuration>
@@ -379,34 +381,34 @@
 						</archive>
 					</configuration>
 				</plugin>
-	            <!--This plugin's configuration is used to store Eclipse 
-	                m2e settings only. It has no influence on the Maven build itself. -->
-	            <plugin>
-	                <groupId>org.eclipse.m2e</groupId>
-	                <artifactId>lifecycle-mapping</artifactId>
-	                <version>1.0.0</version>
-	                <configuration>
-	                    <lifecycleMappingMetadata>
-	                        <pluginExecutions>
-	                            <pluginExecution>
-	                                <pluginExecutionFilter>
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
 										<groupId>org.codehaus.mojo</groupId>
 										<artifactId>buildnumber-maven-plugin</artifactId>
-	                                    <versionRange>[${maven.plugin.buildnumber.version},)</versionRange>
-	                                    <goals>
-	                                        <goal>create</goal>
-	                                    </goals>
-	                                </pluginExecutionFilter>
-	                                <action>
-							           <execute>
-							             <runOnIncremental>true</runOnIncremental>
-							           </execute>
-	                                </action>
-	                            </pluginExecution>
-	                        </pluginExecutions>
-	                    </lifecycleMappingMetadata>
-	                </configuration>
-	            </plugin>
+										<versionRange>[${maven.plugin.buildnumber.version},)</versionRange>
+										<goals>
+											<goal>create</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<execute>
+											<runOnIncremental>true</runOnIncremental>
+										</execute>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
 			</plugins>
 		</pluginManagement>
 		<plugins>
@@ -424,7 +426,7 @@
 			</plugin>
 		</plugins>
 	</build>
-	
+
 	<dependencyManagement>
 		<dependencies>
 			<!-- Spring Framework -->
@@ -872,7 +874,7 @@
 				<groupId>org.carewebframework</groupId>
 				<artifactId>org.carewebframework.api</artifactId>
 				<version>${org.carewebframework.version}</version>
-				<type>test-jar</type>	
+				<type>test-jar</type>
 				<scope>test</scope>
 			</dependency>
 			<dependency>
@@ -886,7 +888,7 @@
 				<groupId>org.carewebframework</groupId>
 				<artifactId>org.carewebframework.ui</artifactId>
 				<version>${org.carewebframework.version}</version>
-				<type>test-jar</type>	
+				<type>test-jar</type>
 				<scope>test</scope>
 			</dependency>
 			<dependency>
