@@ -75,12 +75,12 @@ public final class JMSUtil {
      * Creates a message selector which considers JMSType and recipients properties.
      * 
      * @param eventName The event name (i.e. DESKTOP.LOCK).
-     * @param clientId The clientID of the JMS Connection.
+     * @param recipientId The recipient id of the endpoint.
      * @return The message selector.
      */
-    public static String getMessageSelector(final String eventName, final String clientId) {
+    public static String getMessageSelector(final String eventName, final String recipientId) {
         return "(JMSType='" + eventName + "' OR JMSType LIKE '" + eventName + ".%') AND "
-                + "(Recipients IS NULL OR Recipients LIKE '%," + clientId + ",%')";
+                + "(Recipients IS NULL OR Recipients LIKE '%," + recipientId + ",%')";
     }
     
     /**

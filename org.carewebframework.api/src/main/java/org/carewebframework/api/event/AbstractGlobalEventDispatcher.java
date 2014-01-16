@@ -10,6 +10,7 @@
 package org.carewebframework.api.event;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 import org.carewebframework.api.FrameworkUtil;
 import org.carewebframework.api.domain.IUser;
@@ -32,6 +33,8 @@ public abstract class AbstractGlobalEventDispatcher implements IGlobalEventDispa
     private PingEventHandler pingEventHandler;
     
     private String appName;
+    
+    private final String recipientId = UUID.randomUUID().toString();
     
     /**
      * Create the global event dispatcher.
@@ -94,7 +97,7 @@ public abstract class AbstractGlobalEventDispatcher implements IGlobalEventDispa
      */
     @Override
     public String formatPublisherInfo() {
-        return getClientId() + DELIM + getUserId() + DELIM + getUserName() + DELIM + getAppName();
+        return getRecipientId() + DELIM + getUserId() + DELIM + getUserName() + DELIM + getAppName();
     }
     
     /**
@@ -128,6 +131,16 @@ public abstract class AbstractGlobalEventDispatcher implements IGlobalEventDispa
     public long getUserId() {
         IUser user = getUser();
         return user == null ? 0 : user.getDomainId();
+    }
+    
+    /**
+     * Returns the recipient id for this end point.
+     * 
+     * @return The end point's recipient id.
+     */
+    @Override
+    public String getRecipientId() {
+        return recipientId;
     }
     
     /**

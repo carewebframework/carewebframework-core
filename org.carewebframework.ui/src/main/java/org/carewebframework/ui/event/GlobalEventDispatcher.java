@@ -50,11 +50,6 @@ public class GlobalEventDispatcher extends AbstractGlobalEventDispatcher {
     }
     
     @Override
-    public String getClientId() {
-        return desktop.getId();
-    }
-    
-    @Override
     public void subscribeRemoteEvent(String eventName, boolean subscribe) {
     }
     

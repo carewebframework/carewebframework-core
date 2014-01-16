@@ -33,7 +33,7 @@
 				</row>
 				<row>
 					<label value="${labels.cwf.jmstesting.row4.label1}" />
-					<textbox id="txtClientId" hflex="1" readonly="true" />
+					<textbox id="txtRecipientId" hflex="1" readonly="true" />
 				</row>
 			</rows>
 		</grid>

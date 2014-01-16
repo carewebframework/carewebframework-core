@@ -43,7 +43,7 @@ public class GenericEventTest extends CommonTest {
     
     private final List<TestPacket> tests = Collections.synchronizedList(new ArrayList<TestPacket>());
     
-    protected String clientId;
+    protected String recipientId;
     
     private AssertionError assertionError;
     
@@ -108,7 +108,7 @@ public class GenericEventTest extends CommonTest {
         fireEvent(EVENT_NAME2, true); // Subevent should also be received
         if (this.remote) {
             //Additional routing options / recipient filtering
-            this.recipients = this.clientId;
+            this.recipients = this.recipientId;
             fireEvent(EVENT_NAME1, true); // Subscriber registered, should receive due to defined/intended recipients
             fireEvent(EVENT_NAME2, true); // Subevent w/ defined/intended recipients should also be received
             //not null bogus recipients
@@ -125,7 +125,7 @@ public class GenericEventTest extends CommonTest {
         fireEvent(EVENT_NAME2, true); // Subevent should be received
         if (this.remote) {
             //Additional routing options / recipient filtering
-            this.recipients = this.clientId;
+            this.recipients = this.recipientId;
             fireEvent(EVENT_NAME1, false); // Subscriber registered, should receive due to defined/intended recipients
             fireEvent(EVENT_NAME2, true); // Subevent w/ defined/intended recipients should also be received
             //not null bogus recipients
@@ -140,7 +140,7 @@ public class GenericEventTest extends CommonTest {
         fireEvent(EVENT_NAME2, true); // Subevent should also be received
         if (this.remote) {
             //Additional routing options / recipient filtering
-            this.recipients = this.clientId;
+            this.recipients = this.recipientId;
             fireEvent(EVENT_NAME1, true); // Subscriber registered, should receive due to defined/intended recipients
             fireEvent(EVENT_NAME2, true); // Subevent w/ defined/intended recipients should also be received
             //not null bogus recipients

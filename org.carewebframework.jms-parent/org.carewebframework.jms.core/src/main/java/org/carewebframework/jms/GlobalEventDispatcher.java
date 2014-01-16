@@ -13,7 +13,6 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
@@ -75,8 +74,6 @@ public class GlobalEventDispatcher extends AbstractGlobalEventDispatcher impleme
     private TopicSession session;
     
     private JmsTemplate topicTemplate; //default "not transacted" and "auto-acknowledge"
-    
-    private final String clientId = UUID.randomUUID().toString();
     
     /**
      * Create the global event dispatcher.
@@ -255,7 +252,7 @@ public class GlobalEventDispatcher extends AbstractGlobalEventDispatcher impleme
             log.debug(String.format("Subscribing to Topic[%s]", eventName));
         }
         final String topicName = JMSUtil.getTopicName(eventName);
-        final String selector = JMSUtil.getMessageSelector(eventName, getClientId());
+        final String selector = JMSUtil.getMessageSelector(eventName, getRecipientId());
         
         // This doesn't actually create a physical topic.  In ActiveMQ, a topic is created on-demand when someone with the
         // authority to create topics submits something to a topic.  By default, everyone has the authority to create topics.  See 
@@ -309,7 +306,8 @@ public class GlobalEventDispatcher extends AbstractGlobalEventDispatcher impleme
             
             @Override
             public Message createMessage(final Session session) throws JMSException {
-                return JMSUtil.createObjectMessage(session, eventName, (Serializable) eventData, getClientId(), recipients);
+                return JMSUtil.createObjectMessage(session, eventName, (Serializable) eventData, getRecipientId(),
+                    recipients);
             }
         });
     }
@@ -378,13 +376,4 @@ public class GlobalEventDispatcher extends AbstractGlobalEventDispatcher impleme
         this.topicTemplate = topicTemplate;
     }
     
-    /**
-     * Returns the client id for this end point.
-     * 
-     * @return The end point's client id.
-     */
-    @Override
-    public String getClientId() {
-        return clientId;
-    }
 }

@@ -20,7 +20,7 @@ public interface IPublisherInfo {
     
     String getAppName();
     
-    String getClientId();
+    String getRecipientId();
     
     String formatPublisherInfo();
     

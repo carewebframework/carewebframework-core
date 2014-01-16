@@ -57,13 +57,13 @@ public class MessagingSupport {
      * 
      * @param eventName The event name for which the destination (Topic) is derived.
      * @param messageData The message data.
-     * @param recipients Comma-delimited list of clientIDs (JMS Connection Clients).
+     * @param recipients Comma-delimited list of recipient ids.
      */
     @ManagedOperation(description = "Produces topic message. Uses JmsTemplate to send to local broker and forwards (based on demand) to broker network.")
     @ManagedOperationParameters({
             @ManagedOperationParameter(name = "eventName", description = "The event name for which the destination (Topic) is derived."),
             @ManagedOperationParameter(name = "messageData", description = "The message data"),
-            @ManagedOperationParameter(name = "recipients", description = "Comma delimited list of clientIDs (JMS Connection Clients)") })
+            @ManagedOperationParameter(name = "recipients", description = "Comma delimited list of recipient ids") })
     public void produceTopicMessage(final String eventName, final String messageData, final String recipients) {
         jmsTopicTemplate.send(JMSUtil.getTopicName(eventName), new MessageCreator() {
             

@@ -39,7 +39,7 @@ public class MainController extends PluginController {
     
     private Textbox txtDestinationName;
     
-    private Textbox txtClientId;
+    private Textbox txtRecipientId;
     
     private MessagingSupport messagingSupport;
     
@@ -48,7 +48,7 @@ public class MainController extends PluginController {
     @Override
     public void doAfterCompose(Component comp) throws Exception {
         super.doAfterCompose(comp);
-        txtClientId.setValue(globalEventDispatcher.getClientId());
+        txtRecipientId.setValue(globalEventDispatcher.getRecipientId());
     }
     
     public void onClick$btnProduceLocalMessage(final Event event) {
