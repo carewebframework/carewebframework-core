@@ -24,3 +24,7 @@ div.z-listbox-body {
 .z-listcell-cnt {
 	max-height: inherit !important;
 }
+
+tr.z-listitem-seld {
+	background-image: inherit;
+}

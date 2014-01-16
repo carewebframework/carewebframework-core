@@ -10,12 +10,22 @@
 				<listhead sizable="true" />
 			</listbox>
 		</div>
-		<toolbar align="end">
-			<button label="${labels.cwf.manifest.viewer.btn.print.label}"
-				tooltiptext="${labels.cwf.manifest.viewer.btn.print.hint}"
-				w:onClick="cwf.print(this.$f('printRoot'),'~./org/carewebframework/ui/zk/manifestViewerPrint.css',true);" />
-			<button label="${labels.cwf.manifest.viewer.btn.close.label}" forward="onClick=onClose" />
-			<separator orient="vertical" />
+		<toolbar>
+			<span style="float:left">
+				<textbox id="txtSearch"
+					placeholder="${labels.cwf.manifest.viewer.txt.search.placeholder}"
+					focus="true" width="300px"/>
+			</span>
+			<span style="float:right">
+				<button
+					label="${labels.cwf.manifest.viewer.btn.print.label}"
+					tooltiptext="${labels.cwf.manifest.viewer.btn.print.hint}"
+					w:onClick="cwf.print(this.$f('printRoot'),'~./org/carewebframework/ui/zk/manifestViewerPrint.css',true);" />
+				<button
+					label="${labels.cwf.manifest.viewer.btn.close.label}"
+					forward="onClick=onClose" />
+				<separator orient="vertical" />
+			</span>
 		</toolbar>
 	</window>
 </zk>

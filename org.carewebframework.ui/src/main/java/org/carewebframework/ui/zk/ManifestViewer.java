@@ -24,16 +24,20 @@ import org.carewebframework.ui.FrameworkController;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.InputEvent;
 import org.zkoss.zk.ui.event.SortEvent;
+import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.A;
 import org.zkoss.zul.Caption;
 import org.zkoss.zul.Html;
+import org.zkoss.zul.ListModel;
 import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listcell;
 import org.zkoss.zul.Listheader;
 import org.zkoss.zul.Listitem;
 import org.zkoss.zul.ListitemRenderer;
+import org.zkoss.zul.Textbox;
 
 /**
  * Displays a dialog showing all known manifests or details about a single manifest.
@@ -42,10 +46,15 @@ public class ManifestViewer extends FrameworkController {
     
     private static final long serialVersionUID = 1L;
     
+    private interface Matchable<T> extends Comparable<T> {
+        
+        boolean matches(String searchText);
+    }
+    
     /**
      * List model object. Extracts attributes of interest from a manifest.
      */
-    public static class ManifestItem implements Comparable<ManifestItem> {
+    public static class ManifestItem implements Matchable<ManifestItem> {
         
         public final Manifest manifest;
         
@@ -103,12 +112,19 @@ public class ManifestViewer extends FrameworkController {
         private int compare(String s1, String s2) {
             return s1 == s2 ? 0 : s1 == null ? -1 : s2 == null ? 1 : s1.compareToIgnoreCase(s2);
         }
+        
+        @Override
+        public boolean matches(String searchText) {
+            return StringUtils.containsIgnoreCase(implModule, searchText)
+                    || StringUtils.containsIgnoreCase(implVendor, searchText)
+                    || StringUtils.containsIgnoreCase(implVersion, searchText);
+        }
     }
     
     /**
      * A single attribute item from a manifest.
      */
-    public static class AttributeItem implements Comparable<AttributeItem> {
+    public static class AttributeItem implements Matchable<AttributeItem> {
         
         public final String name;
         
@@ -122,6 +138,11 @@ public class ManifestViewer extends FrameworkController {
         @Override
         public int compareTo(AttributeItem o) {
             return name.compareToIgnoreCase(o.name);
+        }
+        
+        @Override
+        public boolean matches(String searchText) {
+            return StringUtils.containsIgnoreCase(name, searchText) || StringUtils.containsIgnoreCase(value, searchText);
         }
         
     }
@@ -244,6 +265,10 @@ public class ManifestViewer extends FrameworkController {
     
     private Caption caption;
     
+    private Textbox txtSearch;
+    
+    private int matchIndex = -1;
+    
     /**
      * Display a summary dialog of all known manifests.
      */
@@ -270,7 +295,7 @@ public class ManifestViewer extends FrameworkController {
     public void doAfterCompose(Component comp) throws Exception {
         super.doAfterCompose(comp);
         ManifestItem manifestItem = (ManifestItem) arg.get("manifestItem");
-        ListModelList<Comparable> model = new ListModelList<Comparable>();
+        ListModelList<Matchable> model = new ListModelList<Matchable>();
         BaseRenderer<?> renderer;
         
         if (manifestItem != null) {
@@ -317,5 +342,57 @@ public class ManifestViewer extends FrameworkController {
      */
     public void onAfterSort$list() {
         list.renderAll();
+    }
+    
+    /**
+     * Search for user-specified text.
+     * 
+     * @param event
+     */
+    public void onChanging$txtSearch(InputEvent event) {
+        findMatchingItem(event.getValue(), matchIndex - 1);
+        
+    }
+    
+    public void onOK$txtSearch() {
+        findMatchingItem(txtSearch.getValue(), matchIndex);
+    }
+    
+    public void onSelect$list() {
+        matchIndex = list.getSelectedIndex();
+        txtSearch.focus();
+    }
+    
+    private void findMatchingItem(String searchText, int i) {
+        list.clearSelection();
+        
+        if (StringUtils.isEmpty(searchText)) {
+            return;
+        }
+        
+        ListModel<Matchable<?>> model = list.getModel();
+        int max = model.getSize();
+        boolean wrapped = false;
+        
+        if (i < 0) {
+            i = 0;
+        }
+        
+        while (true) {
+            if (++i >= max) {
+                if (wrapped) {
+                    break;
+                } else {
+                    wrapped = true;
+                    i = -1;
+                }
+            } else if (model.getElementAt(i).matches(searchText)) {
+                matchIndex = i;
+                Listitem matchItem = list.getItemAtIndex(i);
+                matchItem.setSelected(true);
+                Clients.scrollIntoView(matchItem);
+                break;
+            }
+        }
     }
 }
