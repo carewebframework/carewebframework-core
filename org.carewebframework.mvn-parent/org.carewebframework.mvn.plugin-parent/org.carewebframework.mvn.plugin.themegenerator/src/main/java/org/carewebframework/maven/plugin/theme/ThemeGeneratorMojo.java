@@ -89,16 +89,12 @@ import org.carewebframework.maven.plugin.core.BaseMojo;
  * <pre>
  * {@code
  *                     <themeSources>
- *                         <themeSource>org.zkoss.zk:zk:jar</themeSource>
- *                         <themeSource>org.zkoss.common:zcommon:jar</themeSource>
- *                         <themeSource>org.zkoss.zkforge.el:zcommons-el:jar</themeSource>
- *                         <themeSource>org.zkoss.zk:zhtml:jar</themeSource>
- *                         <themeSource>org.zkoss.zk:zkex:jar</themeSource>
- *                         <themeSource>org.zkoss.zk:zkmax:jar</themeSource>
- *                         <themeSource>org.zkoss.zk:zkplus:jar</themeSource>
- *                         <themeSource>org.zkoss.zk:zml:jar</themeSource>
- *                         <themeSource>org.zkoss.zk:zul:jar</themeSource>
- *                         <themeSource>org.zkoss.common:zweb:jar</themeSource>
+ *                        <themeSource>org.zkoss.zk:zk:jar</themeSource>
+ *                        <themeSource>org.zkoss.zkforge.el:zcommons-el:jar</themeSource>
+ *                        <themeSource>org.zkoss.zk:zkex:jar</themeSource>
+ *                        <themeSource>org.zkoss.zk:zkmax:jar</themeSource>
+ *                        <themeSource>org.zkoss.zk:zul:jar</themeSource>
+ *                        <themeSource>org.zkoss.common:zweb:jar</themeSource>
  *                     </themeSources>
  * 
  * }
