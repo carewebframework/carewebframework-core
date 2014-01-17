@@ -25,7 +25,7 @@
 		<bean id="jmsTestingController" class="org.carewebframework.ui.jmstesting.MainController"
 			scope="prototype">
 			<property name="messagingSupport" ref="jmsMessagingSupport" />
-			<property name="globalEventDispatcher" ref="globalEventDispatcher" />
+			<property name="eventManager" ref="eventManager" />
 		</bean>
 
 	</beans>
