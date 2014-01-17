@@ -12,6 +12,8 @@ package org.carewebframework.api.event;
 import java.io.Serializable;
 import java.util.UUID;
 
+import org.apache.commons.lang.StringUtils;
+
 import org.carewebframework.api.FrameworkUtil;
 import org.carewebframework.api.domain.IUser;
 import org.carewebframework.api.security.SecurityUtil;
@@ -49,6 +51,7 @@ public abstract class AbstractGlobalEventDispatcher implements IGlobalEventDispa
         publisherInfo.setEndpointId(getEndpointId());
         publisherInfo.setUserId(user == null ? null : getUserId(user));
         publisherInfo.setUserName(user == null ? "" : user.getFullName());
+        publisherInfo.setNodeId(getNodeId());
         publisherInfo.setAppName(getAppName());
         
         if (localEventDispatcher != null) {
@@ -122,12 +125,22 @@ public abstract class AbstractGlobalEventDispatcher implements IGlobalEventDispa
     }
     
     /**
+     * Returns the node id. The default implementation will return null.
+     * 
+     * @return The node id.
+     */
+    protected String getNodeId() {
+        return null;
+    }
+    
+    /**
      * Returns the application name.
      * 
      * @return Application name.
      */
     protected String getAppName() {
-        return FrameworkUtil.isInitialized() ? FrameworkUtil.getAppName() : null;
+        String appName = FrameworkUtil.isInitialized() ? StringUtils.replace(FrameworkUtil.getAppName(), ",", " ") : null;
+        return appName == null ? null : "a-" + appName;
     }
     
     /**

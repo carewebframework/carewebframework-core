@@ -61,6 +61,15 @@ public class PublisherInfo implements IPublisherInfo, Serializable {
     }
     
     @Override
+    public String getNodeId() {
+        return attributes.get("nodeId");
+    }
+    
+    public void setNodeId(String nodeId) {
+        attributes.put("nodeId", nodeId);
+    }
+    
+    @Override
     public String getEndpointId() {
         return attributes.get("ep");
     }

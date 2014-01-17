@@ -11,6 +11,7 @@ package org.carewebframework.jms;
 
 import java.io.Serializable;
 
+import javax.jms.Connection;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.Session;
@@ -70,6 +71,22 @@ public final class JMSUtil {
     public static String getTopicName(final String eventName) {
         final int i = eventName.indexOf('.');
         return i < 0 ? eventName : eventName.substring(0, i);
+    }
+    
+    /**
+     * Returns the node id from the connection.
+     * 
+     * @param connection JMS connection (may be null).
+     * @return The node id (may be null).
+     */
+    public static String getNodeId(Connection connection) {
+        String clientId = null;
+        
+        try {
+            clientId = connection == null ? null : "n-" + connection.getClientID();
+        } catch (JMSException e) {}
+        
+        return clientId;
     }
     
     /**

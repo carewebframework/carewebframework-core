@@ -152,14 +152,13 @@ public class GlobalEventDispatcher extends AbstractGlobalEventDispatcher impleme
     
     @Override
     protected void updateConnectionStatus(boolean connected) {
-        String clientId = null;
-        
-        try {
-            clientId = connection == null ? null : "n-" + connection.getClientID();
-        } catch (JMSException e) {}
-        
-        getPublisherInfo().getAttributes().put("clientId", clientId);
+        publisherInfo.setNodeId(getNodeId());
         super.updateConnectionStatus(connected);
+    }
+    
+    @Override
+    protected String getNodeId() {
+        return JMSUtil.getNodeId(connection);
     }
     
     /**

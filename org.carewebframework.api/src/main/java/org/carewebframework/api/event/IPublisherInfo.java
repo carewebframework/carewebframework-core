@@ -45,6 +45,13 @@ public interface IPublisherInfo {
     String getEndpointId();
     
     /**
+     * Unique id of the node within the messaging infrastructure.
+     * 
+     * @return The node id.
+     */
+    String getNodeId();
+    
+    /**
      * Unique id of the node in a multi-node messaging implementation.
      * 
      * @return Node id.
