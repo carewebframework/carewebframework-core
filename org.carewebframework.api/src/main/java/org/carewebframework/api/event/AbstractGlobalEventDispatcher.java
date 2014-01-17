@@ -34,7 +34,7 @@ public abstract class AbstractGlobalEventDispatcher implements IGlobalEventDispa
     
     private final String endpointId = "e-" + UUID.randomUUID().toString();
     
-    private final IUser user;
+    protected final IUser user;
     
     /**
      * Create the global event dispatcher.
