@@ -36,6 +36,8 @@ public abstract class AbstractGlobalEventDispatcher implements IGlobalEventDispa
     
     protected final PublisherInfo publisherInfo = new PublisherInfo();
     
+    private String appName;
+    
     /**
      * Create the global event dispatcher.
      */
@@ -139,8 +141,20 @@ public abstract class AbstractGlobalEventDispatcher implements IGlobalEventDispa
      * @return Application name.
      */
     protected String getAppName() {
-        String appName = FrameworkUtil.isInitialized() ? StringUtils.replace(FrameworkUtil.getAppName(), ",", " ") : null;
+        if (appName == null && FrameworkUtil.isInitialized()) {
+            setAppName(FrameworkUtil.getAppName());
+        }
+        
         return appName == null ? null : "a-" + appName;
+    }
+    
+    /**
+     * Allow for IOC injection of application name.
+     * 
+     * @param appName Application name.
+     */
+    public void setAppName(String appName) {
+        this.appName = StringUtils.replace(appName, ",", " ");
     }
     
     /**
