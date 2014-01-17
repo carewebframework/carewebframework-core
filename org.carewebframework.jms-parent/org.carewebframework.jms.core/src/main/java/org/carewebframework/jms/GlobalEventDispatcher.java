@@ -158,7 +158,7 @@ public class GlobalEventDispatcher extends AbstractGlobalEventDispatcher impleme
     
     @Override
     protected String getNodeId() {
-        return JMSUtil.getNodeId(connection);
+        return JMSUtil.getClientId(connection);
     }
     
     /**

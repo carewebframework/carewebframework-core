@@ -48,7 +48,7 @@ public class PublisherInfo implements IPublisherInfo, Serializable {
     }
     
     public void setUserId(String userId) {
-        attributes.put("userId", userId);
+        put("userId", "u-", userId);
     }
     
     @Override
@@ -57,7 +57,7 @@ public class PublisherInfo implements IPublisherInfo, Serializable {
     }
     
     public void setAppName(String appName) {
-        attributes.put("appName", appName);
+        put("appName", "a-", appName);
     }
     
     @Override
@@ -66,7 +66,7 @@ public class PublisherInfo implements IPublisherInfo, Serializable {
     }
     
     public void setNodeId(String nodeId) {
-        attributes.put("nodeId", nodeId);
+        put("nodeId", "n-", nodeId);
     }
     
     @Override
@@ -75,7 +75,7 @@ public class PublisherInfo implements IPublisherInfo, Serializable {
     }
     
     public void setEndpointId(String endpointId) {
-        attributes.put("ep", endpointId);
+        put("ep", "", endpointId);
     }
     
     @Override
@@ -86,5 +86,13 @@ public class PublisherInfo implements IPublisherInfo, Serializable {
     @Override
     public boolean equals(Object obj) {
         return obj instanceof IPublisherInfo && attributes.equals(((IPublisherInfo) obj).getAttributes());
+    }
+    
+    public void put(String key, String prefix, String value) {
+        if (value == null) {
+            attributes.keySet().remove(key);
+        } else {
+            attributes.put(key, prefix + value.replace(",", "_"));
+        }
     }
 }

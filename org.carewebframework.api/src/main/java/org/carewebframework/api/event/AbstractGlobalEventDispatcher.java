@@ -123,7 +123,7 @@ public abstract class AbstractGlobalEventDispatcher implements IGlobalEventDispa
      * @return Unique identifier for the user.
      */
     protected String getUserId(IUser user) {
-        return "u-" + Long.toString(user.getDomainId());
+        return Long.toString(user.getDomainId());
     }
     
     /**
@@ -145,7 +145,7 @@ public abstract class AbstractGlobalEventDispatcher implements IGlobalEventDispa
             setAppName(FrameworkUtil.getAppName());
         }
         
-        return appName == null ? null : "a-" + appName;
+        return appName;
     }
     
     /**

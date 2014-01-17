@@ -74,16 +74,16 @@ public final class JMSUtil {
     }
     
     /**
-     * Returns the node id from the connection.
+     * Returns the client id from the connection.
      * 
      * @param connection JMS connection (may be null).
-     * @return The node id (may be null).
+     * @return The client id (may be null).
      */
-    public static String getNodeId(Connection connection) {
+    public static String getClientId(Connection connection) {
         String clientId = null;
         
         try {
-            clientId = connection == null ? null : "n-" + connection.getClientID();
+            clientId = connection == null ? null : connection.getClientID();
         } catch (JMSException e) {}
         
         return clientId;
