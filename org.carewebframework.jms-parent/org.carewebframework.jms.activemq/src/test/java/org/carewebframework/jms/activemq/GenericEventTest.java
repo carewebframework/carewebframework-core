@@ -20,6 +20,6 @@ public class GenericEventTest extends org.carewebframework.api.event.GenericEven
         super();
         this.remote = true;
         GlobalEventDispatcher ged = appContext.getBean("globalEventDispatcher", GlobalEventDispatcher.class);
-        this.recipientId = ged.getRecipientId();
+        this.recipientId = ged.getEndpointId();
     }
 }

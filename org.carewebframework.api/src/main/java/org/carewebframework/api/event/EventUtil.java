@@ -43,9 +43,25 @@ public class EventUtil {
      */
     public static void status(final String statusText) {
         try {
-            EventManager.getInstance().fireLocalEvent("STATUS", statusText == null ? "" : statusText);
+            getEventManager().fireLocalEvent("STATUS", statusText == null ? "" : statusText);
         } catch (final Throwable e) {
             log.error(e);
+        }
+    }
+    
+    /**
+     * Fires a ping request to specified or all recipients.
+     * 
+     * @param appName The app name (may be null).
+     * @param recipients The recipient ids of the ping targets (or null for all recipients).
+     */
+    public static void ping(String appName, String recipients) {
+        IEventManager eventManager = getEventManager();
+        IGlobalEventDispatcher ged = ((ILocalEventDispatcher) eventManager).getGlobalEventDispatcher();
+        
+        if (ged != null) {
+            PingRequest pingRequest = new PingRequest(appName, ged.getEndpointId());
+            eventManager.fireRemoteEvent(PingEventHandler.EVENT_PING_REQUEST, pingRequest, recipients);
         }
     }
     

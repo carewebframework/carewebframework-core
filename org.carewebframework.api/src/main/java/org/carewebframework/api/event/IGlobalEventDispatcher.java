@@ -17,6 +17,13 @@ import java.io.Serializable;
 public interface IGlobalEventDispatcher {
     
     /**
+     * Returns the unique id of this endpoint.
+     * 
+     * @return Endpoint id.
+     */
+    String getEndpointId();
+    
+    /**
      * Request or revoke a global event subscription.
      * 
      * @param eventName The name of the event of interest.

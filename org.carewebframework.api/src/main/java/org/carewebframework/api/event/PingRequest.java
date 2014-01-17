@@ -9,10 +9,14 @@
  */
 package org.carewebframework.api.event;
 
+import java.io.Serializable;
+
 /**
  * Represents a ping request.
  */
-/*package*/class PingRequest {
+public class PingRequest implements Serializable {
+    
+    private static final long serialVersionUID = 1L;
     
     public final String appName;
     

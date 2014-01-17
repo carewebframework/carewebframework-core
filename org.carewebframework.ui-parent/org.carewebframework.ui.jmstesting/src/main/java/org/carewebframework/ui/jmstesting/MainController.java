@@ -48,7 +48,7 @@ public class MainController extends PluginController {
     @Override
     public void doAfterCompose(Component comp) throws Exception {
         super.doAfterCompose(comp);
-        txtRecipientId.setValue(globalEventDispatcher.getRecipientId());
+        txtRecipientId.setValue(globalEventDispatcher.getEndpointId());
     }
     
     public void onClick$btnProduceLocalMessage(final Event event) {

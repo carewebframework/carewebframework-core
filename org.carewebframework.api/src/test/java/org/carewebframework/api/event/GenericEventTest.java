@@ -9,6 +9,7 @@
  */
 package org.carewebframework.api.event;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -37,6 +38,8 @@ public class GenericEventTest extends CommonTest {
     
     private int expectedUndelivered;
     
+    private boolean pingResponded;
+    
     protected boolean remote;
     
     protected String recipients;
@@ -47,7 +50,7 @@ public class GenericEventTest extends CommonTest {
     
     private AssertionError assertionError;
     
-    private class GenericEventSubscriber implements IGenericEvent<TestPacket> {
+    private final IGenericEvent<TestPacket> subscriber = new IGenericEvent<TestPacket>() {
         
         @Override
         public void eventCallback(final String eventName, final TestPacket testPacket) {
@@ -62,9 +65,17 @@ public class GenericEventTest extends CommonTest {
                 }
             }
         }
-    }
+    };
     
-    private final GenericEventSubscriber subscriber = new GenericEventSubscriber();
+    private final IGenericEvent<IPublisherInfo> pingSubscriber = new IGenericEvent<IPublisherInfo>() {
+        
+        @Override
+        public void eventCallback(String eventName, IPublisherInfo publisherInfo) {
+            log.info(publisherInfo);
+            pingResponded = true;
+        }
+        
+    };
     
     /**
      * Fire the specified event.
@@ -96,7 +107,17 @@ public class GenericEventTest extends CommonTest {
     
     @Test
     public void testEvents() {
+        if (this.remote) {
+            pingTest();
+        }
+        
         fireTestEvents();
+        assertEquals("Error testing ping response.", this.remote, this.pingResponded);
+    }
+    
+    public void pingTest() {
+        eventManager.subscribe(PingEventHandler.EVENT_PING_RESPONSE, pingSubscriber);
+        EventUtil.ping(null, recipients);
     }
     
     private void fireTestEvents() {

@@ -16,9 +16,9 @@ import org.apache.commons.lang.StringUtils;
  */
 public class PingEventHandler implements IGenericEvent<PingRequest> {
     
-    private static final String EVENT_PING_REQUEST = "PING.REQUEST";
+    public static final String EVENT_PING_REQUEST = "PING.REQUEST";
     
-    private static final String EVENT_PING_RESPONSE = "PING.RESPONSE";
+    public static final String EVENT_PING_RESPONSE = "PING.RESPONSE";
     
     private final IEventManager eventManager;
     
@@ -53,7 +53,7 @@ public class PingEventHandler implements IGenericEvent<PingRequest> {
     @Override
     public void eventCallback(String eventName, PingRequest pingRequest) {
         if (StringUtils.isEmpty(pingRequest.appName) || pingRequest.appName.equals(publisherInfo.getAppName())) {
-            eventManager.fireRemoteEvent(EVENT_PING_RESPONSE, publisherInfo.formatPublisherInfo(), pingRequest.requestor);
+            eventManager.fireRemoteEvent(EVENT_PING_RESPONSE, new PublisherInfo(publisherInfo), pingRequest.requestor);
         }
     }
     

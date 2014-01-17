@@ -14,14 +14,32 @@ package org.carewebframework.api.event;
  */
 public interface IPublisherInfo {
     
+    /**
+     * Domain id of the user.
+     * 
+     * @return User's domain id.
+     */
     long getUserId();
     
+    /**
+     * Full name of the user.
+     * 
+     * @return User's full name.
+     */
     String getUserName();
     
+    /**
+     * Application name.
+     * 
+     * @return Application name.
+     */
     String getAppName();
     
-    String getRecipientId();
-    
-    String formatPublisherInfo();
+    /**
+     * Unique id of the publisher's endpoint.
+     * 
+     * @return Endpoint id.
+     */
+    String getEndpointId();
     
 }

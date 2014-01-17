@@ -155,10 +155,9 @@ public class EventManager implements ILocalEventDispatcher, IEventManager {
     }
     
     /**
-     * Returns the registered global event dispatcher.
-     * 
-     * @return IGlobalEventDispatcher
+     * @see org.carewebframework.api.event.ILocalEventDispatcher#getGlobalEventDispatcher()
      */
+    @Override
     public IGlobalEventDispatcher getGlobalEventDispatcher() {
         return globalEventDispatcher;
     }

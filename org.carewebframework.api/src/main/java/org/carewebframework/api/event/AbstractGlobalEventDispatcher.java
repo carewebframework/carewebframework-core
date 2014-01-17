@@ -26,15 +26,13 @@ import org.carewebframework.api.security.SecurityUtil;
  */
 public abstract class AbstractGlobalEventDispatcher implements IGlobalEventDispatcher, IPublisherInfo {
     
-    private static final String DELIM = "^";
-    
     private ILocalEventDispatcher localEventDispatcher;
     
     private PingEventHandler pingEventHandler;
     
     private String appName;
     
-    private final String recipientId = UUID.randomUUID().toString();
+    private final String endpointId = UUID.randomUUID().toString();
     
     /**
      * Create the global event dispatcher.
@@ -84,21 +82,11 @@ public abstract class AbstractGlobalEventDispatcher implements IGlobalEventDispa
      * 
      * @param eventName Name of the event.
      * @param eventData Data object associated with the event.
-     * @param recipients List of recipients for the event (null or empty string means all
+     * @param endpoints List of endpoints for the event (null or empty string means all
      *            subscribers).
      */
     @Override
-    public abstract void fireRemoteEvent(String eventName, Serializable eventData, String recipients);
-    
-    /**
-     * Returns formatted info about the current connection.
-     * 
-     * @return Publisher info.
-     */
-    @Override
-    public String formatPublisherInfo() {
-        return getRecipientId() + DELIM + getUserId() + DELIM + getUserName() + DELIM + getAppName();
-    }
+    public abstract void fireRemoteEvent(String eventName, Serializable eventData, String endpoints);
     
     /**
      * Sets the application name.
@@ -134,13 +122,13 @@ public abstract class AbstractGlobalEventDispatcher implements IGlobalEventDispa
     }
     
     /**
-     * Returns the recipient id for this end point.
+     * Returns the unique id for this end point.
      * 
-     * @return The end point's recipient id.
+     * @return The end point's unique id.
      */
     @Override
-    public String getRecipientId() {
-        return recipientId;
+    public String getEndpointId() {
+        return endpointId;
     }
     
     /**
@@ -180,9 +168,7 @@ public abstract class AbstractGlobalEventDispatcher implements IGlobalEventDispa
      * @param connected If true, send a CONNECT event. If false, send a DISCONNECT event.
      */
     protected void updateConnectionStatus(boolean connected) {
-        String eventName = connected ? "CONNECT" : "DISCONNECT";
-        String eventData = formatPublisherInfo();
-        fireRemoteEvent(eventName, eventData, null);
+        fireRemoteEvent(connected ? "CONNECT" : "DISCONNECT", new PublisherInfo(this), null);
     }
     
     /**
