@@ -9,6 +9,8 @@
  */
 package org.carewebframework.ui.jmstesting;
 
+import java.util.Comparator;
+
 import org.apache.commons.lang.StringUtils;
 
 import org.carewebframework.api.event.EventUtil;
@@ -21,9 +23,11 @@ import org.carewebframework.common.StrUtil;
 import org.carewebframework.jms.MessagingSupport;
 import org.carewebframework.shell.plugins.PluginContainer;
 import org.carewebframework.shell.plugins.PluginController;
+import org.carewebframework.ui.zk.AbstractListitemRenderer;
 
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zul.Label;
+import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listitem;
 import org.zkoss.zul.Textbox;
@@ -35,7 +39,24 @@ public class MainController extends PluginController {
     
     private static final long serialVersionUID = 1L;
     
-    private static String[] EVENTS = { "CONNECT", "DISCONNECT", PingEventHandler.EVENT_PING_RESPONSE };
+    private static final String[] EVENTS = { "CONNECT", "DISCONNECT", PingEventHandler.EVENT_PING_RESPONSE };
+    
+    private static final Comparator<IPublisherInfo> sortComparator = new Comparator<IPublisherInfo>() {
+        
+        @Override
+        public int compare(IPublisherInfo pi1, IPublisherInfo pi2) {
+            int i = compare(pi1.getUserName(), pi2.getUserName());
+            i = i == 0 ? compare(pi1.getUserId(), pi2.getUserId()) : i;
+            i = i == 0 ? compare(pi1.getNodeId(), pi2.getNodeId()) : i;
+            i = i == 0 ? compare(pi1.getEndpointId(), pi2.getEndpointId()) : i;
+            return i;
+        }
+        
+        private int compare(String s1, String s2) {
+            return s1 == s2 ? 0 : s1 == null ? -1 : s2 == null ? 1 : s1.compareToIgnoreCase(s2);
+        }
+        
+    };
     
     private Label lblMessage;
     
@@ -51,14 +72,46 @@ public class MainController extends PluginController {
     
     private IEventManager eventManager;
     
+    private String endpointId;
+    
+    private final AbstractListitemRenderer<IPublisherInfo, String> renderer = new AbstractListitemRenderer<IPublisherInfo, String>(
+                                                                                                                                   "",
+                                                                                                                                   null) {
+        
+        @Override
+        protected void renderItem(Listitem item, IPublisherInfo data) {
+            String style = endpointId.equals(data.getEndpointId()) ? "font-weight: bold; color: red" : null;
+            createCell(item, data.getUserName(), null, style);
+            createCell(item, data.getEndpointId(), null, style);
+            createCell(item, data.getUserId(), null, style);
+            createCell(item, data.getNodeId(), null, style);
+        }
+        
+    };
+    
+    private final ListModelList<IPublisherInfo> model = new ListModelList<IPublisherInfo>();
+    
     private final IGenericEvent<IPublisherInfo> eventListener = new IGenericEvent<IPublisherInfo>() {
         
         @Override
         public void eventCallback(String eventName, IPublisherInfo publisherInfo) {
             if ("DISCONNECT".equals(eventName)) {
-                
+                model.remove(publisherInfo);
             } else {
+                int last = model.getSize();
                 
+                for (int i = 0; i <= last; i++) {
+                    int cmp = i == last ? -1 : sortComparator.compare(publisherInfo, model.get(i));
+                    
+                    if (cmp == 0) {
+                        break;
+                    }
+                    
+                    if (cmp < 0) {
+                        model.add(i, publisherInfo);
+                        break;
+                    }
+                }
             }
         }
         
@@ -98,7 +151,8 @@ public class MainController extends PluginController {
                 sb.append(',');
             }
             
-            sb.append(item.getValue());
+            IPublisherInfo pi = (IPublisherInfo) item.getValue();
+            sb.append(pi.getEndpointId());
         }
         
         return sb.toString();
@@ -109,6 +163,10 @@ public class MainController extends PluginController {
         final String messageData = StringUtils.trimToNull(this.txtMessageData.getValue());
         this.messagingSupport.produceQueueMessage(destName, messageData);
         showMessage("@cwf.jmstesting.msg.queue.complete");
+    }
+    
+    public void onClick$btnRefresh() {
+        refresh();
     }
     
     /**
@@ -143,15 +201,24 @@ public class MainController extends PluginController {
     @Override
     public void onLoad(PluginContainer container) {
         super.onLoad(container);
-        txtEndpointId.setValue(((ILocalEventDispatcher) eventManager).getGlobalEventDispatcher().getEndpointId());
+        endpointId = ((ILocalEventDispatcher) eventManager).getGlobalEventDispatcher().getEndpointId();
+        txtEndpointId.setValue(endpointId);
         subscribe(true);
+        model.setMultiple(lstTopicRecipients.isMultiple());
+        lstTopicRecipients.setItemRenderer(renderer);
+        lstTopicRecipients.setModel(model);
+        refresh();
     }
     
     @Override
     public void onUnload() {
         subscribe(false);
         super.onUnload();
-        EventUtil.ping(null, null);
     }
     
+    @Override
+    public void refresh() {
+        model.clear();
+        EventUtil.ping(null, null);
+    }
 }

@@ -12,7 +12,8 @@
 			<rows>
 				<row>
 					<vlayout>
-						<label value="${labels.cwf.jmstesting.row1.label1}" />
+						<label
+							value="${labels.cwf.jmstesting.row1.label1}" />
 						<label
 							value="${labels.cwf.jmstesting.row1.label2}" />
 					</vlayout>
@@ -25,15 +26,20 @@
 				</row>
 				<row>
 					<vlayout>
-						<label value="${labels.cwf.jmstesting.row3.label1}" />
+						<label
+							value="${labels.cwf.jmstesting.row3.label1}" />
 						<label
 							value="${labels.cwf.jmstesting.row3.label2}" />
+						<button id="btnRefresh" label="${labels.cwf.jmstesting.btn.refresh.label}" />
 					</vlayout>
-					<listbox id="lstTopicRecipients" hflex="1" checkmark="true" multiple="true" rows="5" />
+					<listbox id="lstTopicRecipients" hflex="1"
+						checkmark="true" multiple="true" height="100px"
+						sizedByContent="true" />
 				</row>
 				<row>
 					<label value="${labels.cwf.jmstesting.row4.label1}" />
-					<textbox id="txtEndpointId" hflex="1" readonly="true" />
+					<textbox id="txtEndpointId" hflex="1"
+						readonly="true" />
 				</row>
 			</rows>
 		</grid>

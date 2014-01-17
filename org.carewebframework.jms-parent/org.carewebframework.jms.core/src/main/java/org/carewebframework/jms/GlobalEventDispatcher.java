@@ -166,7 +166,7 @@ public class GlobalEventDispatcher extends AbstractGlobalEventDispatcher impleme
     public void destroy() {
         super.destroy();
         removeSubscriptions();
-        disconnect(false);
+        disconnect(true);
     }
     
     /**
@@ -375,7 +375,7 @@ public class GlobalEventDispatcher extends AbstractGlobalEventDispatcher impleme
     @Override
     public String getNodeId() {
         try {
-            return connection == null ? null : connection.getClientID();
+            return connection == null ? null : "n-" + connection.getClientID();
         } catch (JMSException e) {
             return null;
         }

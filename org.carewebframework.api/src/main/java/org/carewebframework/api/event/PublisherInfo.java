@@ -11,6 +11,8 @@ package org.carewebframework.api.event;
 
 import java.io.Serializable;
 
+import org.apache.commons.lang.StringUtils;
+
 /**
  * Class for holding information about a publisher.
  */
@@ -85,4 +87,13 @@ public class PublisherInfo implements IPublisherInfo, Serializable {
         this.nodeId = nodeId;
     }
     
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof IPublisherInfo)) {
+            return false;
+        }
+        
+        IPublisherInfo pi = (IPublisherInfo) obj;
+        return StringUtils.equals(endpointId, pi.getEndpointId());
+    }
 }

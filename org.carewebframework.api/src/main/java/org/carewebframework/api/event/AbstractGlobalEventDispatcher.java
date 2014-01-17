@@ -34,11 +34,14 @@ public abstract class AbstractGlobalEventDispatcher implements IGlobalEventDispa
     
     private final String endpointId = "e-" + UUID.randomUUID().toString();
     
+    private final IUser user;
+    
     /**
      * Create the global event dispatcher.
      */
     public AbstractGlobalEventDispatcher() {
         super();
+        user = SecurityUtil.getAuthenticatedUser();
     }
     
     /**
@@ -117,7 +120,6 @@ public abstract class AbstractGlobalEventDispatcher implements IGlobalEventDispa
      */
     @Override
     public String getUserId() {
-        IUser user = getUser();
         return user == null ? null : "u-" + user.getDomainId();
     }
     
@@ -146,17 +148,7 @@ public abstract class AbstractGlobalEventDispatcher implements IGlobalEventDispa
      */
     @Override
     public String getUserName() {
-        IUser user = getUser();
         return user == null ? "" : user.getFullName();
-    }
-    
-    /**
-     * Returns the authenticated user.
-     * 
-     * @return
-     */
-    private IUser getUser() {
-        return SecurityUtil.getSecurityService().getAuthenticatedUser();
     }
     
     /**
