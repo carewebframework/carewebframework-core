@@ -86,6 +86,7 @@ public class MainController extends PluginController {
         
         @Override
         protected void renderItem(Listitem item, IPublisherInfo data) {
+            item.setValue(data.getEndpointId());
             String style = self.equals(data) ? "font-weight: bold; color: red" : null;
             createCell(item, data.getUserName(), null, style);
             
@@ -158,8 +159,7 @@ public class MainController extends PluginController {
                 sb.append(',');
             }
             
-            IPublisherInfo pi = (IPublisherInfo) item.getValue();
-            sb.append(pi.getEndpointId());
+            sb.append(item.getValue());
         }
         
         return sb.toString();
