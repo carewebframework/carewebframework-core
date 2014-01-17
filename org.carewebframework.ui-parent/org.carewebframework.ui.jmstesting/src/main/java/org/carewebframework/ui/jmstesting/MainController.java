@@ -10,6 +10,8 @@
 package org.carewebframework.ui.jmstesting;
 
 import java.util.Comparator;
+import java.util.Iterator;
+import java.util.Map.Entry;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -46,9 +48,13 @@ public class MainController extends PluginController {
         @Override
         public int compare(IPublisherInfo pi1, IPublisherInfo pi2) {
             int i = compare(pi1.getUserName(), pi2.getUserName());
-            i = i == 0 ? compare(pi1.getUserId(), pi2.getUserId()) : i;
-            i = i == 0 ? compare(pi1.getNodeId(), pi2.getNodeId()) : i;
-            i = i == 0 ? compare(pi1.getEndpointId(), pi2.getEndpointId()) : i;
+            Iterator<String> attrs = i == 0 ? pi1.getAttributes().keySet().iterator() : null;
+            
+            while (i == 0 && attrs.hasNext()) {
+                String key = attrs.next();
+                i = compare(pi1.getAttributes().get(key), pi2.getAttributes().get(key));
+            }
+            
             return i;
         }
         
@@ -72,7 +78,7 @@ public class MainController extends PluginController {
     
     private IEventManager eventManager;
     
-    private String endpointId;
+    private IPublisherInfo self;
     
     private final AbstractListitemRenderer<IPublisherInfo, String> renderer = new AbstractListitemRenderer<IPublisherInfo, String>(
                                                                                                                                    "",
@@ -80,11 +86,12 @@ public class MainController extends PluginController {
         
         @Override
         protected void renderItem(Listitem item, IPublisherInfo data) {
-            String style = endpointId.equals(data.getEndpointId()) ? "font-weight: bold; color: red" : null;
+            String style = self.equals(data) ? "font-weight: bold; color: red" : null;
             createCell(item, data.getUserName(), null, style);
-            createCell(item, data.getEndpointId(), null, style);
-            createCell(item, data.getUserId(), null, style);
-            createCell(item, data.getNodeId(), null, style);
+            
+            for (Entry<String, String> entry : data.getAttributes().entrySet()) {
+                createCell(item, entry.getValue(), null, style);
+            }
         }
         
     };
@@ -201,8 +208,8 @@ public class MainController extends PluginController {
     @Override
     public void onLoad(PluginContainer container) {
         super.onLoad(container);
-        endpointId = ((ILocalEventDispatcher) eventManager).getGlobalEventDispatcher().getEndpointId();
-        txtEndpointId.setValue(endpointId);
+        self = ((ILocalEventDispatcher) eventManager).getGlobalEventDispatcher().getPublisherInfo();
+        txtEndpointId.setValue(self.getEndpointId());
         subscribe(true);
         model.setMultiple(lstTopicRecipients.isMultiple());
         lstTopicRecipients.setItemRenderer(renderer);

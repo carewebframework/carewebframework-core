@@ -24,17 +24,15 @@ import org.carewebframework.api.security.SecurityUtil;
  * the messaging server and receiving subscribed events from the same and passing them on to the
  * local event dispatcher for local distribution.
  */
-public abstract class AbstractGlobalEventDispatcher implements IGlobalEventDispatcher, IPublisherInfo {
+public abstract class AbstractGlobalEventDispatcher implements IGlobalEventDispatcher {
     
     private ILocalEventDispatcher localEventDispatcher;
     
     private PingEventHandler pingEventHandler;
     
-    private String appName;
-    
-    private final String endpointId = "e-" + UUID.randomUUID().toString();
-    
     protected final IUser user;
+    
+    protected final PublisherInfo publisherInfo = new PublisherInfo();
     
     /**
      * Create the global event dispatcher.
@@ -48,9 +46,14 @@ public abstract class AbstractGlobalEventDispatcher implements IGlobalEventDispa
      * Initialize after setting all requisite properties.
      */
     public void init() {
+        publisherInfo.setEndpointId(getEndpointId());
+        publisherInfo.setUserId(user == null ? null : getUserId(user));
+        publisherInfo.setUserName(user == null ? "" : user.getFullName());
+        publisherInfo.setAppName(getAppName());
+        
         if (localEventDispatcher != null) {
             localEventDispatcher.setGlobalEventDispatcher(this);
-            pingEventHandler = new PingEventHandler((IEventManager) localEventDispatcher, this);
+            pingEventHandler = new PingEventHandler((IEventManager) localEventDispatcher, publisherInfo);
             pingEventHandler.init();
         }
     }
@@ -92,63 +95,39 @@ public abstract class AbstractGlobalEventDispatcher implements IGlobalEventDispa
     public abstract void fireRemoteEvent(String eventName, Serializable eventData, String endpoints);
     
     /**
-     * Sets the application name.
-     * 
-     * @param appName The application name.
-     */
-    public void setAppName(String appName) {
-        this.appName = appName;
-    }
-    
-    /**
-     * Returns the application name. If not explicitly set, retrieves the application name from the
-     * framework.
-     * 
-     * @return The application name.
+     * Returns information about this publisher.
      */
     @Override
-    public String getAppName() {
-        if (appName == null) {
-            appName = FrameworkUtil.isInitialized() ? FrameworkUtil.getAppName() : "";
-        }
-        
-        return appName;
+    public IPublisherInfo getPublisherInfo() {
+        return publisherInfo;
     }
     
     /**
-     * Returns the user's id.
-     */
-    @Override
-    public String getUserId() {
-        return user == null ? null : "u-" + user.getDomainId();
-    }
-    
-    /**
-     * Returns the unique id for this end point.
+     * Gets the unique id for this end point.
      * 
      * @return The end point's unique id.
      */
-    @Override
-    public String getEndpointId() {
-        return endpointId;
+    protected String getEndpointId() {
+        return "e-" + UUID.randomUUID().toString();
     }
     
     /**
-     * Returns the unique id for this node.
+     * Returns the unique identifier for the user.
      * 
-     * @return The node id.
+     * @param user The user.
+     * @return Unique identifier for the user.
      */
-    @Override
-    public String getNodeId() {
-        return null;
+    protected String getUserId(IUser user) {
+        return "u-" + Long.toString(user.getDomainId());
     }
     
     /**
-     * Returns the user's full name.
+     * Returns the application name.
+     * 
+     * @return Application name.
      */
-    @Override
-    public String getUserName() {
-        return user == null ? "" : user.getFullName();
+    protected String getAppName() {
+        return FrameworkUtil.isInitialized() ? FrameworkUtil.getAppName() : null;
     }
     
     /**
@@ -170,7 +149,7 @@ public abstract class AbstractGlobalEventDispatcher implements IGlobalEventDispa
      * @param connected If true, send a CONNECT event. If false, send a DISCONNECT event.
      */
     protected void updateConnectionStatus(boolean connected) {
-        fireRemoteEvent(connected ? "CONNECT" : "DISCONNECT", new PublisherInfo(this), null);
+        fireRemoteEvent(connected ? "CONNECT" : "DISCONNECT", publisherInfo, null);
     }
     
     /**

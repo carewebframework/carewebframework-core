@@ -76,17 +76,19 @@ public final class JMSUtil {
      * Creates a message selector which considers JMSType and recipients properties.
      * 
      * @param eventName The event name (i.e. DESKTOP.LOCK).
-     * @param publisherInfo Info on the publisher.  If null, then no recipients properties are added.
+     * @param publisherInfo Info on the publisher. If null, then no recipients properties are added.
      * @return The message selector.
      */
     public static String getMessageSelector(final String eventName, final IPublisherInfo publisherInfo) {
         StringBuilder sb = new StringBuilder("(JMSType='" + eventName + "' OR JMSType LIKE '" + eventName
                 + ".%') AND (Recipients IS NULL");
-        if(publisherInfo != null){
-            addRecipientSelector(publisherInfo.getEndpointId(), sb);
-            addRecipientSelector(publisherInfo.getUserId(), sb);
-            addRecipientSelector(publisherInfo.getNodeId(), sb);
-        }   
+        
+        if (publisherInfo != null) {
+            for (String selector : publisherInfo.getAttributes().values()) {
+                addRecipientSelector(selector, sb);
+            }
+        }
+        
         sb.append(')');
         return sb.toString();
     }

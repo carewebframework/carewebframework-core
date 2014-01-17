@@ -22,8 +22,8 @@ public class PingRequest implements Serializable {
     
     public final String requestor;
     
-    public PingRequest(String appName, String requestor) {
+    public PingRequest(String appName, IPublisherInfo requestor) {
         this.appName = appName;
-        this.requestor = requestor;
+        this.requestor = requestor.getEndpointId();
     }
 }

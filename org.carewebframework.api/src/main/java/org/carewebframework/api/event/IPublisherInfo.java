@@ -9,6 +9,8 @@
  */
 package org.carewebframework.api.event;
 
+import java.util.Map;
+
 /**
  * Returns information about a global event publisher.
  */
@@ -47,6 +49,6 @@ public interface IPublisherInfo {
      * 
      * @return Node id.
      */
-    String getNodeId();
+    Map<String, String> getAttributes();
     
 }

@@ -150,6 +150,18 @@ public class GlobalEventDispatcher extends AbstractGlobalEventDispatcher impleme
         this.connection = null;
     }
     
+    @Override
+    protected void updateConnectionStatus(boolean connected) {
+        String clientId = null;
+        
+        try {
+            clientId = connection == null ? null : "n-" + connection.getClientID();
+        } catch (JMSException e) {}
+        
+        getPublisherInfo().getAttributes().put("clientId", clientId);
+        super.updateConnectionStatus(connected);
+    }
+    
     /**
      * Initialize after setting all requisite properties.
      */
@@ -252,7 +264,7 @@ public class GlobalEventDispatcher extends AbstractGlobalEventDispatcher impleme
             log.debug(String.format("Subscribing to Topic[%s]", eventName));
         }
         final String topicName = JMSUtil.getTopicName(eventName);
-        final String selector = JMSUtil.getMessageSelector(eventName, this);
+        final String selector = JMSUtil.getMessageSelector(eventName, getPublisherInfo());
         
         // This doesn't actually create a physical topic.  In ActiveMQ, a topic is created on-demand when someone with the
         // authority to create topics submits something to a topic.  By default, everyone has the authority to create topics.  See 
@@ -367,18 +379,6 @@ public class GlobalEventDispatcher extends AbstractGlobalEventDispatcher impleme
     @Override
     protected void endMessageProcessing() {
         
-    }
-    
-    /**
-     * Returns the node id based on the underlying connection's client id.
-     */
-    @Override
-    public String getNodeId() {
-        try {
-            return connection == null ? null : "n-" + connection.getClientID();
-        } catch (JMSException e) {
-            return null;
-        }
     }
     
     /**

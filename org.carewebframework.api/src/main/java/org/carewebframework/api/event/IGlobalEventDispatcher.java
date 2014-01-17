@@ -17,11 +17,11 @@ import java.io.Serializable;
 public interface IGlobalEventDispatcher {
     
     /**
-     * Returns the unique id of this endpoint.
+     * Returns information about this publisher.
      * 
-     * @return Endpoint id.
+     * @return Publisher information.
      */
-    String getEndpointId();
+    IPublisherInfo getPublisherInfo();
     
     /**
      * Request or revoke a global event subscription.

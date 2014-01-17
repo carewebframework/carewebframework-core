@@ -60,7 +60,7 @@ public class EventUtil {
         IGlobalEventDispatcher ged = ((ILocalEventDispatcher) eventManager).getGlobalEventDispatcher();
         
         if (ged != null) {
-            PingRequest pingRequest = new PingRequest(appName, ged.getEndpointId());
+            PingRequest pingRequest = new PingRequest(appName, ged.getPublisherInfo());
             eventManager.fireRemoteEvent(PingEventHandler.EVENT_PING_REQUEST, pingRequest, recipients);
         }
     }

@@ -10,8 +10,8 @@
 package org.carewebframework.api.event;
 
 import java.io.Serializable;
-
-import org.apache.commons.lang.StringUtils;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Class for holding information about a publisher.
@@ -20,35 +20,17 @@ public class PublisherInfo implements IPublisherInfo, Serializable {
     
     private static final long serialVersionUID = 1L;
     
-    private String userId;
-    
     private String userName;
     
-    private String appName;
-    
-    private String endpointId;
-    
-    private String nodeId;
+    private final Map<String, String> attributes = new HashMap<String, String>();
     
     public PublisherInfo() {
         
     };
     
     public PublisherInfo(IPublisherInfo publisherInfo) {
-        this.userId = publisherInfo.getUserId();
         this.userName = publisherInfo.getUserName();
-        this.appName = publisherInfo.getAppName();
-        this.endpointId = publisherInfo.getEndpointId();
-        this.nodeId = publisherInfo.getNodeId();
-    }
-    
-    @Override
-    public String getUserId() {
-        return userId;
-    }
-    
-    public void setUserId(String userId) {
-        this.userId = userId;
+        attributes.putAll(publisherInfo.getAttributes());
     }
     
     @Override
@@ -61,39 +43,39 @@ public class PublisherInfo implements IPublisherInfo, Serializable {
     }
     
     @Override
+    public String getUserId() {
+        return attributes.get("userId");
+    }
+    
+    public void setUserId(String userId) {
+        attributes.put("userId", userId);
+    }
+    
+    @Override
     public String getAppName() {
-        return appName;
+        return attributes.get("appName");
     }
     
     public void setAppName(String appName) {
-        this.appName = appName;
+        attributes.put("appName", appName);
     }
     
     @Override
     public String getEndpointId() {
-        return endpointId;
+        return attributes.get("ep");
     }
     
     public void setEndpointId(String endpointId) {
-        this.endpointId = endpointId;
+        attributes.put("ep", endpointId);
     }
     
     @Override
-    public String getNodeId() {
-        return nodeId;
-    }
-    
-    public void setNodeId(String nodeId) {
-        this.nodeId = nodeId;
+    public Map<String, String> getAttributes() {
+        return attributes;
     }
     
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof IPublisherInfo)) {
-            return false;
-        }
-        
-        IPublisherInfo pi = (IPublisherInfo) obj;
-        return StringUtils.equals(endpointId, pi.getEndpointId());
+        return obj instanceof IPublisherInfo && attributes.equals(((IPublisherInfo) obj).getAttributes());
     }
 }
