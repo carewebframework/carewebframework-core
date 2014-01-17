@@ -108,7 +108,7 @@ public abstract class AbstractGlobalEventDispatcher implements IGlobalEventDispa
      * @return The end point's unique id.
      */
     protected String getEndpointId() {
-        return "e-" + UUID.randomUUID().toString();
+        return UUID.randomUUID().toString();
     }
     
     /**
