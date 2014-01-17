@@ -18,13 +18,15 @@ public class PublisherInfo implements IPublisherInfo, Serializable {
     
     private static final long serialVersionUID = 1L;
     
-    private long userId;
+    private String userId;
     
     private String userName;
     
     private String appName;
     
     private String endpointId;
+    
+    private String nodeId;
     
     public PublisherInfo() {
         
@@ -35,14 +37,15 @@ public class PublisherInfo implements IPublisherInfo, Serializable {
         this.userName = publisherInfo.getUserName();
         this.appName = publisherInfo.getAppName();
         this.endpointId = publisherInfo.getEndpointId();
+        this.nodeId = publisherInfo.getNodeId();
     }
     
     @Override
-    public long getUserId() {
+    public String getUserId() {
         return userId;
     }
     
-    public void setUserId(long userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
     
@@ -71,6 +74,15 @@ public class PublisherInfo implements IPublisherInfo, Serializable {
     
     public void setEndpointId(String endpointId) {
         this.endpointId = endpointId;
+    }
+    
+    @Override
+    public String getNodeId() {
+        return nodeId;
+    }
+    
+    public void setNodeId(String nodeId) {
+        this.nodeId = nodeId;
     }
     
 }

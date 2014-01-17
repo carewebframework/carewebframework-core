@@ -29,11 +29,11 @@
 						<label
 							value="${labels.cwf.jmstesting.row3.label2}" />
 					</vlayout>
-					<textbox id="txtTopicRecipients" hflex="1" />
+					<listbox id="lstTopicRecipients" hflex="1" checkmark="true" multiple="true" rows="5" />
 				</row>
 				<row>
 					<label value="${labels.cwf.jmstesting.row4.label1}" />
-					<textbox id="txtRecipientId" hflex="1" readonly="true" />
+					<textbox id="txtEndpointId" hflex="1" readonly="true" />
 				</row>
 			</rows>
 		</grid>

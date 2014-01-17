@@ -11,14 +11,21 @@ package org.carewebframework.ui.jmstesting;
 
 import org.apache.commons.lang.StringUtils;
 
+import org.carewebframework.api.event.EventUtil;
+import org.carewebframework.api.event.IEventManager;
+import org.carewebframework.api.event.IGenericEvent;
+import org.carewebframework.api.event.ILocalEventDispatcher;
+import org.carewebframework.api.event.IPublisherInfo;
+import org.carewebframework.api.event.PingEventHandler;
 import org.carewebframework.common.StrUtil;
-import org.carewebframework.jms.GlobalEventDispatcher;
 import org.carewebframework.jms.MessagingSupport;
+import org.carewebframework.shell.plugins.PluginContainer;
 import org.carewebframework.shell.plugins.PluginController;
 
-import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zul.Label;
+import org.zkoss.zul.Listbox;
+import org.zkoss.zul.Listitem;
 import org.zkoss.zul.Textbox;
 
 /**
@@ -28,27 +35,43 @@ public class MainController extends PluginController {
     
     private static final long serialVersionUID = 1L;
     
-    //members
+    private static String[] EVENTS = { "CONNECT", "DISCONNECT", PingEventHandler.EVENT_PING_RESPONSE };
     
     private Label lblMessage;
     
-    //Messaging Support
     private Textbox txtMessageData;
     
-    private Textbox txtTopicRecipients;
+    private Listbox lstTopicRecipients;
     
     private Textbox txtDestinationName;
     
-    private Textbox txtRecipientId;
+    private Textbox txtEndpointId;
     
     private MessagingSupport messagingSupport;
     
-    private GlobalEventDispatcher globalEventDispatcher;
+    private IEventManager eventManager;
     
-    @Override
-    public void doAfterCompose(Component comp) throws Exception {
-        super.doAfterCompose(comp);
-        txtRecipientId.setValue(globalEventDispatcher.getEndpointId());
+    private final IGenericEvent<IPublisherInfo> eventListener = new IGenericEvent<IPublisherInfo>() {
+        
+        @Override
+        public void eventCallback(String eventName, IPublisherInfo publisherInfo) {
+            if ("DISCONNECT".equals(eventName)) {
+                
+            } else {
+                
+            }
+        }
+        
+    };
+    
+    private void subscribe(boolean doSubscribe) {
+        for (String eventName : EVENTS) {
+            if (doSubscribe) {
+                eventManager.subscribe(eventName, eventListener);
+            } else {
+                eventManager.unsubscribe(eventName, eventListener);
+            }
+        }
     }
     
     public void onClick$btnProduceLocalMessage(final Event event) {
@@ -62,9 +85,23 @@ public class MainController extends PluginController {
     public void onClick$btnProduceTopicMessage(final Event event) {
         final String destName = StringUtils.trimToNull(this.txtDestinationName.getValue());
         final String messageData = StringUtils.trimToNull(this.txtMessageData.getValue());
-        final String recipients = StringUtils.trimToNull(this.txtTopicRecipients.getValue());
+        final String recipients = StringUtils.trimToNull(getSelectedRecipients());
         this.messagingSupport.produceTopicMessage(destName, messageData, recipients);
         showMessage("@cwf.jmstesting.msg.topic.complete");
+    }
+    
+    private String getSelectedRecipients() {
+        StringBuilder sb = new StringBuilder();
+        
+        for (Listitem item : lstTopicRecipients.getSelectedItems()) {
+            if (sb.length() > 0) {
+                sb.append(',');
+            }
+            
+            sb.append(item.getValue());
+        }
+        
+        return sb.toString();
     }
     
     public void onClick$btnProduceQueueMessage(final Event event) {
@@ -97,10 +134,24 @@ public class MainController extends PluginController {
     }
     
     /**
-     * @param globalEventDispatcher The global event dispatcher.
+     * @param eventManager The event manager.
      */
-    public void setGlobalEventDispatcher(final GlobalEventDispatcher globalEventDispatcher) {
-        this.globalEventDispatcher = globalEventDispatcher;
+    public void setEventManager(final IEventManager eventManager) {
+        this.eventManager = eventManager;
+    }
+    
+    @Override
+    public void onLoad(PluginContainer container) {
+        super.onLoad(container);
+        txtEndpointId.setValue(((ILocalEventDispatcher) eventManager).getGlobalEventDispatcher().getEndpointId());
+        subscribe(true);
+    }
+    
+    @Override
+    public void onUnload() {
+        subscribe(false);
+        super.onUnload();
+        EventUtil.ping(null, null);
     }
     
 }

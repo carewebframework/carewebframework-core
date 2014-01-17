@@ -17,6 +17,7 @@ import javax.jms.Session;
 
 import org.apache.commons.lang.StringUtils;
 
+import org.carewebframework.api.event.IPublisherInfo;
 import org.carewebframework.api.spring.SpringUtil;
 
 import org.springframework.jms.core.JmsTemplate;
@@ -75,12 +76,29 @@ public final class JMSUtil {
      * Creates a message selector which considers JMSType and recipients properties.
      * 
      * @param eventName The event name (i.e. DESKTOP.LOCK).
-     * @param recipientId The recipient id of the endpoint.
+     * @param publisherInfo Info on the publisher.
      * @return The message selector.
      */
-    public static String getMessageSelector(final String eventName, final String recipientId) {
-        return "(JMSType='" + eventName + "' OR JMSType LIKE '" + eventName + ".%') AND "
-                + "(Recipients IS NULL OR Recipients LIKE '%," + recipientId + ",%')";
+    public static String getMessageSelector(final String eventName, final IPublisherInfo publisherInfo) {
+        StringBuilder sb = new StringBuilder("(JMSType='" + eventName + "' OR JMSType LIKE '" + eventName
+                + ".%') AND (Recipients IS NULL");
+        addRecipientSelector(publisherInfo.getEndpointId(), sb);
+        addRecipientSelector(publisherInfo.getUserId(), sb);
+        addRecipientSelector(publisherInfo.getNodeId(), sb);
+        sb.append(')');
+        return sb.toString();
+    }
+    
+    /**
+     * Add a recipient selector for the given value.
+     * 
+     * @param value Recipient value.
+     * @param sb String builder to receive value.
+     */
+    private static void addRecipientSelector(final String value, final StringBuilder sb) {
+        if (value != null) {
+            sb.append(" OR Recipients LIKE '%,").append(value).append(",%'");
+        }
     }
     
     /**

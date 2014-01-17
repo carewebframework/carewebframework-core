@@ -32,7 +32,7 @@ public abstract class AbstractGlobalEventDispatcher implements IGlobalEventDispa
     
     private String appName;
     
-    private final String endpointId = UUID.randomUUID().toString();
+    private final String endpointId = "e-" + UUID.randomUUID().toString();
     
     /**
      * Create the global event dispatcher.
@@ -116,9 +116,9 @@ public abstract class AbstractGlobalEventDispatcher implements IGlobalEventDispa
      * Returns the user's id.
      */
     @Override
-    public long getUserId() {
+    public String getUserId() {
         IUser user = getUser();
-        return user == null ? 0 : user.getDomainId();
+        return user == null ? null : "u-" + user.getDomainId();
     }
     
     /**
@@ -129,6 +129,16 @@ public abstract class AbstractGlobalEventDispatcher implements IGlobalEventDispa
     @Override
     public String getEndpointId() {
         return endpointId;
+    }
+    
+    /**
+     * Returns the unique id for this node.
+     * 
+     * @return The node id.
+     */
+    @Override
+    public String getNodeId() {
+        return null;
     }
     
     /**

@@ -19,7 +19,7 @@ public interface IPublisherInfo {
      * 
      * @return User's domain id.
      */
-    long getUserId();
+    String getUserId();
     
     /**
      * Full name of the user.
@@ -41,5 +41,12 @@ public interface IPublisherInfo {
      * @return Endpoint id.
      */
     String getEndpointId();
+    
+    /**
+     * Unique id of the node in a multi-node messaging implementation.
+     * 
+     * @return Node id.
+     */
+    String getNodeId();
     
 }
