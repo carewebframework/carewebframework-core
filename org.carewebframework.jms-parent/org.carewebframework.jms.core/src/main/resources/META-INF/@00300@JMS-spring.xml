@@ -32,7 +32,7 @@
 			<!-- Caching MessageConsumers will leave subscription open until Session 
 				is removed from pool. -->
 			<property name="cacheConsumers" value="false" />
-			<property name="clientId" value="${org.carewebframework.jms.factory.client.id:}" />
+			<property name="clientId" value="${org.carewebframework.jms.connection.factory.client.id}" />
 		</bean>
 
 		<bean id="jmsMessagingSupport" class="org.carewebframework.jms.MessagingSupport">
