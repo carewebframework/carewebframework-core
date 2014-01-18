@@ -37,7 +37,7 @@ import org.codehaus.jackson.type.TypeReference;
  */
 public class JSONUtil {
     
-    private static ObjectMapper mapper = new ObjectMapper();
+    public static final ObjectMapper mapper = new ObjectMapper();
     
     /**
      * Identifies properties that require type metadata (via "@class" property).
@@ -109,7 +109,7 @@ public class JSONUtil {
         typer = typer.init(JsonTypeInfo.Id.CLASS, new CWTypedIdResolver());
         typer = typer.inclusion(JsonTypeInfo.As.PROPERTY);
         typer = typer.typeProperty("@class");
-        mapper = mapper.setDefaultTyping(typer);
+        mapper.setDefaultTyping(typer);
     }
     
     /**
