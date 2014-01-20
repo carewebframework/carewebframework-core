@@ -13,6 +13,10 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.codehaus.jackson.annotate.JsonCreator;
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonProperty;
+
 /**
  * Class for holding information about a publisher.
  */
@@ -26,11 +30,17 @@ public class PublisherInfo implements IPublisherInfo, Serializable {
     
     public PublisherInfo() {
         
-    };
+    }
+    
+    @JsonCreator
+    public PublisherInfo(@JsonProperty("userName") String userName,
+        @JsonProperty("attributes") Map<String, String> attributes) {
+        this.userName = userName;
+        this.attributes.putAll(attributes);
+    }
     
     public PublisherInfo(IPublisherInfo publisherInfo) {
-        this.userName = publisherInfo.getUserName();
-        attributes.putAll(publisherInfo.getAttributes());
+        this(publisherInfo.getUserName(), publisherInfo.getAttributes());
     }
     
     @Override
@@ -47,6 +57,7 @@ public class PublisherInfo implements IPublisherInfo, Serializable {
         return attributes.get("userId");
     }
     
+    @JsonIgnore
     public void setUserId(String userId) {
         put("userId", "u-", userId);
     }
@@ -56,6 +67,7 @@ public class PublisherInfo implements IPublisherInfo, Serializable {
         return attributes.get("appName");
     }
     
+    @JsonIgnore
     public void setAppName(String appName) {
         put("appName", "a-", appName);
     }
@@ -65,6 +77,7 @@ public class PublisherInfo implements IPublisherInfo, Serializable {
         return attributes.get("nodeId");
     }
     
+    @JsonIgnore
     public void setNodeId(String nodeId) {
         put("nodeId", "n-", nodeId);
     }
@@ -74,6 +87,7 @@ public class PublisherInfo implements IPublisherInfo, Serializable {
         return attributes.get("ep");
     }
     
+    @JsonIgnore
     public void setEndpointId(String endpointId) {
         put("ep", "", endpointId);
     }

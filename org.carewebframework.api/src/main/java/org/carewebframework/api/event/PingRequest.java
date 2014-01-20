@@ -11,6 +11,9 @@ package org.carewebframework.api.event;
 
 import java.io.Serializable;
 
+import org.codehaus.jackson.annotate.JsonCreator;
+import org.codehaus.jackson.annotate.JsonProperty;
+
 /**
  * Represents a ping request.
  */
@@ -22,8 +25,9 @@ public class PingRequest implements Serializable {
     
     public final String requestor;
     
-    public PingRequest(String appName, IPublisherInfo requestor) {
+    @JsonCreator
+    public PingRequest(@JsonProperty("appName") String appName, @JsonProperty("requestor") String requestor) {
         this.appName = appName;
-        this.requestor = requestor.getEndpointId();
+        this.requestor = requestor;
     }
 }
