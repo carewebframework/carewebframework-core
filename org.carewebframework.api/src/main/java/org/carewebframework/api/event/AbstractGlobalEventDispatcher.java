@@ -93,11 +93,12 @@ public abstract class AbstractGlobalEventDispatcher implements IGlobalEventDispa
      * 
      * @param eventName Name of the event.
      * @param eventData Data object associated with the event.
-     * @param endpoints List of endpoints for the event (null or empty string means all
-     *            subscribers).
+     * @param recipients List of recipients for the event (null or empty string means all
+     *            subscribers). A recipient may be an endpoint, a user, an application, a node, or a
+     *            custom selector.
      */
     @Override
-    public abstract void fireRemoteEvent(String eventName, Serializable eventData, String endpoints);
+    public abstract void fireRemoteEvent(String eventName, Serializable eventData, String recipients);
     
     /**
      * Returns information about this publisher.
