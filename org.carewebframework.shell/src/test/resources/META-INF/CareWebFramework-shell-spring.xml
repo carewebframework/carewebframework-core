@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-	xmlns:cwp="http://www.carewebframework.org/schema/plugin"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:cwp="http://www.carewebframework.org/schema/plugin"
 	xsi:schemaLocation="
 		http://www.springframework.org/schema/beans 
 		http://www.springframework.org/schema/beans/spring-beans.xsd
@@ -22,6 +21,10 @@
 				<cwp:property id="prop3" name="Test Property #3" type="boolean"
 					description="Test Boolean property" getter="isProp3" />
 			</cwp:serialization>
+			<cwp:resource>
+				<cwp:button-resource id="btnTest" caption="Test Button" />
+				<cwp:menu-resource id="mnuTest" path="Test Menu" />
+			</cwp:resource>
 		</cwp:plugin>
 
 	</beans>

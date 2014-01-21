@@ -199,6 +199,9 @@ public abstract class PluginResource {
         // The url of the icon to appear on the button.
         private String icon;
         
+        // Optional component id.
+        private String id;
+        
         /**
          * Returns the value of the button's caption text.
          * 
@@ -273,6 +276,24 @@ public abstract class PluginResource {
         }
         
         /**
+         * Returns the id to be assigned to the newly created component.
+         * 
+         * @return Component id (may be null).
+         */
+        public String getId() {
+            return id;
+        }
+        
+        /**
+         * Sets the id to be assigned to the newly created component.
+         * 
+         * @param id Component id (may be null).
+         */
+        public void setId(String id) {
+            this.id = id;
+        }
+        
+        /**
          * Registers the button resource with the container.
          */
         @Override
@@ -328,6 +349,9 @@ public abstract class PluginResource {
         // The action to be invoked when the menu item is clicked.
         private String action;
         
+        // Optional component id.
+        private String id;
+        
         /**
          * Returns the path that determines where the associated menu item will appear under the
          * common menu.
@@ -368,6 +392,24 @@ public abstract class PluginResource {
          */
         public void setAction(String action) {
             this.action = action;
+        }
+        
+        /**
+         * Returns the id to be assigned to the newly created component.
+         * 
+         * @return Component id (may be null).
+         */
+        public String getId() {
+            return id;
+        }
+        
+        /**
+         * Sets the id to be assigned to the newly created component.
+         * 
+         * @param id Component id (may be null).
+         */
+        public void setId(String id) {
+            this.id = id;
         }
         
         /**

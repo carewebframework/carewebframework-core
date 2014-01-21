@@ -18,7 +18,8 @@
                                     <xsd:element name="button-resource">
                                         <xsd:complexType>
                                             <xsd:attribute name="caption" use="required" />
-                                            <xsd:attribute name="action" use="required" />
+                                            <xsd:attribute name="id" use="optional" />
+                                            <xsd:attribute name="action" use="optional" />
                                             <xsd:attribute name="icon" use="optional" />
                                             <xsd:attribute name="tooltip" use="optional" />
                                         </xsd:complexType>
@@ -34,7 +35,8 @@
                                     <xsd:element name="menu-resource">
                                         <xsd:complexType>
                                             <xsd:attribute name="path" use="required" />
-                                            <xsd:attribute name="action" use="required" />
+                                            <xsd:attribute name="id" use="optional" />
+                                            <xsd:attribute name="action" use="optional" />
                                         </xsd:complexType>
                                     </xsd:element>
                                     <xsd:element name="property-resource">

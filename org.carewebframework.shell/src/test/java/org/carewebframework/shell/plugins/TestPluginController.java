@@ -9,9 +9,10 @@
  */
 package org.carewebframework.shell.plugins;
 
-import org.zkoss.zul.Window;
+import org.zkoss.zul.Button;
+import org.zkoss.zul.Menu;
 
-public class TestPlugin1 extends Window implements IPluginEvent {
+public class TestPluginController extends PluginController {
     
     private static final long serialVersionUID = 1L;
     
@@ -29,24 +30,32 @@ public class TestPlugin1 extends Window implements IPluginEvent {
     
     private boolean prop3;
     
+    public Button btnTest;
+    
+    public Menu mnuTest;
+    
     @Override
     public void onActivate() {
+        super.onActivate();
         activateCount++;
     }
     
     @Override
     public void onInactivate() {
+        super.onInactivate();
         inactivateCount++;
     }
     
     @Override
     public void onLoad(PluginContainer container) {
+        super.onLoad(container);
         container.registerProperties(this, "prop1", "prop2", "prop3");
         loadCount++;
     }
     
     @Override
     public void onUnload() {
+        super.onUnload();
         unloadCount++;
     }
     

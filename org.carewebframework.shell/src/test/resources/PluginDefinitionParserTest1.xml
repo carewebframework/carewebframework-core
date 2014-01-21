@@ -2,9 +2,9 @@
 
 <plugin id='plugin-test' name='Test1' url='http://docs.zkoss.org/wiki'>
 	<resource>
-		<button-resource caption='Test Button'
+		<button-resource id="btnTest" caption='Test Button'
 			action='zscript:System.out.println(\"hello\");' />
-		<button-resource caption='Test Button2'
+		<button-resource id="btnTest2" caption='Test Button2'
 			action='http://www.zkoss.org' />
 		<help-resource module='testHelpModule' />
 		<property-resource group='testPropertyGroup' />

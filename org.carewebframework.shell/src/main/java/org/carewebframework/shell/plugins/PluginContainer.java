@@ -439,6 +439,25 @@ public class PluginContainer extends Idspace {
     }
     
     /**
+     * Returns a toolbar component with the specified id.
+     * 
+     * @param id Id of toolbar component.
+     * @return The requested toolbar component, or null if not found.
+     */
+    public Component getToolbarComponent(String id) {
+        return tbarContainer == null ? null : tbarContainer.getFellowIfAny(id);
+    }
+    
+    /**
+     * Returns the toolbar container, if any.
+     * 
+     * @return Toolbar container, or null if one has not been created.
+     */
+    protected ToolbarContainer getToolbarContainer() {
+        return tbarContainer;
+    }
+    
+    /**
      * Register a component with the container. The container will control the visibility of the
      * component according to when it is active/inactive.
      * 
@@ -813,6 +832,7 @@ public class PluginContainer extends Idspace {
      */
     public void processResource(ButtonResource resource) {
         Button button = new Button(resource.getCaption());
+        button.setId(resource.getId());
         button.setTooltiptext(resource.getTooltip());
         button.setImage(resource.getIcon());
         ActionListener.addAction(button, resource.getAction());
@@ -826,6 +846,7 @@ public class PluginContainer extends Idspace {
      */
     public void processResource(MenuResource resource) {
         Menu menu = shell.addMenu(resource.getPath(), resource.getAction());
+        menu.setId(resource.getId());
         registerComponent(menu);
     }
     

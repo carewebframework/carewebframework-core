@@ -17,8 +17,9 @@ import static org.junit.Assert.assertTrue;
 import org.carewebframework.shell.CareWebShell;
 import org.carewebframework.shell.plugins.PluginContainer;
 import org.carewebframework.shell.plugins.PluginDefinition;
-import org.carewebframework.shell.plugins.TestPlugin1;
+import org.carewebframework.shell.plugins.TestPluginController;
 import org.carewebframework.shell.property.PropertyInfo;
+import org.carewebframework.ui.FrameworkController;
 import org.carewebframework.ui.test.CommonTest;
 
 import org.zkoss.util.resource.Labels;
@@ -62,19 +63,22 @@ public class LayoutParserTest extends CommonTest {
         assertTrue(element.hasAncestor(root));
         PluginContainer container1 = shell.getLoadedPlugin("testplugin1");
         assertNotNull(container1);
-        TestPlugin1 plugin1 = (TestPlugin1) container1.getFirstChild();
-        assertNotNull(plugin1);
-        testPlugin(plugin1, 1, 1, 0, 0);
+        TestPluginController controller = (TestPluginController) FrameworkController.getController(container1
+                .getFirstChild());
+        assertNotNull(controller);
+        assertEquals(container1, controller.getContainer());
+        testPlugin(controller, 1, 1, 0, 0);
         root.activate(false);
-        testPlugin(plugin1, 1, 1, 1, 0);
+        testPlugin(controller, 1, 1, 1, 0);
         root.activate(true);
-        testPlugin(plugin1, 1, 2, 1, 0);
+        testPlugin(controller, 1, 2, 1, 0);
         testProperty(container1, "prop1", "value1");
         testProperty(container1, "prop2", 123);
         testProperty(container1, "prop3", true);
         root.removeChildren();
-        testPlugin(plugin1, 1, 2, 1, 1);
-        assertEquals(container1, PluginContainer.getContainer(plugin1));
+        testPlugin(controller, 1, 2, 1, 1);
+        assertNotNull(controller.btnTest);
+        assertNotNull(controller.mnuTest);
     }
     
     private void testProperty(PluginContainer container, String propertyName, Object expectedValue) throws Exception {
@@ -92,12 +96,13 @@ public class LayoutParserTest extends CommonTest {
         assertEquals(expectedValue, container.getPropertyValue(propInfo));
     }
     
-    private void testPlugin(TestPlugin1 plugin1, int loadCount, int activateCount, int inactivateCount, int unloadCount) {
+    private void testPlugin(TestPluginController controller, int loadCount, int activateCount, int inactivateCount,
+                            int unloadCount) {
         mockEnvironment.flushEvents();
-        assertEquals(loadCount, plugin1.getLoadCount());
-        assertEquals(activateCount, plugin1.getActivateCount());
-        assertEquals(inactivateCount, plugin1.getInactivateCount());
-        assertEquals(unloadCount, plugin1.getUnloadCount());
+        assertEquals(loadCount, controller.getLoadCount());
+        assertEquals(activateCount, controller.getActivateCount());
+        assertEquals(inactivateCount, controller.getInactivateCount());
+        assertEquals(unloadCount, controller.getUnloadCount());
     }
     
     private void testNode(int dir, String name) {
