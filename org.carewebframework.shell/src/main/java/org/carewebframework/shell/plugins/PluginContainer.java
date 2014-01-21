@@ -467,7 +467,6 @@ public class PluginContainer extends Idspace {
         if (!StringUtils.isEmpty(id) && !hasAttribute(id)) {
             setAttribute(id, component);
         }
-        
     }
     
     /**
