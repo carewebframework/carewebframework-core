@@ -39,6 +39,8 @@ import org.carewebframework.ui.command.CommandEvent;
 import org.carewebframework.ui.command.CommandUtil;
 import org.carewebframework.ui.zk.ZKUtil;
 
+import org.springframework.util.StringUtils;
+
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.event.Events;
@@ -439,25 +441,6 @@ public class PluginContainer extends Idspace {
     }
     
     /**
-     * Returns a toolbar component with the specified id.
-     * 
-     * @param id Id of toolbar component.
-     * @return The requested toolbar component, or null if not found.
-     */
-    public Component getToolbarComponent(String id) {
-        return tbarContainer == null ? null : tbarContainer.getFellowIfAny(id);
-    }
-    
-    /**
-     * Returns the toolbar container, if any.
-     * 
-     * @return Toolbar container, or null if one has not been created.
-     */
-    protected ToolbarContainer getToolbarContainer() {
-        return tbarContainer;
-    }
-    
-    /**
      * Register a component with the container. The container will control the visibility of the
      * component according to when it is active/inactive.
      * 
@@ -472,6 +455,19 @@ public class PluginContainer extends Idspace {
         component.setAttribute(Constants.ATTR_CONTAINER, this);
         component.setAttribute(Constants.ATTR_VISIBLE, component.isVisible());
         component.setVisible(isVisible());
+    }
+    
+    /**
+     * Allows auto-wire to work even if component is not a child of the container.
+     * 
+     * @param id Component id.
+     * @param component Component to be registered.
+     */
+    private void registerId(String id, Component component) {
+        if (!StringUtils.isEmpty(id) && !hasAttribute(id)) {
+            setAttribute(id, component);
+        }
+        
     }
     
     /**
@@ -837,6 +833,7 @@ public class PluginContainer extends Idspace {
         button.setImage(resource.getIcon());
         ActionListener.addAction(button, resource.getAction());
         addToolbarComponent(button);
+        registerId(resource.getId(), button);
     }
     
     /**
@@ -846,8 +843,8 @@ public class PluginContainer extends Idspace {
      */
     public void processResource(MenuResource resource) {
         Menu menu = shell.addMenu(resource.getPath(), resource.getAction());
-        menu.setId(resource.getId());
         registerComponent(menu);
+        registerId(resource.getId(), menu);
     }
     
     /**

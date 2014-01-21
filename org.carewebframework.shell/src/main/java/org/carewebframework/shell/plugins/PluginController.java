@@ -11,7 +11,6 @@ package org.carewebframework.shell.plugins;
 
 import org.carewebframework.ui.FrameworkController;
 import org.carewebframework.ui.thread.ZKThread;
-import org.carewebframework.ui.zk.ZKUtil;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.util.Composer;
@@ -28,15 +27,13 @@ public class PluginController extends FrameworkController implements IPluginEven
     
     private PluginContainer container;
     
+    /**
+     * Wire controller from toolbar components first, then from container.
+     */
     @Override
     public void doAfterCompose(Component comp) throws Exception {
         super.doAfterCompose(comp);
         container = PluginContainer.getContainer(comp);
-        Component tbarContainer = container == null ? null : container.getToolbarContainer();
-        
-        if (tbarContainer != null) {
-            ZKUtil.wireController(tbarContainer, this);
-        }
     }
     
     /**

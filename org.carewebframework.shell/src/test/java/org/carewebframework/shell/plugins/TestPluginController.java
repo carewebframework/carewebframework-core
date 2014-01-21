@@ -24,6 +24,10 @@ public class TestPluginController extends PluginController {
     
     private int unloadCount;
     
+    private int clickButtonCount;
+    
+    private int clickMenuCount;
+    
     private String prop1;
     
     private int prop2;
@@ -59,6 +63,14 @@ public class TestPluginController extends PluginController {
         unloadCount++;
     }
     
+    public void onClick$btnTest() {
+        clickButtonCount++;
+    }
+    
+    public void onClick$mnuTest() {
+        clickMenuCount++;
+    }
+    
     public int getActivateCount() {
         return activateCount;
     }
@@ -73,6 +85,14 @@ public class TestPluginController extends PluginController {
     
     public int getUnloadCount() {
         return unloadCount;
+    }
+    
+    public int getClickButtonCount() {
+        return clickButtonCount;
+    }
+    
+    public int getClickMenuCount() {
+        return clickMenuCount;
     }
     
     public String getProp1() {
@@ -98,5 +118,4 @@ public class TestPluginController extends PluginController {
     public void setProp3(boolean prop3) {
         this.prop3 = prop3;
     }
-    
 }

@@ -23,6 +23,7 @@ import org.carewebframework.ui.FrameworkController;
 import org.carewebframework.ui.test.CommonTest;
 
 import org.zkoss.util.resource.Labels;
+import org.zkoss.zk.ui.event.Events;
 
 import org.junit.Test;
 
@@ -77,8 +78,15 @@ public class LayoutParserTest extends CommonTest {
         testProperty(container1, "prop3", true);
         root.removeChildren();
         testPlugin(controller, 1, 2, 1, 1);
+        // Test auto-wire
         assertNotNull(controller.btnTest);
         assertNotNull(controller.mnuTest);
+        Events.sendEvent(Events.ON_CLICK, controller.btnTest, null);
+        Events.sendEvent(Events.ON_CLICK, controller.mnuTest, null);
+        assertEquals(1, controller.getClickButtonCount());
+        assertEquals(1, controller.getClickMenuCount());
+        assertEquals(controller.btnTest, container1.getAttribute("btnTest"));
+        assertEquals(controller.mnuTest, container1.getAttribute("mnuTest"));
     }
     
     private void testProperty(PluginContainer container, String propertyName, Object expectedValue) throws Exception {
