@@ -15,20 +15,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.codehaus.jackson.annotate.JsonTypeInfo;
-import org.codehaus.jackson.annotate.JsonTypeInfo.Id;
-import org.codehaus.jackson.map.BeanProperty;
-import org.codehaus.jackson.map.DeserializationConfig;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.SerializationConfig;
-import org.codehaus.jackson.map.TypeDeserializer;
-import org.codehaus.jackson.map.TypeSerializer;
-import org.codehaus.jackson.map.jsontype.NamedType;
-import org.codehaus.jackson.map.jsontype.TypeIdResolver;
-import org.codehaus.jackson.map.jsontype.TypeResolverBuilder;
-import org.codehaus.jackson.map.jsontype.impl.StdTypeResolverBuilder;
-import org.codehaus.jackson.type.JavaType;
-import org.codehaus.jackson.type.TypeReference;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationConfig;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationConfig;
+import com.fasterxml.jackson.databind.jsontype.NamedType;
+import com.fasterxml.jackson.databind.jsontype.TypeDeserializer;
+import com.fasterxml.jackson.databind.jsontype.TypeIdResolver;
+import com.fasterxml.jackson.databind.jsontype.TypeResolverBuilder;
+import com.fasterxml.jackson.databind.jsontype.TypeSerializer;
+import com.fasterxml.jackson.databind.jsontype.impl.StdTypeResolverBuilder;
 
 /**
  * A set of static methods supporting serialization and deserialization of objects using the JSON
@@ -46,22 +45,22 @@ public class JSONUtil {
         
         @Override
         public TypeDeserializer buildTypeDeserializer(DeserializationConfig config, JavaType baseType,
-                                                      Collection<NamedType> subtypes, BeanProperty property) {
-            if (property != null || baseType.isArrayType() || baseType.isCollectionLikeType()) {
+                                                      Collection<NamedType> subtypes) {
+            if (baseType.isArrayType() || baseType.isCollectionLikeType()) {
                 return null;
             }
             
-            return super.buildTypeDeserializer(config, baseType, subtypes, property);
+            return super.buildTypeDeserializer(config, baseType, subtypes);
         }
         
         @Override
         public TypeSerializer buildTypeSerializer(SerializationConfig config, JavaType baseType,
-                                                  Collection<NamedType> subtypes, BeanProperty property) {
-            if (property != null || baseType.isArrayType() || baseType.isCollectionLikeType()) {
+                                                  Collection<NamedType> subtypes) {
+            if (baseType.isArrayType() || baseType.isCollectionLikeType()) {
                 return null;
             }
             
-            return super.buildTypeSerializer(config, baseType, subtypes, property);
+            return super.buildTypeSerializer(config, baseType, subtypes);
         }
     }
     
@@ -82,6 +81,11 @@ public class JSONUtil {
         @Override
         public String idFromValueAndType(Object value, Class<?> suggestedType) {
             return findId(suggestedType);
+        }
+        
+        @Override
+        public String idFromBaseType() {
+            return null;
         }
         
         @Override
