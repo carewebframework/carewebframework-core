@@ -55,7 +55,10 @@ public class TestPerson {
     
     private Date dob;
     
+    private long id;
+    
     public TestPerson() {
+        id = 1234567890;
         name = new Name();
         name.first = "Test";
         name.last = "Person";
@@ -71,7 +74,7 @@ public class TestPerson {
         }
         
         TestPerson obj2 = (TestPerson) obj;
-        return name.equals(obj2.name) && dob.equals(obj2.dob);
+        return name.equals(obj2.name) && dob.equals(obj2.dob) && id == obj2.id;
     }
     
     public Name getName() {
@@ -88,6 +91,14 @@ public class TestPerson {
     
     public void setDob(Date dob) {
         this.dob = dob;
+    }
+    
+    public long getId() {
+        return id;
+    }
+    
+    public void setId(long id) {
+        this.id = id;
     }
     
 }

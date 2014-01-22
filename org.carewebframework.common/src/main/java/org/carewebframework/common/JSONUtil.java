@@ -28,6 +28,7 @@ import com.fasterxml.jackson.databind.jsontype.TypeIdResolver;
 import com.fasterxml.jackson.databind.jsontype.TypeResolverBuilder;
 import com.fasterxml.jackson.databind.jsontype.TypeSerializer;
 import com.fasterxml.jackson.databind.jsontype.impl.StdTypeResolverBuilder;
+import com.fasterxml.jackson.databind.util.ClassUtil;
 
 /**
  * A set of static methods supporting serialization and deserialization of objects using the JSON
@@ -46,7 +47,7 @@ public class JSONUtil {
         @Override
         public TypeDeserializer buildTypeDeserializer(DeserializationConfig config, JavaType baseType,
                                                       Collection<NamedType> subtypes) {
-            if (baseType.isArrayType() || baseType.isCollectionLikeType()) {
+            if (baseType.isPrimitive() || baseType.isArrayType() || baseType.isCollectionLikeType()) {
                 return null;
             }
             
@@ -56,7 +57,7 @@ public class JSONUtil {
         @Override
         public TypeSerializer buildTypeSerializer(SerializationConfig config, JavaType baseType,
                                                   Collection<NamedType> subtypes) {
-            if (baseType.isArrayType() || baseType.isCollectionLikeType()) {
+            if (baseType.isPrimitive() || baseType.isArrayType() || baseType.isCollectionLikeType()) {
                 return null;
             }
             
@@ -69,8 +70,11 @@ public class JSONUtil {
      */
     private static class CWTypedIdResolver implements TypeIdResolver {
         
+        private JavaType baseType;
+        
         @Override
         public void init(JavaType baseType) {
+            this.baseType = baseType;
         }
         
         @Override
@@ -85,7 +89,7 @@ public class JSONUtil {
         
         @Override
         public String idFromBaseType() {
-            return null;
+            return findId(baseType.getRawClass());
         }
         
         @Override
@@ -110,7 +114,7 @@ public class JSONUtil {
     
     static {
         TypeResolverBuilder<?> typer = new CWTypeResolverBuilder();
-        typer = typer.init(JsonTypeInfo.Id.CLASS, new CWTypedIdResolver());
+        typer = typer.init(JsonTypeInfo.Id.CUSTOM, new CWTypedIdResolver());
         typer = typer.inclusion(JsonTypeInfo.As.PROPERTY);
         typer = typer.typeProperty("@class");
         mapper.setDefaultTyping(typer);
@@ -165,7 +169,7 @@ public class JSONUtil {
      */
     private static Class<?> findClass(String id) throws ClassNotFoundException {
         Class<?> clazz = aliasToClass.get(id);
-        return clazz == null ? ClassLoader.getSystemClassLoader().loadClass(id) : clazz;
+        return clazz == null ? ClassUtil.findClass(id) : clazz;
     }
     
     /**
