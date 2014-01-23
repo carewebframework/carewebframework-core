@@ -136,6 +136,7 @@ public class CommonTest {
         assertTrue(obj.equals(obj2));
         List<TestPerson> list = new ArrayList<TestPerson>();
         list.add(obj);
+        list.add(obj);
         s = JSONUtil.serialize(list);
         print(s);
         List<TestPerson> list2 = JSONUtil.deserializeList(s, TestPerson.class);

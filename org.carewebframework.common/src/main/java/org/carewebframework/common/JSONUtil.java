@@ -9,15 +9,20 @@
  */
 package org.carewebframework.common;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.BeanProperty;
 import com.fasterxml.jackson.databind.DeserializationConfig;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,6 +32,8 @@ import com.fasterxml.jackson.databind.jsontype.TypeDeserializer;
 import com.fasterxml.jackson.databind.jsontype.TypeIdResolver;
 import com.fasterxml.jackson.databind.jsontype.TypeResolverBuilder;
 import com.fasterxml.jackson.databind.jsontype.TypeSerializer;
+import com.fasterxml.jackson.databind.jsontype.impl.AsPropertyTypeDeserializer;
+import com.fasterxml.jackson.databind.jsontype.impl.AsPropertyTypeSerializer;
 import com.fasterxml.jackson.databind.jsontype.impl.StdTypeResolverBuilder;
 import com.fasterxml.jackson.databind.util.ClassUtil;
 
@@ -47,21 +54,25 @@ public class JSONUtil {
         @Override
         public TypeDeserializer buildTypeDeserializer(DeserializationConfig config, JavaType baseType,
                                                       Collection<NamedType> subtypes) {
-            if (baseType.isPrimitive() || baseType.isArrayType() || baseType.isCollectionLikeType()) {
-                return null;
-            }
-            
-            return super.buildTypeDeserializer(config, baseType, subtypes);
+            return noTypeInfo(baseType) ? null : new AsPropertyTypeDeserializerEx(baseType, _customIdResolver,
+                    _typeProperty, _typeIdVisible, _defaultImpl);
         }
         
         @Override
         public TypeSerializer buildTypeSerializer(SerializationConfig config, JavaType baseType,
                                                   Collection<NamedType> subtypes) {
-            if (baseType.isPrimitive() || baseType.isArrayType() || baseType.isCollectionLikeType()) {
-                return null;
-            }
-            
-            return super.buildTypeSerializer(config, baseType, subtypes);
+            return noTypeInfo(baseType) ? null : new AsPropertyTypeSerializerEx(_customIdResolver, null, _typeProperty);
+        }
+        
+        /**
+         * Returns true if no type info should be written for this base type.
+         * 
+         * @param baseType Base type.
+         * @return True to suppress writing of type information.
+         */
+        private boolean noTypeInfo(JavaType baseType) {
+            return baseType.isPrimitive() || baseType.isArrayType() || baseType.isCollectionLikeType()
+                    || Date.class.isAssignableFrom(baseType.getRawClass());
         }
     }
     
@@ -104,6 +115,41 @@ public class JSONUtil {
         @Override
         public Id getMechanism() {
             return Id.CUSTOM;
+        }
+        
+    }
+    
+    /**
+     * Required to suppress writing of type information exception for top-level objects.
+     */
+    public final static class AsPropertyTypeSerializerEx extends AsPropertyTypeSerializer {
+        
+        public AsPropertyTypeSerializerEx(TypeIdResolver idRes, BeanProperty property, String propName) {
+            super(idRes, property, propName);
+        }
+        
+        @Override
+        public void writeTypePrefixForObject(Object value, JsonGenerator jgen) throws IOException, JsonProcessingException {
+            boolean needTypeId = jgen.getOutputContext().inRoot() || jgen.getOutputContext().inArray();
+            jgen.writeStartObject();
+            
+            if (needTypeId) {
+                jgen.writeStringField(_typePropertyName, idFromValue(value));
+            }
+        }
+        
+    }
+    
+    /**
+     * Required to permit resolution of non top-level objects lacking explicit type information.
+     */
+    public final static class AsPropertyTypeDeserializerEx extends AsPropertyTypeDeserializer {
+        
+        private static final long serialVersionUID = 1L;
+        
+        public AsPropertyTypeDeserializerEx(JavaType bt, TypeIdResolver idRes, String typePropertyName,
+            boolean typeIdVisible, Class<?> defaultImpl) {
+            super(bt, idRes, typePropertyName, typeIdVisible, bt.getRawClass());
         }
         
     }
