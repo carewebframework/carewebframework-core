@@ -54,8 +54,8 @@ public class JSONUtil {
         @Override
         public TypeDeserializer buildTypeDeserializer(DeserializationConfig config, JavaType baseType,
                                                       Collection<NamedType> subtypes) {
-            return noTypeInfo(baseType) ? null : new AsPropertyTypeDeserializerEx(baseType, _customIdResolver,
-                    _typeProperty, _typeIdVisible, _defaultImpl);
+            return noTypeInfo(baseType) ? null : new AsPropertyTypeDeserializer(baseType, _customIdResolver, _typeProperty,
+                    _typeIdVisible, baseType.getRawClass());
         }
         
         @Override
@@ -136,20 +136,6 @@ public class JSONUtil {
             if (needTypeId) {
                 jgen.writeStringField(_typePropertyName, idFromValue(value));
             }
-        }
-        
-    }
-    
-    /**
-     * Required to permit resolution of non top-level objects lacking explicit type information.
-     */
-    public final static class AsPropertyTypeDeserializerEx extends AsPropertyTypeDeserializer {
-        
-        private static final long serialVersionUID = 1L;
-        
-        public AsPropertyTypeDeserializerEx(JavaType bt, TypeIdResolver idRes, String typePropertyName,
-            boolean typeIdVisible, Class<?> defaultImpl) {
-            super(bt, idRes, typePropertyName, typeIdVisible, bt.getRawClass());
         }
         
     }
