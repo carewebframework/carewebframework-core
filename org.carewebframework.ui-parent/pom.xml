@@ -13,7 +13,6 @@
 	
 	<modules>
 		<module>org.carewebframework.ui.currentdatetime</module>
-		<module>org.carewebframework.ui.icons</module>
 		<module>org.carewebframework.ui.infopanel</module>
 		<module>org.carewebframework.ui.popupsupport</module>
 		<module>org.carewebframework.ui.statuspanel</module>

@@ -15,7 +15,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.carewebframework</groupId>
-			<artifactId>org.carewebframework.ui.icons</artifactId>
+			<artifactId>org.carewebframework.icons.famfamfam</artifactId>
 			<version>${org.carewebframework.version}</version>
 		</dependency>
 		<dependency>
