@@ -855,6 +855,13 @@
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-annotations</artifactId>
+				<version>${jackson.version}</version>
+				<type>jar</type>
+				<scope>compile</scope>
+			</dependency>
 			<!-- Servlet -->
 			<dependency>
 				<groupId>javax.servlet</groupId>
