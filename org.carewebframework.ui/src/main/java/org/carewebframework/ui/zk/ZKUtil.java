@@ -16,13 +16,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
 import org.apache.commons.lang.math.NumberUtils;
+import org.apache.commons.lang.reflect.FieldUtils;
 
 import org.carewebframework.ui.FrameworkWebSupport;
 
@@ -836,6 +839,33 @@ public class ZKUtil {
             if (!(controller instanceof Component)) {
                 Events.addEventListeners(component, controller);
             }
+        }
+    }
+    
+    /**
+     * Wires variables from a map into a controller. Useful to inject parameters passed in an
+     * argument map.
+     * 
+     * @param map The argument map.
+     * @param controller The controller to be wired.
+     */
+    public static void wireController(Map<?, ?> map, Object controller) {
+        if (map == null || map.isEmpty() || controller == null) {
+            return;
+        }
+        
+        for (Entry<?, ?> entry : map.entrySet()) {
+            String key = entry.getKey().toString();
+            Object value = entry.getValue();
+            
+            try {
+                PropertyUtils.setProperty(controller, key, value);
+            } catch (Exception e) {
+                try {
+                    FieldUtils.writeField(controller, key, value, true);
+                } catch (Exception e1) {}
+            }
+            
         }
     }
     

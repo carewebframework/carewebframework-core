@@ -15,7 +15,9 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.zkoss.zul.Div;
 
@@ -83,4 +85,37 @@ public class ZKUtilTest {
         assertNull(ZKUtil.getAttributeXulElement(cmpt, ATTR_NULL));
     }
     
+    public interface ArgumentMapTest {
+        
+        void doAssertions();
+        
+        void setTest2Variable(String value);
+    }
+    
+    @Test
+    public void wireArgumentMapTest() {
+        Map<Object, Object> map = new HashMap<Object, Object>();
+        map.put("test1Variable", 123);
+        map.put("test2Variable", "testing");
+        ArgumentMapTest controller = new ArgumentMapTest() {
+            
+            public int test1Variable;
+            
+            public String test2;
+            
+            @Override
+            public void setTest2Variable(String value) {
+                test2 = value;
+            }
+            
+            @Override
+            public void doAssertions() {
+                assertEquals(123, test1Variable);
+                assertEquals("testing", test2);
+            }
+        };
+        
+        ZKUtil.wireController(map, controller);
+        controller.doAssertions();
+    }
 }
