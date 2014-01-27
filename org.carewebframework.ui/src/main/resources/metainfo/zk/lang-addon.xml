@@ -15,7 +15,7 @@
 		src="~./org/carewebframework/ui/ext/jquery/ui/js/jquery-ui-1.10.4.custom.min.js"
 		merge="true" />
 	<javascript
-		src="~./org/carewebframework/ui/ext/jquery/uploadify/jquery.uploadify-3.2.min.js"
+		src="~./org/carewebframework/ui/ext/jquery/uploadify/jquery.uploadify-3.2.1.min.js"
 		merge="true" />
 	<javascript
 		src="~./org/carewebframework/ui/ext/jquery/jquery.base64-1.0.js"
