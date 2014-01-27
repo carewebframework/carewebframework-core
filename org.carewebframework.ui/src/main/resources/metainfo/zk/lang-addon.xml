@@ -3,7 +3,7 @@
 	<addon-name>cwf.ui</addon-name>
 	<language-name>xul/html</language-name>
 
-	<javascript-module name="cwf" version="2.2.11" />
+	<javascript-module name="cwf" version="2.2.12" />
 
 	<javascript src="~./org/carewebframework/ui/zk/common.js"
 		merge="true" />
@@ -12,7 +12,7 @@
 	<javascript src="~./org/carewebframework/ui/ext/swf/swfobject.js"
 		merge="true" />
 	<javascript
-		src="~./org/carewebframework/ui/ext/jquery/ui/js/jquery-ui-1.10.3.custom.min.js"
+		src="~./org/carewebframework/ui/ext/jquery/ui/js/jquery-ui-1.10.4.custom.min.js"
 		merge="true" />
 	<javascript
 		src="~./org/carewebframework/ui/ext/jquery/uploadify/jquery.uploadify-3.2.min.js"
@@ -27,7 +27,7 @@
 	<stylesheet href="~./org/carewebframework/ui/zk/common.css.dsp"
 		type="text/css" />
 	<stylesheet
-		href="~./org/carewebframework/ui/ext/jquery/ui/css/ui-lightness/jquery-ui-1.10.3.custom.min.css"
+		href="~./org/carewebframework/ui/ext/jquery/ui/css/ui-lightness/jquery-ui-1.10.4.custom.min.css"
 		type="text/css" />
 
 	<component>
