@@ -1,35 +1,37 @@
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 
 .cwf-messagewindow {
+	text-align: center;
+	display: none;
 	position: fixed; 
-	display: none; 
 	background: transparent;
-	width: 100%;
-	max-height: 100%;
 	z-index: 9999;
-	pointer-events: none;
+	top: 0;
+	right: 0;
+	left: 0;
+	height: 0;
 }
 
 .cwf-messagewindow-real {
-	position: absolute;
+	text-align: left;
+	display: inline-block;
 	background: lightyellow; 
 	border: solid gray 2px;
 	border-top: none;
 	border-radius: 0 0 5px 5px;
-	overflow: auto;
-	width: auto;
-	max-width: 70%;
-	min-width: 200px;
-	pointer-events: auto;
+	max-width: 75%;
 }
 
 .cwf-messagewindow-cave {
+	min-width: 200px;
 }
 
 .cwf-messagewindow-cap {
 	height: 15px;
 	width: 100%;
 	float: right;
+	padding-right: 0;
+	padding-left: 0;
 	opacity: .6;
 	filter: alpha(opacity=60);
 }
@@ -39,7 +41,7 @@
 	background-repeat: no-repeat;
 	cursor: pointer;
 	display: block;
-	width: 15px;
+	width: 14px;
 	height: 15px;
 	position: absolute;
 	right: 3px;

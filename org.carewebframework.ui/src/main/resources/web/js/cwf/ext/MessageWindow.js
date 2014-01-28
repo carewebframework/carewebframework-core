@@ -36,10 +36,7 @@ cwf.ext.MessageWindow = zk.$extends(zul.wgt.Div, {
 			msg.addClass(zcls + '-text').text(options.message);
 
 		cave.appendTo(real);
-		cwf.ext.MessageWindow._center(real);
-		cwf.ext.MessageWindow._slide(cmp, real.outerHeight(), function() {
-			cwf.ext.MessageWindow._center(real);
-		});
+		cwf.ext.MessageWindow._slide(cave, true);
 		var _this = this;
 		btn.bind('click', function() {
 			_this._close(cave);
@@ -70,12 +67,8 @@ cwf.ext.MessageWindow = zk.$extends(zul.wgt.Div, {
 		if (tmout)
 			clearTimeout(tmout);
 
-		if (animate)
-			cwf.ext.MessageWindow._slide(cave, 0, function() {
-				cwf.ext.MessageWindow._remove(cave);
-			});
-		else
-			cwf.ext.MessageWindow._remove(cave);
+		cwf.ext.MessageWindow._slide(cave, false, animate ? null : 1, function() {
+			cwf.ext.MessageWindow._remove(cave);});
 	},
 
 	bind_: function () {
@@ -91,11 +84,8 @@ cwf.ext.MessageWindow = zk.$extends(zul.wgt.Div, {
 	
 	getZclass : function() {
 		return this._zclass == null ? 'cwf-messagewindow' : this._zclass;
-	},
-	
-	onSize: function() {
-		cwf.ext.MessageWindow._center(jq(this.$n('real')));
 	}
+	
 }, {
 	_remove : function(cave) {
 		var real = cave.parent();
@@ -104,27 +94,15 @@ cwf.ext.MessageWindow = zk.$extends(zul.wgt.Div, {
 
 		if (real && real.children().length == 0)
 			cmp.hide();
-		else
-			cwf.ext.MessageWindow._center(real);
+	},
+
+	_slide : function(cave, down, duration, complete) {
+		if (!cave.jquery)
+			cave = jq(cave);
 		
-		cmp.height(real.outerHeight());
-	},
-
-	_center : function(real) {
-		var cmp = real.parent();
-		real.css('left', (cmp.width() - real.width()) / 2);
-		real.css('max-height', cmp.parent().height() - 40);
-	},
-
-	_slide : function(cmp, height, complete) {
-		if (!cmp.jquery)
-			cmp = jq(cmp);
-
-		cmp.animate({
-			duration : 'slow',
-			height : height
-		}, {
-			complete : complete
-		});
+		var start = down ? 0 : cave.outerHeight();
+		var end = down ? cave.outerHeight() : 0;
+		cave.outerHeight(start);
+		cave.animate({height: end}, duration || 'slow', complete);
 	}
 });

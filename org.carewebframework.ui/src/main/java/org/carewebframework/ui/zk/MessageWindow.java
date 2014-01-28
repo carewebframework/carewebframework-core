@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.util.HashMap;
 
 import org.carewebframework.api.event.EventManager;
+import org.carewebframework.api.event.IEventManager;
 import org.carewebframework.api.event.IGenericEvent;
 import org.carewebframework.common.StrUtil;
 
@@ -71,13 +72,30 @@ public class MessageWindow extends XulElement {
     @Override
     public void onPageAttached(Page newpage, Page oldpage) {
         super.onPageAttached(newpage, oldpage);
-        EventManager.getInstance().subscribe(EVENT, messageWindowListener);
+        subscribe(true);
     }
     
     @Override
     public void onPageDetached(Page page) {
         super.onPageDetached(page);
-        EventManager.getInstance().unsubscribe(EVENT, messageWindowListener);
+        subscribe(false);
+    }
+    
+    /**
+     * Subcribe to/unsubscribe from {@value #EVENT} events if event manager is available.
+     * 
+     * @param doSubscribe If true, subscribe. If false, unsubscribe.
+     */
+    private void subscribe(boolean doSubscribe) {
+        IEventManager eventManager = EventManager.getInstance();
+        
+        if (eventManager != null) {
+            if (doSubscribe) {
+                eventManager.subscribe(EVENT, messageWindowListener);
+            } else {
+                eventManager.unsubscribe(EVENT, messageWindowListener);
+            }
+        }
     }
     
     /**
