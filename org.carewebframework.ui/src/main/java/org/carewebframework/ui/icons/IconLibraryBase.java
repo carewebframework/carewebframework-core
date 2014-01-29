@@ -89,7 +89,7 @@ public class IconLibraryBase implements IIconLibrary, ApplicationContextAware {
             }
         }
         
-        return prefix + resourcePath + dims + "/" + getId() + "/" + iconName;
+        return prefix + resourcePath + getId() + "/" + dims + "/" + iconName;
     }
     
 }
