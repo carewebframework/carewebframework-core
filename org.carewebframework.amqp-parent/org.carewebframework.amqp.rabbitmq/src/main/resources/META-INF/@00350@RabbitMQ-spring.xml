@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:cwf="http://www.carewebframework.org/schema/spring"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.carewebframework.org/schema/spring
+        http://www.carewebframework.org/schema/spring/spring-extensions.xsd">
+
+	<beans profile="root">
+
+		<bean id="amqpExchange" class="org.springframework.amqp.core.TopicExchange">
+			<constructor-arg value="${org.carewebframework.amqp.exchange.id}" />
+		</bean>
+
+		<!-- AMQP ConnectionFactory to use. -->
+		<bean id="amqpConnectionFactory"
+			class="org.springframework.amqp.rabbit.connection.CachingConnectionFactory">
+			<property name="username"
+				value="${org.carewebframework.amqp.broker.username}" />
+			<property name="password"
+				value="${org.carewebframework.amqp.broker.password}" />
+			<property name="virtualHost"
+				value="${org.carewebframework.amqp.broker.virtualhost}" />
+			<property name="host" value="${org.carewebframework.amqp.broker.host}" />
+			<property name="port" value="${org.carewebframework.amqp.broker.port}" />
+			<property name="channelCacheSize"
+				value="${org.carewebframework.amqp.channel.cache.size}" />
+		</bean>
+
+		<bean id="amqpBroker" class="org.carewebframework.amqp.rabbitmq.Broker">
+			<constructor-arg ref="amqpConnectionFactory" />
+			<constructor-arg ref="amqpExchange" />
+		</bean>
+
+		<bean id="amqpMessagingSupport" class="org.carewebframework.amqp.rabbitmq.MessagingSupport">
+			<constructor-arg ref="amqpBroker" />
+		</bean>
+
+	</beans>
+
+	<beans profile="desktop">
+
+		<!-- globalEventDispatcher: Mediates communications between the local and 
+			the global event manager, in this case a AMQP messaging server. -->
+		<bean id="globalEventDispatcher" init-method="init"
+			destroy-method="destroy" cwf:override="always"
+			class="org.carewebframework.amqp.rabbitmq.GlobalEventDispatcher">
+			<property name="localEventDispatcher" ref="eventManager" />
+			<property name="broker" ref="amqpBroker" />
+		</bean>
+
+	</beans>
+
+</beans>
