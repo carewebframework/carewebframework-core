@@ -308,7 +308,7 @@ public class MenuUtil {
             boolean hasChildren = ZKUtil.firstVisibleChild(comp, false) != null;
             ((Menupopup) comp).setZclass(hasChildren ? null : "cwf-menupopup-empty");
         } else if (comp instanceof Menu) {
-            Component child = ZKUtil.firstVisibleChild(comp, false);
+            Menupopup child = ((Menu) comp).getMenupopup();
             boolean hasChildren = child != null && ZKUtil.firstVisibleChild(child, false) != null;
             ((Menu) comp).setZclass(hasChildren ? null : "z-menuitem");
         }
