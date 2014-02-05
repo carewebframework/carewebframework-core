@@ -25,7 +25,7 @@ import org.zkoss.zul.Label;
  */
 public abstract class AbstractRenderer {
     
-    private static final String STYLE_COMP_DEFAULT = "background: #C6E8FC";
+    private static final String STYLE_COMP_DEFAULT = "background:white";
     
     private static final String STYLE_CELL_DEFAULT = "border:none;background:transparent";
     
