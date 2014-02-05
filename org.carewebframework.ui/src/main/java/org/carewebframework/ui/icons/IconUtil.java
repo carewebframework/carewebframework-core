@@ -34,9 +34,14 @@ public class IconUtil {
         IconParams(String name, String defltDimensions, String defltLibrary) {
             String pcs[] = name.split("\\:", 3);
             int len = pcs.length;
-            this.name = pcs[--len];
-            this.dimensions = len > 0 ? pcs[--len] : defltDimensions;
-            this.library = len > 0 ? pcs[--len] : defltLibrary;
+            this.name = getElement(pcs, --len, null);
+            this.dimensions = getElement(pcs, --len, defltDimensions);
+            this.library = getElement(pcs, --len, defltLibrary);
+        }
+        
+        private String getElement(String[] pcs, int index, String deflt) {
+            String element = index >= 0 ? pcs[index] : "";
+            return element.isEmpty() ? deflt : element;
         }
     }
     
