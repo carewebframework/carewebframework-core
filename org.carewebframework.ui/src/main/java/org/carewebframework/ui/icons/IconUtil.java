@@ -16,20 +16,44 @@ import java.util.List;
  */
 public class IconUtil {
     
+    private static class IconParams {
+        
+        final String name;
+        
+        final String dimensions;
+        
+        final String library;
+        
+        /**
+         * Create icon parameters from name and defaults.
+         * 
+         * @param name Icon name. May be the name only, or library:dimensions:name.
+         * @param defltDimensions Default dimensions.
+         * @param defltLibrary Default library.
+         */
+        IconParams(String name, String defltDimensions, String defltLibrary) {
+            String pcs[] = name.split("\\:", 3);
+            int len = pcs.length;
+            this.name = pcs[--len];
+            this.dimensions = len > 0 ? pcs[--len] : defltDimensions;
+            this.library = len > 0 ? pcs[--len] : defltLibrary;
+        }
+    }
+    
     /**
      * <p>
      * Returns the path to the icon resource.
      * </p>
      * <p>
      * For example: getIconPath("help.png") returns
-     * ~./org/carewebframework/ui/icons/16x16/silk/help.png
+     * ~./org/carewebframework/ui/icons/silk/16x16/help.png
      * </p>
      * <p>
      * <i>Note: This method signature is exposed as an EL function</i>
      * </p>
      * 
      * @param iconName Name of the icon in question
-     * @return Path to icon resource (i.e. ~./org/carewebframework/ui/icons/16x16/silk/help.png)
+     * @return Path to icon resource (i.e. ~./org/carewebframework/ui/icons/silk/16x16/help.png)
      */
     public static String getIconPath(final String iconName) {
         return getIconPath(iconName, null, null);
@@ -59,8 +83,9 @@ public class IconUtil {
      * @return The icon path.
      */
     public static String getIconPath(final String iconName, final String dimensions, final String library) {
-        IIconLibrary lib = IconLibraryRegistry.getInstance().get(library);
-        return lib == null ? null : lib.getIconUrl(iconName, dimensions);
+        IconParams icon = new IconParams(iconName, dimensions, library);
+        IIconLibrary lib = IconLibraryRegistry.getInstance().get(icon.library);
+        return lib == null ? null : lib.getIconUrl(icon.name, icon.dimensions);
     }
     
     /**
