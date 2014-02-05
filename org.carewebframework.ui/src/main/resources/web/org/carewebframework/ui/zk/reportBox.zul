@@ -1,0 +1,21 @@
+<zk xmlns="http://www.zkoss.org/2005/zul"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:w="http://www.zkoss.org/2005/zk/client"
+	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+
+	<window title="${arg.title}" contentStyle="padding: 5px">
+		<div id="printRoot" vflex="1" style="overflow: auto">
+			<label id="lblText" multiline="true"
+				visible="${arg.text!=null}" value="${arg.text}"
+				style="font-family: monospace; white-space: pre" />
+			<html vflex="1" hflex="1" visible="${arg.html!=null}"
+				content="${arg.html}" />
+		</div>
+		<toolbar align="end">
+			<button id="btnClose" forward="onClick=onClose" label="${labels.cwf.btn.close.label}"
+				width="60px" />
+			<button id="btnPrint" visible="${arg.allowPrint}"
+				label="${labels.cwf.btn.print.label}" width="60px" w:onClick="cwf.print(this.$f('printRoot'))" />
+		</toolbar>
+	</window>
+</zk>
