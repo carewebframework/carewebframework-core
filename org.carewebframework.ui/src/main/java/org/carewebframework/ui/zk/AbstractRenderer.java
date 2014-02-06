@@ -25,10 +25,6 @@ import org.zkoss.zul.Label;
  */
 public abstract class AbstractRenderer {
     
-    private static final String STYLE_COMP_DEFAULT = "background:white";
-    
-    private static final String STYLE_CELL_DEFAULT = "border:none;background:transparent";
-    
     protected final String compStyle;
     
     protected final String cellStyle;
@@ -45,8 +41,8 @@ public abstract class AbstractRenderer {
      * @param cellStyle Style to be applied to each cell.
      */
     public AbstractRenderer(String compStyle, String cellStyle) {
-        this.compStyle = compStyle == null ? STYLE_COMP_DEFAULT : compStyle;
-        this.cellStyle = cellStyle == null ? STYLE_CELL_DEFAULT : cellStyle;
+        this.compStyle = compStyle;
+        this.cellStyle = cellStyle;
     }
     
     /**
