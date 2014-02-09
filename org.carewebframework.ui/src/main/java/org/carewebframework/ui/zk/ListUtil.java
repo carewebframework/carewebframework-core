@@ -48,6 +48,19 @@ public class ListUtil {
     }
     
     /**
+     * Finds and selects an item with a matching label. Searches are case-insensitive.
+     * 
+     * @param cbo Combo box to search
+     * @param label Label value being sought.
+     * @return The index of the matching item, or -1 if no match found.
+     */
+    public static int selectComboboxItem(Combobox cbo, String label) {
+        int i = findComboboxItem(cbo, label);
+        cbo.setSelectedIndex(i);
+        return i;
+    }
+    
+    /**
      * Finds an item whose associated value matches the specified object.
      * 
      * @param cbo Combo box to search
@@ -56,6 +69,19 @@ public class ListUtil {
      */
     public static int findComboboxData(Combobox cbo, Object data) {
         return findComboboxItem(cbo, data, false);
+    }
+    
+    /**
+     * Finds and selects an item whose associated value matches the specified object.
+     * 
+     * @param cbo Combo box to search
+     * @param data Object being sought.
+     * @return The index of the matching item, or -1 if no match found.
+     */
+    public static int selectComboboxData(Combobox cbo, Object data) {
+        int i = findComboboxData(cbo, data);
+        cbo.setSelectedIndex(i);
+        return i;
     }
     
     /**
@@ -92,6 +118,19 @@ public class ListUtil {
     }
     
     /**
+     * Finds and selects an item with a matching label. Searches are case-insensitive.
+     * 
+     * @param lb List box to search
+     * @param label Label value being sought.
+     * @return The index of the matching item, or -1 if no match found.
+     */
+    public static int selectListboxItem(Listbox lb, String label) {
+        int i = findListboxItem(lb, label);
+        lb.setSelectedIndex(i);
+        return i;
+    }
+    
+    /**
      * Finds an item whose associated value matches the specified object.
      * 
      * @param lb List box to search
@@ -100,6 +139,19 @@ public class ListUtil {
      */
     public static int findListboxData(Listbox lb, Object data) {
         return findListboxItem(lb, data, false);
+    }
+    
+    /**
+     * Finds and selects an item whose associated value matches the specified object.
+     * 
+     * @param lb List box to search
+     * @param data Object being sought.
+     * @return The index of the matching item, or -1 if no match found.
+     */
+    public static int selectListboxData(Listbox lb, Object data) {
+        int i = findListboxData(lb, data);
+        lb.setSelectedIndex(i);
+        return i;
     }
     
     /**
