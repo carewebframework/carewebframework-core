@@ -39,9 +39,9 @@ public class DateTimebox extends Bandbox implements IdSpace {
     
     private boolean requireTime;
     
-    private Date date;
+    private Date date = now();
     
-    private boolean hasTime;
+    private boolean hasTime = true;
     
     private boolean ok;
     
@@ -51,8 +51,6 @@ public class DateTimebox extends Bandbox implements IdSpace {
      * @throws Exception
      */
     public void onCreate() throws Exception {
-        date = now();
-        hasTime = true;
         setText(DateUtil.formatDate(date));
         Bandpopup bp = new Bandpopup();
         appendChild(bp);
@@ -73,7 +71,7 @@ public class DateTimebox extends Bandbox implements IdSpace {
     
     public void setDate(Date date) {
         this.date = date;
-        setRawValue(DateUtil.formatDate(date));
+        setText(DateUtil.formatDate(date));
     }
     
     public Date getDate() {
