@@ -1,5 +1,5 @@
 <zk>
-	<grid oddRowSclass="none" sizedByContent="true" width="300px">
+	<grid id="grid" oddRowSclass="none" sizedByContent="true" width="300px">
 		<columns>
 			<column hflex="10" />
 			<column hflex="6" />
@@ -7,8 +7,8 @@
 		</columns>
 		<rows>
 			<row>
-				<datebox id="datebox" vflex="1" hflex="1" />
-				<timebox id="timebox" vflex="1" hflex="1" />
+				<datebox id="datebox" hflex="1" />
+				<timebox id="timebox" hflex="1" />
 				<button id="btnOK" label="${labels.cwf.datetime.btn.ok.label}" width="55px" />
 			</row>
 			<row>

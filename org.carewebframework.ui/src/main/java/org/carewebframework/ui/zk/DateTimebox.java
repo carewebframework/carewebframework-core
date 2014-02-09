@@ -16,7 +16,6 @@ import org.carewebframework.common.DateUtil;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.IdSpace;
 import org.zkoss.zk.ui.WrongValueException;
-import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.OpenEvent;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zul.Bandbox;
@@ -47,7 +46,7 @@ public class DateTimebox extends Bandbox implements IdSpace {
     private boolean ok;
     
     /**
-     * Creates the color picker instance and all required child components.
+     * Creates all required child components.
      * 
      * @throws Exception
      */
@@ -60,6 +59,8 @@ public class DateTimebox extends Bandbox implements IdSpace {
         PageDefinition def = ZKUtil.loadCachedPageDefinition(Constants.RESOURCE_PREFIX + "dateTimebox.zul");
         Executions.createComponents(def, bp, null);
         ZKUtil.wireController(this);
+        datebox.setFormat("dd-MMM-yyyy");
+        timebox.setFormat("HH:mm");
     }
     
     public void setRequireTime(boolean requireTime) {
@@ -72,7 +73,7 @@ public class DateTimebox extends Bandbox implements IdSpace {
     
     public void setDate(Date date) {
         this.date = date;
-        setText(DateUtil.formatDate(date));
+        setRawValue(DateUtil.formatDate(date));
     }
     
     public Date getDate() {
@@ -98,10 +99,13 @@ public class DateTimebox extends Bandbox implements IdSpace {
         return ok;
     }
     
-    public void onOpen(Event event) {
-        OpenEvent evt = (OpenEvent) ZKUtil.getEventOrigin(event);
-        
-        if (evt.isOpen()) {
+    public void onOpen(OpenEvent event) {
+        update(event.isOpen());
+    }
+    
+    private void update(boolean open) {
+        if (open) {
+            datebox.setConstraint(getConstraint());
             updateDatebox(date);
             updateTimebox(hasTime ? date : null);
             ok = true;
@@ -121,6 +125,12 @@ public class DateTimebox extends Bandbox implements IdSpace {
     public void onClick$btnCancel() {
         ok = false;
         close();
+    }
+    
+    @Override
+    public void close() {
+        super.close();
+        update(false);
     }
     
     private Date now() {
@@ -154,6 +164,11 @@ public class DateTimebox extends Bandbox implements IdSpace {
     public void setValue(String value) {
         date = DateUtil.parseDate(value);
         super.setValue(value);
+    }
+    
+    @Override
+    protected Object marshall(Object value) {
+        return value instanceof Date ? coerceToString(value) : super.marshall(value);
     }
     
     @Override
