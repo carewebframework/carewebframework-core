@@ -11,6 +11,7 @@ package org.carewebframework.common;
 
 import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -68,12 +69,9 @@ public class DateUtil {
         
     };
     
-    private static final String HL7_DATE_PATTERN = "yyyyMMdd";
+    private static final String HL7_DATE_ONLY_PATTERN = "yyyyMMdd";
     
-    private static final String HL7_DATE_TIME_PATTERN = HL7_DATE_PATTERN + "HHmmssz";
-    
-    private static final String[] DATE_PATTERNS = new String[] { "dd-MMM-yyyy HH:mm zzz", "dd-MMM-yyyy HH:mm",
-            "dd-MMM-yyyy", HL7_DATE_PATTERN, HL7_DATE_TIME_PATTERN };
+    private static final String HL7_DATE_TIME_PATTERN = HL7_DATE_ONLY_PATTERN + "HHmmssz";
     
     private static final String UNKNOWN = "Unknown";
     
@@ -106,6 +104,60 @@ public class DateUtil {
     public enum Accuracy {
         YEARS, MONTHS, WEEKS, DAYS, HOURS, MINUTES, SECONDS, MILLISECONDS
     };
+    
+    /**
+     * Enum representing common date formats.
+     */
+    public enum Format {
+        WITH_TZ("dd-MMM-yyyy HH:mm zzz"), WITHOUT_TZ("dd-MMM-yyyy HH:mm"), WITHOUT_TIME("dd-MMM-yyyy"), HL7(
+                HL7_DATE_TIME_PATTERN), HL7_WITHOUT_TIME(HL7_DATE_ONLY_PATTERN);
+        
+        private String pattern;
+        
+        private Format(String pattern) {
+            this.pattern = pattern;
+        }
+        
+        /**
+         * Returns the format pattern.
+         * 
+         * @return The format pattern.
+         */
+        public String getPattern() {
+            return pattern;
+        }
+        
+        /**
+         * Returns a formatter for this date format.
+         * 
+         * @return A formatter.
+         */
+        public FastDateFormat getFormatter() {
+            boolean ignoreTime = this == WITHOUT_TIME || this == HL7_WITHOUT_TIME;
+            return FastDateFormat.getInstance(pattern, ignoreTime ? TimeZone.getDefault() : getLocalTimeZone());
+        }
+        
+        /**
+         * Formats an input date.
+         * 
+         * @param date The date to format.
+         * @return The formatted date.
+         */
+        public String format(Date date) {
+            return date == null ? "" : getFormatter().format(date);
+        }
+        
+        /**
+         * Parses an input value.
+         * 
+         * @param value The value to parse.
+         * @return The resulting date value if successful.
+         * @throws ParseException
+         */
+        public Date parse(String value) throws ParseException {
+            return parseDate(value, pattern);
+        }
+    }
     
     /**
      * <p>
@@ -198,6 +250,18 @@ public class DateUtil {
     }
     
     /**
+     * Attempts to parse an input value using one of several patterns.
+     * 
+     * @param value String to parse.
+     * @param patterns Patterns to be tried in succession until parsing succeeds.
+     * @return The resulting date value.
+     * @throws ParseException
+     */
+    public static Date parseDate(String value, String... patterns) throws ParseException {
+        return DateUtils.parseDate(value, patterns);
+    }
+    
+    /**
      * Attempts to parse a string containing a date representation using several different date
      * patterns.
      * 
@@ -206,9 +270,11 @@ public class DateUtil {
      *         Otherwise, returns null.
      */
     private static Date tryParse(final String value) {
-        try {
-            return DateUtils.parseDate(value, DATE_PATTERNS);
-        } catch (Exception e) {}
+        for (Format format : Format.values()) {
+            try {
+                return format.parse(value);
+            } catch (Exception e) {}
+        }
         
         for (int i = 3; i >= 0; i--) {
             try {
@@ -378,24 +444,9 @@ public class DateUtil {
      *         null.
      */
     public static String formatDate(Date date, boolean showTimezone, boolean ignoreTime) {
-        if (date == null) {
-            return "";
-        }
-        
         ignoreTime = ignoreTime || !hasTime(date);
-        int idx = ignoreTime ? 2 : showTimezone ? 0 : 1;
-        return getFormatter(idx).format(date);
-    }
-    
-    /**
-     * Returns a date formatter for the specified format index.
-     * 
-     * @param idx Format index
-     * @return A date formatter for the specified format.
-     */
-    private static FastDateFormat getFormatter(int idx) {
-        boolean ignoreTime = idx == 2 || idx == 3;
-        return FastDateFormat.getInstance(DATE_PATTERNS[idx], ignoreTime ? TimeZone.getDefault() : getLocalTimeZone());
+        Format format = ignoreTime ? Format.WITHOUT_TIME : showTimezone ? Format.WITH_TZ : Format.WITHOUT_TZ;
+        return format.format(date);
     }
     
     /**
@@ -418,7 +469,8 @@ public class DateUtil {
      * @return The HL7-formatted date.
      */
     public static String toHL7(Date date) {
-        return date == null ? "" : getFormatter(hasTime(date) ? 4 : 3).format(date);
+        Format format = hasTime(date) ? Format.HL7_WITHOUT_TIME : Format.HL7;
+        return format.format(date);
     }
     
     /**
@@ -428,10 +480,13 @@ public class DateUtil {
      * @return True if the date has a time component.
      */
     public static boolean hasTime(Date date) {
+        if (date == null) {
+            return false;
+        }
+        
         long time1 = date.getTime();
         long time2 = stripTime(date).getTime();
-        return time1 != time2; // Do not use "Date.equals" since date may be of
-        // type Timestamp.
+        return time1 != time2; // Do not use "Date.equals" since date may be of type Timestamp.
     }
     
     /**
