@@ -11,8 +11,11 @@ package org.carewebframework.ui.zk;
 
 import java.util.Date;
 
+import org.apache.commons.lang.time.DateUtils;
+
 import org.carewebframework.common.DateUtil;
 
+import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.IdSpace;
 import org.zkoss.zk.ui.WrongValueException;
@@ -23,6 +26,7 @@ import org.zkoss.zul.Bandpopup;
 import org.zkoss.zul.Datebox;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Timebox;
+import org.zkoss.zul.mesg.MZul;
 
 /**
  * Presents a date/time input element.
@@ -39,11 +43,9 @@ public class DateTimebox extends Bandbox implements IdSpace {
     
     private boolean requireTime;
     
-    private Date date = now();
-    
-    private boolean hasTime = true;
-    
     private boolean ok;
+    
+    private final String requireTimeError = Labels.getLabel("cwf.datetime.error.no.time");
     
     /**
      * Creates all required child components.
@@ -51,7 +53,6 @@ public class DateTimebox extends Bandbox implements IdSpace {
      * @throws Exception
      */
     public void onCreate() throws Exception {
-        setText(DateUtil.formatDate(date));
         Bandpopup bp = new Bandpopup();
         appendChild(bp);
         PageDefinition def = ZKUtil.loadCachedPageDefinition(Constants.RESOURCE_PREFIX + "dateTimebox.zul");
@@ -70,28 +71,33 @@ public class DateTimebox extends Bandbox implements IdSpace {
     }
     
     public void setDate(Date date) {
-        this.date = date;
-        setText(DateUtil.formatDate(date));
+        validate(date);
+        setRawValue(date);
+    }
+    
+    @Override
+    public void validate(Object value) {
+        super.validate(value);
+        
+        if (requireTime && !DateUtil.hasTime((Date) value)) {
+            throw showCustomError(new WrongValueException(this, requireTimeError));
+        }
     }
     
     public Date getDate() {
-        return date;
-    }
-    
-    public boolean hasTime() {
-        return hasTime;
+        return (Date) getRawValue();
     }
     
     private void showError(String message) {
         error.setValue(message);
-        ok = false;
+        ok = message == null;
     }
     
     private boolean validate() {
         ok = true;
         
         if (requireTime && timebox.getValue() == null) {
-            showError("Time is required.");
+            showError(requireTimeError);
         }
         
         return ok;
@@ -104,13 +110,14 @@ public class DateTimebox extends Bandbox implements IdSpace {
     private void update(boolean open) {
         if (open) {
             datebox.setConstraint(getConstraint());
+            Date date = getDate();
             updateDatebox(date);
-            updateTimebox(hasTime ? date : null);
-            ok = true;
+            updateTimebox(DateUtil.hasTime(date) ? date : null);
+            showError(null);
         } else if (ok) {
-            date = ZKDateUtil.getTime(datebox, timebox);
-            hasTime = timebox.getValue() != null;
-            setText(DateUtil.formatDate(date));
+            Date date = ZKDateUtil.getTime(datebox, timebox);
+            date = timebox.getValue() != null ? DateUtils.setMilliseconds(date, 1) : date;
+            setDate(date);
         }
     }
     
@@ -159,14 +166,13 @@ public class DateTimebox extends Bandbox implements IdSpace {
     }
     
     @Override
-    public void setValue(String value) {
-        date = DateUtil.parseDate(value);
-        super.setValue(value);
+    protected Object marshall(Object value) {
+        return value instanceof Date ? coerceToString(value) : super.marshall(value);
     }
     
     @Override
-    protected Object marshall(Object value) {
-        return value instanceof Date ? coerceToString(value) : super.marshall(value);
+    protected Object unmarshall(Object value) {
+        return value instanceof String ? coerceFromString((String) value) : super.unmarshall(value);
     }
     
     @Override
@@ -175,10 +181,11 @@ public class DateTimebox extends Bandbox implements IdSpace {
             return null;
         }
         
-        date = DateUtil.parseDate(value);
+        Date date = DateUtil.parseDate(value);
         
         if (date == null) {
-            throw new WrongValueException(value);
+            throw showCustomError(new WrongValueException(this, MZul.DATE_REQUIRED, new Object[] { value,
+                    datebox.getFormat() }));
         }
         
         return date;
@@ -186,6 +193,6 @@ public class DateTimebox extends Bandbox implements IdSpace {
     
     @Override
     protected String coerceToString(Object value) {
-        return DateUtil.formatDate((Date) value, false, !hasTime);
+        return DateUtil.formatDate((Date) value);
     }
 }
