@@ -29,6 +29,7 @@ import org.apache.commons.lang.reflect.FieldUtils;
 
 import org.carewebframework.ui.FrameworkWebSupport;
 
+import org.zkoss.json.JavaScriptValue;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.au.AuResponse;
@@ -1029,6 +1030,18 @@ public class ZKUtil {
         }
         
         return (NODE) node;
+    }
+    
+    /**
+     * Converts a JavaScript snippet to serializable form. If the snippet does not have a function
+     * wrapper, a no-argument wrapper will be added.
+     * 
+     * @param snippet JS code snippet.
+     * @return A JavaScriptValue object or null if the input was null.
+     */
+    public static JavaScriptValue toJavaScriptValue(String snippet) {
+        return snippet == null ? null : new JavaScriptValue(snippet.startsWith("function") ? snippet : "function() {"
+                + snippet + "}");
     }
     
     /**
