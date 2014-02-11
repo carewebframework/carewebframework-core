@@ -37,7 +37,6 @@
 }
 
 .cwf-messagewindow-btn {
-	background-image: url(${c:encodeThemeURL('~./org/carewebframework/ui/zk/messagewindow-close.png')});
 	background-repeat: no-repeat;
 	cursor: pointer;
 	display: block;
@@ -48,6 +47,20 @@
 	top: 2px;
 	z-index: 15;
 	zoom: 1;
+}
+
+.cwf-messagewindow-btn:hover {
+	background-position: -16px;
+}
+
+.cwf-messagewindow-btn-close {
+	background-image: url(${c:encodeThemeURL('~./org/carewebframework/ui/zk/messagewindow-close.png')});
+	right: 3px
+}
+
+.cwf-messagewindow-btn-action {
+	background-image: url(${c:encodeThemeURL('~./org/carewebframework/ui/zk/messagewindow-action.png')});
+	right: 20px;
 }
 
 .cwf-messagewindow-title {

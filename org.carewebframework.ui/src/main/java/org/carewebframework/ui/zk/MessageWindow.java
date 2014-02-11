@@ -51,12 +51,13 @@ public class MessageWindow extends XulElement {
         
         private final HashMap<String, Object> map = new HashMap<String, Object>();
         
-        public MessageInfo(String message, String caption, String color, Integer duration, String tag) {
+        public MessageInfo(String message, String caption, String color, Integer duration, String tag, String action) {
             map.put("message", StrUtil.formatMessage(message));
             map.put("caption", StrUtil.formatMessage(caption));
             map.put("color", color);
             map.put("duration", duration);
             map.put("tag", tag);
+            map.put("action", ZKUtil.toJavaScriptValue(action));
         }
     }
     
@@ -163,7 +164,7 @@ public class MessageWindow extends XulElement {
      *            duration.
      */
     public void show(String message, String caption, String color, int duration) {
-        show(message, caption, color, duration <= 0 ? null : new Integer(duration), null);
+        show(message, caption, color, duration <= 0 ? null : new Integer(duration), null, null);
     }
     
     /**
@@ -176,7 +177,21 @@ public class MessageWindow extends XulElement {
      * @param tag Tag to classify message for selective deletion. May be null.
      */
     public void show(String message, String caption, String color, Integer duration, String tag) {
-        show(new MessageInfo(message, caption, color, duration, tag));
+        show(new MessageInfo(message, caption, color, duration, tag, null));
+    }
+    
+    /**
+     * Displays a message.
+     * 
+     * @param message Message text. If begins with &lt;html&gt; tag, is interpreted as html.
+     * @param caption Optional caption text.
+     * @param color Background color (html format). Null means default color.
+     * @param duration Message duration (in milliseconds). Null means default duration.
+     * @param tag Tag to classify message for selective deletion. May be null.
+     * @param action Javascript action to associate with message. Null means no action.
+     */
+    public void show(String message, String caption, String color, Integer duration, String tag, String action) {
+        show(new MessageInfo(message, caption, color, duration, tag, action));
     }
     
     /**

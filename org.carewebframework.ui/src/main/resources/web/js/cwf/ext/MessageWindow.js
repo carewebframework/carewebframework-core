@@ -21,7 +21,11 @@ cwf.ext.MessageWindow = zk.$extends(zul.wgt.Div, {
 		if (options.caption)
 			jq('<span>').addClass(zcls + '-title').text(options.caption).appendTo(cap);
 		
-		var btn = jq('<span>').addClass(zcls + '-btn').appendTo(cap);
+		if (options.action) {
+			jq('<span>').addClass(zcls + '-btn').addClass(zcls + '-btn-action').appendTo(cap).bind('click', options.action);
+		}
+		
+		var btn = jq('<span>').addClass(zcls + '-btn').addClass(zcls + '-btn-close').appendTo(cap);
 		var msg = jq('<div>').addClass(zcls + '-msg').appendTo(cave);
 
 		if (options.tag)
