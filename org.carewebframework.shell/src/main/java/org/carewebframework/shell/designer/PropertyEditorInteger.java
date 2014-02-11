@@ -51,7 +51,7 @@ public class PropertyEditorInteger extends PropertyEditorBase {
     
     @Override
     protected void setValue(Object value) {
-        intbox.setText((String) value);
+        intbox.setText(value == null ? null : value.toString());
         updateValue();
     }
 }

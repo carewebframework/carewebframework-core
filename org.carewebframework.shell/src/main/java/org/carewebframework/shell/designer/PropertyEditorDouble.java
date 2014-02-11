@@ -50,7 +50,7 @@ public class PropertyEditorDouble extends PropertyEditorBase {
     
     @Override
     protected void setValue(Object value) {
-        doublebox.setText((String) value);
+        doublebox.setText(value == null ? null : value.toString());
         updateValue();
     }
 }
