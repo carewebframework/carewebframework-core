@@ -74,6 +74,41 @@ public class PromptDialog extends Window {
      * 
      * @param message Text message
      * @param title Title of dialog
+     * @param responses Array of response objects.
+     * @param styles SClass specifiers for icon and text, respectively, separated by vertical bars.
+     * @param defaultResponse Default response object (associated button will have initial focus).
+     * @param eventListener Optional event listener to intercept click events
+     * @param saveResponseId Uniquely identifies this response for purposes of saving and retrieving
+     *            the last response. If not specified (null or empty), the response is not saved.
+     *            Otherwise, if a saved response exists, it is returned without displaying the
+     *            dialog. If a saved response does not exist, the user is prompted in the normal
+     *            manner with the addition of a check box on the dialog asking if the response is to
+     *            be saved. If this box is checked, the user's response is then saved as a user
+     *            preference.
+     * @param excludeResponses Only applies if saveResponseId is specified. This is a list of
+     *            responses that will not be saved.
+     * @return Chosen response.
+     */
+    public static <T> T show(final String message, final String title, final T[] responses, final String styles,
+                             final T defaultResponse, final EventListener<Event> eventListener, final String saveResponseId,
+                             final T[] excludeResponses) {
+        String rsp = show(message, title, toResponseList(responses), styles, defaultResponse == null ? null
+                : defaultResponse.toString(), eventListener, saveResponseId, toResponseList(excludeResponses));
+        
+        for (T response : responses) {
+            if (response != null && rsp.equals(response.toString())) {
+                return response;
+            }
+        }
+        
+        return null;
+    }
+    
+    /**
+     * Display the prompt dialog.
+     * 
+     * @param message Text message
+     * @param title Title of dialog
      * @param buttonCaptions Button captions separated by vertical bars
      * @param styles SClass specifiers for icon and text, respectively, separated by vertical bars.
      * @param defaultButton Caption of button to have initial focus
@@ -138,15 +173,46 @@ public class PromptDialog extends Window {
      * 
      * @param message Text message
      * @param title Title of dialog
+     * @param responses Array of response objects.
+     * @param styles SClass specifiers for icon and text, respectively, separated by vertical bars.
+     * @param defaultResponse Default response object (associated button will have initial focus).
+     * @param eventListener Optional event listener to intercept click events
+     * @return Chosen response.
+     */
+    public static <T> T show(final String message, final String title, final T[] responses, final String styles,
+                             final T defaultResponse, final EventListener<Event> eventListener) {
+        return show(message, title, responses, styles, defaultResponse, eventListener, null, null);
+    }
+    
+    /**
+     * Display the prompt dialog.
+     * 
+     * @param message Text message
+     * @param title Title of dialog
      * @param buttonCaptions Button captions separated by vertical bars
-     * @param icon Icon for dialog
+     * @param styles SClass specifiers for icon and text, respectively, separated by vertical bars.
      * @param defaultButton Caption of button to have initial focus
      * @param eventListener Optional event listener to intercept click events
      * @return Caption of button that was clicked.
      */
-    public static String show(final String message, final String title, final String buttonCaptions, final String icon,
+    public static String show(final String message, final String title, final String buttonCaptions, final String styles,
                               final String defaultButton, final EventListener<Event> eventListener) {
-        return show(message, title, buttonCaptions, icon, defaultButton, eventListener, null, null);
+        return show(message, title, buttonCaptions, styles, defaultButton, eventListener, null, null);
+    }
+    
+    /**
+     * Display the prompt dialog.
+     * 
+     * @param message Text message
+     * @param title Title of dialog
+     * @param responses Array of response objects.
+     * @param styles SClass specifiers for icon and text, respectively, separated by vertical bars.
+     * @param defaultResponse Default response object (associated button will have initial focus).
+     * @return Chosen response.
+     */
+    public static <T> T show(final String message, final String title, final T[] responses, final String styles,
+                             final T defaultResponse) {
+        return show(message, title, responses, styles, defaultResponse, null);
     }
     
     /**
@@ -155,13 +221,26 @@ public class PromptDialog extends Window {
      * @param message Text message
      * @param title Title of dialog
      * @param buttonCaptions Button captions separated by vertical bars
-     * @param icon Icon for dialog
+     * @param styles SClass specifiers for icon and text, respectively, separated by vertical bars.
      * @param defaultButton Caption of button to have initial focus
      * @return Caption of button that was clicked.
      */
-    public static String show(final String message, final String title, final String buttonCaptions, final String icon,
+    public static String show(final String message, final String title, final String buttonCaptions, final String styles,
                               final String defaultButton) {
-        return show(message, title, buttonCaptions, icon, defaultButton, null);
+        return show(message, title, buttonCaptions, styles, defaultButton, null);
+    }
+    
+    /**
+     * Display the prompt dialog.
+     * 
+     * @param message Text message
+     * @param title Title of dialog
+     * @param responses Array of response objects.
+     * @param styles SClass specifiers for icon and text, respectively, separated by vertical bars.
+     * @return Chosen response.
+     */
+    public static <T> T show(final String message, final String title, final T[] responses, final String styles) {
+        return show(message, title, responses, styles, null);
     }
     
     /**
@@ -170,11 +249,23 @@ public class PromptDialog extends Window {
      * @param message Text message
      * @param title Title of dialog
      * @param buttonCaptions Button captions separated by vertical bars
-     * @param icon Icon for dialog
+     * @param styles SClass specifiers for icon and text, respectively, separated by vertical bars.
      * @return Caption of button that was clicked.
      */
-    public static String show(final String message, final String title, final String buttonCaptions, final String icon) {
-        return show(message, title, buttonCaptions, icon, null, null);
+    public static String show(final String message, final String title, final String buttonCaptions, final String styles) {
+        return show(message, title, buttonCaptions, styles, null);
+    }
+    
+    /**
+     * Display the prompt dialog.
+     * 
+     * @param message Text message
+     * @param title Title of dialog
+     * @param responses Array of response objects.
+     * @return Chosen response.
+     */
+    public static <T> T show(final String message, final String title, final T[] responses) {
+        return show(message, title, responses, Messagebox.INFORMATION);
     }
     
     /**
@@ -186,7 +277,7 @@ public class PromptDialog extends Window {
      * @return Caption of button that was clicked.
      */
     public static String show(final String message, final String title, final String buttonCaptions) {
-        return show(message, title, buttonCaptions, Messagebox.INFORMATION, null, null);
+        return show(message, title, buttonCaptions, Messagebox.INFORMATION);
     }
     
     /**
@@ -389,7 +480,7 @@ public class PromptDialog extends Window {
     }
     
     /**
-     * Returns a string of vertical bar delimited items as an array list.
+     * Returns a string of vertical bar delimited items a string list.
      * 
      * @param responses Response list separated by vertical bars.
      * @return List of responses.
@@ -402,6 +493,29 @@ public class PromptDialog extends Window {
         }
         
         return result;
+    }
+    
+    /**
+     * Returns an array of response objects as a vertical bar-delimited string.
+     * 
+     * @param responses Array of response objects.
+     * @return Vertical bar delimited list.
+     */
+    private static <T> String toResponseList(final T[] responses) {
+        if (responses == null) {
+            return null;
+        }
+        
+        StringBuilder sb = new StringBuilder();
+        
+        for (T response : responses) {
+            if (sb.length() > 0) {
+                sb.append('|');
+            }
+            
+            sb.append(response.toString());
+        }
+        return sb.toString();
     }
     
     /**
