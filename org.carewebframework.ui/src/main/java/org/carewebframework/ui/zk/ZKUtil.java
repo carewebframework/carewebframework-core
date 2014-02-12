@@ -302,8 +302,8 @@ public class ZKUtil {
     }
     
     /**
-     * Recurses over all children of specified component that implement the Disable interface and
-     * enables or disables them.
+     * Recurses over all children of specified component that implement the Disable interface or a
+     * "disabled" property and enables or disables them.
      * 
      * @param parent Parent whose children's disable status is to be modified.
      * @param disable The disable status for the children.
