@@ -316,6 +316,10 @@ public class ZKUtil {
             
             if (comp instanceof Disable) {
                 ((Disable) comp).setDisabled(disable);
+            } else {
+                try {
+                    PropertyUtils.setSimpleProperty(comp, "disabled", disable);
+                } catch (Exception e) {}
             }
             
             disableChildren(comp, disable);
