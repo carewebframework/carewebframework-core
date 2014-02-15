@@ -167,6 +167,14 @@ public class DesignContextMenu extends Menupopup implements IdSpace {
     }
     
     /**
+     * Avoid exception if menu not attached to a desktop.
+     */
+    public void close() {
+        if (getDesktop() != null)
+            super.close();
+    }
+    
+    /**
      * Sets the context menu's owner. This modifies the member menu item states to reflect the
      * current owner.
      * 
