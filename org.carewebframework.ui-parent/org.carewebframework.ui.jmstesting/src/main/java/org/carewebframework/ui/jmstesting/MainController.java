@@ -20,7 +20,6 @@ import org.carewebframework.api.event.IEventManager;
 import org.carewebframework.api.event.IGenericEvent;
 import org.carewebframework.api.event.ILocalEventDispatcher;
 import org.carewebframework.api.event.IPublisherInfo;
-import org.carewebframework.api.event.PingEventHandler;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.jms.MessagingSupport;
 import org.carewebframework.shell.plugins.PluginContainer;
@@ -41,7 +40,7 @@ public class MainController extends PluginController {
     
     private static final long serialVersionUID = 1L;
     
-    private static final String[] EVENTS = { "CONNECT", "DISCONNECT", PingEventHandler.EVENT_PING_RESPONSE };
+    private static final String[] EVENTS = { "CONNECT", "DISCONNECT", "JMSTESTING" };
     
     private static final Comparator<IPublisherInfo> sortComparator = new Comparator<IPublisherInfo>() {
         
@@ -226,6 +225,6 @@ public class MainController extends PluginController {
     @Override
     public void refresh() {
         model.clear();
-        EventUtil.ping(null, null);
+        EventUtil.ping("JMSTESTING", null, null);
     }
 }

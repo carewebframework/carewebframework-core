@@ -116,8 +116,8 @@ public class GenericEventTest extends CommonTest {
     }
     
     public void pingTest() {
-        eventManager.subscribe(PingEventHandler.EVENT_PING_RESPONSE, pingSubscriber);
-        EventUtil.ping(null, recipients);
+        eventManager.subscribe("PING.TEST", pingSubscriber);
+        EventUtil.ping("PING.TEST", null, recipients);
     }
     
     private void fireTestEvents() {

@@ -9,7 +9,7 @@
  */
 package org.carewebframework.api.event;
 
-import org.apache.commons.lang.StringUtils;
+import java.util.List;
 
 /**
  * Handles ping requests.
@@ -17,8 +17,6 @@ import org.apache.commons.lang.StringUtils;
 public class PingEventHandler implements IGenericEvent<PingRequest> {
     
     public static final String EVENT_PING_REQUEST = "PING.REQUEST";
-    
-    public static final String EVENT_PING_RESPONSE = "PING.RESPONSE";
     
     private final IEventManager eventManager;
     
@@ -52,9 +50,33 @@ public class PingEventHandler implements IGenericEvent<PingRequest> {
     
     @Override
     public void eventCallback(String eventName, PingRequest pingRequest) {
-        if (StringUtils.isEmpty(pingRequest.appName) || pingRequest.appName.equals(publisherInfo.getAppName())) {
-            eventManager.fireRemoteEvent(EVENT_PING_RESPONSE, new PublisherInfo(publisherInfo), pingRequest.requestor);
+        if (checkFilters(pingRequest.filters)) {
+            eventManager.fireRemoteEvent(pingRequest.responseEvent, new PublisherInfo(publisherInfo), pingRequest.requestor);
         }
+    }
+    
+    private boolean checkFilters(List<PingFilter> filters) {
+        if (filters != null) {
+            for (PingFilter filter : filters) {
+                switch (filter.type) {
+                    case APP_NAME:
+                        if (!filter.value.equals(publisherInfo.getAppName())) {
+                            return false;
+                        }
+                        
+                        break;
+                    
+                    case SENTINEL_EVENT:
+                        if (!eventManager.hasSubscribers(filter.value)) {
+                            return false;
+                        }
+                        
+                        break;
+                }
+            }
+        }
+        
+        return true;
     }
     
 }

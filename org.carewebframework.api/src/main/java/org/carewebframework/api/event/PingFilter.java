@@ -10,29 +10,38 @@
 package org.carewebframework.api.event;
 
 import java.io.Serializable;
-import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * Represents a ping request.
+ * Filter criterion for responding to a ping request.
  */
-public class PingRequest implements Serializable {
+public class PingFilter implements Serializable {
     
     private static final long serialVersionUID = 1L;
     
-    public final String requestor;
+    public enum PingFilterType {
+        APP_NAME, SENTINEL_EVENT
+    };
     
-    public final String responseEvent;
+    public final PingFilterType type;
     
-    public final List<PingFilter> filters;
+    public final String value;
     
     @JsonCreator
-    public PingRequest(@JsonProperty("responseEvent") String responseEvent,
-        @JsonProperty("filters") List<PingFilter> filters, @JsonProperty("requestor") String requestor) {
-        this.responseEvent = responseEvent;
-        this.filters = filters;
-        this.requestor = requestor;
+    public PingFilter(@JsonProperty("type") PingFilterType type, @JsonProperty("value") String value) {
+        this.type = type;
+        this.value = value;
+    }
+    
+    @Override
+    public boolean equals(Object object) {
+        if (object instanceof PingFilter) {
+            PingFilter filter = (PingFilter) object;
+            return filter.type == type && filter.value.equals(value);
+        }
+        
+        return false;
     }
 }

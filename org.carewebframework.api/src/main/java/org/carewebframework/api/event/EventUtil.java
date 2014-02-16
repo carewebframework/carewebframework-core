@@ -9,6 +9,8 @@
  */
 package org.carewebframework.api.event;
 
+import java.util.List;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -52,15 +54,16 @@ public class EventUtil {
     /**
      * Fires a ping request to specified or all recipients.
      * 
-     * @param appName The app name (may be null).
+     * @param responseEvent Event to use for response.
+     * @param filters Response filters (null for none).
      * @param recipients The recipient ids of the ping targets (or null for all recipients).
      */
-    public static void ping(String appName, String recipients) {
+    public static void ping(String responseEvent, List<PingFilter> filters, String recipients) {
         IEventManager eventManager = getEventManager();
         IGlobalEventDispatcher ged = ((ILocalEventDispatcher) eventManager).getGlobalEventDispatcher();
         
         if (ged != null) {
-            PingRequest pingRequest = new PingRequest(appName, ged.getPublisherInfo().getEndpointId());
+            PingRequest pingRequest = new PingRequest(responseEvent, filters, ged.getPublisherInfo().getEndpointId());
             eventManager.fireRemoteEvent(PingEventHandler.EVENT_PING_REQUEST, pingRequest, recipients);
         }
     }

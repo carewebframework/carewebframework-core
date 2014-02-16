@@ -11,6 +11,10 @@ package org.carewebframework.api.event;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.carewebframework.api.event.PingFilter.PingFilterType;
 import org.carewebframework.common.JSONUtil;
 
 import org.junit.Test;
@@ -19,10 +23,14 @@ public class SerializationTest {
     
     @Test
     public void testSerialization() {
-        PingRequest pingRequest = new PingRequest("testApp", "testRequestor");
+        List<PingFilter> filters = new ArrayList<PingFilter>();
+        filters.add(new PingFilter(PingFilterType.APP_NAME, "testApp"));
+        filters.add(new PingFilter(PingFilterType.SENTINEL_EVENT, "testEvent"));
+        PingRequest pingRequest = new PingRequest("TEST.RESPONSE", filters, "testRequestor");
         String data = JSONUtil.serialize(pingRequest);
         pingRequest = (PingRequest) JSONUtil.deserialize(data);
-        assertEquals("testApp", pingRequest.appName);
+        assertEquals("TEST.RESPONSE", pingRequest.responseEvent);
+        assertEquals(filters, pingRequest.filters);
         assertEquals("testRequestor", pingRequest.requestor);
         
         PublisherInfo publisherInfo = new PublisherInfo();
