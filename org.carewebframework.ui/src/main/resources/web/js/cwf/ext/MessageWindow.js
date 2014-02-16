@@ -15,14 +15,18 @@ cwf.ext.MessageWindow = zk.$extends(zul.wgt.Div, {
 		var zcls = this.getZclass();
 		var real = jq(this.$n('real'));
 		var cave = jq('<div>').addClass(zcls + '-cave');
-		var cap = jq('<div>').addClass('z-toolbar ' + zcls + '-cap').appendTo(
-				cave);
+		var cap = jq('<div>').addClass('z-toolbar ' + zcls + '-cap').appendTo(cave);
+		var _this = this;
 		
 		if (options.caption)
 			jq('<span>').addClass(zcls + '-title').text(options.caption).appendTo(cap);
 		
 		if (options.action) {
-			jq('<span>').addClass(zcls + '-btn').addClass(zcls + '-btn-action').appendTo(cap).bind('click', options.action);
+			var act = jq('<span>').addClass(zcls + '-btn').addClass(zcls + '-btn-action').appendTo(cap);
+			act.bind('click', function () {
+				if (options.action.call(_this))
+					_this._close(cave);
+			});
 		}
 		
 		var btn = jq('<span>').addClass(zcls + '-btn').addClass(zcls + '-btn-close').appendTo(cap);
@@ -41,7 +45,6 @@ cwf.ext.MessageWindow = zk.$extends(zul.wgt.Div, {
 
 		cave.appendTo(real);
 		cwf.ext.MessageWindow._slide(cave, true);
-		var _this = this;
 		btn.bind('click', function() {
 			_this._close(cave);
 		});
