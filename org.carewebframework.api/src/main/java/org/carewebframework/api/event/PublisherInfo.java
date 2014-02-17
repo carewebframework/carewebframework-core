@@ -102,6 +102,11 @@ public class PublisherInfo implements IPublisherInfo, Serializable {
         return obj instanceof IPublisherInfo && attributes.equals(((IPublisherInfo) obj).getAttributes());
     }
     
+    @Override
+    public int hashCode() {
+        return attributes.hashCode();
+    }
+    
     public void put(String key, String prefix, String value) {
         if (value == null) {
             attributes.keySet().remove(key);

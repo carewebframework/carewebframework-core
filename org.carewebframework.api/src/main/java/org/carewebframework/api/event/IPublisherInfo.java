@@ -11,9 +11,12 @@ package org.carewebframework.api.event;
 
 import java.util.Map;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
 /**
  * Returns information about a global event publisher.
  */
+@JsonDeserialize(as = PublisherInfo.class)
 public interface IPublisherInfo {
     
     /**
