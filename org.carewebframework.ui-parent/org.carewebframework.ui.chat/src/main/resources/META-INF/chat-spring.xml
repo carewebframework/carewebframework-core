@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:cwp="http://www.carewebframework.org/schema/plugin" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+		 http://www.springframework.org/schema/beans/spring-beans.xsd
+		 http://www.carewebframework.org/schema/plugin
+		 http://www.carewebframework.org/schema/plugin/plugin-extensions.xsd">
+
+	<beans profile="root">
+
+
+	</beans>
+
+	<beans profile="desktop">
+
+		<bean id="chatService" class="org.carewebframework.ui.chat.ChatService"
+			init-method="init" destroy-method="destroy">
+			<constructor-arg ref="eventManager" />
+		</bean>
+
+		<bean id="chatSessionController" class="org.carewebframework.ui.chat.SessionController"
+			scope="prototype">
+			<property name="chatService" ref="chatService" />
+		</bean>
+
+		<bean id="chatInviteController" class="org.carewebframework.ui.chat.InviteController"
+			scope="prototype">
+			<property name="chatService" ref="chatService" />
+		</bean>
+
+	</beans>
+
+</beans>

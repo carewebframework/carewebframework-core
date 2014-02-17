@@ -1,0 +1,83 @@
+<zk xmlns="http://www.zkoss.org/2005/zul"
+	xmlns:h="http://www.w3.org/1999/xhtml"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+	
+	<window height="500px" width="500px" title="${arg.title}"
+		apply="${chatSessionController}" position="center">
+		<hbox vflex="1" hflex="1">
+			<cell width="50%">
+				<groupbox closable="false" height="100%">
+					<caption label="${labels.chat.session.group.dialog.caption}" />
+					<div id="pnlDialog" vflex="1" sclass="chat-dialog" />
+					<toolbar align="end">
+						<button id="btnClearDialog" label="${labels.chat.session.button.clear.dialog.label}" />
+					</toolbar>
+				</groupbox>
+			</cell>
+			<splitter />
+			<cell width="50%">
+				<vbox hflex="1" vflex="1">
+					<cell vflex="1">
+						<groupbox closable="false" vflex="1">
+							<caption label="${labels.chat.session.group.participants.caption}" />
+							<listbox id="lstParticipants" vflex="1" style="border:none">
+								<listhead>
+									<listheader label="${labels.chat.participant.header.user}"
+										id="getUserName" />
+								</listhead>
+							</listbox>
+							<toolbar align="end">
+								<button id="btnRefresh" label="${labels.chat.session.button.refresh.label}" />
+								<button id="btnInvite" label="${labels.chat.session.button.invite.label}" />
+							</toolbar>
+						</groupbox>
+					</cell>
+					<cell vflex="1">
+						<groupbox closable="false" height="100%">
+							<caption label="${labels.chat.session.group.message.caption}" />
+							<textbox id="txtMessage" vflex="1" width="100%" multiline="true" style="border:none"/>
+							<toolbar align="end">
+								<button id="btnClearMessage" label="${labels.chat.session.button.clear.message.label}" />
+								<button id="btnSendMessage" label="${labels.chat.session.button.send.message.label}" />
+							</toolbar>
+						</groupbox>
+					</cell>
+				</vbox>
+			</cell>
+		</hbox>
+		<style>
+			.chat-dialog-header {
+				font-weight: bold;
+				color: red;
+			}
+			
+			.chat-dialog-header-self {
+				font-weight: bold;
+				color: green;
+			}
+			
+			.chat-dialog-text {
+				border-bottom: 1px solid lightgray;
+				padding-bottom: 5px;
+			}
+			
+			.chat-dialog-text-self {
+				border-bottom: 1px solid lightgray;
+				padding-bottom: 5px;
+				font-style: italic;
+			}
+			
+			.chat-dialog {
+				background: lightyellow;
+				overflow: auto;
+				word-wrap: break-word;
+				word-break: break-word;
+			}
+			
+			.chat-dialog * {
+				display: block;
+			}
+		</style>
+	</window>
+</zk>

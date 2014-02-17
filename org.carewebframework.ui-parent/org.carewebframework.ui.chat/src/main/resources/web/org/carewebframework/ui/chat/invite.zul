@@ -1,0 +1,38 @@
+<zk xmlns="http://www.zkoss.org/2005/zul"
+	xmlns:h="http://www.w3.org/1999/xhtml"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+
+	<window title="${labels.chat.invite.title}" width="500px"
+		apply="${chatInviteController}" contentSclass="chat-invite">
+		<listbox id="lstSessions" rows="10" checkmark="true"
+			multiple="true">
+			<listhead>
+				<listheader width="30px" />
+					<listheader label="${labels.chat.participant.header.user}"
+						id="getUserName" hflex="1" />
+			</listhead>
+		</listbox>
+		<toolbar align="end">
+			<button id="btnOK"
+				label="${labels.chat.invite.button.ok.label}" />
+			<button id="btnCancel"
+				label="${labels.chat.invite.button.cancel.label}"
+				forward="onClick=onClose" />
+		</toolbar>
+		<style>
+			.chat-participant-self span.z-label {
+				font-style: italic;
+				color: green!important;
+			}
+			
+			.chat-participant-active span.z-label {
+				font-style: italic;
+			}
+			
+			.chat-invite .z-listheader-img {
+				display: none;
+			}
+		</style>
+	</window>
+</zk>
