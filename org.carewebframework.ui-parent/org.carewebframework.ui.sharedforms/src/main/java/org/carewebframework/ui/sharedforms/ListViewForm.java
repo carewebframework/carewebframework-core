@@ -338,7 +338,7 @@ public abstract class ListViewForm extends CaptionedForm {
      */
     protected Listitem addItem(String data) {
         Listitem li = null;
-        String fmt = data.isEmpty() ? data : formatData(data);
+        List<String> fmt = parseData(data);
         
         if (!fmt.isEmpty()) {
             li = new Listitem();
@@ -346,7 +346,7 @@ public abstract class ListViewForm extends CaptionedForm {
             li.setValue(data);
             li.addForward(Events.ON_CLICK, listbox, Events.ON_SELECT);
             
-            for (String pc : StrUtil.split(fmt, StrUtil.U)) {
+            for (String pc : fmt) {
                 Listcell cell = new Listcell(pc);
                 li.appendChild(cell);
             }
@@ -360,9 +360,21 @@ public abstract class ListViewForm extends CaptionedForm {
      * 
      * @param data
      * @return
+     * @deprecated Override <code>parseData</code> instead.
      */
+    @Deprecated
     protected String formatData(String data) {
         return data;
+    }
+    
+    /**
+     * Parse data for display. Each string list entry corresponds to a column entry in a list item.
+     * 
+     * @param data Data to be parsed. By default, it is assumed to be '^'-delimited.
+     * @return A list of column entries.
+     */
+    protected List<String> parseData(String data) {
+        return StrUtil.toList(formatData(data), StrUtil.U);
     }
     
     /**
