@@ -338,16 +338,16 @@ public abstract class ListViewForm extends CaptionedForm {
      */
     protected Listitem addItem(String data) {
         Listitem li = null;
-        List<String> fmt = parseData(data);
+        List<String> cols = parseData(data);
         
-        if (!fmt.isEmpty()) {
+        if (cols != null && !cols.isEmpty()) {
             li = new Listitem();
             listbox.appendChild(li);
             li.setValue(data);
             li.addForward(Events.ON_CLICK, listbox, Events.ON_SELECT);
             
-            for (String pc : fmt) {
-                Listcell cell = new Listcell(pc);
+            for (String col : cols) {
+                Listcell cell = new Listcell(col);
                 li.appendChild(cell);
             }
         }
