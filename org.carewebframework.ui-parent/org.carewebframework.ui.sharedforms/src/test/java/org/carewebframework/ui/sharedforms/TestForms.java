@@ -17,8 +17,8 @@ import org.carewebframework.ui.test.CommonTest;
 import org.carewebframework.ui.zk.ZKUtil;
 
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zul.Label;
 import org.zkoss.zul.Listbox;
-import org.zkoss.zul.Listcell;
 import org.zkoss.zul.Listheader;
 
 import org.junit.Test;
@@ -31,11 +31,12 @@ public class TestForms extends CommonTest {
         TestController controller = (TestController) FrameworkController.getController(root);
         PluginContainer dummy = new PluginContainer();
         controller.onLoad(dummy);
-        controller.loadList();
-        assertEquals(10, controller.itemList.size());
+        controller.requestData();
+        assertEquals(10, controller.model.size());
         Listbox listbox = (Listbox) root.getFellow("listbox");
+        listbox.renderAll();
         assertEquals(10, listbox.getItemCount());
-        assertEquals("Item #2.3", ((Listcell) listbox.getItemAtIndex(1).getChildren().get(2)).getLabel());
+        assertEquals("Item #2.3", ((Label) listbox.getItemAtIndex(1).getChildren().get(2).getFirstChild()).getValue());
         assertEquals("Test Title", controller.getCaption());
         assertEquals("Header3", ((Listheader) listbox.getListhead().getLastChild()).getLabel());
         assertEquals("50:1:false;0:33%;1:33%;2:33%", controller.getLayout());

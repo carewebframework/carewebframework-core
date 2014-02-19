@@ -9,9 +9,25 @@
  */
 package org.carewebframework.ui.sharedforms;
 
-public class TestController extends ListViewForm {
+import java.util.List;
+
+import org.carewebframework.ui.sharedforms.TestController.TestItem;
+
+public class TestController extends ListViewForm<TestItem> {
     
     private static final long serialVersionUID = 1L;
+    
+    public class TestItem {
+        
+        String item1, item2, item3;
+        
+        public TestItem(String data) {
+            String[] pcs = data.split("\\^", 3);
+            this.item1 = pcs[0];
+            this.item2 = pcs[1];
+            this.item3 = pcs[2];
+        }
+    }
     
     @Override
     protected void init() {
@@ -24,7 +40,7 @@ public class TestController extends ListViewForm {
     }
     
     @Override
-    protected void fetchList() {
+    protected void requestData() {
         for (int i = 1; i <= 10; i++) {
             StringBuilder sb = new StringBuilder();
             
@@ -32,10 +48,17 @@ public class TestController extends ListViewForm {
                 sb.append(j == 1 ? "" : "^").append("Item #" + i + "." + j);
             }
             
-            itemList.add(sb.toString());
+            model.add(new TestItem(sb.toString()));
         }
         
-        renderList();
+        renderData();
+    }
+    
+    @Override
+    protected void render(TestItem dao, List<Object> columns) {
+        columns.add(dao.item1);
+        columns.add(dao.item2);
+        columns.add(dao.item3);
     }
     
 }

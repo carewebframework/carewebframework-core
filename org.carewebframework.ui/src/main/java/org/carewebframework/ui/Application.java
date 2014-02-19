@@ -27,6 +27,7 @@ import org.carewebframework.common.DateUtil;
 import org.carewebframework.common.DateUtil.ITimeZoneAccessor;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.ui.LifecycleEventListener.ILifecycleCallback;
+import org.carewebframework.ui.action.ActionRegistry;
 import org.carewebframework.ui.spring.AppContextFinder;
 import org.carewebframework.ui.spring.FrameworkAppContext;
 
@@ -649,6 +650,9 @@ public class Application {
         DateUtil.localTimeZone = localTimeZone;
         LifecycleEventDispatcher.addDesktopCallback(desktopLifeCycle);
         LifecycleEventDispatcher.addSessionCallback(sessionLifeCycle);
+        ActionRegistry.addGlobalAction("@cwf.btn.refresh.label",
+            "zscript:org.carewebframework.api.event.EventManager.getInstance().fireLocalEvent(\"" + Constants.REFRESH_EVENT
+                    + "\", null);");
     }
     
     /**

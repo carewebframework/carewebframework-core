@@ -18,6 +18,7 @@ import org.apache.commons.lang.math.NumberUtils;
 import org.carewebframework.common.NumUtil;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.ui.command.CommandUtil;
+import org.carewebframework.ui.zk.AbstractListitemRenderer;
 import org.carewebframework.ui.zk.SplitterPane;
 import org.carewebframework.ui.zk.SplitterView;
 import org.carewebframework.ui.zk.ZKUtil;
@@ -29,16 +30,18 @@ import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.SelectEvent;
 import org.zkoss.zk.ui.event.SortEvent;
 import org.zkoss.zul.Auxheader;
+import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Listbox;
-import org.zkoss.zul.Listcell;
 import org.zkoss.zul.Listhead;
 import org.zkoss.zul.Listheader;
 import org.zkoss.zul.Listitem;
 
 /**
  * Controller for list view based forms.
+ * 
+ * @param <DAO> Data access object type.
  */
-public abstract class ListViewForm extends CaptionedForm {
+public abstract class ListViewForm<DAO> extends CaptionedForm {
     
     private static final long serialVersionUID = 1L;
     
@@ -76,7 +79,16 @@ public abstract class ListViewForm extends CaptionedForm {
     
     private boolean sortAscending;
     
-    protected final List<String> itemList = new ArrayList<String>();
+    protected final ListModelList<DAO> model = new ListModelList<DAO>();
+    
+    private final AbstractListitemRenderer<DAO, Object> renderer = new AbstractListitemRenderer<DAO, Object>() {
+        
+        @Override
+        protected void renderItem(Listitem item, DAO object) {
+            ListViewForm.this.renderItem(item, object);
+        }
+        
+    };
     
     private final EventListener<SortEvent> sortListener = new EventListener<SortEvent>() {
         
@@ -88,9 +100,21 @@ public abstract class ListViewForm extends CaptionedForm {
         
     };
     
+    /**
+     * Abort any pending async call.
+     */
+    protected abstract void asyncAbort();
+    
+    /**
+     * Async request to fetch data.
+     */
+    protected abstract void requestData();
+    
     @Override
     protected void init() {
         super.init();
+        listbox.setItemRenderer(renderer);
+        listbox.setModel(model);
         root = detailPane;
         setSize(50);
         CommandUtil.associateCommand("REFRESH", listbox);
@@ -113,11 +137,10 @@ public abstract class ListViewForm extends CaptionedForm {
         
         for (String header : headers) {
             String[] pcs = StrUtil.split(header, StrUtil.U, 2);
-            Listheader lhdr = new Listheader();
+            Listheader lhdr = new Listheader(pcs[0]);
             listhead.appendChild(lhdr);
             lhdr.setAttribute(SORT_TYPE_ATTR, NumberUtils.toInt(pcs[1]));
             lhdr.setAttribute(COL_INDEX_ATTR, colCount++);
-            lhdr.setLabel(pcs[0]);
             lhdr.setWidth(w);
             lhdr.addEventListener(Events.ON_SORT, sortListener);
         }
@@ -255,8 +278,8 @@ public abstract class ListViewForm extends CaptionedForm {
      * Clears the list and status.
      */
     protected void reset() {
-        itemList.clear();
-        listbox.getItems().clear();
+        model.clear();
+        listbox.setModel((ListModelList<?>) null);
         status(null);
     }
     
@@ -265,128 +288,61 @@ public abstract class ListViewForm extends CaptionedForm {
     }
     
     /**
-     * Abort any pending async call.
-     */
-    protected abstract void asyncAbort();
-    
-    /**
-     * Async request to fetch list data.
-     */
-    protected abstract void fetchList();
-    
-    /**
      * Initiate asynchronous call to retrieve data from host.
      */
-    protected void loadList() {
+    protected void loadData() {
         dataNeedsUpdate = false;
         asyncAbort();
         reset();
         status("Retrieving " + dataName + "...");
         
         try {
-            fetchList();
+            requestData();
         } catch (Throwable t) {
             status("Error Retrieving " + dataName + "...^" + t.getMessage());
         }
     }
     
     /**
-     * Render the list view from the current item list.
+     * Converts a DAO object for rendering.
+     * 
+     * @param dao DAO object to be rendered.
+     * @param columns Returns a list of objects to render, one per column.
      */
-    protected void renderList() {
-        listbox.getItems().clear();
+    protected abstract void render(DAO dao, List<Object> columns);
+    
+    /**
+     * Render a single item.
+     * 
+     * @param item List item being rendered.
+     * @param dao DAO object
+     */
+    protected void renderItem(Listitem item, DAO dao) {
+        List<Object> columns = new ArrayList<Object>();
+        render(dao, columns);
+        item.setVisible(!columns.isEmpty());
         
-        for (String item : itemList) {
-            if (isError(item)) {
-                return;
-            }
-            addItem(item);
+        for (Object colData : columns) {
+            renderer.createCell(item, colData).setValue(colData);
         }
-        
-        if (listbox.getItems().isEmpty()) {
+    }
+    
+    /**
+     * Render the model data.
+     */
+    protected void renderData() {
+        if (model.isEmpty()) {
             status("No " + dataName + " Found");
         } else {
             status(null);
+            alphaSort();
+            listbox.setModel(model);
         }
-        
-        alphaSort();
     }
     
     /**
-     * Returns true if data represents an error.
-     * 
-     * @param data
-     * @return
+     * Implement to sort the data before displaying.
      */
-    private boolean isError(String data) {
-        String error = getError(data);
-        
-        if (error != null) {
-            status(error);
-            return true;
-        }
-        
-        return false;
-        
-    }
-    
-    /**
-     * Add an item to the list view.
-     * 
-     * @param data Item data, each column delimited by '^'.
-     * @return The newly added list item.
-     */
-    protected Listitem addItem(String data) {
-        Listitem li = null;
-        List<String> cols = parseData(data);
-        
-        if (cols != null && !cols.isEmpty()) {
-            li = new Listitem();
-            listbox.appendChild(li);
-            li.setValue(data);
-            li.addForward(Events.ON_CLICK, listbox, Events.ON_SELECT);
-            
-            for (String col : cols) {
-                Listcell cell = new Listcell(col);
-                li.appendChild(cell);
-            }
-        }
-        
-        return li;
-    }
-    
-    /**
-     * Format data before processing. Default action is to return original.
-     * 
-     * @param data
-     * @return
-     * @deprecated Override <code>parseData</code> instead.
-     */
-    @Deprecated
-    protected String formatData(String data) {
-        return data;
-    }
-    
-    /**
-     * Parse data for display. Each string list entry corresponds to a column entry in a list item.
-     * 
-     * @param data Data to be parsed. By default, it is assumed to be '^'-delimited.
-     * @return A list of column entries.
-     */
-    protected List<String> parseData(String data) {
-        return StrUtil.toList(formatData(data), StrUtil.U);
-    }
-    
-    /**
-     * Return error message if data represents an error. Otherwise, returns null.
-     * 
-     * @param data
-     * @return
-     */
-    protected String getError(String data) {
-        return null;
-    }
-    
     protected void alphaSort() {
         
     }
@@ -399,7 +355,7 @@ public abstract class ListViewForm extends CaptionedForm {
         dataNeedsUpdate = true;
         
         if (!deferUpdate || isActive()) {
-            loadList();
+            loadData();
         } else {
             reset();
         }
@@ -447,7 +403,7 @@ public abstract class ListViewForm extends CaptionedForm {
         super.onActivate();
         
         if (dataNeedsUpdate) {
-            loadList();
+            loadData();
         }
     }
     
