@@ -52,7 +52,7 @@ public abstract class AbstractRenderer {
      * @param value Value to be used as label text.
      * @return The newly created label.
      */
-    protected Label createLabel(Component parent, Object value) {
+    public Label createLabel(Component parent, Object value) {
         return createLabel(parent, value, null, null);
     }
     
@@ -64,7 +64,7 @@ public abstract class AbstractRenderer {
      * @param prefix Value to be used as a prefix for the label text.
      * @return The newly created label.
      */
-    protected Label createLabel(Component parent, Object value, String prefix) {
+    public Label createLabel(Component parent, Object value, String prefix) {
         return createLabel(parent, value, prefix, null);
     }
     
@@ -77,7 +77,7 @@ public abstract class AbstractRenderer {
      * @param style Style to be applied to the label.
      * @return The newly created label.
      */
-    protected Label createLabel(Component parent, Object value, String prefix, String style) {
+    public Label createLabel(Component parent, Object value, String prefix, String style) {
         return createLabel(parent, value, prefix, style, false);
     }
     
@@ -91,7 +91,7 @@ public abstract class AbstractRenderer {
      * @param asFirst If true, the label is prepended to the parent. If false, it is appended.
      * @return The newly created label.
      */
-    protected Label createLabel(Component parent, Object value, String prefix, String style, boolean asFirst) {
+    public Label createLabel(Component parent, Object value, String prefix, String style, boolean asFirst) {
         Label label = new Label(createLabelText(value, prefix));
         label.setStyle(style);
         parent.insertBefore(label, asFirst ? parent.getFirstChild() : null);
@@ -134,7 +134,7 @@ public abstract class AbstractRenderer {
         return container;
     }
     
-    protected String createLabelText(Object value, String prefix) {
+    public String createLabelText(Object value, String prefix) {
         String text = StringUtils.trimToEmpty(value == null ? null : value instanceof Date ? DateUtil
                 .formatDate((Date) value) : value instanceof String ? StrUtil.formatMessage((String) value) : value
                 .toString());

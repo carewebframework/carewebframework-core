@@ -63,7 +63,7 @@ public abstract class AbstractListitemRenderer<T, G> extends AbstractRenderer im
      * @param value Value to be used as label text.
      * @return The newly created list cell.
      */
-    protected Listcell createCell(Component parent, Object value) {
+    public Listcell createCell(Component parent, Object value) {
         return createCell(parent, value, null);
     }
     
@@ -75,7 +75,7 @@ public abstract class AbstractListitemRenderer<T, G> extends AbstractRenderer im
      * @param prefix Value to be used as a prefix for the label text.
      * @return The newly created list cell.
      */
-    protected Listcell createCell(Component parent, Object value, String prefix) {
+    public Listcell createCell(Component parent, Object value, String prefix) {
         return createCell(parent, value, prefix, null);
     }
     
@@ -88,7 +88,7 @@ public abstract class AbstractListitemRenderer<T, G> extends AbstractRenderer im
      * @param style Style to be applied to the label.
      * @return The newly created list cell.
      */
-    protected Listcell createCell(Component parent, Object value, String prefix, String style) {
+    public Listcell createCell(Component parent, Object value, String prefix, String style) {
         return createCell(parent, value, prefix, style, null, Listcell.class);
     }
     

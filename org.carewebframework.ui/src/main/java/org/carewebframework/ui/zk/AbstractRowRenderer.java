@@ -182,7 +182,7 @@ public abstract class AbstractRowRenderer<T, G> extends AbstractRenderer impleme
      * @param value Value to be used as label text.
      * @return The newly created cell.
      */
-    protected Cell createCell(Component parent, Object value) {
+    public Cell createCell(Component parent, Object value) {
         return createCell(parent, value, null);
     }
     
@@ -194,7 +194,7 @@ public abstract class AbstractRowRenderer<T, G> extends AbstractRenderer impleme
      * @param prefix Value to be used as a prefix for the label text.
      * @return The newly created cell.
      */
-    protected Cell createCell(Component parent, Object value, String prefix) {
+    public Cell createCell(Component parent, Object value, String prefix) {
         return createCell(parent, value, prefix, null);
     }
     
@@ -207,7 +207,7 @@ public abstract class AbstractRowRenderer<T, G> extends AbstractRenderer impleme
      * @param style Style to be applied to the label.
      * @return The newly created cell.
      */
-    protected Cell createCell(Component parent, Object value, String prefix, String style) {
+    public Cell createCell(Component parent, Object value, String prefix, String style) {
         return createCell(parent, value, prefix, style, null);
     }
     
@@ -221,7 +221,7 @@ public abstract class AbstractRowRenderer<T, G> extends AbstractRenderer impleme
      * @param width Width of the cell.
      * @return The newly created cell.
      */
-    protected Cell createCell(Component parent, Object value, String prefix, String style, String width) {
+    public Cell createCell(Component parent, Object value, String prefix, String style, String width) {
         return createCell(parent, value, prefix, style, width, Cell.class);
     }
     
@@ -234,7 +234,7 @@ public abstract class AbstractRowRenderer<T, G> extends AbstractRenderer impleme
      * @param value The content for the new cell.
      * @return If the previous cell was re-used, this is returned. Otherwise, returns a new cell.
      */
-    protected Cell createOrMergeCell(Component parent, Cell cell, Object value) {
+    public Cell createOrMergeCell(Component parent, Cell cell, Object value) {
         return createOrMergeCell(parent, cell, value, null);
     }
     
@@ -248,7 +248,7 @@ public abstract class AbstractRowRenderer<T, G> extends AbstractRenderer impleme
      * @param prefix Text prefix for content.
      * @return If the previous cell was re-used, this is returned. Otherwise, returns a new cell.
      */
-    protected Cell createOrMergeCell(Component parent, Cell cell, Object value, String prefix) {
+    public Cell createOrMergeCell(Component parent, Cell cell, Object value, String prefix) {
         return createOrMergeCell(parent, cell, value, prefix, null);
     }
     
@@ -263,7 +263,7 @@ public abstract class AbstractRowRenderer<T, G> extends AbstractRenderer impleme
      * @param style Optional style for label.
      * @return If the previous cell was re-used, this is returned. Otherwise, returns a new cell.
      */
-    protected Cell createOrMergeCell(Component parent, Cell cell, Object value, String prefix, String style) {
+    public Cell createOrMergeCell(Component parent, Cell cell, Object value, String prefix, String style) {
         value = value instanceof String ? StringUtils.trimToNull(createLabelText(value, prefix)) : value;
         
         if (cell == null || value != null) {
