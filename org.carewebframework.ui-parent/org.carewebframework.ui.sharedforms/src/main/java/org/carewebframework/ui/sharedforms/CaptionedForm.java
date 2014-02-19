@@ -45,7 +45,7 @@ public class CaptionedForm extends BaseForm {
     @Override
     protected void init() {
         super.init();
-        getContainer().registerProperties(this, "caption", "captionStyle", "color1", "color2");
+        getContainer().registerProperties(this, "caption", "captionStyle", "icon", "color1", "color2");
         root = panel;
         updateStyle();
     }
@@ -156,6 +156,24 @@ public class CaptionedForm extends BaseForm {
      */
     public void setCaption(String caption) {
         panel.getCaption().setLabel(caption);
+    }
+    
+    /**
+     * Return the caption icon URL.
+     * 
+     * @return Caption icon URL.
+     */
+    public String getIcon() {
+        return panel.getCaption().getImage();
+    }
+    
+    /**
+     * Set the caption icon.
+     * 
+     * @param url URL of icon.
+     */
+    public void setIcon(String url) {
+        panel.getCaption().setImage(url);
     }
     
 }
