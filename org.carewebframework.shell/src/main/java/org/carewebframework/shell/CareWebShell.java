@@ -41,6 +41,7 @@ import org.carewebframework.ui.command.CommandEvent;
 import org.carewebframework.ui.command.CommandRegistry;
 import org.carewebframework.ui.command.CommandUtil;
 import org.carewebframework.ui.zk.MessageWindow;
+import org.carewebframework.ui.zk.MessageWindow.MessageInfo;
 import org.carewebframework.ui.zk.PromptDialog;
 import org.carewebframework.ui.zk.ZKUtil;
 
@@ -690,6 +691,32 @@ public class CareWebShell extends Div implements AfterCompose {
      */
     public void showMessage(String message, String caption, String color, Integer duration, String tag) {
         messageWindow.show(message, caption, color, duration, tag);
+    }
+    
+    /**
+     * Shows a slide-down message.
+     * 
+     * @param message
+     * @param caption
+     * @param color
+     * @param duration
+     * @param tag
+     * @param action
+     * @see org.carewebframework.ui.zk.MessageWindow#show(String, String, String, Integer, String,
+     *      String)
+     */
+    public void showMessage(String message, String caption, String color, Integer duration, String tag, String action) {
+        messageWindow.show(message, caption, color, duration, tag, action);
+    }
+    
+    /**
+     * Shows a slide-down message.
+     * 
+     * @param messageInfo
+     * @see org.carewebframework.ui.zk.MessageWindow#show(MessageInfo)
+     */
+    public void showMessage(MessageInfo messageInfo) {
+        messageWindow.show(messageInfo);
     }
     
     /**

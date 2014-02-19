@@ -169,9 +169,11 @@ public class DesignContextMenu extends Menupopup implements IdSpace {
     /**
      * Avoid exception if menu not attached to a desktop.
      */
+    @Override
     public void close() {
-        if (getDesktop() != null)
+        if (getDesktop() != null) {
             super.close();
+        }
     }
     
     /**

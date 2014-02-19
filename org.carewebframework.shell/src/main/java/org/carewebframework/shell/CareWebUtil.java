@@ -12,6 +12,7 @@ package org.carewebframework.shell;
 import org.carewebframework.api.FrameworkUtil;
 import org.carewebframework.api.ManifestIterator;
 import org.carewebframework.ui.action.ActionRegistry;
+import org.carewebframework.ui.zk.MessageWindow.MessageInfo;
 
 /**
  * Static utility methods.
@@ -53,6 +54,15 @@ public class CareWebUtil {
      */
     public static void about() {
         AboutDialog.execute(ManifestIterator.getInstance().getPrimaryManifest());
+    }
+    
+    /**
+     * Sends an informational message for display by desktop.
+     * 
+     * @param messageInfo A message descriptor.
+     */
+    public static void showMessage(MessageInfo messageInfo) {
+        getShell().showMessage(messageInfo);
     }
     
     /**
