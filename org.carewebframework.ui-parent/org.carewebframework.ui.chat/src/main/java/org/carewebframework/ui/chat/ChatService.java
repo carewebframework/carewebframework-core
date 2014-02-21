@@ -79,14 +79,14 @@ public class ChatService implements IParticipantUpdate {
     public ChatService(IEventManager eventManager) {
         this.eventManager = eventManager;
         self = ((ILocalEventDispatcher) eventManager).getGlobalEventDispatcher().getPublisherInfo();
+        ActionRegistry.addLocalAction("@chat.action.create.session", "zscript:" + ChatService.class.getName()
+                + ".getInstance().createSession();");
     }
     
     /**
      * Initialization of service.
      */
     public void init() {
-        ActionRegistry.addLocalAction("@chat.action.create.session", "zscript:" + ChatService.class.getName()
-                + ".getInstance().createSession();");
         participantListener = new ParticipantListener(self, EVENT_INVITE, EVENT_ACTIVE, EVENT_INACTIVE, eventManager, this);
         inviteListener = new ServiceListener<String>(
                                                      EVENT_INVITE, eventManager) {
