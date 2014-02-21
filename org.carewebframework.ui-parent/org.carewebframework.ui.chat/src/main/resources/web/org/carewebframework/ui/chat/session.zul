@@ -22,12 +22,7 @@
 					<cell vflex="1">
 						<groupbox closable="false" vflex="1">
 							<caption label="${labels.chat.session.group.participants.caption}" />
-							<listbox id="lstParticipants" vflex="1" style="border:none">
-								<listhead>
-									<listheader label="${labels.chat.participant.header.user}"
-										id="getUserName" />
-								</listhead>
-							</listbox>
+							<listbox id="lstParticipants" vflex="1" style="border:none" />
 							<toolbar align="end">
 								<button id="btnRefresh" label="${labels.chat.session.button.refresh.label}" />
 								<button id="btnInvite" label="${labels.chat.session.button.invite.label}" />
