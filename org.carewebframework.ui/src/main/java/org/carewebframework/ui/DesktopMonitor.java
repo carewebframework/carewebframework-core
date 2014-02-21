@@ -390,7 +390,7 @@ public class DesktopMonitor extends Thread {
     public void abortShutdown(String message) {
         if (mode == Mode.SHUTDOWN) {
             updateShutdown(0);
-            eventManager.fireLocalEvent(MessageWindow.EVENT,
+            eventManager.fireLocalEvent(MessageWindow.EVENT_SHOW,
                 StringUtils.isEmpty(message) ? Labels.getLabel("cwf.timeout.shutdown.abort.message") : message);
         }
     }

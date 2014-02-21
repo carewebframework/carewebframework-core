@@ -97,7 +97,7 @@ public class ChatService implements IParticipantUpdate {
                 MessageInfo mi = new MessageInfo(StrUtil.formatMessage("@chat.invitation.message", pcs[1]),
                         StrUtil.formatMessage("@chat.invitation.caption"), null, 999999, null, "cwf.fireLocalEvent('"
                                 + EVENT_ACCEPT + "', '" + pcs[0] + "'); return true;");
-                eventManager.fireLocalEvent(MessageWindow.EVENT, mi);
+                eventManager.fireLocalEvent(MessageWindow.EVENT_SHOW, mi);
             }
         };
         acceptListener = new ServiceListener<String>(

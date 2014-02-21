@@ -29,16 +29,24 @@ public class MessageWindow extends XulElement {
     
     private static final long serialVersionUID = 1L;
     
-    public static final String EVENT = "CAREWEB.INFO";
+    private static final String EVENT_ROOT = "CAREWEB.INFO";
+    
+    public static final String EVENT_SHOW = EVENT_ROOT + ".SHOW";
+    
+    public static final String EVENT_HIDE = EVENT_ROOT + ".HIDE";
     
     private final IGenericEvent<Object> messageWindowListener = new IGenericEvent<Object>() {
         
         @Override
         public void eventCallback(String eventName, Object eventData) {
-            if (eventData instanceof MessageInfo) {
-                show((MessageInfo) eventData);
-            } else {
-                show(eventData.toString());
+            if (eventName.startsWith(EVENT_SHOW)) {
+                if (eventData instanceof MessageInfo) {
+                    show((MessageInfo) eventData);
+                } else {
+                    show(eventData.toString());
+                }
+            } else if (eventName.startsWith(EVENT_HIDE)) {
+                clear((String) eventData);
             }
         }
         
@@ -83,7 +91,7 @@ public class MessageWindow extends XulElement {
     }
     
     /**
-     * Subcribe to/unsubscribe from {@value #EVENT} events if event manager is available.
+     * Subscribe to/unsubscribe from {@value #EVENT_ROOT} events if event manager is available.
      * 
      * @param doSubscribe If true, subscribe. If false, unsubscribe.
      */
@@ -92,9 +100,9 @@ public class MessageWindow extends XulElement {
         
         if (eventManager != null) {
             if (doSubscribe) {
-                eventManager.subscribe(EVENT, messageWindowListener);
+                eventManager.subscribe(EVENT_ROOT, messageWindowListener);
             } else {
-                eventManager.unsubscribe(EVENT, messageWindowListener);
+                eventManager.unsubscribe(EVENT_ROOT, messageWindowListener);
             }
         }
     }
