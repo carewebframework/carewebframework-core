@@ -21,6 +21,7 @@ import org.carewebframework.ui.zk.ZKUtil;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zul.Button;
+import org.zkoss.zul.Checkbox;
 import org.zkoss.zul.ListModel;
 import org.zkoss.zul.ListModelSet;
 import org.zkoss.zul.Listbox;
@@ -35,11 +36,15 @@ public class InviteController extends FrameworkController {
     
     private static final String DIALOG = ZKUtil.getResourcePath(InviteController.class) + "invite.zul";
     
+    private static final String ATTR_HIDE = InviteController.class.getName() + ".HIDE_ACTIVE";
+    
     private Listbox lstSessions;
     
     private Listheader getUserName;
     
-    private Button btnOK;
+    private Button btnInvite;
+    
+    private Checkbox chkHideActive;
     
     private final ListModelSet<IPublisherInfo> model = new ListModelSet<IPublisherInfo>();
     
@@ -47,17 +52,20 @@ public class InviteController extends FrameworkController {
     
     private ChatService chatService;
     
+    private ParticipantRenderer renderer;
+    
     /**
      * Displays the participant invitation dialog.
      * 
      * @param sessionId The id of the chat session making the invitation request.
      * @param exclusions List of participants that should be excluded from user selection.
+     * @return True if invitations were sent.
      */
-    public static void show(String sessionId, Collection<IPublisherInfo> exclusions) {
+    public static boolean show(String sessionId, Collection<IPublisherInfo> exclusions) {
         Map<Object, Object> args = new HashMap<Object, Object>();
         args.put("sessionId", sessionId);
         args.put("exclusions", exclusions);
-        PopupDialog.popup(DIALOG, args, true, true, true);
+        return PopupDialog.popup(DIALOG, args, true, true, true).hasAttribute("ok");
     }
     
     /**
@@ -70,8 +78,10 @@ public class InviteController extends FrameworkController {
         sessionId = (String) arg.get("sessionId");
         Collection<IPublisherInfo> exclusions = (Collection<IPublisherInfo>) arg.get("exclusions");
         model.setMultiple(lstSessions.isMultiple());
-        lstSessions.setItemRenderer(new ParticipantRenderer(chatService.getSelf(), exclusions));
+        renderer = new ParticipantRenderer(chatService.getSelf(), exclusions);
+        lstSessions.setItemRenderer(renderer);
         RowComparator.autowireColumnComparators(lstSessions.getListhead().getChildren());
+        chkHideActive.setChecked(getAppFramework().getAttribute(ATTR_HIDE) != null);
         refresh();
     }
     
@@ -83,6 +93,7 @@ public class InviteController extends FrameworkController {
         lstSessions.setModel((ListModel<?>) null);
         model.clear();
         model.addAll(chatService.getChatCandidates());
+        renderer.setHideExclusions(chkHideActive.isChecked());
         lstSessions.setModel(model);
         getUserName.sort(true);
         updateControls();
@@ -92,7 +103,7 @@ public class InviteController extends FrameworkController {
      * Updates controls to reflect the current selection state.
      */
     private void updateControls() {
-        btnOK.setDisabled(model.isSelectionEmpty());
+        btnInvite.setDisabled(model.isSelectionEmpty());
     }
     
     /**
@@ -105,9 +116,18 @@ public class InviteController extends FrameworkController {
     /**
      * Send invitations to the selected participants, then close the dialog.
      */
-    public void onClick$btnOK() {
+    public void onClick$btnInvite() {
         chatService.invite(sessionId, model.getSelection());
+        root.setAttribute("ok", true);
         root.detach();
+    }
+    
+    /**
+     * Update display when hide active participants setting changes.
+     */
+    public void onCheck$chkHideActive() {
+        getAppFramework().setAttribute(ATTR_HIDE, chkHideActive.isChecked() ? true : null);
+        refresh();
     }
     
     /**

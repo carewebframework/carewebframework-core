@@ -25,6 +25,8 @@ public class ParticipantRenderer extends AbstractListitemRenderer<IPublisherInfo
     
     private final IPublisherInfo self;
     
+    private boolean hideExclusions;
+    
     /**
      * Creates a participant renderer.
      * 
@@ -49,11 +51,20 @@ public class ParticipantRenderer extends AbstractListitemRenderer<IPublisherInfo
             item.setCheckable(false);
             item.setDisabled(true);
             item.setSclass("chat-participant-active");
+            item.setVisible(!hideExclusions);
         }
         
         if (participant.equals(self)) {
             item.setSclass("chat-participant-self");
         }
+    }
+    
+    public boolean getHideExclusions() {
+        return hideExclusions;
+    }
+    
+    public void setHideExclusions(boolean hideExclusions) {
+        this.hideExclusions = hideExclusions;
     }
     
 };

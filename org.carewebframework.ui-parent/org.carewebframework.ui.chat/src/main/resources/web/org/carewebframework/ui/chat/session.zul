@@ -5,6 +5,7 @@
 	
 	<window height="500px" width="500px" title="${arg.title}"
 		apply="${chatSessionController}" position="center">
+		<style src="~./org/carewebframework/ui/chat/chat.css" />
 		<hbox vflex="1" hflex="1">
 			<cell width="50%">
 				<groupbox closable="false" height="100%">
@@ -46,38 +47,5 @@
 				</vbox>
 			</cell>
 		</hbox>
-		<style>
-			.chat-dialog-header {
-				font-weight: bold;
-				color: red;
-			}
-			
-			.chat-dialog-header-self {
-				font-weight: bold;
-				color: green;
-			}
-			
-			.chat-dialog-text {
-				border-bottom: 1px solid lightgray;
-				padding-bottom: 5px;
-			}
-			
-			.chat-dialog-text-self {
-				border-bottom: 1px solid lightgray;
-				padding-bottom: 5px;
-				font-style: italic;
-			}
-			
-			.chat-dialog {
-				background: lightyellow;
-				overflow: auto;
-				word-wrap: break-word;
-				word-break: break-word;
-			}
-			
-			.chat-dialog * {
-				display: block;
-			}
-		</style>
 	</window>
 </zk>

@@ -92,7 +92,6 @@ public class ChatService implements IGenericEvent<String>, IParticipantUpdate {
      */
     public void destroy() {
         setActive(false);
-        participantListener.setActive(false);
         
         for (SessionController session : new ArrayList<SessionController>(sessions)) {
             session.close();
@@ -138,7 +137,7 @@ public class ChatService implements IGenericEvent<String>, IParticipantUpdate {
      * @return The newly created session.
      */
     public SessionController createSession() {
-        return createSession(newSessionId());
+        return createSession(null);
     }
     
     /**
@@ -148,7 +147,9 @@ public class ChatService implements IGenericEvent<String>, IParticipantUpdate {
      * @return The newly created session.
      */
     public SessionController createSession(String sessionId) {
-        SessionController controller = SessionController.create(sessionId);
+        boolean newSession = sessionId == null;
+        sessionId = newSession ? newSessionId() : sessionId;
+        SessionController controller = SessionController.create(sessionId, newSession);
         sessions.add(controller);
         return controller;
     }
@@ -212,17 +213,21 @@ public class ChatService implements IGenericEvent<String>, IParticipantUpdate {
      * @param active
      */
     public void setActive(boolean active) {
-        this.active = active;
-        
-        for (String eventName : EVENTS) {
-            if (active) {
-                eventManager.subscribe(eventName, this);
-            } else {
-                eventManager.unsubscribe(eventName, this);
+        if (this.active != active) {
+            this.active = active;
+            
+            for (String eventName : EVENTS) {
+                if (active) {
+                    eventManager.subscribe(eventName, this);
+                } else {
+                    eventManager.unsubscribe(eventName, this);
+                }
             }
+            
+            participants.clear();
+            participants.add(self);
+            participantListener.setActive(active);
         }
-        
-        participantListener.setActive(active);
     }
     
     /**

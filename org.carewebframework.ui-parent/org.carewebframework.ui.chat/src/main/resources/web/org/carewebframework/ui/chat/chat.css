@@ -1,0 +1,45 @@
+.chat-dialog-header {
+	font-weight: bold;
+	color: red;
+}
+
+.chat-dialog-header-self {
+	font-weight: bold;
+	color: green;
+}
+
+.chat-dialog-text {
+	border-bottom: 1px solid lightgray;
+	padding-bottom: 5px;
+}
+
+.chat-dialog-text-self {
+	border-bottom: 1px solid lightgray;
+	padding-bottom: 5px;
+	font-style: italic;
+}
+
+.chat-dialog {
+	background: lightyellow;
+	overflow: auto;
+	word-wrap: break-word;
+	word-break: break-word;
+}
+
+.chat-dialog * {
+	display: block;
+}
+
+.chat-participant-self span.z-label {
+	font-style: italic;
+	color: green!important;
+}
+
+.chat-participant-active span.z-label {
+	font-style: italic;
+}
+
+.chat-invite .z-listheader-img {
+	display: none;
+}
+

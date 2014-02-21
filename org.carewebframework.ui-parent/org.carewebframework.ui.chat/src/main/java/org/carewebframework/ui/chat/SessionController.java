@@ -62,14 +62,15 @@ public class SessionController extends FrameworkController implements IGenericEv
      * Creates a chat session bound to the specified session id.
      * 
      * @param sessionId The chat session id.
+     * @param originator If true, this user is originating the chat session.
      * @return The controller for the chat session.
      */
-    protected static SessionController create(String sessionId) {
+    protected static SessionController create(String sessionId, boolean originator) {
         Map<Object, Object> args = new HashMap<Object, Object>();
         args.put("id", sessionId);
         args.put("title", StrUtil.formatMessage("@chat.session.title", sessionId));
+        args.put("originator", originator ? true : null);
         Window dlg = PopupDialog.popup(DIALOG, args, true, true, false);
-        dlg.doOverlapped();
         return (SessionController) FrameworkController.getController(dlg);
     }
     
@@ -88,6 +89,12 @@ public class SessionController extends FrameworkController implements IGenericEv
         participantListener = chatService.createListener(messageEvent, eventRoot + "JOIN", eventRoot + "LEAVE", this);
         doSubscribe(true);
         clearMessage();
+        
+        if (arg.get("originator") != null && !InviteController.show(sessionId, model)) {
+            root.detach();
+        } else {
+            ((Window) root).doOverlapped();
+        }
     }
     
     /**
