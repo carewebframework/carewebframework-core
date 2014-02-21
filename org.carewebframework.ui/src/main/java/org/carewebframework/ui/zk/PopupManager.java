@@ -118,7 +118,7 @@ public class PopupManager {
      * @param window
      */
     private void addOffset(Window window) {
-        if (!disableScript && window.inModal()) {
+        if (!disableScript && (!window.inEmbedded())) {
             int offset = getNextOffset();
             active.add(window);
             window.setAttribute(ATTR_OFFSET, offset);
@@ -145,9 +145,9 @@ public class PopupManager {
             Window window = active.get(i);
             Integer thisOffset = (Integer) window.getAttribute(ATTR_OFFSET);
             
-            if (window.getPage() == null || !window.inModal() || thisOffset == null) {
+            if (window.getPage() == null || thisOffset == null) {
                 active.remove(i);
-            } else {
+            } else if (window.isVisible()) {
                 offset = thisOffset;
                 break;
             }
