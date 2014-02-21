@@ -75,7 +75,7 @@ public class PopupManager {
      * @return PopupManager
      */
     public static PopupManager getInstance() {
-        return SpringUtil.getAppContext().getBean("popupManager", PopupManager.class);
+        return SpringUtil.getBean("popupManager", PopupManager.class);
     }
     
     /**
