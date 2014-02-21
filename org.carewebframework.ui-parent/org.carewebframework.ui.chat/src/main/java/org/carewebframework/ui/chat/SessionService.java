@@ -18,7 +18,7 @@ import org.carewebframework.common.StrUtil;
  */
 public class SessionService extends ParticipantListener {
     
-    protected static final String EVENT_SESSION = "CHAT.SESSION.{0}.";
+    protected static final String EVENT_SESSION = "CHAT.SESSION.%s.";
     
     protected static final String EVENT_JOIN = EVENT_SESSION + "JOIN";
     
