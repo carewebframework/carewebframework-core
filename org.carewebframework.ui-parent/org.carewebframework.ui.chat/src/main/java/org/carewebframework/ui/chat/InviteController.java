@@ -59,13 +59,14 @@ public class InviteController extends FrameworkController {
      * 
      * @param sessionId The id of the chat session making the invitation request.
      * @param exclusions List of participants that should be excluded from user selection.
-     * @return True if invitations were sent.
+     * @return List of participants that were sent invitations, or null if the dialog was cancelled.
      */
-    public static boolean show(String sessionId, Collection<IPublisherInfo> exclusions) {
+    @SuppressWarnings("unchecked")
+    public static Collection<IPublisherInfo> show(String sessionId, Collection<IPublisherInfo> exclusions) {
         Map<Object, Object> args = new HashMap<Object, Object>();
         args.put("sessionId", sessionId);
         args.put("exclusions", exclusions);
-        return PopupDialog.popup(DIALOG, args, true, true, true).hasAttribute("ok");
+        return (Collection<IPublisherInfo>) PopupDialog.popup(DIALOG, args, true, true, true).getAttribute("invitees");
     }
     
     /**
@@ -117,8 +118,9 @@ public class InviteController extends FrameworkController {
      * Send invitations to the selected participants, then close the dialog.
      */
     public void onClick$btnInvite() {
-        chatService.invite(sessionId, model.getSelection());
-        root.setAttribute("ok", true);
+        Collection<IPublisherInfo> invitees = model.getSelection();
+        chatService.invite(sessionId, invitees, false);
+        root.setAttribute("invitees", invitees);
         root.detach();
     }
     

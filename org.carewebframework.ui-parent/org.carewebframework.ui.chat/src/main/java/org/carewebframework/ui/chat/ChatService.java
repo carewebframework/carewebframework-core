@@ -91,13 +91,25 @@ public class ChatService implements IParticipantUpdate {
         inviteListener = new ServiceListener<String>(
                                                      EVENT_INVITE, eventManager) {
             
+            /**
+             * If event data is of the format [session id]^[requester], this is an invitation
+             * request. If event data is of the format [session id], it is a cancellation of a
+             * previous request.
+             */
             @Override
             public void eventCallback(String eventName, String eventData) {
-                String[] pcs = StrUtil.split(eventData, StrUtil.U);
-                MessageInfo mi = new MessageInfo(StrUtil.formatMessage("@chat.invitation.message", pcs[1]),
-                        StrUtil.formatMessage("@chat.invitation.caption"), null, 999999, null, "cwf.fireLocalEvent('"
-                                + EVENT_ACCEPT + "', '" + pcs[0] + "'); return true;");
-                eventManager.fireLocalEvent(MessageWindow.EVENT_SHOW, mi);
+                String[] pcs = eventData.split("\\^", 2);
+                String tag = EVENT_INVITE + "_" + pcs[0];
+                
+                if (pcs.length == 2) {
+                    String message = StrUtil.formatMessage("@chat.invitation.message", pcs[1]);
+                    String caption = StrUtil.formatMessage("@chat.invitation.caption");
+                    String action = "cwf.fireLocalEvent('" + EVENT_ACCEPT + "', '" + pcs[0] + "'); return true;";
+                    MessageInfo mi = new MessageInfo(message, caption, null, 999999, tag, action);
+                    eventManager.fireLocalEvent(MessageWindow.EVENT_SHOW, mi);
+                } else {
+                    eventManager.fireLocalEvent(MessageWindow.EVENT_HIDE, tag);
+                }
             }
         };
         acceptListener = new ServiceListener<String>(
@@ -237,8 +249,9 @@ public class ChatService implements IParticipantUpdate {
      * @param sessionId The id of the chat session making the invitation.
      * @param invitees The list of invitees. This will be used to constraint delivery of the
      *            invitation event to only those subscribers.
+     * @param cancel If true, invitees are sent a cancellation instead.
      */
-    public void invite(String sessionId, Collection<IPublisherInfo> invitees) {
+    public void invite(String sessionId, Collection<IPublisherInfo> invitees, boolean cancel) {
         if (invitees == null || invitees.isEmpty()) {
             return;
         }
@@ -253,7 +266,8 @@ public class ChatService implements IParticipantUpdate {
             sb.append(invitee.getEndpointId());
         }
         
-        eventManager.fireRemoteEvent(EVENT_INVITE, sessionId + StrUtil.U + self.getUserName(), sb.toString());
+        String eventData = sessionId + (cancel ? "" : StrUtil.U + self.getUserName());
+        eventManager.fireRemoteEvent(EVENT_INVITE, eventData, sb.toString());
     }
     
     /**

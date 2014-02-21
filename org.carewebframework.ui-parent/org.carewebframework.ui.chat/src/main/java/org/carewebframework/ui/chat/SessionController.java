@@ -9,8 +9,11 @@
  */
 package org.carewebframework.ui.chat;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.carewebframework.api.event.IPublisherInfo;
 import org.carewebframework.common.DateUtil;
@@ -53,6 +56,8 @@ public class SessionController extends FrameworkController implements ISessionUp
     
     private final ListModelSet<IPublisherInfo> model = new ListModelSet<IPublisherInfo>();
     
+    private final Set<IPublisherInfo> outstandingInvitations = new HashSet<IPublisherInfo>();
+    
     private SessionService sessionService;
     
     /**
@@ -83,11 +88,26 @@ public class SessionController extends FrameworkController implements ISessionUp
         lstParticipants.setModel(model);
         clearMessage();
         
-        if (arg.get("originator") != null && !InviteController.show(sessionId, model)) {
+        if (arg.get("originator") != null && !invite()) {
             root.detach();
         } else {
             ((Window) root).doOverlapped();
         }
+    }
+    
+    /**
+     * Extend chat invitation.
+     * 
+     * @return True if invitations were sent.
+     */
+    private boolean invite() {
+        Collection<IPublisherInfo> invitees = InviteController.show(sessionId, model);
+        
+        if (invitees != null) {
+            outstandingInvitations.addAll(invitees);
+        }
+        
+        return invitees != null;
     }
     
     /**
@@ -151,7 +171,7 @@ public class SessionController extends FrameworkController implements ISessionUp
      * Invokes the participate invitation dialog.
      */
     public void onClick$btnInvite() {
-        InviteController.show(sessionId, model);
+        invite();
     }
     
     /**
@@ -214,6 +234,8 @@ public class SessionController extends FrameworkController implements ISessionUp
         if (model.add(participant) && !fromRefresh && !participant.equals(chatService.getSelf())) {
             addDialog(StrUtil.formatMessage("@chat.session.event.join", participant.getUserName()), null, false);
         }
+        
+        outstandingInvitations.remove(participant);
     }
     
     /**
@@ -261,6 +283,7 @@ public class SessionController extends FrameworkController implements ISessionUp
         }
         
         root.detach();
+        chatService.invite(sessionId, outstandingInvitations, true);
         chatService.onSessionClosed(this);
     }
     
