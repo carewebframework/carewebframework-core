@@ -53,6 +53,16 @@ public class GlobalEventDispatcher extends AbstractGlobalEventDispatcher {
     public void subscribeRemoteEvent(String eventName, boolean subscribe) {
     }
     
+    /**
+     * Gets the unique id for this end point.
+     * 
+     * @return The end point's unique id.
+     */
+    @Override
+    protected String getEndpointId() {
+        return desktop.getId();
+    }
+    
     @Override
     public void fireRemoteEvent(String eventName, Serializable eventData, String recipients) {
         List<String> recp = StringUtils.isEmpty(recipients) ? null : StrUtil.toList(recipients, ",");
