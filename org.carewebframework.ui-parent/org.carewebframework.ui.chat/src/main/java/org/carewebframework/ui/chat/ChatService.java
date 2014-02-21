@@ -185,8 +185,12 @@ public class ChatService implements IParticipantUpdate {
         boolean newSession = sessionId == null;
         sessionId = newSession ? newSessionId() : sessionId;
         SessionController controller = SessionController.create(sessionId, newSession);
-        controller.setSessionService(SessionService.create(self, sessionId, eventManager, controller));
-        sessions.add(controller);
+        
+        if (controller != null) {
+            controller.setSessionService(SessionService.create(self, sessionId, eventManager, controller));
+            sessions.add(controller);
+        }
+        
         return controller;
     }
     

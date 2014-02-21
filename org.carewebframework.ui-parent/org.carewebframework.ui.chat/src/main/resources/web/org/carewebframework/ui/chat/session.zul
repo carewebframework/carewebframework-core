@@ -3,7 +3,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
 	
-	<window height="500px" width="500px" title="${arg.title}"
+	<window height="500px" width="500px" title="${arg.title}" visible="false"
 		apply="${chatSessionController}" position="center">
 		<style src="~./org/carewebframework/ui/chat/chat.css" />
 		<hbox vflex="1" hflex="1">

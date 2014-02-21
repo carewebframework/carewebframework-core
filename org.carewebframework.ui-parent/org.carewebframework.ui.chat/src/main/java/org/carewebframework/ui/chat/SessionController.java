@@ -73,6 +73,13 @@ public class SessionController extends FrameworkController implements ISessionUp
         args.put("title", StrUtil.formatMessage("@chat.session.title", sessionId));
         args.put("originator", originator ? true : null);
         Window dlg = PopupDialog.popup(DIALOG, args, true, true, false);
+        
+        if (dlg.hasAttribute("closed")) {
+            dlg.detach();
+            return null;
+        }
+        
+        dlg.doOverlapped();
         return (SessionController) FrameworkController.getController(dlg);
     }
     
@@ -89,9 +96,7 @@ public class SessionController extends FrameworkController implements ISessionUp
         clearMessage();
         
         if (arg.get("originator") != null && !invite()) {
-            root.detach();
-        } else {
-            ((Window) root).doOverlapped();
+            close();
         }
     }
     
@@ -283,6 +288,7 @@ public class SessionController extends FrameworkController implements ISessionUp
         }
         
         root.detach();
+        root.setAttribute("closed", true);
         chatService.invite(sessionId, outstandingInvitations, true);
         chatService.onSessionClosed(this);
     }
