@@ -57,7 +57,7 @@ public class SessionService extends ParticipantListener {
         return new SessionService(self, sendEvent, joinEvent, leaveEvent, eventManager, callback);
     }
     
-    private SessionService(IPublisherInfo self, String sendEvent, String addEvent, String removeEvent,
+    private SessionService(final IPublisherInfo self, String sendEvent, String addEvent, String removeEvent,
         IEventManager eventManager, final ISessionUpdate callback) {
         super(self, sendEvent, addEvent, removeEvent, eventManager, callback);
         this.sendEvent = sendEvent;
@@ -66,7 +66,9 @@ public class SessionService extends ParticipantListener {
             
             @Override
             public void eventCallback(String eventName, ChatMessage chatMessage) {
-                callback.onMessageReceived(chatMessage);
+                if (!chatMessage.sender.equals(self)) {
+                    callback.onMessageReceived(chatMessage);
+                }
             }
             
         };

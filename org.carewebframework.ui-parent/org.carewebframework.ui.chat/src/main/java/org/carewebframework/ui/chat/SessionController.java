@@ -129,7 +129,7 @@ public class SessionController extends FrameworkController implements ISessionUp
      * Send the message text.
      */
     public void onClick$btnSendMessage() {
-        addDialog(sessionService.sendMessage(txtMessage.getText().trim()));
+        addDialog(sessionService.sendMessage(txtMessage.getText().trim()), true);
         clearMessage();
     }
     
@@ -167,11 +167,12 @@ public class SessionController extends FrameworkController implements ISessionUp
      * Adds a message to the dialog panel.
      * 
      * @param chatMessage Message to add.
+     * @param self True if this user is the message author.
      */
-    private void addDialog(ChatMessage chatMessage) {
+    private void addDialog(ChatMessage chatMessage, boolean self) {
         if (chatMessage != null) {
             String header = chatMessage.sender.getUserName() + " @ " + DateUtil.formatDate(chatMessage.timestamp);
-            addDialog(header, chatMessage.message, chatMessage.sender.equals(chatService.getSelf()));
+            addDialog(header, chatMessage.message, self);
         }
     }
     
@@ -228,13 +229,11 @@ public class SessionController extends FrameworkController implements ISessionUp
     }
     
     /**
-     * Handles chat dialog.
+     * Handles chat message receipt.
      */
     @Override
     public void onMessageReceived(ChatMessage chatMessage) {
-        if (!chatMessage.sender.equals(chatService.getSelf())) {
-            addDialog(chatMessage);
-        }
+        addDialog(chatMessage, false);
     }
     
     /**
