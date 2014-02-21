@@ -17,32 +17,32 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.carewebframework.api.event.IEventManager;
-import org.carewebframework.api.event.IGenericEvent;
 import org.carewebframework.api.event.ILocalEventDispatcher;
 import org.carewebframework.api.event.IPublisherInfo;
 import org.carewebframework.api.spring.SpringUtil;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.ui.action.ActionRegistry;
 import org.carewebframework.ui.chat.ParticipantListener.IParticipantUpdate;
+import org.carewebframework.ui.chat.SessionService.ISessionUpdate;
 import org.carewebframework.ui.zk.MessageWindow;
 import org.carewebframework.ui.zk.MessageWindow.MessageInfo;
 
 /**
  * Chat service.
  */
-public class ChatService implements IGenericEvent<String>, IParticipantUpdate {
+public class ChatService implements IParticipantUpdate {
     
-    private static final String EVENT_PREFIX = "CHAT.SERVICE.";
+    protected static final String EVENT_SERVICE = "CHAT.SERVICE.";
     
-    private static final String EVENT_ACTIVE = EVENT_PREFIX + "ACTIVE";
+    protected static final String EVENT_ACTIVE = EVENT_SERVICE + "ACTIVE";
     
-    private static final String EVENT_INACTIVE = EVENT_PREFIX + "INACTIVE";
+    protected static final String EVENT_INACTIVE = EVENT_SERVICE + "INACTIVE";
     
-    private static final String EVENT_INVITE = EVENT_PREFIX + "INVITE";
+    protected static final String EVENT_INVITE = EVENT_SERVICE + "INVITE";
     
-    private static final String EVENT_ACCEPT = EVENT_PREFIX + "ACCEPT";
+    protected static final String EVENT_ACCEPT = EVENT_SERVICE + "ACCEPT";
     
-    private static final String[] EVENTS = { EVENT_INVITE, EVENT_ACCEPT };
+    protected static final String EVENT_PING = EVENT_SERVICE + "PING";
     
     private static final AtomicInteger lastId = new AtomicInteger();
     
@@ -57,6 +57,10 @@ public class ChatService implements IGenericEvent<String>, IParticipantUpdate {
     private final IPublisherInfo self;
     
     private ParticipantListener participantListener;
+    
+    private ServiceListener<String> inviteListener;
+    
+    private ServiceListener<String> acceptListener;
     
     /**
      * Returns an instance of the chat service.
@@ -84,6 +88,27 @@ public class ChatService implements IGenericEvent<String>, IParticipantUpdate {
         ActionRegistry.addLocalAction("@chat.action.create.session", "zscript:" + ChatService.class.getName()
                 + ".getInstance().createSession();");
         participantListener = new ParticipantListener(self, EVENT_INVITE, EVENT_ACTIVE, EVENT_INACTIVE, eventManager, this);
+        inviteListener = new ServiceListener<String>(
+                                                     EVENT_INVITE, eventManager) {
+            
+            @Override
+            public void eventCallback(String eventName, String eventData) {
+                String[] pcs = StrUtil.split(eventData, StrUtil.U);
+                MessageInfo mi = new MessageInfo(StrUtil.formatMessage("@chat.invitation.message", pcs[1]),
+                        StrUtil.formatMessage("@chat.invitation.caption"), null, 999999, null, "cwf.fireLocalEvent('"
+                                + EVENT_ACCEPT + "', '" + pcs[0] + "'); return true;");
+                eventManager.fireLocalEvent(MessageWindow.EVENT, mi);
+            }
+        };
+        acceptListener = new ServiceListener<String>(
+                                                     EVENT_ACCEPT, eventManager) {
+            
+            @Override
+            public void eventCallback(String eventName, String eventData) {
+                createSession(eventData);
+            }
+            
+        };
         setActive(true);
     }
     
@@ -99,17 +124,15 @@ public class ChatService implements IGenericEvent<String>, IParticipantUpdate {
     }
     
     /**
-     * Creates a participant listener.
+     * Creates a session listener.
      * 
-     * @param sentinelEvent The sentinel event that will be used to filter participants.
-     * @param addEvent The event that signals a new participant has been added.
-     * @param removeEvent The event that signals a participant has been removed.
-     * @param callback The callback interface to invoke when a participant event has been received.
-     * @return The newly created participant listener.
+     * @param sessionId Chat session identifier.
+     * @param callback The callback interface to invoke when a session update event has been
+     *            received.
+     * @return The newly created session listener.
      */
-    public ParticipantListener createListener(String sentinelEvent, String addEvent, String removeEvent,
-                                              IParticipantUpdate callback) {
-        return new ParticipantListener(self, sentinelEvent, addEvent, removeEvent, eventManager, callback);
+    public ParticipantListener createSessionListener(String sessionId, ISessionUpdate callback) {
+        return SessionService.create(self, sessionId, eventManager, callback);
     }
     
     /**
@@ -150,6 +173,7 @@ public class ChatService implements IGenericEvent<String>, IParticipantUpdate {
         boolean newSession = sessionId == null;
         sessionId = newSession ? newSessionId() : sessionId;
         SessionController controller = SessionController.create(sessionId, newSession);
+        controller.setSessionService(SessionService.create(self, sessionId, eventManager, controller));
         sessions.add(controller);
         return controller;
     }
@@ -173,31 +197,6 @@ public class ChatService implements IGenericEvent<String>, IParticipantUpdate {
     }
     
     /**
-     * Respond to events:
-     * <p>
-     * CHAT.SERVICE.INVITE - An invitation has been received to join a dialog. Event stub format is:
-     * Chat Session ID^Requester name
-     * <p>
-     * CHAT.SERVICE.ACCEPT - This client has accepted the invitation to join. Event stub format is:
-     * Chat Session ID
-     */
-    @Override
-    public void eventCallback(String eventName, String eventData) {
-        String action = StrUtil.piece(eventName, ".", 3);
-        
-        if ("INVITE".equals(action)) {
-            String[] pcs = StrUtil.split(eventData, StrUtil.U);
-            MessageInfo mi = new MessageInfo(StrUtil.formatMessage("@chat.invitation.message", pcs[1]),
-                    StrUtil.formatMessage("@chat.invitation.caption"), null, 999999, null,
-                    "cwf.fireLocalEvent('CHAT.SERVICE.ACCEPT', '" + pcs[0] + "'); return true;");
-            eventManager.fireLocalEvent(MessageWindow.EVENT, mi);
-            ;
-        } else if ("ACCEPT".equals(action)) {
-            createSession(eventData);
-        }
-    }
-    
-    /**
      * Returns true if the service is actively listening for events.
      * 
      * @return
@@ -215,15 +214,8 @@ public class ChatService implements IGenericEvent<String>, IParticipantUpdate {
     public void setActive(boolean active) {
         if (this.active != active) {
             this.active = active;
-            
-            for (String eventName : EVENTS) {
-                if (active) {
-                    eventManager.subscribe(eventName, this);
-                } else {
-                    eventManager.unsubscribe(eventName, this);
-                }
-            }
-            
+            inviteListener.setActive(active);
+            acceptListener.setActive(active);
             participants.clear();
             participants.add(self);
             participantListener.setActive(active);
@@ -237,23 +229,6 @@ public class ChatService implements IGenericEvent<String>, IParticipantUpdate {
      */
     public Collection<IPublisherInfo> getChatCandidates() {
         return participants;
-    }
-    
-    /**
-     * Sends a message via the specified event.
-     * 
-     * @param eventName Event to use to deliver the message.
-     * @param text The message text.
-     * @return The message that was sent (may be null if no text).
-     */
-    public ChatMessage sendMessage(String eventName, String text) {
-        if (text != null && !text.isEmpty()) {
-            ChatMessage message = new ChatMessage(self, text);
-            eventManager.fireRemoteEvent(eventName, message);
-            return message;
-        }
-        
-        return null;
     }
     
     /**
@@ -278,7 +253,7 @@ public class ChatService implements IGenericEvent<String>, IParticipantUpdate {
             sb.append(invitee.getEndpointId());
         }
         
-        eventManager.fireRemoteEvent("CHAT.SERVICE.INVITE", sessionId + StrUtil.U + self.getUserName(), sb.toString());
+        eventManager.fireRemoteEvent(EVENT_INVITE, sessionId + StrUtil.U + self.getUserName(), sb.toString());
     }
     
     /**

@@ -12,12 +12,11 @@ package org.carewebframework.ui.chat;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.carewebframework.api.event.IGenericEvent;
 import org.carewebframework.api.event.IPublisherInfo;
 import org.carewebframework.common.DateUtil;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.ui.FrameworkController;
-import org.carewebframework.ui.chat.ParticipantListener.IParticipantUpdate;
+import org.carewebframework.ui.chat.SessionService.ISessionUpdate;
 import org.carewebframework.ui.zk.PopupDialog;
 import org.carewebframework.ui.zk.ZKUtil;
 
@@ -34,7 +33,7 @@ import org.zkoss.zul.Window;
 /**
  * Controller for an individual chat session.
  */
-public class SessionController extends FrameworkController implements IGenericEvent<ChatMessage>, IParticipantUpdate {
+public class SessionController extends FrameworkController implements ISessionUpdate {
     
     private static final long serialVersionUID = 1L;
     
@@ -52,11 +51,9 @@ public class SessionController extends FrameworkController implements IGenericEv
     
     private Button btnSendMessage;
     
-    private String messageEvent;
-    
     private final ListModelSet<IPublisherInfo> model = new ListModelSet<IPublisherInfo>();
     
-    private ParticipantListener participantListener;
+    private SessionService sessionService;
     
     /**
      * Creates a chat session bound to the specified session id.
@@ -81,13 +78,9 @@ public class SessionController extends FrameworkController implements IGenericEv
     public void doAfterCompose(Component comp) throws Exception {
         super.doAfterCompose(comp);
         sessionId = (String) arg.get("id");
-        String eventRoot = "CHAT.SESSION." + sessionId + ".";
-        messageEvent = eventRoot + "MESSAGE";
         lstParticipants.setItemRenderer(new ParticipantRenderer(chatService.getSelf(), null));
         model.add(chatService.getSelf());
         lstParticipants.setModel(model);
-        participantListener = chatService.createListener(messageEvent, eventRoot + "JOIN", eventRoot + "LEAVE", this);
-        doSubscribe(true);
         clearMessage();
         
         if (arg.get("originator") != null && !InviteController.show(sessionId, model)) {
@@ -104,22 +97,7 @@ public class SessionController extends FrameworkController implements IGenericEv
     public void refresh() {
         model.clear();
         model.add(chatService.getSelf());
-        participantListener.refresh();
-    }
-    
-    /**
-     * Subscribe to / unsubscribe from events of interest.
-     * 
-     * @param subscribe If true, subscribe; false, unsubscribe.
-     */
-    private void doSubscribe(boolean subscribe) {
-        if (subscribe) {
-            getEventManager().subscribe(messageEvent, this);
-        } else {
-            getEventManager().unsubscribe(messageEvent, this);
-        }
-        
-        participantListener.setActive(subscribe);
+        sessionService.refresh();
     }
     
     /**
@@ -151,7 +129,7 @@ public class SessionController extends FrameworkController implements IGenericEv
      * Send the message text.
      */
     public void onClick$btnSendMessage() {
-        addDialog(chatService.sendMessage(messageEvent, txtMessage.getText().trim()));
+        addDialog(sessionService.sendMessage(txtMessage.getText().trim()));
         clearMessage();
     }
     
@@ -250,6 +228,16 @@ public class SessionController extends FrameworkController implements IGenericEv
     }
     
     /**
+     * Handles chat dialog.
+     */
+    @Override
+    public void onMessageReceived(ChatMessage chatMessage) {
+        if (!chatMessage.sender.equals(chatService.getSelf())) {
+            addDialog(chatMessage);
+        }
+    }
+    
+    /**
      * Returns the id of the session to which this controller is bound.
      * 
      * @return The session id.
@@ -269,7 +257,10 @@ public class SessionController extends FrameworkController implements IGenericEv
      * Closes the chat dialog. Unsubscribes from all events and notifies the chat service.
      */
     public void close() {
-        doSubscribe(false);
+        if (sessionService != null) {
+            sessionService.setActive(false);
+        }
+        
         root.detach();
         chatService.onSessionClosed(this);
     }
@@ -284,13 +275,13 @@ public class SessionController extends FrameworkController implements IGenericEv
     }
     
     /**
-     * Handles chat dialog.
+     * Provided by chat service during chat session creation.
+     * 
+     * @param sessionService
      */
-    @Override
-    public void eventCallback(String eventName, ChatMessage chatMessage) {
-        if (!chatMessage.sender.equals(chatService.getSelf())) {
-            addDialog(chatMessage);
-        }
+    protected void setSessionService(SessionService sessionService) {
+        this.sessionService = sessionService;
+        sessionService.setActive(true);
     }
     
 }

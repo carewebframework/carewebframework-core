@@ -105,15 +105,15 @@ public class ParticipantListener {
     
     private final SubTypeListener removeListener;
     
-    private final IEventManager eventManager;
+    private final List<PingFilter> pingFilter;
+    
+    private final String pingEvent = ChatService.EVENT_PING + "." + pingId.incrementAndGet();
     
     private final IParticipantUpdate callback;
     
-    private final IPublisherInfo self;
+    protected final IEventManager eventManager;
     
-    private final List<PingFilter> pingFilter;
-    
-    private final String pingEvent = "CHAT.SERVICE.PING." + pingId.incrementAndGet();
+    protected final IPublisherInfo self;
     
     /**
      * Creates a participant listener.
