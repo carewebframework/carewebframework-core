@@ -11,8 +11,9 @@ package org.carewebframework.ui.chat;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -48,7 +49,7 @@ public class ChatService implements IParticipantUpdate {
     
     private final IEventManager eventManager;
     
-    private final List<SessionController> sessions = new ArrayList<SessionController>();
+    private final Map<String, SessionController> sessions = new HashMap<String, SessionController>();
     
     private final Set<IPublisherInfo> participants = new HashSet<IPublisherInfo>();
     
@@ -130,7 +131,7 @@ public class ChatService implements IParticipantUpdate {
     public void destroy() {
         setActive(false);
         
-        for (SessionController session : new ArrayList<SessionController>(sessions)) {
+        for (SessionController session : new ArrayList<SessionController>(sessions.values())) {
             session.close();
         }
     }
@@ -184,11 +185,17 @@ public class ChatService implements IParticipantUpdate {
     public SessionController createSession(String sessionId) {
         boolean newSession = sessionId == null;
         sessionId = newSession ? newSessionId() : sessionId;
-        SessionController controller = SessionController.create(sessionId, newSession);
+        SessionController controller = sessions.get(sessionId);
+        
+        if (controller != null) {
+            return controller;
+        }
+        
+        controller = SessionController.create(sessionId, newSession);
         
         if (controller != null) {
             controller.setSessionService(SessionService.create(self, sessionId, eventManager, controller));
-            sessions.add(controller);
+            sessions.put(sessionId, controller);
         }
         
         return controller;
