@@ -48,6 +48,11 @@
 			<artifactId>org.carewebframework.ui.currentdatetime</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.carewebframework</groupId>
+			<artifactId>org.carewebframework.ui.chat</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
 		<!-- CareWeb Framework Components -->
 		<dependency>
 			<groupId>org.carewebframework</groupId>
