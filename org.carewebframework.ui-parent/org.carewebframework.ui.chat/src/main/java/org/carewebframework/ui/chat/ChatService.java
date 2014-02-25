@@ -216,7 +216,7 @@ public class ChatService implements IParticipantUpdate {
      * @param session Session being closed.
      */
     protected void onSessionClosed(SessionController session) {
-        sessions.remove(session);
+        sessions.remove(session.getSessionId());
     }
     
     /**
