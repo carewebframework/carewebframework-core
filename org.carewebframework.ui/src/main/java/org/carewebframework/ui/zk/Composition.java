@@ -77,46 +77,60 @@ public class Composition implements Initiator, InitiatorExt {
         exec.removeAttribute(COMPOSITION);
         exec.removeAttribute(ROOTS);
         
-        // resolve insert components
-        final Map<String, Component> insertMap = new HashMap<String, Component>(); //(insert name, insert component)
-        resolveInsertComponents(roots, insertMap);
-        
         if (!roots.isEmpty()) {
-            Component comp = roots.iterator().next();
+            // resolve insert components
+            Map<String, Component> insertionPoints = new HashMap<String, Component>(); //(insert name, insert component)
+            resolveInsertionPoints(roots, insertionPoints);
+            Component root = roots.get(0);
             
             // join "define" components as children of "insert" component
-            do {
-                final Component nextRoot = comp.getNextSibling();
-                final Annotation annt = ((ComponentCtrl) comp).getAnnotation(null, "define");
-                if (annt != null) {
-                    final String joinId = annt.getAttribute("value");
-                    final Component insertComp = insertMap.get(joinId);
+            while (root != null) {
+                Component nextRoot = root.getNextSibling();
+                String insertionId = getAnnotationValue(root, "define");
+                
+                if (insertionId != null) {
+                    Component insertionPoint = insertionPoints.get(insertionId);
                     
-                    if (insertComp != null) {
-                        comp.setParent(insertComp);
+                    if (insertionPoint != null) {
+                        root.setParent(insertionPoint);
                     } else {
-                        comp.detach(); //no where to insert
+                        root.detach(); //no where to insert
+                        throw new UiException("Could not find insertion point named '" + insertionId
+                                + "' referenced by Component " + root);
                     }
                 }
-                comp = nextRoot;
-            } while (comp != null);
+                root = nextRoot;
+            }
         }
     }
     
-    private void resolveInsertComponents(Collection<Component> comps, Map<String, Component> map) {
+    /**
+     * Returns the value of the named annotation, if any.
+     * 
+     * @param comp Component of interest.
+     * @param name The name of the annotation whose value is sought.
+     * @return The annotation value, or null if not present.
+     */
+    private String getAnnotationValue(Component comp, String name) {
+        Annotation annt = ((ComponentCtrl) comp).getAnnotation(null, name);
+        return annt == null ? null : annt.getAttribute("value");
+    }
+    
+    /**
+     * Build a map of all insertion points.
+     * 
+     * @param comps Components to search for insertion points.
+     * @param map Map to receive discovered insertion points.
+     */
+    private void resolveInsertionPoints(Collection<Component> comps, Map<String, Component> map) {
         for (Component comp : comps) {
-            final Annotation annt = ((ComponentCtrl) comp).getAnnotation(null, "insert");
+            String insertionId = getAnnotationValue(comp, "insert");
             
-            if (annt != null) {
-                final String insertName = annt.getAttribute("value");
-                
-                if (map.containsKey(insertName)) {
-                    throw new UiException("Duplicate insert name: " + insertName + " at Component " + comp);
-                }
-                
-                map.put(insertName, comp);
+            if (insertionId != null && map.put(insertionId, comp) != null) {
+                throw new UiException("Duplicate insertion point named '" + insertionId + "' at Component " + comp);
             }
-            resolveInsertComponents(comp.getChildren(), map); //recursive
+            
+            resolveInsertionPoints(comp.getChildren(), map); //recursive
         }
     }
 }
