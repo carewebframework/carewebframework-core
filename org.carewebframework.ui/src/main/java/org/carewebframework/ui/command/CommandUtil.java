@@ -254,7 +254,7 @@ public class CommandUtil {
     }
     
     /**
-     * Disassociate a ZK component with a command.
+     * Dissociate a ZK component with a command.
      * 
      * @param commandName Name of the command.
      * @param component Component to be associated.
