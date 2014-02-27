@@ -16,6 +16,8 @@ import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 
+import org.carewebframework.ui.action.IAction;
+
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.KeyEvent;
 import org.zkoss.zul.impl.XulElement;
@@ -238,7 +240,7 @@ public class CommandUtil {
      * @param component Component to be associated.
      */
     public static void associateCommand(String commandName, XulElement component) {
-        associateCommand(commandName, component, null);
+        associateCommand(commandName, component, (Component) null);
     }
     
     /**
@@ -251,6 +253,17 @@ public class CommandUtil {
      */
     public static void associateCommand(String commandName, XulElement component, Component commandTarget) {
         getCommand(commandName, true).bind(component, commandTarget);
+    }
+    
+    /**
+     * Associates a ZK component with a command and action.
+     * 
+     * @param commandName Name of the command.
+     * @param component Component to be associated.
+     * @param action Action to be executed when the command is invoked.
+     */
+    public static void associateCommand(String commandName, XulElement component, IAction action) {
+        getCommand(commandName, true).bind(component, action);
     }
     
     /**

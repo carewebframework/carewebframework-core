@@ -10,10 +10,8 @@
 package org.carewebframework.ui.command;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 
 import org.carewebframework.api.spring.SpringUtil;
 
@@ -27,8 +25,6 @@ import org.zkoss.zul.impl.XulElement;
 public class CommandRegistry implements Iterable<Command> {
     
     private final Map<String, Command> commands = new HashMap<String, Command>();
-    
-    private XulElement root;
     
     /**
      * Returns the singleton instance of the registry.
@@ -99,8 +95,6 @@ public class CommandRegistry implements Iterable<Command> {
         for (String shortcut : CommandUtil.parseShortcuts(shortcuts, null)) {
             command.bind(shortcut);
         }
-        
-        updateRoot();
     }
     
     public void process(KeyEvent event) {
@@ -108,36 +102,6 @@ public class CommandRegistry implements Iterable<Command> {
             String shortcut = CommandUtil.getShortcut(event);
             fireCommands(shortcut, event, (XulElement) event.getReference());
         }
-    }
-    
-    public void setRoot(XulElement root) {
-        if (this.root != null) {
-            this.root.setCtrlKeys(null);
-        }
-        
-        this.root = root;
-        updateRoot();
-    }
-    
-    private void updateRoot() {
-        if (root != null) {
-            root.setCtrlKeys(getAllShortcuts());
-        }
-    }
-    
-    public String getAllShortcuts() {
-        Set<String> shortcuts = new HashSet<String>();
-        StringBuilder sb = new StringBuilder();
-        
-        for (Command command : this) {
-            for (String shortcut : command.getShortcutBindings()) {
-                if (shortcuts.add(shortcut)) {
-                    sb.append(shortcut);
-                }
-            }
-        }
-        
-        return sb.toString();
     }
     
     public void fireCommands(String shortcut, Event triggerEvent, Iterable<? extends XulElement> targets) {

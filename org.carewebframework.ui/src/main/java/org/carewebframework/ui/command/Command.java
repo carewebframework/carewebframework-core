@@ -12,6 +12,8 @@ package org.carewebframework.ui.command;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.carewebframework.ui.action.ActionListener;
+import org.carewebframework.ui.action.IAction;
 import org.carewebframework.ui.zk.ZKUtil;
 
 import org.zkoss.zk.ui.Component;
@@ -19,6 +21,7 @@ import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.KeyEvent;
+import org.zkoss.zul.Div;
 import org.zkoss.zul.impl.XulElement;
 
 /**
@@ -31,6 +34,8 @@ import org.zkoss.zul.impl.XulElement;
 public class Command {
     
     private static final String ATTR_TARGET = Command.class.getName() + ".target.";
+    
+    private static final String ATTR_DUMMY = Command.class.getName() + ".dummy";
     
     /**
      * Each command has a control key event listener to process shortcut key presses.
@@ -101,6 +106,21 @@ public class Command {
             CommandUtil.updateShortcuts(component, shortcutBindings, false);
             keyEventListener.registerComponent(component, true);
         }
+    }
+    
+    /**
+     * Bind a component to this command and action.
+     * 
+     * @param component The component to be bound.
+     * @param action The action to be executed when the command is invoked.
+     */
+    /*package*/void bind(final XulElement component, final IAction action) {
+        Component dummy = new Div();
+        dummy.setAttribute(ATTR_DUMMY, true);
+        dummy.setVisible(false);
+        dummy.setPage(component.getPage());
+        ActionListener.addAction(dummy, action, CommandEvent.EVENT_NAME);
+        bind(component, dummy);
     }
     
     /**
@@ -213,7 +233,11 @@ public class Command {
      */
     private void setCommandTarget(Component component, Component commandTarget) {
         if (commandTarget == null) {
-            component.removeAttribute(getTargetAttributeName());
+            commandTarget = (Component) component.removeAttribute(getTargetAttributeName());
+            
+            if (commandTarget != null && commandTarget.hasAttribute(ATTR_DUMMY)) {
+                commandTarget.detach();
+            }
         } else {
             component.setAttribute(getTargetAttributeName(), commandTarget);
         }

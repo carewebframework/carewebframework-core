@@ -161,7 +161,6 @@ public class CareWebShell extends Div implements AfterCompose {
     @Override
     public void afterCompose() {
         try {
-            CommandRegistry.getInstance().setRoot(this);
             CommandUtil.associateCommand("help", this);
             appendChild(registeredStyles);
             appendChild(messageWindow = new MessageWindow());
