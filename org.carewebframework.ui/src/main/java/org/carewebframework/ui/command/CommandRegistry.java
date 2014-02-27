@@ -131,9 +131,8 @@ public class CommandRegistry implements Iterable<Command> {
         
         for (Command command : this) {
             for (String shortcut : command.getShortcutBindings()) {
-                if (!shortcuts.contains(shortcut)) {
+                if (shortcuts.add(shortcut)) {
                     sb.append(shortcut);
-                    shortcuts.add(shortcut);
                 }
             }
         }
