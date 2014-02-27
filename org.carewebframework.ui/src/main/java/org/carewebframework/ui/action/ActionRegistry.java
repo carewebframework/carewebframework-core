@@ -39,9 +39,11 @@ public class ActionRegistry extends AbstractGlobalRegistry<String, IAction> {
      * Adds an action to the global registry.
      * 
      * @param action Action to add.
+     * @return The added action.
      */
-    public static void addGlobalAction(IAction action) {
+    public static IAction addGlobalAction(IAction action) {
         getInstance().add(action);
+        return action;
     }
     
     /**
@@ -49,9 +51,10 @@ public class ActionRegistry extends AbstractGlobalRegistry<String, IAction> {
      * 
      * @param label Action's label.
      * @param script Action's script.
+     * @return The added action.
      */
-    public static void addGlobalAction(String label, String script) {
-        addGlobalAction(ActionUtil.createAction(label, script));
+    public static IAction addGlobalAction(String label, String script) {
+        return addGlobalAction(ActionUtil.createAction(label, script));
     }
     
     /**
@@ -76,12 +79,14 @@ public class ActionRegistry extends AbstractGlobalRegistry<String, IAction> {
      * Adds an action to the local registry.
      * 
      * @param action Action to add.
+     * @return The added action.
      */
-    public static void addLocalAction(IAction action) {
+    public static IAction addLocalAction(IAction action) {
         String key = action.getLabel();
         Map<String, IAction> map = getLocalMap();
         checkDuplicate(key, action, map);
         map.put(key, action);
+        return action;
     }
     
     /**
@@ -89,9 +94,10 @@ public class ActionRegistry extends AbstractGlobalRegistry<String, IAction> {
      * 
      * @param label Action's associated label.
      * @param script Action's script.
+     * @return The added action.
      */
-    public static void addLocalAction(String label, String script) {
-        addLocalAction(ActionUtil.createAction(label, script));
+    public static IAction addLocalAction(String label, String script) {
+        return addLocalAction(ActionUtil.createAction(label, script));
     }
     
     /**
