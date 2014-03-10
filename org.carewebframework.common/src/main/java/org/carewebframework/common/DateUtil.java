@@ -16,6 +16,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.time.DateUtils;
@@ -91,17 +92,23 @@ public class DateUtil {
      */
     private static final Pattern PATTERN_SPECIFIES_UNITS = Pattern.compile("^.*[d|m|y]$");
     
-    private static final double[] SECONDS_FP = new double[] { 31557600.0, 2592000.0, 604800.0, 86400.0, 3600.0, 60.0, 1.0 };
+    /*
+     * Defines a regular expression pattern for extracting a numeric prefix from a string.
+     */
+    private static final Pattern PATTERN_NUMERIC_PREFIX = Pattern.compile("^-?[\\d\\.]+");
     
-    private static final long[] SECONDS_LG = new long[] { 31557600000L, 2592000000L, 604800000L, 86400000L, 3600000L,
-            60000L, 1000L, 1L };
+    private static final double[] MS_FP = new double[] { 31557600000.0, 2592000000.0, 604800000.0, 86400000.0, 3600000.0,
+            60000.0, 1000.0, 1.0 };
     
-    public static String[][] DURATION_UNITS = new String[][] { { "year", "years", "yr", "yrs" },
+    private static final long[] MS_LG = new long[] { 31557600000L, 2592000000L, 604800000L, 86400000L, 3600000L, 60000L,
+            1000L, 1L };
+    
+    public static String[][] TIME_UNIT = new String[][] { { "year", "years", "yr", "yrs" },
             { "month", "months", "mo", "mos" }, { "week", "weeks", "wk", "wks" }, { "day", "days", "day", "days" },
             { "hour", "hours", "hr", "hrs" }, { "minute", "minutes", "min", "mins" },
             { "second", "seconds", "sec", "secs" }, { "millisecond", "milliseconds", "ms", "ms" } };
     
-    public enum Accuracy {
+    public enum TimeUnit {
         YEARS, MONTHS, WEEKS, DAYS, HOURS, MINUTES, SECONDS, MILLISECONDS
     };
     
@@ -503,24 +510,49 @@ public class DateUtil {
      * Return elapsed time in ms to displayable format with units.
      * 
      * @param elapsed Elapsed time in ms.
+     * @return Elapsed time in displayable format.
+     * @param minUnits Minimum units for return value (null = ms).
+     */
+    public static String formatElapsed(double elapsed, TimeUnit minUnits) {
+        return formatElapsed(elapsed, true, false, false, minUnits);
+    }
+    
+    /**
+     * Return elapsed time in ms to displayable format with units.
+     * 
+     * @param elapsed Elapsed time in ms.
      * @param pluralize If true, pluralize units when appropriate.
      * @param abbreviated If true, use abbreviated form of units.
      * @param round If true, round result to an integer.
      * @return Elapsed time in displayable format.
      */
     public static String formatElapsed(double elapsed, boolean pluralize, boolean abbreviated, boolean round) {
-        int index = SECONDS_FP.length - 1;
+        return formatElapsed(elapsed, pluralize, abbreviated, round, null);
+    }
+    
+    /**
+     * Return elapsed time in ms to displayable format with units.
+     * 
+     * @param elapsed Elapsed time in ms.
+     * @param pluralize If true, pluralize units when appropriate.
+     * @param abbreviated If true, use abbreviated form of units.
+     * @param round If true, round result to an integer.
+     * @param minUnits Minimum units for return value (null = ms).
+     * @return Elapsed time in displayable format.
+     */
+    public static String formatElapsed(double elapsed, boolean pluralize, boolean abbreviated, boolean round,
+                                       TimeUnit minUnits) {
+        int index = (minUnits == null ? TimeUnit.MILLISECONDS : minUnits).ordinal();
         String prefix = "";
-        elapsed /= 1000.0;
         
         if (elapsed < 0) {
             elapsed = -elapsed;
             prefix = "-";
         }
         
-        for (int i = 0; i < SECONDS_FP.length; i++) {
-            if (elapsed >= SECONDS_FP[i]) {
-                elapsed /= SECONDS_FP[i];
+        for (int i = 0; i <= index; i++) {
+            if (elapsed >= MS_FP[i] || i == index) {
+                elapsed /= MS_FP[i];
                 index = i;
                 break;
             }
@@ -532,6 +564,57 @@ public class DateUtil {
         
         return prefix + decimalFormat.get().format(elapsed) + " "
                 + getDurationUnits(index, pluralize && elapsed != 1.0, abbreviated);
+    }
+    
+    /**
+     * Parses an elapsed time string, returning time in milliseconds.
+     * 
+     * @param value The string value to parse.
+     * @return The elapsed time value in milliseconds.
+     */
+    public static double parseElapsed(String value) {
+        return parseElapsed(value, TimeUnit.MILLISECONDS);
+    }
+    
+    /**
+     * Parses an elapsed time string, returning time in specified units.
+     * 
+     * @param value The string value to parse.
+     * @param units The units of the returned value (defaults to ms).
+     * @return The elapsed time value in the requested units.
+     */
+    public static double parseElapsed(String value, TimeUnit units) {
+        Matcher matcher = PATTERN_NUMERIC_PREFIX.matcher(value);
+        
+        if (!matcher.find()) {
+            return 0;
+        }
+        
+        int i = matcher.end();
+        double result;
+        
+        try {
+            result = Double.parseDouble(value.substring(0, i));
+        } catch (NumberFormatException e) {
+            return 0;
+        }
+        value = value.substring(i).trim().toLowerCase();
+        
+        for (TimeUnit tu : TimeUnit.values()) {
+            for (String unit : TIME_UNIT[tu.ordinal()]) {
+                if (unit.equals(value)) {
+                    result *= MS_FP[tu.ordinal()];
+                    
+                    if (units != null && units != TimeUnit.MILLISECONDS) {
+                        result /= MS_FP[units.ordinal()];
+                    }
+                    
+                    return result;
+                }
+            }
+        }
+        
+        return 0;
     }
     
     /**
@@ -551,7 +634,7 @@ public class DateUtil {
      * @param accuracy Accuracy of output.
      * @return Formatted duration.
      */
-    public static String formatDuration(long duration, Accuracy accuracy) {
+    public static String formatDuration(long duration, TimeUnit accuracy) {
         return formatDuration(duration, accuracy, true, false);
     }
     
@@ -564,7 +647,7 @@ public class DateUtil {
      * @param abbreviated If true, use abbreviated form of units.
      * @return Formatted duration.
      */
-    public static String formatDuration(long duration, Accuracy accuracy, boolean pluralize, boolean abbreviated) {
+    public static String formatDuration(long duration, TimeUnit accuracy, boolean pluralize, boolean abbreviated) {
         StringBuilder sb = new StringBuilder();
         
         if (duration < 0) {
@@ -572,13 +655,13 @@ public class DateUtil {
             sb.append('-');
         }
         
-        accuracy = accuracy == null ? Accuracy.MILLISECONDS : accuracy;
+        accuracy = accuracy == null ? TimeUnit.MILLISECONDS : accuracy;
         int last = accuracy.ordinal();
         boolean empty = true;
         
         for (int i = 0; i <= last; i++) {
-            long val = duration / SECONDS_LG[i];
-            duration -= val * SECONDS_LG[i];
+            long val = duration / MS_LG[i];
+            duration -= val * MS_LG[i];
             
             if (val != 0 || (empty && i == last)) {
                 if (!empty) {
@@ -594,13 +677,13 @@ public class DateUtil {
         return sb.toString();
     }
     
-    private static String getDurationUnits(Accuracy accuracy, boolean plural, boolean abbreviated) {
+    private static String getDurationUnits(TimeUnit accuracy, boolean plural, boolean abbreviated) {
         return getDurationUnits(accuracy.ordinal(), plural, abbreviated);
     }
     
     private static String getDurationUnits(int index, boolean plural, boolean abbreviated) {
         int which = (plural ? 1 : 0) + (abbreviated ? 2 : 0);
-        return DURATION_UNITS[index][which];
+        return TIME_UNIT[index][which];
     }
     
     /**
@@ -665,7 +748,7 @@ public class DateUtil {
         
         // If person is less than 2 months old, then display age in days
         if (birthDateInDays <= 60) {
-            return formatUnits(birthDateInDays, Accuracy.DAYS, pluralize);
+            return formatUnits(birthDateInDays, TimeUnit.DAYS, pluralize);
         }
         
         int birthYear = bd.get(Calendar.YEAR);
@@ -679,14 +762,14 @@ public class DateUtil {
             // If person is more than 2 months but less than 2 years then display age in months
             if (refMonth >= birthMonth && refDay >= birthDay) {
                 // If person has had a birthday already this year
-                return formatUnits((refYear - birthYear) * 12 + refMonth - birthMonth, Accuracy.MONTHS, pluralize);
+                return formatUnits((refYear - birthYear) * 12 + refMonth - birthMonth, TimeUnit.MONTHS, pluralize);
             }
             // then age in months = # years old * 12 + months so far this year
             // If person has not yet had a birthday this year, subtract 1 month
-            return formatUnits((refYear - birthYear) * 12 + refMonth - birthMonth - 1, Accuracy.MONTHS, pluralize);
+            return formatUnits((refYear - birthYear) * 12 + refMonth - birthMonth - 1, TimeUnit.MONTHS, pluralize);
         }
         // If person is more than 2 years old then display age in years
-        return formatUnits(getAgeInYears(birthYear, birthMonth, birthDay, refYear, refMonth, refDay), Accuracy.YEARS,
+        return formatUnits(getAgeInYears(birthYear, birthMonth, birthDay, refYear, refMonth, refDay), TimeUnit.YEARS,
             pluralize);
     }
     
@@ -700,7 +783,7 @@ public class DateUtil {
         return refYear - birthYear - 1;
     }
     
-    private static String formatUnits(long value, Accuracy accuracy, boolean pluralize) {
+    private static String formatUnits(long value, TimeUnit accuracy, boolean pluralize) {
         return value + " " + getDurationUnits(accuracy, pluralize && value != 1, true);
     }
     

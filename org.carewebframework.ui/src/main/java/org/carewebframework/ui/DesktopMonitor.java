@@ -29,7 +29,7 @@ import org.carewebframework.api.event.IGenericEvent;
 import org.carewebframework.api.security.ISecurityService;
 import org.carewebframework.api.thread.ThreadUtil;
 import org.carewebframework.common.DateUtil;
-import org.carewebframework.common.DateUtil.Accuracy;
+import org.carewebframework.common.DateUtil.TimeUnit;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.ui.Application.Command;
 import org.carewebframework.ui.zk.MessageWindow;
@@ -301,7 +301,7 @@ public class DesktopMonitor extends Thread {
             
             switch (action) {
                 case UPDATE_COUNTDOWN:
-                    String s = mode.getLabel(TIMEOUT_WARNING, DateUtil.formatDuration(countdown, Accuracy.SECONDS));
+                    String s = mode.getLabel(TIMEOUT_WARNING, DateUtil.formatDuration(countdown, TimeUnit.SECONDS));
                     lblDuration.setValue(s);
                     if (!isDesktopLockingDisabled) {
                         setSclass(SCLASS_COUNTDOWN);

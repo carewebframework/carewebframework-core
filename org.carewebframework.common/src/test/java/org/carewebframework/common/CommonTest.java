@@ -20,7 +20,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
-import org.carewebframework.common.DateUtil.Accuracy;
+import org.carewebframework.common.DateUtil.TimeUnit;
 
 import org.junit.Test;
 
@@ -148,27 +148,35 @@ public class CommonTest {
     
     @Test
     public void testElapsed() {
-        assertEquals("0.1 seconds", DateUtil.formatElapsed(100.0));
+        assertEquals("0.1 seconds", DateUtil.formatElapsed(100.0, TimeUnit.SECONDS));
         assertEquals("1 second", DateUtil.formatElapsed(1000.0));
         assertEquals("1 minute", DateUtil.formatElapsed(60000.0));
         assertEquals("3.59 days", DateUtil.formatElapsed(309898934.0));
         assertEquals("98.2 years", DateUtil.formatElapsed(3098989343984.0));
         assertEquals("-98.2 years", DateUtil.formatElapsed(-3098989343984.0));
+        
+        assertEquals(100.0, DateUtil.parseElapsed("0.1 seconds"), 0.0);
+        assertEquals(1000.0, DateUtil.parseElapsed("1 second"), 0.0);
+        assertEquals(60000.0, DateUtil.parseElapsed("1 minute"), 0.0);
+        assertEquals(310176000.0, DateUtil.parseElapsed("3.59 days"), 0.0);
+        assertEquals(3098956320000.0, DateUtil.parseElapsed("98.2 years"), 0.0);
+        assertEquals(-3098956320000.0, DateUtil.parseElapsed("-98.2 years"), 0.0);
+        assertEquals(98.2, DateUtil.parseElapsed("98.2 years", TimeUnit.YEARS), 0.0);
     }
     
     @Test
     public void testDuration() {
-        assertEquals("0 seconds", DateUtil.formatDuration(100, Accuracy.SECONDS));
-        assertEquals("0 sec", DateUtil.formatDuration(100, Accuracy.SECONDS, false, true));
-        assertEquals("1 second", DateUtil.formatDuration(1000, Accuracy.SECONDS));
-        assertEquals("1 minute", DateUtil.formatDuration(60000, Accuracy.SECONDS));
-        assertEquals("3 days 14 hours 4 minutes 58 seconds", DateUtil.formatDuration(309898934, Accuracy.SECONDS));
-        assertEquals("3 day 14 hour 4 minute 58 second", DateUtil.formatDuration(309898934, Accuracy.SECONDS, false, false));
+        assertEquals("0 seconds", DateUtil.formatDuration(100, TimeUnit.SECONDS));
+        assertEquals("0 sec", DateUtil.formatDuration(100, TimeUnit.SECONDS, false, true));
+        assertEquals("1 second", DateUtil.formatDuration(1000, TimeUnit.SECONDS));
+        assertEquals("1 minute", DateUtil.formatDuration(60000, TimeUnit.SECONDS));
+        assertEquals("3 days 14 hours 4 minutes 58 seconds", DateUtil.formatDuration(309898934, TimeUnit.SECONDS));
+        assertEquals("3 day 14 hour 4 minute 58 second", DateUtil.formatDuration(309898934, TimeUnit.SECONDS, false, false));
         assertEquals("98 years 2 months 1 week 6 days 10 hours 22 minutes 23 seconds",
-            DateUtil.formatDuration(3098989343984L, Accuracy.SECONDS));
-        assertEquals("3 days 14 hrs 4 mins 58 secs", DateUtil.formatDuration(309898934, Accuracy.SECONDS, true, true));
+            DateUtil.formatDuration(3098989343984L, TimeUnit.SECONDS));
+        assertEquals("3 days 14 hrs 4 mins 58 secs", DateUtil.formatDuration(309898934, TimeUnit.SECONDS, true, true));
         assertEquals("-98 years 2 months 1 week 6 days 10 hours 22 minutes 23 seconds",
-            DateUtil.formatDuration(-3098989343984L, Accuracy.SECONDS));
+            DateUtil.formatDuration(-3098989343984L, TimeUnit.SECONDS));
     }
     
     @Test
