@@ -288,6 +288,18 @@ public abstract class ListViewForm<DAO> extends CaptionedForm {
         return listbox.getSelectedItem();
     }
     
+    @SuppressWarnings("unchecked")
+    protected DAO getSelectedValue() {
+        Listitem item = getSelectedItem();
+        
+        if (item != null) {
+            listbox.renderItem(item);
+            return (DAO) item.getValue();
+        }
+        
+        return null;
+    }
+    
     /**
      * Initiate asynchronous call to retrieve data from host.
      */
