@@ -958,6 +958,13 @@
 			</dependency>
 			<dependency>
 				<groupId>org.carewebframework</groupId>
+				<artifactId>org.carewebframework.ui.wonderbar</artifactId>
+				<version>${org.carewebframework.version}</version>
+				<type>jar</type>
+				<scope>compile</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.carewebframework</groupId>
 				<artifactId>org.carewebframework.shell</artifactId>
 				<version>${org.carewebframework.version}</version>
 				<type>jar</type>
