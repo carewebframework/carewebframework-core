@@ -346,6 +346,7 @@ public class Wonderbar<T> extends InputElement {
                 } else {
                     item.setLabel(data.toString());
                     item.setValue(data.toString());
+                    item.setData(data);
                 }
             }
             
