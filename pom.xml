@@ -40,7 +40,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<org.carewebframework.version>3.1.0-SNAPSHOT</org.carewebframework.version>
 		<org.springframework.version>4.0.1.RELEASE</org.springframework.version>
-		<org.springframework.security.version>3.2.1.RELEASE</org.springframework.security.version>
+		<org.springframework.security.version>3.2.2.RELEASE</org.springframework.security.version>
 		<org.apache.activemq.version>5.9.0</org.apache.activemq.version>
 		<org.zkoss.zk.version>6.5.4</org.zkoss.zk.version>
 		<com.rabbitmq.version>3.2.3</com.rabbitmq.version>
