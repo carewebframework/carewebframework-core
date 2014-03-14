@@ -191,14 +191,14 @@ public abstract class AbstractSecurityService implements ISecurityService {
     /**
      * <p>
      * Returns true if the Authentication object is granted debug privilege (determined by the role
-     * {@link Constants#ROLE_DEBUG})
+     * {@link Constants#PRIV_DEBUG})
      * </p>
      * 
      * @return boolean true if authenticated principal is granted a verbose view
      */
     @Override
     public boolean hasDebugRole() {
-        return isGranted(Constants.ROLE_DEBUG);
+        return isGranted(Constants.PRIV_DEBUG);
     }
     
     /**

@@ -17,7 +17,7 @@ public class Constants {
     
     public static final String ROLE_USER = ROLE_PREFIX + "USER";
     
-    public static final String ROLE_DEBUG = ROLE_PREFIX + "DEBUG"; // Role that enables debug modes.
+    public static final String PRIV_DEBUG = PRIV_PREFIX + "DEBUG"; // Privilege that enables debug modes.
     
     public static final String ANONYMOUS_USER = "ANONYMOUS_USER";
     

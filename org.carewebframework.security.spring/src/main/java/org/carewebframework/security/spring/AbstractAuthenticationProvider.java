@@ -44,7 +44,7 @@ public abstract class AbstractAuthenticationProvider implements AuthenticationPr
         grantedRoles.add(Constants.ROLE_USER);
         
         if (debugRole) {
-            grantedRoles.add(Constants.ROLE_DEBUG);
+            grantedRoles.add(Constants.PRIV_DEBUG);
         }
     }
     
