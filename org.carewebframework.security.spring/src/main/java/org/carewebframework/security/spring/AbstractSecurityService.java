@@ -41,7 +41,7 @@ public abstract class AbstractSecurityService implements ISecurityService {
     
     private static final Log log = LogFactory.getLog(AbstractSecurityService.class);
     
-    protected final AliasRegistryForType authorityAliases = AliasRegistry.getInstance(AliasType.AUTHORITY);
+    private final AliasRegistryForType authorityAliases = AliasRegistry.getInstance(AliasType.AUTHORITY);
     
     private String logoutTarget = Constants.LOGOUT_TARGET;
     
