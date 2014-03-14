@@ -39,6 +39,16 @@ public class SecurityUtil {
     }
     
     /**
+     * Register an alias for an authority.
+     * 
+     * @param authority String representation of an authority.
+     * @param alias String representation of an authority alias. If null, removes an existing alias.
+     */
+    public static void setAuthorityAlias(String authority, String alias) {
+        getSecurityService().setAuthorityAlias(authority, alias);
+    }
+    
+    /**
      * Returns whether the current context has authenticated
      * 
      * @return boolean true if Authentication token is found and is not an Anonymous User
