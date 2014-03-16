@@ -11,8 +11,10 @@ package org.carewebframework.api;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Map.Entry;
 import java.util.Properties;
 
+import org.apache.commons.digester.SimpleRegexMatcher;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -66,7 +68,11 @@ public class AliasRegistry extends AbstractGlobalMap<String, String> implements 
     
     private static final String PREFIX_DELIM_REGEX = "\\" + PREFIX_DELIM;
     
+    private static final String WILDCARD_DELIM_REGEX = "((?<=[\\*,\\?])|(?=[\\*,\\?]))";
+    
     private String propertyFile;
+    
+    private final SimpleRegexMatcher matcher = new SimpleRegexMatcher();
     
     /**
      * Returns reference to the alias registry.
@@ -172,6 +178,73 @@ public class AliasRegistry extends AbstractGlobalMap<String, String> implements 
      */
     public String get(AliasType type, String key) {
         return get(prefixedKey(type, key));
+    }
+    
+    /**
+     * Returns the alias for a given key. Recognizes wildcards.
+     * 
+     * @param key Key name.
+     * @return Alias for the key, or null if not found.
+     */
+    @Override
+    public String get(String key) {
+        String result = super.get(key);
+        
+        if (result == null) {
+            for (Entry<String, String> entry : globalMap.entrySet()) {
+                String wc = entry.getKey();
+                
+                if (wc.contains("*") || wc.contains("?")) {
+                    if (matcher.match(key, wc)) {
+                        result = transformKey(key, wc, entry.getValue());
+                        break;
+                    }
+                }
+            }
+        }
+        
+        return result;
+    }
+    
+    /**
+     * Uses the source and target wildcard masks to transform an input key.
+     * 
+     * @param key The input key.
+     * @param src The source wildcard mask.
+     * @param tgt The target wildcard mask.
+     * @return The transformed key.
+     */
+    private String transformKey(String key, String src, String tgt) {
+        StringBuilder sb = new StringBuilder();
+        key = key.split(PREFIX_DELIM_REGEX, 2)[1];
+        src = src.split(PREFIX_DELIM_REGEX, 2)[1];
+        String[] srcTokens = src.split(WILDCARD_DELIM_REGEX);
+        String[] tgtTokens = tgt.split(WILDCARD_DELIM_REGEX);
+        int len = Math.max(srcTokens.length, tgtTokens.length);
+        int pos = 0;
+        int start = 0;
+        
+        for (int i = 0; i <= len; i++) {
+            String srcx = i >= srcTokens.length ? "" : srcTokens[i];
+            String tgtx = i >= tgtTokens.length ? "" : tgtTokens[i];
+            pos = i == len ? key.length() : pos;
+            
+            if ("*".equals(srcx) || "?".equals(srcx)) {
+                start = pos;
+            } else {
+                pos = key.indexOf(srcx, pos);
+                
+                if (pos > start) {
+                    sb.append(key.substring(start, pos));
+                }
+                
+                start = pos += srcx.length();
+                sb.append(tgtx);
+            }
+            
+        }
+        
+        return sb.toString();
     }
     
     /**
