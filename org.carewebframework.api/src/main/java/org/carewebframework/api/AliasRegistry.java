@@ -147,7 +147,7 @@ public class AliasRegistry extends AbstractGlobalMap<String, String> implements 
             if (globalMap.get(key).equals(alias)) {
                 return;
             }
-            throw new IllegalArgumentException("Authority " + key + " already has a registered alias.");
+            throw new IllegalArgumentException(type.name() + " " + key + " already has a registered alias.");
         }
         globalMap.put(key, alias);
     }
