@@ -204,6 +204,22 @@ public class AliasRegistry extends AbstractGlobalMap<String, String> implements 
             return;
         }
         
+        for (String pf : propertyFile.split("\\,")) {
+            loadAliases(applicationContext, pf);
+        }
+    }
+    
+    /**
+     * Load aliases from a property file.
+     * 
+     * @param applicationContext
+     * @param propertyFile
+     */
+    private void loadAliases(ApplicationContext applicationContext, String propertyFile) {
+        if (propertyFile.isEmpty()) {
+            return;
+        }
+        
         Resource[] resources;
         
         try {
