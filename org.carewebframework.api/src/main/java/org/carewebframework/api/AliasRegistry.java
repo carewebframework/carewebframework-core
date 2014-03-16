@@ -64,7 +64,7 @@ public class AliasRegistry extends AbstractGlobalMap<String, String> implements 
         }
     }
     
-    private static final char PREFIX_DELIM = ':';
+    private static final char PREFIX_DELIM = '.';
     
     private static final String PREFIX_DELIM_REGEX = "\\" + PREFIX_DELIM;
     
