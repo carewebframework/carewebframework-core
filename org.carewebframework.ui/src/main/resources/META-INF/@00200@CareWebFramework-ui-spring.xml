@@ -44,7 +44,7 @@
 
 		<!-- List of shortcut bindings for commands. -->
 		<bean id="commandShortcuts" class="org.carewebframework.ui.command.CommandShortcuts">
-			<constructor-arg value="${org.carewebframework.ui.command.shortcuts:classpath:shortcut.properties}" />
+			<constructor-arg value="${org.carewebframework.location.shortcuts}" />
 		</bean>
 
 		<!-- Default controller for framework-aware applications. -->

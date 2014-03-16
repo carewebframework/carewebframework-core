@@ -16,7 +16,7 @@
 		<context:annotation-config />
 
  		<context:property-placeholder
-			location="classpath*:/META-INF/*-default.properties,${org.carewebframework.property.location}"
+			location="classpath*:/META-INF/*-default.properties,classpath:cwf*.properties"
 			ignore-resource-not-found="true"  />
 
 		<bean id="appContextFinder" class="org.carewebframework.api.spring.AppContextFinder">
@@ -35,7 +35,7 @@
 		<!-- Maintains a registry of all aliases. -->
 		<bean id="aliasRegistry" class="org.carewebframework.api.AliasRegistry"
 			factory-method="getInstance">
-			<property name="propertyFile" value="classpath*:/META-INF/alias.properties,${org.carewebframework.api.aliases}" />
+			<property name="propertyFile" value="classpath*:/META-INF/alias.properties,${org.carewebframework.location.aliases}" />
 		</bean>
 
 		<task:annotation-driven executor="taskExecutor"
