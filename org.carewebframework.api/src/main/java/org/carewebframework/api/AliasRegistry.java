@@ -159,7 +159,7 @@ public class AliasRegistry extends AbstractGlobalMap<String, String> implements 
     }
     
     /**
-     * Returns true if the key exists for the given alias type.
+     * Returns true if the key exists for the given alias type. Recognizes wildcards.
      * 
      * @param type The alias type.
      * @param key Key name.
@@ -170,7 +170,18 @@ public class AliasRegistry extends AbstractGlobalMap<String, String> implements 
     }
     
     /**
-     * Returns the alias for a given key and alias type.
+     * Returns true if the key exists for the given alias type. Recognizes wildcards.
+     * 
+     * @param key Key name.
+     * @return True if the key exists for the alias type.
+     */
+    @Override
+    public boolean contains(String key) {
+        return get(key) != null;
+    }
+    
+    /**
+     * Returns the alias for a given key and alias type. Recognizes wildcards.
      * 
      * @param type The alias type.
      * @param key Key name.
