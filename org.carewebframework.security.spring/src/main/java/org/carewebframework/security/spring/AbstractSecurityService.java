@@ -17,8 +17,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import org.carewebframework.api.AliasRegistry;
-import org.carewebframework.api.AliasRegistry.AliasRegistryForType;
 import org.carewebframework.api.AliasRegistry.AliasType;
 import org.carewebframework.api.context.ContextManager;
 import org.carewebframework.api.context.IContextManager;
@@ -40,8 +38,6 @@ import org.zkoss.zk.ui.Desktop;
 public abstract class AbstractSecurityService implements ISecurityService {
     
     private static final Log log = LogFactory.getLog(AbstractSecurityService.class);
-    
-    private final AliasRegistryForType authorityAliases = AliasRegistry.getInstance(AliasType.AUTHORITY);
     
     private String logoutTarget = Constants.LOGOUT_TARGET;
     
@@ -153,7 +149,7 @@ public abstract class AbstractSecurityService implements ISecurityService {
      */
     @Override
     public void setAuthorityAlias(String authority, String alias) {
-        authorityAliases.registerAlias(authority, alias);
+        AliasType.AUTHORITY.registerAlias(authority, alias);
     }
     
     /**
@@ -265,8 +261,9 @@ public abstract class AbstractSecurityService implements ISecurityService {
         
         boolean result = authentication.getAuthorities().contains(new SimpleGrantedAuthority(grantedAuthority));
         
-        if (!result && authorityAliases.contains(grantedAuthority)) {
-            return isGranted(authorityAliases.get(grantedAuthority), authentication);
+        if (!result) {
+            String alias = AliasType.AUTHORITY.get(grantedAuthority);
+            return alias != null && isGranted(alias, authentication);
         }
         
         return result;

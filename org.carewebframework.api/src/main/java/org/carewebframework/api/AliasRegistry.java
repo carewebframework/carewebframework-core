@@ -30,39 +30,11 @@ import org.springframework.core.io.Resource;
  * AliasType enum. Aliases may be loaded from one or more property files and may be added
  * programmatically.
  */
-public class AliasRegistry extends AbstractGlobalMap<String, String> implements ApplicationContextAware {
+public class AliasRegistry implements ApplicationContextAware {
     
     private static final Log log = LogFactory.getLog(AliasRegistry.class);
     
     private static final AliasRegistry instance = new AliasRegistry();
-    
-    public enum AliasType {
-        AUTHORITY, PROPERTY
-    };
-    
-    /**
-     * Class for convenient access to aliases of a specific type.
-     */
-    public class AliasRegistryForType {
-        
-        private final AliasType type;
-        
-        private AliasRegistryForType(AliasType type) {
-            this.type = type;
-        }
-        
-        public String get(String key) {
-            return AliasRegistry.this.get(type, key);
-        }
-        
-        public boolean contains(String key) {
-            return AliasRegistry.this.contains(type, key);
-        }
-        
-        public void registerAlias(String key, String alias) {
-            AliasRegistry.this.registerAlias(type, key, alias);
-        }
-    }
     
     private static final char PREFIX_DELIM = '.';
     
@@ -70,9 +42,95 @@ public class AliasRegistry extends AbstractGlobalMap<String, String> implements 
     
     private static final String WILDCARD_DELIM_REGEX = "((?<=[\\*,\\?])|(?=[\\*,\\?]))";
     
-    private String propertyFile;
+    private static final SimpleRegexMatcher matcher = new SimpleRegexMatcher();
     
-    private final SimpleRegexMatcher matcher = new SimpleRegexMatcher();
+    public enum AliasType {
+        AUTHORITY, PROPERTY;
+        
+        private final AbstractGlobalMap<String, String> map = new AbstractGlobalMap<String, String>();
+        
+        public String get(String key) {
+            String result = map.get(key);
+            
+            if (result == null) {
+                for (Entry<String, String> entry : map.globalMap.entrySet()) {
+                    String wc = entry.getKey();
+                    
+                    if (wc.contains("*") || wc.contains("?")) {
+                        if (matcher.match(key, wc)) {
+                            result = transformKey(key, wc, entry.getValue());
+                            break;
+                        }
+                    }
+                }
+            }
+            
+            return result;
+        }
+        
+        /**
+         * Registers an alias for a key.
+         * 
+         * @param key Key name.
+         * @param alias Alias for the key. A null value removes any existing alias.
+         */
+        public void registerAlias(String key, String alias) {
+            if (alias == null) {
+                map.globalMap.remove(key);
+                return;
+            }
+            
+            if (map.globalMap.containsKey(key)) {
+                if (map.globalMap.get(key).equals(alias)) {
+                    return;
+                }
+                throw new IllegalArgumentException(name() + " " + key + " already has a registered alias.");
+            }
+            map.globalMap.put(key, alias);
+        }
+        
+        /**
+         * Uses the source and target wildcard masks to transform an input key.
+         * 
+         * @param key The input key.
+         * @param src The source wildcard mask.
+         * @param tgt The target wildcard mask.
+         * @return The transformed key.
+         */
+        private String transformKey(String key, String src, String tgt) {
+            StringBuilder sb = new StringBuilder();
+            String[] srcTokens = src.split(WILDCARD_DELIM_REGEX);
+            String[] tgtTokens = tgt.split(WILDCARD_DELIM_REGEX);
+            int len = Math.max(srcTokens.length, tgtTokens.length);
+            int pos = 0;
+            int start = 0;
+            
+            for (int i = 0; i <= len; i++) {
+                String srcx = i >= srcTokens.length ? "" : srcTokens[i];
+                String tgtx = i >= tgtTokens.length ? "" : tgtTokens[i];
+                pos = i == len ? key.length() : pos;
+                
+                if ("*".equals(srcx) || "?".equals(srcx)) {
+                    start = pos;
+                } else {
+                    pos = key.indexOf(srcx, pos);
+                    
+                    if (pos > start) {
+                        sb.append(key.substring(start, pos));
+                    }
+                    
+                    start = pos += srcx.length();
+                    sb.append(tgtx);
+                }
+                
+            }
+            
+            return sb.toString();
+        }
+        
+    };
+    
+    private String propertyFile;
     
     /**
      * Returns reference to the alias registry.
@@ -81,17 +139,6 @@ public class AliasRegistry extends AbstractGlobalMap<String, String> implements 
      */
     public static AliasRegistry getInstance() {
         return instance;
-    }
-    
-    /**
-     * Returns a reference to an accessor for the alias registry that is constrained to the
-     * specified alias type.
-     * 
-     * @param type Alias type.
-     * @return Type-specific accessor.
-     */
-    public static AliasRegistryForType getInstance(AliasType type) {
-        return instance.aliasRegistryForType(type);
     }
     
     /**
@@ -123,160 +170,12 @@ public class AliasRegistry extends AbstractGlobalMap<String, String> implements 
             throw new IllegalArgumentException("Illegal key value: " + key);
         }
         
-        AliasType type;
-        
         try {
-            type = AliasType.valueOf(pcs[0].toUpperCase());
+            AliasType type = AliasType.valueOf(pcs[0].toUpperCase());
+            type.registerAlias(pcs[1], alias);
         } catch (Throwable t) {
             throw new IllegalArgumentException("Illegal alias type: " + pcs[0]);
         }
-        
-        registerAlias(type, pcs[1], alias);
-    }
-    
-    /**
-     * Registers an alias for a key.
-     * 
-     * @param type Type of alias being registered.
-     * @param key Key name.
-     * @param alias Alias for the key. A null value removes any existing alias.
-     */
-    public void registerAlias(AliasType type, String key, String alias) {
-        key = prefixedKey(type, key);
-        
-        if (alias == null) {
-            globalMap.remove(key);
-            return;
-        }
-        
-        if (globalMap.containsKey(key)) {
-            if (globalMap.get(key).equals(alias)) {
-                return;
-            }
-            throw new IllegalArgumentException(type.name() + " " + key + " already has a registered alias.");
-        }
-        globalMap.put(key, alias);
-    }
-    
-    /**
-     * Returns true if the key exists for the given alias type. Recognizes wildcards.
-     * 
-     * @param type The alias type.
-     * @param key Key name.
-     * @return True if the key exists for the alias type.
-     */
-    public boolean contains(AliasType type, String key) {
-        return contains(prefixedKey(type, key));
-    }
-    
-    /**
-     * Returns true if the key exists for the given alias type. Recognizes wildcards.
-     * 
-     * @param key Key name.
-     * @return True if the key exists for the alias type.
-     */
-    @Override
-    public boolean contains(String key) {
-        return get(key) != null;
-    }
-    
-    /**
-     * Returns the alias for a given key and alias type. Recognizes wildcards.
-     * 
-     * @param type The alias type.
-     * @param key Key name.
-     * @return Alias for the key, or null if not found.
-     */
-    public String get(AliasType type, String key) {
-        return get(prefixedKey(type, key));
-    }
-    
-    /**
-     * Returns the alias for a given key. Recognizes wildcards.
-     * 
-     * @param key Key name.
-     * @return Alias for the key, or null if not found.
-     */
-    @Override
-    public String get(String key) {
-        String result = super.get(key);
-        
-        if (result == null) {
-            for (Entry<String, String> entry : globalMap.entrySet()) {
-                String wc = entry.getKey();
-                
-                if (wc.contains("*") || wc.contains("?")) {
-                    if (matcher.match(key, wc)) {
-                        result = transformKey(key, wc, entry.getValue());
-                        break;
-                    }
-                }
-            }
-        }
-        
-        return result;
-    }
-    
-    /**
-     * Uses the source and target wildcard masks to transform an input key.
-     * 
-     * @param key The input key.
-     * @param src The source wildcard mask.
-     * @param tgt The target wildcard mask.
-     * @return The transformed key.
-     */
-    private String transformKey(String key, String src, String tgt) {
-        StringBuilder sb = new StringBuilder();
-        key = key.split(PREFIX_DELIM_REGEX, 2)[1];
-        src = src.split(PREFIX_DELIM_REGEX, 2)[1];
-        String[] srcTokens = src.split(WILDCARD_DELIM_REGEX);
-        String[] tgtTokens = tgt.split(WILDCARD_DELIM_REGEX);
-        int len = Math.max(srcTokens.length, tgtTokens.length);
-        int pos = 0;
-        int start = 0;
-        
-        for (int i = 0; i <= len; i++) {
-            String srcx = i >= srcTokens.length ? "" : srcTokens[i];
-            String tgtx = i >= tgtTokens.length ? "" : tgtTokens[i];
-            pos = i == len ? key.length() : pos;
-            
-            if ("*".equals(srcx) || "?".equals(srcx)) {
-                start = pos;
-            } else {
-                pos = key.indexOf(srcx, pos);
-                
-                if (pos > start) {
-                    sb.append(key.substring(start, pos));
-                }
-                
-                start = pos += srcx.length();
-                sb.append(tgtx);
-            }
-            
-        }
-        
-        return sb.toString();
-    }
-    
-    /**
-     * Returns the key name in prefixed form.
-     * 
-     * @param type Alias type.
-     * @param key Key name.
-     * @return Prefixed key name.
-     */
-    private String prefixedKey(AliasType type, String key) {
-        return type.name() + PREFIX_DELIM + key;
-    }
-    
-    /**
-     * Returns an accessor object limited to the specified alias type.
-     * 
-     * @param type Alias type.
-     * @return Accessor object.
-     */
-    private AliasRegistryForType aliasRegistryForType(AliasType type) {
-        return new AliasRegistryForType(type);
     }
     
     /**

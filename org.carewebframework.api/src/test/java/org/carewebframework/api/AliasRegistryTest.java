@@ -20,33 +20,33 @@ public class AliasRegistryTest {
     @Test
     public void test() {
         AliasRegistry reg = AliasRegistry.getInstance();
-        reg.registerAlias(AliasType.AUTHORITY, "auth1", "auth.alias1");
-        reg.registerAlias(AliasType.AUTHORITY, "auth2", "auth.alias2");
+        AliasType.AUTHORITY.registerAlias("auth1", "auth.alias1");
+        AliasType.AUTHORITY.registerAlias("auth2", "auth.alias2");
         reg.registerAlias("AUTHORITY.auth3", "auth.alias3");
-        reg.registerAlias(AliasType.AUTHORITY, "authx*", "auth.aliasx*");
-        reg.registerAlias(AliasType.AUTHORITY, "authy.*.abc.*", "authz.*.xyz.*");
-        reg.registerAlias(AliasType.AUTHORITY, "authy.?.def.*", "authz.?.xyz.*");
+        AliasType.AUTHORITY.registerAlias("authx*", "auth.aliasx*");
+        AliasType.AUTHORITY.registerAlias("authy.*.abc.*", "authz.*.xyz.*");
+        AliasType.AUTHORITY.registerAlias("authy.?.def.*", "authz.?.xyz.*");
         
-        reg.registerAlias(AliasType.PROPERTY, "prop1", "prop.alias1");
-        reg.registerAlias(AliasType.PROPERTY, "prop2", "prop.alias2");
+        AliasType.PROPERTY.registerAlias("prop1", "prop.alias1");
+        AliasType.PROPERTY.registerAlias("prop2", "prop.alias2");
         reg.registerAlias("PROPERTY.prop3", "prop.alias3");
-        reg.registerAlias(AliasType.PROPERTY, "propx*", "prop.aliasx*");
-        reg.registerAlias(AliasType.PROPERTY, "propy.*.abc.*", "propz.*.xyz.*");
-        reg.registerAlias(AliasType.PROPERTY, "propy.?.def.*", "propz.?.xyz.*");
+        AliasType.PROPERTY.registerAlias("propx*", "prop.aliasx*");
+        AliasType.PROPERTY.registerAlias("propy.*.abc.*", "propz.*.xyz.*");
+        AliasType.PROPERTY.registerAlias("propy.?.def.*", "propz.?.xyz.*");
         
-        assertEquals("auth.alias1", reg.get(AliasType.AUTHORITY, "auth1"));
-        assertEquals("auth.alias2", reg.get(AliasType.AUTHORITY, "auth2"));
-        assertEquals("auth.alias3", reg.get(AliasType.AUTHORITY, "auth3"));
-        assertEquals("auth.aliasx.test", reg.get(AliasType.AUTHORITY, "authx.test"));
-        assertEquals("authz.123.xyz.456", reg.get(AliasType.AUTHORITY, "authy.123.abc.456"));
-        assertEquals("authz.9.xyz.789", reg.get(AliasType.AUTHORITY, "authy.9.def.789"));
+        assertEquals("auth.alias1", AliasType.AUTHORITY.get("auth1"));
+        assertEquals("auth.alias2", AliasType.AUTHORITY.get("auth2"));
+        assertEquals("auth.alias3", AliasType.AUTHORITY.get("auth3"));
+        assertEquals("auth.aliasx.test", AliasType.AUTHORITY.get("authx.test"));
+        assertEquals("authz.123.xyz.456", AliasType.AUTHORITY.get("authy.123.abc.456"));
+        assertEquals("authz.9.xyz.789", AliasType.AUTHORITY.get("authy.9.def.789"));
         
-        assertEquals("prop.alias1", reg.get(AliasType.PROPERTY, "prop1"));
-        assertEquals("prop.alias2", reg.get(AliasType.PROPERTY, "prop2"));
-        assertEquals("prop.alias3", reg.get(AliasType.PROPERTY, "prop3"));
-        assertEquals("prop.aliasx.test", reg.get(AliasType.PROPERTY, "propx.test"));
-        assertEquals("propz.123.xyz.456", reg.get(AliasType.PROPERTY, "propy.123.abc.456"));
-        assertEquals("propz.9.xyz.789", reg.get(AliasType.PROPERTY, "propy.9.def.789"));
+        assertEquals("prop.alias1", AliasType.PROPERTY.get("prop1"));
+        assertEquals("prop.alias2", AliasType.PROPERTY.get("prop2"));
+        assertEquals("prop.alias3", AliasType.PROPERTY.get("prop3"));
+        assertEquals("prop.aliasx.test", AliasType.PROPERTY.get("propx.test"));
+        assertEquals("propz.123.xyz.456", AliasType.PROPERTY.get("propy.123.abc.456"));
+        assertEquals("propz.9.xyz.789", AliasType.PROPERTY.get("propy.9.def.789"));
     }
     
 }
