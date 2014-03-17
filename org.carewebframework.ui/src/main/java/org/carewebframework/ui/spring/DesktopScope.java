@@ -132,6 +132,6 @@ public class DesktopScope extends AbstractScope implements ILifecycleCallback<De
     
     @Override
     public int getPriority() {
-        return 0;
+        return Integer.MIN_VALUE;
     }
 }
