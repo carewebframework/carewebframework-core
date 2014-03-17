@@ -315,11 +315,11 @@ public class AliasRegistry extends AbstractGlobalMap<String, String> implements 
                 Properties props = new Properties();
                 props.load(is);
                 
-                for (String prop : props.stringPropertyNames()) {
+                for (Entry<Object, Object> entry : props.entrySet()) {
                     try {
-                        registerAlias(prop, props.getProperty(prop));
+                        registerAlias((String) entry.getKey(), (String) entry.getValue());
                     } catch (Exception e) {
-                        log.error("Error registering alias for '" + prop + "'.", e);
+                        log.error("Error registering alias for '" + entry.getKey() + "'.", e);
                     }
                 }
                 
