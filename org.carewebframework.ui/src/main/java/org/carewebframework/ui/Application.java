@@ -583,6 +583,11 @@ public class Application {
         public void onCleanup(Desktop desktop) {
             register(desktop, false);
         }
+        
+        @Override
+        public int getPriority() {
+            return -100;
+        }
     };
     
     private final ILifecycleCallback<Session> sessionLifeCycle = new ILifecycleCallback<Session>() {
@@ -605,6 +610,11 @@ public class Application {
         @Override
         public void onCleanup(Session session) {
             removeSession(session);
+        }
+        
+        @Override
+        public int getPriority() {
+            return -100;
         }
     };
     

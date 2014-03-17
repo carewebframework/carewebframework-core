@@ -11,6 +11,7 @@ package org.carewebframework.ui;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -34,15 +35,29 @@ public class LifecycleEventListener<T extends Object> {
         
         void onCleanup(T object);
         
+        int getPriority();
+        
     }
     
     private static final Log log = LogFactory.getLog(LifecycleEventListener.class);
     
+    private static final Comparator<ILifecycleCallback<?>> comparator = new Comparator<ILifecycleCallback<?>>() {
+        
+        @Override
+        public int compare(ILifecycleCallback<?> o1, ILifecycleCallback<?> o2) {
+            return o1.getPriority() - o2.getPriority();
+        }
+        
+    };
+    
     private final List<ILifecycleCallback<T>> callbacks = Collections
             .synchronizedList(new ArrayList<ILifecycleCallback<T>>());
     
+    private boolean needsSorting;
+    
     public void addCallback(ILifecycleCallback<T> callback) {
         callbacks.add(callback);
+        needsSorting = true;
     }
     
     public void removeCallback(ILifecycleCallback<T> callback) {
@@ -64,13 +79,22 @@ public class LifecycleEventListener<T extends Object> {
             log.info("Executing lifecycle callbacks for " + target + (init ? " init." : " cleanup."));
         }
         
-        List<ILifecycleCallback<T>> list = new ArrayList<ILifecycleCallback<T>>(callbacks);
+        List<ILifecycleCallback<T>> list;
         
-        if (!init) {
-            Collections.reverse(list);
+        synchronized (callbacks) {
+            if (needsSorting) {
+                needsSorting = false;
+                Collections.sort(callbacks, comparator);
+            }
+            
+            list = new ArrayList<ILifecycleCallback<T>>(callbacks);
         }
         
-        for (ILifecycleCallback<T> callback : list) {
+        int last = list.size() - 1;
+        
+        for (int i = 0; i <= last; i++) {
+            ILifecycleCallback<T> callback = list.get(init ? i : last - i);
+            
             try {
                 if (init) {
                     callback.onInit(target);

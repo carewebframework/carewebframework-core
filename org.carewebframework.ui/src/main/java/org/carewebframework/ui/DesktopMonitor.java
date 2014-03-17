@@ -56,9 +56,7 @@ import org.zkoss.zul.Window;
 
 /**
  * Desktop timeout thread that evaluates ZK's Desktop and the time a request was last sent. Used to
- * notify user regarding their inactivity and take appropriate action. Since we need to consider all
- * desktops for a given session, our 'timeout' must be less than the HttpSession
- * maxInactiveInterval,
+ * notify user regarding their inactivity and take appropriate action.
  */
 public class DesktopMonitor extends Thread {
     

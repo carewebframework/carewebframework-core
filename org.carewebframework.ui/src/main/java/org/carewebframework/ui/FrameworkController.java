@@ -71,6 +71,11 @@ public class FrameworkController extends GenericForwardComposer<Component> {
             cleanup();
         }
         
+        @Override
+        public int getPriority() {
+            return 0;
+        }
+        
     };
     
     /**

@@ -129,4 +129,9 @@ public class DesktopScope extends AbstractScope implements ILifecycleCallback<De
             desktop.removeAttribute(KEY_SCOPE);
         }
     }
+    
+    @Override
+    public int getPriority() {
+        return 0;
+    }
 }

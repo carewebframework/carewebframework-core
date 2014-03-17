@@ -17,6 +17,9 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import org.carewebframework.ui.LifecycleEventDispatcher;
+import org.carewebframework.ui.LifecycleEventListener.ILifecycleCallback;
+
 import org.springframework.security.authentication.AuthenticationTrustResolver;
 import org.springframework.security.authentication.AuthenticationTrustResolverImpl;
 import org.springframework.security.core.Authentication;
@@ -33,7 +36,7 @@ import org.zkoss.zk.ui.Desktop;
 /**
  * This is based on the HttpSessionSecurityContextRepository, but is desktop-, not session-, based.
  */
-public class DesktopSecurityContextRepository implements SecurityContextRepository {
+public class DesktopSecurityContextRepository implements SecurityContextRepository, ILifecycleCallback<Desktop> {
     
     private static final String CONTEXT_KEY = HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY;
     
@@ -149,6 +152,11 @@ public class DesktopSecurityContextRepository implements SecurityContextReposito
      */
     private static String getDesktopContextKey(String dtid) {
         return StringUtils.isEmpty(dtid) ? null : CONTEXT_KEY + "-" + dtid;
+    }
+    
+    public DesktopSecurityContextRepository() {
+        super();
+        LifecycleEventDispatcher.addDesktopCallback(this);
     }
     
     /**
@@ -401,5 +409,28 @@ public class DesktopSecurityContextRepository implements SecurityContextReposito
             
             return null;
         }
+    }
+    
+    /**
+     * Force transfer of session-based security context to desktop.
+     */
+    @Override
+    public void onInit(Desktop desktop) {
+        HttpSession session = (HttpSession) desktop.getSession().getNativeSession();
+        getSecurityContext(session, desktop.getId());
+    }
+    
+    /**
+     * Remove desktop security context on desktop cleanup.
+     */
+    @Override
+    public void onCleanup(Desktop desktop) {
+        HttpSession session = (HttpSession) desktop.getSession().getNativeSession();
+        session.removeAttribute(getDesktopContextKey(desktop.getId()));
+    }
+    
+    @Override
+    public int getPriority() {
+        return Integer.MIN_VALUE;
     }
 }
