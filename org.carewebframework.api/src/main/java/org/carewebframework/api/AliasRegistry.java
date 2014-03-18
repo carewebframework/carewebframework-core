@@ -11,8 +11,10 @@ package org.carewebframework.api;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.digester.SimpleRegexMatcher;
 import org.apache.commons.io.IOUtils;
@@ -47,20 +49,20 @@ public class AliasRegistry implements ApplicationContextAware {
     public enum AliasType {
         AUTHORITY, PROPERTY;
         
-        private final AbstractGlobalMap<String, String> map = new AbstractGlobalMap<String, String>();
+        private final Map<String, String> aliasMap = new ConcurrentHashMap<String, String>();
+        
+        private final Map<String, String> wildcardMap = new ConcurrentHashMap<String, String>();
         
         public String get(String key) {
-            String result = map.get(key);
+            String result = aliasMap.get(key);
             
             if (result == null) {
-                for (Entry<String, String> entry : map.globalMap.entrySet()) {
+                for (Entry<String, String> entry : wildcardMap.entrySet()) {
                     String wc = entry.getKey();
                     
-                    if (wc.contains("*") || wc.contains("?")) {
-                        if (matcher.match(key, wc)) {
-                            result = transformKey(key, wc, entry.getValue());
-                            break;
-                        }
+                    if (matcher.match(key, wc)) {
+                        result = transformKey(key, wc, entry.getValue());
+                        break;
                     }
                 }
             }
@@ -75,18 +77,20 @@ public class AliasRegistry implements ApplicationContextAware {
          * @param alias Alias for the key. A null value removes any existing alias.
          */
         public void registerAlias(String key, String alias) {
+            Map<String, String> map = key.contains("*") || key.contains("?") ? wildcardMap : aliasMap;
+            
             if (alias == null) {
-                map.globalMap.remove(key);
+                map.remove(key);
                 return;
             }
             
-            if (map.globalMap.containsKey(key)) {
-                if (map.globalMap.get(key).equals(alias)) {
+            if (map.containsKey(key)) {
+                if (map.get(key).equals(alias)) {
                     return;
                 }
                 throw new IllegalArgumentException(name() + " " + key + " already has a registered alias.");
             }
-            map.globalMap.put(key, alias);
+            map.put(key, alias);
         }
         
         /**
