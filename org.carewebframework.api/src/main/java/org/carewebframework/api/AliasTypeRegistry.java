@@ -248,6 +248,8 @@ public class AliasTypeRegistry extends AbstractGlobalRegistry<String, AliasTypeR
             return;
         }
         
+        log.info("Loading aliases from " + propertyFile);
+        int count = 0;
         Resource[] resources;
         
         try {
@@ -273,11 +275,13 @@ public class AliasTypeRegistry extends AbstractGlobalRegistry<String, AliasTypeR
                 for (Entry<Object, Object> entry : props.entrySet()) {
                     try {
                         registerAlias((String) entry.getKey(), (String) entry.getValue());
+                        count++;
                     } catch (Exception e) {
                         log.error("Error registering alias for '" + entry.getKey() + "'.", e);
                     }
                 }
                 
+                log.info("Loaded " + count + " alias entries.");
             } catch (IOException e) {
                 log.error("Failed to load alias property file: " + resource.getFilename(), e);
             } finally {
