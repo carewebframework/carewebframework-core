@@ -32,8 +32,8 @@
 			class="org.carewebframework.api.context.ContextSerializerRegistry"
 			factory-method="getInstance" />
 
-		<!-- Maintains a registry of all aliases. -->
-		<bean id="aliasRegistry" class="org.carewebframework.api.AliasRegistry"
+		<!-- Maintains a registry of all alias types. -->
+		<bean id="aliasTypeRegistry" class="org.carewebframework.api.AliasTypeRegistry"
 			factory-method="getInstance">
 			<property name="propertyFile" value="classpath*:/META-INF/alias.properties,${org.carewebframework.location.aliases}" />
 		</bean>

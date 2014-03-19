@@ -16,6 +16,8 @@ import org.carewebframework.api.domain.IUser;
  */
 public interface ISecurityService {
     
+    static final String ALIAS_TYPE_AUTHORITY = "AUTHORITY";
+    
     /**
      * Logout out the current desktop instance.
      * 

@@ -31,16 +31,16 @@ import org.springframework.core.io.Resource;
 
 /**
  * Global registry for aliases. Supports aliases for different alias types as defined by the
- * AliasType enum. Aliases may be loaded from one or more property files and may be added
+ * AliasType class. Aliases may be loaded from one or more property files and may be added
  * programmatically.
  */
-public class AliasRegistry implements ApplicationContextAware {
+public class AliasTypeRegistry extends AbstractGlobalRegistry<String, AliasTypeRegistry.AliasType> implements ApplicationContextAware {
     
-    private static final Log log = LogFactory.getLog(AliasRegistry.class);
+    private static final Log log = LogFactory.getLog(AliasTypeRegistry.class);
     
-    private static final AliasRegistry instance = new AliasRegistry();
+    private static final AliasTypeRegistry instance = new AliasTypeRegistry();
     
-    private static final char PREFIX_DELIM = '.';
+    private static final char PREFIX_DELIM = '^';
     
     private static final String PREFIX_DELIM_REGEX = "\\" + PREFIX_DELIM;
     
@@ -48,12 +48,21 @@ public class AliasRegistry implements ApplicationContextAware {
     
     private static final SimpleRegexMatcher matcher = new SimpleRegexMatcher();
     
-    public enum AliasType {
-        AUTHORITY, PROPERTY;
+    public static class AliasType {
+        
+        private final String name;
         
         private final Map<String, String> aliasMap = new ConcurrentHashMap<String, String>();
         
         private final Map<String, String> wildcardMap = new ConcurrentHashMap<String, String>();
+        
+        private AliasType(String name) {
+            this.name = name;
+        }
+        
+        public String getName() {
+            return name;
+        }
         
         public String get(String key) {
             String result = aliasMap.get(key);
@@ -94,8 +103,8 @@ public class AliasRegistry implements ApplicationContextAware {
                 }
                 
                 if (log.isInfoEnabled()) {
-                    log.info(StrUtil.formatMessage("Replaced %s alias for '%s':  old value ='%s', new value ='%s'.", name(),
-                        key, oldAlias, alias));
+                    log.info(StrUtil.formatMessage("Replaced %s alias for '%s':  old value ='%s', new value ='%s'.",
+                        getName(), key, oldAlias, alias));
                 }
             }
             map.put(key, alias);
@@ -149,14 +158,24 @@ public class AliasRegistry implements ApplicationContextAware {
      * 
      * @return Reference to the alias registry.
      */
-    public static AliasRegistry getInstance() {
+    public static AliasTypeRegistry getInstance() {
         return instance;
+    }
+    
+    /**
+     * Convenience method for accessing alias type.
+     * 
+     * @param key Key associated with alias type.
+     * @return The alias type (never null).
+     */
+    public static AliasType getType(String key) {
+        return instance.get(key);
     }
     
     /**
      * Enforce singleton instance.
      */
-    private AliasRegistry() {
+    private AliasTypeRegistry() {
         super();
     }
     
@@ -182,12 +201,26 @@ public class AliasRegistry implements ApplicationContextAware {
             throw new IllegalArgumentException("Illegal key value: " + key);
         }
         
-        try {
-            AliasType type = AliasType.valueOf(pcs[0].toUpperCase());
-            type.registerAlias(pcs[1], alias);
-        } catch (Throwable t) {
-            throw new IllegalArgumentException("Illegal alias type: " + pcs[0]);
+        get(pcs[0]).registerAlias(pcs[1], alias);
+    }
+    
+    /**
+     * Returns the AliasType given the key, creating and registering it if it does not already
+     * exist.
+     * 
+     * @param key Unique key of alias type.
+     * @return The alias type (never null).
+     */
+    @Override
+    public AliasType get(String key) {
+        key = key.toUpperCase();
+        AliasType type = super.get(key);
+        
+        if (type == null) {
+            add(type = new AliasType(key));
         }
+        
+        return type;
     }
     
     /**
@@ -251,5 +284,10 @@ public class AliasRegistry implements ApplicationContextAware {
                 IOUtils.closeQuietly(is);
             }
         }
+    }
+    
+    @Override
+    protected String getKey(AliasType item) {
+        return item.getName();
     }
 }

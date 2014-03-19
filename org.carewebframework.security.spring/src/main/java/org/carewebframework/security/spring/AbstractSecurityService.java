@@ -17,7 +17,8 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import org.carewebframework.api.AliasRegistry.AliasType;
+import org.carewebframework.api.AliasTypeRegistry;
+import org.carewebframework.api.AliasTypeRegistry.AliasType;
 import org.carewebframework.api.context.ContextManager;
 import org.carewebframework.api.context.IContextManager;
 import org.carewebframework.api.domain.IUser;
@@ -40,6 +41,8 @@ public abstract class AbstractSecurityService implements ISecurityService {
     private static final Log log = LogFactory.getLog(AbstractSecurityService.class);
     
     private String logoutTarget = Constants.LOGOUT_TARGET;
+    
+    private final AliasType authorityAlias = AliasTypeRegistry.getType(ALIAS_TYPE_AUTHORITY);
     
     /**
      * Returns Spring security Authentication object via
@@ -149,7 +152,7 @@ public abstract class AbstractSecurityService implements ISecurityService {
      */
     @Override
     public void setAuthorityAlias(String authority, String alias) {
-        AliasType.AUTHORITY.registerAlias(authority, alias);
+        authorityAlias.registerAlias(authority, alias);
     }
     
     /**
@@ -262,7 +265,7 @@ public abstract class AbstractSecurityService implements ISecurityService {
         boolean result = authentication.getAuthorities().contains(new SimpleGrantedAuthority(grantedAuthority));
         
         if (!result) {
-            String alias = AliasType.AUTHORITY.get(grantedAuthority);
+            String alias = authorityAlias.get(grantedAuthority);
             return alias != null && isGranted(alias, authentication);
         }
         
