@@ -248,7 +248,6 @@ public class AliasTypeRegistry extends AbstractGlobalRegistry<String, AliasTypeR
             return;
         }
         
-        log.info("Loading aliases from " + propertyFile);
         int count = 0;
         Resource[] resources;
         
@@ -261,10 +260,11 @@ public class AliasTypeRegistry extends AbstractGlobalRegistry<String, AliasTypeR
         
         for (Resource resource : resources) {
             if (!resource.exists()) {
-                log.info("Did not find authority alias property file: " + resource.getFilename());
+                log.info("Did not find alias property file: " + resource.getFilename());
                 continue;
             }
             
+            log.info("Loading aliases from " + resource.getFilename());
             InputStream is = null;
             
             try {
