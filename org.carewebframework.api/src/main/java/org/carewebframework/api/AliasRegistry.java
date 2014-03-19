@@ -22,6 +22,8 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import org.carewebframework.common.StrUtil;
+
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -84,11 +86,17 @@ public class AliasRegistry implements ApplicationContextAware {
                 return;
             }
             
-            if (map.containsKey(key)) {
-                if (map.get(key).equals(alias)) {
+            String oldAlias = map.get(key);
+            
+            if (oldAlias != null) {
+                if (oldAlias.equals(alias)) {
                     return;
                 }
-                throw new IllegalArgumentException(name() + " " + key + " already has a registered alias.");
+                
+                if (log.isInfoEnabled()) {
+                    log.info(StrUtil.formatMessage("Replaced %s alias for '%s':  old value ='%s', new value ='%s'.", name(),
+                        key, oldAlias, alias));
+                }
             }
             map.put(key, alias);
         }

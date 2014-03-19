@@ -10,6 +10,7 @@
 package org.carewebframework.api;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import org.carewebframework.api.AliasRegistry.AliasType;
 
@@ -40,6 +41,7 @@ public class AliasRegistryTest {
         assertEquals("auth.aliasx.test", AliasType.AUTHORITY.get("authx.test"));
         assertEquals("authz.123.xyz.456", AliasType.AUTHORITY.get("authy.123.abc.456"));
         assertEquals("authz.9.xyz.789", AliasType.AUTHORITY.get("authy.9.def.789"));
+        assertNull(AliasType.AUTHORITY.get("authz.5.ghi.987"));
         
         assertEquals("prop.alias1", AliasType.PROPERTY.get("prop1"));
         assertEquals("prop.alias2", AliasType.PROPERTY.get("prop2"));
@@ -47,6 +49,9 @@ public class AliasRegistryTest {
         assertEquals("prop.aliasx.test", AliasType.PROPERTY.get("propx.test"));
         assertEquals("propz.123.xyz.456", AliasType.PROPERTY.get("propy.123.abc.456"));
         assertEquals("propz.9.xyz.789", AliasType.PROPERTY.get("propy.9.def.789"));
+        assertNull(AliasType.PROPERTY.get("prop.test.property"));
+        
+        AliasType.AUTHORITY.registerAlias("auth1", "auth.new.alias1");
     }
     
 }
