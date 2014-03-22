@@ -21,14 +21,14 @@ public class AliasRegistryTest {
         AliasTypeRegistry reg = AliasTypeRegistry.getInstance();
         reg.get("AUTHORITY").registerAlias("auth1", "auth.alias1");
         reg.get("AUTHORITY").registerAlias("auth2", "auth.alias2");
-        reg.registerAlias("AUTHORITY^auth3", "auth.alias3");
+        AliasTypeRegistry.registerAlias("AUTHORITY", "auth3", "auth.alias3");
         reg.get("AUTHORITY").registerAlias("authx*", "auth.aliasx*");
         reg.get("AUTHORITY").registerAlias("authy.*.abc.*", "authz.*.xyz.*");
         reg.get("AUTHORITY").registerAlias("authy.?.def.*", "authz.?.xyz.*");
         
         reg.get("PROPERTY").registerAlias("prop1", "prop.alias1");
         reg.get("PROPERTY").registerAlias("prop2", "prop.alias2");
-        reg.registerAlias("PROPERTY^prop3", "prop.alias3");
+        AliasTypeRegistry.registerAlias("PROPERTY", "prop3", "prop.alias3");
         reg.get("PROPERTY").registerAlias("propx*", "prop.aliasx*");
         reg.get("PROPERTY").registerAlias("propy.*.abc.*", "propz.*.xyz.*");
         reg.get("PROPERTY").registerAlias("propy.?.def.*", "propz.?.xyz.*");

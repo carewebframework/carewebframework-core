@@ -64,15 +64,15 @@ public class AliasTypeRegistry extends AbstractGlobalRegistry<String, AliasTypeR
             return name;
         }
         
-        public String get(String key) {
-            String result = aliasMap.get(key);
+        public String get(String local) {
+            String result = aliasMap.get(local);
             
             if (result == null) {
                 for (Entry<String, String> entry : wildcardMap.entrySet()) {
                     String wc = entry.getKey();
                     
-                    if (matcher.match(key, wc)) {
-                        result = transformKey(key, wc, entry.getValue());
+                    if (matcher.match(local, wc)) {
+                        result = transformKey(local, wc, entry.getValue());
                         break;
                     }
                 }
@@ -84,18 +84,18 @@ public class AliasTypeRegistry extends AbstractGlobalRegistry<String, AliasTypeR
         /**
          * Registers an alias for a key.
          * 
-         * @param key Key name.
+         * @param local Local name.
          * @param alias Alias for the key. A null value removes any existing alias.
          */
-        public void registerAlias(String key, String alias) {
-            Map<String, String> map = key.contains("*") || key.contains("?") ? wildcardMap : aliasMap;
+        public void registerAlias(String local, String alias) {
+            Map<String, String> map = local.contains("*") || local.contains("?") ? wildcardMap : aliasMap;
             
             if (alias == null) {
-                map.remove(key);
+                map.remove(local);
                 return;
             }
             
-            String oldAlias = map.get(key);
+            String oldAlias = map.get(local);
             
             if (oldAlias != null) {
                 if (oldAlias.equals(alias)) {
@@ -104,10 +104,10 @@ public class AliasTypeRegistry extends AbstractGlobalRegistry<String, AliasTypeR
                 
                 if (log.isInfoEnabled()) {
                     log.info(StrUtil.formatMessage("Replaced %s alias for '%s':  old value ='%s', new value ='%s'.",
-                        getName(), key, oldAlias, alias));
+                        getName(), local, oldAlias, alias));
                 }
             }
-            map.put(key, alias);
+            map.put(local, alias);
         }
         
         /**
@@ -169,11 +169,22 @@ public class AliasTypeRegistry extends AbstractGlobalRegistry<String, AliasTypeR
     /**
      * Convenience method for accessing alias type.
      * 
-     * @param key Key associated with alias type.
+     * @param type Key associated with alias type.
      * @return The alias type (never null).
      */
-    public static AliasType getType(String key) {
-        return instance.get(key);
+    public static AliasType getType(String type) {
+        return instance.get(type);
+    }
+    
+    /**
+     * Registers an alias for a key.
+     * 
+     * @param type Name of the alias type.
+     * @param local Local name.
+     * @param alias Alias for the local name. A null value removes any existing alias.
+     */
+    public static void registerAlias(String type, String local, String alias) {
+        instance.get(type).registerAlias(local, alias);
     }
     
     /**
@@ -190,33 +201,6 @@ public class AliasTypeRegistry extends AbstractGlobalRegistry<String, AliasTypeR
      */
     public void setPropertyFile(String propertyFile) {
         this.propertyFile = propertyFile;
-    }
-    
-    /**
-     * Registers an alias for a key prefixed with an alias type.
-     * 
-     * @param key Key name with alias type prefix.
-     * @param alias Alias for the key. A null value removes any existing alias.
-     */
-    public void registerAlias(String key, String alias) {
-        String[] pcs = key.split(PREFIX_DELIM_REGEX, 2);
-        
-        if (pcs.length != 2) {
-            throw new IllegalArgumentException("Illegal key value: " + key);
-        }
-        
-        registerAlias(pcs[0], pcs[1], alias);
-    }
-    
-    /**
-     * Registers an alias for a key.
-     * 
-     * @param type Name of the alias type.
-     * @param key Key name.
-     * @param alias Alias for the key. A null value removes any existing alias.
-     */
-    public void registerAlias(String type, String key, String alias) {
-        get(type).registerAlias(key, alias);
     }
     
     /**
@@ -305,6 +289,22 @@ public class AliasTypeRegistry extends AbstractGlobalRegistry<String, AliasTypeR
                 IOUtils.closeQuietly(is);
             }
         }
+    }
+    
+    /**
+     * Registers an alias for a key prefixed with an alias type.
+     * 
+     * @param key Local name with alias type prefix.
+     * @param alias Alias for the key. A null value removes any existing alias.
+     */
+    private void registerAlias(String key, String alias) {
+        String[] pcs = key.split(PREFIX_DELIM_REGEX, 2);
+        
+        if (pcs.length != 2) {
+            throw new IllegalArgumentException("Illegal key value: " + key);
+        }
+        
+        registerAlias(pcs[0], pcs[1], alias);
     }
     
     @Override
