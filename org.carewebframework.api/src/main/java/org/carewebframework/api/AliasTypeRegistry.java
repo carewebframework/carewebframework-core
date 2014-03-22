@@ -193,7 +193,7 @@ public class AliasTypeRegistry extends AbstractGlobalRegistry<String, AliasTypeR
     }
     
     /**
-     * Registers an alias for a key.
+     * Registers an alias for a key prefixed with an alias type.
      * 
      * @param key Key name with alias type prefix.
      * @param alias Alias for the key. A null value removes any existing alias.
@@ -205,7 +205,18 @@ public class AliasTypeRegistry extends AbstractGlobalRegistry<String, AliasTypeR
             throw new IllegalArgumentException("Illegal key value: " + key);
         }
         
-        get(pcs[0]).registerAlias(pcs[1], alias);
+        registerAlias(pcs[0], pcs[1], alias);
+    }
+    
+    /**
+     * Registers an alias for a key.
+     * 
+     * @param type Name of the alias type.
+     * @param key Key name.
+     * @param alias Alias for the key. A null value removes any existing alias.
+     */
+    public void registerAlias(String type, String key, String alias) {
+        get(type).registerAlias(key, alias);
     }
     
     /**
