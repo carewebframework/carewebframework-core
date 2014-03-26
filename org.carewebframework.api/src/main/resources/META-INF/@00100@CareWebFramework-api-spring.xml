@@ -33,7 +33,7 @@
 			factory-method="getInstance" />
 
 		<!-- Maintains a registry of all alias types. -->
-		<bean id="aliasTypeRegistry" class="org.carewebframework.api.AliasTypeRegistry"
+		<bean id="aliasTypeRegistry" class="org.carewebframework.api.alias.AliasTypeRegistry"
 			factory-method="getInstance">
 			<property name="propertyFile" value="classpath*:/META-INF/alias.properties,${org.carewebframework.location.aliases}" />
 		</bean>
