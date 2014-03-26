@@ -12,6 +12,8 @@ package org.carewebframework.api;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
+import org.carewebframework.api.alias.AliasTypeRegistry;
+
 import org.junit.Test;
 
 public class AliasRegistryTest {
