@@ -22,7 +22,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @param <KEY> The class of the indexing key.
  * @param <VALUE> The class of the stored item.
  */
-public class AbstractGlobalMap<KEY, VALUE> implements Iterable<VALUE> {
+public abstract class AbstractGlobalMap<KEY, VALUE> implements Iterable<VALUE> {
     
     protected final Map<KEY, VALUE> globalMap = new ConcurrentHashMap<KEY, VALUE>();
     
@@ -35,7 +35,7 @@ public class AbstractGlobalMap<KEY, VALUE> implements Iterable<VALUE> {
      */
     protected static void checkDuplicate(Object key, Object value, Map<?, ?> map) {
         if (map.containsKey(key) && !map.get(key).equals(value)) {
-            throw new RuntimeException("A registry entry with the key '" + key + "' already exists.");
+            throw new IllegalArgumentException("A registry entry with the key '" + key + "' already exists.");
         }
     }
     
