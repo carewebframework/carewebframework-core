@@ -17,8 +17,8 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import org.carewebframework.api.AliasTypeRegistry;
-import org.carewebframework.api.AliasTypeRegistry.AliasType;
+import org.carewebframework.api.alias.AliasType;
+import org.carewebframework.api.alias.AliasTypeRegistry;
 import org.carewebframework.api.context.ContextManager;
 import org.carewebframework.api.context.IContextManager;
 import org.carewebframework.api.domain.IUser;
