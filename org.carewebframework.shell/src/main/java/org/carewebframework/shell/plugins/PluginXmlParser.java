@@ -223,7 +223,7 @@ public class PluginXmlParser extends BaseXmlParser {
             for (int i = 0; i < entries.getLength(); i++) {
                 Element entry = (Element) entries.item(i);
                 String key = entry.getAttribute("key");
-                String value = entry.getTextContent();
+                String value = entry.getTextContent().trim();
                 properties.put(key, value);
             }
             
