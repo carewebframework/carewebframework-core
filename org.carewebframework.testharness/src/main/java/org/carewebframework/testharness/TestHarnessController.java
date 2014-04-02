@@ -47,9 +47,7 @@ public class TestHarnessController extends FrameworkController {
         
         @Override
         public int compare(IAction act1, IAction act2) {
-            String lbl1 = act1.toString();
-            String lbl2 = act2.toString();
-            return lbl1.compareToIgnoreCase(lbl2);
+            return act1.toString().compareToIgnoreCase(act2.toString());
         }
         
     };
