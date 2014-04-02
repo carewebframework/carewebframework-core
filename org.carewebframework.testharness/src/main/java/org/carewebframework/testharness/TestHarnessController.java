@@ -20,6 +20,9 @@ import org.carewebframework.shell.CareWebShellEx;
 import org.carewebframework.shell.plugins.PluginDefinition;
 import org.carewebframework.shell.plugins.PluginRegistry;
 import org.carewebframework.ui.FrameworkController;
+import org.carewebframework.ui.action.ActionRegistry;
+import org.carewebframework.ui.action.ActionRegistry.ActionScope;
+import org.carewebframework.ui.action.IAction;
 import org.carewebframework.ui.zk.ZKUtil;
 
 import org.zkoss.zk.ui.Component;
@@ -30,6 +33,26 @@ import org.zkoss.zk.ui.Component;
 public class TestHarnessController extends FrameworkController {
     
     private static final long serialVersionUID = 1L;
+    
+    private static final Comparator<PluginDefinition> pluginComparator = new Comparator<PluginDefinition>() {
+        
+        @Override
+        public int compare(PluginDefinition def1, PluginDefinition def2) {
+            return def1.getName().compareToIgnoreCase(def2.getName());
+        }
+        
+    };
+    
+    private static final Comparator<IAction> actionComparator = new Comparator<IAction>() {
+        
+        @Override
+        public int compare(IAction act1, IAction act2) {
+            String lbl1 = act1.toString();
+            String lbl2 = act2.toString();
+            return lbl1.compareToIgnoreCase(lbl2);
+        }
+        
+    };
     
     private CareWebShellEx shell;
     
@@ -50,17 +73,17 @@ public class TestHarnessController extends FrameworkController {
             }
         }
         
-        Collections.sort(plugins, new Comparator<PluginDefinition>() {
-            
-            @Override
-            public int compare(PluginDefinition def1, PluginDefinition def2) {
-                return def1.getName().compareToIgnoreCase(def2.getName());
-            }
-            
-        });
+        Collections.sort(plugins, pluginComparator);
         
         for (PluginDefinition plugin : plugins) {
             shell.register("Test Harness\\" + plugin.getName(), plugin);
+        }
+        
+        List<IAction> actions = new ArrayList<IAction>(ActionRegistry.getInstance().getRegisteredActions(ActionScope.BOTH));
+        Collections.sort(actions, actionComparator);
+        
+        for (IAction action : actions) {
+            shell.registerMenu("Actions\\" + action, action.getScript()).setHint(action.getScript());
         }
         
         shell.start();
