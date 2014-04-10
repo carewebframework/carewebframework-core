@@ -358,8 +358,8 @@ public class HybridModel<T, G> extends AbstractListModel<T> implements GroupsMod
         if (grouper != null) {
             groupsModel.sort(cmpr, ascending, colIndex);
         } else {
-            fireEvent(ListDataEvent.STRUCTURE_CHANGED, -1, -1);
             Collections.sort(data, cmpr);
+            fireEvent(ListDataEvent.STRUCTURE_CHANGED, -1, -1);
         }
     }
     
