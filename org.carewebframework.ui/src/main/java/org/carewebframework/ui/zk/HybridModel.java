@@ -23,6 +23,7 @@ import org.zkoss.zul.GroupsModel;
 import org.zkoss.zul.SimpleGroupsModel;
 import org.zkoss.zul.event.GroupsDataListener;
 import org.zkoss.zul.event.ListDataEvent;
+import org.zkoss.zul.ext.GroupsSortableModel;
 
 /**
  * This is a hybrid list model/group model. If a grouper implementation is supplied, can act as a
@@ -32,7 +33,7 @@ import org.zkoss.zul.event.ListDataEvent;
  * @param <G>
  */
 @SuppressWarnings("rawtypes")
-public class HybridModel<T, G> extends AbstractListModel<T> implements GroupsModel<T, GroupHeader, Object>, Iterable<T> {
+public class HybridModel<T, G> extends AbstractListModel<T> implements GroupsModel<T, GroupHeader, Object>, GroupsSortableModel<T>, Iterable<T> {
     
     private static final long serialVersionUID = 1L;
     
@@ -348,6 +349,23 @@ public class HybridModel<T, G> extends AbstractListModel<T> implements GroupsMod
     @Override
     public Iterator<T> iterator() {
         return data.iterator();
+    }
+    
+    /******** GroupsSortableModel<T> ********/
+    
+    @Override
+    public void sort(Comparator<T> cmpr, boolean ascending, int colIndex) {
+        if (grouper != null) {
+            groupsModel.sort(cmpr, ascending, colIndex);
+        } else {
+            fireEvent(ListDataEvent.STRUCTURE_CHANGED, -1, -1);
+            Collections.sort(data, cmpr);
+        }
+    }
+    
+    @Override
+    public void group(Comparator<T> cmpr, boolean ascending, int colIndex) {
+        // NOP
     }
     
 }
