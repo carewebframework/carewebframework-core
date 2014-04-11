@@ -14,10 +14,9 @@ import java.lang.reflect.Method;
 import java.util.Comparator;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
-import org.springframework.util.StringUtils;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zul.Column;
@@ -46,17 +45,17 @@ public class RowComparator implements Comparator<Object>, Serializable {
      * @param headers List of headers (of type Column or Listheader).
      */
     public static void autowireColumnComparators(List<Component> headers) {
-        for (Object obj : headers) {
-            if (obj instanceof Column) {
-                Column col = (Column) obj;
+        for (Component cmp : headers) {
+            if (cmp instanceof Column) {
+                Column col = (Column) cmp;
                 String getter = getterMethod(col);
                 
                 if (getter != null) {
                     col.setSortAscending(new RowComparator(true, getter));
                     col.setSortDescending(new RowComparator(false, getter));
                 }
-            } else if (obj instanceof Listheader) {
-                Listheader hdr = (Listheader) obj;
+            } else if (cmp instanceof Listheader) {
+                Listheader hdr = (Listheader) cmp;
                 String getter = getterMethod(hdr);
                 
                 if (getter != null) {
