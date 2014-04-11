@@ -45,9 +45,10 @@ public abstract class AbstractListitemRenderer<T, G> extends AbstractRenderer im
         
         if (item instanceof Listgroup) {
             renderGroup((Listgroup) item, (G) object);
+        } else {
+            item.setStyle(compStyle);
+            renderItem(item, (T) object);
         }
-        item.setStyle(compStyle);
-        renderItem(item, (T) object);
     }
     
     protected abstract void renderItem(Listitem item, T object);
