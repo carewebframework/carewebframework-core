@@ -21,6 +21,7 @@ import org.carewebframework.ui.zk.HybridModel.GroupHeader;
 import org.zkoss.zul.AbstractListModel;
 import org.zkoss.zul.GroupsModel;
 import org.zkoss.zul.SimpleGroupsModel;
+import org.zkoss.zul.event.GroupsDataEvent;
 import org.zkoss.zul.event.GroupsDataListener;
 import org.zkoss.zul.event.ListDataEvent;
 import org.zkoss.zul.ext.GroupsSortableModel;
@@ -58,12 +59,12 @@ public class HybridModel<T, G> extends AbstractListModel<T> implements GroupsMod
         
         private static final long serialVersionUID = 1L;
         
-        private int state = -1;
+        private int state;
         
-        private final Comparator<E> comparator;
+        private Comparator<E> comparator;
         
         SortedList(Comparator<E> comparator) {
-            this.comparator = comparator;
+            setComparator(comparator);
         }
         
         protected void ensureSorted() {
@@ -71,6 +72,11 @@ public class HybridModel<T, G> extends AbstractListModel<T> implements GroupsMod
                 state = modCount;
                 Collections.sort(this, comparator);
             }
+        }
+        
+        protected void setComparator(Comparator<E> comparator) {
+            this.comparator = comparator;
+            state = -1;
         }
     }
     
@@ -116,15 +122,35 @@ public class HybridModel<T, G> extends AbstractListModel<T> implements GroupsMod
         }
     }
     
-    private final IGrouper<T, G> grouper;
-    
-    private final Comparator<T> elementComparator;
-    
     private final List<T> data = new ArrayList<T>();
     
-    private final SortedList<GroupHeader<T, G>> groupHeaders;
+    private IGrouper<T, G> grouper;
     
-    private final SimpleGroupsModel<T, G, ?, ?> groupsModel;
+    private final Comparator<T> elementComparator = new Comparator<T>() {
+        
+        @Override
+        public int compare(T t1, T t2) {
+            return grouper == null ? 0 : grouper.compareElement(t1, t2);
+        }
+        
+    };
+    
+    private final SortedList<GroupHeader<T, G>> groupHeaders = new SortedList<GroupHeader<T, G>>(null);
+    
+    @SuppressWarnings("unchecked")
+    private final SimpleGroupsModel<T, GroupHeader, ?, ?> groupsModel = new SimpleGroupsModel(
+                                                                                              groupHeaders) {
+        
+        @Override
+        public void group(Comparator cmpr, boolean ascending, int colIndex) {
+            if (colIndex == -1) {
+                fireEvent(GroupsDataEvent.STRUCTURE_CHANGED, -1, -1, -1);
+            }
+        }
+        
+        private static final long serialVersionUID = 1L;
+        
+    };
     
     public HybridModel() {
         this(null, null);
@@ -138,27 +164,12 @@ public class HybridModel<T, G> extends AbstractListModel<T> implements GroupsMod
         this(null, data);
     }
     
-    @SuppressWarnings("unchecked")
     public HybridModel(IGrouper<T, G> grouper, Collection<T> data) {
-        this.grouper = grouper;
-        this.groupHeaders = grouper == null ? null : new SortedList<GroupHeader<T, G>>(null);
-        
-        this.elementComparator = grouper == null ? null : new Comparator<T>() {
-            
-            @Override
-            public int compare(T t1, T t2) {
-                return HybridModel.this.grouper.compareElement(t1, t2);
-            }
-            
-        };
-        
-        this.groupsModel = groupHeaders == null ? null : new SimpleGroupsModel(groupHeaders);
-        
         if (data != null) {
-            for (T element : data) {
-                add(element);
-            }
+            this.data.addAll(data);
         }
+        
+        setGrouper(grouper);
     }
     
     public HybridModel(HybridModel<T, G> model) {
@@ -273,6 +284,25 @@ public class HybridModel<T, G> extends AbstractListModel<T> implements GroupsMod
         return grp;
     }
     
+    public IGrouper<T, G> getGrouper() {
+        return grouper;
+    }
+    
+    public void setGrouper(IGrouper<T, G> grouper) {
+        if (grouper != this.grouper) {
+            this.grouper = grouper;
+            groupHeaders.clear();
+            
+            if (grouper != null) {
+                for (T element : data) {
+                    addToGroup(element);
+                }
+            }
+            
+            groupsModel.group(null, true, -1);
+        }
+    }
+    
     /******** ListModel ********/
     
     @Override
@@ -355,12 +385,12 @@ public class HybridModel<T, G> extends AbstractListModel<T> implements GroupsMod
     
     @Override
     public void sort(Comparator<T> cmpr, boolean ascending, int colIndex) {
-        if (grouper != null) {
+        if (isGrouped()) {
             groupsModel.sort(cmpr, ascending, colIndex);
-        } else {
-            Collections.sort(data, cmpr);
-            fireEvent(ListDataEvent.STRUCTURE_CHANGED, -1, -1);
         }
+        
+        Collections.sort(data, cmpr);
+        fireEvent(ListDataEvent.STRUCTURE_CHANGED, -1, -1);
     }
     
     @Override
