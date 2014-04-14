@@ -297,6 +297,11 @@ public class PropertyGrid extends Window {
         }
         
         disableButtons(result);
+        
+        if (commit) {
+            Events.postEvent(new LayoutChangedEvent(null, target));
+        }
+        
         return result;
     }
     

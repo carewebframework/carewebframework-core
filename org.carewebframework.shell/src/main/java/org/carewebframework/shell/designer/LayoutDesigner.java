@@ -46,8 +46,6 @@ public class LayoutDesigner extends Window implements AfterCompose {
     
     private static final String ATTR_BRING_TO_FRONT = ZUL_PAGE + ".BTF";
     
-    private static final String ON_LAYOUT_CHANGED = "onLayoutChanged";
-    
     private enum MovementType {
         INVALID, // Invalid movement type
         EXCHANGE, // Exchange position of two siblings
@@ -85,7 +83,7 @@ public class LayoutDesigner extends Window implements AfterCompose {
     
     private int dragId;
     
-    private Event layoutChangedEvent;
+    private LayoutChangedEvent layoutChangedEvent;
     
     private boolean refreshPending;
     
@@ -180,7 +178,7 @@ public class LayoutDesigner extends Window implements AfterCompose {
         setWidgetOverride("_cwf_highlight", "function(comp) {jq(comp).effect('pulsate',{times:1}).effect('highlight');}");
         Boolean btf = (Boolean) getDesktop().getAttribute(ATTR_BRING_TO_FRONT);
         bringToFront = btf == null || btf;
-        layoutChangedEvent = new Event(ON_LAYOUT_CHANGED, this);
+        layoutChangedEvent = new LayoutChangedEvent(this, null);
         contextMenu.setParent(this);
         contextMenu.setListener(this);
         setContext(contextMenu);
