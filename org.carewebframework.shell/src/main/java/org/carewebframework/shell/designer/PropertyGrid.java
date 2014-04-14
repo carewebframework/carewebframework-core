@@ -110,7 +110,7 @@ public class PropertyGrid extends Window {
     
     private boolean propertiesModified;
     
-    private boolean imbedded;
+    private boolean embedded;
     
     /**
      * Creates a property grid for the given target UI element.
@@ -129,14 +129,14 @@ public class PropertyGrid extends Window {
      * 
      * @param target UI element whose properties are to be edited.
      * @param parent Parent component for property grid (may be null).
-     * @param imbedded If true, the property grid is imbedded within another component.
+     * @param embedded If true, the property grid is embedded within another component.
      * @return Newly created PropertyGrid instance.
      * @throws Exception
      */
-    public static PropertyGrid create(UIElementBase target, Component parent, boolean imbedded) throws Exception {
+    public static PropertyGrid create(UIElementBase target, Component parent, boolean embedded) throws Exception {
         PageDefinition def = ZKUtil.loadCachedPageDefinition(DesignConstants.RESOURCE_PREFIX + "PropertyGrid.zul");
         PropertyGrid propertyGrid = (PropertyGrid) PopupDialog.popup(def, null, false, true, false);
-        propertyGrid.init(target, parent, imbedded);
+        propertyGrid.init(target, parent, embedded);
         
         if (parent == null) {
             propertyGrid.doModal();
@@ -150,10 +150,10 @@ public class PropertyGrid extends Window {
      * 
      * @param target UI element whose properties are to be edited.
      * @param parent Parent component for property grid (may be null).
-     * @param imbedded If true, the property grid is imbedded within another component.
+     * @param embedded If true, the property grid is embedded within another component.
      */
-    private void init(UIElementBase target, Component parent, boolean imbedded) {
-        this.imbedded = imbedded;
+    private void init(UIElementBase target, Component parent, boolean embedded) {
+        this.embedded = embedded;
         ZKUtil.wireController(this);
         setTarget(target);
         colProperty.setSortAscending(propSortAscending);
@@ -165,12 +165,12 @@ public class PropertyGrid extends Window {
             setBorder("none");
             setContentStyle("border: solid 1px gray");
             setSizable(false);
-            toolbar.setVisible(imbedded);
+            toolbar.setVisible(embedded);
             setParent(parent);
         }
         
-        btnOK.setVisible(!imbedded);
-        btnCancel.setVisible(!imbedded);
+        btnOK.setVisible(!embedded);
+        btnCancel.setVisible(!embedded);
     }
     
     /**
@@ -356,11 +356,11 @@ public class PropertyGrid extends Window {
     }
     
     /**
-     * Clicking the cancel button cancels any pending edits and, if imbedded mode is not active,
+     * Clicking the cancel button cancels any pending edits and, if embedded mode is not active,
      * closes the dialog.
      */
     public void onClick$btnCancel() {
-        if (imbedded) {
+        if (embedded) {
             commitChanges(false);
         } else {
             onClose();
@@ -391,11 +391,11 @@ public class PropertyGrid extends Window {
     }
     
     /**
-     * Overrides the onClose method to prevent dialog closure when in imbedded mode.
+     * Overrides the onClose method to prevent dialog closure when in embedded mode.
      */
     @Override
     public void onClose() {
-        if (imbedded) {
+        if (embedded) {
             setVisible(false);
         } else {
             super.onClose();

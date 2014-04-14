@@ -123,7 +123,7 @@ public class ZKUtil {
     }
     
     /**
-     * Loads a page definition from a zul page. If the page is an imbedded resource, prefix the file
+     * Loads a page definition from a zul page. If the page is an embedded resource, prefix the file
      * name with the owning class name followed by a colon. For example,
      * "org.carewebframework.ui.component.PatientSelection:patientSelection.zul"
      * 
@@ -162,7 +162,7 @@ public class ZKUtil {
     }
     
     /**
-     * Loads a page definition from a zul page. If the page is an imbedded resource, prefix the file
+     * Loads a page definition from a zul page. If the page is an embedded resource, prefix the file
      * name with the owning class name followed by a colon. For example,
      * "org.carewebframework.ui.component.PatientSelection:patientSelection.zul" Also, extracts any
      * query parameters present and returns them in the specified map.

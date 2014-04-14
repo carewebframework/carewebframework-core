@@ -101,7 +101,7 @@ public class HelpUtil {
     }
     
     /**
-     * Returns image content for an imbedded image resource.
+     * Returns image content for an embedded image resource.
      * 
      * @param image The name of the image file.
      * @return An AImage instance, or null if the image resource was not found.

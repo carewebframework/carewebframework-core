@@ -35,7 +35,7 @@ public abstract class PluginResource {
      * There are essentially two ways to declare a help resource, one for internal help resources
      * and one for external help resources:
      * <ul>
-     * <li>If the help resource uses the framework's imbedded help system, you only need to set the
+     * <li>If the help resource uses the framework's embedded help system, you only need to set the
      * module name (and optionally the topic). Default values for all other properties can be
      * derived from the associated help definition, though you can set them explicitly if you need
      * to override the defaults.</li>
@@ -55,7 +55,7 @@ public abstract class PluginResource {
         // An optional topic within the help module.  If not specified, the default topic is displayed.
         private String topic;
         
-        // The name of the help module if using the imbedded help system.
+        // The name of the help module if using the embedded help system.
         private String module;
         
         /**
