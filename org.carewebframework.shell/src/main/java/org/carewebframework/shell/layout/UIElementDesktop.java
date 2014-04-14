@@ -204,6 +204,7 @@ public class UIElementDesktop extends UIElementZKBase {
         removeChildren();
         clearHelpMenu();
         setTitle("");
+        setIcon(null);
     }
     
     /**
