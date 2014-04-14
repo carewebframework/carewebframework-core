@@ -60,7 +60,7 @@ public class DesignConstants {
     
     public static final String DESIGN_HINT_ACTIVE = "@cwf.shell.designer.designmode.active.hint";
     
-    public static final String DESIGN_HINT_INACTIVE = "@cwf.shell.designer.designmode.active.hint";
+    public static final String DESIGN_HINT_INACTIVE = "@cwf.shell.designer.designmode.inactive.hint";
     
     public static final String ATTR_DESIGN_MENU = RESOURCE_PREFIX + "DesignMenu";
     
