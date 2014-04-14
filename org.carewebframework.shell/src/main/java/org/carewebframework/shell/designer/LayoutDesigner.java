@@ -352,7 +352,7 @@ public class LayoutDesigner extends Window implements AfterCompose {
      * @return The movement type.
      */
     private MovementType movementType(Treeitem child, Treeitem target, boolean allowExchange) {
-        if (!canMove(child) || !canMove(target)) {
+        if (!canMove(child) || target == null) {
             return MovementType.INVALID;
         }
         
@@ -364,7 +364,7 @@ public class LayoutDesigner extends Window implements AfterCompose {
         }
         
         if (eleChild.getParent() == eleTarget.getParent() && allowExchange) {
-            return MovementType.EXCHANGE;
+            return canMove(target) ? MovementType.EXCHANGE : MovementType.INVALID;
         }
         
         if (eleChild.getParent() == eleTarget) {
