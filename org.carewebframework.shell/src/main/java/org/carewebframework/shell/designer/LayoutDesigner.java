@@ -498,8 +498,8 @@ public class LayoutDesigner extends Window implements AfterCompose {
      * @throws Exception
      */
     public void onClick$btnProperties() throws Exception {
-        if (!btnProperties.isDisabled() && PropertyGrid.create(selectedElement(), null).getPropertiesModified()) {
-            requestRefresh();
+        if (!btnProperties.isDisabled()) {
+            PropertyGrid.create(selectedElement(), null);
         }
     }
     
