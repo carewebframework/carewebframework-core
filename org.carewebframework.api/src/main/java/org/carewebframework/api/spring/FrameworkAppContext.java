@@ -29,13 +29,6 @@ public class FrameworkAppContext extends ClassPathXmlApplicationContext implemen
     
     private static final ResourceCache resourceCache = new ResourceCache();
     
-    private static final String[] PROFILES_PROD = { "root", "root-prod", "desktop", "desktop-prod" };
-    
-    private static final String[] PROFILES_TEST = { "root", "root-test", "desktop", "desktop-test" };
-    
-    private static final String[] DEFAULT_LOCATIONS = { "classpath*:/META-INF/*-spring.xml",
-            "classpath*:/META-INF/*-beans-init.xml", "classpath*:/META-INF/*-beans.xml" };
-    
     public FrameworkAppContext() {
         this(false);
     }
@@ -52,7 +45,7 @@ public class FrameworkAppContext extends ClassPathXmlApplicationContext implemen
         setAllowBeanDefinitionOverriding(false);
         setConfigLocations(locations == null || locations.length == 0 ? null : locations);
         ConfigurableEnvironment env = getEnvironment();
-        env.setActiveProfiles(testConfig ? PROFILES_TEST : PROFILES_PROD);
+        env.setActiveProfiles(testConfig ? Constants.PROFILES_TEST : Constants.PROFILES_PROD);
         env.getPropertySources().addLast(new DomainPropertySource(this));
     }
     
@@ -61,7 +54,7 @@ public class FrameworkAppContext extends ClassPathXmlApplicationContext implemen
      */
     @Override
     protected String[] getDefaultConfigLocations() {
-        return DEFAULT_LOCATIONS;
+        return Constants.DEFAULT_LOCATIONS;
     }
     
     /**

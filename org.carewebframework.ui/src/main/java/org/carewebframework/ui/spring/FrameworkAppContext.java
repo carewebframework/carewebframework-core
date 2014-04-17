@@ -10,6 +10,7 @@
 package org.carewebframework.ui.spring;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -18,6 +19,7 @@ import javax.servlet.ServletContext;
 
 import org.apache.commons.lang.ArrayUtils;
 
+import org.carewebframework.api.spring.Constants;
 import org.carewebframework.api.spring.DomainPropertySource;
 import org.carewebframework.api.spring.FrameworkBeanFactory;
 import org.carewebframework.api.spring.ResourceCache;
@@ -45,55 +47,6 @@ import org.zkoss.zk.ui.Session;
  */
 
 public class FrameworkAppContext extends XmlWebApplicationContext implements ResourceCache.IResourceCacheAware {
-    
-    /**
-     * Constant for beans profile which identifies beans to be processed by Spring's root
-     * application context.
-     */
-    public static final String PROFILE_ROOT = "root";
-    
-    /**
-     * Constant for beans profile which identifies beans to be processed by Spring's root
-     * application context, in a production setting.
-     */
-    public static final String PROFILE_ROOT_PROD = "root-prod";
-    
-    /**
-     * Constant for beans profile which identifies beans to be processed by Spring's root
-     * application context, in a test setting.
-     */
-    public static final String PROFILE_ROOT_TEST = "root-test";
-    
-    /**
-     * Constant for beans profile which identifies beans to be processed by a child Spring
-     * application context.
-     */
-    public static final String PROFILE_DESKTOP = "desktop";
-    
-    /**
-     * Constant for beans profile which identifies beans to be processed by a child Spring
-     * application context, in a production setting.
-     */
-    public static final String PROFILE_DESKTOP_PROD = "desktop-prod";
-    
-    /**
-     * Constant for beans profile which identifies beans to be processed by a child Spring
-     * application context, in a test setting.
-     */
-    public static final String PROFILE_DESKTOP_TEST = "desktop-test";
-    
-    /**
-     * Default locations to search for configurations files for the root Spring application context.
-     */
-    private static final String[] DEFAULT_LOCATIONS_ROOT = { "classpath*:/META-INF/*-spring.xml",
-            "classpath*:/META-INF/*-beans-init.xml" };
-    
-    /**
-     * Default locations to search for configurations files for the child Spring application
-     * context.
-     */
-    private static final String[] DEFAULT_LOCATIONS_DESKTOP = { "classpath*:/META-INF/*-spring.xml",
-            "classpath*:/META-INF/*-beans.xml" };
     
     private static final String APP_CONTEXT_ATTRIB = "_CWFAppContext";
     
@@ -160,6 +113,8 @@ public class FrameworkAppContext extends XmlWebApplicationContext implements Res
         setAllowBeanDefinitionOverriding(false);
         this.desktop = desktop;
         ConfigurableEnvironment env = getEnvironment();
+        Set<String> aps = new LinkedHashSet<String>();
+        Collections.addAll(aps, env.getActiveProfiles());
         
         if (desktop != null) {
             desktop.setAttribute(APP_CONTEXT_ATTRIB, this);
@@ -173,22 +128,16 @@ public class FrameworkAppContext extends XmlWebApplicationContext implements Res
             getParent().getBean(APPLICATION_EVENT_MULTICASTER_BEAN_NAME, ApplicationEventMulticaster.class)
                     .addApplicationListener(this.ctxListener);
             // Set up profiles (remove root profiles merged from parent)
-            Set<String> aps = new LinkedHashSet<String>();
-            Collections.addAll(aps, env.getActiveProfiles());
-            aps.remove(PROFILE_ROOT);
-            aps.remove(PROFILE_ROOT_TEST);
-            aps.remove(PROFILE_ROOT_PROD);
-            aps.add(PROFILE_DESKTOP);
-            aps.add(testConfig ? PROFILE_DESKTOP_TEST : PROFILE_DESKTOP_PROD);
-            env.setActiveProfiles(aps.toArray(new String[aps.size()]));
+            aps.removeAll(Arrays.asList(Constants.PROFILES_ROOT));
+            Collections.addAll(aps, testConfig ? Constants.PROFILES_DESKTOP_TEST : Constants.PROFILES_DESKTOP_PROD);
         } else {
             AppContextFinder.rootContext = this;
-            env.addActiveProfile(PROFILE_ROOT);
-            env.addActiveProfile(testConfig ? PROFILE_ROOT_TEST : PROFILE_ROOT_PROD);
+            Collections.addAll(aps, testConfig ? Constants.PROFILES_ROOT_TEST : Constants.PROFILES_ROOT_PROD);
             env.getPropertySources().addLast(new LabelPropertySource(this));
             env.getPropertySources().addLast(new DomainPropertySource(this));
         }
         
+        env.setActiveProfiles(aps.toArray(new String[aps.size()]));
         setConfigLocations(locations == null || locations.length == 0 ? null : locations);
     }
     
@@ -224,13 +173,13 @@ public class FrameworkAppContext extends XmlWebApplicationContext implements Res
     }
     
     /**
-     * For the root container, returns the usual defaults. For a child container, must always return
-     * null.
+     * For the root container, adds the usual defaults to any custom locations. For a child
+     * container, returns just the usual defaults.
      */
     @Override
     protected String[] getDefaultConfigLocations() {
-        return desktop == null ? (String[]) ArrayUtils.addAll(DEFAULT_LOCATIONS_ROOT, super.getDefaultConfigLocations())
-                : DEFAULT_LOCATIONS_DESKTOP;
+        return desktop == null ? (String[]) ArrayUtils
+                .addAll(Constants.DEFAULT_LOCATIONS, super.getDefaultConfigLocations()) : Constants.DEFAULT_LOCATIONS;
     }
     
     /**
