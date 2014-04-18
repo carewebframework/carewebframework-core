@@ -67,6 +67,10 @@ public class LayoutDesigner extends Window implements AfterCompose {
     
     private Toolbarbutton btnDelete;
     
+    private Toolbarbutton btnUp;
+    
+    private Toolbarbutton btnDown;
+    
     private Toolbarbutton btnLeft;
     
     private Toolbarbutton btnRight;
@@ -338,8 +342,16 @@ public class LayoutDesigner extends Window implements AfterCompose {
         btnLeft.setDisabled(movementType(selectedItem, target, false) == MovementType.INVALID);
         target = selectedItem == null ? null : (Treeitem) selectedItem.getPreviousSibling();
         btnRight.setDisabled(movementType(selectedItem, target, false) == MovementType.INVALID);
+        btnUp.setDisabled(movementType(selectedItem, target, true) == MovementType.INVALID);
+        target = selectedItem == null ? null : (Treeitem) selectedItem.getNextSibling();
+        btnDown.setDisabled(movementType(selectedItem, target, true) == MovementType.INVALID);
         contextMenu.setOwner(selectedElement);
         ZKUtil.updateStyle(btnToFront, "opacity", bringToFront ? null : "0.5");
+        
+        if (selectedItem != null) {
+            selectedItem.setSelected(false);
+            selectedItem.setSelected(true);
+        }
     }
     
     /**
@@ -525,6 +537,16 @@ public class LayoutDesigner extends Window implements AfterCompose {
         tree.getSelectedItem().detach();
         updateDroppable();
         updateControls();
+    }
+    
+    public void onClick$btnUp() {
+        Treeitem item = tree.getSelectedItem();
+        doDrop(item, (Treeitem) item.getPreviousSibling(), true);
+    }
+    
+    public void onClick$btnDown() {
+        Treeitem item = tree.getSelectedItem();
+        doDrop((Treeitem) item.getNextSibling(), item, true);
     }
     
     public void onClick$btnRight() {

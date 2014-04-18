@@ -1,6 +1,6 @@
 <zk>
 	<window border="normal" height="500px"
-		width="450px" position="center"
+		width="460px" position="center"
 		use="org.carewebframework.shell.designer.LayoutDesigner">
 		<caption label="${labels.cwf.shell.designer.layout.designer.caption}" style="font-weight:bold"/>
 		<toolbar>
@@ -20,7 +20,7 @@
 				tooltiptext="${labels.cwf.shell.designer.layout.designer.view.hint}"
 				style="background:transparent"
 				image="~./org/carewebframework/shell/images/view.png" />
-			<separator orient="vertical" width="15px" />
+			<separator orient="vertical" width="10px" />
 			<toolbarbutton id="btnAdd"
 				tooltiptext="${labels.cwf.shell.designer.layout.designer.add.hint}"
 				style="background:transparent"
@@ -29,7 +29,15 @@
 				tooltiptext="${labels.cwf.shell.designer.layout.designer.delete.hint}"
 				style="background:transparent"
 				image="~./org/carewebframework/shell/images/delete.png" />
-			<separator orient="vertical" width="15px" />
+			<separator orient="vertical" width="10px" />
+			<toolbarbutton id="btnUp"
+				tooltiptext="${labels.cwf.shell.designer.layout.designer.up.hint}"
+				style="background:transparent"
+				image="~./org/carewebframework/shell/images/arrowU.png" />
+			<toolbarbutton id="btnDown"
+				tooltiptext="${labels.cwf.shell.designer.layout.designer.down.hint}"
+				style="background:transparent"
+				image="~./org/carewebframework/shell/images/arrowD.png" />
 			<toolbarbutton id="btnLeft"
 				tooltiptext="${labels.cwf.shell.designer.layout.designer.promote.hint}"
 				style="background:transparent"
@@ -38,7 +46,7 @@
 				tooltiptext="${labels.cwf.shell.designer.layout.designer.demote.hint}"
 				style="background:transparent"
 				image="~./org/carewebframework/shell/images/arrowR.png" />
-			<separator orient="vertical" width="15px" />
+			<separator orient="vertical" width="10px" />
 			<toolbarbutton id="btnProperties"
 				tooltiptext="${labels.cwf.shell.designer.layout.designer.properties.hint}"
 				style="background:transparent"
@@ -47,7 +55,7 @@
 				tooltiptext="${labels.cwf.shell.designer.layout.designer.about.hint}"
 				style="background:transparent"
 				image="~./org/carewebframework/shell/images/about.png" />
-			<separator orient="vertical" width="15px" />
+			<separator orient="vertical" width="10px" />
 			<toolbarbutton id="btnToFront"
 				tooltiptext="${labels.cwf.shell.designer.layout.designer.tofront.hint}"
 				style="background:transparent"
