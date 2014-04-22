@@ -9,6 +9,7 @@
  */
 package org.carewebframework.shell.layout;
 
+import org.carewebframework.shell.Constants;
 import org.carewebframework.ui.zk.ZKUtil;
 
 /**
@@ -27,6 +28,10 @@ public class LayoutConstants {
     protected static final String PROPERTY_LAYOUT_PRIVATE = "CAREWEB.LAYOUT.PRIVATE";
     
     protected static final String PROPERTY_LAYOUT_ASSOCIATION = "CAREWEB.LAYOUT.ASSOCIATION";
+    
+    public static final String EVENT_ELEMENT_ACTIVATE = Constants.EVENT_PREFIX + ".ELEMENT.ACTIVATE";
+    
+    public static final String EVENT_ELEMENT_INACTIVATE = Constants.EVENT_PREFIX + ".ELEMENT.INACTIVATE";
     
     public static final String LAYOUT_VERSION = "3.0";
     

@@ -17,6 +17,8 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import org.carewebframework.api.event.EventManager;
+import org.carewebframework.api.event.IEventManager;
 import org.carewebframework.shell.AboutDialog;
 import org.carewebframework.shell.plugins.PluginDefinition;
 import org.carewebframework.shell.plugins.PluginRegistry;
@@ -136,6 +138,8 @@ public abstract class UIElementBase {
     private String hint;
     
     private String color;
+    
+    private IEventManager eventManager;
     
     /**
      * A UIElementBase subclass should call this in its static initializer block to register any
@@ -546,6 +550,8 @@ public abstract class UIElementBase {
         activateChildren(activate);
         activated = activate;
         updateVisibility();
+        getEventManager().fireLocalEvent(
+            activate ? LayoutConstants.EVENT_ELEMENT_ACTIVATE : LayoutConstants.EVENT_ELEMENT_INACTIVATE, this);
     }
     
     /**
@@ -567,6 +573,19 @@ public abstract class UIElementBase {
      */
     public final boolean isActivated() {
         return activated;
+    }
+    
+    /**
+     * Returns instance of the event manager.
+     * 
+     * @return Event manager instance.
+     */
+    protected IEventManager getEventManager() {
+        if (eventManager == null) {
+            eventManager = EventManager.getInstance();
+        }
+        
+        return eventManager;
     }
     
     /**
