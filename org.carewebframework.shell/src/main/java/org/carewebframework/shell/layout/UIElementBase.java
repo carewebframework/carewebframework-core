@@ -530,7 +530,7 @@ public abstract class UIElementBase {
      * editor appropriate for the component.
      */
     public void editProperties() {
-        PromptDialog.confirm("No property editor is defined for this component.", "No Property Editor");
+        PromptDialog.confirm("@cwf.shell.designer.propedit.none.message", "@cwf.shell.designer.propedit.none.caption");
     }
     
     /**
