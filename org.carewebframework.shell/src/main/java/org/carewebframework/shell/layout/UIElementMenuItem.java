@@ -18,6 +18,7 @@ import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.Menu;
+import org.zkoss.zul.Menubar;
 import org.zkoss.zul.Menupopup;
 
 /**
@@ -53,7 +54,11 @@ public class UIElementMenuItem extends UIElementActionBase {
                  */
                 @Override
                 public void onEvent(Event event) throws Exception {
-                    MenuUtil.close(MenuEx.this);
+                    if (MenuEx.this.getParent() instanceof Menubar) {
+                        MenuEx.this.open();
+                    } else {
+                        MenuUtil.close(MenuEx.this);
+                    }
                 }
                 
             });
