@@ -43,7 +43,7 @@ public class LayoutPrompt extends Window {
     
     private boolean allowDups;
     
-    private LayoutIdentifier layout;
+    private LayoutIdentifier layoutId;
     
     /**
      * Prompts for a layout.
@@ -63,11 +63,12 @@ public class LayoutPrompt extends Window {
             lp.setTitle(StrUtil.formatMessage(title));
             lp.lblPrompt.setValue(StrUtil.formatMessage(prompt));
             lp.txtLayout.setText(dflt == null ? null : dflt.name);
-            lp.radioGroup.setSelectedIndex(dflt == null || !dflt.shared ? 1 : 0);
+            boolean shared = dflt == null ? LayoutManager.defaultIsShared() : dflt.shared;
+            lp.radioGroup.setSelectedIndex(shared ? 0 : 1);
             lp.radioGroup.setVisible(!hideScope);
             lp.allowDups = allowDups;
             lp.doModal();
-            return lp.layout;
+            return lp.layoutId;
         } catch (Exception e) {
             return null;
         }
@@ -96,7 +97,8 @@ public class LayoutPrompt extends Window {
             }
         }
         
-        layout = id;
+        layoutId = id;
+        LayoutManager.defaultIsShared(id.shared);
         detach();
     }
     

@@ -25,6 +25,7 @@ import static org.carewebframework.shell.designer.DesignConstants.MSG_LAYOUT_REN
 import static org.carewebframework.shell.designer.DesignConstants.MSG_LAYOUT_SAVE;
 import static org.carewebframework.shell.designer.DesignConstants.RESOURCE_PREFIX;
 
+import org.carewebframework.api.FrameworkUtil;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.shell.layout.LayoutIdentifier;
 import org.carewebframework.shell.layout.LayoutUtil;
@@ -54,6 +55,8 @@ import org.zkoss.zul.Window;
 public class LayoutManager extends Window {
     
     private static final long serialVersionUID = 1L;
+    
+    private static final String ATTR_DEFAULT_SCOPE = LayoutUtil.class.getName() + ".default_scope";
     
     private Button btnOK;
     
@@ -94,20 +97,37 @@ public class LayoutManager extends Window {
     };
     
     /**
+     * Returns true if the default layout scope is shared.
+     * 
+     * @return
+     */
+    public static boolean defaultIsShared() {
+        return FrameworkUtil.getAttribute(ATTR_DEFAULT_SCOPE) != null;
+    }
+    
+    /**
+     * Sets the default layout scope.
+     * 
+     * @param isShared If true, the default scope is shared. If false, it is private.
+     */
+    public static void defaultIsShared(boolean isShared) {
+        FrameworkUtil.setAttribute(ATTR_DEFAULT_SCOPE, isShared ? true : null);
+    }
+    
+    /**
      * Invokes the layout manager dialog.
      * 
      * @param manage If true, open in management mode; otherwise, in selection mode.
-     * @param shared If true, manage shared layouts; otherwise, manage personal layouts.
      * @param deflt Default layout name.
      * @return
      */
-    public static LayoutIdentifier execute(boolean manage, boolean shared, String deflt) {
+    public static LayoutIdentifier execute(boolean manage, String deflt) {
         LayoutManager dlg = null;
         
         try {
             dlg = (LayoutManager) PopupDialog.popup(ZKUtil.loadCachedPageDefinition(RESOURCE_PREFIX + "LayoutManager.zul"),
                 null, true, true, false);
-            return dlg.show(manage, shared, deflt);
+            return dlg.show(manage, deflt);
         } catch (Exception e) {
             return null;
         }
@@ -135,12 +155,11 @@ public class LayoutManager extends Window {
      * Initialize and display the dialog.
      * 
      * @param manage If true, open in management mode; otherwise, in selection mode.
-     * @param shared If true, manage shared layouts; otherwise, manage personal layouts.
      * @param deflt Default layout name.
      * @return The selected layout name (if in selection mode).
      */
-    private LayoutIdentifier show(boolean manage, boolean shared, String deflt) {
-        this.shared = shared;
+    private LayoutIdentifier show(boolean manage, String deflt) {
+        this.shared = defaultIsShared();
         ZKUtil.wireController(this);
         setTitle(StrUtil.formatMessage(manage ? CAP_LAYOUT_MANAGE : CAP_LAYOUT_LOAD));
         lblPrompt.setValue(StrUtil.formatMessage(manage ? MSG_LAYOUT_MANAGE : MSG_LAYOUT_LOAD));
@@ -298,6 +317,7 @@ public class LayoutManager extends Window {
      */
     public void onCheck$radioGroup() {
         shared = radioGroup.getSelectedIndex() == 0;
+        defaultIsShared(shared);
         refresh(null);
     }
     

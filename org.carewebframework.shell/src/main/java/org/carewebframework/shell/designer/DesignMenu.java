@@ -145,7 +145,7 @@ public class DesignMenu extends Menu implements IdSpace {
      * @throws Exception
      */
     public void onClick$mnuLayoutManager() throws Exception {
-        LayoutManager.execute(true, false, shell.getUILayout().getName());
+        LayoutManager.execute(true, shell.getUILayout().getName());
     }
     
     /**
@@ -161,8 +161,8 @@ public class DesignMenu extends Menu implements IdSpace {
      * @throws Exception
      */
     public void onClick$mnuSaveLayout() throws Exception {
-        LayoutManager.saveLayout(UILayout.serialize(owner), new LayoutIdentifier(shell.getUILayout().getName(), false),
-            false);
+        LayoutManager.saveLayout(UILayout.serialize(owner), new LayoutIdentifier(shell.getUILayout().getName(),
+                LayoutManager.defaultIsShared()), false);
     }
     
     /**
@@ -171,11 +171,11 @@ public class DesignMenu extends Menu implements IdSpace {
      * @throws Exception
      */
     public void onClick$mnuLoadLayout() throws Exception {
-        LayoutIdentifier selected = LayoutManager.execute(false, true, shell.getUILayout().getName());
+        LayoutIdentifier layoutId = LayoutManager.execute(false, shell.getUILayout().getName());
         
-        if (selected != null) {
+        if (layoutId != null) {
             UILayout newLayout = new UILayout();
-            newLayout.loadFromProperty(selected);
+            newLayout.loadFromProperty(layoutId);
             shell.buildUI(newLayout);
         }
     }
