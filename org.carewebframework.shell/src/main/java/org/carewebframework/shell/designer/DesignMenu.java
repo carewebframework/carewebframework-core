@@ -145,7 +145,7 @@ public class DesignMenu extends Menu implements IdSpace {
      * @throws Exception
      */
     public void onClick$mnuLayoutManager() throws Exception {
-        LayoutManager.execute(true, true, shell.getUILayout().getName());
+        LayoutManager.execute(true, false, shell.getUILayout().getName());
     }
     
     /**
