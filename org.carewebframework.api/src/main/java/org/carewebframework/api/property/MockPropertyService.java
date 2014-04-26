@@ -93,7 +93,14 @@ public class MockPropertyService implements IPropertyService {
     
     @Override
     public void saveValue(String propertyName, String instanceName, boolean asGlobal, String value) {
-        (asGlobal ? global_map : local_map).put(getKey(propertyName, instanceName), value);
+        Map<String, String> map = asGlobal ? global_map : local_map;
+        String key = getKey(propertyName, instanceName);
+        
+        if (value == null) {
+            map.remove(key);
+        } else {
+            map.put(key, value);
+        }
     }
     
     @Override
