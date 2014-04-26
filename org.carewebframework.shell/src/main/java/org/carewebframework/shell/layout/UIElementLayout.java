@@ -81,7 +81,7 @@ public class UIElementLayout extends UIElementZKBase {
     public UILayout getLayout() throws Exception {
         if (layout == null) {
             layout = new UILayout();
-            String xml = LayoutUtil.getLayout(layoutName, shared);
+            String xml = LayoutUtil.getLayoutContent(new LayoutIdentifier(layoutName, shared));
             
             if (StringUtils.isEmpty(xml)) {
                 raise("Unknown layout: " + layoutName);

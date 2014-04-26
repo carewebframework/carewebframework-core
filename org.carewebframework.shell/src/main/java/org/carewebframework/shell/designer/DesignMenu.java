@@ -15,6 +15,7 @@ import org.apache.commons.logging.LogFactory;
 import org.carewebframework.api.security.SecurityUtil;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.shell.CareWebShell;
+import org.carewebframework.shell.layout.LayoutIdentifier;
 import org.carewebframework.shell.layout.UIElementDesktop;
 import org.carewebframework.shell.layout.UILayout;
 import org.carewebframework.ui.xml.XMLViewer;
@@ -155,21 +156,13 @@ public class DesignMenu extends Menu implements IdSpace {
     }
     
     /**
-     * Prompts to save a shared layout.
+     * Prompts to save a layout.
      * 
      * @throws Exception
      */
-    public void onClick$mnuSaveSharedLayout() throws Exception {
-        LayoutManager.saveLayout(UILayout.serialize(owner), shell.getUILayout().getName(), true);
-    }
-    
-    /**
-     * Prompts to save a private layout.
-     * 
-     * @throws Exception
-     */
-    public void onClick$mnuSavePrivateLayout() throws Exception {
-        LayoutManager.saveLayout(UILayout.serialize(owner), shell.getUILayout().getName(), false);
+    public void onClick$mnuSaveLayout() throws Exception {
+        LayoutManager.saveLayout(UILayout.serialize(owner), new LayoutIdentifier(shell.getUILayout().getName(), false),
+            false);
     }
     
     /**
@@ -178,11 +171,11 @@ public class DesignMenu extends Menu implements IdSpace {
      * @throws Exception
      */
     public void onClick$mnuLoadLayout() throws Exception {
-        LayoutManager.LayoutSelection selected = LayoutManager.execute(false, true, shell.getUILayout().getName());
+        LayoutIdentifier selected = LayoutManager.execute(false, true, shell.getUILayout().getName());
         
         if (selected != null) {
             UILayout newLayout = new UILayout();
-            newLayout.loadFromProperty(selected.name, selected.shared);
+            newLayout.loadFromProperty(selected);
             shell.buildUI(newLayout);
         }
     }

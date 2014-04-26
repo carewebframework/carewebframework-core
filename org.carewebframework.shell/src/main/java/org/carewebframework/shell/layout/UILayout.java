@@ -272,15 +272,14 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
     /**
      * Load the layout from a stored property.
      * 
-     * @param layoutName A named layout.
-     * @param shared If true, return a shared layout; otherwise, a private layout.
+     * @param layoutId Layout identifier.
      * @return This layout (for chaining).
      * @throws Exception
      */
-    public UILayout loadFromProperty(String layoutName, boolean shared) throws Exception {
-        String xml = LayoutUtil.getLayout(layoutName, shared);
+    public UILayout loadFromProperty(LayoutIdentifier layoutId) throws Exception {
+        String xml = LayoutUtil.getLayoutContent(layoutId);
         loadFromText(xml);
-        this.layoutName = layoutName;
+        this.layoutName = layoutId.name;
         return this;
     }
     
@@ -292,23 +291,22 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
      * @throws Exception
      */
     public UILayout loadByAppId(String appId) throws Exception {
-        String xml = LayoutUtil.getLayoutByAppId(appId);
+        String xml = LayoutUtil.getLayoutContentByAppId(appId);
         return loadFromText(xml);
     }
     
     /**
-     * Saves the layout as a property value using the specified name.
+     * Saves the layout as a property value using the specified identifier.
      * 
-     * @param layoutName Name of layout.
-     * @param shared If true, save as a shared layout; otherwise, a private layout.
+     * @param layoutId Layout identifier
      * @return True if operation succeeded.
      */
-    public boolean saveToProperty(String layoutName, boolean shared) {
-        setName(layoutName);
+    public boolean saveToProperty(LayoutIdentifier layoutId) {
+        setName(layoutId.name);
         setVersion(LayoutConstants.LAYOUT_VERSION);
         
         try {
-            LayoutUtil.saveLayout(layoutName, toString(), shared);
+            LayoutUtil.saveLayout(layoutId, toString());
         } catch (Exception e) {
             log.error("Error saving application layout.", e);
             return false;

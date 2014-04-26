@@ -38,9 +38,7 @@ public class DesignConstants {
     
     public static final String MSG_LAYOUT_SAVE = "@cwf.shell.designer.layout.save.message";
     
-    public static final String CAP_LAYOUT_SAVE_SHARED = "@cwf.shell.designer.layout.save.caption.shared";
-    
-    public static final String CAP_LAYOUT_SAVE_PRIVATE = "@cwf.shell.designer.layout.save.caption.private_";
+    public static final String CAP_LAYOUT_SAVE = "@cwf.shell.designer.layout.save.caption";
     
     public static final String MSG_LAYOUT_LOAD = "@cwf.shell.designer.layout.load.message";
     

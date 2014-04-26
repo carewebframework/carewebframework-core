@@ -41,75 +41,69 @@ public class LayoutService implements ILayoutService {
     /**
      * Returns true if the specified layout exists.
      * 
-     * @param name
+     * @param layout The layout identifier.
      * @return True if layout exists.
-     * @param shared Shared or personal layout.
      */
     @Override
-    public boolean layoutExists(String name, boolean shared) {
-        return getLayouts(shared).contains(name);
+    public boolean layoutExists(LayoutIdentifier layout) {
+        return getLayouts(layout.shared).contains(layout.name);
     }
     
     /**
      * Saves a layout with the specified name and content.
      * 
-     * @param name The layout name.
+     * @param layout The layout identifier.
      * @param content The layout content.
-     * @param shared If true, save as a shared layout; otherwise, as a personal layout.
      */
     @Override
-    public void saveLayout(String name, String content, boolean shared) {
-        propertyService.saveValue(getPropertyName(shared), name, shared, content);
+    public void saveLayout(LayoutIdentifier layout, String content) {
+        propertyService.saveValue(getPropertyName(layout.shared), layout.name, layout.shared, content);
     }
     
     /**
      * Rename a layout.
      * 
-     * @param oldName The original layout name.
+     * @param layout The original layout identifier.
      * @param newName The new layout name.
-     * @param shared Shared or personal layout.
      */
     @Override
-    public void renameLayout(String oldName, String newName, boolean shared) {
-        String text = getLayout(oldName, shared);
-        saveLayout(newName, text, shared);
-        deleteLayout(oldName, shared);
+    public void renameLayout(LayoutIdentifier layout, String newName) {
+        String text = getLayoutContent(layout);
+        saveLayout(new LayoutIdentifier(newName, layout.shared), text);
+        deleteLayout(layout);
     }
     
     /**
      * Clone a layout.
      * 
-     * @param oldName The original layout name.
-     * @param newName The new layout name.
-     * @param shared Shared or personal layout.
+     * @param layout The original layout identifier.
+     * @param layout2 The new layout identifier.
      */
     @Override
-    public void cloneLayout(String oldName, String newName, boolean shared) {
-        String text = getLayout(oldName, shared);
-        saveLayout(newName, text, shared);
+    public void cloneLayout(LayoutIdentifier layout, LayoutIdentifier layout2) {
+        String text = getLayoutContent(layout);
+        saveLayout(layout2, text);
     }
     
     /**
      * Delete a layout.
      * 
-     * @param name The layout name.
-     * @param shared Shared or personal layout.
+     * @param layout The layout identifier.
      */
     @Override
-    public void deleteLayout(String name, boolean shared) {
-        saveLayout(name, null, shared);
+    public void deleteLayout(LayoutIdentifier layout) {
+        saveLayout(layout, null);
     }
     
     /**
      * Returns the layout content.
      * 
-     * @param name The layout name.
-     * @param shared If true, save as a shared layout; otherwise, as a personal layout.
+     * @param layout The layout identifier.
      * @return The layout content.
      */
     @Override
-    public String getLayout(String name, boolean shared) {
-        return propertyService.getValue(getPropertyName(shared), name);
+    public String getLayoutContent(LayoutIdentifier layout) {
+        return propertyService.getValue(getPropertyName(layout.shared), layout.name);
     }
     
     /**
@@ -119,9 +113,9 @@ public class LayoutService implements ILayoutService {
      * @return The layout content.
      */
     @Override
-    public String getLayoutByAppId(String appId) {
+    public String getLayoutContentByAppId(String appId) {
         String value = propertyService.getValue(LayoutConstants.PROPERTY_LAYOUT_ASSOCIATION, appId);
-        return value == null ? null : getLayout(value, true);
+        return value == null ? null : getLayoutContent(new LayoutIdentifier(value, true));
     }
     
     /**

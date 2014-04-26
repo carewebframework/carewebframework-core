@@ -27,63 +27,57 @@ public interface ILayoutService {
     /**
      * Returns true if the specified layout exists.
      * 
-     * @param name
+     * @param layout
      * @return True if layout exists.
-     * @param shared Shared or personal layout.
      */
-    boolean layoutExists(String name, boolean shared);
+    boolean layoutExists(LayoutIdentifier layout);
     
     /**
      * Saves a layout with the specified name and content.
      * 
-     * @param name The layout name.
+     * @param layout The layout identifier.
      * @param content The layout content.
-     * @param shared If true, save as a shared layout; otherwise, as a personal layout.
      */
-    void saveLayout(String name, String content, boolean shared);
+    void saveLayout(LayoutIdentifier layout, String content);
     
     /**
      * Rename a layout.
      * 
-     * @param oldName The original layout name.
+     * @param layout The original layout identifier.
      * @param newName The new layout name.
-     * @param shared Shared or personal layout.
      */
-    void renameLayout(String oldName, String newName, boolean shared);
+    void renameLayout(LayoutIdentifier layout, String newName);
     
     /**
      * Clone a layout.
      * 
-     * @param oldName The original layout name.
-     * @param newName The new layout name.
-     * @param shared Shared or personal layout.
+     * @param layout The original layout identifier.
+     * @param layout2 The new layout identifier.
      */
-    void cloneLayout(String oldName, String newName, boolean shared);
+    void cloneLayout(LayoutIdentifier layout, LayoutIdentifier layout2);
     
     /**
      * Delete a layout.
      * 
-     * @param name The layout name.
-     * @param shared Shared or personal layout.
+     * @param layout The layout identifier.
      */
-    void deleteLayout(String name, boolean shared);
+    void deleteLayout(LayoutIdentifier layout);
     
     /**
      * Returns the layout content.
      * 
-     * @param name The layout name.
-     * @param shared If true, save as a shared layout; otherwise, as a personal layout.
+     * @param layout The layout identifier.
      * @return The layout content.
      */
-    String getLayout(String name, boolean shared);
+    String getLayoutContent(LayoutIdentifier layout);
     
     /**
-     * Returns the layout associated with the specified application id.
+     * Returns content of the layout associated with the specified application id.
      * 
      * @param appId An application id.
      * @return The layout content.
      */
-    String getLayoutByAppId(String appId);
+    String getLayoutContentByAppId(String appId);
     
     /**
      * Returns a list of saved layouts.

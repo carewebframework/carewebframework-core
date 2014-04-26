@@ -18,12 +18,9 @@
 		<menuitem id="mnuLoadLayout"
 			label="${labels.cwf.shell.designer.menu.layout.load.label}"
 			tooltiptext="${labels.cwf.shell.designer.menu.layout.load.hint}" />
-		<menuitem id="mnuSaveSharedLayout"
-			label="${labels.cwf.shell.designer.menu.layout.save.shared.label}"
-			tooltiptext="${labels.cwf.shell.designer.menu.layout.save.shared.hint}" />
-		<menuitem id="mnuSavePrivateLayout"
-			label="${labels.cwf.shell.designer.menu.layout.save.private_.label}"
-			tooltiptext="${labels.cwf.shell.designer.menu.layout.save.private_.hint}" />
+		<menuitem id="mnuSaveLayout"
+			label="${labels.cwf.shell.designer.menu.layout.save.label}"
+			tooltiptext="${labels.cwf.shell.designer.menu.layout.save.hint}" />
 		<menuitem id="mnuShowZul"
 			label="${labels.cwf.shell.designer.menu.zk.viewer.label}"
 			tooltiptext="${labels.cwf.shell.designer.menu.zk.viewer.hint}" />

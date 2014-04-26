@@ -29,6 +29,7 @@ import org.carewebframework.api.spring.SpringUtil;
 import org.carewebframework.help.IHelpSet;
 import org.carewebframework.shell.help.HelpDefinition;
 import org.carewebframework.shell.help.HelpUtil;
+import org.carewebframework.shell.layout.LayoutIdentifier;
 import org.carewebframework.shell.layout.UIElementDesktop;
 import org.carewebframework.shell.layout.UIElementZKBase;
 import org.carewebframework.shell.layout.UILayout;
@@ -282,9 +283,9 @@ public class CareWebShell extends Div implements AfterCompose {
         if (resource.startsWith("app:")) {
             layout.loadByAppId(resource.substring(4));
         } else if (resource.startsWith("shared:")) {
-            layout.loadFromProperty(resource.substring(7), true);
+            layout.loadFromProperty(new LayoutIdentifier(resource.substring(7), true));
         } else if (resource.startsWith("private:")) {
-            layout.loadFromProperty(resource.substring(8), false);
+            layout.loadFromProperty(new LayoutIdentifier(resource.substring(8), false));
         } else {
             layout.loadFromUrl(resource);
         }

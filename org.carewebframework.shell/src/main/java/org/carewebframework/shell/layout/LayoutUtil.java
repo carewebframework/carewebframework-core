@@ -41,66 +41,60 @@ public class LayoutUtil {
     /**
      * Returns true if the specified layout exists.
      * 
-     * @param name
+     * @param layoutId
      * @return True if layout exists.
-     * @param shared Shared or personal layout.
      */
-    public static boolean layoutExists(String name, boolean shared) {
-        return getLayoutService().layoutExists(name, shared);
+    public static boolean layoutExists(LayoutIdentifier layoutId) {
+        return getLayoutService().layoutExists(layoutId);
     }
     
     /**
      * Saves a layout with the specified name and content.
      * 
-     * @param name The layout name.
+     * @param layoutId The layout identifier.
      * @param content The layout content.
-     * @param shared If true, save as a shared layout; otherwise, as a personal layout.
      */
-    public static void saveLayout(String name, String content, boolean shared) {
-        getLayoutService().saveLayout(name, content, shared);
+    public static void saveLayout(LayoutIdentifier layoutId, String content) {
+        getLayoutService().saveLayout(layoutId, content);
     }
     
     /**
      * Rename a layout.
      * 
-     * @param oldName The original layout name.
+     * @param layoutId The original layout.
      * @param newName The new layout name.
-     * @param shared Shared or personal layout.
      */
-    public static void renameLayout(String oldName, String newName, boolean shared) {
-        getLayoutService().renameLayout(oldName, newName, shared);
+    public static void renameLayout(LayoutIdentifier layoutId, String newName) {
+        getLayoutService().renameLayout(layoutId, newName);
     }
     
     /**
      * Clone a layout.
      * 
-     * @param oldName The original layout name.
-     * @param newName The new layout name.
-     * @param shared Shared or personal layout.
+     * @param layoutId1 The original layout identifier.
+     * @param layoutId2 The new layout identifier.
      */
-    public static void cloneLayout(String oldName, String newName, boolean shared) {
-        getLayoutService().cloneLayout(oldName, newName, shared);
+    public static void cloneLayout(LayoutIdentifier layoutId1, LayoutIdentifier layoutId2) {
+        getLayoutService().cloneLayout(layoutId1, layoutId2);
     }
     
     /**
      * Delete a layout.
      * 
-     * @param name The layout name.
-     * @param shared Shared or personal layout.
+     * @param layoutId The layout identifier.
      */
-    public static void deleteLayout(String name, boolean shared) {
-        getLayoutService().deleteLayout(name, shared);
+    public static void deleteLayout(LayoutIdentifier layoutId) {
+        getLayoutService().deleteLayout(layoutId);
     }
     
     /**
      * Returns the layout content.
      * 
-     * @param name The layout name.
-     * @param shared If true, returns a shared layout; otherwise, a personal layout.
+     * @param layoutId The layout identifier.
      * @return The layout content.
      */
-    public static String getLayout(String name, boolean shared) {
-        return getLayoutService().getLayout(name, shared);
+    public static String getLayoutContent(LayoutIdentifier layoutId) {
+        return getLayoutService().getLayoutContent(layoutId);
     }
     
     /**
@@ -109,8 +103,8 @@ public class LayoutUtil {
      * @param appId An application id.
      * @return The layout content.
      */
-    public static String getLayoutByAppId(String appId) {
-        return getLayoutService().getLayoutByAppId(appId);
+    public static String getLayoutContentByAppId(String appId) {
+        return getLayoutService().getLayoutContentByAppId(appId);
     }
     
     /**
