@@ -283,7 +283,7 @@ public class LayoutManager extends Window {
                 
                 UILayout layout = new UILayout();
                 layout.loadFromText(media.getStringData());
-                LayoutIdentifier layoutId = saveLayout(layout, new LayoutIdentifier(layout.getName(), shared), true);
+                LayoutIdentifier layoutId = saveLayout(layout, new LayoutIdentifier(layout.getName(), shared), false);
                 
                 if (layoutId != null) {
                     refresh(layoutId.name);
