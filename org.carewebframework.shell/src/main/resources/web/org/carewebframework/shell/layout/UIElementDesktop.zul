@@ -5,7 +5,7 @@
 				<image id="icon" />
 			</cell>
 			<cell id="titleCell" sclass="cwf-desktop-title">
-				<label id="title" value="${labels.cwf.shell.plugin._desktop.title}" />
+				<label id="title" value="${labels.cwf.shell.plugin._desktop.caption}" />
 			</cell>
 			<cell>
 				<menubar id="menubar1"

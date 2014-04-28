@@ -117,6 +117,7 @@ public class UIElementDesktop extends UIElementZKBase {
         
         addChild(menubar);
         addChild(toolbar);
+        setTitle(getTitle());
         shell.appendChild(win);
     }
     
