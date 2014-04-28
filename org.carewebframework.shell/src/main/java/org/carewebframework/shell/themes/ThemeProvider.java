@@ -14,34 +14,24 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
-import org.apache.commons.lang.StringUtils;
-
-import org.carewebframework.api.property.PropertyUtil;
-import org.carewebframework.api.security.SecurityUtil;
-import org.carewebframework.ui.util.RequestUtil;
 
 import org.zkoss.zk.ui.Execution;
-import org.zkoss.zul.theme.Themes;
 
 /**
  * Implements theme support.
  */
 public class ThemeProvider implements org.zkoss.zk.ui.util.ThemeProvider {
     
-    /**
-     * Database property constant
-     */
-    public static final String THEME_PROPERTY = "CAREWEB.THEME";
-    
     private final ThemeRegistry themeRegistry;
+    
+    private final ThemeResolver themeResolver;
     
     /**
      * No-arg constructor
      */
     public ThemeProvider() {
         themeRegistry = ThemeRegistry.getInstance();
+        themeResolver = ThemeResolver.getInstance();
     }
     
     // Interface: ThemeProvider
@@ -122,54 +112,8 @@ public class ThemeProvider implements org.zkoss.zk.ui.util.ThemeProvider {
      * @return The active theme definition, or null to indicate use default.
      */
     private ThemeDefinition getThemeDefinition(Execution exec) {
-        boolean isAuthenticated = SecurityUtil.isAuthenticated();
-        String attr1 = sessionAttribute(isAuthenticated);
-        String attr2 = sessionAttribute(!isAuthenticated);
-        HttpSession session = RequestUtil.getSession((HttpServletRequest) exec.getNativeRequest());
-        String themeName = null;
-        int pass = 0;
-        
-        while (StringUtils.isEmpty(themeName)) {
-            switch (++pass) {
-                case 1:
-                    themeName = (String) exec.getAttribute(attr1);
-                    break;
-                
-                case 2:
-                    themeName = exec.getParameter("theme");
-                    break;
-                
-                case 3:
-                    themeName = session == null ? null : (String) session.getAttribute(attr1);
-                    break;
-                
-                case 4:
-                    themeName = !PropertyUtil.isAvailable() ? null : PropertyUtil.getValue(THEME_PROPERTY, null);
-                    break;
-                
-                case 5:
-                    themeName = "default";
-                    break;
-            }
-        }
-        
-        exec.setAttribute(attr1, themeName);
-        
-        if (session != null) {
-            session.setAttribute(attr1, themeName);
-            session.removeAttribute(attr2);
-        }
-        Themes.setTheme(exec, themeName);
+        String themeName = themeResolver.getTheme((HttpServletRequest) exec.getNativeRequest());
         return themeRegistry.get(themeName);
     }
     
-    /**
-     * Return the name of the session attribute to use to cache theme setting.
-     * 
-     * @param isAuthenticated True if the session has been authenticated.
-     * @return
-     */
-    private String sessionAttribute(boolean isAuthenticated) {
-        return isAuthenticated ? "user-theme" : "default-theme";
-    }
 }
