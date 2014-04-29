@@ -31,14 +31,25 @@ public class ThemeResolver implements org.zkoss.web.theme.ThemeResolver {
     
     private static final ThemeResolver instance = new ThemeResolver();
     
+    /**
+     * Returns singleton instance of the resolver.
+     * 
+     * @return
+     */
     public static ThemeResolver getInstance() {
         return instance;
     }
     
+    /**
+     * Set resolver as ZK default.
+     */
     private ThemeResolver() {
         ThemeFns.setThemeResolver(this);
     }
     
+    /**
+     * Attempts current theme resolution by several algorithms in succession.
+     */
     @Override
     public String getTheme(HttpServletRequest request) {
         String themeName = null;
@@ -46,15 +57,15 @@ public class ThemeResolver implements org.zkoss.web.theme.ThemeResolver {
         
         do {
             switch (++pass) {
-                case 1:
+                case 1: // Theme from servlet request.
                     themeName = (String) request.getAttribute(THEME_PROPERTY);
                     break;
                 
-                case 2:
+                case 2: // Theme from query parameter.
                     themeName = request.getParameter("theme");
                     break;
                 
-                case 3:
+                case 3: // Theme from session.
                     Desktop dt = FrameworkWebSupport.getDesktop();
                     HttpSession session = request.getSession(false);
                     
@@ -66,11 +77,11 @@ public class ThemeResolver implements org.zkoss.web.theme.ThemeResolver {
                     
                     break;
                 
-                case 4:
+                case 4: // Theme from property.
                     themeName = !PropertyUtil.isAvailable() ? null : PropertyUtil.getValue(THEME_PROPERTY, null);
                     break;
                 
-                case 5:
+                case 5: // Default theme when all else fails.
                     themeName = "default";
                     break;
             }
@@ -83,6 +94,9 @@ public class ThemeResolver implements org.zkoss.web.theme.ThemeResolver {
         return themeName;
     }
     
+    /**
+     * Sets the current theme in the servlet request and session.
+     */
     @Override
     public void setTheme(HttpServletRequest request, HttpServletResponse response, String themeName) {
         if (themeName != null) {

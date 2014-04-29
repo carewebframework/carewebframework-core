@@ -16,7 +16,7 @@ import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.w3c.dom.Element;
 
 /**
- * Spring xml configuration file parser extension. Supports the definition of help modules within
+ * Spring xml configuration file parser extension. Supports the definition of theme modules within
  * the configuration file in a much more abbreviated fashion than would be required without the
  * extension.
  */

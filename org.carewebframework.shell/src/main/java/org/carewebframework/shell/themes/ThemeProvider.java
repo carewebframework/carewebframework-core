@@ -103,10 +103,8 @@ public class ThemeProvider implements org.zkoss.zk.ui.util.ThemeProvider {
     }
     
     /**
-     * Returns the theme definition in effect, if any. First looks at the query parameter for a
-     * theme reference. If not found, looks at the session associated with the execution. Finally,
-     * looks at the user preference setting (which it then caches in the session to avoid multiple
-     * property lookups).
+     * Returns the theme definition in effect, if any. Obtains the theme name from the theme
+     * resolver, then looks it up in the theme registry.
      * 
      * @param exec The current execution.
      * @return The active theme definition, or null to indicate use default.
