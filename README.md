@@ -41,7 +41,7 @@ extracted from the JDK download.
 
 `git clone https://github.com/carewebframework/carewebframework-core.git`
 
-Note: Problem checking out?  Windows has a file path length limit of 260 characters.  If you run into errors suggesting that a file cannot be created, try cloning from a shorter root path (e.g., C:\git).
+Note: Problem checking out?  Windows has a file path length limit of 260 characters.  If you run into errors suggesting that a file cannot be created, try cloning from a shorter root path (e.g., `C:\git`).
 
 ### Install all CareWeb Framework jars into your local Maven repository/cache
 Make sure to cd into the carewebframework-core directory and then execute
