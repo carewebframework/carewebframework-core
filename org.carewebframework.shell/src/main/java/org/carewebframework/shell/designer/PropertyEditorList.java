@@ -42,6 +42,7 @@ public class PropertyEditorList extends PropertyEditorBase {
             if (event.getKeyCode() == KeyEvent.DELETE) {
                 combobox.setValue(null);
                 combobox.close();
+                Events.postEvent(Events.ON_CHANGE, combobox, null);
             }
         }
         

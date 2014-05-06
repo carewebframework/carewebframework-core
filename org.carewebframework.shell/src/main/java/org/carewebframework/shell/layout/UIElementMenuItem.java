@@ -13,7 +13,6 @@ import org.carewebframework.ui.action.ActionListener;
 import org.carewebframework.ui.zk.MenuUtil;
 import org.carewebframework.ui.zk.ZKUtil;
 
-import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
@@ -68,7 +67,6 @@ public class UIElementMenuItem extends UIElementActionBase {
         public boolean setVisible(boolean visible) {
             boolean result = super.setVisible(visible);
             adjustVisibility(visible);
-            MenuUtil.updateStyles(this);
             return result;
         }
         
@@ -78,16 +76,32 @@ public class UIElementMenuItem extends UIElementActionBase {
          * @param visible
          */
         private void adjustVisibility(boolean visible) {
-            Component parent = ZKUtil.findAncestor(this, Menupopup.class);
+            Menu menu = this;
+            Menupopup menuPopup = null;
             
-            while (parent != null) {
-                visible |= ZKUtil.firstVisibleChild(parent, false) != null;
-                parent = parent.getParent();
-                visible |= ActionListener.getListener(parent, Events.ON_CLICK) != null;
-                parent.setVisible(visible);
-                parent = ZKUtil.findAncestor(parent, Menupopup.class);
+            while ((menuPopup = getParentPopup(menu)) != null) {
+                visible |= ZKUtil.firstVisibleChild(menuPopup, false) != null;
+                menu = (Menu) menuPopup.getParent();
+                visible |= ActionListener.getListener(menu, Events.ON_CLICK) != null;
+                
+                if (visible == menu.setVisible(visible)) {
+                    break;
+                }
             }
             
+            if (menu != null) {
+                MenuUtil.updateStyles(menu);
+            }
+        }
+        
+        /**
+         * Returns the parent menu popup for this menu, or null if none.
+         * 
+         * @param menu Menu whose parent menu popup is sought.
+         * @return The parent menu popup or null if none.
+         */
+        private Menupopup getParentPopup(Menu menu) {
+            return menu.isTopmost() ? null : (Menupopup) menu.getParent();
         }
     }
     
