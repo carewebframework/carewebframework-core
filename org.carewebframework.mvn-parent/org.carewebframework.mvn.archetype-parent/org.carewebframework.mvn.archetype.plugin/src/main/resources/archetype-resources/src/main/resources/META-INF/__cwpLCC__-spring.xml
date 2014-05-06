@@ -22,7 +22,7 @@
 				<cwp:button-resource caption="${symbol_dollar}{labels.${cwpLC}.button.caption}" 
 					action='zscript:Messagebox.show("${symbol_dollar}{labels.${cwpLC}.button.click.msg}");'/>
 				<cwp:help-resource module="${cwpLCC}Help"/>
-				<cwp:menu-resource path="${cwpUCC}${symbol_escape}Click Me" 
+				<cwp:menu-resource path="${symbol_dollar}{labels.${cwpLC}.menu.resource.path}" 
 					action='zscript:Messagebox.show("${symbol_dollar}{labels.${cwpLC}.menu.click.msg}");'/>
 				<cwp:property-resource group="${cwpLCC}PropGroupName"/>
 			</cwp:resource>
