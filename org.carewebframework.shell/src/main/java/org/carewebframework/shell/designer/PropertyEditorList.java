@@ -13,6 +13,8 @@ import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.property.PropertyInfo;
 import org.carewebframework.ui.zk.ListUtil;
 
+import org.springframework.util.StringUtils;
+
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
@@ -40,9 +42,13 @@ public class PropertyEditorList extends PropertyEditorBase {
         @Override
         public void onEvent(KeyEvent event) throws Exception {
             if (event.getKeyCode() == KeyEvent.DELETE) {
+                boolean changed = !StringUtils.isEmpty(combobox.getValue());
                 combobox.setValue(null);
                 combobox.close();
-                Events.postEvent(Events.ON_CHANGE, combobox, null);
+                
+                if (changed) {
+                    Events.postEvent(Events.ON_CHANGE, combobox, null);
+                }
             }
         }
         
