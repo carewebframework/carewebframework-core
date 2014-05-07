@@ -13,7 +13,7 @@
  *  public class ExampleRowRendererImpl implements RowRenderer, Serializable {
  * 
  *      //@Override annotation commented out only for better IDE javadoc formatting
- *      public void render(final Row row, final Object data) throws Exception {
+ *      public void render(Row row, Object data, int index) throws Exception {
  *          ...
  *      }
  *  }

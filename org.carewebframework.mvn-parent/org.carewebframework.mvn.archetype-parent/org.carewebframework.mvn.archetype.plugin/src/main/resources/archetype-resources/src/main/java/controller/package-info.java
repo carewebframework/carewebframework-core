@@ -7,9 +7,9 @@
  * </p>
  * <code>
  * <pre>
- *  import org.carewebframework.ui.FrameworkController;
+ *  import org.carewebframework.ui.PluginController;
  *  
- *  public class ExampleCareWebPluginController extends FrameworkController {
+ *  public class ${cwpUCC}Controller extends PluginController {
  *      ...
  *  } 
  * 

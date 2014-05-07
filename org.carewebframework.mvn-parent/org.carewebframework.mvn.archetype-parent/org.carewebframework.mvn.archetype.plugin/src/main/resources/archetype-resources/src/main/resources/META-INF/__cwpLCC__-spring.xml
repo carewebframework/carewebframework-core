@@ -28,8 +28,8 @@
 			</cwp:resource>
 			<!-- You may specify plugin level security constraints here:
 			<cwp:security requiresAll="false">
-				<cwp:authority name="PRIV_CLINICAL_PRIVILEGED_DATA_HIV_OR_AIDS"/>
-				<cwp:authority name="PRIV_CLINICAL_PRIVILEGED_DATA_PSYCHIATRIC"/>
+				<cwp:authority name="PRIV_PRIVNAME"/>
+				<cwp:authority name="ROLE_ROLENAME"/>
 			</cwp:security>
 			-->
 		</cwp:plugin>

@@ -10,19 +10,19 @@
 			if the defaults are incorrect. -->
 		<requiredProperty key="cwpName">
 			<!-- Descriptive Name -->
-			<defaultValue>Example CareWeb Plugin</defaultValue>
+			<defaultValue>My CareWeb Plugin</defaultValue>
 		</requiredProperty>
 		<requiredProperty key="cwpUCC">
 			<!-- Upper Camel Case Plugin Name/ID : No Spaces -->
-			<defaultValue>ExampleCareWebPlugin</defaultValue>
+			<defaultValue>MyPlugin</defaultValue>
 		</requiredProperty>
 		<requiredProperty key="cwpLCC">
 			<!-- Lower Camel Case Plugin Name/ID : No Spaces -->
-			<defaultValue>exampleCareWebPlugin</defaultValue>
+			<defaultValue>myPlugin</defaultValue>
 		</requiredProperty>
 		<requiredProperty key="cwpLC">
 			<!-- Lower Case Plugin Name/ID : No Spaces -->
-			<defaultValue>examplecarewebplugin</defaultValue>
+			<defaultValue>myplugin</defaultValue>
 		</requiredProperty>
 		<requiredProperty key="cwfVersion">
 			<!-- CareWeb Framework Version -->
