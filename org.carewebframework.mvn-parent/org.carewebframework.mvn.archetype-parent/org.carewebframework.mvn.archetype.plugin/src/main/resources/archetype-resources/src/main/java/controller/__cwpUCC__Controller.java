@@ -38,7 +38,7 @@ public class ${cwpUCC}Controller extends PluginController {
     
     private static final Log log = LogFactory.getLog(${cwpUCC}Controller.class);
 
-    private Label lblExample; // This value will be injected automatically by the parent class
+    private Label lblDate; // This value will be injected automatically by the parent class
 
     /**
      * @see org.carewebframework.ui.FrameworkController${symbol_pound}doAfterCompose(org.zkoss.zk.ui.Component)
@@ -47,7 +47,6 @@ public class ${cwpUCC}Controller extends PluginController {
     public void doAfterCompose(final Component comp) throws Exception {
         super.doAfterCompose(comp);
         log.trace("Controller composed");
-        lblExample.setValue(new Date().toString());
     }
     
     /**
@@ -72,6 +71,7 @@ public class ${cwpUCC}Controller extends PluginController {
     @Override
     public void onActivate() {
         super.onActivate();
+        lblDate.setValue(new Date().toString());
     }
     
     /**
