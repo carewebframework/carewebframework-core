@@ -24,12 +24,11 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zul.Label;
 
 /**
- * This is a sample controller that subclasses the PluginController class which provides some
- * convenience methods for accessing framework services and can automatically register the
- * controller with the framework so that it may receive context change events (if controller is-an
- * instanceof a supported context-related interface).  This controller illustrates use of the
- * IPluginEvent interface to receive notification when the plugin is activated and inactivated
- * within the CareWeb Framework. 
+ * This is a sample controller that extends the PluginController class which provides some
+ * convenience methods for accessing framework services and automatically registers the
+ * controller with the framework so that it may receive context change events (if the controller
+ * implements a supported context-related interface).  This controller illustrates the use of
+ * the IPluginEvent interface to receive plugin lifecycle notifications.. 
  *
  */
 public class ${cwpUCC}Controller extends PluginController {
