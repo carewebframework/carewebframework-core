@@ -84,7 +84,7 @@ public class PluginDefinition {
     
     private Class<? extends UIElementBase> clazz = UIElementPlugin.class;
     
-    private final List<PluginResource> resources = new ArrayList<PluginResource>();
+    private final List<IPluginResource> resources = new ArrayList<IPluginResource>();
     
     private final List<Authority> authorities = new ArrayList<Authority>();
     
@@ -286,7 +286,7 @@ public class PluginDefinition {
      * 
      * @return List of associated resources.
      */
-    public List<PluginResource> getResources() {
+    public List<IPluginResource> getResources() {
         return resources;
     }
     
@@ -298,10 +298,10 @@ public class PluginDefinition {
      * @return List of associated resources.
      */
     @SuppressWarnings("unchecked")
-    public <E extends PluginResource> List<E> getResources(Class<E> clazz) {
+    public <E extends IPluginResource> List<E> getResources(Class<E> clazz) {
         List<E> list = new ArrayList<E>();
         
-        for (PluginResource resource : resources) {
+        for (IPluginResource resource : resources) {
             if (clazz.isInstance(resource)) {
                 list.add((E) resource);
             }
@@ -315,7 +315,7 @@ public class PluginDefinition {
      * 
      * @param resources Resources to add.
      */
-    public void setResources(List<PluginResource> resources) {
+    public void setResources(List<IPluginResource> resources) {
         this.resources.addAll(resources);
     }
     

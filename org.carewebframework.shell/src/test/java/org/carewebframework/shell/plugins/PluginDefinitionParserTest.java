@@ -25,10 +25,10 @@ public class PluginDefinitionParserTest extends CommonTest {
         assertEquals("Test1", def.getName());
         assertEquals("plugin-test", def.getId());
         assertEquals(def.getResources().size(), 4);
-        assertTrue(def.getResources().get(0) instanceof PluginResource.ButtonResource);
-        assertTrue(def.getResources().get(1) instanceof PluginResource.ButtonResource);
-        assertTrue(def.getResources().get(2) instanceof PluginResource.HelpResource);
-        assertTrue(def.getResources().get(3) instanceof PluginResource.PropertyResource);
+        assertTrue(def.getResources().get(0) instanceof PluginResourceButton);
+        assertTrue(def.getResources().get(1) instanceof PluginResourceButton);
+        assertTrue(def.getResources().get(2) instanceof PluginResourceHelp);
+        assertTrue(def.getResources().get(3) instanceof PluginResourcePropertyGroup);
     }
     
 }

@@ -16,7 +16,7 @@ import org.carewebframework.shell.CareWebShell;
 import org.carewebframework.shell.designer.DesignConstants;
 import org.carewebframework.shell.designer.DesignMenu;
 import org.carewebframework.shell.layout.UIElementMenuItem.MenuEx;
-import org.carewebframework.shell.plugins.PluginResource.HelpResource;
+import org.carewebframework.shell.plugins.PluginResourceHelp;
 import org.carewebframework.ui.action.ActionListener;
 import org.carewebframework.ui.zk.MenuUtil;
 
@@ -297,7 +297,7 @@ public class UIElementDesktop extends UIElementZKBase {
      * @param resource The help resource.
      * @return The newly created menu item.
      */
-    public Menu addHelpMenu(HelpResource resource) {
+    public Menu addHelpMenu(PluginResourceHelp resource) {
         Menu menu = addHelpMenu(resource.getPath(), resource.getAction());
         mnuTOC.setVisible(menu != null);
         return menu;

@@ -10,9 +10,9 @@
 package org.carewebframework.shell.layout;
 
 import org.carewebframework.shell.AboutDialog;
+import org.carewebframework.shell.plugins.IPluginResource;
 import org.carewebframework.shell.plugins.PluginContainer;
 import org.carewebframework.shell.plugins.PluginDefinition;
-import org.carewebframework.shell.plugins.PluginResource;
 import org.carewebframework.shell.property.IPropertyAccessor;
 import org.carewebframework.shell.property.PropertyInfo;
 
@@ -94,7 +94,7 @@ public class UIElementPlugin extends UIElementZKBase implements Disable, IProper
     public void afterInitialize(boolean deserializing) throws Exception {
         super.afterInitialize(deserializing);
         
-        for (PluginResource resource : getDefinition().getResources()) {
+        for (IPluginResource resource : getDefinition().getResources()) {
             resource.process(container);
         }
         

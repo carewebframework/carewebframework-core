@@ -115,39 +115,39 @@ public class PluginXmlParser extends BaseXmlParser {
             }
             
             Element resource = (Element) resources.item(i);
-            Class<? extends PluginResource> resourceClass = null;
+            Class<? extends IPluginResource> resourceClass = null;
             
             switch (getResourceType(getNodeName(resource))) {
                 case button:
-                    resourceClass = PluginResource.ButtonResource.class;
+                    resourceClass = PluginResourceButton.class;
                     break;
                 
                 case help:
-                    resourceClass = PluginResource.HelpResource.class;
+                    resourceClass = PluginResourceHelp.class;
                     break;
                 
                 case menu:
-                    resourceClass = PluginResource.MenuResource.class;
+                    resourceClass = PluginResourceMenu.class;
                     break;
                 
                 case property:
-                    resourceClass = PluginResource.PropertyResource.class;
+                    resourceClass = PluginResourcePropertyGroup.class;
                     break;
                 
                 case css:
-                    resourceClass = PluginResource.CSSResource.class;
+                    resourceClass = PluginResourceCSS.class;
                     break;
                 
                 case bean:
-                    resourceClass = PluginResource.BeanResource.class;
+                    resourceClass = PluginResourceBean.class;
                     break;
                 
                 case command:
-                    resourceClass = PluginResource.CommandResource.class;
+                    resourceClass = PluginResourceCommand.class;
                     break;
                 
                 case action:
-                    resourceClass = PluginResource.ActionResource.class;
+                    resourceClass = PluginResourceAction.class;
                     break;
             }
             

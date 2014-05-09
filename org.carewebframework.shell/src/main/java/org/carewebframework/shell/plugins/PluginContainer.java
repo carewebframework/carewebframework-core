@@ -26,18 +26,8 @@ import org.carewebframework.shell.Constants;
 import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.layout.UIElementZKBase;
 import org.carewebframework.shell.plugins.PluginEvent.PluginAction;
-import org.carewebframework.shell.plugins.PluginResource.ActionResource;
-import org.carewebframework.shell.plugins.PluginResource.BeanResource;
-import org.carewebframework.shell.plugins.PluginResource.ButtonResource;
-import org.carewebframework.shell.plugins.PluginResource.CSSResource;
-import org.carewebframework.shell.plugins.PluginResource.CommandResource;
-import org.carewebframework.shell.plugins.PluginResource.HelpResource;
-import org.carewebframework.shell.plugins.PluginResource.MenuResource;
-import org.carewebframework.shell.plugins.PluginResource.PropertyResource;
 import org.carewebframework.shell.property.PropertyInfo;
 import org.carewebframework.ui.FrameworkController;
-import org.carewebframework.ui.action.ActionListener;
-import org.carewebframework.ui.action.ActionRegistry;
 import org.carewebframework.ui.command.CommandEvent;
 import org.carewebframework.ui.command.CommandUtil;
 import org.carewebframework.ui.zk.ZKUtil;
@@ -49,9 +39,7 @@ import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.ext.Disable;
 import org.zkoss.zk.ui.util.Clients;
-import org.zkoss.zul.Button;
 import org.zkoss.zul.Idspace;
-import org.zkoss.zul.Menu;
 
 /**
  * Container that manages CareWeb plugins
@@ -459,7 +447,7 @@ public class PluginContainer extends Idspace {
      * @param id Component id.
      * @param component Component to be registered.
      */
-    private void registerId(String id, Component component) {
+    /*package*/void registerId(String id, Component component) {
         if (!StringUtils.isEmpty(id) && !hasAttribute(id)) {
             setAttribute(id, component);
         }
@@ -626,7 +614,7 @@ public class PluginContainer extends Idspace {
      * @param beanId The bean's id.
      * @param isRequired If true and the bean is not found, an exception is raised.
      */
-    private void registerBean(String beanId, boolean isRequired) {
+    /*package*/void registerBean(String beanId, boolean isRequired) {
         if (beanId == null || beanId.isEmpty()) {
             return;
         }
@@ -817,83 +805,12 @@ public class PluginContainer extends Idspace {
     }
     
     /**
-     * Adds a button to the toolbar.
+     * Returns the shell instance that hosts this container.
      * 
-     * @param resource Button resource.
+     * @return
      */
-    public void processResource(ButtonResource resource) {
-        Button button = new Button(resource.getCaption());
-        button.setId(resource.getId());
-        button.setTooltiptext(resource.getTooltip());
-        button.setImage(resource.getIcon());
-        ActionListener.addAction(button, resource.getAction());
-        addToolbarComponent(button);
-        registerId(resource.getId(), button);
-    }
-    
-    /**
-     * Adds a menu item as defined by the specified resource.
-     * 
-     * @param resource Menu resource.
-     */
-    public void processResource(MenuResource resource) {
-        Menu menu = shell.addMenu(resource.getPath(), resource.getAction());
-        registerComponent(menu);
-        registerId(resource.getId(), menu);
-    }
-    
-    /**
-     * Registers a property resource with the shell.
-     * 
-     * @param resource Property resource.
-     */
-    public void processResource(PropertyResource resource) {
-        shell.registerPropertyGroup(resource.getGroup());
-    }
-    
-    /**
-     * Registers a help resource with the shell.
-     * 
-     * @param resource Help resource.
-     */
-    public void processResource(HelpResource resource) {
-        shell.registerHelpResource(resource);
-    }
-    
-    /**
-     * Registers a CSS resource with the shell.
-     * 
-     * @param resource CSS resource.
-     */
-    public void processResource(CSSResource resource) {
-        shell.registerStyleSheet(resource.getUrl());
-    }
-    
-    /**
-     * Registers a bean resource with the container.
-     * 
-     * @param resource Bean resource.
-     */
-    public void processResource(BeanResource resource) {
-        registerBean(resource.getBean(), resource.isRequired());
-    }
-    
-    /**
-     * Registers a listener for the specified command.
-     * 
-     * @param commandResource
-     */
-    public void processResource(CommandResource commandResource) {
-        CommandUtil.associateCommand(commandResource.getName(), this);
-    }
-    
-    /**
-     * Registers a local action for the specified action.
-     * 
-     * @param actionResource
-     */
-    public void processResource(ActionResource actionResource) {
-        ActionRegistry.addLocalAction(actionResource.getLabel(), actionResource.getScript());
+    public CareWebShell getShell() {
+        return shell;
     }
     
     /**

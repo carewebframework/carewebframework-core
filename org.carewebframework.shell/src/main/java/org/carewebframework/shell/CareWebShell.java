@@ -35,7 +35,7 @@ import org.carewebframework.shell.layout.UIElementZKBase;
 import org.carewebframework.shell.layout.UILayout;
 import org.carewebframework.shell.plugins.PluginContainer;
 import org.carewebframework.shell.plugins.PluginDefinition;
-import org.carewebframework.shell.plugins.PluginResource.HelpResource;
+import org.carewebframework.shell.plugins.PluginResourceHelp;
 import org.carewebframework.ui.Application;
 import org.carewebframework.ui.FrameworkWebSupport;
 import org.carewebframework.ui.command.CommandEvent;
@@ -434,7 +434,7 @@ public class CareWebShell extends Div implements AfterCompose {
      * 
      * @param resource Resource defining the help menu item to be added.
      */
-    public void registerHelpResource(HelpResource resource) {
+    public void registerHelpResource(PluginResourceHelp resource) {
         HelpDefinition def = resource.getHelpDefinition();
         
         if (def != null) {
