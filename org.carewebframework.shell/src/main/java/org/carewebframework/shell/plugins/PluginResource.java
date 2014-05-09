@@ -546,4 +546,60 @@ public abstract class PluginResource {
         }
     }
     
+    /**
+     * Resource for declaring actions supported by a plugin.
+     */
+    public static class ActionResource extends PluginResource {
+        
+        // The label of the action.
+        private String label;
+        
+        // The script of the action
+        private String script;
+        
+        /**
+         * Returns the label of the action.
+         * 
+         * @return The action's label.
+         */
+        public String getLabel() {
+            return label;
+        }
+        
+        /**
+         * Sets the label of the action.
+         * 
+         * @param label The new label.
+         */
+        public void setLabel(String label) {
+            this.label = label;
+        }
+        
+        /**
+         * Returns the script of the action.
+         * 
+         * @return The action's script.
+         */
+        public String getScript() {
+            return script;
+        }
+        
+        /**
+         * Sets the script of the action.
+         * 
+         * @param script The new script.
+         */
+        public void setScript(String script) {
+            this.script = script;
+        }
+        
+        /**
+         * Registers the action resource with the action registry.
+         */
+        @Override
+        public void process(PluginContainer container) {
+            container.processResource(this);
+        }
+    }
+    
 }

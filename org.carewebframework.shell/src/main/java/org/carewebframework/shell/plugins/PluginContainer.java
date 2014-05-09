@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.WordUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -25,6 +26,7 @@ import org.carewebframework.shell.Constants;
 import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.layout.UIElementZKBase;
 import org.carewebframework.shell.plugins.PluginEvent.PluginAction;
+import org.carewebframework.shell.plugins.PluginResource.ActionResource;
 import org.carewebframework.shell.plugins.PluginResource.BeanResource;
 import org.carewebframework.shell.plugins.PluginResource.ButtonResource;
 import org.carewebframework.shell.plugins.PluginResource.CSSResource;
@@ -35,6 +37,7 @@ import org.carewebframework.shell.plugins.PluginResource.PropertyResource;
 import org.carewebframework.shell.property.PropertyInfo;
 import org.carewebframework.ui.FrameworkController;
 import org.carewebframework.ui.action.ActionListener;
+import org.carewebframework.ui.action.ActionRegistry;
 import org.carewebframework.ui.command.CommandEvent;
 import org.carewebframework.ui.command.CommandUtil;
 import org.carewebframework.ui.zk.ZKUtil;
@@ -289,32 +292,25 @@ public class PluginContainer extends Idspace {
         if (pluginEventListeners1 != null) {
             for (IPluginEvent listener : new ArrayList<IPluginEvent>(pluginEventListeners1)) {
                 try {
+                    if (debug) {
+                        log.debug("Invoking IPluginEvent.on" + WordUtils.capitalizeFully(action.name()) + " for listener "
+                                + listener);
+                    }
+                    
                     switch (action) {
                         case LOAD:
-                            if (debug) {
-                                log.debug("Invoking IPluginEvent.onLoad for listener " + listener);
-                            }
                             listener.onLoad(this);
                             continue;
                             
                         case UNLOAD:
-                            if (debug) {
-                                log.debug("Invoking IPluginEvent.onUnload for listener " + listener);
-                            }
                             listener.onUnload();
                             continue;
                             
                         case ACTIVATE:
-                            if (debug) {
-                                log.debug("Invoking IPluginEvent.onActivate for listener " + listener);
-                            }
                             listener.onActivate();
                             continue;
                             
                         case INACTIVATE:
-                            if (debug) {
-                                log.debug("Invoking IPluginEvent.onInactivate for listener " + listener);
-                            }
                             listener.onInactivate();
                             continue;
                     }
@@ -889,6 +885,15 @@ public class PluginContainer extends Idspace {
      */
     public void processResource(CommandResource commandResource) {
         CommandUtil.associateCommand(commandResource.getName(), this);
+    }
+    
+    /**
+     * Registers a local action for the specified action.
+     * 
+     * @param actionResource
+     */
+    public void processResource(ActionResource actionResource) {
+        ActionRegistry.addLocalAction(actionResource.getLabel(), actionResource.getScript());
     }
     
     /**

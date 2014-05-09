@@ -31,7 +31,7 @@ import org.w3c.dom.NodeList;
 public class PluginXmlParser extends BaseXmlParser {
     
     private enum ResourceType {
-        unknown, button, help, menu, property, css, bean, command
+        unknown, button, help, menu, property, css, bean, command, action
     };
     
     @Override
@@ -144,6 +144,10 @@ public class PluginXmlParser extends BaseXmlParser {
                 
                 case command:
                     resourceClass = PluginResource.CommandResource.class;
+                    break;
+                
+                case action:
+                    resourceClass = PluginResource.ActionResource.class;
                     break;
             }
             

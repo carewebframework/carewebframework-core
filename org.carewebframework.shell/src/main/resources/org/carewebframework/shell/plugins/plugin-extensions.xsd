@@ -60,6 +60,12 @@
                                             <xsd:attribute name="name" use="required" />
                                         </xsd:complexType>
                                     </xsd:element>
+                                    <xsd:element name="action-resource">
+                                        <xsd:complexType>
+                                            <xsd:attribute name="label" use="required" />
+                                            <xsd:attribute name="script" use="required" />
+                                        </xsd:complexType>
+                                    </xsd:element>
                                 </xsd:choice>
                             </xsd:complexType>
                         </xsd:element>
