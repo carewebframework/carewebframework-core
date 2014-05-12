@@ -20,7 +20,7 @@ import java.util.Map;
  */
 public abstract class AbstractRegistry<KEY, VALUE> implements Iterable<VALUE> {
     
-    private final Map<KEY, VALUE> map;
+    protected final Map<KEY, VALUE> map;
     
     protected AbstractRegistry() {
         this(true);
