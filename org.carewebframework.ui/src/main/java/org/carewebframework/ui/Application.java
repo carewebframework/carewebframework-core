@@ -660,7 +660,7 @@ public class Application {
         DateUtil.localTimeZone = localTimeZone;
         LifecycleEventDispatcher.addDesktopCallback(desktopLifeCycle);
         LifecycleEventDispatcher.addSessionCallback(sessionLifeCycle);
-        ActionRegistry.addGlobalAction("@cwf.btn.refresh.label",
+        ActionRegistry.register(true, "cwf.refresh", "@cwf.btn.refresh.label",
             "zscript:org.carewebframework.api.event.EventManager.getInstance().fireLocalEvent(\"" + Constants.REFRESH_EVENT
                     + "\", null);");
     }

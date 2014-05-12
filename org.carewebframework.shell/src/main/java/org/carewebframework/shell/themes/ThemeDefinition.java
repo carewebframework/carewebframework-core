@@ -52,14 +52,14 @@ public class ThemeDefinition implements ApplicationContextAware {
      * Remove the theme definition from the registry when it is destroyed.
      */
     public void destroy() {
-        themeRegistry.remove(this);
+        themeRegistry.unregister(this);
     }
     
     /**
      * Called when the definition is fully instantiated.
      */
     public void init() {
-        themeRegistry.add(this);
+        themeRegistry.register(this);
     }
     
     public String getId() {

@@ -9,7 +9,7 @@
  */
 package org.carewebframework.api.context;
 
-import org.carewebframework.api.AbstractGlobalRegistry;
+import org.carewebframework.common.AbstractRegistry;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.DestructionAwareBeanPostProcessor;
@@ -17,7 +17,7 @@ import org.springframework.beans.factory.config.DestructionAwareBeanPostProcesso
 /**
  * Registry for context serializers indexed by the class type they support.
  */
-public class ContextSerializerRegistry extends AbstractGlobalRegistry<Class<?>, IContextSerializer> implements DestructionAwareBeanPostProcessor {
+public class ContextSerializerRegistry extends AbstractRegistry<Class<?>, IContextSerializer> implements DestructionAwareBeanPostProcessor {
     
     private static ContextSerializerRegistry instance = new ContextSerializerRegistry();
     
@@ -68,7 +68,7 @@ public class ContextSerializerRegistry extends AbstractGlobalRegistry<Class<?>, 
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
         if (bean instanceof IContextSerializer) {
-            add((IContextSerializer) bean);
+            register((IContextSerializer) bean);
         }
         
         return bean;
@@ -77,7 +77,7 @@ public class ContextSerializerRegistry extends AbstractGlobalRegistry<Class<?>, 
     @Override
     public void postProcessBeforeDestruction(Object bean, String beanName) throws BeansException {
         if (bean instanceof IContextSerializer) {
-            remove((IContextSerializer) bean);
+            unregister((IContextSerializer) bean);
         }
     }
     

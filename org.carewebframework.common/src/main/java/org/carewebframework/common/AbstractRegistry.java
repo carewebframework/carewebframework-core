@@ -7,7 +7,10 @@
  * Disclaimer of Warranty and Limitation of Liability available at
  * http://www.carewebframework.org/licensing/disclaimer.
  */
-package org.carewebframework.api;
+package org.carewebframework.common;
+
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * Abstract base class for thread-safe registry of shared objects.
@@ -15,21 +18,16 @@ package org.carewebframework.api;
  * @param <KEY> The class of the indexing key.
  * @param <VALUE> The class of the registered item.
  */
-public abstract class AbstractGlobalRegistry<KEY, VALUE> extends AbstractGlobalMap<KEY, VALUE> {
+public abstract class AbstractRegistry<KEY, VALUE> implements Iterable<VALUE> {
     
-    private final boolean replaceDuplicates;
+    private final Map<KEY, VALUE> map;
     
-    protected AbstractGlobalRegistry() {
+    protected AbstractRegistry() {
         this(true);
     }
     
-    /**
-     * @param replaceDuplicates If false, an exception is thrown when attempting to store a
-     *            duplicate entry. If true, the duplicate entry replaces the original.
-     */
-    protected AbstractGlobalRegistry(boolean replaceDuplicates) {
-        super();
-        this.replaceDuplicates = replaceDuplicates;
+    protected AbstractRegistry(boolean replaceDuplicates) {
+        map = new RegistryMap<KEY, VALUE>(replaceDuplicates);
     }
     
     /**
@@ -41,18 +39,23 @@ public abstract class AbstractGlobalRegistry<KEY, VALUE> extends AbstractGlobalM
     protected abstract KEY getKey(VALUE item);
     
     /**
+     * Returns the value associated with the specified key.
+     * 
+     * @param key
+     * @return
+     */
+    public VALUE get(KEY key) {
+        return map.get(key);
+    }
+    
+    /**
      * Adds an item to the registry.
      * 
      * @param item
      */
-    public void add(VALUE item) {
-        KEY key = item == null ? null : getKey(item);
-        
-        if (key != null) {
-            if (!replaceDuplicates) {
-                checkDuplicate(key, item, globalMap);
-            }
-            globalMap.put(key, item);
+    public void register(VALUE item) {
+        if (item != null) {
+            map.put(getKey(item), item);
         }
     }
     
@@ -62,8 +65,8 @@ public abstract class AbstractGlobalRegistry<KEY, VALUE> extends AbstractGlobalM
      * @param item The item to remove.
      * @return True if the item was successfully removed.
      */
-    public boolean remove(VALUE item) {
-        return removeByKey(getKey(item));
+    public boolean unregister(VALUE item) {
+        return unregisterByKey(getKey(item));
     }
     
     /**
@@ -72,14 +75,16 @@ public abstract class AbstractGlobalRegistry<KEY, VALUE> extends AbstractGlobalM
      * @param key The key of the item to remove.
      * @return True if the item was successfully removed.
      */
-    public boolean removeByKey(KEY key) {
-        boolean result = key != null && globalMap.containsKey(key);
-        
-        if (result) {
-            globalMap.remove(key);
-        }
-        
-        return result;
+    public boolean unregisterByKey(KEY key) {
+        return map.remove(key) != null;
+    }
+    
+    /**
+     * Iterate over value set.
+     */
+    @Override
+    public Iterator<VALUE> iterator() {
+        return map.values().iterator();
     }
     
 }

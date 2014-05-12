@@ -10,20 +10,23 @@
 package org.carewebframework.help;
 
 import java.lang.reflect.Constructor;
+import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import org.carewebframework.api.AbstractGlobalMap;
+import org.carewebframework.common.RegistryMap;
 
 /**
  * Factory class for creating help sets using registered implementations.
  */
-public class HelpSetFactory extends AbstractGlobalMap<String, Class<? extends IHelpSet>> {
+public class HelpSetFactory {
     
     private static final Log log = LogFactory.getLog(HelpSetFactory.class);
     
     private static final HelpSetFactory instance = new HelpSetFactory();
+    
+    private final Map<String, Class<? extends IHelpSet>> map = new RegistryMap<String, Class<? extends IHelpSet>>(false);
     
     public static HelpSetFactory getInstance() {
         return instance;
@@ -38,7 +41,7 @@ public class HelpSetFactory extends AbstractGlobalMap<String, Class<? extends IH
      */
     public static Class<? extends IHelpSet> register(Class<? extends IHelpSet> clazz, String formats) {
         for (String type : formats.split("\\,")) {
-            instance.globalMap.put(type, clazz);
+            instance.map.put(type, clazz);
         }
         
         return clazz;
@@ -53,7 +56,7 @@ public class HelpSetFactory extends AbstractGlobalMap<String, Class<? extends IH
      */
     public static IHelpSet create(String format, String url) {
         try {
-            Class<? extends IHelpSet> clazz = instance.get(format);
+            Class<? extends IHelpSet> clazz = instance.map.get(format);
             
             if (clazz == null) {
                 throw new Exception("Unsupported help format: " + format);

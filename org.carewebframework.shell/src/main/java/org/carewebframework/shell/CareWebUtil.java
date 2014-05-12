@@ -22,8 +22,8 @@ public class CareWebUtil {
     private static final String ACTION_BASE = "zscript:" + CareWebUtil.class.getName() + ".getShell().";
     
     static {
-        ActionRegistry.addGlobalAction("@cwf.shell.action.lock.label", ACTION_BASE + "lock();");
-        ActionRegistry.addGlobalAction("@cwf.shell.action.logout.label", ACTION_BASE + "logout();");
+        ActionRegistry.register(true, "cwf.shell.lock", "@cwf.shell.action.lock.label", ACTION_BASE + "lock();");
+        ActionRegistry.register(true, "cwf.shell.logout", "@cwf.shell.action.logout.label", ACTION_BASE + "logout();");
     }
     
     /**

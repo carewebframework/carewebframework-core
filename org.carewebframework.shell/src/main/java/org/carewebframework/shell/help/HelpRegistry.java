@@ -9,12 +9,12 @@
  */
 package org.carewebframework.shell.help;
 
-import org.carewebframework.api.AbstractGlobalRegistry;
+import org.carewebframework.common.AbstractRegistry;
 
 /**
  * Registry of all known help modules.
  */
-public class HelpRegistry extends AbstractGlobalRegistry<String, HelpDefinition> {
+public class HelpRegistry extends AbstractRegistry<String, HelpDefinition> {
     
     private static final HelpRegistry instance = new HelpRegistry();
     

@@ -52,7 +52,7 @@ public class HelpDefinition {
      */
     public void destroy() {
         if (helpRegistry != null) {
-            helpRegistry.remove(this);
+            helpRegistry.unregister(this);
         }
     }
     
@@ -62,7 +62,7 @@ public class HelpDefinition {
     public void init() {
         if (title != null && !title.isEmpty()) {
             if (helpRegistry != null) {
-                helpRegistry.add(this);
+                helpRegistry.register(this);
             }
         }
     }

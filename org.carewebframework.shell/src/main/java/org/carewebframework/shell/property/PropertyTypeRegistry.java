@@ -11,7 +11,7 @@ package org.carewebframework.shell.property;
 
 import java.util.Date;
 
-import org.carewebframework.api.AbstractGlobalRegistry;
+import org.carewebframework.common.AbstractRegistry;
 import org.carewebframework.shell.designer.PropertyEditorAction;
 import org.carewebframework.shell.designer.PropertyEditorBase;
 import org.carewebframework.shell.designer.PropertyEditorBoolean;
@@ -27,7 +27,7 @@ import org.carewebframework.shell.designer.PropertyEditorText;
 /**
  * Registry of all supported property types.
  */
-public class PropertyTypeRegistry extends AbstractGlobalRegistry<String, PropertyType> {
+public class PropertyTypeRegistry extends AbstractRegistry<String, PropertyType> {
     
     private static final PropertyTypeRegistry instance = new PropertyTypeRegistry();
     
@@ -68,7 +68,7 @@ public class PropertyTypeRegistry extends AbstractGlobalRegistry<String, Propert
      */
     public void add(String typeName, Class<?> javaClass, Class<? extends PropertyEditorBase> editorClass) {
         if (get(typeName) == null) {
-            add(new PropertyType(typeName, javaClass, editorClass));
+            register(new PropertyType(typeName, javaClass, editorClass));
         }
     }
     

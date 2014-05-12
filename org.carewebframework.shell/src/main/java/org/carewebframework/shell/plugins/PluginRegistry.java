@@ -9,14 +9,14 @@
  */
 package org.carewebframework.shell.plugins;
 
-import org.carewebframework.api.AbstractGlobalRegistry;
+import org.carewebframework.common.AbstractRegistry;
 
 /**
  * Registry of all known plugins.
  */
-public class PluginRegistry extends AbstractGlobalRegistry<String, PluginDefinition> {
+public class PluginRegistry extends AbstractRegistry<String, PluginDefinition> {
     
-    private final AbstractGlobalRegistry<Class<?>, PluginDefinition> classRegistry = new AbstractGlobalRegistry<Class<?>, PluginDefinition>() {
+    private final AbstractRegistry<Class<?>, PluginDefinition> classRegistry = new AbstractRegistry<Class<?>, PluginDefinition>() {
         
         @Override
         protected Class<?> getKey(PluginDefinition item) {
@@ -38,19 +38,19 @@ public class PluginRegistry extends AbstractGlobalRegistry<String, PluginDefinit
     }
     
     @Override
-    public void add(PluginDefinition item) {
-        super.add(item);
-        classRegistry.add(item);
+    public void register(PluginDefinition item) {
+        super.register(item);
+        classRegistry.register(item);
     }
     
-    public boolean remove(Class<?> clazz) {
-        return remove(get(clazz));
+    public boolean unregister(Class<?> clazz) {
+        return unregister(get(clazz));
     }
     
     @Override
-    public boolean remove(PluginDefinition item) {
-        classRegistry.remove(item);
-        return super.remove(item);
+    public boolean unregister(PluginDefinition item) {
+        classRegistry.unregister(item);
+        return super.unregister(item);
     }
     
     public PluginDefinition get(Class<?> clazz) {

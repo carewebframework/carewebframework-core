@@ -19,7 +19,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import org.carewebframework.api.AbstractGlobalRegistry;
+import org.carewebframework.common.AbstractRegistry;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
@@ -31,7 +31,7 @@ import org.springframework.core.io.Resource;
  * AliasType class. Aliases may be loaded from one or more property files and may be added
  * programmatically.
  */
-public class AliasTypeRegistry extends AbstractGlobalRegistry<String, AliasType> implements ApplicationContextAware {
+public class AliasTypeRegistry extends AbstractRegistry<String, AliasType> implements ApplicationContextAware {
     
     private static final Log log = LogFactory.getLog(AliasTypeRegistry.class);
     
@@ -106,7 +106,7 @@ public class AliasTypeRegistry extends AbstractGlobalRegistry<String, AliasType>
         AliasType type = super.get(key);
         
         if (type == null) {
-            add(type = new AliasType(key));
+            register(type = new AliasType(key));
         }
         
         return type;

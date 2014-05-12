@@ -13,14 +13,14 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import org.carewebframework.api.AbstractGlobalCache;
+import org.carewebframework.common.AbstractCache;
 
 import org.zkoss.zk.ui.metainfo.PageDefinition;
 
 /**
  * Supports caching of zul page definitions.
  */
-public class ZulGlobalCache extends AbstractGlobalCache<String, PageDefinition> {
+public class ZulGlobalCache extends AbstractCache<String, PageDefinition> {
     
     private static final Log log = LogFactory.getLog(ZulGlobalCache.class);
     
@@ -43,7 +43,7 @@ public class ZulGlobalCache extends AbstractGlobalCache<String, PageDefinition> 
     }
     
     /**
-     * @see org.carewebframework.api.AbstractGlobalCache#fetch(java.lang.Object)
+     * @see org.carewebframework.common.AbstractCache#fetch(java.lang.Object)
      */
     @Override
     protected PageDefinition fetch(final String filename) {

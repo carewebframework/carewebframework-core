@@ -7,10 +7,13 @@
  * Disclaimer of Warranty and Limitation of Liability available at
  * http://www.carewebframework.org/licensing/disclaimer.
  */
-package org.carewebframework.api;
+package org.carewebframework.common;
 
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Abstract class for managing globally cached data. Subclasses must implement the fetch logic for
@@ -19,7 +22,9 @@ import java.util.Set;
  * @param <KEY> The class of the indexing key.
  * @param <VALUE> The class of the cached item.
  */
-public abstract class AbstractGlobalCache<KEY, VALUE> extends AbstractGlobalMap<KEY, VALUE> {
+public abstract class AbstractCache<KEY, VALUE> implements Iterable<VALUE> {
+    
+    private final Map<KEY, VALUE> map = new ConcurrentHashMap<KEY, VALUE>();
     
     /**
      * Logic to retrieve the data item from its primary store based on the provided key. The
@@ -38,9 +43,8 @@ public abstract class AbstractGlobalCache<KEY, VALUE> extends AbstractGlobalMap<
      * @param key The key.
      * @return The associated value.
      */
-    @Override
     public VALUE get(KEY key) {
-        return globalMap.containsKey(key) ? globalMap.get(key) : internalGet(key);
+        return map.containsKey(key) ? map.get(key) : internalGet(key);
     }
     
     /**
@@ -49,14 +53,14 @@ public abstract class AbstractGlobalCache<KEY, VALUE> extends AbstractGlobalMap<
      * @param key The key.
      * @return The associated value.
      */
-    private synchronized VALUE internalGet(KEY key) {
-        VALUE value = globalMap.get(key);
+    private VALUE internalGet(KEY key) {
+        VALUE value = null;
         
-        if (value == null) {
-            value = fetch(key);
+        synchronized (map) {
+            value = map.get(key);
             
-            if (value != null) {
-                globalMap.put(key, value);
+            if (value == null) {
+                map.put(key, value = fetch(key));
             }
         }
         
@@ -66,13 +70,23 @@ public abstract class AbstractGlobalCache<KEY, VALUE> extends AbstractGlobalMap<
     /**
      * Refresh the cache. Any existing entries in the cache will be re-fetched after it is cleared.
      */
-    public synchronized void refresh() {
-        Set<KEY> contents = new HashSet<KEY>(globalMap.keySet());
-        clear();
-        
-        for (KEY key : contents) {
-            internalGet(key);
+    public void refresh() {
+        synchronized (map) {
+            Set<KEY> contents = new HashSet<KEY>(map.keySet());
+            map.clear();
+            
+            for (KEY key : contents) {
+                internalGet(key);
+            }
         }
+    }
+    
+    /**
+     * Iterate over value set.
+     */
+    @Override
+    public Iterator<VALUE> iterator() {
+        return map.values().iterator();
     }
     
 }

@@ -9,13 +9,13 @@
  */
 package org.carewebframework.help;
 
-import org.carewebframework.api.AbstractGlobalCache;
+import org.carewebframework.common.AbstractCache;
 import org.carewebframework.help.HelpSetCache.HelpSetDescriptor;
 
 /**
  * Maintains a cache of all known help sets. This is a singleton class.
  */
-public class HelpSetCache extends AbstractGlobalCache<HelpSetDescriptor, IHelpSet> {
+public class HelpSetCache extends AbstractCache<HelpSetDescriptor, IHelpSet> {
     
     private static final HelpSetCache instance = new HelpSetCache();
     

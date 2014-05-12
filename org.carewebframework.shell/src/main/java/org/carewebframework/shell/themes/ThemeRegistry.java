@@ -9,12 +9,12 @@
  */
 package org.carewebframework.shell.themes;
 
-import org.carewebframework.api.AbstractGlobalRegistry;
+import org.carewebframework.common.AbstractRegistry;
 
 /**
  * Registry for theme definitions.
  */
-public class ThemeRegistry extends AbstractGlobalRegistry<String, ThemeDefinition> {
+public class ThemeRegistry extends AbstractRegistry<String, ThemeDefinition> {
     
     private static final ThemeRegistry instance = new ThemeRegistry();
     

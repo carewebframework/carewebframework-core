@@ -148,7 +148,7 @@ public class PluginDefinition {
      */
     public void destroy() {
         if (pluginRegistry != null) {
-            pluginRegistry.remove(this);
+            pluginRegistry.unregister(this);
         }
     }
     
@@ -158,7 +158,7 @@ public class PluginDefinition {
     public void init() {
         if (name != null && !name.isEmpty()) {
             if (pluginRegistry != null) {
-                pluginRegistry.add(this);
+                pluginRegistry.register(this);
             }
         }
     }

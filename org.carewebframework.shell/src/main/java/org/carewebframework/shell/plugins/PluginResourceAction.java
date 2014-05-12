@@ -16,11 +16,32 @@ import org.carewebframework.ui.action.ActionRegistry;
  */
 public class PluginResourceAction implements IPluginResource {
     
+    // The unique id of the action.
+    private String id;
+    
     // The label of the action.
     private String label;
     
     // The script of the action
     private String script;
+    
+    /**
+     * Returns the unique id associated with the action.
+     * 
+     * @return
+     */
+    public String getId() {
+        return id;
+    }
+    
+    /**
+     * Sets the unique id associated with the action.
+     * 
+     * @param id
+     */
+    public void setId(String id) {
+        this.id = id;
+    }
     
     /**
      * Returns the label of the action.
@@ -63,6 +84,6 @@ public class PluginResourceAction implements IPluginResource {
      */
     @Override
     public void process(PluginContainer container) {
-        ActionRegistry.addLocalAction(label, script);
+        ActionRegistry.register(false, id, label, script);
     }
 }

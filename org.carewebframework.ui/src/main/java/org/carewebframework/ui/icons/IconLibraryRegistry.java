@@ -16,7 +16,7 @@ import org.apache.commons.digester.SimpleRegexMatcher;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import org.carewebframework.api.AbstractGlobalRegistry;
+import org.carewebframework.common.AbstractRegistry;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
@@ -25,7 +25,7 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
  * Registry for icon libraries. Will automatically registry icon library beans instantiated in the
  * root container.
  */
-public class IconLibraryRegistry extends AbstractGlobalRegistry<String, IIconLibrary> implements BeanPostProcessor {
+public class IconLibraryRegistry extends AbstractRegistry<String, IIconLibrary> implements BeanPostProcessor {
     
     private static final Log log = LogFactory.getLog(IconLibraryRegistry.class);
     
@@ -71,7 +71,7 @@ public class IconLibraryRegistry extends AbstractGlobalRegistry<String, IIconLib
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
         if (bean instanceof IIconLibrary) {
             IIconLibrary lib = (IIconLibrary) bean;
-            add(lib);
+            register(lib);
             log.info("Registered icon library: " + lib.getId());
         }
         

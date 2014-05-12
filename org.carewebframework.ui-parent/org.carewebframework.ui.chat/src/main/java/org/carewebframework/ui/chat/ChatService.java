@@ -80,8 +80,8 @@ public class ChatService implements IParticipantUpdate {
     public ChatService(IEventManager eventManager) {
         this.eventManager = eventManager;
         self = ((ILocalEventDispatcher) eventManager).getGlobalEventDispatcher().getPublisherInfo();
-        ActionRegistry.addLocalAction("@chat.action.create.session", "zscript:" + ChatService.class.getName()
-                + ".getInstance().createSession();");
+        ActionRegistry.register(false, "chat.create.session", "@chat.action.create.session",
+            "zscript:" + ChatService.class.getName() + ".getInstance().createSession();");
     }
     
     /**
