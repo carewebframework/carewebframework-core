@@ -10,6 +10,7 @@
 package org.carewebframework.shell.plugins;
 
 import org.carewebframework.common.AbstractRegistry;
+import org.carewebframework.common.RegistryMap.DuplicateAction;
 
 /**
  * Registry of all known plugins.
@@ -34,7 +35,7 @@ public class PluginRegistry extends AbstractRegistry<String, PluginDefinition> {
      * Enforce singleton instance.
      */
     private PluginRegistry() {
-        super(false);
+        super(DuplicateAction.ERROR);
     }
     
     @Override
