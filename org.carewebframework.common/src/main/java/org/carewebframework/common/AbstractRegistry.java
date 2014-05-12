@@ -12,6 +12,8 @@ package org.carewebframework.common;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.carewebframework.common.RegistryMap.DuplicateAction;
+
 /**
  * Abstract base class for thread-safe registry of shared objects.
  * 
@@ -23,11 +25,11 @@ public abstract class AbstractRegistry<KEY, VALUE> implements Iterable<VALUE> {
     protected final Map<KEY, VALUE> map;
     
     protected AbstractRegistry() {
-        this(true);
+        this(null);
     }
     
-    protected AbstractRegistry(boolean replaceDuplicates) {
-        map = new RegistryMap<KEY, VALUE>(replaceDuplicates);
+    protected AbstractRegistry(DuplicateAction duplicateAction) {
+        map = new RegistryMap<KEY, VALUE>(duplicateAction);
     }
     
     /**

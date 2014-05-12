@@ -16,6 +16,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import org.carewebframework.common.RegistryMap;
+import org.carewebframework.common.RegistryMap.DuplicateAction;
 
 /**
  * Factory class for creating help sets using registered implementations.
@@ -26,7 +27,8 @@ public class HelpSetFactory {
     
     private static final HelpSetFactory instance = new HelpSetFactory();
     
-    private final Map<String, Class<? extends IHelpSet>> map = new RegistryMap<String, Class<? extends IHelpSet>>(false);
+    private final Map<String, Class<? extends IHelpSet>> map = new RegistryMap<String, Class<? extends IHelpSet>>(
+            DuplicateAction.ERROR);
     
     public static HelpSetFactory getInstance() {
         return instance;

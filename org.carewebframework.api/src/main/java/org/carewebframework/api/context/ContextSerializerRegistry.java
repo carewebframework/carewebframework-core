@@ -10,6 +10,7 @@
 package org.carewebframework.api.context;
 
 import org.carewebframework.common.AbstractRegistry;
+import org.carewebframework.common.RegistryMap.DuplicateAction;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.DestructionAwareBeanPostProcessor;
@@ -29,7 +30,7 @@ public class ContextSerializerRegistry extends AbstractRegistry<Class<?>, IConte
      * Enforce singleton instance.
      */
     private ContextSerializerRegistry() {
-        super(false);
+        super(DuplicateAction.ERROR);
     }
     
     @Override

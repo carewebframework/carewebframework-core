@@ -23,15 +23,21 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class RegistryMap<KEY, VALUE> implements Map<KEY, VALUE> {
     
+    public enum DuplicateAction {
+        REPLACE, // Replace existing key value (default).
+        IGNORE, // Ignore attempt to replace existing key value.
+        ERROR // Throw exception on duplicate key.
+    };
+    
     private final Map<KEY, VALUE> map;
     
-    private final boolean replaceDuplicates;
+    private final DuplicateAction duplicateAction;
     
     /**
      * Defaults to concurrent hash map and replaceable keys.
      */
     public RegistryMap() {
-        this(true);
+        this(null, null);
     }
     
     /**
@@ -40,26 +46,24 @@ public class RegistryMap<KEY, VALUE> implements Map<KEY, VALUE> {
      * @param map Map to be wrapped. If null, a concurrent hash map is created and used.
      */
     public RegistryMap(Map<KEY, VALUE> map) {
-        this(map, true);
+        this(map, null);
     }
     
     /**
      * Uses concurrent hash map.
      * 
-     * @param replaceDuplicates If false, an exception is thrown when attempting to store a
-     *            duplicate entry. If true, the duplicate entry replaces the original.
+     * @param duplicateAction Behavior on attempt to replace existing key.
      */
-    public RegistryMap(boolean replaceDuplicates) {
-        this(null, replaceDuplicates);
+    public RegistryMap(DuplicateAction duplicateAction) {
+        this(null, duplicateAction);
     }
     
     /**
      * @param map Map to be wrapped. If null, a concurrent hash map is created and used.
-     * @param replaceDuplicates If false, an exception is thrown when attempting to store a
-     *            duplicate entry. If true, the duplicate entry replaces the original.
+     * @param duplicateAction Behavior on attempt to replace existing key.
      */
-    public RegistryMap(Map<KEY, VALUE> map, boolean replaceDuplicates) {
-        this.replaceDuplicates = replaceDuplicates;
+    public RegistryMap(Map<KEY, VALUE> map, DuplicateAction duplicateAction) {
+        this.duplicateAction = duplicateAction == null ? DuplicateAction.REPLACE : duplicateAction;
         this.map = map == null ? new ConcurrentHashMap<KEY, VALUE>() : map;
     }
     
@@ -95,14 +99,28 @@ public class RegistryMap<KEY, VALUE> implements Map<KEY, VALUE> {
         if (key != null) {
             oldValue = map.get(key);
             
-            if (!replaceDuplicates && oldValue != null && !oldValue.equals(value)) {
-                throw new IllegalArgumentException("Cannot modify existing entry with the key '" + key + "'.");
-            }
-            
             if (value == null) {
                 map.remove(key);
-            } else {
+                return oldValue;
+            }
+            
+            if (oldValue == null) {
                 map.put(key, value);
+            } else {
+                switch (duplicateAction) {
+                    case IGNORE:
+                        break;
+                    
+                    case REPLACE:
+                        map.put(key, value);
+                        break;
+                    
+                    case ERROR:
+                        if (!oldValue.equals(value)) {
+                            throw new IllegalArgumentException("Cannot modify existing entry with the key '" + key + "'.");
+                        }
+                        break;
+                }
             }
         }
         

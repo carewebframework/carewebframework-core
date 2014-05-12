@@ -16,6 +16,7 @@ import java.util.Map;
 
 import org.carewebframework.api.FrameworkUtil;
 import org.carewebframework.common.RegistryMap;
+import org.carewebframework.common.RegistryMap.DuplicateAction;
 
 /**
  * Global (shared across application instances) and local (restricted to current desktop) registry
@@ -27,7 +28,7 @@ public class ActionRegistry implements Iterable<IAction> {
     
     private static final ActionRegistry instance = new ActionRegistry();
     
-    private final RegistryMap<String, IAction> globalMap = new RegistryMap<String, IAction>(false);
+    private final RegistryMap<String, IAction> globalMap = new RegistryMap<String, IAction>(DuplicateAction.ERROR);
     
     public enum ActionScope {
         BOTH, GLOBAL, LOCAL
