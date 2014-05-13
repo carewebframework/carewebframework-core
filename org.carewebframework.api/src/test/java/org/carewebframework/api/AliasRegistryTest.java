@@ -21,19 +21,19 @@ public class AliasRegistryTest {
     @Test
     public void test() {
         AliasTypeRegistry reg = AliasTypeRegistry.getInstance();
-        reg.get("AUTHORITY").registerAlias("auth1", "auth.alias1");
-        reg.get("AUTHORITY").registerAlias("auth2", "auth.alias2");
-        AliasTypeRegistry.registerAlias("AUTHORITY", "auth3", "auth.alias3");
-        reg.get("AUTHORITY").registerAlias("authx*", "auth.aliasx*");
-        reg.get("AUTHORITY").registerAlias("authy.*.abc.*", "authz.*.xyz.*");
-        reg.get("AUTHORITY").registerAlias("authy.?.def.*", "authz.?.xyz.*");
+        reg.get("AUTHORITY").register("auth1", "auth.alias1");
+        reg.get("AUTHORITY").register("auth2", "auth.alias2");
+        AliasTypeRegistry.register("AUTHORITY", "auth3", "auth.alias3");
+        reg.get("AUTHORITY").register("authx*", "auth.aliasx*");
+        reg.get("AUTHORITY").register("authy.*.abc.*", "authz.*.xyz.*");
+        reg.get("AUTHORITY").register("authy.?.def.*", "authz.?.xyz.*");
         
-        reg.get("PROPERTY").registerAlias("prop1", "prop.alias1");
-        reg.get("PROPERTY").registerAlias("prop2", "prop.alias2");
-        AliasTypeRegistry.registerAlias("PROPERTY", "prop3", "prop.alias3");
-        reg.get("PROPERTY").registerAlias("propx*", "prop.aliasx*");
-        reg.get("PROPERTY").registerAlias("propy.*.abc.*", "propz.*.xyz.*");
-        reg.get("PROPERTY").registerAlias("propy.?.def.*", "propz.?.xyz.*");
+        reg.get("PROPERTY").register("prop1", "prop.alias1");
+        reg.get("PROPERTY").register("prop2", "prop.alias2");
+        AliasTypeRegistry.register("PROPERTY", "prop3", "prop.alias3");
+        reg.get("PROPERTY").register("propx*", "prop.aliasx*");
+        reg.get("PROPERTY").register("propy.*.abc.*", "propz.*.xyz.*");
+        reg.get("PROPERTY").register("propy.?.def.*", "propz.?.xyz.*");
         
         assertEquals("auth.alias1", reg.get("AUTHORITY").get("auth1"));
         assertEquals("auth.alias2", reg.get("AUTHORITY").get("auth2"));
@@ -51,7 +51,7 @@ public class AliasRegistryTest {
         assertEquals("propz.9.xyz.789", reg.get("PROPERTY").get("propy.9.def.789"));
         assertNull(reg.get("PROPERTY").get("prop.test.property"));
         
-        reg.get("AUTHORITY").registerAlias("auth1", "auth.new.alias1");
+        reg.get("AUTHORITY").register("auth1", "auth.new.alias1");
     }
     
 }

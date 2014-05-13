@@ -67,7 +67,7 @@ public class AliasType {
      * @param local Local name.
      * @param alias Alias for the key. A null value removes any existing alias.
      */
-    public void registerAlias(String local, String alias) {
+    public void register(String local, String alias) {
         Map<String, String> map = local.contains("*") || local.contains("?") ? wildcardMap : aliasMap;
         
         if (alias == null) {

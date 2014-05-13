@@ -152,7 +152,7 @@ public abstract class AbstractSecurityService implements ISecurityService {
      */
     @Override
     public void setAuthorityAlias(String authority, String alias) {
-        authorityAlias.registerAlias(authority, alias);
+        authorityAlias.register(authority, alias);
     }
     
     /**

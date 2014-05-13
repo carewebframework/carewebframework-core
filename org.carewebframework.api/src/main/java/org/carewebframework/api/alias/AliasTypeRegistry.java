@@ -73,8 +73,8 @@ public class AliasTypeRegistry extends AbstractRegistry<String, AliasType> imple
      * @param local Local name.
      * @param alias Alias for the local name. A null value removes any existing alias.
      */
-    public static void registerAlias(String type, String local, String alias) {
-        instance.get(type).registerAlias(local, alias);
+    public static void register(String type, String local, String alias) {
+        instance.get(type).register(local, alias);
     }
     
     /**
@@ -165,7 +165,7 @@ public class AliasTypeRegistry extends AbstractRegistry<String, AliasType> imple
                 
                 for (Entry<Object, Object> entry : props.entrySet()) {
                     try {
-                        registerAlias((String) entry.getKey(), (String) entry.getValue());
+                        register((String) entry.getKey(), (String) entry.getValue());
                         entryCount++;
                     } catch (Exception e) {
                         log.error("Error registering alias for '" + entry.getKey() + "'.", e);
@@ -187,14 +187,14 @@ public class AliasTypeRegistry extends AbstractRegistry<String, AliasType> imple
      * @param key Local name with alias type prefix.
      * @param alias Alias for the key. A null value removes any existing alias.
      */
-    private void registerAlias(String key, String alias) {
+    private void register(String key, String alias) {
         String[] pcs = key.split(PREFIX_DELIM_REGEX, 2);
         
         if (pcs.length != 2) {
             throw new IllegalArgumentException("Illegal key value: " + key);
         }
         
-        registerAlias(pcs[0], pcs[1], alias);
+        register(pcs[0], pcs[1], alias);
     }
     
     @Override
