@@ -38,10 +38,6 @@
 			<constructor-arg value="${org.carewebframework.icons.dimensions.default}" />
 		</bean>
 
-		<!-- A registry of actions -->
-		<bean id="actionRegistry" class="org.carewebframework.ui.action.ActionRegistry"
-			factory-method="getInstance" />
-
 		<!-- List of shortcut bindings for commands. -->
 		<bean id="commandShortcuts" class="org.carewebframework.ui.command.CommandShortcuts">
 			<constructor-arg value="${org.carewebframework.location.shortcuts}" />

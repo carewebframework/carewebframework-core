@@ -174,7 +174,7 @@ public class ActionListener implements EventListener<Event> {
         IAction actn = null;
         
         if (!StringUtils.isEmpty(action)) {
-            if ((actn = ActionRegistry.getInstance().get(action)) == null) {
+            if ((actn = ActionRegistry.getRegisteredAction(action)) == null) {
                 actn = ActionUtil.createAction(null, action);
             }
         }

@@ -16,10 +16,9 @@ import java.util.List;
 import org.carewebframework.api.security.SecurityUtil;
 import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.property.PropertyInfo;
+import org.carewebframework.ui.action.ActionEntry;
 import org.carewebframework.ui.action.ActionRegistry;
 import org.carewebframework.ui.action.ActionRegistry.ActionScope;
-import org.carewebframework.ui.action.ActionUtil;
-import org.carewebframework.ui.action.IAction;
 
 /**
  * Editor for actions.
@@ -33,12 +32,11 @@ public class PropertyEditorAction extends PropertyEditorList {
     protected void init(UIElementBase target, PropertyInfo propInfo, PropertyGrid propGrid) {
         propInfo.getConfig().setProperty("readonly", Boolean.toString(!SecurityUtil.hasDebugRole()));
         super.init(target, propInfo, propGrid);
-        List<IAction> actions = new ArrayList<IAction>(ActionRegistry.getInstance().getRegisteredActions(ActionScope.BOTH));
-        Collections.sort(actions, ActionUtil.comparator);
+        List<ActionEntry> actions = new ArrayList<ActionEntry>(ActionRegistry.getRegisteredActions(ActionScope.BOTH));
+        Collections.sort(actions);
         
-        for (IAction action : actions) {
-            String label = action.getLabel();
-            appendItem(action.toString(), label == null ? action.getScript() : label);
+        for (ActionEntry action : actions) {
+            appendItem(action.toString(), action.getId());
         }
     }
 }

@@ -25,7 +25,7 @@ public class ActionUtil {
         
         @Override
         public int compare(IAction a1, IAction a2) {
-            return a1.toString().compareTo(a2.toString());
+            return a1.toString().compareToIgnoreCase(a2.toString());
         }
         
     };

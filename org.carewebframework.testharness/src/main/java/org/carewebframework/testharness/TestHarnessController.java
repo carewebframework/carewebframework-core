@@ -77,7 +77,7 @@ public class TestHarnessController extends FrameworkController {
             shell.register("Test Harness\\" + plugin.getName(), plugin);
         }
         
-        List<IAction> actions = new ArrayList<IAction>(ActionRegistry.getInstance().getRegisteredActions(ActionScope.BOTH));
+        List<IAction> actions = new ArrayList<IAction>(ActionRegistry.getRegisteredActions(ActionScope.BOTH));
         Collections.sort(actions, actionComparator);
         
         for (IAction action : actions) {
