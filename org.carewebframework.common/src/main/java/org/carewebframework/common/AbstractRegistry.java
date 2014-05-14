@@ -82,6 +82,13 @@ public abstract class AbstractRegistry<KEY, VALUE> implements Iterable<VALUE> {
     }
     
     /**
+     * Remove all registry entries.
+     */
+    public void clear() {
+        map.clear();
+    }
+    
+    /**
      * Iterate over value set.
      */
     @Override
