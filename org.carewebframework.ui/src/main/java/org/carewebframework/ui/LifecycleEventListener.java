@@ -17,6 +17,8 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import org.carewebframework.api.CompositeException;
+
 /**
  * Dispatches creation and destruction events to registered listeners.
  * 
@@ -91,6 +93,7 @@ public class LifecycleEventListener<T extends Object> {
         }
         
         int last = list.size() - 1;
+        CompositeException exc = new CompositeException("Error executing lifecycle callback.");
         
         for (int i = 0; i <= last; i++) {
             ILifecycleCallback<T> callback = list.get(init ? i : last - i);
@@ -103,7 +106,10 @@ public class LifecycleEventListener<T extends Object> {
                 }
             } catch (Exception e) {
                 log.error("Error executing lifecycle callback.", e);
+                exc.add(e);
             }
         }
+        
+        exc.throwIfExceptions();
     }
 }
