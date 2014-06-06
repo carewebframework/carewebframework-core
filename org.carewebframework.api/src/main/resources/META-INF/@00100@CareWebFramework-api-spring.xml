@@ -16,7 +16,7 @@
 		<context:annotation-config />
 
  		<context:property-placeholder
-			location="classpath*:/META-INF/*-default.properties,classpath:cwf*.properties"
+			location="classpath*:/META-INF/*-default.properties,${org.carewebframework.location.properties:classpath:cwf*.properties}"
 			ignore-resource-not-found="true"  />
 
 		<bean id="appContextFinder" class="org.carewebframework.api.spring.AppContextFinder">
