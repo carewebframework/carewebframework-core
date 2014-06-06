@@ -15,6 +15,13 @@
 
 		<context:annotation-config />
 
+		<!-- 
+		The intent here is for property 'org.carewebframework.location.properties' to purposely 
+		not exist in any *-default.properties so that a System property could be consulted first, 
+		thus overriding the default 'classpath:cwf*.properties'.  One can start a JVM/tomcat with
+		that property pointing to an external property file (i.e. outside the WAR) where the 
+		embedded cwf.properties file is not used.
+		-->
  		<context:property-placeholder
 			location="classpath*:/META-INF/*-default.properties,${org.carewebframework.location.properties:classpath:cwf*.properties}"
 			ignore-resource-not-found="true"  />
