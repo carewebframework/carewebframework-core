@@ -611,7 +611,7 @@
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.security</groupId>
-				<artifactId>spring-security-idap</artifactId>
+				<artifactId>spring-security-ldap</artifactId>
 				<version>${org.springframework.security.version}</version>
 				<type>jar</type>
 				<scope>compile</scope>
