@@ -1,8 +1,8 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
- * 
+ *
  * This Source Code Form is also subject to the terms of the Health-Related Additional
  * Disclaimer of Warranty and Limitation of Liability available at
  * http://www.carewebframework.org/licensing/disclaimer.
@@ -12,6 +12,7 @@ package org.carewebframework.shell.layout;
 import org.carewebframework.shell.designer.PropertyEditorTreeView;
 import org.carewebframework.shell.property.PropertyTypeRegistry;
 import org.carewebframework.ui.zk.TreeUtil;
+import org.carewebframework.ui.zk.ZKUtil;
 
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
@@ -19,6 +20,7 @@ import org.zkoss.zk.ui.event.SelectEvent;
 import org.zkoss.zul.Div;
 import org.zkoss.zul.LayoutRegion;
 import org.zkoss.zul.Tree;
+import org.zkoss.zul.Treeitem;
 
 /**
  * A tree view consists of a selector pane on the left containing a ZK tree component and a view
@@ -63,7 +65,7 @@ public class UIElementTreeView extends UIElementZKBase {
     
     /**
      * Sets the caption of the selector pane.
-     * 
+     *
      * @param value Selector pane caption.
      */
     public void setCaption(String value) {
@@ -72,7 +74,7 @@ public class UIElementTreeView extends UIElementZKBase {
     
     /**
      * Returns the caption of the selector pane.
-     * 
+     *
      * @return Selector pane caption.
      */
     public String getCaption() {
@@ -81,7 +83,7 @@ public class UIElementTreeView extends UIElementZKBase {
     
     /**
      * Opens or closes the selector pane.
-     * 
+     *
      * @param value True to open the selector pane; false to close it.
      */
     public void setOpen(boolean value) {
@@ -90,7 +92,7 @@ public class UIElementTreeView extends UIElementZKBase {
     
     /**
      * Returns true if the selector pane is open.
-     * 
+     *
      * @return True if selector pane is open.
      */
     public boolean isOpen() {
@@ -124,7 +126,12 @@ public class UIElementTreeView extends UIElementZKBase {
     @Override
     public void activateChildren(boolean activate) {
         if (activePane == null) {
-            activePane = (UIElementTreePane) getAssociatedUIElement(tree.getSelectedItem());
+            Treeitem selItem = tree.getSelectedItem();
+            
+            if (selItem == null) {
+                selItem = ZKUtil.findChild(tree.getTreechildren(), Treeitem.class);
+            }
+            setActivePane((UIElementTreePane) getAssociatedUIElement(selItem));
         }
         
         if (activePane != null) {
@@ -134,7 +141,7 @@ public class UIElementTreeView extends UIElementZKBase {
     
     /**
      * Activates the specified pane. Any previously active pane will be deactivated.
-     * 
+     *
      * @param pane Pane to make active.
      */
     protected void setActivePane(UIElementTreePane pane) {
