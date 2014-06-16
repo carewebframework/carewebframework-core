@@ -12,7 +12,6 @@ package org.carewebframework.shell.layout;
 import org.carewebframework.shell.designer.PropertyEditorTreeView;
 import org.carewebframework.shell.property.PropertyTypeRegistry;
 import org.carewebframework.ui.zk.TreeUtil;
-import org.carewebframework.ui.zk.ZKUtil;
 
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
@@ -125,13 +124,10 @@ public class UIElementTreeView extends UIElementZKBase {
      */
     @Override
     public void activateChildren(boolean activate) {
-        if (activePane == null) {
+        if (activePane == null || !activePane.isVisible()) {
             Treeitem selItem = tree.getSelectedItem();
-            
-            if (selItem == null) {
-                selItem = ZKUtil.findChild(tree.getTreechildren(), Treeitem.class);
-            }
-            setActivePane((UIElementTreePane) getAssociatedUIElement(selItem));
+            UIElementBase active = selItem == null ? getFirstVisibleChild() : getAssociatedUIElement(selItem);
+            setActivePane((UIElementTreePane) active);
         }
         
         if (activePane != null) {
