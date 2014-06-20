@@ -16,6 +16,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
@@ -44,10 +45,12 @@ import com.fasterxml.jackson.databind.util.ClassUtil;
  */
 public class JSONUtil {
     
-    public static final ObjectMapper mapper = new ObjectMapper();
+    private static final String DEFAULT_TYPE_PROPERTY = "@class";
+    
+    private static final Map<String, ObjectMapper> mappers = new ConcurrentHashMap<String, ObjectMapper>();
     
     /**
-     * Identifies properties that require type metadata (via "@class" property).
+     * Identifies properties that require type metadata (via property specified in typeProperty).
      */
     private static class CWTypeResolverBuilder extends StdTypeResolverBuilder {
         
@@ -82,6 +85,12 @@ public class JSONUtil {
     private static class CWTypedIdResolver implements TypeIdResolver {
         
         private JavaType baseType;
+        
+        private ObjectMapper mapper;
+        
+        protected CWTypedIdResolver(ObjectMapper mapper) {
+            this.mapper = mapper;
+        }
         
         @Override
         public void init(JavaType baseType) {
@@ -144,12 +153,47 @@ public class JSONUtil {
     
     private static final Map<Class<?>, String> classToAlias = new HashMap<Class<?>, String>();
     
-    static {
-        TypeResolverBuilder<?> typer = new CWTypeResolverBuilder();
-        typer = typer.init(JsonTypeInfo.Id.CUSTOM, new CWTypedIdResolver());
-        typer = typer.inclusion(JsonTypeInfo.As.PROPERTY);
-        typer = typer.typeProperty("@class");
-        mapper.setDefaultTyping(typer);
+    /**
+     * Returns an instance of the mapper for the default type property.
+     * 
+     * @return A mapper.
+     */
+    public static ObjectMapper getMapper() {
+        return getMapper(null);
+    }
+    
+    /**
+     * Returns an instance of the mapper for the specified type property.
+     * 
+     * @param typeProperty The name of the property signifying the data type.
+     * @return A mapper.
+     */
+    public static ObjectMapper getMapper(String typeProperty) {
+        typeProperty = typeProperty == null ? DEFAULT_TYPE_PROPERTY : typeProperty;
+        ObjectMapper mapper = mappers.get(typeProperty);
+        return mapper == null ? initMapper(typeProperty) : mapper;
+    }
+    
+    /**
+     * Initializes a mapper in a thread-safe way.
+     * 
+     * @return The initialized mapper.
+     */
+    private static ObjectMapper initMapper(String typeProperty) {
+        synchronized (mappers) {
+            ObjectMapper mapper = mappers.get(typeProperty);
+            if (mapper == null) {
+                mapper = new ObjectMapper();
+                TypeResolverBuilder<?> typer = new CWTypeResolverBuilder();
+                typer = typer.init(JsonTypeInfo.Id.CUSTOM, new CWTypedIdResolver(mapper));
+                typer = typer.inclusion(JsonTypeInfo.As.PROPERTY);
+                typer = typer.typeProperty(typeProperty);
+                mapper.setDefaultTyping(typer);
+                mappers.put(typeProperty, mapper);
+            }
+            
+            return mapper;
+        }
     }
     
     /**
@@ -222,7 +266,17 @@ public class JSONUtil {
      * @param dateFormat Date format to use.
      */
     public static void setDateFormat(DateFormat dateFormat) {
-        mapper.setDateFormat(dateFormat);
+        setDateFormat(null, dateFormat);
+    }
+    
+    /**
+     * Sets the date format to be used when serializing dates.
+     * 
+     * @param typeProperty The name of the property signifying the data type.
+     * @param dateFormat Date format to use.
+     */
+    public static void setDateFormat(String typeProperty, DateFormat dateFormat) {
+        getMapper(typeProperty).setDateFormat(dateFormat);
     }
     
     /**
@@ -232,8 +286,19 @@ public class JSONUtil {
      * @return Serialized form of the object in JSON format.
      */
     public static String serialize(Object object) {
+        return serialize(null, object);
+    }
+    
+    /**
+     * Serializes an object to JSON format.
+     * 
+     * @param typeProperty The name of the property signifying the data type.
+     * @param object Object to be serialized.
+     * @return Serialized form of the object in JSON format.
+     */
+    public static String serialize(String typeProperty, Object object) {
         try {
-            return mapper.writeValueAsString(object);
+            return getMapper(typeProperty).writeValueAsString(object);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -246,16 +311,27 @@ public class JSONUtil {
      * @return An instance of the deserialized object.
      */
     public static Object deserialize(String data) {
+        return deserialize(null, data);
+    }
+    
+    /**
+     * Deserializes an object from JSON format.
+     * 
+     * @param typeProperty The name of the property signifying the data type.
+     * @param data Serialized form of the object.
+     * @return An instance of the deserialized object.
+     */
+    public static Object deserialize(String typeProperty, String data) {
         if (data == null) {
             return null;
         }
         
         if (data.startsWith("[")) {
-            return deserializeList(data, Object.class);
+            return deserializeList(typeProperty, data, Object.class);
         }
         
         try {
-            return mapper.readValue(data, Object.class);
+            return getMapper(typeProperty).readValue(data, Object.class);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -269,8 +345,20 @@ public class JSONUtil {
      * @return A list of objects of the specified type.
      */
     public static <T> List<T> deserializeList(String data, Class<T> clazz) {
+        return deserializeList(null, data, clazz);
+    }
+    
+    /**
+     * Deserializes a list of objects.
+     * 
+     * @param typeProperty The name of the property signifying the data type.
+     * @param data Serialized form of the list in JSON format.
+     * @param clazz The class of objects found in the list.
+     * @return A list of objects of the specified type.
+     */
+    public static <T> List<T> deserializeList(String typeProperty, String data, Class<T> clazz) {
         try {
-            return mapper.readValue(data, new TypeReference<List<T>>() {});
+            return getMapper(typeProperty).readValue(data, new TypeReference<List<T>>() {});
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

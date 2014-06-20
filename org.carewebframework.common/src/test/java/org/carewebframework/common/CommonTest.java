@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.TimeZone;
 
 import org.carewebframework.common.DateUtil.TimeUnit;
-
 import org.junit.Test;
 
 public class CommonTest {
@@ -129,20 +128,25 @@ public class CommonTest {
     @Test
     public void testSerializer() {
         JSONUtil.registerAlias("TestPerson", TestPerson.class);
+        testSerializer(null);
+        testSerializer("resourceType");
+    }
+    
+    private void testSerializer(String typeProperty) {
         TestPerson obj = new TestPerson();
-        String s = JSONUtil.serialize(obj);
+        String s = JSONUtil.serialize(typeProperty, obj);
         print(s);
-        TestPerson obj2 = (TestPerson) JSONUtil.deserialize(s);
+        TestPerson obj2 = (TestPerson) JSONUtil.deserialize(typeProperty, s);
         assertTrue(obj.equals(obj2));
         List<TestPerson> list = new ArrayList<TestPerson>();
         list.add(obj);
         list.add(obj);
-        s = JSONUtil.serialize(list);
+        s = JSONUtil.serialize(typeProperty, list);
         print(s);
-        List<TestPerson> list2 = JSONUtil.deserializeList(s, TestPerson.class);
+        List<TestPerson> list2 = JSONUtil.deserializeList(typeProperty, s, TestPerson.class);
         assertEquals(list, list2);
         @SuppressWarnings("unchecked")
-        List<TestPerson> list3 = (List<TestPerson>) JSONUtil.deserialize(s);
+        List<TestPerson> list3 = (List<TestPerson>) JSONUtil.deserialize(typeProperty, s);
         assertEquals(list, list3);
     }
     
