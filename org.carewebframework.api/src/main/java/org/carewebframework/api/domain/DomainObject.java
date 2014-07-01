@@ -18,33 +18,37 @@ import org.apache.commons.lang.StringUtils;
  * domain object from scratch. To wrap an existing domain object, use DomainObjectProxy.
  */
 public abstract class DomainObject implements Serializable, IDomainObject {
-
+    
     private static final long serialVersionUID = 1L;
-
+    
     private String id;
-
+    
     public DomainObject() {
     }
-
+    
+    public DomainObject(DomainObject src) {
+        id = src.id;
+    }
+    
     public DomainObject(String id) {
         this.id = id;
     }
-
+    
     @Override
     public String getDomainId() {
         return id;
     }
-
+    
     @Override
     public void setDomainId(String id) {
         this.id = id;
     }
-
+    
     @Override
     public boolean equals(Object object) {
         return object != null && object.getClass().equals(getClass()) && StringUtils.equals(((DomainObject) object).id, id);
     }
-
+    
     @Override
     public Object getProxiedObject() {
         return this;
