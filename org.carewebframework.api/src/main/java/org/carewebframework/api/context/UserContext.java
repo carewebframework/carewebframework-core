@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -12,21 +12,20 @@ package org.carewebframework.api.context;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import org.carewebframework.api.domain.IInstitution;
-import org.carewebframework.api.domain.IUser;
+import org.carewebframework.api.domain.IDomainObject;
 
 /**
  * Wrapper for shared user context.
  */
-public class UserContext extends ManagedContext<IUser> {
+public class UserContext extends ManagedContext<IDomainObject> {
     
     private static final Log log = LogFactory.getLog(UserContext.class);
     
-    private static final String SUBJECT_NAME = "User";
+    protected static final String SUBJECT_NAME = "User";
     
-    private static final String CCOW_USERNM = SUBJECT_NAME + ".Id.Logon";
+    protected static final String CCOW_USERNM = SUBJECT_NAME + ".Id.Logon";
     
-    private static final String CCOW_FULLNAME = SUBJECT_NAME + ".Co.Name";
+    protected static final String CCOW_FULLNAME = SUBJECT_NAME + ".Co.Name";
     
     // This is the interface that every user context subscriber must implement.
     public interface IUserContextEvent extends IContextEvent {};
@@ -36,7 +35,7 @@ public class UserContext extends ManagedContext<IUser> {
      * 
      * @param user New user
      */
-    public static void changeUser(IUser user) {
+    public static void changeUser(IDomainObject user) {
         try {
             getUserContext().requestContextChange(user);
         } catch (Exception e) {
@@ -50,27 +49,17 @@ public class UserContext extends ManagedContext<IUser> {
      * @return IDomainUser context
      */
     @SuppressWarnings("unchecked")
-    public static ISharedContext<IUser> getUserContext() {
-        return (ISharedContext<IUser>) ContextManager.getInstance().getSharedContext(UserContext.class.getName());
+    public static ISharedContext<IDomainObject> getUserContext() {
+        return (ISharedContext<IDomainObject>) ContextManager.getInstance().getSharedContext(UserContext.class.getName());
     }
     
     /**
      * Returns the user in the current context.
      * 
-     * @return IDomainUser
+     * @return User in current context.
      */
-    public static IUser getActiveUser() {
+    public static IDomainObject getActiveUser() {
         return getUserContext().getContextObject(false);
-    }
-    
-    /**
-     * Returns the institution of the active user, or null if no active user.
-     * 
-     * @return Institution
-     */
-    public static IInstitution getInstitution() {
-        IUser user = getActiveUser();
-        return user == null ? null : user.getInstitution();
     }
     
     /**
@@ -85,7 +74,7 @@ public class UserContext extends ManagedContext<IUser> {
      * 
      * @param user User that will be the initial state.
      */
-    public UserContext(IUser user) {
+    public UserContext(IDomainObject user) {
         super(SUBJECT_NAME, IUserContextEvent.class, user);
     }
     
@@ -93,9 +82,9 @@ public class UserContext extends ManagedContext<IUser> {
      * Creates a CCOW context from the specified user object.
      */
     @Override
-    public ContextItems toCCOWContext(IUser user) {
-        contextItems.setItem(CCOW_USERNM, user.getUsername());
-        contextItems.setItem(CCOW_FULLNAME, user.getFullName());
+    public ContextItems toCCOWContext(IDomainObject user) {
+        //contextItems.setItem(CCOW_USERNM, user.getUsername());
+        //contextItems.setItem(CCOW_FULLNAME, user.getFullName());
         return contextItems;
     }
     
@@ -103,12 +92,12 @@ public class UserContext extends ManagedContext<IUser> {
      * Returns a user object based on the specified CCOW context.
      */
     @Override
-    public IUser fromCCOWContext(ContextItems contextItems) {
+    public IDomainObject fromCCOWContext(ContextItems contextItems) {
         if (contextItems == null) {
             return null;
         }
         
-        IUser user = null; //TODO: finish
+        IDomainObject user = null; //TODO: finish
         return user;
     }
     

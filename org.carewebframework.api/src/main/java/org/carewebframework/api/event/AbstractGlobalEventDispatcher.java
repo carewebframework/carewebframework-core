@@ -15,7 +15,7 @@ import java.util.UUID;
 import org.apache.commons.lang.StringUtils;
 
 import org.carewebframework.api.FrameworkUtil;
-import org.carewebframework.api.domain.IUser;
+import org.carewebframework.api.domain.IDomainObject;
 import org.carewebframework.api.security.SecurityUtil;
 
 /**
@@ -27,17 +27,17 @@ import org.carewebframework.api.security.SecurityUtil;
  * local event dispatcher for local distribution.
  */
 public abstract class AbstractGlobalEventDispatcher implements IGlobalEventDispatcher {
-
+    
     private ILocalEventDispatcher localEventDispatcher;
-
+    
     private PingEventHandler pingEventHandler;
-
-    protected final IUser user;
-
+    
+    protected final IDomainObject user;
+    
     protected final PublisherInfo publisherInfo = new PublisherInfo();
-
+    
     private String appName;
-
+    
     /**
      * Create the global event dispatcher.
      */
@@ -45,24 +45,24 @@ public abstract class AbstractGlobalEventDispatcher implements IGlobalEventDispa
         super();
         user = SecurityUtil.getAuthenticatedUser();
     }
-
+    
     /**
      * Initialize after setting all requisite properties.
      */
     public void init() {
         publisherInfo.setEndpointId(getEndpointId());
         publisherInfo.setUserId(user == null ? null : getUserId(user));
-        publisherInfo.setUserName(user == null ? "" : user.getFullName());
+        publisherInfo.setUserName(user == null ? "" : user.toString());
         publisherInfo.setNodeId(getNodeId());
         publisherInfo.setAppName(getAppName());
-
+        
         if (localEventDispatcher != null) {
             localEventDispatcher.setGlobalEventDispatcher(this);
             pingEventHandler = new PingEventHandler((IEventManager) localEventDispatcher, publisherInfo);
             pingEventHandler.init();
         }
     }
-
+    
     /**
      * Cleanup this instance.
      */
@@ -71,7 +71,7 @@ public abstract class AbstractGlobalEventDispatcher implements IGlobalEventDispa
             pingEventHandler.destroy();
         }
     }
-
+    
     /**
      * Sets the local event dispatcher to be used for dispatching events received from the remote
      * server to local subscribers.
@@ -81,13 +81,13 @@ public abstract class AbstractGlobalEventDispatcher implements IGlobalEventDispa
     public void setLocalEventDispatcher(ILocalEventDispatcher localEventDispatcher) {
         this.localEventDispatcher = localEventDispatcher;
     }
-
+    
     /**
      * Process a host event subscribe/unsubscribe request.
      */
     @Override
     public abstract void subscribeRemoteEvent(String eventName, boolean subscribe);
-
+    
     /**
      * Fires a remote event.
      *
@@ -99,7 +99,7 @@ public abstract class AbstractGlobalEventDispatcher implements IGlobalEventDispa
      */
     @Override
     public abstract void fireRemoteEvent(String eventName, Serializable eventData, String recipients);
-
+    
     /**
      * Returns information about this publisher.
      */
@@ -107,7 +107,7 @@ public abstract class AbstractGlobalEventDispatcher implements IGlobalEventDispa
     public IPublisherInfo getPublisherInfo() {
         return publisherInfo;
     }
-
+    
     /**
      * Gets the unique id for this end point.
      *
@@ -116,17 +116,17 @@ public abstract class AbstractGlobalEventDispatcher implements IGlobalEventDispa
     protected String getEndpointId() {
         return UUID.randomUUID().toString();
     }
-
+    
     /**
      * Returns the unique identifier for the user.
      *
      * @param user The user.
      * @return Unique identifier for the user.
      */
-    protected String getUserId(IUser user) {
+    protected String getUserId(IDomainObject user) {
         return user.getDomainId();
     }
-
+    
     /**
      * Returns the node id. The default implementation will return null.
      *
@@ -135,7 +135,7 @@ public abstract class AbstractGlobalEventDispatcher implements IGlobalEventDispa
     protected String getNodeId() {
         return null;
     }
-
+    
     /**
      * Returns the application name.
      *
@@ -145,10 +145,10 @@ public abstract class AbstractGlobalEventDispatcher implements IGlobalEventDispa
         if (appName == null && FrameworkUtil.isInitialized()) {
             setAppName(FrameworkUtil.getAppName());
         }
-
+        
         return appName;
     }
-
+    
     /**
      * Allow for IOC injection of application name.
      *
@@ -157,7 +157,7 @@ public abstract class AbstractGlobalEventDispatcher implements IGlobalEventDispa
     public void setAppName(String appName) {
         this.appName = StringUtils.replace(appName, ",", " ");
     }
-
+    
     /**
      * Delivery the event to local subscribers. This may be overridden to provide alternate means
      * for delivering events.
@@ -170,7 +170,7 @@ public abstract class AbstractGlobalEventDispatcher implements IGlobalEventDispa
             localEventDispatcher.fireLocalEvent(eventName, eventData);
         }
     }
-
+    
     /**
      * Sends a CONNECT/DISCONNECT event for subscribers
      *
@@ -179,7 +179,7 @@ public abstract class AbstractGlobalEventDispatcher implements IGlobalEventDispa
     protected void updateConnectionStatus(boolean connected) {
         fireRemoteEvent(connected ? "CONNECT" : "DISCONNECT", publisherInfo, null);
     }
-
+    
     /**
      * Override to do any special setup prior to processing of messages.
      *
@@ -188,12 +188,12 @@ public abstract class AbstractGlobalEventDispatcher implements IGlobalEventDispa
     protected boolean beginMessageProcessing() {
         return true;
     }
-
+    
     /**
      * Override to do any special teardown after processing of messages.
      */
     protected void endMessageProcessing() {
-
+        
     }
-
+    
 }

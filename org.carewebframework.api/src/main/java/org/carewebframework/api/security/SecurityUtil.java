@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -11,7 +11,7 @@ package org.carewebframework.api.security;
 
 import java.util.Map;
 
-import org.carewebframework.api.domain.IUser;
+import org.carewebframework.api.domain.IDomainObject;
 import org.carewebframework.api.spring.SpringUtil;
 
 import org.springframework.util.AntPathMatcher;
@@ -64,18 +64,8 @@ public class SecurityUtil {
      * @return The authenticated user, or null if none.
      * @see ISecurityService#getAuthenticatedUser()
      */
-    public static IUser getAuthenticatedUser() {
+    public static IDomainObject getAuthenticatedUser() {
         return getSecurityService().getAuthenticatedUser();
-    }
-    
-    /**
-     * Returns the currently authenticated user's username.
-     * 
-     * @return The authenticated username, or null if none.
-     */
-    public static String getAuthenticatedUsername() {
-        IUser user = getSecurityService().getAuthenticatedUser();
-        return user == null ? null : user.getUsername();
     }
     
     /**

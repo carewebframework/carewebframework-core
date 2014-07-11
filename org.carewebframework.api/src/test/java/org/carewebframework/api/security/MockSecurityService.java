@@ -21,16 +21,16 @@ package org.carewebframework.api.security;
  *
  * Copyright (C) Regenstrief Institute.  All Rights Reserved.
  */
-import org.carewebframework.api.domain.IUser;
+import org.carewebframework.api.domain.IDomainObject;
 
 /**
  * Mock security service for testing.
  */
 public class MockSecurityService implements ISecurityService {
     
-    private final IUser mockUser;
+    private final IDomainObject mockUser;
     
-    public MockSecurityService(IUser mockUser) {
+    public MockSecurityService(IDomainObject mockUser) {
         this.mockUser = mockUser;
     }
     
@@ -73,7 +73,7 @@ public class MockSecurityService implements ISecurityService {
     }
     
     @Override
-    public IUser getAuthenticatedUser() {
+    public IDomainObject getAuthenticatedUser() {
         return mockUser;
     }
     

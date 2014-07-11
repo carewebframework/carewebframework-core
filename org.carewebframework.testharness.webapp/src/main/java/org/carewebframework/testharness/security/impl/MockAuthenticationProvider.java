@@ -12,8 +12,7 @@ package org.carewebframework.testharness.security.impl;
 import java.io.Serializable;
 import java.util.List;
 
-import org.carewebframework.api.domain.IInstitution;
-import org.carewebframework.api.domain.IUser;
+import org.carewebframework.api.domain.IDomainObject;
 import org.carewebframework.api.property.PropertyUtil;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.security.spring.AbstractAuthenticationProvider;
@@ -42,18 +41,16 @@ public class MockAuthenticationProvider extends AbstractAuthenticationProvider {
         super(grantedAuthorities);
     }
     
-    private static class MockUser implements IUser, Serializable {
+    private static class MockUser implements IDomainObject, Serializable {
         
         private static final long serialVersionUID = 1L;
         
         private String id = "123";
         
-        private String uname;
+        private final String fullName;
         
-        private String fullName;
-        
-        public MockUser(String username) {
-            this.uname = username;
+        public MockUser(String fullName) {
+            this.fullName = fullName;
         }
         
         @Override
@@ -72,29 +69,9 @@ public class MockAuthenticationProvider extends AbstractAuthenticationProvider {
         }
         
         @Override
-        public void setUsername(String username) {
-            uname = username;
-        }
-        
-        @Override
-        public String getUsername() {
-            return uname;
-        }
-        
-        @Override
-        public String getFullName() {
-            if (fullName == null) {
-                fullName = PropertyUtil.getValue("mock.fullname", null);
-            }
-            
+        public String toString() {
             return fullName;
         }
-        
-        @Override
-        public IInstitution getInstitution() {
-            return null;
-        }
-        
     }
     
     /**
@@ -107,13 +84,13 @@ public class MockAuthenticationProvider extends AbstractAuthenticationProvider {
      * @return Authorization result
      */
     @Override
-    protected IUser login(CWFAuthenticationDetails details, String username, String password, String domain) {
-        IUser user = authenticate(username, password, domain);
+    protected IDomainObject login(CWFAuthenticationDetails details, String username, String password, String domain) {
+        IDomainObject user = authenticate(username, password, domain);
         details.setDetail("user", user);
         return user;
     }
     
-    private IUser authenticate(final String username, final String password, final String domain) {
+    private IDomainObject authenticate(final String username, final String password, final String domain) {
         if (!check("mock.username", username) || !check("mock.password", password) || !check("mock.domain", domain)) {
             throw new BadCredentialsException("Authentication failed.");
         }
@@ -126,7 +103,7 @@ public class MockAuthenticationProvider extends AbstractAuthenticationProvider {
     }
     
     @Override
-    protected List<String> getAuthorities(IUser user) {
+    protected List<String> getAuthorities(IDomainObject user) {
         return user == null ? null : StrUtil.toList(PropertyUtil.getValue("mock.authorities", null), ",");
     }
     

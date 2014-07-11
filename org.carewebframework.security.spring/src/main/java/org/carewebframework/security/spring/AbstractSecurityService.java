@@ -21,7 +21,7 @@ import org.carewebframework.api.alias.AliasType;
 import org.carewebframework.api.alias.AliasTypeRegistry;
 import org.carewebframework.api.context.ContextManager;
 import org.carewebframework.api.context.IContextManager;
-import org.carewebframework.api.domain.IUser;
+import org.carewebframework.api.domain.IDomainObject;
 import org.carewebframework.api.security.ISecurityService;
 import org.carewebframework.ui.Application;
 import org.carewebframework.ui.FrameworkWebSupport;
@@ -180,10 +180,10 @@ public abstract class AbstractSecurityService implements ISecurityService {
      * @return The authenticated user object, or null if none present.
      */
     @Override
-    public IUser getAuthenticatedUser() {
+    public IDomainObject getAuthenticatedUser() {
         Authentication authentication = getAuthentication();
         Object details = authentication == null ? null : authentication.getDetails();
-        return (details instanceof CWFAuthenticationDetails) ? (IUser) ((CWFAuthenticationDetails) details)
+        return (details instanceof CWFAuthenticationDetails) ? (IDomainObject) ((CWFAuthenticationDetails) details)
                 .getDetail("user") : null;
     }
     

@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -17,8 +17,7 @@ import org.apache.commons.logging.LogFactory;
 
 import org.carewebframework.api.context.UserContext;
 import org.carewebframework.api.context.UserContext.IUserContextEvent;
-import org.carewebframework.api.domain.IInstitution;
-import org.carewebframework.api.domain.IUser;
+import org.carewebframework.api.domain.IDomainObject;
 import org.carewebframework.api.property.PropertyUtil;
 import org.carewebframework.api.security.SecurityUtil;
 import org.carewebframework.shell.CareWebUtil;
@@ -48,7 +47,7 @@ public class UserHeader extends PluginController implements IUserContextEvent {
     
     private static final String DATABASE_DISPLAY_BACKGROUNDCOLOR_PROPERTY = "DATABASE.BACKGROUNDCOLOR";
     
-    private IUser currentUser;
+    private IDomainObject currentUser;
     
     private String dbRegion;
     
@@ -100,7 +99,7 @@ public class UserHeader extends PluginController implements IUserContextEvent {
      */
     @Override
     public void committed() {
-        IUser user = UserContext.getActiveUser();
+        IDomainObject user = UserContext.getActiveUser();
         
         if (log.isDebugEnabled()) {
             log.debug("user: " + user);
@@ -111,13 +110,7 @@ public class UserHeader extends PluginController implements IUserContextEvent {
         }
         
         currentUser = user;
-        String text = user == null ? "" : user.getFullName();
-        IInstitution inst = user == null ? null : user.getInstitution();
-        
-        if (inst != null) {
-            text += "@" + inst.getAbbreviation();
-        }
-        
+        String text = user == null ? "" : user.toString();
         HttpServletRequest request = FrameworkWebSupport.getHttpServletRequest();
         String info = StringUtils.trimToEmpty((request == null ? "" : request.getLocalAddr()) + " " + dbRegion);
         userHeader.setValue(text + (info.isEmpty() ? "" : " (" + info + ")"));

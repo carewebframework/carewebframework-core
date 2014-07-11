@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -22,8 +22,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import org.carewebframework.api.FrameworkUtil;
-import org.carewebframework.api.domain.IInstitution;
-import org.carewebframework.api.domain.IUser;
+import org.carewebframework.api.domain.IDomainObject;
 import org.carewebframework.api.event.IEventManager;
 import org.carewebframework.api.event.IGenericEvent;
 import org.carewebframework.api.security.ISecurityService;
@@ -87,11 +86,11 @@ public class DesktopMonitor extends Thread {
                 case BASELINE:
                     monitor.setMode(Mode.LOCK);
                     break;
-                
+                    
                 case LOCK:
                     monitor.requestLogout();
                     break;
-                
+                    
                 case SHUTDOWN:
                     monitor.requestLogout();
                     break;
@@ -209,11 +208,8 @@ public class DesktopMonitor extends Thread {
             desktop.removeListener(this);
             timeoutWindow = (Window) desktop.getExecution().createComponents(DESKTOP_TIMEOUT_ZUL, null, null);
             ZKUtil.wireController(timeoutWindow, DesktopMonitor.this);
-            IUser user = securityService.getAuthenticatedUser();
-            IInstitution inst = user.getInstitution();
-            String instnm = inst == null ? "" : "@" + inst.getAbbreviation();
-            String usrnm = user.getFullName() + instnm;
-            lblLocked.setValue(Mode.BASELINE.getLabel(TIMEOUT_EXPIRATION, usrnm));
+            IDomainObject user = securityService.getAuthenticatedUser();
+            lblLocked.setValue(Mode.BASELINE.getLabel(TIMEOUT_EXPIRATION, user.toString()));
             desktop.enableServerPush(true);
             desktop.addListener(desktopActivityMonitor);
             ThreadUtil.startThread(DesktopMonitor.this);
@@ -307,7 +303,7 @@ public class DesktopMonitor extends Thread {
                     }
                     resetActivity(false);
                     break;
-                
+                    
                 case UPDATE_MODE:
                     if (!isDesktopLockingDisabled) {
                         setSclass(SCLASS_IDLE);
@@ -316,7 +312,7 @@ public class DesktopMonitor extends Thread {
                         Application.getDesktopInfo(desktop).sendToSpawned(mode == Mode.LOCK ? Command.LOCK : Command.UNLOCK);
                     }
                     break;
-                
+                    
                 case LOGOUT:
                     if (isDesktopLockingDisabled) {
                         log.info(String.format("App[%s] Desktop[%s] was excluded from pre-invalidation locking", appName,
@@ -454,7 +450,7 @@ public class DesktopMonitor extends Thread {
                 }
                 
                 break;
-            
+                
             case COUNTDOWN:
                 if (stateChanged) {
                     pollingInterval = countdownInterval;
@@ -472,7 +468,7 @@ public class DesktopMonitor extends Thread {
             case TIMEDOUT:
                 mode.onTimeout(this);
                 break;
-            
+                
             case DEAD:
                 this.terminate = true;
                 this.desktopDead = true;

@@ -10,44 +10,25 @@
 package org.carewebframework.api.security;
 
 import org.carewebframework.api.domain.DomainObject;
-import org.carewebframework.api.domain.IInstitution;
-import org.carewebframework.api.domain.IUser;
+import org.carewebframework.api.domain.IDomainObject;
 
 /**
  * Mock user for testing.
  */
-public class MockUser extends DomainObject implements IUser {
+public class MockUser extends DomainObject implements IDomainObject {
     
     private static final long serialVersionUID = 1L;
     
-    private String username;
-    
     private final String fullName;
     
-    public MockUser(String id, String username, String fullName) {
+    public MockUser(String id, String fullName) {
         super(id);
-        this.username = username;
         this.fullName = fullName;
     }
     
     @Override
-    public void setUsername(String username) {
-        this.username = username;
-    }
-    
-    @Override
-    public String getUsername() {
-        return username;
-    }
-    
-    @Override
-    public String getFullName() {
+    public String toString() {
         return fullName;
-    }
-    
-    @Override
-    public IInstitution getInstitution() {
-        return null;
     }
     
 }

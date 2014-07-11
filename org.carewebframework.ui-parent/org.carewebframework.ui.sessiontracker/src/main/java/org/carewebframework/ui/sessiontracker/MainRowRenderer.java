@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -17,8 +17,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import org.carewebframework.api.context.UserContext;
-import org.carewebframework.api.domain.IInstitution;
-import org.carewebframework.api.domain.IUser;
+import org.carewebframework.api.domain.IDomainObject;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.ui.Application;
 import org.carewebframework.ui.Application.DesktopInfo;
@@ -43,9 +42,9 @@ public class MainRowRenderer extends AbstractRowRenderer<SessionInfo, Object> {
     private static final String[] DETAIL_COL_WIDTHS = { "12%", "10%", "10%", "38%", "15%", "15%" };
     
     private static final String[] DETAIL_COL_LABELS = { "@cwf.sessiontracker.detail.col1.label",
-            "@cwf.sessiontracker.detail.col2.label", "@cwf.sessiontracker.detail.col3.label",
-            "@cwf.sessiontracker.detail.col4.label", "@cwf.sessiontracker.detail.col5.label",
-            "@cwf.sessiontracker.detail.col6.label" };
+        "@cwf.sessiontracker.detail.col2.label", "@cwf.sessiontracker.detail.col3.label",
+        "@cwf.sessiontracker.detail.col4.label", "@cwf.sessiontracker.detail.col5.label",
+    "@cwf.sessiontracker.detail.col6.label" };
     
     private static final Log log = LogFactory.getLog(MainRowRenderer.class);
     
@@ -97,10 +96,8 @@ public class MainRowRenderer extends AbstractRowRenderer<SessionInfo, Object> {
             final ClientInfoEvent clientInfo = desktopInfo == null ? null : desktopInfo.getClientInformation();
             final String screenDimensions = clientInfo == null ? "" : (clientInfo.getScreenWidth() + "x" + clientInfo
                     .getScreenHeight());
-            final IUser user = getUser(desktop);
-            final IInstitution inst = user == null ? null : user.getInstitution();
-            String usr = user == null ? StrUtil.formatMessage("@cwf.sessiontracker.msg.unknown")
-                    : (user.getFullName() + (inst == null ? "" : "@" + inst.getName()));
+            final IDomainObject user = getUser(desktop);
+            String usr = user == null ? StrUtil.formatMessage("@cwf.sessiontracker.msg.unknown") : (user.toString());
             final Row detailRow = new Row();
             detailRow.setParent(detailRows);
             createCell(detailRow, desktop.getId());
@@ -112,7 +109,7 @@ public class MainRowRenderer extends AbstractRowRenderer<SessionInfo, Object> {
         }
     }
     
-    private IUser getUser(Desktop desktop) {
+    private IDomainObject getUser(Desktop desktop) {
         try {
             final FrameworkAppContext ctx = FrameworkAppContext.getAppContext(desktop);
             final UserContext uctx = ctx == null ? null : ctx.getBean("userContext", UserContext.class);

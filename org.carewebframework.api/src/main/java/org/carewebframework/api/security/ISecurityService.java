@@ -9,7 +9,7 @@
  */
 package org.carewebframework.api.security;
 
-import org.carewebframework.api.domain.IUser;
+import org.carewebframework.api.domain.IDomainObject;
 
 /**
  * Interface implemented by the security service.
@@ -84,7 +84,7 @@ public interface ISecurityService {
      * 
      * @return The authenticated user object, or null if none present.
      */
-    IUser getAuthenticatedUser();
+    IDomainObject getAuthenticatedUser();
     
     /**
      * Returns true if the Authentication object is granted debug privilege.

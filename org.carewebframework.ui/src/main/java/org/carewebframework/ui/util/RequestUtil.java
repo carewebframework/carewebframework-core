@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -20,6 +20,8 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
+import org.carewebframework.api.domain.IDomainObject;
 import org.carewebframework.api.security.SecurityUtil;
 import org.carewebframework.ui.FrameworkWebSupport;
 
@@ -183,9 +185,10 @@ public class RequestUtil {
      * @return order List of Strings representing the diagnostic context
      */
     public static List<String> getStandardDiagnosticContext() {
+        IDomainObject user = SecurityUtil.getAuthenticatedUser();
         final List<String> dc = new ArrayList<String>();
         dc.add(getSessionId());
-        dc.add(SecurityUtil.getAuthenticatedUsername());
+        dc.add(user == null ? "Unknown user" : user.toString());
         dc.add(FrameworkWebSupport.getDesktopId());
         dc.add(getRemoteAddress());
         dc.add(getLocalHostAddress());
