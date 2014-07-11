@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -14,7 +14,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.carewebframework.api.domain.EntityIdentifier;
 import org.carewebframework.common.DateUtil;
 
 /**
@@ -208,18 +207,6 @@ public class ContextItems {
     }
     
     /**
-     * Retrieves a context entity identifier by name.
-     * 
-     * @param itemName Item name
-     * @param sysId The identifier's system id (this is appended to the item name for lookup).
-     * @return The entity identifier
-     */
-    public EntityIdentifier getIdentifier(String itemName, String sysId) {
-        String value = getItem(itemName + "." + sysId);
-        return value == null ? null : new EntityIdentifier(value, sysId);
-    }
-    
-    /**
      * Sets a context item value.
      * 
      * @param itemName Item name
@@ -267,16 +254,6 @@ public class ContextItems {
     public void setItem(String itemName, String value, String suffix) {
         itemName = lookupItemName(itemName, suffix, value != null);
         items.put(itemName, value);
-    }
-    
-    /**
-     * Sets a context entity identifier value.
-     * 
-     * @param itemName Item name (identifier system id will be appended).
-     * @param value An entity identifier
-     */
-    public void setIdentifier(String itemName, EntityIdentifier value) {
-        setItem(itemName + "." + value.getSysId(), value.getId());
     }
     
     /**

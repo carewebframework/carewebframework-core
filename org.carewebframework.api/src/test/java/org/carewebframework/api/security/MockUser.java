@@ -9,10 +9,7 @@
  */
 package org.carewebframework.api.security;
 
-import java.util.Date;
-
 import org.carewebframework.api.domain.DomainObject;
-import org.carewebframework.api.domain.EntityIdentifier;
 import org.carewebframework.api.domain.IInstitution;
 import org.carewebframework.api.domain.IUser;
 
@@ -20,56 +17,37 @@ import org.carewebframework.api.domain.IUser;
  * Mock user for testing.
  */
 public class MockUser extends DomainObject implements IUser {
-
+    
     private static final long serialVersionUID = 1L;
-
+    
     private String username;
-
+    
     private final String fullName;
-
+    
     public MockUser(String id, String username, String fullName) {
         super(id);
         this.username = username;
         this.fullName = fullName;
     }
-
+    
     @Override
     public void setUsername(String username) {
         this.username = username;
     }
-
+    
     @Override
     public String getUsername() {
         return username;
     }
-
+    
     @Override
     public String getFullName() {
         return fullName;
     }
-
-    @Override
-    public String getGender() {
-        return null;
-    }
-
-    @Override
-    public Date getBirthDate() {
-        return null;
-    }
-
-    @Override
-    public Date getDeathDate() {
-        return null;
-    }
-
+    
     @Override
     public IInstitution getInstitution() {
         return null;
     }
-
-    @Override
-    public EntityIdentifier getIdentifier(String sysId) {
-        return null;
-    }
+    
 }
