@@ -79,29 +79,6 @@ public class UserContext extends ManagedContext<IDomainObject> {
     }
     
     /**
-     * Creates a CCOW context from the specified user object.
-     */
-    @Override
-    public ContextItems toCCOWContext(IDomainObject user) {
-        //contextItems.setItem(CCOW_USERNM, user.getUsername());
-        //contextItems.setItem(CCOW_FULLNAME, user.getFullName());
-        return contextItems;
-    }
-    
-    /**
-     * Returns a user object based on the specified CCOW context.
-     */
-    @Override
-    public IDomainObject fromCCOWContext(ContextItems contextItems) {
-        if (contextItems == null) {
-            return null;
-        }
-        
-        IDomainObject user = null; //TODO: finish
-        return user;
-    }
-    
-    /**
      * Returns a priority value of -100. Among concurrent context change transactions, a user
      * context change should generally occur last, therefore it has a negative priority value.
      * 
