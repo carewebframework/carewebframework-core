@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -17,8 +17,6 @@ import java.util.Set;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import org.carewebframework.api.domain.IDomainObject;
-
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -31,8 +29,10 @@ import org.springframework.security.core.userdetails.User;
 /**
  * Provides authentication support for the framework. Takes provided authentication credentials and
  * authenticates them against the database.
+ * 
+ * @param <T> User class
  */
-public abstract class AbstractAuthenticationProvider implements AuthenticationProvider {
+public abstract class AbstractAuthenticationProvider<T> implements AuthenticationProvider {
     
     private static final Log log = LogFactory.getLog(AbstractAuthenticationProvider.class);
     
@@ -87,7 +87,7 @@ public abstract class AbstractAuthenticationProvider implements AuthenticationPr
             throw new BadCredentialsException("Missing security credentials.");
         }
         
-        IDomainObject user = login(details, username, password, domain);
+        T user = login(details, username, password, domain);
         List<GrantedAuthority> userPrivs = new ArrayList<GrantedAuthority>();
         List<String> list = getAuthorities(user);
         Set<String> privs = list == null ? new HashSet<String>() : new HashSet<String>(list);
@@ -114,7 +114,7 @@ public abstract class AbstractAuthenticationProvider implements AuthenticationPr
         return authentication;
     }
     
-    protected abstract List<String> getAuthorities(IDomainObject user);
+    protected abstract List<String> getAuthorities(T user);
     
     /**
      * Performs a user login.
@@ -125,6 +125,6 @@ public abstract class AbstractAuthenticationProvider implements AuthenticationPr
      * @param domain Domain for which the login is requested.
      * @return User object
      */
-    protected abstract IDomainObject login(CWFAuthenticationDetails details, String username, String password, String domain);
+    protected abstract T login(CWFAuthenticationDetails details, String username, String password, String domain);
     
 }

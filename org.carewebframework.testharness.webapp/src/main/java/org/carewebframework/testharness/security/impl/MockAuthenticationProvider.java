@@ -17,6 +17,7 @@ import org.carewebframework.api.property.PropertyUtil;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.security.spring.AbstractAuthenticationProvider;
 import org.carewebframework.security.spring.CWFAuthenticationDetails;
+import org.carewebframework.testharness.security.impl.MockAuthenticationProvider.MockUser;
 
 import org.springframework.security.authentication.BadCredentialsException;
 
@@ -24,7 +25,7 @@ import org.springframework.security.authentication.BadCredentialsException;
  * Provides authentication support for the framework. Takes provided authentication credentials and
  * authenticates them against the database.
  */
-public class MockAuthenticationProvider extends AbstractAuthenticationProvider {
+public class MockAuthenticationProvider extends AbstractAuthenticationProvider<MockUser> {
     
     /**
      * No-arg constructor.
@@ -41,7 +42,7 @@ public class MockAuthenticationProvider extends AbstractAuthenticationProvider {
         super(grantedAuthorities);
     }
     
-    private static class MockUser implements IDomainObject, Serializable {
+    /*package*/static class MockUser implements IDomainObject, Serializable {
         
         private static final long serialVersionUID = 1L;
         
@@ -84,13 +85,13 @@ public class MockAuthenticationProvider extends AbstractAuthenticationProvider {
      * @return Authorization result
      */
     @Override
-    protected IDomainObject login(CWFAuthenticationDetails details, String username, String password, String domain) {
-        IDomainObject user = authenticate(username, password, domain);
+    protected MockUser login(CWFAuthenticationDetails details, String username, String password, String domain) {
+        MockUser user = authenticate(username, password, domain);
         details.setDetail("user", user);
         return user;
     }
     
-    private IDomainObject authenticate(final String username, final String password, final String domain) {
+    private MockUser authenticate(final String username, final String password, final String domain) {
         if (!check("mock.username", username) || !check("mock.password", password) || !check("mock.domain", domain)) {
             throw new BadCredentialsException("Authentication failed.");
         }
@@ -103,7 +104,7 @@ public class MockAuthenticationProvider extends AbstractAuthenticationProvider {
     }
     
     @Override
-    protected List<String> getAuthorities(IDomainObject user) {
+    protected List<String> getAuthorities(MockUser user) {
         return user == null ? null : StrUtil.toList(PropertyUtil.getValue("mock.authorities", null), ",");
     }
     
