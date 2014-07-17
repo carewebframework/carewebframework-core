@@ -13,32 +13,50 @@ import java.util.List;
 
 /**
  * Interface for a domain object factory.
- *
- * @param <T> The class of domain object serviced by the factory.
  */
-public interface IDomainFactory<T extends IDomainObject> {
-
+public interface IDomainFactory {
+    
     /**
      * Creates a new instance of an object of this domain.
-     *
+     * 
+     * @param clazz Class of object to create.
      * @return The new domain object instance.
      */
-    T newObject();
-
+    <T extends IDomainObject> T newObject(Class<T> clazz);
+    
     /**
      * Fetches an object, identified by its unique id, from the underlying data store.
      *
+     * @param clazz Class of object to create.
      * @param id Unique id of the object.
      * @return The requested object.
      */
-    T fetchObject(String id);
-
+    <T extends IDomainObject> T fetchObject(Class<T> clazz, String id);
+    
+    /**
+     * Fetches an object, identified by its unique id, from the underlying data store.
+     *
+     * @param clazz Class of object to create.
+     * @param key Unique key associated with the object.
+     * @param table Table containing the requested object.
+     * @return The requested object.
+     */
+    <T extends IDomainObject> T fetchObject(Class<T> clazz, String key, String table);
+    
     /**
      * Fetches multiple domain objects as specified by an array of identifier values.
      *
+     * @param clazz Class of object to create.
      * @param ids An array of unique identifiers.
      * @return A list of domain objects in the same order as requested in the ids parameter.
      */
-    List<T> fetchObjects(String[] ids);
-
+    <T extends IDomainObject> List<T> fetchObjects(Class<T> clazz, String[] ids);
+    
+    /**
+     * Returns the alias for the domain class.
+     *
+     * @param clazz Domain class whose alias is sought.
+     * @return The alias for the domain class, or null if not found.
+     */
+    String getAlias(Class<? extends IDomainObject> clazz);
 }

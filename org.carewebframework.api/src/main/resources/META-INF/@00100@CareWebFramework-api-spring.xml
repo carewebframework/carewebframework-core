@@ -44,6 +44,11 @@
 			factory-method="getInstance">
 			<property name="propertyFile" value="classpath*:/META-INF/alias.properties,${org.carewebframework.location.aliases}" />
 		</bean>
+		
+		<!-- Maintains a registry of all domain factories. -->
+		<bean id="domainFactoryRegistry" class="org.carewebframework.api.domain.DomainFactoryRegistry"
+			factory-method="getInstance">
+		</bean>
 
 		<task:annotation-driven executor="taskExecutor"
 			scheduler="taskScheduler" />
