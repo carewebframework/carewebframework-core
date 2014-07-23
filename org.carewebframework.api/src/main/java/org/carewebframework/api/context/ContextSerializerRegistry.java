@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -18,7 +18,7 @@ import org.springframework.beans.factory.config.DestructionAwareBeanPostProcesso
 /**
  * Registry for context serializers indexed by the class type they support.
  */
-public class ContextSerializerRegistry extends AbstractRegistry<Class<?>, IContextSerializer> implements DestructionAwareBeanPostProcessor {
+public class ContextSerializerRegistry extends AbstractRegistry<Class<?>, IContextSerializer<?>> implements DestructionAwareBeanPostProcessor {
     
     private static ContextSerializerRegistry instance = new ContextSerializerRegistry();
     
@@ -34,7 +34,7 @@ public class ContextSerializerRegistry extends AbstractRegistry<Class<?>, IConte
     }
     
     @Override
-    protected Class<?> getKey(IContextSerializer item) {
+    protected Class<?> getKey(IContextSerializer<?> item) {
         return item.getType();
     }
     
@@ -45,14 +45,14 @@ public class ContextSerializerRegistry extends AbstractRegistry<Class<?>, IConte
      * @return The context serializer.
      */
     @Override
-    public IContextSerializer get(Class<?> clazz) {
-        IContextSerializer contextSerializer = super.get(clazz);
+    public IContextSerializer<?> get(Class<?> clazz) {
+        IContextSerializer<?> contextSerializer = super.get(clazz);
         
         if (contextSerializer != null) {
             return contextSerializer;
         }
         
-        for (IContextSerializer item : this) {
+        for (IContextSerializer<?> item : this) {
             if (item.getType().isAssignableFrom(clazz)) {
                 return item;
             }
@@ -69,7 +69,7 @@ public class ContextSerializerRegistry extends AbstractRegistry<Class<?>, IConte
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
         if (bean instanceof IContextSerializer) {
-            register((IContextSerializer) bean);
+            register((IContextSerializer<?>) bean);
         }
         
         return bean;
@@ -78,7 +78,7 @@ public class ContextSerializerRegistry extends AbstractRegistry<Class<?>, IConte
     @Override
     public void postProcessBeforeDestruction(Object bean, String beanName) throws BeansException {
         if (bean instanceof IContextSerializer) {
-            unregister((IContextSerializer) bean);
+            unregister((IContextSerializer<?>) bean);
         }
     }
     

@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -11,13 +11,15 @@ package org.carewebframework.api.context;
 
 /**
  * Methods for serializing / deserializing an object to / from a shared context.
+ * 
+ * @param <T> Class of object being serialized or deserialized.
  */
-public interface IContextSerializer {
+public interface IContextSerializer<T> {
     
-    String serialize(Object object);
+    String serialize(T object);
     
-    Object deserialize(String value);
+    T deserialize(String value);
     
-    Class<?> getType();
+    Class<T> getType();
     
 }
