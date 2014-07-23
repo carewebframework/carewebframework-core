@@ -13,8 +13,10 @@ import java.util.List;
 
 /**
  * Interface for a domain object factory.
+ * 
+ * @param <T> Base class created by factory.
  */
-public interface IDomainFactory {
+public interface IDomainFactory<T> {
     
     /**
      * Creates a new instance of an object of this domain.
@@ -22,7 +24,7 @@ public interface IDomainFactory {
      * @param clazz Class of object to create.
      * @return The new domain object instance.
      */
-    <T extends IDomainObject> T newObject(Class<T> clazz);
+    T newObject(Class<T> clazz);
     
     /**
      * Fetches an object, identified by its unique id, from the underlying data store.
@@ -31,7 +33,7 @@ public interface IDomainFactory {
      * @param id Unique id of the object.
      * @return The requested object.
      */
-    <T extends IDomainObject> T fetchObject(Class<T> clazz, String id);
+    T fetchObject(Class<T> clazz, String id);
     
     /**
      * Fetches an object, identified by its unique id, from the underlying data store.
@@ -41,7 +43,7 @@ public interface IDomainFactory {
      * @param table Table containing the requested object.
      * @return The requested object.
      */
-    <T extends IDomainObject> T fetchObject(Class<T> clazz, String key, String table);
+    T fetchObject(Class<T> clazz, String key, String table);
     
     /**
      * Fetches multiple domain objects as specified by an array of identifier values.
@@ -50,13 +52,13 @@ public interface IDomainFactory {
      * @param ids An array of unique identifiers.
      * @return A list of domain objects in the same order as requested in the ids parameter.
      */
-    <T extends IDomainObject> List<T> fetchObjects(Class<T> clazz, String[] ids);
+    List<T> fetchObjects(Class<T> clazz, String[] ids);
     
     /**
      * Returns the alias for the domain class.
      *
      * @param clazz Domain class whose alias is sought.
-     * @return The alias for the domain class, or null if not found.
+     * @return The alias for the domain class, or null if class not supported by this factory.
      */
-    String getAlias(Class<? extends IDomainObject> clazz);
+    String getAlias(Class<?> clazz);
 }

@@ -16,6 +16,7 @@ import org.carewebframework.api.spring.BeanRegistry;
 /**
  * Tracks all domain factory implementations.
  */
+@SuppressWarnings("rawtypes")
 public class DomainFactoryRegistry extends BeanRegistry<IDomainFactory> {
     
     private static DomainFactoryRegistry instance = new DomainFactoryRegistry();
@@ -30,7 +31,7 @@ public class DomainFactoryRegistry extends BeanRegistry<IDomainFactory> {
      * @param clazz Class of object to create.
      * @return The new domain object instance.
      */
-    public static <T extends IDomainObject> T newObject(Class<T> clazz) {
+    public static <T> T newObject(Class<T> clazz) {
         return getFactory(clazz).newObject(clazz);
     }
     
@@ -41,7 +42,7 @@ public class DomainFactoryRegistry extends BeanRegistry<IDomainFactory> {
      * @param id Unique id of the object.
      * @return The requested object.
      */
-    public static <T extends IDomainObject> T fetchObject(Class<T> clazz, String id) {
+    public static <T> T fetchObject(Class<T> clazz, String id) {
         return getFactory(clazz).fetchObject(clazz, id);
     }
     
@@ -53,7 +54,7 @@ public class DomainFactoryRegistry extends BeanRegistry<IDomainFactory> {
      * @param table The table containing the requested object.
      * @return The requested object.
      */
-    public static <T extends IDomainObject> T fetchObject(Class<T> clazz, String key, String table) {
+    public static <T> T fetchObject(Class<T> clazz, String key, String table) {
         return getFactory(clazz).fetchObject(clazz, key, table);
     }
     
@@ -64,14 +65,15 @@ public class DomainFactoryRegistry extends BeanRegistry<IDomainFactory> {
      * @param ids An array of unique identifiers.
      * @return A list of domain objects in the same order as requested in the ids parameter.
      */
-    public static <T extends IDomainObject> List<T> fetchObjects(Class<T> clazz, String[] ids) {
+    public static <T> List<T> fetchObjects(Class<T> clazz, String[] ids) {
         return getFactory(clazz).fetchObjects(clazz, ids);
     }
     
-    public static IDomainFactory getFactory(Class<? extends IDomainObject> clazz) {
-        for (IDomainFactory factory : instance) {
+    @SuppressWarnings("unchecked")
+    public static <T> IDomainFactory<T> getFactory(Class<T> clazz) {
+        for (IDomainFactory<?> factory : instance) {
             if (factory.getAlias(clazz) != null) {
-                return factory;
+                return (IDomainFactory<T>) factory;
             }
         }
         
