@@ -31,7 +31,7 @@
     
     <!-- To log session/desktop information, change to consider DEBUG level -->
     <logger name="org.carewebframework.ui">
-        <level value="debug"/>
+        <level value="info"/>
     </logger>
     
     <!-- Spring Framework -->

@@ -13,26 +13,26 @@
 	<!-- Regenstrief artifacts -->
 	<!-- <logger name="org.carewebframework"> <level value="info"/> </logger> -->
 	<logger name="org.apache.tomcat.jdbc">
-		<level value="trace" />
+		<level value="info" />
 	</logger>
 	<logger name="org.carewebframework.jdbc.pool.tomcat.LogInterceptor">
 		<level value="info" />
 	</logger>
 	<!-- To log session/desktop information, change to consider DEBUG level -->
 	<logger name="org.carewebframework.ui">
-		<level value="debug" />
+		<level value="info" />
 	</logger>
 	
 	<logger name="org.carewebframework.api.context.ManagedContext">
-		<level value="debug" />
+		<level value="info" />
 	</logger>
 
 	<logger name="org.perf4j.TimingLogger">
-		<level value="debug" />
+		<level value="info" />
 	</logger>
 
 	<logger name="org.carewebframework.util.StopWatch">
-		<level value="debug" />
+		<level value="info" />
 	</logger>
 
 	<!-- Spring Framework -->

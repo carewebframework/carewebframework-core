@@ -16,12 +16,12 @@
 	</appender>
 
 	<logger name="org.carewebframework.util.StopWatch">
-		<level value="debug" />
+		<level value="info" />
 		<appender-ref ref="stdout" />
 	</logger>
 
 	<logger name="org.carewebframework.logging.log4j.LoggingTest">
-		<level value="debug" />
+		<level value="info" />
 		<appender-ref ref="test" />
 	</logger>
 
