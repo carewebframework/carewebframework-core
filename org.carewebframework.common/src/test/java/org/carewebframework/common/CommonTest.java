@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.TimeZone;
 
 import org.carewebframework.common.DateUtil.TimeUnit;
+
 import org.junit.Test;
 
 public class CommonTest {
@@ -212,6 +213,25 @@ public class CommonTest {
         assertEquals(color1, color2);
         Color color3 = ColorUtil.toColor("badvalue", refColor);
         assertEquals(refColor, color3);
+    }
+    
+    @Test
+    public void testQueryStringBuilder() {
+        QueryStringBuilder sb = new QueryStringBuilder();
+        assertEquals(0, sb.length());
+        sb.append("q1", "value 1", "value 2");
+        List<String> list = new ArrayList<String>();
+        list.add("value 1");
+        list.add("value 2");
+        list.add("value 3");
+        sb.append("q2", list);
+        sb.append("q3", "single");
+        sb.append("q4<>", "escape+name");
+        String qs = sb.toString();
+        print(qs);
+        assertEquals("q1=value+1,value+2&q2=value+1&q2=value+2&q2=value+3&q3=single&q4%3C%3E=escape%2Bname", qs);
+        sb.clear();
+        assertTrue(sb.toString().isEmpty());
     }
     
     private void print(Object object) {
