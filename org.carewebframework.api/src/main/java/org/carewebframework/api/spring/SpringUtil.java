@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -10,6 +10,8 @@
 package org.carewebframework.api.spring;
 
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.core.env.PropertySource;
 
 /**
  * Static utility class for the access to Spring Framework services.
@@ -81,6 +83,31 @@ public class SpringUtil {
         ApplicationContext appContext = getAppContext();
         return appContext == null ? null : appContext.containsBean(id) && appContext.isTypeMatch(id, clazz) ? appContext
                 .getBean(id, clazz) : null;
+    }
+    
+    /**
+     * Returns a property value from the application context.
+     * 
+     * @param name Property name.
+     * @return Property value, or null if not found.
+     */
+    public static String getProperty(String name) {
+        ApplicationContext appContext = getRootAppContext();
+        
+        if (appContext == null) {
+            return null;
+        }
+        
+        String value = appContext.getEnvironment().getProperty(name);
+        
+        if (value == null) {
+            PropertySourcesPlaceholderConfigurer cfg = appContext.getBean(PropertySourcesPlaceholderConfigurer.class);
+            PropertySource<?> ps = cfg.getAppliedPropertySources().get(
+                PropertySourcesPlaceholderConfigurer.LOCAL_PROPERTIES_PROPERTY_SOURCE_NAME);
+            value = ps == null ? null : (String) ps.getProperty(name);
+        }
+        
+        return value;
     }
     
     /**

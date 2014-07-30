@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -9,9 +9,12 @@
  */
 package org.carewebframework.api;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 
+import org.carewebframework.api.spring.SpringUtil;
 import org.carewebframework.api.test.CommonTest;
 
 import org.junit.Test;
@@ -35,5 +38,11 @@ public class FrameworkTest extends CommonTest {
         testBean = null;
         System.gc();
         assertNull(appFramework.findObject(TestBean.class, null));
+    }
+    
+    @Test
+    public void testPropertyFetch() {
+        assertEquals("success", SpringUtil.getProperty("org.carewebframework.test.property"));
+        assertNotNull(SpringUtil.getProperty("path"));
     }
 }
