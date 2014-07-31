@@ -1,13 +1,13 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
  * Disclaimer of Warranty and Limitation of Liability available at
  * http://www.carewebframework.org/licensing/disclaimer.
  */
-package org.carewebframework.testharness.security.impl;
+package org.carewebframework.security.spring.mock;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -75,7 +75,7 @@ public class LoginPaneController extends GenericForwardComposer<Component> {
         //previous logic implied that username would only have a value if there was an error.
         //pre-populate with mock values
         username = authError == null ? PropertyUtil.getValue("mock.username", null) : username;
-        if(authError == null){//keep consistent with previous logic (i.e. empty field values if authError is null)
+        if (authError == null) {//keep consistent with previous logic (i.e. empty field values if authError is null)
             j_password.setText(PropertyUtil.getValue("mock.password", null));
         }
         showMessage(authError == null ? null : loginFailureMessage);

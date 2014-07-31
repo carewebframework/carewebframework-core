@@ -1,0 +1,18 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	
+	<parent>
+		<groupId>org.carewebframework</groupId>
+		<artifactId>org.carewebframework-parent</artifactId>
+		<version>3.1.0-SNAPSHOT</version>
+	</parent>
+	
+	<artifactId>org.carewebframework.security.spring-parent</artifactId>
+	<packaging>pom</packaging>
+	<name>CareWeb Framework Spring Security Aggregator</name>
+	
+	<modules>
+		<module>org.carewebframework.security.spring.core</module>
+		<module>org.carewebframework.security.spring.mock</module>
+	</modules>
+</project>

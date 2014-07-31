@@ -15,19 +15,19 @@
 			<constructor-arg value="classpath:mock.properties"/>
 		</bean>
 
-		<bean id="securityService" class="org.carewebframework.testharness.security.impl.SecurityServiceImpl">
+		<bean id="securityService" class="org.carewebframework.security.spring.mock.SecurityServiceImpl">
 			<property name="logoutTarget" value="${org.carewebframework.security.logout.url:}" />
 		</bean>
 
-		<bean id="securityAuthenticationProvider" class="org.carewebframework.testharness.security.impl.MockAuthenticationProvider">
+		<bean id="securityAuthenticationProvider" class="org.carewebframework.security.spring.mock.MockAuthenticationProvider">
 		</bean>
 	
-		<bean id="loginPaneController" class="org.carewebframework.testharness.security.impl.LoginPaneController"
+		<bean id="loginPaneController" class="org.carewebframework.security.spring.mock.LoginPaneController"
 			scope="prototype">
 		</bean>
 
 		<bean id="loginWindowController"
-			class="org.carewebframework.testharness.security.impl.LoginWindowController"
+			class="org.carewebframework.security.spring.mock.LoginWindowController"
 			scope="prototype" />
 			
 	</beans>

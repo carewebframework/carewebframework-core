@@ -1,13 +1,13 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
  * Disclaimer of Warranty and Limitation of Liability available at
  * http://www.carewebframework.org/licensing/disclaimer.
  */
-package org.carewebframework.testharness.security.impl;
+package org.carewebframework.security.spring.mock;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -56,14 +56,14 @@ public class LoginWindowController extends GenericForwardComposer<Component> {
                 .removeAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
         IDomainObject user = authError != null && authError.getCause() instanceof CredentialsExpiredException ? (IDomainObject) ((CredentialsExpiredException) authError
                 .getCause()).getExtraInformation() : null;
-        String form = LoginPaneController.DIALOG_LOGIN_PANE;
-        Map<Object, Object> args = new HashMap<Object, Object>();
-        args.put("savedRequest", savedRequest);
-        args.put("authError", authError);
-        args.put("user", user);
-        ZKUtil.loadZulPage(form, loginForm, args, this);
-        getPage().setTitle(user != null ? "Change Password" : "Please Login");
-        resetTimer();
+                String form = LoginPaneController.DIALOG_LOGIN_PANE;
+                Map<Object, Object> args = new HashMap<Object, Object>();
+                args.put("savedRequest", savedRequest);
+                args.put("authError", authError);
+                args.put("user", user);
+                ZKUtil.loadZulPage(form, loginForm, args, this);
+                getPage().setTitle(user != null ? "Change Password" : "Please Login");
+                resetTimer();
     }
     
     /**

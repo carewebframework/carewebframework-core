@@ -7,7 +7,7 @@
  * Disclaimer of Warranty and Limitation of Liability available at
  * http://www.carewebframework.org/licensing/disclaimer.
  */
-package org.carewebframework.testharness.security.impl;
+package org.carewebframework.security.spring.mock;
 
 import java.io.Serializable;
 import java.util.List;
@@ -17,7 +17,7 @@ import org.carewebframework.api.property.PropertyUtil;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.security.spring.AbstractAuthenticationProvider;
 import org.carewebframework.security.spring.CWFAuthenticationDetails;
-import org.carewebframework.testharness.security.impl.MockAuthenticationProvider.MockUser;
+import org.carewebframework.security.spring.mock.MockAuthenticationProvider.MockUser;
 
 import org.springframework.security.authentication.BadCredentialsException;
 
