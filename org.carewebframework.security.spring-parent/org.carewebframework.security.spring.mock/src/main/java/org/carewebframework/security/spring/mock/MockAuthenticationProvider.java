@@ -13,7 +13,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import org.carewebframework.api.domain.IDomainObject;
-import org.carewebframework.api.property.PropertyUtil;
+import org.carewebframework.api.spring.SpringUtil;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.security.spring.AbstractAuthenticationProvider;
 import org.carewebframework.security.spring.CWFAuthenticationDetails;
@@ -26,6 +26,8 @@ import org.springframework.security.authentication.BadCredentialsException;
  * authenticates them against the database.
  */
 public class MockAuthenticationProvider extends AbstractAuthenticationProvider<MockUser> {
+    
+    private String mockAuthorities;
     
     /**
      * No-arg constructor.
@@ -100,12 +102,16 @@ public class MockAuthenticationProvider extends AbstractAuthenticationProvider<M
     }
     
     private boolean check(String property, String value) {
-        return value.equals(PropertyUtil.getValue(property, null));
+        return value.equals(SpringUtil.getProperty(property));
     }
     
     @Override
     protected List<String> getAuthorities(MockUser user) {
-        return user == null ? null : StrUtil.toList(PropertyUtil.getValue("mock.authorities", null), ",");
+        return user == null ? null : StrUtil.toList(mockAuthorities, ",");
+    }
+    
+    public void setMockAuthorities(String mockAuthorities) {
+        this.mockAuthorities = mockAuthorities;
     }
     
 }

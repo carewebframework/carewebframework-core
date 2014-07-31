@@ -11,7 +11,6 @@ package org.carewebframework.security.spring.mock;
 
 import org.apache.commons.lang.StringUtils;
 
-import org.carewebframework.api.property.PropertyUtil;
 import org.carewebframework.ui.FrameworkWebSupport;
 import org.carewebframework.ui.zk.ZKUtil;
 
@@ -52,7 +51,19 @@ public class LoginPaneController extends GenericForwardComposer<Component> {
     
     private Component loginRoot;
     
+    private Component btnLogin;
+    
     private SavedRequest savedRequest;
+    
+    private boolean autoLogin;
+    
+    private String mockUsername;
+    
+    private String mockPassword;
+    
+    private String mockDomain;
+    
+    private String mockGreeting;
     
     /**
      * Initialize the login form.
@@ -74,9 +85,9 @@ public class LoginPaneController extends GenericForwardComposer<Component> {
         String username = (String) session.removeAttribute(Constants.DEFAULT_USERNAME);
         //previous logic implied that username would only have a value if there was an error.
         //pre-populate with mock values
-        username = authError == null ? PropertyUtil.getValue("mock.username", null) : username;
+        username = authError == null ? mockUsername : username;
         if (authError == null) {//keep consistent with previous logic (i.e. empty field values if authError is null)
-            j_password.setText(PropertyUtil.getValue("mock.password", null));
+            j_password.setText(mockPassword);
         }
         showMessage(authError == null ? null : loginFailureMessage);
         j_username.setText(username);
@@ -86,7 +97,13 @@ public class LoginPaneController extends GenericForwardComposer<Component> {
         } else {
             j_password.setFocus(true);
         }
-        setFooterText(PropertyUtil.getValue("mock.greeting", null));
+        
+        setFooterText(mockGreeting);
+        
+        if (autoLogin) {
+            comp.setVisible(false);
+            Events.echoEvent(Events.ON_CLICK, btnLogin, null);
+        }
     }
     
     /**
@@ -122,7 +139,7 @@ public class LoginPaneController extends GenericForwardComposer<Component> {
      */
     private void doSubmit() {
         showMessage("");
-        String instId = PropertyUtil.getValue("mock.domain", null);
+        String instId = mockDomain;
         String username = j_username.getValue().trim();
         final String password = j_password.getValue();
         
@@ -197,6 +214,26 @@ public class LoginPaneController extends GenericForwardComposer<Component> {
      */
     private void setFooterText(String value) {
         setMessageText(value, lblFooterText, htmlFooterText);
+    }
+    
+    public void setAutoLogin(boolean autoLogin) {
+        this.autoLogin = autoLogin;
+    }
+    
+    public void setMockUsername(String mockUsername) {
+        this.mockUsername = mockUsername;
+    }
+    
+    public void setMockPassword(String mockPassword) {
+        this.mockPassword = mockPassword;
+    }
+    
+    public void setMockDomain(String mockDomain) {
+        this.mockDomain = mockDomain;
+    }
+    
+    public void setMockGreeting(String mockGreeting) {
+        this.mockGreeting = mockGreeting;
     }
     
 }

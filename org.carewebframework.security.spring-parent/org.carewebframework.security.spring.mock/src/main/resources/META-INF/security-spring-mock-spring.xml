@@ -11,19 +11,23 @@
 	<beans profile="root">
 
 		<!-- Service for reading and writing persisted properties. -->
-		<bean id="propertyService" class="org.carewebframework.api.property.MockPropertyService">
-			<constructor-arg value="classpath:mock.properties"/>
-		</bean>
+		<bean id="propertyService" class="org.carewebframework.api.property.MockPropertyService" />
 
 		<bean id="securityService" class="org.carewebframework.security.spring.mock.SecurityServiceImpl">
 			<property name="logoutTarget" value="${org.carewebframework.security.logout.url:}" />
 		</bean>
 
 		<bean id="securityAuthenticationProvider" class="org.carewebframework.security.spring.mock.MockAuthenticationProvider">
+			<property name="mockAuthorities" value="${mock.authorities:}" />
 		</bean>
 	
 		<bean id="loginPaneController" class="org.carewebframework.security.spring.mock.LoginPaneController"
 			scope="prototype">
+			<property name="autoLogin" value="${mock.autologin:false}" />
+			<property name="mockUsername" value="${mock.username:}" />
+			<property name="mockPassword" value="${mock.password:}" />
+			<property name="mockDomain" value="${mock.domain:}" />
+			<property name="mockGreeting" value="${mock.greeting:}" />
 		</bean>
 
 		<bean id="loginWindowController"
