@@ -47,16 +47,21 @@ public class QueryStringBuilder {
      */
     public QueryStringBuilder append(String name, Object... values) {
         if (values != null && values.length > 0) {
-            if (sb.length() > 0) {
-                sb.append('&');
-            }
-            
-            sb.append(encode(name)).append('=');
             boolean first = true;
             
             for (Object value : values) {
+                if (value == null) {
+                    continue;
+                }
+                
                 if (first) {
                     first = false;
+                    
+                    if (sb.length() > 0) {
+                        sb.append('&');
+                    }
+                    
+                    sb.append(encode(name)).append('=');
                 } else {
                     sb.append(',');
                 }
