@@ -98,7 +98,7 @@ public class MockAuthenticationProvider extends AbstractAuthenticationProvider<M
             throw new BadCredentialsException("Authentication failed.");
         }
         
-        return new MockUser(username);
+        return new MockUser(SpringUtil.getProperty("mock.fullname"));
     }
     
     private boolean check(String property, String value) {
