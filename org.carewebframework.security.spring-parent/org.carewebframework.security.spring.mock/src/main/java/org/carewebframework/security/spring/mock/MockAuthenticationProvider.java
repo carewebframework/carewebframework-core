@@ -9,7 +9,6 @@
  */
 package org.carewebframework.security.spring.mock;
 
-import java.io.Serializable;
 import java.util.List;
 
 import org.carewebframework.api.domain.IDomainObject;
@@ -17,7 +16,6 @@ import org.carewebframework.api.spring.SpringUtil;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.security.spring.AbstractAuthenticationProvider;
 import org.carewebframework.security.spring.CWFAuthenticationDetails;
-import org.carewebframework.security.spring.mock.MockAuthenticationProvider.MockUser;
 
 import org.springframework.security.authentication.BadCredentialsException;
 
@@ -25,9 +23,16 @@ import org.springframework.security.authentication.BadCredentialsException;
  * Provides authentication support for the framework. Takes provided authentication credentials and
  * authenticates them against the database.
  */
-public class MockAuthenticationProvider extends AbstractAuthenticationProvider<MockUser> {
+public class MockAuthenticationProvider extends AbstractAuthenticationProvider<IDomainObject> {
+    
+    public interface IMockUserFactory {
+        
+        public IDomainObject create(String name);
+    }
     
     private String mockAuthorities;
+    
+    private IMockUserFactory mockUserFactory;
     
     /**
      * No-arg constructor.
@@ -44,39 +49,6 @@ public class MockAuthenticationProvider extends AbstractAuthenticationProvider<M
         super(grantedAuthorities);
     }
     
-    /*package*/static class MockUser implements IDomainObject, Serializable {
-        
-        private static final long serialVersionUID = 1L;
-        
-        private String id = "123";
-        
-        private final String fullName;
-        
-        public MockUser(String fullName) {
-            this.fullName = fullName;
-        }
-        
-        @Override
-        public String getDomainId() {
-            return id;
-        }
-        
-        @Override
-        public void setDomainId(String id) {
-            this.id = id;
-        }
-        
-        @Override
-        public Object getProxiedObject() {
-            return this;
-        }
-        
-        @Override
-        public String toString() {
-            return fullName;
-        }
-    }
-    
     /**
      * Performs a user login.
      *
@@ -87,18 +59,18 @@ public class MockAuthenticationProvider extends AbstractAuthenticationProvider<M
      * @return Authorization result
      */
     @Override
-    protected MockUser login(CWFAuthenticationDetails details, String username, String password, String domain) {
-        MockUser user = authenticate(username, password, domain);
+    protected IDomainObject login(CWFAuthenticationDetails details, String username, String password, String domain) {
+        IDomainObject user = authenticate(username, password, domain);
         details.setDetail("user", user);
         return user;
     }
     
-    private MockUser authenticate(final String username, final String password, final String domain) {
+    private IDomainObject authenticate(final String username, final String password, final String domain) {
         if (!check("mock.username", username) || !check("mock.password", password) || !check("mock.domain", domain)) {
             throw new BadCredentialsException("Authentication failed.");
         }
         
-        return new MockUser(SpringUtil.getProperty("mock.fullname"));
+        return mockUserFactory.create(SpringUtil.getProperty("mock.fullname"));
     }
     
     private boolean check(String property, String value) {
@@ -106,12 +78,16 @@ public class MockAuthenticationProvider extends AbstractAuthenticationProvider<M
     }
     
     @Override
-    protected List<String> getAuthorities(MockUser user) {
+    protected List<String> getAuthorities(IDomainObject user) {
         return user == null ? null : StrUtil.toList(mockAuthorities, ",");
     }
     
     public void setMockAuthorities(String mockAuthorities) {
         this.mockAuthorities = mockAuthorities;
+    }
+    
+    public void setMockUserFactory(IMockUserFactory mockUserFactory) {
+        this.mockUserFactory = mockUserFactory;
     }
     
 }

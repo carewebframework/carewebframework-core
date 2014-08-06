@@ -17,8 +17,11 @@
 			<property name="logoutTarget" value="${org.carewebframework.security.logout.url:}" />
 		</bean>
 
+		<bean id="mockUserFactory" class="org.carewebframework.security.spring.mock.MockUserFactory" />
+		
 		<bean id="securityAuthenticationProvider" class="org.carewebframework.security.spring.mock.MockAuthenticationProvider">
 			<property name="mockAuthorities" value="${mock.authorities:}" />
+			<property name="mockUserFactory" ref="mockUserFactory" />
 		</bean>
 	
 		<bean id="loginPaneController" class="org.carewebframework.security.spring.mock.LoginPaneController"
