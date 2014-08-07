@@ -17,7 +17,8 @@
 			<property name="logoutTarget" value="${org.carewebframework.security.logout.url:}" />
 		</bean>
 
-		<bean id="mockUserFactory" class="org.carewebframework.security.spring.mock.MockUserFactory" />
+		<bean id="mockUserFactory" class="org.carewebframework.security.spring.mock.MockUserFactory" 
+			cwf:override="ignore" />
 		
 		<bean id="securityAuthenticationProvider" class="org.carewebframework.security.spring.mock.MockAuthenticationProvider">
 			<property name="mockAuthorities" value="${mock.authorities:}" />
