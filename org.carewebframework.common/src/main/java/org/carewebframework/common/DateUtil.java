@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -98,15 +98,15 @@ public class DateUtil {
     private static final Pattern PATTERN_NUMERIC_PREFIX = Pattern.compile("^-?[\\d\\.]+");
     
     private static final double[] MS_FP = new double[] { 31557600000.0, 2592000000.0, 604800000.0, 86400000.0, 3600000.0,
-            60000.0, 1000.0, 1.0 };
+        60000.0, 1000.0, 1.0 };
     
     private static final long[] MS_LG = new long[] { 31557600000L, 2592000000L, 604800000L, 86400000L, 3600000L, 60000L,
-            1000L, 1L };
+        1000L, 1L };
     
     public static String[][] TIME_UNIT = new String[][] { { "year", "years", "yr", "yrs" },
-            { "month", "months", "mo", "mos" }, { "week", "weeks", "wk", "wks" }, { "day", "days", "day", "days" },
-            { "hour", "hours", "hr", "hrs" }, { "minute", "minutes", "min", "mins" },
-            { "second", "seconds", "sec", "secs" }, { "millisecond", "milliseconds", "ms", "ms" } };
+        { "month", "months", "mo", "mos" }, { "week", "weeks", "wk", "wks" }, { "day", "days", "day", "days" },
+        { "hour", "hours", "hr", "hrs" }, { "minute", "minutes", "min", "mins" },
+        { "second", "seconds", "sec", "secs" }, { "millisecond", "milliseconds", "ms", "ms" } };
     
     public enum TimeUnit {
         YEARS, MONTHS, WEEKS, DAYS, HOURS, MINUTES, SECONDS, MILLISECONDS
@@ -117,7 +117,7 @@ public class DateUtil {
      */
     public enum Format {
         WITH_TZ("dd-MMM-yyyy HH:mm zzz"), WITHOUT_TZ("dd-MMM-yyyy HH:mm"), WITHOUT_TIME("dd-MMM-yyyy"), HL7(
-                HL7_DATE_TIME_PATTERN), HL7_WITHOUT_TIME(HL7_DATE_ONLY_PATTERN);
+            HL7_DATE_TIME_PATTERN), HL7_WITHOUT_TIME(HL7_DATE_ONLY_PATTERN);
         
         private String pattern;
         
@@ -382,25 +382,6 @@ public class DateUtil {
     }
     
     /**
-     * Changes a time from one time zone to another.
-     * 
-     * @param date Date/time to change.
-     * @param oldTimeZone Old time zone.
-     * @param newTimeZone New time zone.
-     * @return Date/time converted from old time zone to new time zone.
-     */
-    public static Date changeTimeZone(Date date, TimeZone oldTimeZone, TimeZone newTimeZone) {
-        if (!hasTime(date)) {
-            return date;
-        }
-        
-        Calendar cal = Calendar.getInstance(oldTimeZone);
-        cal.setTime(date);
-        cal.setTimeZone(newTimeZone);
-        return cal.getTime();
-    }
-    
-    /**
      * Compares two dates. Allows nulls.
      * 
      * @param date1 First date to compare.
@@ -563,7 +544,7 @@ public class DateUtil {
         }
         
         return prefix + decimalFormat.get().format(elapsed) + " "
-                + getDurationUnits(index, pluralize && elapsed != 1.0, abbreviated);
+        + getDurationUnits(index, pluralize && elapsed != 1.0, abbreviated);
     }
     
     /**

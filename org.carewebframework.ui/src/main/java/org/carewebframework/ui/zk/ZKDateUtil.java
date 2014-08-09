@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -42,7 +42,7 @@ public class ZKDateUtil {
         date.setTime(datebox.getValue());
         time.setTime(timebox.getValue());
         time.set(date.get(Calendar.YEAR), date.get(Calendar.MONTH), date.get(Calendar.DAY_OF_MONTH));
-        return DateUtil.changeTimeZone(time.getTime(), timezone, TimeZone.getDefault());
+        return time.getTime();
     }
     
     /**
@@ -53,8 +53,7 @@ public class ZKDateUtil {
      * @param value Time value to set.
      */
     public static void setTime(Datebox datebox, Timebox timebox, Date value) {
-        TimeZone timezone = DateUtil.getLocalTimeZone();
-        value = value == null ? new Date() : DateUtil.changeTimeZone(value, TimeZone.getDefault(), timezone);
+        value = value == null ? new Date() : value;
         datebox.setValue(DateUtil.stripTime(value));
         timebox.setValue(value);
     }
