@@ -9,21 +9,20 @@
  */
 package org.carewebframework.security.spring.mock;
 
-import java.io.Serializable;
-
-import org.carewebframework.api.domain.IDomainObject;
+import org.carewebframework.api.domain.DomainObject;
 import org.carewebframework.security.spring.mock.MockAuthenticationProvider.IMockUserFactory;
+import org.carewebframework.security.spring.mock.MockUserFactory.MockUser;
 
 /**
  * Default factory for creating a mock user.
  */
-public class MockUserFactory implements IMockUserFactory {
+public class MockUserFactory implements IMockUserFactory<MockUser> {
     
-    private static class MockUser implements IDomainObject, Serializable {
+    public static class MockUser extends DomainObject {
         
         private static final long serialVersionUID = 1L;
         
-        private String id = "123";
+        private final String id = "123";
         
         private final String fullName;
         
@@ -32,28 +31,24 @@ public class MockUserFactory implements IMockUserFactory {
         }
         
         @Override
-        public String getDomainId() {
+        public String getLogicalId() {
             return id;
         }
         
         @Override
-        public void setDomainId(String id) {
-            this.id = id;
-        }
-        
-        @Override
-        public Object getProxiedObject() {
-            return this;
+        public String getUniversalId() {
+            return id;
         }
         
         @Override
         public String toString() {
             return fullName;
         }
+        
     }
     
     @Override
-    public IDomainObject create(String name) {
+    public MockUser create(String name) {
         return new MockUser(name);
     }
     

@@ -124,7 +124,7 @@ public abstract class AbstractGlobalEventDispatcher implements IGlobalEventDispa
      * @return Unique identifier for the user.
      */
     protected String getUserId(IDomainObject user) {
-        return user.getDomainId();
+        return user.getLogicalId();
     }
     
     /**

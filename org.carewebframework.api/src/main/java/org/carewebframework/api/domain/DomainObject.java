@@ -11,8 +11,6 @@ package org.carewebframework.api.domain;
 
 import java.io.Serializable;
 
-import org.apache.commons.lang.StringUtils;
-
 /**
  * Abstract base class for implementing domain objects. This class is useful for implementing a
  * domain object from scratch. To wrap an existing domain object, use DomainObjectProxy.
@@ -21,36 +19,49 @@ public abstract class DomainObject implements Serializable, IDomainObject {
     
     private static final long serialVersionUID = 1L;
     
-    private String id;
+    private String logicalId;
+    
+    private String universalId;
     
     public DomainObject() {
     }
     
     public DomainObject(DomainObject src) {
-        id = src.id;
+        logicalId = src.logicalId;
     }
     
-    public DomainObject(String id) {
-        this.id = id;
-    }
-    
-    @Override
-    public String getDomainId() {
-        return id;
+    public DomainObject(String logicalId, String universalId) {
+        this.logicalId = logicalId;
+        this.universalId = universalId;
     }
     
     @Override
-    public void setDomainId(String id) {
-        this.id = id;
+    public String getLogicalId() {
+        return logicalId;
+    }
+    
+    protected void setLogicalId(String logicalId) {
+        this.logicalId = logicalId;
+    }
+    
+    @Override
+    public String getUniversalId() {
+        return universalId;
+    }
+    
+    protected void setUniversalId(String universalId) {
+        this.universalId = universalId;
     }
     
     @Override
     public boolean equals(Object object) {
-        return object != null && object.getClass().equals(getClass()) && StringUtils.equals(((DomainObject) object).id, id);
+        if (object instanceof DomainObject) {
+            DomainObject tgt = (DomainObject) object;
+            return getClass() == tgt.getClass() && getUniversalId() != null && tgt.getUniversalId() != null
+                    && getUniversalId().equals(tgt.getUniversalId());
+        }
+        
+        return false;
     }
     
-    @Override
-    public Object getProxiedObject() {
-        return this;
-    }
 }

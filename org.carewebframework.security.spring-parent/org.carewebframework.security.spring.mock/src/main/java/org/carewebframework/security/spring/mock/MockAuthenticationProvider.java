@@ -25,14 +25,14 @@ import org.springframework.security.authentication.BadCredentialsException;
  */
 public class MockAuthenticationProvider extends AbstractAuthenticationProvider<IDomainObject> {
     
-    public interface IMockUserFactory {
+    public interface IMockUserFactory<T> {
         
         public IDomainObject create(String name);
     }
     
     private String mockAuthorities;
     
-    private IMockUserFactory mockUserFactory;
+    private IMockUserFactory<?> mockUserFactory;
     
     /**
      * No-arg constructor.
@@ -86,7 +86,7 @@ public class MockAuthenticationProvider extends AbstractAuthenticationProvider<I
         this.mockAuthorities = mockAuthorities;
     }
     
-    public void setMockUserFactory(IMockUserFactory mockUserFactory) {
+    public void setMockUserFactory(IMockUserFactory<?> mockUserFactory) {
         this.mockUserFactory = mockUserFactory;
     }
     

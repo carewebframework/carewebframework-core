@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -9,8 +9,6 @@
  */
 package org.carewebframework.api.domain;
 
-import java.io.Serializable;
-
 /**
  * Abstract base class for wrapping an existing domain object. The wrapped object may be directly
  * accessed via the getProxiedObject method. This class is useful for exposing domain objects in a
@@ -18,10 +16,10 @@ import java.io.Serializable;
  * 
  * @param <T> The class of the wrapped domain object.
  */
-public abstract class DomainObjectProxy<T> implements IDomainObject, Serializable {
+public abstract class DomainObjectProxy<T> extends DomainObject implements IProxiedDomainObject<T> {
     
     private static final long serialVersionUID = 1L;
-
+    
     protected T proxiedObject;
     
     /**
@@ -32,7 +30,7 @@ public abstract class DomainObjectProxy<T> implements IDomainObject, Serializabl
     }
     
     /**
-     * @see org.carewebframework.api.domain.IDomainObject#getProxiedObject()
+     * @see org.carewebframework.api.domain.IProxiedDomainObject#getProxiedObject()
      */
     @Override
     public T getProxiedObject() {
@@ -45,7 +43,7 @@ public abstract class DomainObjectProxy<T> implements IDomainObject, Serializabl
     @Override
     public boolean equals(Object object) {
         return object != null && object.getClass().equals(getClass())
-                && ((DomainObjectProxy<?>) object).getDomainId() == getDomainId();
+                && ((DomainObjectProxy<?>) object).getLogicalId() == getLogicalId();
     }
     
 }

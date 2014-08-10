@@ -11,22 +11,18 @@ package org.carewebframework.api.domain;
 
 /**
  * Base interface for domain objects.
+ * 
+ * @param <T> Type of proxied object.
  */
-public interface IDomainObject {
+public interface IProxiedDomainObject<T> extends IDomainObject {
     
     /**
-     * Returns an id that is assumed to uniquely identify this object within its domain.
+     * Returns the native domain object. If this implementation wraps another domain object, the
+     * wrapped object is returned; otherwise, the method should simply return a reference to the
+     * domain object itself.
      *
-     * @return The unique id.
+     * @return The native domain object.
      */
-    String getLogicalId();
-    
-    /**
-     * Returns an id that is unique across domains. The logical id is typically a subset of the
-     * universal id.
-     *
-     * @return The universal id.
-     */
-    String getUniversalId();
+    T getProxiedObject();
     
 }

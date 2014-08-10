@@ -22,7 +22,7 @@ public class MockUser extends DomainObject implements IDomainObject {
     private final String fullName;
     
     public MockUser(String id, String fullName) {
-        super(id);
+        super(id, id);
         this.fullName = fullName;
     }
     
