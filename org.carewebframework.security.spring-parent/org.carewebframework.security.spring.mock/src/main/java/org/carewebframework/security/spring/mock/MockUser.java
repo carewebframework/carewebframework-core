@@ -16,14 +16,14 @@ import org.carewebframework.api.domain.IUser;
  */
 public class MockUser implements IUser {
     
-    private final String userId;
+    private final String logicalId;
     
     private final String fullName;
     
     private final String domainName;
     
-    public MockUser(String userId, String fullName, String domainName) {
-        this.userId = userId;
+    public MockUser(String logicalId, String fullName, String domainName) {
+        this.logicalId = logicalId;
         this.fullName = fullName;
         this.domainName = domainName;
     }
@@ -44,8 +44,8 @@ public class MockUser implements IUser {
     }
     
     @Override
-    public String getUserId() {
-        return userId;
+    public String getLogicalId() {
+        return logicalId;
     }
     
     @Override

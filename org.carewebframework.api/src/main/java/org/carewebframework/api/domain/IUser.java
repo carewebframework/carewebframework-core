@@ -29,11 +29,11 @@ public interface IUser {
     String getDomainName();
     
     /**
-     * Returns the identifier for the user.
+     * Returns the logical identifier for the user.
      * 
-     * @return User identifier.
+     * @return User logical identifier.
      */
-    String getUserId();
+    String getLogicalId();
     
     /**
      * Returns the native user object if this is a proxy.

@@ -51,7 +51,7 @@ public abstract class AbstractGlobalEventDispatcher implements IGlobalEventDispa
      */
     public void init() {
         publisherInfo.setEndpointId(getEndpointId());
-        publisherInfo.setUserId(user == null ? null : user.getUserId());
+        publisherInfo.setUserId(user == null ? null : user.getLogicalId());
         publisherInfo.setUserName(user == null ? "" : user.getFullName());
         publisherInfo.setNodeId(getNodeId());
         publisherInfo.setAppName(getAppName());
