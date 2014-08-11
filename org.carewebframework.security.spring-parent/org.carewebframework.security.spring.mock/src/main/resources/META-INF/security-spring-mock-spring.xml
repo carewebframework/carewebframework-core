@@ -17,11 +17,11 @@
 			<property name="logoutTarget" value="${org.carewebframework.security.logout.url:}" />
 		</bean>
 
-		<bean id="mockUser" class="org.carewebframework.api.security.MockUser" 
+		<bean id="mockUser" class="org.carewebframework.security.spring.mock.MockUser" 
 			cwf:override="ignore">
-			<constructor-arg value="${mock.userid:}";
-			<constructor-arg value="${mock.fullname:}";
-			<constructor-arg value="${mock.domainame:}";
+			<constructor-arg value="${mock.userid:}" />
+			<constructor-arg value="${mock.fullname:}" />
+			<constructor-arg value="${mock.domainname:}" />
 		</bean>
 		
 		<bean id="securityAuthenticationProvider" class="org.carewebframework.security.spring.mock.MockAuthenticationProvider">

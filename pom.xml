@@ -966,7 +966,7 @@
 			</dependency>
 			<dependency>
 				<groupId>org.carewebframework</groupId>
-				<artifactId>org.carewebframework.security.spring</artifactId>
+				<artifactId>org.carewebframework.security.spring.core</artifactId>
 				<version>${org.carewebframework.version}</version>
 				<type>jar</type>
 				<scope>compile</scope>

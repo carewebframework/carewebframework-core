@@ -7,7 +7,7 @@
  * Disclaimer of Warranty and Limitation of Liability available at
  * http://www.carewebframework.org/licensing/disclaimer.
  */
-package org.carewebframework.api.security;
+package org.carewebframework.security.spring.mock;
 
 import org.carewebframework.api.domain.IUser;
 
