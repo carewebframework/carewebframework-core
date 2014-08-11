@@ -17,7 +17,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import org.carewebframework.api.context.UserContext;
-import org.carewebframework.api.domain.IDomainObject;
+import org.carewebframework.api.domain.IUser;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.ui.Application;
 import org.carewebframework.ui.Application.DesktopInfo;
@@ -42,9 +42,9 @@ public class MainRowRenderer extends AbstractRowRenderer<SessionInfo, Object> {
     private static final String[] DETAIL_COL_WIDTHS = { "12%", "10%", "10%", "38%", "15%", "15%" };
     
     private static final String[] DETAIL_COL_LABELS = { "@cwf.sessiontracker.detail.col1.label",
-        "@cwf.sessiontracker.detail.col2.label", "@cwf.sessiontracker.detail.col3.label",
-        "@cwf.sessiontracker.detail.col4.label", "@cwf.sessiontracker.detail.col5.label",
-    "@cwf.sessiontracker.detail.col6.label" };
+            "@cwf.sessiontracker.detail.col2.label", "@cwf.sessiontracker.detail.col3.label",
+            "@cwf.sessiontracker.detail.col4.label", "@cwf.sessiontracker.detail.col5.label",
+            "@cwf.sessiontracker.detail.col6.label" };
     
     private static final Log log = LogFactory.getLog(MainRowRenderer.class);
     
@@ -96,7 +96,7 @@ public class MainRowRenderer extends AbstractRowRenderer<SessionInfo, Object> {
             final ClientInfoEvent clientInfo = desktopInfo == null ? null : desktopInfo.getClientInformation();
             final String screenDimensions = clientInfo == null ? "" : (clientInfo.getScreenWidth() + "x" + clientInfo
                     .getScreenHeight());
-            final IDomainObject user = getUser(desktop);
+            final IUser user = getUser(desktop);
             String usr = user == null ? StrUtil.formatMessage("@cwf.sessiontracker.msg.unknown") : (user.toString());
             final Row detailRow = new Row();
             detailRow.setParent(detailRows);
@@ -109,7 +109,7 @@ public class MainRowRenderer extends AbstractRowRenderer<SessionInfo, Object> {
         }
     }
     
-    private IDomainObject getUser(Desktop desktop) {
+    private IUser getUser(Desktop desktop) {
         try {
             final FrameworkAppContext ctx = FrameworkAppContext.getAppContext(desktop);
             final UserContext uctx = ctx == null ? null : ctx.getBean("userContext", UserContext.class);

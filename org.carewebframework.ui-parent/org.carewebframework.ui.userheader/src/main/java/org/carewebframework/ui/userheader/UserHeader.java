@@ -17,7 +17,7 @@ import org.apache.commons.logging.LogFactory;
 
 import org.carewebframework.api.context.UserContext;
 import org.carewebframework.api.context.UserContext.IUserContextEvent;
-import org.carewebframework.api.domain.IDomainObject;
+import org.carewebframework.api.domain.IUser;
 import org.carewebframework.api.property.PropertyUtil;
 import org.carewebframework.api.security.SecurityUtil;
 import org.carewebframework.shell.CareWebUtil;
@@ -47,7 +47,7 @@ public class UserHeader extends PluginController implements IUserContextEvent {
     
     private static final String DATABASE_DISPLAY_BACKGROUNDCOLOR_PROPERTY = "DATABASE.BACKGROUNDCOLOR";
     
-    private IDomainObject currentUser;
+    private IUser currentUser;
     
     private String dbRegion;
     
@@ -99,7 +99,7 @@ public class UserHeader extends PluginController implements IUserContextEvent {
      */
     @Override
     public void committed() {
-        IDomainObject user = UserContext.getActiveUser();
+        IUser user = UserContext.getActiveUser();
         
         if (log.isDebugEnabled()) {
             log.debug("user: " + user);
@@ -110,7 +110,7 @@ public class UserHeader extends PluginController implements IUserContextEvent {
         }
         
         currentUser = user;
-        String text = user == null ? "" : user.toString();
+        String text = user == null ? "" : user.getFullName() + "@" + user.getDomainName();
         HttpServletRequest request = FrameworkWebSupport.getHttpServletRequest();
         String info = StringUtils.trimToEmpty((request == null ? "" : request.getLocalAddr()) + " " + dbRegion);
         userHeader.setValue(text + (info.isEmpty() ? "" : " (" + info + ")"));

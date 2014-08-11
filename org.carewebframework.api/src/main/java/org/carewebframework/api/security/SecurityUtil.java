@@ -11,7 +11,7 @@ package org.carewebframework.api.security;
 
 import java.util.Map;
 
-import org.carewebframework.api.domain.IDomainObject;
+import org.carewebframework.api.domain.IUser;
 import org.carewebframework.api.spring.SpringUtil;
 
 import org.springframework.util.AntPathMatcher;
@@ -64,7 +64,7 @@ public class SecurityUtil {
      * @return The authenticated user, or null if none.
      * @see ISecurityService#getAuthenticatedUser()
      */
-    public static IDomainObject getAuthenticatedUser() {
+    public static IUser getAuthenticatedUser() {
         return getSecurityService().getAuthenticatedUser();
     }
     

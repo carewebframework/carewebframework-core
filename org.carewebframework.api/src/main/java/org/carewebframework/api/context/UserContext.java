@@ -12,12 +12,12 @@ package org.carewebframework.api.context;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import org.carewebframework.api.domain.IDomainObject;
+import org.carewebframework.api.domain.IUser;
 
 /**
  * Wrapper for shared user context.
  */
-public class UserContext extends ManagedContext<IDomainObject> {
+public class UserContext extends ManagedContext<IUser> {
     
     private static final Log log = LogFactory.getLog(UserContext.class);
     
@@ -35,7 +35,7 @@ public class UserContext extends ManagedContext<IDomainObject> {
      * 
      * @param user New user
      */
-    public static void changeUser(IDomainObject user) {
+    public static void changeUser(IUser user) {
         try {
             getUserContext().requestContextChange(user);
         } catch (Exception e) {
@@ -46,11 +46,11 @@ public class UserContext extends ManagedContext<IDomainObject> {
     /**
      * Returns the managed user context.
      * 
-     * @return IDomainUser context
+     * @return User context
      */
     @SuppressWarnings("unchecked")
-    public static ISharedContext<IDomainObject> getUserContext() {
-        return (ISharedContext<IDomainObject>) ContextManager.getInstance().getSharedContext(UserContext.class.getName());
+    public static ISharedContext<IUser> getUserContext() {
+        return (ISharedContext<IUser>) ContextManager.getInstance().getSharedContext(UserContext.class.getName());
     }
     
     /**
@@ -58,7 +58,7 @@ public class UserContext extends ManagedContext<IDomainObject> {
      * 
      * @return User in current context.
      */
-    public static IDomainObject getActiveUser() {
+    public static IUser getActiveUser() {
         return getUserContext().getContextObject(false);
     }
     
@@ -74,7 +74,7 @@ public class UserContext extends ManagedContext<IDomainObject> {
      * 
      * @param user User that will be the initial state.
      */
-    public UserContext(IDomainObject user) {
+    public UserContext(IUser user) {
         super(SUBJECT_NAME, IUserContextEvent.class, user);
     }
     

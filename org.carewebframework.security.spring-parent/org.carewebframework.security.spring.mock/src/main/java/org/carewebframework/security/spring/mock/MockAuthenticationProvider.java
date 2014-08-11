@@ -11,7 +11,7 @@ package org.carewebframework.security.spring.mock;
 
 import java.util.List;
 
-import org.carewebframework.api.domain.IDomainObject;
+import org.carewebframework.api.domain.IUser;
 import org.carewebframework.api.spring.SpringUtil;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.security.spring.AbstractAuthenticationProvider;
@@ -23,16 +23,11 @@ import org.springframework.security.authentication.BadCredentialsException;
  * Provides authentication support for the framework. Takes provided authentication credentials and
  * authenticates them against the database.
  */
-public class MockAuthenticationProvider extends AbstractAuthenticationProvider<IDomainObject> {
-    
-    public interface IMockUserFactory<T> {
-        
-        public IDomainObject create(String name);
-    }
+public class MockAuthenticationProvider extends AbstractAuthenticationProvider<IUser> {
     
     private String mockAuthorities;
     
-    private IMockUserFactory<?> mockUserFactory;
+    private IUser mockUser;
     
     /**
      * No-arg constructor.
@@ -59,18 +54,18 @@ public class MockAuthenticationProvider extends AbstractAuthenticationProvider<I
      * @return Authorization result
      */
     @Override
-    protected IDomainObject login(CWFAuthenticationDetails details, String username, String password, String domain) {
-        IDomainObject user = authenticate(username, password, domain);
+    protected IUser login(CWFAuthenticationDetails details, String username, String password, String domain) {
+        IUser user = authenticate(username, password, domain);
         details.setDetail("user", user);
         return user;
     }
     
-    private IDomainObject authenticate(final String username, final String password, final String domain) {
+    private IUser authenticate(final String username, final String password, final String domain) {
         if (!check("mock.username", username) || !check("mock.password", password) || !check("mock.domain", domain)) {
             throw new BadCredentialsException("Authentication failed.");
         }
         
-        return mockUserFactory.create(SpringUtil.getProperty("mock.fullname"));
+        return mockUser;
     }
     
     private boolean check(String property, String value) {
@@ -78,7 +73,7 @@ public class MockAuthenticationProvider extends AbstractAuthenticationProvider<I
     }
     
     @Override
-    protected List<String> getAuthorities(IDomainObject user) {
+    protected List<String> getAuthorities(IUser user) {
         return user == null ? null : StrUtil.toList(mockAuthorities, ",");
     }
     
@@ -86,8 +81,8 @@ public class MockAuthenticationProvider extends AbstractAuthenticationProvider<I
         this.mockAuthorities = mockAuthorities;
     }
     
-    public void setMockUserFactory(IMockUserFactory<?> mockUserFactory) {
-        this.mockUserFactory = mockUserFactory;
+    public void setMockUser(IUser mockUser) {
+        this.mockUser = mockUser;
     }
     
 }

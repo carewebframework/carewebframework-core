@@ -12,7 +12,7 @@ package org.carewebframework.security.spring.mock;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.carewebframework.api.domain.IDomainObject;
+import org.carewebframework.api.domain.IUser;
 import org.carewebframework.api.security.SecurityUtil;
 import org.carewebframework.ui.zk.ZKUtil;
 
@@ -54,16 +54,16 @@ public class LoginWindowController extends GenericForwardComposer<Component> {
         savedRequest = (SavedRequest) session.removeAttribute(org.carewebframework.security.spring.Constants.SAVED_REQUEST);
         final AuthenticationException authError = (AuthenticationException) session
                 .removeAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
-        IDomainObject user = authError != null && authError.getCause() instanceof CredentialsExpiredException ? (IDomainObject) ((CredentialsExpiredException) authError
+        IUser user = authError != null && authError.getCause() instanceof CredentialsExpiredException ? (IUser) ((CredentialsExpiredException) authError
                 .getCause()).getExtraInformation() : null;
-                String form = LoginPaneController.DIALOG_LOGIN_PANE;
-                Map<Object, Object> args = new HashMap<Object, Object>();
-                args.put("savedRequest", savedRequest);
-                args.put("authError", authError);
-                args.put("user", user);
-                ZKUtil.loadZulPage(form, loginForm, args, this);
-                getPage().setTitle(user != null ? "Change Password" : "Please Login");
-                resetTimer();
+        String form = LoginPaneController.DIALOG_LOGIN_PANE;
+        Map<Object, Object> args = new HashMap<Object, Object>();
+        args.put("savedRequest", savedRequest);
+        args.put("authError", authError);
+        args.put("user", user);
+        ZKUtil.loadZulPage(form, loginForm, args, this);
+        getPage().setTitle(user != null ? "Change Password" : "Please Login");
+        resetTimer();
     }
     
     /**

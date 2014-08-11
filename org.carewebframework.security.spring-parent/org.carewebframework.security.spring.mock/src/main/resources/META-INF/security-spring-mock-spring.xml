@@ -17,12 +17,16 @@
 			<property name="logoutTarget" value="${org.carewebframework.security.logout.url:}" />
 		</bean>
 
-		<bean id="mockUserFactory" class="org.carewebframework.security.spring.mock.MockUserFactory" 
-			cwf:override="ignore" />
+		<bean id="mockUser" class="org.carewebframework.api.security.MockUser" 
+			cwf:override="ignore">
+			<constructor-arg value="${mock.userid:}";
+			<constructor-arg value="${mock.fullname:}";
+			<constructor-arg value="${mock.domainame:}";
+		</bean>
 		
 		<bean id="securityAuthenticationProvider" class="org.carewebframework.security.spring.mock.MockAuthenticationProvider">
 			<property name="mockAuthorities" value="${mock.authorities:}" />
-			<property name="mockUserFactory" ref="mockUserFactory" />
+			<property name="mockUser" ref="mockUser" />
 		</bean>
 	
 		<bean id="loginPaneController" class="org.carewebframework.security.spring.mock.LoginPaneController"
@@ -30,7 +34,7 @@
 			<property name="autoLogin" value="${mock.autologin:false}" />
 			<property name="mockUsername" value="${mock.username:}" />
 			<property name="mockPassword" value="${mock.password:}" />
-			<property name="mockDomain" value="${mock.domain:}" />
+			<property name="mockDomain" value="${mock.domainid:}" />
 			<property name="mockGreeting" value="${mock.greeting:}" />
 		</bean>
 

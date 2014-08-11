@@ -15,7 +15,7 @@ import java.util.UUID;
 import org.apache.commons.lang.StringUtils;
 
 import org.carewebframework.api.FrameworkUtil;
-import org.carewebframework.api.domain.IDomainObject;
+import org.carewebframework.api.domain.IUser;
 import org.carewebframework.api.security.SecurityUtil;
 
 /**
@@ -32,7 +32,7 @@ public abstract class AbstractGlobalEventDispatcher implements IGlobalEventDispa
     
     private PingEventHandler pingEventHandler;
     
-    protected final IDomainObject user;
+    protected final IUser user;
     
     protected final PublisherInfo publisherInfo = new PublisherInfo();
     
@@ -51,7 +51,7 @@ public abstract class AbstractGlobalEventDispatcher implements IGlobalEventDispa
      */
     public void init() {
         publisherInfo.setEndpointId(getEndpointId());
-        publisherInfo.setUserId(user == null ? null : getUserId(user));
+        publisherInfo.setUserId(user == null ? null : user.getUserId());
         publisherInfo.setUserName(user == null ? "" : user.toString());
         publisherInfo.setNodeId(getNodeId());
         publisherInfo.setAppName(getAppName());
@@ -115,16 +115,6 @@ public abstract class AbstractGlobalEventDispatcher implements IGlobalEventDispa
      */
     protected String getEndpointId() {
         return UUID.randomUUID().toString();
-    }
-    
-    /**
-     * Returns the unique identifier for the user.
-     *
-     * @param user The user.
-     * @return Unique identifier for the user.
-     */
-    protected String getUserId(IDomainObject user) {
-        return user.getLogicalId();
     }
     
     /**

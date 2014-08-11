@@ -9,16 +9,16 @@
  */
 package org.carewebframework.api.security;
 
-import org.carewebframework.api.domain.IDomainObject;
+import org.carewebframework.api.domain.IUser;
 
 /**
  * Mock security service for testing.
  */
 public class MockSecurityService implements ISecurityService {
     
-    private final IDomainObject mockUser;
+    private final IUser mockUser;
     
-    public MockSecurityService(IDomainObject mockUser) {
+    public MockSecurityService(IUser mockUser) {
         this.mockUser = mockUser;
     }
     
@@ -61,7 +61,7 @@ public class MockSecurityService implements ISecurityService {
     }
     
     @Override
-    public IDomainObject getAuthenticatedUser() {
+    public IUser getAuthenticatedUser() {
         return mockUser;
     }
     

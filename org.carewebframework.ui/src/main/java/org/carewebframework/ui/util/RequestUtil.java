@@ -21,7 +21,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import org.carewebframework.api.domain.IDomainObject;
+import org.carewebframework.api.domain.IUser;
 import org.carewebframework.api.security.SecurityUtil;
 import org.carewebframework.ui.FrameworkWebSupport;
 
@@ -185,10 +185,10 @@ public class RequestUtil {
      * @return order List of Strings representing the diagnostic context
      */
     public static List<String> getStandardDiagnosticContext() {
-        IDomainObject user = SecurityUtil.getAuthenticatedUser();
+        IUser user = SecurityUtil.getAuthenticatedUser();
         final List<String> dc = new ArrayList<String>();
         dc.add(getSessionId());
-        dc.add(user == null ? "Unknown user" : user.toString());
+        dc.add(user == null ? "Unknown user" : user.getFullName());
         dc.add(FrameworkWebSupport.getDesktopId());
         dc.add(getRemoteAddress());
         dc.add(getLocalHostAddress());

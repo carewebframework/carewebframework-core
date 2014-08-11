@@ -22,7 +22,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import org.carewebframework.api.FrameworkUtil;
-import org.carewebframework.api.domain.IDomainObject;
 import org.carewebframework.api.event.IEventManager;
 import org.carewebframework.api.event.IGenericEvent;
 import org.carewebframework.api.security.ISecurityService;
@@ -86,11 +85,11 @@ public class DesktopMonitor extends Thread {
                 case BASELINE:
                     monitor.setMode(Mode.LOCK);
                     break;
-                    
+                
                 case LOCK:
                     monitor.requestLogout();
                     break;
-                    
+                
                 case SHUTDOWN:
                     monitor.requestLogout();
                     break;
@@ -208,7 +207,7 @@ public class DesktopMonitor extends Thread {
             desktop.removeListener(this);
             timeoutWindow = (Window) desktop.getExecution().createComponents(DESKTOP_TIMEOUT_ZUL, null, null);
             ZKUtil.wireController(timeoutWindow, DesktopMonitor.this);
-            IDomainObject user = securityService.getAuthenticatedUser();
+            Object user = securityService.getAuthenticatedUser();
             lblLocked.setValue(Mode.BASELINE.getLabel(TIMEOUT_EXPIRATION, user.toString()));
             desktop.enableServerPush(true);
             desktop.addListener(desktopActivityMonitor);
@@ -303,7 +302,7 @@ public class DesktopMonitor extends Thread {
                     }
                     resetActivity(false);
                     break;
-                    
+                
                 case UPDATE_MODE:
                     if (!isDesktopLockingDisabled) {
                         setSclass(SCLASS_IDLE);
@@ -312,7 +311,7 @@ public class DesktopMonitor extends Thread {
                         Application.getDesktopInfo(desktop).sendToSpawned(mode == Mode.LOCK ? Command.LOCK : Command.UNLOCK);
                     }
                     break;
-                    
+                
                 case LOGOUT:
                     if (isDesktopLockingDisabled) {
                         log.info(String.format("App[%s] Desktop[%s] was excluded from pre-invalidation locking", appName,
@@ -450,7 +449,7 @@ public class DesktopMonitor extends Thread {
                 }
                 
                 break;
-                
+            
             case COUNTDOWN:
                 if (stateChanged) {
                     pollingInterval = countdownInterval;
@@ -468,7 +467,7 @@ public class DesktopMonitor extends Thread {
             case TIMEDOUT:
                 mode.onTimeout(this);
                 break;
-                
+            
             case DEAD:
                 this.terminate = true;
                 this.desktopDead = true;

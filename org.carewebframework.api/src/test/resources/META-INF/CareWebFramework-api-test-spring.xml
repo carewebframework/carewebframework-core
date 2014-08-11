@@ -18,6 +18,7 @@
 				<bean class="org.carewebframework.api.security.MockUser">
 					<constructor-arg value="1" />
 					<constructor-arg value="User, Mock" />
+					<constructor-arg value="Mock Domain" />
 				</bean>
 			</constructor-arg>
 		</bean>
