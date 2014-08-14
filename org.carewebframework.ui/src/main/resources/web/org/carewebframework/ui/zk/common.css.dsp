@@ -213,3 +213,14 @@ div.z-listbox-body .z-listcell {
 .z-caption .z-toolbar a {
     color: blue;
 }
+
+/* JQuery-UI overrides */
+
+.ui-front {
+	z-index: 2000;
+}
+
+.ui-selectable-helper {
+	z-index: 2000;
+}
+
