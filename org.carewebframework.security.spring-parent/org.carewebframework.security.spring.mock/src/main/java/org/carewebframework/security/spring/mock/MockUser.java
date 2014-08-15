@@ -16,6 +16,8 @@ import org.carewebframework.api.domain.IUser;
  */
 public class MockUser implements IUser {
     
+    private static final long serialVersionUID = 1L;
+    
     private final String logicalId;
     
     private final String fullName;
