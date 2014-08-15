@@ -12,7 +12,7 @@ package org.carewebframework.security.spring.mock;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 
-import org.carewebframework.api.property.PropertyUtil;
+import org.carewebframework.api.spring.SpringUtil;
 import org.carewebframework.security.spring.AbstractSecurityService;
 import org.carewebframework.ui.zk.PromptDialog;
 
@@ -31,7 +31,7 @@ public class SecurityServiceImpl extends AbstractSecurityService {
      */
     @Override
     public boolean validatePassword(final String password) {
-        return password.equals(PropertyUtil.getValue("mock.password", null));
+        return password.equals(SpringUtil.getProperty("mock.password"));
     }
     
     /**
