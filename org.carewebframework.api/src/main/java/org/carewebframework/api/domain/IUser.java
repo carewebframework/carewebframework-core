@@ -9,10 +9,12 @@
  */
 package org.carewebframework.api.domain;
 
+import java.io.Serializable;
+
 /**
  * Interface for a user.
  */
-public interface IUser {
+public interface IUser extends Serializable {
     
     /**
      * Returns the user's full name.
