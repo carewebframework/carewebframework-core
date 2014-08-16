@@ -47,18 +47,6 @@ public class DomainFactoryRegistry extends BeanRegistry<IDomainFactory> {
     }
     
     /**
-     * Fetches an object, identified by its unique key, from the specified table.
-     * 
-     * @param clazz Class of object to create.
-     * @param key The unique key associated with the object.
-     * @param table The table containing the requested object.
-     * @return The requested object.
-     */
-    public static <T> T fetchObject(Class<T> clazz, String key, String table) {
-        return getFactory(clazz).fetchObject(clazz, key, table);
-    }
-    
-    /**
      * Fetches multiple domain objects as specified by an array of identifier values.
      *
      * @param clazz Class of object to create.

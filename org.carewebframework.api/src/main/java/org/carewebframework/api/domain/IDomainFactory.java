@@ -36,16 +36,6 @@ public interface IDomainFactory<T> {
     T fetchObject(Class<T> clazz, String id);
     
     /**
-     * Fetches an object, identified by its unique id, from the underlying data store.
-     *
-     * @param clazz Class of object to create.
-     * @param key Unique key associated with the object.
-     * @param table Table containing the requested object.
-     * @return The requested object.
-     */
-    T fetchObject(Class<T> clazz, String key, String table);
-    
-    /**
      * Fetches multiple domain objects as specified by an array of identifier values.
      *
      * @param clazz Class of object to create.
