@@ -1,5 +1,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+	
 	<groupId>org.carewebframework</groupId>
 	<artifactId>org.carewebframework-parent</artifactId>
 	<version>3.1.0-SNAPSHOT</version>
@@ -87,7 +88,7 @@
 		<module>org.carewebframework.lib-parent</module>
 		<module>org.carewebframework.ui-parent</module>
 		<module>org.carewebframework.testharness</module>
-		<module>org.carewebframework.web.testharness</module>
+		<module>org.carewebframework.webapp.testharness</module>
 	</modules>
 
 	<build>
