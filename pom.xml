@@ -87,7 +87,7 @@
 		<module>org.carewebframework.lib-parent</module>
 		<module>org.carewebframework.ui-parent</module>
 		<module>org.carewebframework.testharness</module>
-		<module>org.carewebframework.testharness.webapp</module>
+		<module>org.carewebframework.web.testharness</module>
 	</modules>
 
 	<build>
