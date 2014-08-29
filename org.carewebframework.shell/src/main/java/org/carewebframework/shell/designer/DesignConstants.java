@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -67,6 +67,12 @@ public class DesignConstants {
     public static final String DESIGN_ICON_ACTIVE = Constants.IMAGE_PATH + "designOn.png";;
     
     public static final String DESIGN_MODE_PRIVS = "PRIV_CAREWEB_DESIGNER";
+    
+    public static final String DESIGN_FAVORITES_PROPERTY = "CAREWEB.DESIGN.FAVORITES";
+    
+    public static final String DESIGN_FAVORITES_INACTIVE = Constants.IMAGE_PATH + "starOff.png";
+    
+    public static final String DESIGN_FAVORITES_ACTIVE = Constants.IMAGE_PATH + "starOn.png";
     
     /**
      * Enforce static class.

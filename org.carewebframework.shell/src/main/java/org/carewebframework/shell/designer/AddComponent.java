@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -9,8 +9,11 @@
  */
 package org.carewebframework.shell.designer;
 
+import java.util.List;
+
 import org.apache.commons.lang.StringUtils;
 
+import org.carewebframework.api.property.PropertyUtil;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.shell.layout.LayoutUtil;
 import org.carewebframework.shell.layout.UIElementBase;
@@ -23,8 +26,12 @@ import org.carewebframework.ui.zk.TreeUtil;
 import org.carewebframework.ui.zk.ZKUtil;
 
 import org.zkoss.util.resource.Labels;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.Button;
+import org.zkoss.zul.Image;
 import org.zkoss.zul.Tree;
 import org.zkoss.zul.Treeitem;
 import org.zkoss.zul.Window;
@@ -35,6 +42,8 @@ import org.zkoss.zul.Window;
 public class AddComponent extends Window {
     
     private static final long serialVersionUID = 1L;
+    
+    private static final String ON_FAVORITE = "onFavorite";
     
     private UIElementBase parentElement;
     
@@ -47,6 +56,54 @@ public class AddComponent extends Window {
     private Button btnOK;
     
     private boolean createChild;
+    
+    private Treeitem itmFavorites;
+    
+    private List<String> favorites;
+    
+    private boolean favoritesChanged;
+    
+    private final String favoritesCategory = Labels.getLabel("cwf.shell.plugin.category.favorite");
+    
+    /**
+     * Handles click on item not under favorites category.
+     */
+    private final EventListener<Event> favoriteListener1 = new EventListener<Event>() {
+        
+        @Override
+        public void onEvent(Event event) throws Exception {
+            Treeitem item = (Treeitem) event.getTarget();
+            String path = (String) item.getAttribute("path");
+            boolean isFavorite = !(Boolean) item.getAttribute("favorite");
+            Treeitem other = (Treeitem) item.getAttribute("other");
+            favoritesChanged = true;
+            
+            if (isFavorite) {
+                favorites.add(path);
+                other = addTreeitem((PluginDefinition) item.getValue(), item);
+                item.setAttribute("other", other);
+            } else {
+                favorites.remove(path);
+                other.detach();
+            }
+            
+            setFavoriteStatus(item, isFavorite);
+        }
+    };
+    
+    /**
+     * Handles click on item under favorites category.
+     */
+    private final EventListener<Event> favoriteListener2 = new EventListener<Event>() {
+        
+        @Override
+        public void onEvent(Event event) throws Exception {
+            Treeitem item = (Treeitem) event.getTarget();
+            Treeitem other = (Treeitem) item.getAttribute("other");
+            Events.sendEvent(ON_FAVORITE, other, null);
+        }
+        
+    };
     
     /**
      * Display the add component dialog, presenting a list of candidate plugins that may serve as
@@ -107,6 +164,7 @@ public class AddComponent extends Window {
         ZKUtil.wireController(this);
         Treeitem defaultItem = null;
         boolean useDefault = true;
+        loadFavorites();
         
         for (PluginDefinition def : PluginRegistry.getInstance()) {
             if (def.isInternal()) {
@@ -119,13 +177,11 @@ public class AddComponent extends Window {
                 continue;
             }
             
-            Treeitem item = addTreeitem(def);
+            Treeitem item = addTreeitem(def, null);
             
             if (item == null) {
                 continue;
             }
-            
-            item.setDisabled(def.isDisabled() || def.isForbidden());
             
             if (!item.isDisabled()) {
                 if (defaultItem == null) {
@@ -142,6 +198,7 @@ public class AddComponent extends Window {
         }
         
         TreeUtil.sort(tree);
+        ZKUtil.moveChild(itmFavorites, 0);
         
         if (useDefault && defaultItem != null) {
             defaultItem.setSelected(true);
@@ -151,15 +208,23 @@ public class AddComponent extends Window {
         setTitle(StrUtil.formatMessage("@cwf.shell.designer.add.component.title", parentElement.getDefinition().getName()));
     }
     
-    private void addLayouts(boolean shared) {
-        for (String layout : LayoutUtil.getLayouts(shared)) {
-            UIElementLayout ele = new UIElementLayout(layout, shared);
-            addTreeitem(ele.getDefinition());
+    private void loadFavorites() {
+        try {
+            favorites = PropertyUtil.getValues(DesignConstants.DESIGN_FAVORITES_PROPERTY);
+        } catch (Exception e) {
+            favorites = null;
         }
     }
     
-    private Treeitem addTreeitem(PluginDefinition def) {
-        String category = def.getCategory();
+    private void addLayouts(boolean shared) {
+        for (String layout : LayoutUtil.getLayouts(shared)) {
+            UIElementLayout ele = new UIElementLayout(layout, shared);
+            addTreeitem(ele.getDefinition(), null);
+        }
+    }
+    
+    private Treeitem addTreeitem(PluginDefinition def, Treeitem other) {
+        String category = other != null ? favoritesCategory : def.getCategory();
         
         if (StringUtils.isEmpty(category)) {
             if (UIElementPlugin.class.isAssignableFrom(def.getClazz())) {
@@ -169,11 +234,52 @@ public class AddComponent extends Window {
             }
         }
         
-        Treeitem item = TreeUtil.findNode(tree, category + (category.endsWith("\\") ? "" : "\\") + def.getName(), true);
+        String path = category + (category.endsWith("\\") ? "" : "\\") + def.getName();
+        boolean isFavorite = other != null || (favorites != null && favorites.contains(path));
+        boolean disabled = def.isDisabled() || def.isForbidden();
+        Treeitem item = TreeUtil.findNode(tree, path, true);
         item.setValue(def);
         item.setTooltiptext(def.getDescription());
-        item.getFirstChild().addForward(Events.ON_DOUBLE_CLICK, btnOK, Events.ON_CLICK);
+        
+        if (disabled) {
+            item.setDisabled(true);
+        } else {
+            item.getFirstChild().addForward(Events.ON_DOUBLE_CLICK, btnOK, Events.ON_CLICK);
+        }
+        
+        if (favorites != null) {
+            Image image = new Image();
+            Component cell = item.getTreerow().getFirstChild();
+            cell.insertBefore(image, cell.getFirstChild());
+            image.addForward(Events.ON_CLICK, item, ON_FAVORITE);
+            image.setStyle("float: left");
+            item.addEventListener(ON_FAVORITE, other == null ? favoriteListener1 : favoriteListener2);
+            
+            if (isFavorite && other == null) {
+                other = addTreeitem(def, item);
+            }
+            
+            item.setAttribute("other", other);
+            item.setAttribute("path", path);
+            item.setAttribute("image", image);
+            setFavoriteStatus(item, isFavorite);
+        }
         return item;
+    }
+    
+    /**
+     * Updates the tree item according to the favorite status.
+     * 
+     * @param item
+     * @param isFavorite
+     * @return The original image.
+     */
+    private Image setFavoriteStatus(Treeitem item, boolean isFavorite) {
+        Image image = (Image) item.getAttribute("image");
+        image.setSrc(isFavorite ? DesignConstants.DESIGN_FAVORITES_ACTIVE : DesignConstants.DESIGN_FAVORITES_INACTIVE);
+        item.setAttribute("favorite", isFavorite);
+        itmFavorites.setVisible(isFavorite || itmFavorites.getTreechildren().getFirstChild() != null);
+        return image;
     }
     
     /**
@@ -189,7 +295,7 @@ public class AddComponent extends Window {
      * Close dialog without further action.
      */
     public void onClick$btnCancel() {
-        detach();
+        onClose();
     }
     
     /**
@@ -208,7 +314,19 @@ public class AddComponent extends Window {
                 childElement.bringToFront();
             }
             
-            detach();
+            onClose();
+        }
+    }
+    
+    /**
+     * Close the dialog, saving any changes to favorites.
+     */
+    @Override
+    public void onClose() {
+        super.onClose();
+        
+        if (favoritesChanged) {
+            PropertyUtil.saveValues(DesignConstants.DESIGN_FAVORITES_PROPERTY, null, false, favorites);
         }
     }
     

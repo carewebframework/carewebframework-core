@@ -1,11 +1,17 @@
 <zk>
 	<window border="normal" height="400px"
-		width="300px"
+		width="400px"
 		use="org.carewebframework.shell.designer.AddComponent">
 		<panel vflex="1">
 			<panelchildren>
 				<tree id="tree" vflex="true"
-					style="background:none;border:none;text-overflow:ellipsis;white-space:nowrap" />
+					style="background:none;border:none;text-overflow:ellipsis;white-space:nowrap">
+					<treechildren>
+						<treeitem id="itmFavorites" visible="false" label="${labels.cwf.shell.plugin.category.favorite}">
+							<treechildren />
+						</treeitem>
+					</treechildren>
+				</tree>
 			</panelchildren>
 			<toolbar align="end">
 				<button id="btnOK" label="${labels.cwf.shell.designer.add.component.btn.ok.label}" disabled="true" />
