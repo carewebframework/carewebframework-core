@@ -300,11 +300,10 @@
 
 .cwf-designer-addcomponent .z-image {
 	float: left;
-	opacity: 0.5;
 }
 
 .cwf-designer-addcomponent .z-image:hover {
-	opacity: 1;
+	zoom: 120%;
 }
 
 .cwf-designer-addcomponent .z-tree-tee,

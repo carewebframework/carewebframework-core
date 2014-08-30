@@ -65,6 +65,12 @@ public class AddComponent extends Window {
     
     private final String favoritesCategory = Labels.getLabel("cwf.shell.plugin.category.favorite");
     
+    private final String favoritesAddHint = Labels.getLabel("cwf.shell.designer.add.component.favorite.add.hint");
+    
+    private final String favoritesRemoveHint = Labels.getLabel("cwf.shell.designer.add.component.favorite.remove.hint");
+    
+    private final String noDescriptionHint = Labels.getLabel("cwf.shell.designer.add.component.description.missing.hint");
+    
     /**
      * Handles click on item not under favorites category.
      */
@@ -239,12 +245,12 @@ public class AddComponent extends Window {
         boolean disabled = def.isDisabled() || def.isForbidden();
         Treeitem item = TreeUtil.findNode(tree, path, true);
         item.setValue(def);
-        item.setTooltiptext(def.getDescription());
+        item.setTooltiptext(StringUtils.defaultString(def.getDescription(), noDescriptionHint));
         
         if (disabled) {
             item.setDisabled(true);
         } else {
-            item.getFirstChild().addForward(Events.ON_DOUBLE_CLICK, btnOK, Events.ON_CLICK);
+            item.getTreerow().addForward(Events.ON_DOUBLE_CLICK, btnOK, Events.ON_CLICK);
         }
         
         if (favorites != null) {
@@ -276,6 +282,7 @@ public class AddComponent extends Window {
     private Image setFavoriteStatus(Treeitem item, boolean isFavorite) {
         Image image = (Image) item.getAttribute("image");
         image.setSrc(isFavorite ? DesignConstants.DESIGN_FAVORITES_ACTIVE : DesignConstants.DESIGN_FAVORITES_INACTIVE);
+        image.setTooltiptext(isFavorite ? favoritesRemoveHint : favoritesAddHint);
         item.setAttribute("favorite", isFavorite);
         itmFavorites.setVisible(isFavorite || itmFavorites.getTreechildren().getFirstChild() != null);
         return image;
