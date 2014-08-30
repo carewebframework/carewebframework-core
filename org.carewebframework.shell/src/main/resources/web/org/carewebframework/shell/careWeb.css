@@ -298,6 +298,20 @@
 	font-weight: bold;
 }
 
+.cwf-designer-addcomponent .z-image {
+	float: left;
+	opacity: 0.5;
+}
+
+.cwf-designer-addcomponent .z-image:hover {
+	opacity: 1;
+}
+
+.cwf-designer-addcomponent .z-tree-tee,
+.cwf-designer-addcomponent .z-tree-last {
+	display: none;
+}
+
 @media print {
 
 	/* used for print to ensure all data is on the page with 'shrink to fit' option */

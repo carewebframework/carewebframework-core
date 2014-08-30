@@ -1,6 +1,6 @@
 <zk>
 	<window border="normal" height="400px"
-		width="400px"
+		width="400px" sclass="cwf-designer-addcomponent"
 		use="org.carewebframework.shell.designer.AddComponent">
 		<panel vflex="1">
 			<panelchildren>

@@ -252,7 +252,6 @@ public class AddComponent extends Window {
             Component cell = item.getTreerow().getFirstChild();
             cell.insertBefore(image, cell.getFirstChild());
             image.addForward(Events.ON_CLICK, item, ON_FAVORITE);
-            image.setStyle("float: left");
             item.addEventListener(ON_FAVORITE, other == null ? favoriteListener1 : favoriteListener2);
             
             if (isFavorite && other == null) {
