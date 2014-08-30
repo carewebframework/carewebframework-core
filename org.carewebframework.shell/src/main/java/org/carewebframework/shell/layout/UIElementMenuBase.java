@@ -45,12 +45,6 @@ public class UIElementMenuBase extends UIElementZKBase {
     }
     
     @Override
-    public void setDesignMode(boolean designMode) {
-        super.setDesignMode(designMode);
-        setOutlined(designMode);
-    }
-    
-    @Override
     protected void afterAddChild(UIElementBase child) {
         super.afterAddChild(child);
         updateMenubar();

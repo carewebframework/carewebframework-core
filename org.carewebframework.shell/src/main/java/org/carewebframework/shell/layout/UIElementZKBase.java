@@ -98,15 +98,13 @@ public abstract class UIElementZKBase extends UIElementBase {
     }
     
     /**
-     * Displays or hides an outline (actually a box shadow) around the outer component.
-     * 
-     * @param outlined If true, show the outline. If false, hide it.
+     * Sets styling of outer component according to design mode state.
      */
-    public void setOutlined(boolean outlined) {
+    protected void setDesignStyle() {
         Component outer = getOuterComponent();
         
         if (outer instanceof HtmlBasedComponent) {
-            ZKUtil.updateStyle((HtmlBasedComponent) outer, "box-shadow", outlined ? "0 0 0 1px lightgray inset" : null);
+            ZKUtil.updateSclass((HtmlBasedComponent) outer, "cwf-designer-designmode-active", !isDesignMode());
         }
     }
     
@@ -248,6 +246,7 @@ public abstract class UIElementZKBase extends UIElementBase {
         if (isDesignMode() != designMode) {
             super.setDesignMode(designMode);
             setDesignContextMenu(designMode ? DesignContextMenu.getInstance() : null);
+            setDesignStyle();
         } else {
             applyMask(false);
         }

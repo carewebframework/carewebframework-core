@@ -94,7 +94,6 @@ public class UIElementToolbar extends UIElementZKBase {
     @Override
     public void setDesignMode(boolean designMode) {
         super.setDesignMode(designMode);
-        setOutlined(designMode);
         ZKUtil.updateStyle(toolbar, "min-height", designMode ? "20px" : null);
     }
     
