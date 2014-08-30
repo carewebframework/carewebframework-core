@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -94,7 +94,7 @@ public class UIElementToolbar extends UIElementZKBase {
     @Override
     public void setDesignMode(boolean designMode) {
         super.setDesignMode(designMode);
-        ZKUtil.updateStyle(toolbar, "border", designMode ? "dotted 1px gray" : null);
+        setOutlined(designMode);
         ZKUtil.updateStyle(toolbar, "min-height", designMode ? "20px" : null);
     }
     

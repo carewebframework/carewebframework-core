@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -95,6 +95,19 @@ public abstract class UIElementZKBase extends UIElementBase {
     public void setInnerComponent(Object value) {
         super.setInnerComponent(value);
         associateComponent((Component) value);
+    }
+    
+    /**
+     * Displays or hides an outline (actually a box shadow) around the outer component.
+     * 
+     * @param outlined If true, show the outline. If false, hide it.
+     */
+    public void setOutlined(boolean outlined) {
+        Component outer = getOuterComponent();
+        
+        if (outer instanceof HtmlBasedComponent) {
+            ZKUtil.updateStyle((HtmlBasedComponent) outer, "box-shadow", outlined ? "0 0 0 1px lightgray inset" : null);
+        }
     }
     
     /**
