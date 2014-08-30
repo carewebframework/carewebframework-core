@@ -298,10 +298,6 @@
 	font-weight: bold;
 }
 
-.cwf-designer-designmode-active:hover {
-	box-shadow: 0 0 0 1px lightgray inset;	
-}
-
 .cwf-designer-addcomponent .z-image {
 	float: left;
 }

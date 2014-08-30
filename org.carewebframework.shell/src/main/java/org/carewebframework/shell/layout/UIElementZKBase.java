@@ -104,7 +104,7 @@ public abstract class UIElementZKBase extends UIElementBase {
         Component outer = getOuterComponent();
         
         if (outer instanceof HtmlBasedComponent) {
-            ZKUtil.updateSclass((HtmlBasedComponent) outer, "cwf-designer-designmode-active", !isDesignMode());
+            ZKUtil.updateStyle((HtmlBasedComponent) outer, "box-shadow", isDesignMode() ? "0 0 0 1px lightgray inset" : null);
         }
     }
     
