@@ -37,6 +37,8 @@ public abstract class UIElementZKBase extends UIElementBase {
     
     private static final String SAVED_CONTEXT_MENU = ATTR_PREFIX + "SavedContextMenu";
     
+    private static final String SAVED_TOOLTIP_TEXT = ATTR_PREFIX + "SavedTooltipText";
+    
     protected static final String CUSTOM_COLOR_OVERRIDE = "setCustomColor";
     
     private boolean enableDesignModeMask;
@@ -53,7 +55,7 @@ public abstract class UIElementZKBase extends UIElementBase {
         public void onEvent(Event event) throws Exception {
             Component target = event.getTarget();
             Menupopup contextMenu = (Menupopup) event.getData();
-            ZKUtil.addMask(target, getDisplayName(), contextMenu);
+            ZKUtil.addMask(target, getDisplayName(), contextMenu, getDisplayName());
         }
         
     };
@@ -95,17 +97,6 @@ public abstract class UIElementZKBase extends UIElementBase {
     public void setInnerComponent(Object value) {
         super.setInnerComponent(value);
         associateComponent((Component) value);
-    }
-    
-    /**
-     * Sets styling of outer component according to design mode state.
-     */
-    protected void setDesignStyle() {
-        Component outer = getOuterComponent();
-        
-        if (outer instanceof HtmlBasedComponent) {
-            ZKUtil.updateStyle((HtmlBasedComponent) outer, "box-shadow", isDesignMode() ? "0 0 0 1px lightgray inset" : null);
-        }
     }
     
     /**
@@ -246,7 +237,6 @@ public abstract class UIElementZKBase extends UIElementBase {
         if (isDesignMode() != designMode) {
             super.setDesignMode(designMode);
             setDesignContextMenu(designMode ? DesignContextMenu.getInstance() : null);
-            setDesignStyle();
         } else {
             applyMask(false);
         }
@@ -282,6 +272,8 @@ public abstract class UIElementZKBase extends UIElementBase {
                     ZKUtil.removeMask(comp);
                 } else {
                     comp.setContext((String) comp.removeAttribute(SAVED_CONTEXT_MENU));
+                    comp.setTooltiptext((String) comp.removeAttribute(SAVED_TOOLTIP_TEXT));
+                    ZKUtil.updateStyle(comp, "box-shadow", null);
                 }
             } else {
                 if (enableDesignModeMask) {
@@ -290,7 +282,10 @@ public abstract class UIElementZKBase extends UIElementBase {
                     applyMask(false);
                 } else {
                     comp.setAttribute(SAVED_CONTEXT_MENU, comp.getContext());
+                    comp.setAttribute(SAVED_TOOLTIP_TEXT, comp.getTooltiptext());
                     comp.setContext(contextMenu);
+                    comp.setTooltiptext(getDefinition().getName());
+                    ZKUtil.updateStyle(comp, "box-shadow", "0 0 0 1px lightgray inset");
                 }
             }
         }

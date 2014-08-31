@@ -188,9 +188,10 @@ cwf.cancelNavigation = function(event) {
  * @param uuid Widget or widget id.
  * @param msg Caption for mask.
  * @param popid Optional id of popup menu
+ * @param hint Optional hint text
  */
 zAu.cmd0.cwf_addMask =
-cwf.addMask = function(uuid, msg, popid) {
+cwf.addMask = function(uuid, msg, popid, hint) {
 	if (uuid.uuid)
 		uuid = uuid.uuid;
 
@@ -206,6 +207,9 @@ cwf.addMask = function(uuid, msg, popid) {
 			e.stop({dom:true});
 		});
 	}
+	
+	if (hint)
+		w.attr('title', hint);
 };
 
 /**

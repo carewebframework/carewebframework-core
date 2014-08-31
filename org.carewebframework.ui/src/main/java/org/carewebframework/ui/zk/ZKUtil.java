@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -803,10 +803,32 @@ public class ZKUtil {
      * 
      * @param c Component to be disabled.
      * @param caption Caption text to appear over disabled component.
+     */
+    public static void addMask(Component c, String caption) {
+        addMask(c, caption, null, null);
+    }
+    
+    /**
+     * Places a semi-transparent mask over the specified component to disable user interaction.
+     * 
+     * @param c Component to be disabled.
+     * @param caption Caption text to appear over disabled component.
      * @param popup Optional popup to display when context menu is invoked.
      */
     public static void addMask(Component c, String caption, Popup popup) {
-        AuResponse rsp = new AuResponse("cwf_addMask", c, new Object[] { c, caption, popup });
+        addMask(c, caption, popup, null);
+    }
+    
+    /**
+     * Places a semi-transparent mask over the specified component to disable user interaction.
+     * 
+     * @param c Component to be disabled.
+     * @param caption Caption text to appear over disabled component.
+     * @param popup Optional popup to display when context menu is invoked.
+     * @param hint Optional tooltip text.
+     */
+    public static void addMask(Component c, String caption, Popup popup, String hint) {
+        AuResponse rsp = new AuResponse("cwf_addMask", c, new Object[] { c, caption, popup, hint });
         Clients.response(rsp);
     }
     

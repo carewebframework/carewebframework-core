@@ -3,7 +3,7 @@
 	<depends>cwf.ui</depends>
 	<language-name>xul/html</language-name>
 
-	<javascript-module name="cwf" version="3.1.0"/>
+	<javascript-module name="cwf" version="3.1.1"/>
 
 	<javascript>
 		cwf.registerPrintStyle('~./org/carewebframework/shell/careWebPrint.css');
