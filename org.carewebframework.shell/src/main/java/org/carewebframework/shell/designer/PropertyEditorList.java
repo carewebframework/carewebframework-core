@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -34,14 +34,14 @@ public class PropertyEditorList extends PropertyEditorBase {
     private final EventListener<KeyEvent> deleteListener = new EventListener<KeyEvent>() {
         
         /**
-         * Pressing delete key will clear combo box selection.
+         * Pressing delete key or control-X will clear combo box selection.
          * 
          * @param event
          * @throws Exception
          */
         @Override
         public void onEvent(KeyEvent event) throws Exception {
-            if (event.getKeyCode() == KeyEvent.DELETE) {
+            if (event.getKeyCode() == KeyEvent.DELETE || event.getKeyCode() == 88) {
                 boolean changed = !StringUtils.isEmpty(combobox.getValue());
                 combobox.setValue(null);
                 combobox.close();
@@ -94,13 +94,13 @@ public class PropertyEditorList extends PropertyEditorBase {
     /**
      * Set read only mode.
      * 
-     * @param readonly If true, the combobox is read only and the delete key will remove the
-     *            selection. If false, the combo box content can be modified and the delete key
+     * @param readonly If true, the combobox is read only and the delete key (or ctrl-x) will remove
+     *            the selection. If false, the combo box content can be modified and the delete key
      *            functions normally.
      */
     private void setReadonly(boolean readonly) {
         combobox.setReadonly(readonly);
-        combobox.setCtrlKeys(readonly ? "#del" : null);
+        combobox.setCtrlKeys(readonly ? "#del^x" : null);
         
         if (readonly) {
             combobox.addEventListener(Events.ON_CTRL_KEY, deleteListener);
