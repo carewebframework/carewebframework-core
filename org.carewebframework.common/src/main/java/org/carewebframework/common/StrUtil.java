@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -253,11 +253,17 @@ public class StrUtil {
     /**
      * Converts a text value to a boolean result.
      * 
-     * @param text Value to convert. Any non-zero value is interpreted as "true".
+     * @param text Value to convert. Non-zero numeric values or values beginning with a T, t, Y, or
+     *            y evaluate to true.
      * @return The result of the conversion.
      */
     public static boolean toBoolean(String text) {
-        return NumberUtils.toInt(text) != 0;
+        if (StringUtils.isEmpty(text)) {
+            return false;
+        }
+        
+        String char1 = text.substring(0, 1).toLowerCase();
+        return "y".equals(char1) || "t".equals(char1) || NumberUtils.toInt(text) != 0;
     }
     
     /**
