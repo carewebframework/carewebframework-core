@@ -49,6 +49,23 @@ public class CommonTest {
     }
     
     @Test
+    public void testBooleanUtil() {
+        assertTrue(StrUtil.toBoolean("YES"));
+        assertTrue(StrUtil.toBoolean("Y"));
+        assertTrue(StrUtil.toBoolean("yes"));
+        assertTrue(StrUtil.toBoolean("y"));
+        assertTrue(StrUtil.toBoolean("TRUE"));
+        assertTrue(StrUtil.toBoolean("t"));
+        assertTrue(StrUtil.toBoolean("1"));
+        assertTrue(StrUtil.toBoolean("100"));
+        assertFalse(StrUtil.toBoolean(null));
+        assertFalse(StrUtil.toBoolean(""));
+        assertFalse(StrUtil.toBoolean("false"));
+        assertFalse(StrUtil.toBoolean("0"));
+        assertFalse(StrUtil.toBoolean("any old string"));
+    }
+    
+    @Test
     public void testDateUtil() {
         testDate(new Date());
         testDate(DateUtil.parseDate("T"));
