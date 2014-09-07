@@ -6,7 +6,16 @@
 	<version>3.1.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>CareWeb Framework Root POM</name>
-
+	<description>CareWeb Framework Root POM</description>
+	<url>http://www.carewebframework.org</url>
+	
+	<developers>
+		<developer>
+			<name>CareWeb Development Team</name>
+			<email>support@carewebframework.org</email>
+		</developer>
+	</developers>
+	
 	<organization>
 		<name>Regenstrief Center for Biomedical Informatics</name>
 		<url>http://www.carewebframework.org/</url>
