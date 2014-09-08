@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -81,8 +81,8 @@ public abstract class AbstractRowRenderer<T, G> extends AbstractRenderer impleme
     /**
      * Returns the default detail expansion state for the grid.
      * 
-     * @param grid
-     * @return
+     * @param grid The grid.
+     * @return The default detail expansion state.
      */
     public static boolean getExpandDetail(Grid grid) {
         Boolean expandDetail = (Boolean) grid.getAttribute(ATTR_EXPAND);
@@ -93,8 +93,8 @@ public abstract class AbstractRowRenderer<T, G> extends AbstractRenderer impleme
      * Sets the detail expansion state for the grid and for any existing detail views within the
      * grid.
      * 
-     * @param grid
-     * @param value
+     * @param grid The grid.
+     * @param value The default detail expansion state.
      */
     public static void setExpandDetail(Grid grid, boolean value) {
         boolean oldValue = getExpandDetail(grid);
@@ -279,9 +279,9 @@ public abstract class AbstractRowRenderer<T, G> extends AbstractRenderer impleme
     /**
      * Creates a grid for detail view.
      * 
-     * @param parent
-     * @param colWidths
-     * @return
+     * @param parent The detail parent.
+     * @param colWidths Array of column widths.
+     * @return The detail grid.
      */
     public Grid createDetailGrid(Component parent, String[] colWidths) {
         return createDetailGrid(parent, colWidths, null);
@@ -290,10 +290,10 @@ public abstract class AbstractRowRenderer<T, G> extends AbstractRenderer impleme
     /**
      * Creates a grid for detail view.
      * 
-     * @param parent
-     * @param colWidths
-     * @param colLabels
-     * @return
+     * @param parent The detail parent.
+     * @param colWidths Array of column widths.
+     * @param colLabels Array of column labels (may be null).
+     * @return The detail grid.
      */
     public Grid createDetailGrid(Component parent, String[] colWidths, String[] colLabels) {
         final Grid detailGrid = new Grid();

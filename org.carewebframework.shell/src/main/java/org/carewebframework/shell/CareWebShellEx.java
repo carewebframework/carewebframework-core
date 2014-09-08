@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -125,7 +125,7 @@ public class CareWebShellEx extends CareWebShell {
      * @param path Format is &lt;tab name&gt;\&lt;tree node path&gt;
      * @param id Unique id of plugin
      * @return Container created for the plugin.
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     public UIElementBase registerFromId(String path, String id) throws Exception {
         return registerFromId(path, id, null);
@@ -139,7 +139,7 @@ public class CareWebShellEx extends CareWebShell {
      * @param id Unique id of plugin
      * @param propertySource Optional source for retrieving property values.
      * @return Container created for the plugin.
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     public UIElementBase registerFromId(String path, String id, IPropertyProvider propertySource) throws Exception {
         return register(path, pluginById(id), propertySource);
@@ -167,7 +167,7 @@ public class CareWebShellEx extends CareWebShell {
      * @param path Format is &lt;tab name&gt;\&lt;tree node path&gt;
      * @param url Main url of plugin.
      * @return Container created for the plugin.
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     public UIElementBase register(String path, String url) throws Exception {
         return register(path, url, null);
@@ -180,7 +180,7 @@ public class CareWebShellEx extends CareWebShell {
      * @param url Main url of plugin.
      * @param propertySource Optional source for retrieving property values.
      * @return Container created for the plugin.
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     public UIElementBase register(String path, String url, IPropertyProvider propertySource) throws Exception {
         PluginDefinition def = new PluginDefinition();
@@ -245,7 +245,7 @@ public class CareWebShellEx extends CareWebShell {
      * @param path Format is &lt;tab name&gt;\&lt;tree node path&gt;
      * @param def Plugin definition
      * @return The newly created plugin.
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     public UIElementBase register(String path, PluginDefinition def) throws Exception {
         return register(path, def, null);
@@ -259,7 +259,7 @@ public class CareWebShellEx extends CareWebShell {
      * @param def Plugin definition
      * @param propertySource Optional source for retrieving property values.
      * @return The newly created plugin.
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     public UIElementBase register(String path, PluginDefinition def, IPropertyProvider propertySource) throws Exception {
         if (def.isForbidden()) {
@@ -288,7 +288,7 @@ public class CareWebShellEx extends CareWebShell {
      * 
      * @param path Format is &lt;tab name&gt;\&lt;tree node path&gt;
      * @param url Location of the xml layout.
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     public void registerLayout(String path, String url) throws Exception {
         UILayout layout = new UILayout();
@@ -305,7 +305,7 @@ public class CareWebShellEx extends CareWebShell {
      * 
      * @param path Format is &lt;tab name&gt;\&lt;tree node path&gt;
      * @return The parent UI element.
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     private UIElementBase parentFromPath(String path) throws Exception {
         if (TOOLBAR_PATH.equalsIgnoreCase(path)) {
@@ -323,7 +323,7 @@ public class CareWebShellEx extends CareWebShell {
      * 
      * @param name Label text of tab to find.
      * @return Tab corresponding to label text.
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     private UIElementTabPane findTabPane(String name) throws Exception {
         UIElementTabView tabView = getTabView();
@@ -381,7 +381,7 @@ public class CareWebShellEx extends CareWebShell {
      * Returns the path resolver implementation. This implementation determines where in the layout
      * the plugin should be placed based on a path. A default implementation is provided.
      * 
-     * @return
+     * @return The path resolver.
      */
     public PathResolver getPathResolver() {
         if (pathResolver == null) {
@@ -394,7 +394,7 @@ public class CareWebShellEx extends CareWebShell {
     /**
      * Sets the path resolver implementation. This must be set before any resources are registered.
      * 
-     * @param pathResolver
+     * @param pathResolver The path resolver.
      */
     public void setPathResolver(PathResolver pathResolver) {
         if (this.pathResolver != null) {

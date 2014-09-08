@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -19,35 +19,35 @@ public interface ILogManager {
     /**
      * Enable ERROR level logging
      * 
-     * @param target
+     * @param target Logging target.
      */
     void enableError(String target);
     
     /**
      * Enable WARN level logging
      * 
-     * @param target
+     * @param target Logging target.
      */
     void enableWarn(String target);
     
     /**
      * Enable INFO level logging
      * 
-     * @param target
+     * @param target Logging target.
      */
     void enableInfo(String target);
     
     /**
      * Enable DEBUG level logging
      * 
-     * @param target
+     * @param target Logging target.
      */
     void enableDebug(String target);
     
     /**
      * Enable TRACE level logging
      * 
-     * @param target
+     * @param target Logging target.
      */
     void enableTrace(String target);
     

@@ -26,7 +26,7 @@ public class PropertyEditorBoolean extends PropertyEditorBase {
     /**
      * Create property editor.
      * 
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     public PropertyEditorBoolean() throws Exception {
         super(DesignConstants.RESOURCE_PREFIX + "PropertyEditorBoolean.zul");

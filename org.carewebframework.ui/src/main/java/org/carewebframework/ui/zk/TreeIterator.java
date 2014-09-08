@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -29,7 +29,7 @@ public class TreeIterator implements Iterator<Treeitem> {
     /**
      * Starts iterator at top of tree.
      * 
-     * @param tree
+     * @param tree The tree.
      */
     public TreeIterator(Tree tree) {
         this(tree.getTreechildren());
@@ -38,7 +38,7 @@ public class TreeIterator implements Iterator<Treeitem> {
     /**
      * Starts iterator at tree children node.
      * 
-     * @param treeChildren
+     * @param treeChildren The tree children node.
      */
     public TreeIterator(Treechildren treeChildren) {
         this.next = treeChildren == null ? null : (Treeitem) treeChildren.getFirstChild();
@@ -47,7 +47,7 @@ public class TreeIterator implements Iterator<Treeitem> {
     /**
      * Starts iterator after tree item.
      * 
-     * @param last
+     * @param last The last tree item.
      */
     public TreeIterator(Treeitem last) {
         this.last = last;
@@ -56,7 +56,7 @@ public class TreeIterator implements Iterator<Treeitem> {
     /**
      * Returns next tree item following specified item.
      * 
-     * @param item
+     * @param item The reference tree item.
      * @return Next tree item or null if no more.
      */
     private Treeitem nextItem(Treeitem item) {
@@ -92,7 +92,7 @@ public class TreeIterator implements Iterator<Treeitem> {
     /**
      * Returns next tree item.
      * 
-     * @return
+     * @return The next tree item.
      */
     private Treeitem nextItem() {
         if (next == null) {

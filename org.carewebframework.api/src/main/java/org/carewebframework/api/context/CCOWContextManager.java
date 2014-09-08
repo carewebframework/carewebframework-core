@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -41,10 +41,10 @@ public class CCOWContextManager {
     /**
      * Initializes the context manager.
      * 
-     * @param appId
-     * @param passCode
-     * @param join
-     * @param contextFilter
+     * @param appId The application id.
+     * @param passCode The pass code.
+     * @param join Whether to join the common context.
+     * @param contextFilter The context filter.
      */
     public void run(String appId, String passCode, boolean join, String contextFilter) {
         
@@ -67,7 +67,7 @@ public class CCOWContextManager {
     /**
      * Add a CCOW context subscriber.
      * 
-     * @param subscriber
+     * @param subscriber Context subscriber to add.
      */
     public void subscribe(ICCOWContextEvent subscriber) {
         
@@ -76,7 +76,7 @@ public class CCOWContextManager {
     /**
      * Remove a CCOW context subscriber.
      * 
-     * @param subscriber
+     * @param subscriber Context subscriber to remove.
      */
     public void unsubscribe(ICCOWContextEvent subscriber) {
         
@@ -94,7 +94,7 @@ public class CCOWContextManager {
     /**
      * Set the CCOW survey response.
      * 
-     * @param reason
+     * @param reason Survey response.
      */
     public void setSurveyResponse(String reason) {
         

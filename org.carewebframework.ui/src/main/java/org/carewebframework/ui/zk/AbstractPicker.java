@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -63,10 +63,9 @@ public abstract class AbstractPicker<T extends Component> extends Bandbox {
          * @param row The row to render.
          * @param start Index of first item to render in row.
          * @param index Not used.
-         * @throws Exception
          */
         @Override
-        public void render(Row row, Integer start, int index) throws Exception {
+        public void render(Row row, Integer start, int index) {
             int end = Math.min(start + itemsPerRow, items.size());
             
             for (int i = start; i < end; i++) {
@@ -127,7 +126,7 @@ public abstract class AbstractPicker<T extends Component> extends Bandbox {
     /**
      * Adds an item.
      * 
-     * @param item
+     * @param item Item to add.
      */
     public void addItem(T item) {
         _addItem(item);
@@ -137,7 +136,7 @@ public abstract class AbstractPicker<T extends Component> extends Bandbox {
     /**
      * Adds multiple items.
      * 
-     * @param items
+     * @param items Items to add.
      */
     public void addItems(List<T> items) {
         for (T item : items) {
@@ -152,7 +151,7 @@ public abstract class AbstractPicker<T extends Component> extends Bandbox {
      * choice item exists, the item will be added to the list. Note that this does not trigger a
      * re-rendering.
      * 
-     * @param item
+     * @param item Item to add.
      */
     protected void _addItem(T item) {
         if (itemNoChoice != null && items.isEmpty()) {
@@ -219,9 +218,9 @@ public abstract class AbstractPicker<T extends Component> extends Bandbox {
     /**
      * Override to perform alternate comparison.
      * 
-     * @param item1
-     * @param item2
-     * @return
+     * @param item1 First item to compare.
+     * @param item2 Second item to compare.
+     * @return Result of comparison.
      */
     protected boolean itemsAreEqual(T item1, T item2) {
         return item1 == item2 || item1.equals(item2);
@@ -271,7 +270,7 @@ public abstract class AbstractPicker<T extends Component> extends Bandbox {
     /**
      * Returns list of items in model.
      * 
-     * @return
+     * @return Items in model.
      */
     public List<T> getItems() {
         return items;

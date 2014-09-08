@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -124,7 +124,7 @@ public class DesignMenu extends Menu implements IdSpace {
     /**
      * Brings up property editor for desktop.
      * 
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     public void onClick$mnuDesktopProperties() throws Exception {
         PropertyGrid.create(owner, null);
@@ -133,7 +133,7 @@ public class DesignMenu extends Menu implements IdSpace {
     /**
      * Brings up layout designer for desktop.
      * 
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     public void onClick$mnuLayoutDesigner() throws Exception {
         LayoutDesigner.execute(owner);
@@ -142,7 +142,7 @@ public class DesignMenu extends Menu implements IdSpace {
     /**
      * Brings up layout manager.
      * 
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     public void onClick$mnuLayoutManager() throws Exception {
         LayoutManager.execute(true, shell.getUILayout().getName());
@@ -158,7 +158,7 @@ public class DesignMenu extends Menu implements IdSpace {
     /**
      * Prompts to save a layout.
      * 
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     public void onClick$mnuSaveLayout() throws Exception {
         LayoutManager.saveLayout(UILayout.serialize(owner), new LayoutIdentifier(shell.getUILayout().getName(),
@@ -168,7 +168,7 @@ public class DesignMenu extends Menu implements IdSpace {
     /**
      * Prompts to load layout.
      * 
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     public void onClick$mnuLoadLayout() throws Exception {
         LayoutIdentifier layoutId = LayoutManager.execute(false, shell.getUILayout().getName());
@@ -190,7 +190,7 @@ public class DesignMenu extends Menu implements IdSpace {
     /**
      * Updates the visibility of menu items
      * 
-     * @param enabled
+     * @param enabled The enabled status.
      */
     private void updateMenus(boolean enabled) {
         setImage(enabled ? DesignConstants.DESIGN_ICON_ACTIVE : DesignConstants.DESIGN_ICON_INACTIVE);

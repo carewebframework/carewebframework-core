@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -45,7 +45,7 @@ public abstract class PluginStatus implements IPluginEventListener {
     /**
      * Override to provide logic to determine when the plugin should be disabled.
      * 
-     * @return
+     * @return True if the plugin should be disabled.
      */
     protected boolean checkDisabled() {
         return disabled;
@@ -54,7 +54,7 @@ public abstract class PluginStatus implements IPluginEventListener {
     /**
      * Set the disabled status. Notifies subscribed containers of the change.
      * 
-     * @param disabled
+     * @param disabled True to disable the plugin.
      */
     private void setDisabled(boolean disabled) {
         if (disabled != this.disabled) {

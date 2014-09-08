@@ -111,10 +111,10 @@ public abstract class UIElementZKBase extends UIElementBase {
     }
     
     /**
-     * Returns the url of the default template to use in createFromTemplate. Override this method to
-     * provide an alternate default url.
+     * Returns the URL of the default template to use in createFromTemplate. Override this method to
+     * provide an alternate default URL.
      * 
-     * @return
+     * @return The template URL.
      */
     protected String getTemplateUrl() {
         return "~./" + getClass().getName().replace(".", "/") + ".zul";
@@ -122,8 +122,8 @@ public abstract class UIElementZKBase extends UIElementBase {
     
     /**
      * Create wrapped component(s) from a template (a zul page). Performs autowiring of variables
-     * and events. The template url is derived from the class name. For example, if the class is
-     * "org.carewebframework.xxx.Clazz", the template url is assumed to be
+     * and events. The template URL is derived from the class name. For example, if the class is
+     * "org.carewebframework.xxx.Clazz", the template URL is assumed to be
      * "~./org/carewebframework/xxx/Clazz.zul".
      * 
      * @return Top level component.
@@ -186,8 +186,8 @@ public abstract class UIElementZKBase extends UIElementBase {
     /**
      * Swaps the position of the two child components.
      * 
-     * @param child1
-     * @param child2
+     * @param child1 The first child.
+     * @param child2 The second child.
      */
     protected void swapChildren(Component child1, Component child2) {
         ZKUtil.swapChildren(child1, child2);

@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * Implements the equivalent of an array list with weakly referenced elements.
  * 
- * @param <E>
+ * @param <E> Class of element.
  */
 public class WeakArrayList<E> extends AbstractList<E> {
     
@@ -34,7 +34,7 @@ public class WeakArrayList<E> extends AbstractList<E> {
     /**
      * Copy constructor
      * 
-     * @param source
+     * @param source Instance to be copied.
      */
     public WeakArrayList(WeakArrayList<E> source) {
         super();
@@ -61,8 +61,8 @@ public class WeakArrayList<E> extends AbstractList<E> {
      * Creates a weak reference for the specified element, associating it with the internal
      * reference queue.
      * 
-     * @param element
-     * @return
+     * @param element The element.
+     * @return Weak reference for the element.
      */
     private WeakReference<E> createWeakReference(E element) {
         return new WeakReference<E>(element, referenceQueue);

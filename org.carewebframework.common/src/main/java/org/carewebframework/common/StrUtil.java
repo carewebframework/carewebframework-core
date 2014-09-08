@@ -442,7 +442,7 @@ public class StrUtil {
     /**
      * Sets a message source for resolving messages.
      * 
-     * @param messageSource
+     * @param messageSource The message source.
      */
     public static void setMessageSource(MessageSource messageSource) {
         StrUtil.messageSource = messageSource;

@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -85,7 +85,7 @@ public class GlobalEventDispatcher extends AbstractGlobalEventDispatcher impleme
     /**
      * Returns true if connected to JMS server
      * 
-     * @return
+     * @return True if connected.
      */
     private boolean isConnected() {
         return this.connection != null;
@@ -122,7 +122,7 @@ public class GlobalEventDispatcher extends AbstractGlobalEventDispatcher impleme
     /**
      * Disconnect from the JMS server.
      * 
-     * @param updateStatus
+     * @param updateStatus If true, update the connection status.
      */
     private void disconnect(final boolean updateStatus) {
         if (updateStatus) {
@@ -249,7 +249,7 @@ public class GlobalEventDispatcher extends AbstractGlobalEventDispatcher impleme
      * individual subscribers.
      * 
      * @param eventName Name of event.
-     * @throws JMSException
+     * @throws JMSException JMS exception.
      */
     private void doHostSubscribe(final String eventName) throws JMSException {
         
@@ -266,7 +266,7 @@ public class GlobalEventDispatcher extends AbstractGlobalEventDispatcher impleme
         final String selector = JMSUtil.getMessageSelector(eventName, getPublisherInfo());
         
         // This doesn't actually create a physical topic.  In ActiveMQ, a topic is created on-demand when someone with the
-        // authority to create topics submits something to a topic.  By default, everyone has the authority to create topics.  See 
+        // authority to create topics submits something to a topic.  By default, everyone has the authority to create topics.  See
         // http://markmail.org/message/us7v5ocnb65m4fdp#query:createtopic%20activemq%20jms+page:1+mid:tce6soq5g7rdkqnw+state:results --lrc
         final Topic topic = this.session.createTopic(topicName);
         final TopicSubscriber subscriber = this.session.createSubscriber(topic, selector, false);
@@ -278,7 +278,7 @@ public class GlobalEventDispatcher extends AbstractGlobalEventDispatcher impleme
      * Removes an event subscription with the global event manager.
      * 
      * @param eventName Name of event
-     * @throws JMSException
+     * @throws JMSException JMS exception.
      */
     private void doHostUnsubscribe(final String eventName) throws JMSException {
         final TopicSubscriber subscriber = this.subscribers.remove(eventName);
@@ -309,7 +309,7 @@ public class GlobalEventDispatcher extends AbstractGlobalEventDispatcher impleme
      * @param eventData Data object associated with the event.
      * @param recipients List of recipients for the event (null or empty string means all
      *            subscribers).
-     * @throws JMSException
+     * @throws JMSException JMS exception.
      */
     private void doFireRemoteEvent(final String eventName, final Object eventData, final String recipients)
                                                                                                            throws JMSException {
@@ -341,7 +341,7 @@ public class GlobalEventDispatcher extends AbstractGlobalEventDispatcher impleme
      * Process a dequeued message by forwarding it to the local event manager for local delivery. If
      * the message is a ping request, send the response.
      * 
-     * @param message
+     * @param message Message to process.
      */
     protected void processMessage(final Message message) {
         try {

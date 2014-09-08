@@ -152,8 +152,8 @@ public class ContextItems {
     /**
      * Normalizes a prefix by appending a "." if necessary and converting to lower case.
      * 
-     * @param prefix
-     * @return
+     * @param prefix Prefix to normalize.
+     * @return Normalized prefix.
      */
     private String normalizePrefix(String prefix) {
         return (prefix.endsWith(".") ? prefix : prefix + ".").toLowerCase();
@@ -290,7 +290,7 @@ public class ContextItems {
      * Adds context items from a serialized string.
      * 
      * @param values Serialized context items to add.
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     public void addItems(String values) throws Exception {
         for (String line : values.split("[\\r\\n]")) {

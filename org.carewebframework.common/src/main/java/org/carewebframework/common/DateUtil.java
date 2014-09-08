@@ -98,15 +98,15 @@ public class DateUtil {
     private static final Pattern PATTERN_NUMERIC_PREFIX = Pattern.compile("^-?[\\d\\.]+");
     
     private static final double[] MS_FP = new double[] { 31557600000.0, 2592000000.0, 604800000.0, 86400000.0, 3600000.0,
-        60000.0, 1000.0, 1.0 };
+            60000.0, 1000.0, 1.0 };
     
     private static final long[] MS_LG = new long[] { 31557600000L, 2592000000L, 604800000L, 86400000L, 3600000L, 60000L,
-        1000L, 1L };
+            1000L, 1L };
     
     public static String[][] TIME_UNIT = new String[][] { { "year", "years", "yr", "yrs" },
-        { "month", "months", "mo", "mos" }, { "week", "weeks", "wk", "wks" }, { "day", "days", "day", "days" },
-        { "hour", "hours", "hr", "hrs" }, { "minute", "minutes", "min", "mins" },
-        { "second", "seconds", "sec", "secs" }, { "millisecond", "milliseconds", "ms", "ms" } };
+            { "month", "months", "mo", "mos" }, { "week", "weeks", "wk", "wks" }, { "day", "days", "day", "days" },
+            { "hour", "hours", "hr", "hrs" }, { "minute", "minutes", "min", "mins" },
+            { "second", "seconds", "sec", "secs" }, { "millisecond", "milliseconds", "ms", "ms" } };
     
     public enum TimeUnit {
         YEARS, MONTHS, WEEKS, DAYS, HOURS, MINUTES, SECONDS, MILLISECONDS
@@ -117,7 +117,7 @@ public class DateUtil {
      */
     public enum Format {
         WITH_TZ("dd-MMM-yyyy HH:mm zzz"), WITHOUT_TZ("dd-MMM-yyyy HH:mm"), WITHOUT_TIME("dd-MMM-yyyy"), HL7(
-            HL7_DATE_TIME_PATTERN), HL7_WITHOUT_TIME(HL7_DATE_ONLY_PATTERN);
+                HL7_DATE_TIME_PATTERN), HL7_WITHOUT_TIME(HL7_DATE_ONLY_PATTERN);
         
         private String pattern;
         
@@ -159,7 +159,7 @@ public class DateUtil {
          * 
          * @param value The value to parse.
          * @return The resulting date value if successful.
-         * @throws ParseException
+         * @throws ParseException Date parsing exception.
          */
         public Date parse(String value) throws ParseException {
             return parseDate(value, pattern);
@@ -262,7 +262,7 @@ public class DateUtil {
      * @param value String to parse.
      * @param patterns Patterns to be tried in succession until parsing succeeds.
      * @return The resulting date value.
-     * @throws ParseException
+     * @throws ParseException Date parsing exception.
      */
     public static Date parseDate(String value, String... patterns) throws ParseException {
         return DateUtils.parseDate(value, patterns);
@@ -453,7 +453,7 @@ public class DateUtil {
     /**
      * Convert a date to HL7 format.
      * 
-     * @param date
+     * @param date Date to convert.
      * @return The HL7-formatted date.
      */
     public static String toHL7(Date date) {
@@ -544,7 +544,7 @@ public class DateUtil {
         }
         
         return prefix + decimalFormat.get().format(elapsed) + " "
-        + getDurationUnits(index, pluralize && elapsed != 1.0, abbreviated);
+                + getDurationUnits(index, pluralize && elapsed != 1.0, abbreviated);
     }
     
     /**

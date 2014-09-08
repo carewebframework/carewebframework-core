@@ -41,7 +41,7 @@ public class HelpXmlParser extends BaseXmlParser {
      * 
      * @param xml XML containing help definition.
      * @return A help definition instance.
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     public static HelpDefinition fromXml(String xml) throws Exception {
         return (HelpDefinition) new HelpXmlParser().fromXml(xml, "help");

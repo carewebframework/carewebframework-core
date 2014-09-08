@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -48,7 +48,7 @@ public class ContextMarshaller {
      * 
      * @param text Text to sign
      * @return Digital signature
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     public String sign(String text) throws Exception {
         return signer.sign(text);
@@ -61,7 +61,7 @@ public class ContextMarshaller {
      * @param marshaledContext Marshaled context
      * @param authSignature If set, the digital signature is verified.
      * @return The unmarshaled context.
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     public ContextItems unmarshal(String marshaledContext, String authSignature) throws Exception {
         ContextItems contextItems = new ContextItems();

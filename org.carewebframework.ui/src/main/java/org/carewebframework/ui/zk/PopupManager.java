@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -62,8 +62,8 @@ public class PopupManager {
     private final List<Window> active = new ArrayList<Window>();
     
     /*
-     * Set the offset size to 22 pixels so that the text of the title bars of nested 
-     * popups can be read on all popups in the stack. 
+     * Set the offset size to 22 pixels so that the text of the title bars of nested
+     * popups can be read on all popups in the stack.
      */
     private final int increment = 22;
     
@@ -115,7 +115,7 @@ public class PopupManager {
     /**
      * Add the next offset to the window's top and left positions.
      * 
-     * @param window
+     * @param window The window.
      */
     private void addOffset(Window window) {
         if (!disableScript && (!window.inEmbedded())) {
@@ -136,7 +136,7 @@ public class PopupManager {
     /**
      * Returns the next offset to be used.
      * 
-     * @return
+     * @return The next offset.
      */
     private int getNextOffset() {
         int offset = -1;

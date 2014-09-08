@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -28,8 +28,8 @@ public class PluginExecutionException extends PluginException {
     /**
      * Provide additional contextual information regarding the exception
      * 
-     * @param execution
-     * @return
+     * @param execution The execution context.
+     * @return Formatted information from execution context.
      */
     private static String formatExecution(Execution execution) {
         StringBuffer buffer = new StringBuffer();

@@ -36,8 +36,8 @@ public class PropertyEditorList extends PropertyEditorBase {
         /**
          * Pressing delete key or control-X will clear combo box selection.
          * 
-         * @param event
-         * @throws Exception
+         * @param event The control key event.
+         * @throws Exception Unspecified exception.
          */
         @Override
         public void onEvent(KeyEvent event) throws Exception {
@@ -77,8 +77,8 @@ public class PropertyEditorList extends PropertyEditorBase {
             /**
              * Double-clicking a combo item will select the item and close the combo box.
              * 
-             * @param event
-             * @throws Exception
+             * @param event The double click event.
+             * @throws Exception Unspecified exception.
              */
             @Override
             public void onEvent(Event event) throws Exception {

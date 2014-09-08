@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -28,7 +28,7 @@ public class PluginResourceAction implements IPluginResource {
     /**
      * Returns the unique id associated with the action.
      * 
-     * @return
+     * @return The action's unique id.
      */
     public String getId() {
         return id;
@@ -37,7 +37,7 @@ public class PluginResourceAction implements IPluginResource {
     /**
      * Sets the unique id associated with the action.
      * 
-     * @param id
+     * @param id The action's unique id.
      */
     public void setId(String id) {
         this.id = id;

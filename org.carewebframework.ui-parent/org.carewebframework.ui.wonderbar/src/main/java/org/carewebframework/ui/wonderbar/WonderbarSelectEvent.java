@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -33,8 +33,8 @@ public class WonderbarSelectEvent extends Event {
     /**
      * Extracts a select event from the au request.
      * 
-     * @param request
-     * @return
+     * @param request The AU request.
+     * @return The select event.
      */
     public static final WonderbarSelectEvent getSelectEvent(AuRequest request) {
         final Map<String, Object> data = request.getData();
@@ -61,7 +61,7 @@ public class WonderbarSelectEvent extends Event {
     /**
      * Returns the selected item.
      * 
-     * @return
+     * @return The selected item.
      */
     public WonderbarItem getSelectedItem() {
         return selectedItem;
@@ -70,7 +70,7 @@ public class WonderbarSelectEvent extends Event {
     /**
      * Returns the keypress states.
      * 
-     * @return
+     * @return The keypress states.
      */
     public int getKeys() {
         return keys;

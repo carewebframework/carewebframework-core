@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -52,7 +52,7 @@ public class UIElementTabView extends UIElementZKBase {
     /**
      * Sets the orientation which can be horizontal or vertical.
      * 
-     * @param orientation
+     * @param orientation Orientation setting.
      */
     public void setOrientation(String orientation) {
         if ("accordion".equals(orientation)) {
@@ -67,7 +67,7 @@ public class UIElementTabView extends UIElementZKBase {
     /**
      * Returns the orientation (horizontal, vertical or accordion).
      * 
-     * @return
+     * @return Orientation setting.
      */
     public String getOrientation() {
         return "accordion".equals(tabBox.getMold()) ? "accordion" : tabBox.getOrient();
@@ -86,7 +86,7 @@ public class UIElementTabView extends UIElementZKBase {
     /**
      * Sets the active (visible) pane.
      * 
-     * @param pane
+     * @param pane The pane to become active.
      */
     protected void setActivePane(UIElementTabPane pane) {
         if (activePane != null) {

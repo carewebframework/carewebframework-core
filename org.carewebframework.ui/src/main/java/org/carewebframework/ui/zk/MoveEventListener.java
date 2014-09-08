@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -25,7 +25,7 @@ public class MoveEventListener implements EventListener<MoveEvent> {
     /**
      * Adds a move event listener to the specified component.
      * 
-     * @param comp
+     * @param comp The component to receive the event listener.
      */
     public static void add(Component comp) {
         comp.addEventListener(Events.ON_MOVE, moveEventListener);
@@ -34,7 +34,7 @@ public class MoveEventListener implements EventListener<MoveEvent> {
     /**
      * Removes a move event listener from the specified component.
      * 
-     * @param comp
+     * @param comp The component from which to remove the event listener.
      */
     public static void remove(Component comp) {
         comp.removeEventListener(Events.ON_MOVE, moveEventListener);

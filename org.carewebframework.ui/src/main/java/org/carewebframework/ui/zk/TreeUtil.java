@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -162,7 +162,7 @@ public class TreeUtil {
      * @param tree Tree containing the item of interest.
      * @param label Label to match.
      * @param caseSensitive If true, match is case-sensitive.
-     * @return
+     * @return The matching tree item, or null if not found.
      */
     public static Treeitem findNodeByLabel(Tree tree, String label, boolean caseSensitive) {
         for (Treeitem item : tree.getItems()) {
@@ -247,9 +247,9 @@ public class TreeUtil {
     /**
      * Case insensitive comparison of labels of two tree items.
      * 
-     * @param item1
-     * @param item2
-     * @return
+     * @param item1 First tree item.
+     * @param item2 Second tree item.
+     * @return Result of the comparison.
      */
     private static int compare(Treeitem item1, Treeitem item2) {
         String label1 = item1.getLabel();
@@ -367,7 +367,7 @@ public class TreeUtil {
     /**
      * Makes certain a tree item is visible.
      * 
-     * @param item
+     * @param item The tree item.
      */
     public static void makeVisible(Treeitem item) {
         if (item == null) {

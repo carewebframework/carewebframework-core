@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -255,8 +255,8 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
     /**
      * Surveys all CCOW participants.
      * 
-     * @param all
-     * @return
+     * @param all If true, survey all participants.
+     * @return True if context change may proceed.
      */
     @SuppressWarnings("unused")
     private boolean surveyCCOW(boolean all) {

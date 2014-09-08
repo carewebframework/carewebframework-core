@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -30,7 +30,7 @@ public class CompositeException extends RuntimeException {
     /**
      * Adds an exception.
      * 
-     * @param exception
+     * @param exception Exception to add.
      */
     public void add(Throwable exception) {
         exceptions.add(exception);
@@ -39,7 +39,7 @@ public class CompositeException extends RuntimeException {
     /**
      * Returns true if this instance contains any exceptions.
      * 
-     * @return
+     * @return True if exceptions have been added.
      */
     public boolean hasExceptions() {
         return !exceptions.isEmpty();

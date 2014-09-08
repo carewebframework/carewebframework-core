@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -135,7 +135,7 @@ public class LayoutService implements ILayoutService {
      * Returns the name of the property to use.
      * 
      * @param shared Shared or personal layout.
-     * @return
+     * @return Name of property for storing layouts.
      */
     private String getPropertyName(boolean shared) {
         return shared ? LayoutConstants.PROPERTY_LAYOUT_SHARED : LayoutConstants.PROPERTY_LAYOUT_PRIVATE;

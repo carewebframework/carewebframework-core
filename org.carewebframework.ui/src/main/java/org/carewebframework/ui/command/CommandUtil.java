@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -128,7 +128,7 @@ public class CommandUtil {
      * Returns true if the shortcut is a valid symbolic representation of a supported key press.
      * 
      * @param shortcut Symbolic representation of a shortcut.
-     * @return
+     * @return True if the shortcut is valid.
      */
     /*package*/static boolean validateShortcut(String shortcut) {
         if (shortcut.startsWith("$")) {
@@ -158,8 +158,8 @@ public class CommandUtil {
     /**
      * Returns a concatenated list of shortcuts from a set.
      * 
-     * @param result
-     * @return
+     * @param result Set of shortcut entries.
+     * @return Concatenated list of validated shortcut entries.
      */
     /*package*/static String concatShortcuts(Set<String> result) {
         StringBuilder sb = new StringBuilder();
@@ -283,7 +283,7 @@ public class CommandUtil {
     /**
      * Removes all command bindings for a component.
      * 
-     * @param component
+     * @param component The component.
      */
     public static void dissociateAll(XulElement component) {
         for (Command command : CommandRegistry.getInstance()) {

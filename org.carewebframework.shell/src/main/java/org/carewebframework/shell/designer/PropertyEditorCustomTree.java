@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -214,7 +214,7 @@ public abstract class PropertyEditorCustomTree<T extends UIElementBase> extends 
      *            synchronized with the label of the corresponding tree node. It may be null.
      * @param hierarchical If true, the editor assumes that child elements may contain other child
      *            elements.
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     public PropertyEditorCustomTree(Class<T> childClass, String labelProperty, boolean hierarchical) throws Exception {
         super(DesignConstants.RESOURCE_PREFIX + "PropertyEditorCustomTree.zul");
@@ -357,8 +357,8 @@ public abstract class PropertyEditorCustomTree<T extends UIElementBase> extends 
     /**
      * Returns the tree children for the item, creating one if it does not exist.
      * 
-     * @param item
-     * @return
+     * @param item Item whose tree children property is sought.
+     * @return Tree children for item.
      */
     private Treechildren getTreechildren(Treeitem item) {
         Treechildren tc = item.getTreechildren();
@@ -401,7 +401,7 @@ public abstract class PropertyEditorCustomTree<T extends UIElementBase> extends 
     /**
      * Returns true if the class has a writable label property.
      * 
-     * @param clazz
+     * @param clazz The class to check.
      * @return True if a writable label property exists.
      */
     private boolean hasLabelProperty(Class<?> clazz) {
@@ -418,7 +418,7 @@ public abstract class PropertyEditorCustomTree<T extends UIElementBase> extends 
      * operations, the proxied elements are created or deleted at this time. The commit operation
      * writes all property settings from the proxy to the proxied element.
      * 
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     private void commitProxies() throws Exception {
         for (Proxy proxy : proxies) {
@@ -487,7 +487,7 @@ public abstract class PropertyEditorCustomTree<T extends UIElementBase> extends 
     /**
      * Double-clicking a tree item allows in place editing.
      * 
-     * @param event
+     * @param event The double click event.
      */
     public void onDoubleClick$tree(Event event) {
         Component target = ZKUtil.getEventOrigin(event).getTarget();
@@ -507,7 +507,7 @@ public abstract class PropertyEditorCustomTree<T extends UIElementBase> extends 
      * Place the specified tree item in edit mode. In this mode, the node's label is replaced with a
      * text box containing the label's value.
      * 
-     * @param item
+     * @param item Target tree item.
      */
     private void editNodeStart(Treeitem item) {
         txtLabel.setAttribute(ITEM_ATTR, item);
@@ -740,8 +740,8 @@ public abstract class PropertyEditorCustomTree<T extends UIElementBase> extends 
     /**
      * Override to enable promotion of items
      * 
-     * @param item
-     * @return
+     * @param item The item to test.
+     * @return True if the item can be promoted.
      */
     protected boolean canPromote(Treeitem item) {
         return hierarchical && item.getPreviousSibling() != null;
@@ -750,8 +750,8 @@ public abstract class PropertyEditorCustomTree<T extends UIElementBase> extends 
     /**
      * Override to enable promotion of items
      * 
-     * @param item
-     * @return
+     * @param item The item to test.
+     * @return True if the item can be demoted.
      */
     protected boolean canDemote(Treeitem item) {
         return hierarchical && item.getParent() != root;

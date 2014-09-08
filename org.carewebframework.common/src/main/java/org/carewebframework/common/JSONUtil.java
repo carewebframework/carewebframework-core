@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -86,7 +86,7 @@ public class JSONUtil {
         
         private JavaType baseType;
         
-        private ObjectMapper mapper;
+        private final ObjectMapper mapper;
         
         protected CWTypedIdResolver(ObjectMapper mapper) {
             this.mapper = mapper;
@@ -241,7 +241,7 @@ public class JSONUtil {
      * 
      * @param id Alias or class name.
      * @return The associated class.
-     * @throws ClassNotFoundException
+     * @throws ClassNotFoundException If class not found.
      */
     private static Class<?> findClass(String id) throws ClassNotFoundException {
         Class<?> clazz = aliasToClass.get(id);

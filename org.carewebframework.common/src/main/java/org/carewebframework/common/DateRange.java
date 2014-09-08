@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -10,9 +10,6 @@
 package org.carewebframework.common;
 
 import java.util.Date;
-
-import org.apache.commons.lang.BooleanUtils;
-import org.apache.commons.lang.math.NumberUtils;
 
 public class DateRange {
     
@@ -75,7 +72,7 @@ public class DateRange {
     /**
      * Copy constructor.
      * 
-     * @param dateRange
+     * @param dateRange Date range to copy.
      */
     public DateRange(DateRange dateRange) {
         this.dflt = dateRange.dflt;
@@ -172,7 +169,7 @@ public class DateRange {
     /**
      * Sets the start date.
      * 
-     * @param startDate
+     * @param startDate The start date.
      */
     private void setStartDate(String startDate) {
         this.rawStartDate = startDate;
@@ -182,7 +179,7 @@ public class DateRange {
     /**
      * Sets the end date.
      * 
-     * @param endDate
+     * @param endDate The end date.
      */
     private void setEndDate(String endDate) {
         this.rawEndDate = endDate;
@@ -192,10 +189,10 @@ public class DateRange {
     /**
      * Sets the default flag.
      * 
-     * @param dflt
+     * @param value Boolean string expression.
      */
-    private void setDefault(String dflt) {
-        this.dflt = NumberUtils.isDigits(dflt) ? NumberUtils.toInt(dflt) != 0 : BooleanUtils.toBoolean(dflt);
+    private void setDefault(String value) {
+        this.dflt = StrUtil.toBoolean(value);
     }
     
     /**

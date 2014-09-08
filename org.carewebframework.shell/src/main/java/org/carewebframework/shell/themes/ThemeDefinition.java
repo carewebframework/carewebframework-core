@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -130,7 +130,7 @@ public class ThemeDefinition implements ApplicationContextAware {
      * Maps a resource uri to its themed version if one exists. If no themed version exists, the
      * original uri is returned.
      * 
-     * @param uri
+     * @param uri The resource URI to map.
      * @return Mapped resource uri.
      */
     public String themedURI(String uri) {

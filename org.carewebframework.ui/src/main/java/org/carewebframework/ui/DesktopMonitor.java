@@ -86,11 +86,11 @@ public class DesktopMonitor extends Thread {
                 case BASELINE:
                     monitor.setMode(Mode.LOCK);
                     break;
-                    
+                
                 case LOCK:
                     monitor.requestLogout();
                     break;
-                    
+                
                 case SHUTDOWN:
                     monitor.requestLogout();
                     break;
@@ -303,7 +303,7 @@ public class DesktopMonitor extends Thread {
                     }
                     resetActivity(false);
                     break;
-                    
+                
                 case UPDATE_MODE:
                     if (!isDesktopLockingDisabled) {
                         setSclass(SCLASS_IDLE);
@@ -312,7 +312,7 @@ public class DesktopMonitor extends Thread {
                         Application.getDesktopInfo(desktop).sendToSpawned(mode == Mode.LOCK ? Command.LOCK : Command.UNLOCK);
                     }
                     break;
-                    
+                
                 case LOGOUT:
                     if (isDesktopLockingDisabled) {
                         log.info(String.format("App[%s] Desktop[%s] was excluded from pre-invalidation locking", appName,
@@ -410,10 +410,10 @@ public class DesktopMonitor extends Thread {
     }
     
     /**
-     * Resets the keep alive timer. Note that we always keep the session alive since the desktop
+     * Resets the activity timer. Note that we always keep the session alive since the desktop
      * monitor is responsible for handling the session timeout.
      * 
-     * @param resetKeepAlive
+     * @param resetKeepAlive If true, the keepalive timer is reset.
      */
     private synchronized void resetActivity(final boolean resetKeepAlive) {
         lastActivity = System.currentTimeMillis();
@@ -427,7 +427,7 @@ public class DesktopMonitor extends Thread {
     /**
      * Processes a polling request.
      * 
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     private void process() throws Exception {
         long now = System.currentTimeMillis();
@@ -450,7 +450,7 @@ public class DesktopMonitor extends Thread {
                 }
                 
                 break;
-                
+            
             case COUNTDOWN:
                 if (stateChanged) {
                     pollingInterval = countdownInterval;
@@ -468,7 +468,7 @@ public class DesktopMonitor extends Thread {
             case TIMEDOUT:
                 mode.onTimeout(this);
                 break;
-                
+            
             case DEAD:
                 this.terminate = true;
                 this.desktopDead = true;
@@ -493,7 +493,7 @@ public class DesktopMonitor extends Thread {
     /**
      * Queues a desktop action for deferred execution.
      * 
-     * @param action
+     * @param action The action to queue.
      */
     private void queueDesktopAction(Action action) {
         Event actionEvent = new Event("onAction", null, action);
@@ -602,7 +602,7 @@ public class DesktopMonitor extends Thread {
     /**
      * Wakes up the background thread.
      * 
-     * @return
+     * @return True if the operation was successful.
      */
     private synchronized boolean wakeup() {
         try {

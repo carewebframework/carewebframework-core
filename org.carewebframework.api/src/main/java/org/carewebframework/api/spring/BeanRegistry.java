@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -30,7 +30,7 @@ public class BeanRegistry<T> implements DestructionAwareBeanPostProcessor, Itera
     /**
      * Create a registry that tracks beans of the given class.
      * 
-     * @param clazz
+     * @param clazz Class of beans to track.
      */
     protected BeanRegistry(Class<T> clazz) {
         this.clazz = clazz;
@@ -67,7 +67,7 @@ public class BeanRegistry<T> implements DestructionAwareBeanPostProcessor, Itera
     /**
      * Returns a list of registered beans.
      * 
-     * @return
+     * @return List of registered beans.
      */
     protected List<T> getMembers() {
         return new ArrayList<T>(members);

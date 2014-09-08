@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -227,7 +227,7 @@ public class SelectionGrid extends Grid {
     /**
      * Updates group member selection and disabled states based on the state of the group.
      * 
-     * @param group
+     * @param group The group.
      */
     private void updateMembersFromGroup(Group group) {
         if (group != null && !isUpdating(group)) {
@@ -249,7 +249,7 @@ public class SelectionGrid extends Grid {
     /**
      * Update the selection and disabled states for the group based on the state of its members.
      * 
-     * @param group
+     * @param group The group.
      */
     private void updateGroupFromMembers(Group group) {
         if (group != null && !isUpdating(group)) {
@@ -281,8 +281,8 @@ public class SelectionGrid extends Grid {
     /**
      * Returns true if a component is being updated.
      * 
-     * @param cmpt
-     * @return
+     * @param cmpt The component to test.
+     * @return True if component is being updated.
      */
     private boolean isUpdating(Component cmpt) {
         return cmpt.getAttribute(UPDATING_ATTR) != null;
@@ -291,8 +291,8 @@ public class SelectionGrid extends Grid {
     /**
      * Sets the update state of the specified component.
      * 
-     * @param cmpt
-     * @param updating
+     * @param cmpt The target component.
+     * @param updating The updating state.
      */
     private void setUpdating(Component cmpt, boolean updating) {
         if (updating) {
@@ -305,7 +305,7 @@ public class SelectionGrid extends Grid {
     /**
      * Fires an onSelect event.to the grid.
      * 
-     * @param row
+     * @param row The selected row.
      */
     private void fireSelectEvent(Row row) {
         @SuppressWarnings({ "rawtypes", "unchecked" })
@@ -367,7 +367,7 @@ public class SelectionGrid extends Grid {
     /**
      * Ensures that no cell in the given row is empty by adding an hbox for any empty cell.
      * 
-     * @param row
+     * @param row The target row.
      */
     public void fillRow(Row row) {
         fillRow(row, forceColumns().getChildren().size());
@@ -561,7 +561,7 @@ public class SelectionGrid extends Grid {
      * Sets the select-on-click behavior. If true, clicking on a row is the same as clicking on its
      * checkbox. If false, one must click the checkbox to select the row.
      * 
-     * @param selectOnClick
+     * @param selectOnClick The select-on-click setting.
      */
     public void setSelectOnClick(boolean selectOnClick) {
         this.selectOnClick = selectOnClick;
@@ -667,7 +667,7 @@ public class SelectionGrid extends Grid {
     /**
      * Returns true if all items on current page are selected.
      * 
-     * @return
+     * @return True if all items on page selected.
      */
     private boolean isPageSelected() {
         return getPageRows(new Filter(false, null), true).size() == 0;
@@ -676,7 +676,7 @@ public class SelectionGrid extends Grid {
     /**
      * Returns true if all items on current page are disabled.
      * 
-     * @return
+     * @return True if all items on page disabled.
      */
     private boolean isPageDisabled() {
         return getPageRows(new Filter(null, false), true).size() == 0;
@@ -685,7 +685,7 @@ public class SelectionGrid extends Grid {
     /**
      * Returns true if paging mode is active.
      * 
-     * @return
+     * @return True if paging mode active.
      */
     private boolean isPagingActive() {
         return getPagingChild() != null;
@@ -703,7 +703,7 @@ public class SelectionGrid extends Grid {
     /**
      * Returns true if the specified row is disabled.
      * 
-     * @param row
+     * @param row The row to test.
      * @return True if the specified row is disabled.
      */
     public boolean isDisabled(Row row) {
@@ -720,7 +720,7 @@ public class SelectionGrid extends Grid {
      * Sets the disabled state of the grid. Disabling the grid disables all checkboxes within the
      * grid.
      * 
-     * @param value
+     * @param value The disabled state.
      */
     public void setDisabled(boolean value) {
         if (value != disabled) {
@@ -743,8 +743,8 @@ public class SelectionGrid extends Grid {
     /**
      * Sets the disabled state of the specified row.
      * 
-     * @param row
-     * @param value
+     * @param row The row to test.
+     * @param value The disabled state.
      */
     public void setDisabled(Row row, boolean value) {
         Checkbox cb = getCheckbox(row);
@@ -802,7 +802,7 @@ public class SelectionGrid extends Grid {
     /**
      * onCheck events are generated by individual check boxes.
      * 
-     * @param event
+     * @param event The on check event.
      */
     public void onCheck(Event event) {
         event = ZKUtil.getEventOrigin(event);
@@ -818,7 +818,7 @@ public class SelectionGrid extends Grid {
     /**
      * Process a row click event, toggling the row selection if selectOnClick is enabled.
      * 
-     * @param event
+     * @param event The row click event.
      */
     public void onRowClick(Event event) {
         if (selectOnClick) {
@@ -831,7 +831,7 @@ public class SelectionGrid extends Grid {
     /**
      * Process a row double click event, selecting the target row.
      * 
-     * @param event
+     * @param event The row double click event.
      */
     public void onRowDoubleClick(Event event) {
         if (selectOnClick) {

@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -181,7 +181,7 @@ public class FrameworkController extends GenericForwardComposer<Component> {
     /**
      * Returns true if any active threads are present.
      * 
-     * @return
+     * @return True if any active threads are present.
      */
     protected boolean hasActiveThreads() {
         return !threads.isEmpty();
@@ -204,7 +204,7 @@ public class FrameworkController extends GenericForwardComposer<Component> {
      * Background thread completion will be notified via this event listener. The listener will in
      * turn invoke either the threadFinished or threadAborted methods, as appropriate.
      * 
-     * @param event
+     * @param event The completion event.
      */
     public void onThreadComplete(Event event) {
         final ZKThread thread = (ZKThread) ZKUtil.getEventOrigin(event).getData();

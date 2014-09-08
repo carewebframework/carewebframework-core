@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -206,7 +206,7 @@ public class HelpViewer extends Window implements IHelpViewer, AfterCompose, ITo
     /**
      * Select the specified tab. Fires the onSelect event on the tab.
      * 
-     * @param tab
+     * @param tab Tab to select.
      */
     private void selectTab(HelpTab tab) {
         tbxNavigator.setSelectedPanel(tab);
@@ -239,8 +239,8 @@ public class HelpViewer extends Window implements IHelpViewer, AfterCompose, ITo
     /**
      * Returns the help set that matches the specified home id, or null if no match found.
      * 
-     * @param homeId
-     * @return
+     * @param homeId The home id.
+     * @return The home help set, or null if none.
      */
     private IHelpSet findHelpSet(String homeId) {
         for (IHelpSet helpSet : helpSets) {
@@ -255,7 +255,7 @@ public class HelpViewer extends Window implements IHelpViewer, AfterCompose, ITo
     /**
      * Returns the list of existing help tabs.
      * 
-     * @return
+     * @return List of help tabs.
      */
     @SuppressWarnings("unchecked")
     private List<HelpTab> getTabs() {
@@ -267,9 +267,9 @@ public class HelpViewer extends Window implements IHelpViewer, AfterCompose, ITo
      * doCreate is true and the view type is supported, a new tab is created. Otherwise, null is
      * returned.
      * 
-     * @param viewType
-     * @param doCreate
-     * @return A help tab
+     * @param viewType The view type.
+     * @param doCreate If true, create if does not already exist.
+     * @return A help tab (possibly null).
      */
     private HelpTab findTab(HelpViewType viewType, boolean doCreate) {
         for (HelpTab helpTab : getTabs()) {
@@ -285,7 +285,7 @@ public class HelpViewer extends Window implements IHelpViewer, AfterCompose, ITo
      * Creates a help tab for the specified view type. If the view type is not supported, null is
      * returned.
      * 
-     * @param viewType
+     * @param viewType The view type.
      * @return A help tab
      */
     private HelpTab createTab(HelpViewType viewType) {
@@ -296,7 +296,7 @@ public class HelpViewer extends Window implements IHelpViewer, AfterCompose, ITo
     /**
      * Sets the currently viewed topic.
      * 
-     * @param topic
+     * @param topic Help topic.
      */
     public void setTopic(HelpTopic topic) {
         history.add(topic);
@@ -326,7 +326,7 @@ public class HelpViewer extends Window implements IHelpViewer, AfterCompose, ITo
     /**
      * Returns a reference to the tab box.
      * 
-     * @return
+     * @return The tab box.
      */
     protected Tabbox getTabbox() {
         return tbxNavigator;
@@ -335,7 +335,7 @@ public class HelpViewer extends Window implements IHelpViewer, AfterCompose, ITo
     /**
      * Returns a reference to the view history.
      * 
-     * @return
+     * @return The help history view.
      */
     protected HelpHistory getHistory() {
         return history;
@@ -395,7 +395,7 @@ public class HelpViewer extends Window implements IHelpViewer, AfterCompose, ITo
     /**
      * Save height and width to use next time window is shown.
      * 
-     * @param event
+     * @param event The size event.
      */
     public void onSize(Event event) {
         SizeEvent size = (SizeEvent) ZKUtil.getEventOrigin(event);
@@ -452,7 +452,7 @@ public class HelpViewer extends Window implements IHelpViewer, AfterCompose, ITo
      * 
      * @param event The event object that embodies the request. The event name is the method name to
      *            be invoked and the event data is an array of the method parameters.
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     @Override
     public void onEvent(Event event) throws Exception {

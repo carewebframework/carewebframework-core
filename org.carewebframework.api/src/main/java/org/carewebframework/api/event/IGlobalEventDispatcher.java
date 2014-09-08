@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -28,7 +28,7 @@ public interface IGlobalEventDispatcher {
      * 
      * @param eventName The name of the event of interest.
      * @param subscribe If true, a subscription is requested. If false, it is revoked.
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     void subscribeRemoteEvent(String eventName, boolean subscribe) throws Exception;
     
@@ -39,7 +39,7 @@ public interface IGlobalEventDispatcher {
      * @param eventData Data object associated with the event.
      * @param recipients List of recipients for the event (null or empty string means all
      *            subscribers).
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     void fireRemoteEvent(String eventName, Serializable eventData, String recipients) throws Exception;
 }

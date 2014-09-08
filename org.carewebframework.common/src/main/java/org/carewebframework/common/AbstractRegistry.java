@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -35,16 +35,16 @@ public abstract class AbstractRegistry<KEY, VALUE> implements Iterable<VALUE> {
     /**
      * Returns the key to use to store the item.
      * 
-     * @param item
-     * @return
+     * @param item Item whose key is sought.
+     * @return Key for the item.
      */
     protected abstract KEY getKey(VALUE item);
     
     /**
      * Returns the value associated with the specified key.
      * 
-     * @param key
-     * @return
+     * @param key Key whose associated value is sought.
+     * @return Value associated with the key.
      */
     public VALUE get(KEY key) {
         return map.get(key);
@@ -53,7 +53,7 @@ public abstract class AbstractRegistry<KEY, VALUE> implements Iterable<VALUE> {
     /**
      * Adds an item to the registry.
      * 
-     * @param item
+     * @param item Item to add.
      */
     public void register(VALUE item) {
         if (item != null) {

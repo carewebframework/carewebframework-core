@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -133,7 +133,7 @@ public class UIElementTabPane extends UIElementZKBase {
     /**
      * Returns the caption label.
      * 
-     * @return
+     * @return The caption label.
      */
     public String getLabel() {
         return caption.getLabel();
@@ -142,7 +142,7 @@ public class UIElementTabPane extends UIElementZKBase {
     /**
      * Sets the caption label.
      * 
-     * @param value
+     * @param value The caption label.
      */
     public void setLabel(String value) {
         tab.setLabel(value);
@@ -152,7 +152,7 @@ public class UIElementTabPane extends UIElementZKBase {
     /**
      * Returns the tab icon.
      * 
-     * @return
+     * @return The tab icon.
      */
     public String getIcon() {
         return caption.getImage();
@@ -161,7 +161,7 @@ public class UIElementTabPane extends UIElementZKBase {
     /**
      * Sets the tab icon.
      * 
-     * @param value
+     * @param value The tab icon.
      */
     public void setIcon(String value) {
         tab.setImage(value);

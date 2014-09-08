@@ -259,7 +259,7 @@ public class PluginXmlParser extends BaseXmlParser {
      * 
      * @param xml XML containing plugin definition.
      * @return A plugin definition instance.
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     public static PluginDefinition fromXml(String xml) throws Exception {
         return (PluginDefinition) new PluginXmlParser().fromXml(xml, "plugin");

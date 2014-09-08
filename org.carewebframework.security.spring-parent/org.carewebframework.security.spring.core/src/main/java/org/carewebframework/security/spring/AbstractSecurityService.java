@@ -130,7 +130,7 @@ public abstract class AbstractSecurityService implements ISecurityService {
      * @param text Text containing parameter placeholder.
      * @param param Parameter name.
      * @param value Value to replace (will be url-encoded).
-     * @return
+     * @return Updated text.
      */
     private String replaceParam(String text, String param, String value) {
         if (text.contains(param)) {
@@ -252,9 +252,9 @@ public abstract class AbstractSecurityService implements ISecurityService {
     /**
      * Determine if the granted authority exists within the authentication context.
      * 
-     * @param grantedAuthority
-     * @param authentication
-     * @return
+     * @param grantedAuthority The granted authority to check.
+     * @param authentication The authentication context.
+     * @return True if the granted authority exists within the authentication context.
      */
     private boolean isGranted(String grantedAuthority, Authentication authentication) {
         if (authentication == null) {

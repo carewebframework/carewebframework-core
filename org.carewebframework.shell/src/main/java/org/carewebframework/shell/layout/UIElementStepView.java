@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -58,7 +58,7 @@ public class UIElementStepView extends UIElementZKBase {
     /**
      * Creates the ZK components that comprise this UI element.
      * 
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     public UIElementStepView() throws Exception {
         super();
@@ -99,7 +99,7 @@ public class UIElementStepView extends UIElementZKBase {
     /**
      * Sets the caption of the panel.
      * 
-     * @param caption
+     * @param caption The panel caption.
      */
     public void setCaption(String caption) {
         panel.setTitle(caption);
@@ -209,7 +209,7 @@ public class UIElementStepView extends UIElementZKBase {
      * 
      * @param forward If true, search forward. Otherwise, search backward.
      * @param fromIndex Pane index from which to search.
-     * @return
+     * @return Index of the next visible pane.
      */
     protected int nextVisiblePaneIndex(boolean forward, int fromIndex) {
         int max = getChildCount();
@@ -234,7 +234,7 @@ public class UIElementStepView extends UIElementZKBase {
      * 
      * @param forward If true, search forward. Otherwise, search backward.
      * @param fromIndex Pane index from which to search.
-     * @return
+     * @return The next visible pane.
      */
     protected UIElementStepPane nextVisiblePane(boolean forward, int fromIndex) {
         int idx = nextVisiblePaneIndex(forward, fromIndex);
@@ -274,7 +274,7 @@ public class UIElementStepView extends UIElementZKBase {
     /**
      * Returns true if navigation controls are suppressed.
      * 
-     * @return
+     * @return True if navigation controls are suppressed.
      */
     public boolean getNoNavigation() {
         return noNavigation;
@@ -283,7 +283,7 @@ public class UIElementStepView extends UIElementZKBase {
     /**
      * Set to true to suppress navigation controls.
      * 
-     * @param noNavigation
+     * @param noNavigation True to suppress navigation controls.
      */
     public void setNoNavigation(boolean noNavigation) {
         this.noNavigation = noNavigation;
@@ -294,7 +294,7 @@ public class UIElementStepView extends UIElementZKBase {
     /**
      * Returns true if home pane is suppressed.
      * 
-     * @return
+     * @return Home suppression flag.
      */
     public boolean getNoHome() {
         return noHome;
@@ -303,7 +303,7 @@ public class UIElementStepView extends UIElementZKBase {
     /**
      * Set to true to suppress home pane.
      * 
-     * @param noHome
+     * @param noHome Home suppression flag.
      */
     public void setNoHome(boolean noHome) {
         this.noHome = noHome;

@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -142,8 +142,8 @@ public class ActionListener implements EventListener<Event> {
     /**
      * Enables or disables the deferred event listener associated with the component.
      * 
-     * @param component
-     * @param disable
+     * @param component The component.
+     * @param disable Disable state for listener.
      */
     public static void disableAction(Component component, boolean disable) {
         disableAction(component, Events.ON_CLICK, disable);
@@ -152,9 +152,9 @@ public class ActionListener implements EventListener<Event> {
     /**
      * Enables or disables the deferred event listener associated with the component.
      * 
-     * @param component
-     * @param eventName
-     * @param disable
+     * @param component The component.
+     * @param eventName The name of the event.
+     * @param disable Disable state for listener.
      */
     public static void disableAction(Component component, String eventName, boolean disable) {
         ActionListener listener = getListener(component, eventName);
@@ -185,8 +185,8 @@ public class ActionListener implements EventListener<Event> {
     /**
      * Returns the listener associated with the given component and event.
      * 
-     * @param component
-     * @param eventName
+     * @param component The component.
+     * @param eventName The event name.
      * @return A DeferredEventListener, or null if not found.
      */
     public static ActionListener getListener(Component component, String eventName) {
@@ -196,8 +196,8 @@ public class ActionListener implements EventListener<Event> {
     /**
      * Returns the attribute name where the listener reference is stored.
      * 
-     * @param eventName
-     * @return
+     * @param eventName The event anem.
+     * @return The attribute name.
      */
     private static String getAttrName(String eventName) {
         return ATTR_LISTENER + eventName;
@@ -245,8 +245,8 @@ public class ActionListener implements EventListener<Event> {
     /**
      * Listener for the target event. Initial execution resolves the action.
      * 
-     * @param event
-     * @throws Exception
+     * @param event The target event.
+     * @throws Exception Unspecified exception.
      */
     @Override
     public void onEvent(Event event) throws Exception {

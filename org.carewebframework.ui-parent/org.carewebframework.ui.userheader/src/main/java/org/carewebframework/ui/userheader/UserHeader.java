@@ -121,8 +121,8 @@ public class UserHeader extends PluginController implements IUserContextEvent {
     /**
      * Returns a property value.
      * 
-     * @param propertyName
-     * @return
+     * @param propertyName The property name.
+     * @return The property value.
      */
     private String getPropertyValue(final String propertyName) {
         try {

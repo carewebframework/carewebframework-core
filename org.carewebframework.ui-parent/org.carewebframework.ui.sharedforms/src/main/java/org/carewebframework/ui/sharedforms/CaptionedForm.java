@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -95,8 +95,8 @@ public class CaptionedForm extends BaseForm {
     /**
      * Returns css gradient specifier for current browser.
      * 
-     * @param colors
-     * @return
+     * @param colors List of colors for gradient.
+     * @return The gradient specifier.
      */
     private String getGradValue(String... colors) {
         return ThemeFns.gradValue("hor", StrUtil.fromList(Arrays.asList(colors), ";", "none"));
@@ -114,7 +114,7 @@ public class CaptionedForm extends BaseForm {
     /**
      * Set first color in gradient range.
      * 
-     * @param color1
+     * @param color1 First color in gradient range.
      */
     public void setColor1(String color1) {
         this.color1 = color1;
@@ -133,7 +133,7 @@ public class CaptionedForm extends BaseForm {
     /**
      * Set second color in gradient range.
      * 
-     * @param color2
+     * @param color2 Second color in gradient range.
      */
     public void setColor2(String color2) {
         this.color2 = color2;
@@ -152,7 +152,7 @@ public class CaptionedForm extends BaseForm {
     /**
      * Set the current caption.
      * 
-     * @param caption
+     * @param caption Current caption.
      */
     public void setCaption(String caption) {
         panel.getCaption().setLabel(caption);

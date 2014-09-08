@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -78,7 +78,7 @@ public class Command {
     /**
      * Creates a command with the specified name.
      * 
-     * @param name
+     * @param name The command name.
      */
     /*package*/Command(final String name) {
         this.name = name;
@@ -141,7 +141,7 @@ public class Command {
     /**
      * Unbind a component from this command.
      * 
-     * @param component
+     * @param component The component to unbind.
      */
     public void unbind(final XulElement component) {
         if (componentBindings.remove(component)) {
@@ -218,7 +218,7 @@ public class Command {
     /**
      * Returns the name of the attribute used to store the command target in the bound component.
      * 
-     * @return
+     * @return The attribute name.
      */
     private String getTargetAttributeName() {
         return ATTR_TARGET + name;
@@ -271,8 +271,8 @@ public class Command {
     /**
      * Fire the onCommand event to the specified target (or its associated command target).
      * 
-     * @param target
-     * @param triggerEvent
+     * @param target The target component.
+     * @param triggerEvent The trigger event.
      * @return If false, do not propagate the event further.
      */
     public boolean fire(Component target, Event triggerEvent) {

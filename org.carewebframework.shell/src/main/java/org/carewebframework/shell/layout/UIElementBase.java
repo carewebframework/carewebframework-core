@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -62,8 +62,8 @@ public abstract class UIElementBase {
         /**
          * Adds clazz2 as a related class to clazz1.
          * 
-         * @param clazz1
-         * @param clazz2
+         * @param clazz1 The primary class.
+         * @param clazz2 Class to be registered.
          */
         public void addRelated(Class<? extends UIElementBase> clazz1, Class<? extends UIElementBase> clazz2) {
             getRelatedClasses(clazz1).add(clazz2);
@@ -72,7 +72,7 @@ public abstract class UIElementBase {
         /**
          * Returns true if the specified class has any related classes.
          * 
-         * @param clazz
+         * @param clazz The primary class.
          * @return True if the specified class has any related classes.
          */
         public boolean hasRelated(Class<? extends UIElementBase> clazz) {
@@ -83,8 +83,8 @@ public abstract class UIElementBase {
         /**
          * Returns true if class clazz2 or a superclass of clazz2 is related to clazz1.
          * 
-         * @param clazz1
-         * @param clazz2
+         * @param clazz1 The primary class.
+         * @param clazz2 The class to test.
          * @return True if class clazz2 or a superclass of clazz2 is related to clazz1.
          */
         public boolean isRelated(Class<? extends UIElementBase> clazz1, Class<? extends UIElementBase> clazz2) {
@@ -180,8 +180,8 @@ public abstract class UIElementBase {
     /**
      * Returns true if parentClass can be a parent of childClass.
      * 
-     * @param childClass
-     * @param parentClass
+     * @param childClass The child class.
+     * @param parentClass The parent class.
      * @return True if parentClass can be a parent of childClass.
      */
     public static boolean canAcceptParent(Class<? extends UIElementBase> childClass,
@@ -209,7 +209,7 @@ public abstract class UIElementBase {
     /**
      * Sets design mode status for this component and all its children.
      * 
-     * @param designMode
+     * @param designMode The design mode flag.
      */
     public void setDesignMode(boolean designMode) {
         this.designMode = designMode;
@@ -482,7 +482,7 @@ public abstract class UIElementBase {
     /**
      * Sets the plugin definition for this element.
      * 
-     * @param definition
+     * @param definition The plugin definition.
      */
     public void setDefinition(PluginDefinition definition) {
         if (this.definition != null) {
@@ -515,7 +515,7 @@ public abstract class UIElementBase {
      * Sets the plugin definition based on the specified class. Typically this would be the same
      * class as the element itself, but in certain cases (as in the UIElementProxy class) it is not.
      * 
-     * @param clazz
+     * @param clazz The UI element class.
      */
     public void setDefinition(Class<? extends UIElementBase> clazz) {
         setDefinition(PluginRegistry.getInstance().get(clazz));
@@ -544,7 +544,7 @@ public abstract class UIElementBase {
      * requires special activation logic for its children (e.g., if it allows only one child to be
      * active at a time), it should override the activateChildren method.
      * 
-     * @param activate
+     * @param activate The activate status.
      */
     public void activate(boolean activate) {
         activateChildren(activate);
@@ -558,7 +558,7 @@ public abstract class UIElementBase {
      * Default behavior is to pass activation/inactivation event to children. Override to restrict
      * propagation of the event.
      * 
-     * @param activate
+     * @param activate The activate status.
      */
     protected void activateChildren(boolean activate) {
         for (UIElementBase child : children) {
@@ -1136,7 +1136,7 @@ public abstract class UIElementBase {
      * Returns true if this element may accept a child of the specified class. Updates the reject
      * reason with the result.
      * 
-     * @param clazz
+     * @param clazz Child class to test.
      * @return True if this element may accept a child of the specified class.
      */
     public boolean canAcceptChild(Class<? extends UIElementBase> clazz) {
@@ -1157,7 +1157,7 @@ public abstract class UIElementBase {
      * Returns true if this element may accept the specified child. Updates the reject reason with
      * the result.
      * 
-     * @param child
+     * @param child Child instance to test.
      * @return True if this element may accept the specified child.
      */
     public boolean canAcceptChild(UIElementBase child) {
@@ -1189,7 +1189,7 @@ public abstract class UIElementBase {
      * Returns true if this element may accept a parent of the specified class. Updates the reject
      * reason with the result.
      * 
-     * @param clazz
+     * @param clazz Parent class to test.
      * @return True if this element may accept a parent of the specified class.
      */
     public boolean canAcceptParent(Class<? extends UIElementBase> clazz) {
@@ -1206,7 +1206,7 @@ public abstract class UIElementBase {
      * Returns true if this element may accept the specified element as a parent. Updates the reject
      * reason with the result.
      * 
-     * @param parent
+     * @param parent Parent instance to test.
      * @return True if this element may accept the specified element as a parent.
      */
     public boolean canAcceptParent(UIElementBase parent) {
@@ -1226,7 +1226,7 @@ public abstract class UIElementBase {
     /**
      * Sets the reject reason to the specified value.
      * 
-     * @param rejectReason
+     * @param rejectReason Reason for rejection.
      */
     public void setRejectReason(String rejectReason) {
         this.rejectReason = rejectReason;
@@ -1278,7 +1278,7 @@ public abstract class UIElementBase {
      * this element is initialized (i.e., before property values and parent element are set).
      * 
      * @param deserializing If true, initialization is occurring as a result of deserialization.
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     public void beforeInitialize(boolean deserializing) throws Exception {
         
@@ -1289,7 +1289,7 @@ public abstract class UIElementBase {
      * this element is initialized (i.e., after property values and parent element are set).
      * 
      * @param deserializing If true, initialization is occurring as a result of deserialization.
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     public void afterInitialize(boolean deserializing) throws Exception {
         

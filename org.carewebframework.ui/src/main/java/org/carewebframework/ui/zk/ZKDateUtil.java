@@ -27,8 +27,8 @@ public class ZKDateUtil {
      * Returns a date/time from the UI. This is combined from two UI input elements, one for date
      * and one for time.
      * 
-     * @param datebox
-     * @param timebox
+     * @param datebox The date box.
+     * @param timebox The time box.
      * @return The combined date/time.
      */
     public static Date getTime(Datebox datebox, Timebox timebox) {
@@ -48,8 +48,8 @@ public class ZKDateUtil {
     /**
      * Sets the UI to reflect the specified time.
      * 
-     * @param datebox
-     * @param timebox
+     * @param datebox The date box.
+     * @param timebox The time box.
      * @param value Time value to set.
      */
     public static void setTime(Datebox datebox, Timebox timebox, Date value) {

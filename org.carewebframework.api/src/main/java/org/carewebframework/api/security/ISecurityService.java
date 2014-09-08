@@ -31,7 +31,7 @@ public interface ISecurityService {
     /**
      * Validates the current user's password.
      * 
-     * @param password
+     * @param password Password to validate.
      * @return True if the password is valid.
      */
     boolean validatePassword(String password);

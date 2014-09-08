@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -135,7 +135,7 @@ public class LayoutDesigner extends Window implements AfterCompose {
      * Display the Layout Manager dialog
      * 
      * @param rootElement The root UI element.
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     public static void execute(UIElementBase rootElement) throws Exception {
         LayoutDesigner dlg = getInstance(true);
@@ -162,7 +162,7 @@ public class LayoutDesigner extends Window implements AfterCompose {
      * 
      * @param autoCreate If true and dialog does not exist, it is created.
      * @return The layout manager.
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     private static LayoutDesigner getInstance(boolean autoCreate) throws Exception {
         Desktop desktop = FrameworkWebSupport.getDesktop();
@@ -313,7 +313,7 @@ public class LayoutDesigner extends Window implements AfterCompose {
     /**
      * Returns currently selected UI element, or null if none selected.
      * 
-     * @return
+     * @return Currently selected item (may be null).
      */
     private UIElementBase selectedElement() {
         return getElement(tree.getSelectedItem());
@@ -408,8 +408,8 @@ public class LayoutDesigner extends Window implements AfterCompose {
     /**
      * Update the drop id for the specified target.
      * 
-     * @param target
-     * @param items
+     * @param target Target tree item.
+     * @param items Item list.
      */
     private void updateDroppable(Treeitem target, Collection<Treeitem> items) {
         StringBuilder sb = new StringBuilder();
@@ -453,7 +453,7 @@ public class LayoutDesigner extends Window implements AfterCompose {
     /**
      * Performs a cut operation on the selected item.
      * 
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     public void onClick$btnCut() throws Exception {
         onClick$btnCopy();
@@ -463,7 +463,7 @@ public class LayoutDesigner extends Window implements AfterCompose {
     /**
      * Performs a copy operation on the selected item.
      * 
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     public void onClick$btnCopy() throws Exception {
         clipboard.copy(UILayout.serialize(selectedElement()));
@@ -472,7 +472,7 @@ public class LayoutDesigner extends Window implements AfterCompose {
     /**
      * Performs a paste operation, inserted the pasted elements under the current selection.
      * 
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     public void onClick$btnPaste() throws Exception {
         Object data = clipboard.getData();
@@ -486,7 +486,7 @@ public class LayoutDesigner extends Window implements AfterCompose {
     /**
      * Shows clipboard contents.
      * 
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     public void onClick$btnView() throws Exception {
         clipboard.view();
@@ -507,7 +507,7 @@ public class LayoutDesigner extends Window implements AfterCompose {
     /**
      * Displays the property grid for the currently selected item.
      * 
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     public void onClick$btnProperties() throws Exception {
         if (!btnProperties.isDisabled()) {
@@ -528,7 +528,7 @@ public class LayoutDesigner extends Window implements AfterCompose {
     /**
      * Removes the currently selected element and any children.
      * 
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     public void onClick$btnDelete() throws Exception {
         UIElementBase child = selectedElement();
@@ -562,7 +562,7 @@ public class LayoutDesigner extends Window implements AfterCompose {
     /**
      * Display the About dialog for the selected element.
      * 
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     public void onClick$btnAbout() throws Exception {
         selectedElement().about();
@@ -578,7 +578,7 @@ public class LayoutDesigner extends Window implements AfterCompose {
     /**
      * Handles drop events.
      * 
-     * @param event
+     * @param event The drop event.
      */
     public void onDrop(Event event) {
         DropEvent dropEvent = (DropEvent) ZKUtil.getEventOrigin(event);

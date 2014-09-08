@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -34,7 +34,7 @@ public abstract class PropertyEditorBase {
      * Create property editor using the specified template.
      * 
      * @param template The template to create the editing component.
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     protected PropertyEditorBase(String template) throws Exception {
         this((XulElement) ZKUtil.loadZulPage(template, null));
@@ -64,14 +64,14 @@ public abstract class PropertyEditorBase {
     /**
      * Logic to return the value from the editor component.
      * 
-     * @return
+     * @return Value from the editor component.
      */
     protected abstract Object getValue();
     
     /**
      * Logic to set the value in the editor component.
      * 
-     * @param value
+     * @param value Value for the editor component.
      */
     protected abstract void setValue(Object value);
     

@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -121,7 +121,7 @@ public class Application {
         /**
          * Creates a session info instance for this session.
          * 
-         * @param session
+         * @param session The session.
          */
         private SessionInfo(final Session session) {
             this.session = session;
@@ -130,7 +130,7 @@ public class Application {
         /**
          * Adds a desktop to this session information.
          * 
-         * @param desktop
+         * @param desktop The desktop to add.
          */
         private void addDesktop(final Desktop desktop) {
             synchronized (activeDesktops) {
@@ -146,7 +146,7 @@ public class Application {
         /**
          * Removes a desktop from this session information.
          * 
-         * @param desktop
+         * @param desktop The desktop to remove.
          */
         private void removeDesktop(final Desktop desktop) {
             synchronized (activeDesktops) {
@@ -297,7 +297,7 @@ public class Application {
          * <p>
          * Note: Do not keep a reference to the desktop here.
          * 
-         * @param desktop
+         * @param desktop The desktop.
          */
         private DesktopInfo(final Desktop desktop) {
             final Execution exec = desktop.getExecution();
@@ -644,7 +644,7 @@ public class Application {
     /**
      * Return the time zone set for the specified desktop.
      * 
-     * @param desktop
+     * @param desktop The desktop.
      * @return The time zone.
      */
     public static TimeZone getTimeZone(final Desktop desktop) {

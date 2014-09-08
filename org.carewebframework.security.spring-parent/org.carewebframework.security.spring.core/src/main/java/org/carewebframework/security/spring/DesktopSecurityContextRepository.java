@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -148,7 +148,7 @@ public class DesktopSecurityContextRepository implements SecurityContextReposito
      * Returns the desktop-specific session key from the desktop id.
      * 
      * @param dtid The desktop id.
-     * @return
+     * @return The desktop-specific session key.
      */
     private static String getDesktopContextKey(String dtid) {
         return StringUtils.isEmpty(dtid) ? null : CONTEXT_KEY + "-" + dtid;
@@ -209,8 +209,8 @@ public class DesktopSecurityContextRepository implements SecurityContextReposito
     /**
      * Reads the security context from the request object.
      * 
-     * @param request
-     * @return
+     * @param request The servlet request.
+     * @return The security context.
      */
     private SecurityContext readSecurityContextFromRequest(HttpServletRequest request) {
         // Session exists, so try to obtain a context from it.
@@ -260,7 +260,7 @@ public class DesktopSecurityContextRepository implements SecurityContextReposito
      * context. If your application (or another filter) creates a session, then the security context
      * will still be stored for an authenticated user.
      * 
-     * @param allowSessionCreation
+     * @param allowSessionCreation The session creation flag.
      */
     public void setAllowSessionCreation(boolean allowSessionCreation) {
         this.allowSessionCreation = allowSessionCreation;

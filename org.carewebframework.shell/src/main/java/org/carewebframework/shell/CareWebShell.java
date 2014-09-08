@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -190,7 +190,7 @@ public class CareWebShell extends Div implements AfterCompose {
     /**
      * Handle help requests.
      * 
-     * @param event
+     * @param event A command event.
      */
     public void onCommand(CommandEvent event) {
         if ("help".equals(event.getCommandName())) {
@@ -211,7 +211,7 @@ public class CareWebShell extends Div implements AfterCompose {
     /**
      * Capture unhandled shortcut key press events.
      * 
-     * @param event
+     * @param event Control key event.
      */
     public void onCtrlKey(Event event) {
         KeyEvent keyEvent = (KeyEvent) ZKUtil.getEventOrigin(event);
@@ -277,7 +277,7 @@ public class CareWebShell extends Div implements AfterCompose {
      *            If url of format "private:xxx", then user layout named "xxx" is loaded.
      *            <p>
      *            Otherwise, resource is assumed to be a resource url.
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     public void loadLayoutFromResource(String resource) throws Exception {
         if (resource.startsWith("app:")) {
@@ -298,7 +298,7 @@ public class CareWebShell extends Div implements AfterCompose {
      * Loads the layout associated with the given application id.
      * 
      * @param appId An application id.
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     public void loadLayoutByAppId(String appId) throws Exception {
         FrameworkUtil.setAppName(appId);
@@ -313,16 +313,16 @@ public class CareWebShell extends Div implements AfterCompose {
     /**
      * Loads a layout based on the appId query parameter setting.
      * 
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     public void loadLayoutByAppId() throws Exception {
         loadLayoutByAppId(FrameworkWebSupport.getFrameworkProperty("appId", "CAREWEB.APPID.DEFAULT"));
     }
     
     /**
-     * Returns the layout to be loaded.
+     * Returns the name of the layout to be loaded.
      * 
-     * @return
+     * @return Name of layout to be loaded.
      */
     public String getLayout() {
         return defaultLayoutName;
@@ -332,8 +332,8 @@ public class CareWebShell extends Div implements AfterCompose {
      * Sets the layout to be loaded. If null, the layout specified by the configuration will be
      * loaded.
      * 
-     * @param defaultLayoutName
-     * @throws Exception
+     * @param defaultLayoutName The default layout name.
+     * @throws Exception Unspecified exception.
      */
     public void setLayout(String defaultLayoutName) throws Exception {
         this.defaultLayoutName = defaultLayoutName;
@@ -367,7 +367,7 @@ public class CareWebShell extends Div implements AfterCompose {
      * Build the UI based on the specified layout.
      * 
      * @param layout Layout for building UI.
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     public void buildUI(UILayout layout) throws Exception {
         this.layout = layout;
@@ -405,7 +405,7 @@ public class CareWebShell extends Div implements AfterCompose {
     /**
      * Registers a plugin and its resources. Called internally when a plugin is instantiated.
      * 
-     * @param plugin
+     * @param plugin Plugin to register.
      */
     public void registerPlugin(PluginContainer plugin) {
         plugins.add(plugin);
@@ -414,7 +414,7 @@ public class CareWebShell extends Div implements AfterCompose {
     /**
      * Unregisters a plugin and its resources. Called internally when a plugin is destroyed.
      * 
-     * @param plugin
+     * @param plugin Plugin to unregister.
      */
     public void unregisterPlugin(PluginContainer plugin) {
         plugins.remove(plugin);
@@ -459,7 +459,7 @@ public class CareWebShell extends Div implements AfterCompose {
      * Registers an external style sheet. If the style sheet has not already been registered,
      * creates a style component and adds it to the current page.
      * 
-     * @param url
+     * @param url URL of style sheet.
      */
     public void registerStyleSheet(String url) {
         for (Object style : registeredStyles.getChildren()) {
@@ -636,7 +636,7 @@ public class CareWebShell extends Div implements AfterCompose {
     /**
      * Shows a slide-down message.
      * 
-     * @param message
+     * @param message Message to display.
      * @see org.carewebframework.ui.zk.MessageWindow#show(String)
      */
     public void showMessage(String message) {
@@ -646,8 +646,8 @@ public class CareWebShell extends Div implements AfterCompose {
     /**
      * Shows a slide-down message.
      * 
-     * @param message
-     * @param caption
+     * @param message Message to display.
+     * @param caption Caption for message.
      * @see org.carewebframework.ui.zk.MessageWindow#show(String, String)
      */
     public void showMessage(String message, String caption) {
@@ -657,9 +657,9 @@ public class CareWebShell extends Div implements AfterCompose {
     /**
      * Shows a slide-down message.
      * 
-     * @param message
-     * @param caption
-     * @param color
+     * @param message Message to display
+     * @param caption Caption for message.
+     * @param color Background color for message window.
      * @see org.carewebframework.ui.zk.MessageWindow#show(String, String, String)
      */
     public void showMessage(String message, String caption, String color) {
@@ -669,10 +669,10 @@ public class CareWebShell extends Div implements AfterCompose {
     /**
      * Shows a slide-down message.
      * 
-     * @param message
-     * @param caption
-     * @param color
-     * @param duration
+     * @param message Message to display
+     * @param caption Caption for message.
+     * @param color Background color for message window.
+     * @param duration Message duration in milliseconds.
      * @see org.carewebframework.ui.zk.MessageWindow#show(String, String, String, int)
      */
     public void showMessage(String message, String caption, String color, int duration) {
@@ -682,11 +682,11 @@ public class CareWebShell extends Div implements AfterCompose {
     /**
      * Shows a slide-down message.
      * 
-     * @param message
-     * @param caption
-     * @param color
-     * @param duration
-     * @param tag
+     * @param message Message to display
+     * @param caption Caption for message.
+     * @param color Background color for message window.
+     * @param duration Message duration in milliseconds.
+     * @param tag Tag to classify message.
      * @see org.carewebframework.ui.zk.MessageWindow#show(String, String, String, Integer, String)
      */
     public void showMessage(String message, String caption, String color, Integer duration, String tag) {
@@ -696,12 +696,12 @@ public class CareWebShell extends Div implements AfterCompose {
     /**
      * Shows a slide-down message.
      * 
-     * @param message
-     * @param caption
-     * @param color
-     * @param duration
-     * @param tag
-     * @param action
+     * @param message Message to display
+     * @param caption Caption for message.
+     * @param color Background color for message window.
+     * @param duration Message duration in milliseconds.
+     * @param tag Tag to classify message.
+     * @param action Javascript action.
      * @see org.carewebframework.ui.zk.MessageWindow#show(String, String, String, Integer, String,
      *      String)
      */
@@ -712,7 +712,7 @@ public class CareWebShell extends Div implements AfterCompose {
     /**
      * Shows a slide-down message.
      * 
-     * @param messageInfo
+     * @param messageInfo Message info structure.
      * @see org.carewebframework.ui.zk.MessageWindow#show(MessageInfo)
      */
     public void showMessage(MessageInfo messageInfo) {

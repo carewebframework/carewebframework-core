@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -70,8 +70,8 @@ public class ActionRegistry extends AbstractRegistry<String, ActionEntry> {
     /**
      * Attempt to locate in local registry first, then global.
      * 
-     * @param id
-     * @return
+     * @param id The action id.
+     * @return The action entry (possibly null).
      */
     public static ActionEntry getRegisteredAction(String id) {
         ActionEntry action = getRegistry(false).get(id);
@@ -82,7 +82,7 @@ public class ActionRegistry extends AbstractRegistry<String, ActionEntry> {
      * Returns a collection of actions registered to the specified scope.
      * 
      * @param scope Action scope from which to retrieve.
-     * @return
+     * @return Actions associated with specified scope.
      */
     public static Collection<ActionEntry> getRegisteredActions(ActionScope scope) {
         Map<String, ActionEntry> actions = new HashMap<String, ActionEntry>();

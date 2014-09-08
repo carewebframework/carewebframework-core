@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -39,7 +39,7 @@ public class PluginController extends FrameworkController implements IPluginEven
     /**
      * Displays/clears a busy message.
      * 
-     * @param message
+     * @param message The message.
      */
     public void showBusy(String message) {
         container.setBusy(message);
@@ -79,7 +79,7 @@ public class PluginController extends FrameworkController implements IPluginEven
      * 
      * @param comp Target component.
      * @param controller Controller to attach.
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     public void attachController(Component comp, Composer<Component> controller) throws Exception {
         container.tryRegisterListener(controller, true);

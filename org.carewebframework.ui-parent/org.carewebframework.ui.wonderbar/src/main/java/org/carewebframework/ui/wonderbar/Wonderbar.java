@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -249,7 +249,7 @@ public class Wonderbar<T> extends InputElement {
     /**
      * Handles the client request for a server-based search.
      * 
-     * @param event
+     * @param event The search event.
      */
     public void onWonderbarSearch(WonderbarSearchEvent event) {
         doSearch(event.getTerm(), true);
@@ -272,8 +272,8 @@ public class Wonderbar<T> extends InputElement {
     /**
      * Invokes a function on the client.
      * 
-     * @param fnc
-     * @param args
+     * @param fnc Function name.
+     * @param args Function arguments.
      */
     private void invoke(String fnc, Object... args) {
         response(new AuInvoke(this, fnc, args));
@@ -364,7 +364,7 @@ public class Wonderbar<T> extends InputElement {
      * Returns true if item selection occurs only when the enter key is pressed, or false if item
      * selection also occurs when tabbing away from the component.
      * 
-     * @return
+     * @return Change-on-OK setting.
      */
     public boolean getChangeOnOKOnly() {
         return changeOnOKOnly;
@@ -374,7 +374,7 @@ public class Wonderbar<T> extends InputElement {
      * Sets item selection behavior. Set to true if item selection occurs only when the enter key is
      * pressed, or false if item selection also occurs when tabbing away from the component.
      * 
-     * @param value
+     * @param value Change-on-OK setting.
      */
     public void setChangeOnOKOnly(boolean value) {
         this.changeOnOKOnly = value;
@@ -384,7 +384,7 @@ public class Wonderbar<T> extends InputElement {
     /**
      * Returns true if the wonder bar menu should appear when the component receives focus.
      * 
-     * @return
+     * @return The open-on-focus setting.
      */
     public boolean getOpenOnFocus() {
         return openOnFocus;
@@ -393,7 +393,7 @@ public class Wonderbar<T> extends InputElement {
     /**
      * Set to true if the wonder bar menu should appear when the component receives focus.
      * 
-     * @param value
+     * @param value The open-on-focus setting.
      */
     public void setOpenOnFocus(boolean value) {
         this.openOnFocus = value;
@@ -424,7 +424,7 @@ public class Wonderbar<T> extends InputElement {
      * Returns the minimum number of characters that must be typed before search results are
      * displayed.
      * 
-     * @return
+     * @return Minimum search characters.
      */
     public int getMinSearchCharacters() {
         return this.minSearchCharacters;
@@ -433,7 +433,7 @@ public class Wonderbar<T> extends InputElement {
     /**
      * Set the minimum number of characters that must be typed before search results are displayed
      * 
-     * @param value
+     * @param value Minimum search characters.
      */
     public void setMinSearchCharacters(int value) {
         this.minSearchCharacters = value;
@@ -446,7 +446,7 @@ public class Wonderbar<T> extends InputElement {
      * When the number of searchable items exceeds this threshold, the server-based strategy is
      * employed.
      * 
-     * @return
+     * @return The client search threshold.
      */
     public int getClientThreshold() {
         return clientThreshold;
@@ -473,7 +473,7 @@ public class Wonderbar<T> extends InputElement {
     /**
      * Returns the match mode to be used for client-based searches.
      * 
-     * @return
+     * @return The client match mode.
      */
     public MatchMode getClientMatchMode() {
         return clientMatchMode;
@@ -482,7 +482,7 @@ public class Wonderbar<T> extends InputElement {
     /**
      * Sets the match mode to be used by the client. Does not affect server-based searching.
      * 
-     * @param clientMatchMode
+     * @param clientMatchMode The client match mode.
      */
     public void setClientMatchMode(MatchMode clientMatchMode) {
         this.clientMatchMode = clientMatchMode;
@@ -500,7 +500,7 @@ public class Wonderbar<T> extends InputElement {
     /**
      * Returns the currently selected item.
      * 
-     * @return
+     * @return The currently selected item.
      */
     public WonderbarItem getSelectedItem() {
         return selectedItem;
@@ -509,7 +509,7 @@ public class Wonderbar<T> extends InputElement {
     /**
      * Returns the data associated with the currently selected item.
      * 
-     * @return
+     * @return Data of the currently selected item.
      */
     public Object getSelectedData() {
         return selectedItem == null ? null : selectedItem.getData();
@@ -518,7 +518,7 @@ public class Wonderbar<T> extends InputElement {
     /**
      * Selects the specified item on the client and fires an onWonderbarSelect event.
      * 
-     * @param selectedItem
+     * @param selectedItem The item to be selected.
      */
     public void setSelectedItem(WonderbarItem selectedItem) {
         setSelectedItem(selectedItem, true);
@@ -527,7 +527,7 @@ public class Wonderbar<T> extends InputElement {
     /**
      * Selects the specified item on the client and fires an onWonderbarSelect event.
      * 
-     * @param selectedItem
+     * @param selectedItem The item to be selected.
      * @param fireEvent If true, an onWonderbarSelect event will be fired.
      */
     public void setSelectedItem(WonderbarItem selectedItem, boolean fireEvent) {
@@ -576,7 +576,7 @@ public class Wonderbar<T> extends InputElement {
     /**
      * Returns the search provider.
      * 
-     * @return
+     * @return The search provider.
      */
     public IWonderbarSearchProvider<T> getSearchProvider() {
         return this.searchProvider;
@@ -586,7 +586,7 @@ public class Wonderbar<T> extends InputElement {
      * Set the search provider. This must be an instance of IWonderbarServerSearchProvider,
      * IWonderbarClientSearchProvider, or both.
      * 
-     * @param searchProvider
+     * @param searchProvider The search provider.
      */
     public void setSearchProvider(final IWonderbarSearchProvider<T> searchProvider) {
         this.searchProvider = searchProvider;
@@ -596,7 +596,7 @@ public class Wonderbar<T> extends InputElement {
     /**
      * Renderer for searchable and default items.
      * 
-     * @return
+     * @return The item renderer.
      */
     public IWonderbarItemRenderer<T> getItemRenderer() {
         return renderer;
@@ -606,7 +606,7 @@ public class Wonderbar<T> extends InputElement {
      * Sets the renderer for searchable and default items. If none is specified, a default renderer
      * will be used.
      * 
-     * @param renderer
+     * @param renderer The item renderer.
      */
     public void setItemRenderer(IWonderbarItemRenderer<T> renderer) {
         this.renderer = renderer;
@@ -634,7 +634,7 @@ public class Wonderbar<T> extends InputElement {
      * Returns true if the first selectable item in the wonder bar menu should be selected by
      * default.
      * 
-     * @return
+     * @return The select first item setting.
      */
     public boolean isSelectFirstItem() {
         return selectFirstItem;
@@ -644,7 +644,7 @@ public class Wonderbar<T> extends InputElement {
      * Set to true if the first selectable item in the wonder bar menu should be selected by
      * default.
      * 
-     * @param value
+     * @param value The select first item setting.
      */
     public void setSelectFirstItem(boolean value) {
         this.selectFirstItem = value;

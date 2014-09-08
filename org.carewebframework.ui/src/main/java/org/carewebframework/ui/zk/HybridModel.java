@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -30,8 +30,8 @@ import org.zkoss.zul.ext.GroupsSortableModel;
  * This is a hybrid list model/group model. If a grouper implementation is supplied, can act as a
  * group model. Otherwise, is a simple list model.
  * 
- * @param <T>
- * @param <G>
+ * @param <T> The element class.
+ * @param <G> The group class.
  */
 @SuppressWarnings("rawtypes")
 public class HybridModel<T, G> extends AbstractListModel<T> implements GroupsModel<T, GroupHeader, Object>, GroupsSortableModel<T>, Iterable<T> {
@@ -53,7 +53,7 @@ public class HybridModel<T, G> extends AbstractListModel<T> implements GroupsMod
     /**
      * Simple implementation of a sorted list.
      * 
-     * @param <E>
+     * @param <E> The list element class.
      */
     private static class SortedList<E> extends ArrayList<E> {
         

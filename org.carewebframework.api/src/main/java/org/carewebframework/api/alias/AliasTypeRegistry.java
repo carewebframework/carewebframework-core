@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -133,8 +133,8 @@ public class AliasTypeRegistry extends AbstractRegistry<String, AliasType> imple
     /**
      * Load aliases from a property file.
      * 
-     * @param applicationContext
-     * @param propertyFile
+     * @param applicationContext The application context.
+     * @param propertyFile A property file.
      */
     private void loadAliases(ApplicationContext applicationContext, String propertyFile) {
         if (propertyFile.isEmpty()) {

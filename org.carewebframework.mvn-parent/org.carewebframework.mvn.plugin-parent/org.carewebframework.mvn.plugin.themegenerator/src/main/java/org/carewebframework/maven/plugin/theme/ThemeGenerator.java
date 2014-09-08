@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -217,8 +217,8 @@ class ThemeGenerator {
     /**
      * Modifies the path of a jar entry to use the new root path.
      * 
-     * @param entryName
-     * @return
+     * @param entryName Path to modify.
+     * @return The modified path.
      */
     protected String relocateEntry(final String entryName) {
         return entryName.replaceFirst("^web", "web/" + this.rootPath);
@@ -304,7 +304,7 @@ class ThemeGenerator {
      * @param sourceJar The source jar.
      * @param jarEntry The entry within the source jar.
      * @return True if a processor was found for the jar entry.
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     public boolean process(final JarFile sourceJar, final JarEntry jarEntry) throws Exception {
         final String entryName = StringUtils.trimToEmpty(jarEntry.getName());
@@ -327,8 +327,8 @@ class ThemeGenerator {
     /**
      * Returns true if the specified file is in the exclusion list.
      * 
-     * @param fileName
-     * @return
+     * @param fileName Name of file to check.
+     * @return True if the file is to be excluded.
      */
     private boolean isExcluded(final String fileName) {
         return isExcluded(new File(fileName));
@@ -337,8 +337,8 @@ class ThemeGenerator {
     /**
      * Returns true if the specified file is in the exclusion list.
      * 
-     * @param file
-     * @return
+     * @param file File instance to check.
+     * @return True if the file is to be excluded.
      */
     private boolean isExcluded(final File file) {
         if (this.exclusionFilters.accept(file)) {

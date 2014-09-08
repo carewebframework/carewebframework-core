@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -42,7 +42,7 @@ public class LifecycleEventDispatcher implements DesktopInit, DesktopCleanup, Se
     /**
      * Add a desktop lifecycle callback.
      * 
-     * @param callback
+     * @param callback The callback to add.
      */
     public static void addDesktopCallback(ILifecycleCallback<Desktop> callback) {
         desktopListener.addCallback(callback);
@@ -51,7 +51,7 @@ public class LifecycleEventDispatcher implements DesktopInit, DesktopCleanup, Se
     /**
      * Remove a desktop lifecycle callback.
      * 
-     * @param callback
+     * @param callback The callback to remove.
      */
     public static void removeDesktopCallback(ILifecycleCallback<Desktop> callback) {
         desktopListener.removeCallback(callback);
@@ -60,7 +60,7 @@ public class LifecycleEventDispatcher implements DesktopInit, DesktopCleanup, Se
     /**
      * Add a session lifecycle callback.
      * 
-     * @param callback
+     * @param callback The callback to add.
      */
     public static void addSessionCallback(ILifecycleCallback<Session> callback) {
         sessionListener.addCallback(callback);
@@ -69,7 +69,7 @@ public class LifecycleEventDispatcher implements DesktopInit, DesktopCleanup, Se
     /**
      * Remove a session lifecycle callback.
      * 
-     * @param callback
+     * @param callback The callback to remove.
      */
     public static void removeSessionCallback(ILifecycleCallback<Session> callback) {
         sessionListener.removeCallback(callback);
@@ -79,7 +79,7 @@ public class LifecycleEventDispatcher implements DesktopInit, DesktopCleanup, Se
      * Add a component lifecycle callback.
      * 
      * @param comp Component whose lifecycle is to be monitored.
-     * @param callback
+     * @param callback The callback to add.
      */
     public static void addComponentCallback(Component comp, ILifecycleCallback<Component> callback) {
         getListener(comp, true).addCallback(callback);
@@ -89,7 +89,7 @@ public class LifecycleEventDispatcher implements DesktopInit, DesktopCleanup, Se
      * Remove a component lifecycle callback.
      * 
      * @param comp Component whose lifecycle is to be monitored.
-     * @param callback
+     * @param callback The callback to remove.
      */
     public static void removeComponentCallback(Component comp, ILifecycleCallback<Component> callback) {
         LifecycleEventListener<Component> listener = getListener(comp, false);

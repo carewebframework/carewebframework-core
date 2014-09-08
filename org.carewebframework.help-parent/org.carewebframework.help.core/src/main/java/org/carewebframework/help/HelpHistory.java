@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -96,9 +96,9 @@ public class HelpHistory {
      * equality test here. Two topics are considered equal if the are the same instance or if their
      * targets are equal.
      * 
-     * @param topic1
-     * @param topic2
-     * @return
+     * @param topic1 First topic to compare.
+     * @param topic2 Second topic to compare.
+     * @return True if topics are equal.
      */
     private boolean sameTopic(HelpTopic topic1, HelpTopic topic2) {
         return topic1 == topic2 || (topic1 != null && topic2 != null && topic1.equals(topic2));
@@ -107,7 +107,7 @@ public class HelpHistory {
     /**
      * Adds a topic change listener.
      * 
-     * @param topicListener
+     * @param topicListener Topic listener to add.
      */
     public void addTopicListener(ITopicListener topicListener) {
         topicListeners.add(topicListener);
@@ -162,7 +162,7 @@ public class HelpHistory {
      * Sets the current position in the history list. The topic at that position becomes the
      * currently selected topic and all topic change listeners are notified.
      * 
-     * @param newPosition
+     * @param newPosition Position to set.
      */
     public void setPosition(int newPosition) {
         if (newPosition != position) {

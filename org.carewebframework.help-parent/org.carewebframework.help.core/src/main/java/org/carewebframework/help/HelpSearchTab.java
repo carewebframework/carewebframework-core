@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -79,8 +79,8 @@ public class HelpSearchTab extends HelpTab implements ListitemRenderer<HelpSearc
     /**
      * Create the help tab for the specified viewer and viewType.
      * 
-     * @param viewer
-     * @param viewType
+     * @param viewer The help viewer.
+     * @param viewType The view type.
      */
     public HelpSearchTab(HelpViewer viewer, HelpViewType viewType) {
         super(viewer, viewType, "helpSearchTab.zul");
@@ -135,8 +135,8 @@ public class HelpSearchTab extends HelpTab implements ListitemRenderer<HelpSearc
      * Returns the icon that represents the specified score. There are three icons available based
      * on within which tertile the score falls.
      * 
-     * @param score
-     * @return
+     * @param score The relevancy score.
+     * @return Image to represent relevancy.
      */
     private AImage toImage(double score) {
         int tertile = score >= tertile2 ? 2 : score >= tertile1 ? 1 : 0;
@@ -154,7 +154,7 @@ public class HelpSearchTab extends HelpTab implements ListitemRenderer<HelpSearc
     /**
      * Displays the specified message. The list box is hidden if the message is not empty.
      * 
-     * @param message
+     * @param message Message to display.
      */
     private void showMessage(String message) {
         message = message == null ? null : Labels.getLabel(message);

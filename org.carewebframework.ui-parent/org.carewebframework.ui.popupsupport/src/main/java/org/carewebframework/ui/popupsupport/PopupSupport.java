@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -136,7 +136,7 @@ public class PopupSupport implements IGenericEvent<Object>, EventListener<Event>
     /**
      * Return the screen position for window placement
      * 
-     * @return
+     * @return The screen position.
      */
     private synchronized String getPosition() {
         position = position < 80 ? position + 5 : 10;
@@ -147,7 +147,7 @@ public class PopupSupport implements IGenericEvent<Object>, EventListener<Event>
      * Return a popup window instance.
      * 
      * @return A popup window instance.
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     private synchronized Window getPopupWindow() throws Exception {
         if (popupDefinition == null) {
@@ -168,7 +168,7 @@ public class PopupSupport implements IGenericEvent<Object>, EventListener<Event>
     /**
      * Set the event manager instance.
      * 
-     * @param eventManager
+     * @param eventManager The event manager.
      */
     public void setEventManager(EventManager eventManager) {
         this.eventManager = eventManager;

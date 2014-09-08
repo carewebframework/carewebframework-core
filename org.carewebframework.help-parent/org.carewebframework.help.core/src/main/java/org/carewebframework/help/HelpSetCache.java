@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -55,18 +55,18 @@ public class HelpSetCache extends AbstractCache<HelpSetDescriptor, IHelpSet> {
     }
     
     /**
-     * Set the base url for non-compressed help sets.
+     * Set the base URL for non-compressed help sets.
      * 
-     * @param baseURL
+     * @param baseURL The base URL.
      */
     public void setBaseURL(String baseURL) {
         this.baseURL = baseURL;
     }
     
     /**
-     * Get the base url for non-compressed help sets.
+     * Get the base URL for non-compressed help sets.
      * 
-     * @return The base url.
+     * @return The base URL.
      */
     public String getBaseURL() {
         return baseURL;
@@ -78,15 +78,15 @@ public class HelpSetCache extends AbstractCache<HelpSetDescriptor, IHelpSet> {
     }
     
     /**
-     * Returns the help set corresponding to the specified url. If the help set has not been
+     * Returns the help set corresponding to the specified URL. If the help set has not been
      * previously loaded, it is loaded at this time. If the help set cannot be found, null is
      * returned.
      * 
-     * @param url Url of the requested help set. This can be an absolute or relative path. Where the
+     * @param url URL of the requested help set. This can be an absolute or relative path. Where the
      *            "~./" prefix is used, special processing is required. This is because ZK
      *            interferes with accessing files with an xml extension via this special path. So,
      *            we use an alternate HelpSet constructor that accesses the help set resources via
-     *            the class loader. However, when we do this, Oracle Help sets the base url for the
+     *            the class loader. However, when we do this, Oracle Help sets the base URL for the
      *            help set to the local file system path, which then prevents accessing the help
      *            content via the web UI. To fix this, the help viewer must translate this local
      *            file system path back to a web-based URL.
@@ -98,14 +98,14 @@ public class HelpSetCache extends AbstractCache<HelpSetDescriptor, IHelpSet> {
     }
     
     /**
-     * Encodes the specified url path, which may be absolute or relative.
+     * Encodes the specified URL path, which may be absolute or relative.
      * <p>
      * For compressed help sets, use the ~./ prefix. When using this syntax, ZK requires that the
      * root folder in the jar file be named "web" with the specified path being relative to that
      * folder.
      * 
-     * @param url
-     * @return
+     * @param url URL to encode.
+     * @return The encoded URL.
      */
     private String encodeURL(String url) {
         if (url.startsWith("~./")) {

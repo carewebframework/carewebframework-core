@@ -183,7 +183,7 @@ public final class NaturalStringSorter {
      * numeric values.
      * </p>
      * 
-     * @param collator
+     * @param collator The collator.
      * @param s first string
      * @param t second string
      * @return zero iff <code>s</code> and <code>t</code> are equal, a value less than zero iff

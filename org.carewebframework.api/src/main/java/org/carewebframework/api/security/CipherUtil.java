@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -47,10 +47,10 @@ public class CipherUtil {
      * @param keystoreLocation Path to key store location.
      * @param keystoreType Key store type.
      * @return A key store instance.
-     * @throws NoSuchAlgorithmException
-     * @throws CertificateException
-     * @throws IOException
-     * @throws KeyStoreException
+     * @throws NoSuchAlgorithmException If algorithm not supported.
+     * @throws CertificateException If certificate invalid.
+     * @throws IOException If IO exception.
+     * @throws KeyStoreException If key store invalid.
      */
     public static KeyStore getKeyStore(String keystoreLocation, String keystoreType) throws NoSuchAlgorithmException,
                                                                                     CertificateException, IOException,
@@ -74,8 +74,8 @@ public class CipherUtil {
      * @param content The content that was signed.
      * @param timestamp Optional timestamp for time-sensitive payloads.
      * @param duration Optional validity duration in minutes for time-sensitive payloads.
-     * @return
-     * @throws Exception
+     * @return True if signature is valid.
+     * @throws Exception Unspecified exception.
      */
     public static boolean verify(PublicKey key, String base64Signature, String content, String timestamp, int duration)
                                                                                                                        throws Exception {
@@ -105,7 +105,7 @@ public class CipherUtil {
      * @param key The private key to sign the content.
      * @param content The content to sign.
      * @return The digital signature.
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     public static String sign(PrivateKey key, String content) throws Exception {
         Signature signature = Signature.getInstance(SIGN_ALGORITHM);
@@ -118,8 +118,8 @@ public class CipherUtil {
      * Validates the timestamp and insures that it falls within the specified duration.
      * 
      * @param timestamp Timestamp in yyyyMMddHHmmssz format.
-     * @param duration
-     * @throws Exception
+     * @param duration Validity duration in minutes.
+     * @throws Exception Unspecified exception.
      */
     public static void validateTime(String timestamp, int duration) throws Exception {
         Date date = getTimestampFormatter().parse(timestamp);
@@ -158,7 +158,7 @@ public class CipherUtil {
      * @param key The cryptographic key.
      * @param content The content to encrypt.
      * @return The encrypted content.
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     public static String encrypt(Key key, String content) throws Exception {
         try {
@@ -177,7 +177,7 @@ public class CipherUtil {
      * @param key The cryptographic key.
      * @param content The content to decrypt.
      * @return The decrypted content.
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     public static String decrypt(Key key, String content) throws Exception {
         try {

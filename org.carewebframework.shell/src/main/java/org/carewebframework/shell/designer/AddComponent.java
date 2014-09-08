@@ -275,8 +275,8 @@ public class AddComponent extends Window {
     /**
      * Updates the tree item according to the favorite status.
      * 
-     * @param item
-     * @param isFavorite
+     * @param item Tree item to update.
+     * @param isFavorite If true, the item is a favorite.
      * @return The original image.
      */
     private Image setFavoriteStatus(Treeitem item, boolean isFavorite) {
@@ -291,7 +291,7 @@ public class AddComponent extends Window {
     /**
      * Returns currently selected plugin definition, or null if none selected.
      * 
-     * @return
+     * @return Definition of the currently selected plugin.
      */
     private PluginDefinition selectedPluginDefinition() {
         return (PluginDefinition) (tree.getSelectedItem() == null ? null : tree.getSelectedItem().getValue());
@@ -308,7 +308,7 @@ public class AddComponent extends Window {
      * Create new element based on selected plugin definition, add it to the parent element and
      * close the dialog.
      * 
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     public void onClick$btnOK() throws Exception {
         definition = selectedPluginDefinition();

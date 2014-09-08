@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -89,7 +89,7 @@ public class WonderbarItem extends WonderbarAbstractItem {
      * Returns the choice number for this item. When the user enters a positive integer value that
      * matches the choice number, that item is highlighted in the wonder bar menu.
      * 
-     * @return
+     * @return The choice number.
      */
     public int getChoiceNumber() {
         return choiceNumber;
@@ -111,7 +111,7 @@ public class WonderbarItem extends WonderbarAbstractItem {
      * itself is not suitable for searching (e.g., it contains special formatting for display
      * purposes).
      * 
-     * @return
+     * @return The search term.
      */
     public String getSearchTerm() {
         return searchTerm;
@@ -121,7 +121,7 @@ public class WonderbarItem extends WonderbarAbstractItem {
      * Sets the term to use for comparison during searches. This can be used when the label itself
      * is not suitable for searching (e.g., it contains special formatting for display purposes).
      * 
-     * @param searchTerm
+     * @param searchTerm The search term.
      */
     public void setSearchTerm(String searchTerm) {
         this.searchTerm = searchTerm;
@@ -132,7 +132,7 @@ public class WonderbarItem extends WonderbarAbstractItem {
      * Unique key identifying the item. This will be used to filter out items that have the same
      * unique key from displaying in the list.
      * 
-     * @return
+     * @return The unique key.
      */
     public String getUniqueKey() {
         return uniqueKey;
@@ -142,7 +142,7 @@ public class WonderbarItem extends WonderbarAbstractItem {
      * Sets the unique key identifying the item. This will be used to filter out items that have the
      * same unique key from displaying in the list.
      * 
-     * @param uniqueKey
+     * @param uniqueKey The unique key.
      */
     public void setUniqueKey(String uniqueKey) {
         this.uniqueKey = uniqueKey;
@@ -153,7 +153,7 @@ public class WonderbarItem extends WonderbarAbstractItem {
      * Priority used to determine which items with the same unique key to keep in the search list.
      * The matching item with the greatest priority will be kept.
      * 
-     * @return
+     * @return The unique priority.
      */
     public int getUniquePriority() {
         return uniquePriority;
@@ -163,7 +163,7 @@ public class WonderbarItem extends WonderbarAbstractItem {
      * Sets the priority used to determine which items with the same unique key to keep in the
      * search list. The matching item with the greatest priority will be kept.
      * 
-     * @param uniquePriority
+     * @param uniquePriority The unique priority.
      */
     public void setUniquePriority(int uniquePriority) {
         this.uniquePriority = uniquePriority;
@@ -175,7 +175,7 @@ public class WonderbarItem extends WonderbarAbstractItem {
      * to the right of the item in the wonder bar menu and is not re-rendered for consecutive items
      * with the same category.
      * 
-     * @return
+     * @return The category.
      */
     public String getCategory() {
         return category;
@@ -186,7 +186,7 @@ public class WonderbarItem extends WonderbarAbstractItem {
      * the right of the item in the wonder bar menu and is not re-rendered for consecutive items
      * with the same category.
      * 
-     * @param category
+     * @param category The category.
      */
     public void setCategory(String category) {
         this.category = category;

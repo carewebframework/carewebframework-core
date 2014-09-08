@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -232,7 +232,7 @@ public class PluginContainer extends Idspace {
     /**
      * Returns true if any plugin event listeners are registered.
      * 
-     * @return
+     * @return True if any plugin event listeners are registered.
      */
     private boolean hasListeners() {
         return pluginEventListeners1 != null || pluginEventListeners2 != null;
@@ -340,7 +340,7 @@ public class PluginContainer extends Idspace {
     /**
      * Forward onCommand events to first level children of the container.
      * 
-     * @param event
+     * @param event The command event.
      */
     public void onCommand(CommandEvent event) {
         if (!disabled) {
@@ -658,9 +658,9 @@ public class PluginContainer extends Idspace {
     /**
      * Returns the value for a registered property.
      * 
-     * @param propInfo
+     * @param propInfo Property info.
      * @return The property value.
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     public Object getPropertyValue(PropertyInfo propInfo) throws Exception {
         Object obj = registeredProperties == null ? null : registeredProperties.get(propInfo.getId());
@@ -671,9 +671,9 @@ public class PluginContainer extends Idspace {
     /**
      * Sets a value for a registered property.
      * 
-     * @param propInfo
-     * @param value
-     * @throws Exception
+     * @param propInfo Property info.
+     * @param value The value to set.
+     * @throws Exception Unspecified exception.
      */
     public void setPropertyValue(PropertyInfo propInfo, Object value) throws Exception {
         String propId = propInfo.getId();
@@ -732,7 +732,7 @@ public class PluginContainer extends Idspace {
      * action elements will not be enabled by this call. It may be used, however, to temporarily
      * disable action elements that would otherwise be enabled.
      * 
-     * @param disable
+     * @param disable The disable status.
      */
     public void disableActions(boolean disable) {
         if (registeredActions != null) {
@@ -776,7 +776,7 @@ public class PluginContainer extends Idspace {
      * If message is not null, disables the plugin and displays the busy message. If message is
      * null, removes any previous message and returns the plugin to its previous state.
      * 
-     * @param message
+     * @param message The message to display, or null to clear previous message.
      */
     public void setBusy(String message) {
         busyMessage = message = StrUtil.formatMessage(message);
@@ -807,7 +807,7 @@ public class PluginContainer extends Idspace {
     /**
      * Returns the shell instance that hosts this container.
      * 
-     * @return
+     * @return The shell instance.
      */
     public CareWebShell getShell() {
         return shell;

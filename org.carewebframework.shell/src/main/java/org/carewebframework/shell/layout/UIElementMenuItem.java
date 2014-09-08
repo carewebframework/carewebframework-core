@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -48,8 +48,8 @@ public class UIElementMenuItem extends UIElementActionBase {
                 /**
                  * Auto close the menu when it is clicked.
                  * 
-                 * @param event
-                 * @throws Exception
+                 * @param event The click event.
+                 * @throws Exception Unspecified exception.
                  */
                 @Override
                 public void onEvent(Event event) throws Exception {
@@ -73,7 +73,7 @@ public class UIElementMenuItem extends UIElementActionBase {
         /**
          * Adjust visibility of parent menu elements.
          * 
-         * @param visible
+         * @param visible The visibility state.
          */
         private void adjustVisibility(boolean visible) {
             Menu menu = this;

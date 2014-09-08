@@ -161,7 +161,7 @@ public class PropertyInfo {
      * 
      * @param instance The object instance.
      * @return The object's property value.
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     public Object getPropertyValue(Object instance) throws Exception {
         if (instance == null) {
@@ -180,7 +180,7 @@ public class PropertyInfo {
      * 
      * @param instance The object instance.
      * @param value The value to assign.
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     public void setPropertyValue(Object instance, Object value) throws Exception {
         if (instance instanceof IPropertyAccessor) {

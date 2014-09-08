@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -32,7 +32,7 @@ public class ResourceCache extends ConcurrentHashMap<String, Resource[]> {
          * 
          * @param locationPattern The location pattern.
          * @return An array of discovered resources.
-         * @throws IOException
+         * @throws IOException IO exception.
          */
         public Resource[] getResourcesForCache(String locationPattern) throws IOException;
     }
@@ -60,7 +60,7 @@ public class ResourceCache extends ConcurrentHashMap<String, Resource[]> {
      * @param ctx Resource cache-aware application context to be used to lookup resources if not in
      *            cache.
      * @return An array of matching resources, sorted alphabetically by file name.
-     * @throws IOException
+     * @throws IOException IO exception.
      */
     public Resource[] get(String pattern, IResourceCacheAware ctx) throws IOException {
         Resource[] resources = get(pattern);
@@ -73,7 +73,7 @@ public class ResourceCache extends ConcurrentHashMap<String, Resource[]> {
      * @param pattern Pattern to be used to lookup resources.
      * @param ctx Resource cache-aware application context to be used to lookup resources.
      * @return An array of matching resources, sorted alphabetically by file name.
-     * @throws IOException
+     * @throws IOException IO exception.
      */
     private synchronized Resource[] internalGet(String pattern, IResourceCacheAware ctx) throws IOException {
         Resource[] resources = get(pattern);

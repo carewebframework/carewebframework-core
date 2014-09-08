@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -66,7 +66,7 @@ public class DigitalSignature implements IDigitalSignature {
      * @param content The authorization string to which the signature was applied.
      * @param timestamp The timestamp of the digital signature.
      * @return True if the signature is valid.
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     public boolean verify(String base64Signature, String content, String timestamp) throws Exception {
         return verify(base64Signature, content, timestamp, keyName);
@@ -89,7 +89,6 @@ public class DigitalSignature implements IDigitalSignature {
     }
     
     /**
-     * @throws Exception
      * @see org.carewebframework.api.security.IDigitalSignature#sign(java.lang.String)
      */
     @Override
@@ -116,7 +115,7 @@ public class DigitalSignature implements IDigitalSignature {
     /**
      * Sets the duration, in minutes, that a signed payload will remain valid beyond its timestamp.
      * 
-     * @param duration
+     * @param duration Duration in minutes.
      */
     public void setDuration(int duration) {
         this.duration = duration;
@@ -133,7 +132,7 @@ public class DigitalSignature implements IDigitalSignature {
     /**
      * Sets the name of the key that will be used to generate a digital signature.
      * 
-     * @param keyName
+     * @param keyName The key name.
      */
     public void setKeyName(String keyName) {
         this.keyName = keyName;
@@ -153,7 +152,7 @@ public class DigitalSignature implements IDigitalSignature {
      * Sets the password used to extract the private key for purposes of generating a digital
      * signature.
      * 
-     * @param privateKeyPassword
+     * @param privateKeyPassword The private key password.
      */
     public void setPrivateKeyPassword(String privateKeyPassword) {
         this.privateKeyPassword = privateKeyPassword;

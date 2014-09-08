@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -91,8 +91,8 @@ public class ManagedContext<DomainClass> implements Comparable<IManagedContext>,
      * Extracts and returns the CCOW context from the specified domain object. Each subclass should
      * override this and supply their own implementation.
      * 
-     * @param domainObject
-     * @return
+     * @param domainObject The domain object.
+     * @return Context items extracted from the domain object.
      */
     protected ContextItems toCCOWContext(DomainClass domainObject) {
         return contextItems;
@@ -113,7 +113,7 @@ public class ManagedContext<DomainClass> implements Comparable<IManagedContext>,
     /**
      * Sets the pending state to the specified domain object.
      * 
-     * @param domainObject
+     * @param domainObject The domain object.
      */
     protected void setPending(DomainClass domainObject) {
         this.domainObject[CONTEXT_PENDING] = domainObject;
@@ -136,7 +136,7 @@ public class ManagedContext<DomainClass> implements Comparable<IManagedContext>,
     /**
      * Sets the context manager instance.
      * 
-     * @param contextManager
+     * @param contextManager The context manager.
      */
     public void setContextManager(IContextManager contextManager) {
         this.contextManager = contextManager;
@@ -145,7 +145,7 @@ public class ManagedContext<DomainClass> implements Comparable<IManagedContext>,
     /**
      * Sets the event manager instance.
      * 
-     * @param eventManager
+     * @param eventManager The event manager.
      */
     public void setEventManager(IEventManager eventManager) {
         this.eventManager = eventManager;
@@ -154,7 +154,7 @@ public class ManagedContext<DomainClass> implements Comparable<IManagedContext>,
     /**
      * Sets the application framework instance.
      * 
-     * @param appFramework
+     * @param appFramework The application framework.
      */
     public void setAppFramework(AppFramework appFramework) {
         this.appFramework = appFramework;
@@ -354,7 +354,7 @@ public class ManagedContext<DomainClass> implements Comparable<IManagedContext>,
      * 
      * @param all If true, all callbacks are returned. If false, only callbacks for surveyed
      *            subscribers are returned.
-     * @return
+     * @return Callback list.
      */
     private Iterable<IContextEvent> getIterable(boolean all) {
         return new ArrayList<IContextEvent>(all ? subscribers : surveyed);
@@ -439,7 +439,7 @@ public class ManagedContext<DomainClass> implements Comparable<IManagedContext>,
      * Register an object as a subscriber if it implements the callback interface.
      * 
      * @see org.carewebframework.api.IRegisterEvent#registerObject(Object)
-     * @param object
+     * @param object Object to register.
      */
     @Override
     public void registerObject(Object object) {
@@ -450,7 +450,7 @@ public class ManagedContext<DomainClass> implements Comparable<IManagedContext>,
      * Remove an object as a subscriber if it implements the callback interface.
      * 
      * @see org.carewebframework.api.IRegisterEvent#unregisterObject(Object)
-     * @param object
+     * @param object Object to unregister.
      */
     @Override
     public void unregisterObject(Object object) {

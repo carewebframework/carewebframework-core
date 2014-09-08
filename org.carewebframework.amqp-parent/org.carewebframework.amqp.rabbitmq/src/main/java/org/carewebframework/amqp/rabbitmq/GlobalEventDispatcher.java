@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -101,7 +101,7 @@ public class GlobalEventDispatcher extends AbstractGlobalEventDispatcher impleme
      * individual subscribers.
      * 
      * @param eventName Name of event.
-     * @throws AmqpException
+     * @throws AmqpException RabbitMQ exception.
      */
     private void doHostSubscribe(final String eventName) throws AmqpException {
         
@@ -128,7 +128,7 @@ public class GlobalEventDispatcher extends AbstractGlobalEventDispatcher impleme
      * Removes an event subscription with the global event manager.
      * 
      * @param eventName Name of event
-     * @throws AmqpException
+     * @throws AmqpException RabbitMQ exception.
      */
     private void doHostUnsubscribe(final String eventName) throws AmqpException {
         final Subscriber subscriber = this.subscribers.remove(eventName);
@@ -159,7 +159,7 @@ public class GlobalEventDispatcher extends AbstractGlobalEventDispatcher impleme
      * @param eventData Data object associated with the event.
      * @param recipients List of recipients for the event (null or empty string means all
      *            subscribers).
-     * @throws AmqpException
+     * @throws AmqpException RabbitMQ exception.
      */
     private void doFireRemoteEvent(final String eventName, final Object eventData, final String recipients)
                                                                                                            throws AmqpException {
@@ -184,7 +184,7 @@ public class GlobalEventDispatcher extends AbstractGlobalEventDispatcher impleme
      * Process a dequeued message by forwarding it to the local event manager for local delivery. If
      * the message is a ping request, send the response.
      * 
-     * @param message
+     * @param message Message to process.
      */
     protected void processMessage(final Message message) {
         try {

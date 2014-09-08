@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -90,7 +90,7 @@ public class FrameworkAppContext extends ClassPathXmlApplicationContext implemen
      * 
      * @param locationPattern The resource search pattern.
      * @return An array of resources matching the specified pattern.
-     * @throws IOException
+     * @throws IOException IO exception.
      */
     @Override
     public Resource[] getResourcesForCache(String locationPattern) throws IOException {

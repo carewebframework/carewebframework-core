@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -99,7 +99,7 @@ public class LayoutManager extends Window {
     /**
      * Returns true if the default layout scope is shared.
      * 
-     * @return
+     * @return True if the default layout scope is shared.
      */
     public static boolean defaultIsShared() {
         return FrameworkUtil.getAttribute(ATTR_DEFAULT_SCOPE) != null;
@@ -119,7 +119,7 @@ public class LayoutManager extends Window {
      * 
      * @param manage If true, open in management mode; otherwise, in selection mode.
      * @param deflt Default layout name.
-     * @return
+     * @return The layout selected on dialog closure.
      */
     public static LayoutIdentifier execute(boolean manage, String deflt) {
         LayoutManager dlg = null;

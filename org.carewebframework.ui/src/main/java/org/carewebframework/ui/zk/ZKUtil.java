@@ -515,8 +515,8 @@ public class ZKUtil {
     /**
      * Swaps the position of the two child components.
      * 
-     * @param child1
-     * @param child2
+     * @param child1 The first child.
+     * @param child2 The second child.
      */
     public static void swapChildren(Component child1, Component child2) {
         Component parent = child1.getParent();
@@ -835,10 +835,10 @@ public class ZKUtil {
     /**
      * Removes any disable mask over a component.
      * 
-     * @param c
+     * @param component The component.
      */
-    public static void removeMask(Component c) {
-        AuResponse rsp = new AuResponse("cwf_removeMask", c, new Object[] { c });
+    public static void removeMask(Component component) {
+        AuResponse rsp = new AuResponse("cwf_removeMask", component, new Object[] { component });
         Clients.response(rsp);
     }
     
@@ -899,7 +899,7 @@ public class ZKUtil {
     /**
      * Fires an event, deferring delivery if the desktop of the target is not currently active.
      * 
-     * @param event
+     * @param event The event to fire.
      */
     public static void fireEvent(Event event) {
         fireEvent(event, deferredDelivery);
@@ -909,8 +909,8 @@ public class ZKUtil {
      * Fires an event to the specified listener, deferring delivery if the desktop of the target is
      * not currently active.
      * 
-     * @param event
-     * @param listener
+     * @param event The event to fire.
+     * @param listener The listener to receive the event.
      */
     public static void fireEvent(Event event, EventListener<Event> listener) {
         Desktop dtp = event.getTarget() == null ? null : event.getTarget().getDesktop();

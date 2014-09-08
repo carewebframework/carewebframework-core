@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -34,8 +34,8 @@ public class HelpContentsTab extends HelpTab {
     /**
      * Create the help tab for the specified viewer and viewType.
      * 
-     * @param viewer
-     * @param viewType
+     * @param viewer The help viewer.
+     * @param viewType The view type.
      */
     public HelpContentsTab(HelpViewer viewer, HelpViewType viewType) {
         super(viewer, viewType, "helpContentsTab.zul");

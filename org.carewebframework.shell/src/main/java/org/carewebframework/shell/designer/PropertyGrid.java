@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -118,7 +118,7 @@ public class PropertyGrid extends Window {
      * @param target UI element whose properties are to be edited.
      * @param parent Parent component for property grid (may be null).
      * @return Newly created PropertyGrid instance.
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     public static PropertyGrid create(UIElementBase target, Component parent) throws Exception {
         return create(target, parent, false);
@@ -131,7 +131,7 @@ public class PropertyGrid extends Window {
      * @param parent Parent component for property grid (may be null).
      * @param embedded If true, the property grid is embedded within another component.
      * @return Newly created PropertyGrid instance.
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     public static PropertyGrid create(UIElementBase target, Component parent, boolean embedded) throws Exception {
         PageDefinition def = ZKUtil.loadCachedPageDefinition(DesignConstants.RESOURCE_PREFIX + "PropertyGrid.zul");
@@ -308,8 +308,8 @@ public class PropertyGrid extends Window {
     /**
      * Returns the editor associated with the named property, or null if none found.
      * 
-     * @param propName
-     * @return
+     * @param propName The property name.
+     * @return The associated property editor (may be null).
      */
     protected PropertyEditorBase findEditor(String propName) {
         for (Object child : gridProperties.getRows().getChildren()) {
@@ -329,7 +329,7 @@ public class PropertyGrid extends Window {
     /**
      * Change button enable states to reflect whether or not pending changes exist.
      * 
-     * @param disable
+     * @param disable The disable status.
      */
     private void disableButtons(boolean disable) {
         btnRestore.setDisabled(disable);
@@ -421,7 +421,7 @@ public class PropertyGrid extends Window {
     /**
      * Sets the selected row.
      * 
-     * @param row
+     * @param row The row to select.
      */
     private void setSelectedRow(Row row) {
         if (row == selectedRow) {
@@ -453,7 +453,7 @@ public class PropertyGrid extends Window {
     /**
      * Handles the selection of a row in the property grid.
      * 
-     * @param event
+     * @param event Row selection event.
      */
     public void onSelect(Event event) {
         event = ZKUtil.getEventOrigin(event);
@@ -463,7 +463,7 @@ public class PropertyGrid extends Window {
     /**
      * Handles change events from property editors.
      * 
-     * @param event
+     * @param event Change event.
      */
     public void onChange(Event event) {
         event = ZKUtil.getEventOrigin(event);

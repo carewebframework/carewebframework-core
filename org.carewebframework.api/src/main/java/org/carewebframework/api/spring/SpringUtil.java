@@ -24,7 +24,7 @@ public class SpringUtil {
      * Sets the finder logic for locating the framework context. This is set during framework
      * initialization and should not be changed.
      * 
-     * @param appContextFinder
+     * @param appContextFinder The application context finder.
      */
     public static void setAppContextFinder(IAppContextFinder appContextFinder) {
         SpringUtil.appContextFinder = appContextFinder;

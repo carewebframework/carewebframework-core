@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -33,7 +33,7 @@ public class ImageUtil {
      * 
      * @param text Text to be rendered in the image.
      * @return A buffered image.
-     * @throws IOException
+     * @throws IOException IO exception.
      */
     public static BufferedImage toImage(String text) throws IOException {
         return toImage(text, null, null, null);
@@ -47,7 +47,7 @@ public class ImageUtil {
      * @param backColor Background color for the image. If null, a transparent background is used.
      * @param fontColor Font color. If null, black is used.
      * @return A buffered image.
-     * @throws IOException
+     * @throws IOException IO exception.
      */
     public static BufferedImage toImage(String text, Font font, Color backColor, Color fontColor) throws IOException {
         text = text == null ? "" : text;

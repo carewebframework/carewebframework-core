@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -86,8 +86,8 @@ public class InfoPanelTestController extends FrameworkController {
     /**
      * Creates and returns a draggable list item.
      * 
-     * @param associateEvents If true, associated events with this item.
-     * @return
+     * @param associateEvents If true, associate events with this item.
+     * @return New list item.
      */
     private Listitem newListitem(boolean associateEvents) {
         Listitem item = new Listitem();
@@ -111,8 +111,8 @@ public class InfoPanelTestController extends FrameworkController {
     /**
      * Creates and returns a test alert item.
      * 
-     * @param associateEvents If true, associated events with this item.
-     * @return
+     * @param associateEvents If true, associate events with this item.
+     * @return Test alert item.
      */
     private Component newAlertitem(boolean associateEvents) {
         Vbox root = new Vbox();
@@ -133,7 +133,7 @@ public class InfoPanelTestController extends FrameworkController {
     /**
      * Associate action events with a component.
      * 
-     * @param cmp
+     * @param cmp The component.
      */
     private void associateEvents(Component cmp) {
         for (Action action : Action.values()) {
@@ -198,7 +198,7 @@ public class InfoPanelTestController extends FrameworkController {
     /**
      * Pushes the item to the info panel.
      * 
-     * @param item
+     * @param item The list item.
      */
     private void pushDrop(Listitem item) {
         if (item != null) {
@@ -220,7 +220,7 @@ public class InfoPanelTestController extends FrameworkController {
     /**
      * Pushes the alert to the alert manager.
      * 
-     * @param root
+     * @param root The root component.
      */
     private void pushAlert(Component root) {
         if (chkEvents.isChecked()) {

@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -80,12 +80,12 @@ public class RequestProcessingServlet extends HttpServlet {
      * @param res HttpServletResponse
      * @throws IllegalArgumentException If there is not the appropriate request parameter or if the
      *             bean found is not of type RequestProcessor
-     * @throws ServletException
-     * @throws IOException
+     * @throws ServletException Servlet exception.
+     * @throws IOException IO Exception.
      * @throws BeansException If the bean could not be obtained
      * @throws NoSuchBeanDefinitionException If there is no bean definition with the specified name
-     * @throws BeanNotOfRequiredTypeException if bean found is not a RequestProcessor implementation
-     * @throws RequestProcessingException
+     * @throws BeanNotOfRequiredTypeException If bean found is not a RequestProcessor implementation
+     * @throws RequestProcessingException Request processing exception.
      */
     protected final void processRequest(final HttpServletRequest req, final HttpServletResponse res)
                                                                                                     throws ServletException,

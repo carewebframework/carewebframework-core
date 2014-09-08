@@ -62,7 +62,7 @@ public abstract class AbstractAuthenticationProvider<T> implements Authenticatio
      * Authentication Provider. Produces a trusted <code>UsernamePasswordAuthenticationToken</code>
      * if
      * 
-     * @param authentication
+     * @param authentication The authentication context.
      * @return authentication Authentication object if authentication succeeded. Null if not.
      */
     @Override

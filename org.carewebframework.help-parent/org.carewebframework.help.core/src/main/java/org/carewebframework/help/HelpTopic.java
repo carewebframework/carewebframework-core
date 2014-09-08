@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -28,18 +28,18 @@ public class HelpTopic implements Comparable<HelpTopic> {
     /**
      * Creates an unlinked help topic with a label only.
      * 
-     * @param label
+     * @param label The topic label.
      */
     public HelpTopic(String label) {
         this(null, label, null);
     }
     
     /**
-     * Creates a help topic from a url, a label, and a source.
+     * Creates a help topic from a URL, a label, and a source.
      * 
-     * @param url
-     * @param label
-     * @param source
+     * @param url Topic URL.
+     * @param label Topic label.
+     * @param source Topic source.
      */
     public HelpTopic(URL url, String label, String source) {
         this.label = label;

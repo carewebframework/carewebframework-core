@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -101,7 +101,7 @@ public class DropContainer extends Panel implements IdSpace, IActionTarget {
     /**
      * Perform the specified action on the drop container.
      * 
-     * @param action
+     * @param action An action.
      */
     @Override
     public void doAction(Action action) {
@@ -154,7 +154,7 @@ public class DropContainer extends Panel implements IdSpace, IActionTarget {
     /**
      * Supports dragging drop container to a new position in the stream.
      * 
-     * @param event
+     * @param event The drop event.
      */
     public void onDrop(DropEvent event) {
         Component dragged = event.getDragged();

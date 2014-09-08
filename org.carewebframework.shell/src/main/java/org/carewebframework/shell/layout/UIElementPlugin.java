@@ -87,7 +87,7 @@ public class UIElementPlugin extends UIElementZKBase implements Disable, IProper
     /**
      * Additional processing of the plugin after it is initialized.
      * 
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      * @see org.carewebframework.shell.layout.UIElementBase#afterInitialize
      */
     @Override

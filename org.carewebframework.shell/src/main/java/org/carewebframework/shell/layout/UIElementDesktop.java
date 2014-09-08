@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -182,7 +182,7 @@ public class UIElementDesktop extends UIElementZKBase {
      * Returns true if the application id specified matches the desktop's application id. Handles
      * nulls.
      * 
-     * @param appId
+     * @param appId The application id.
      * @return True if the application ids match.
      */
     public boolean hasAppId(String appId) {

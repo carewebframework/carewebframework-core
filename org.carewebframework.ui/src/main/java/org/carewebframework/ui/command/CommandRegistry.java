@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -81,7 +81,7 @@ public class CommandRegistry implements Iterable<Command> {
      * Binds the shortcuts specified in the map to the associated commands. The map key is the
      * command name and the associated value is a list of shortcuts bound to the command.
      * 
-     * @param shortcuts
+     * @param shortcuts Shortcut map.
      */
     private void bindShortcuts(Map<Object, Object> shortcuts) {
         for (Object commandName : shortcuts.keySet()) {

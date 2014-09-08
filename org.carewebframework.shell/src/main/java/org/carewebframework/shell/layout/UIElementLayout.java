@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -179,7 +179,7 @@ public class UIElementLayout extends UIElementZKBase {
     /**
      * Sets the lock state for all descendants of this layout.
      * 
-     * @param lock
+     * @param lock The lock state.
      */
     private void lockDescendants(boolean lock) {
         lockDescendants(getChildren(), lock);
@@ -188,8 +188,8 @@ public class UIElementLayout extends UIElementZKBase {
     /**
      * Sets the lock state for all descendants of this layout.
      * 
-     * @param children
-     * @param lock
+     * @param children List of descendants.
+     * @param lock The lock state.
      */
     private void lockDescendants(Iterable<UIElementBase> children, boolean lock) {
         for (UIElementBase child : children) {
@@ -205,7 +205,7 @@ public class UIElementLayout extends UIElementZKBase {
      * the containing layout is loaded. Additionally, all child UI elements of a linked layout are
      * locked and may not be modified. Child elements of an embedded layout may be freely edited.
      * 
-     * @return
+     * @return The linked state.
      */
     public boolean getLinked() {
         return linked;
@@ -214,7 +214,7 @@ public class UIElementLayout extends UIElementZKBase {
     /**
      * Sets the linked state. A change in this state requires reloading of the associated layout.
      * 
-     * @param linked
+     * @param linked The linked state.
      */
     public void setLinked(boolean linked) {
         if (linked != this.linked) {

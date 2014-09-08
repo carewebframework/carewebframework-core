@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -50,7 +50,7 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
      * 
      * @param parent Top level element to be serialized.
      * @return A UI layout representing the serialized hierarchy.
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     public static UILayout serialize(UIElementBase parent) throws Exception {
         UILayout layout = new UILayout();
@@ -68,7 +68,7 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
      * 
      * @param parent Parent UI element at this level of the hierarchy. May be null.
      * @return The UI element created during this pass.
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     public UIElementBase deserialize(UIElementBase parent) throws Exception {
         moveTop();
@@ -90,7 +90,7 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
      * @param parent Parent UI element at this level of the hierarchy. May be null.
      * @param ignoreInternal Ignore internal elements.
      * @return The UI element created during this pass.
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     private UIElementBase internalDeserialize(UIElementBase parent, boolean ignoreInternal) throws Exception {
         String id = getObjectName();
@@ -119,7 +119,7 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
      * element and all its subordinates.
      * 
      * @param parent UI element to be serialized.
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     private void internalSerialize(UIElementBase parent) throws Exception {
         PluginDefinition def = parent.getDefinition();
@@ -197,7 +197,7 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
     /**
      * Performs some simple validation of the newly loaded layout.
      * 
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     private void validateDocument() throws Exception {
         currentNode = document.getDocumentElement();
@@ -253,9 +253,9 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
     /**
      * Load the layout from a string.
      * 
-     * @param text
+     * @param text The XML text to parse.
      * @return This layout (for chaining).
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     public UILayout loadFromText(String text) throws Exception {
         try {
@@ -274,7 +274,7 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
      * 
      * @param layoutId Layout identifier.
      * @return This layout (for chaining).
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     public UILayout loadFromProperty(LayoutIdentifier layoutId) throws Exception {
         String xml = LayoutUtil.getLayoutContent(layoutId);
@@ -288,7 +288,7 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
      * 
      * @param appId An application id.
      * @return True if the operation succeeded.
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     public UILayout loadByAppId(String appId) throws Exception {
         String xml = LayoutUtil.getLayoutContentByAppId(appId);
@@ -435,7 +435,7 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
     /**
      * Create a new element node as the child of the current node and make it the current node.
      * 
-     * @param name
+     * @param name Tag name for the new element.
      */
     public void newChild(String name) {
         currentNode = currentNode.appendChild(document.createElement(name));
@@ -452,8 +452,8 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
     /**
      * Sets an attribute value.
      * 
-     * @param name
-     * @param value
+     * @param name Attribute name.
+     * @param value Attribute value.
      */
     public void writeString(String name, String value) {
         setAttributeValue(name, value == null ? NULL_VALUE : value, currentNode);
@@ -472,9 +472,9 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
     /**
      * Sets the specified attribute value for the specified element.
      * 
-     * @param name
-     * @param value
-     * @param element
+     * @param name Attribute name.
+     * @param value Attribute value.
+     * @param element Element to receive the attribute.
      */
     private void setAttributeValue(String name, String value, Node element) {
         Node node = element.getAttributes().getNamedItem(name);
@@ -525,7 +525,7 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
     /**
      * Converts from clipboard format.
      * 
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     @Override
     public UILayout fromClipboard(String data) throws Exception {

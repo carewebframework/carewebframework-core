@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -64,8 +64,8 @@ public class LabelFinder {
         /**
          * Return a URL that matches the requested file name, or null if one does not exist.
          * 
-         * @param fileName
-         * @return
+         * @param fileName A file name.
+         * @return The URL matching the file name, or null if none found.
          */
         private URL findUrl(String fileName) {
             for (URL url : labelFiles) {
@@ -165,7 +165,7 @@ public class LabelFinder {
     /**
      * Validates entries in a label resource.
      * 
-     * @param resource
+     * @param resource A label resource.
      */
     private void validate(Resource resource) {
         InputStream is = null;

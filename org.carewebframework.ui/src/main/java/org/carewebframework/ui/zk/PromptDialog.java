@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -285,7 +285,7 @@ public class PromptDialog extends Window {
      * 
      * @param message Text message (if starts with "@", assumed to be a label name).
      * @param title Title of dialog (if starts with "@", assumed to be a label name)
-     * @return
+     * @return Initialized map of control parameters.
      */
     private static Map<Object, Object> initArgs(final String message, final String title) {
         final Map<Object, Object> args = new HashMap<Object, Object>();
@@ -297,10 +297,10 @@ public class PromptDialog extends Window {
     /**
      * Create and modally display the dialog.
      * 
-     * @param args
-     * @param eventListener
-     * @param useInputListener
-     * @return
+     * @param args Control parameter map.
+     * @param eventListener An event listener.
+     * @param useInputListener If true, use the generic input listener.
+     * @return The prompt dialog.
      */
     private static PromptDialog showDialog(final Map<Object, Object> args, final EventListener<Event> eventListener,
                                            final boolean useInputListener) {
@@ -443,8 +443,8 @@ public class PromptDialog extends Window {
     /**
      * Returns true if the result corresponds to an OK result.
      * 
-     * @param result
-     * @return
+     * @param result Result value to test.
+     * @return True if represents an OK result.
      */
     private static boolean isOK(String result) {
         return StrUtil.formatMessage(LABEL_ID_OK).equals(result);
@@ -653,8 +653,8 @@ public class PromptDialog extends Window {
     /**
      * Returns true if valid input is present.
      * 
-     * @param result
-     * @return
+     * @param result The input value to test.
+     * @return True if input is valid.
      */
     private boolean inputCheck(final String result) {
         if (isOK(result)) {
@@ -709,7 +709,7 @@ public class PromptDialog extends Window {
     /**
      * Accept input when enter key is pressed.
      * 
-     * @param event
+     * @param event OK event.
      */
     public void onInputOK(final Event event) {
         String okResult = StrUtil.formatMessage(LABEL_ID_OK);
@@ -723,8 +723,8 @@ public class PromptDialog extends Window {
      * When a button is clicked, save its label in _result and save the state of the remember
      * response check box to _remember. Then close the dialog.
      * 
-     * @param event
-     * @throws Exception
+     * @param event Click event.
+     * @throws Exception Unspecified exception.
      */
     public void onButtonClick(Event event) throws Exception {
         event = ZKUtil.getEventOrigin(event);

@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -225,7 +225,7 @@ public class ThemeGeneratorMojo extends BaseMojo {
     /**
      * Auto generated method comment
      * 
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     private void prepareSource() throws Exception {
         this.sourceDirectory.mkdir();
@@ -276,7 +276,7 @@ public class ThemeGeneratorMojo extends BaseMojo {
     /**
      * Auto generated method comment
      * 
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     private void initThemeGenerators() throws Exception {
         this.themeGenerators = new ArrayList<ThemeGenerator>();
@@ -291,7 +291,7 @@ public class ThemeGeneratorMojo extends BaseMojo {
     /**
      * Process all jars in the source folder.
      * 
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     private void processSources() throws Exception {
         final FileFilter filter = new WildcardFileFilter("*.jar");
@@ -309,7 +309,7 @@ public class ThemeGeneratorMojo extends BaseMojo {
      * Process one jar file from the source folder.
      * 
      * @param file A jar file from the source folder.
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     private void processJarFile(final File file) throws Exception {
         final JarFile sourceJar = new JarFile(file);

@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -25,7 +25,7 @@ public interface IHelpViewer {
      * Merges a help set into the viewer. If the help set has already been merged, no action is
      * taken.
      * 
-     * @param helpSet
+     * @param helpSet The help set to merge.
      */
     void mergeHelpSet(IHelpSet helpSet);
     
@@ -62,7 +62,7 @@ public interface IHelpViewer {
     /**
      * Selects the tab associated with the specified view type and displays the viewer.
      * 
-     * @param viewType
+     * @param viewType The view type.
      */
     void show(HelpViewType viewType);
     

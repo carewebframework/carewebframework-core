@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -67,7 +67,7 @@ public class ManifestViewer extends FrameworkController {
         /**
          * Wrapper for a single manifest.
          * 
-         * @param manifest
+         * @param manifest A manifest.
          */
         public ManifestItem(Manifest manifest) {
             this.manifest = manifest;
@@ -150,7 +150,7 @@ public class ManifestViewer extends FrameworkController {
     /**
      * Base renderer.
      * 
-     * @param <T>
+     * @param <T> Class of rendered object.
      */
     private static abstract class BaseRenderer<T> implements ListitemRenderer<T> {
         
@@ -347,7 +347,7 @@ public class ManifestViewer extends FrameworkController {
     /**
      * Search for user-specified text.
      * 
-     * @param event
+     * @param event The input event.
      */
     public void onChanging$txtSearch(InputEvent event) {
         findMatchingItem(event.getValue(), matchIndex - 1);

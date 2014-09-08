@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -194,7 +194,7 @@ public class DesignContextMenu extends Menupopup implements IdSpace {
     /**
      * Sets the component that is to receive layout change events.
      * 
-     * @param listener
+     * @param listener Event listener.
      */
     public void setListener(Component listener) {
         this.listener = listener;
@@ -203,7 +203,7 @@ public class DesignContextMenu extends Menupopup implements IdSpace {
     /**
      * Sets the context menu's owner based on the UI element that invoked the menu.
      * 
-     * @param event
+     * @param event The open event.
      */
     public void onOpen(Event event) {
         if (listener == null) {
@@ -222,7 +222,7 @@ public class DesignContextMenu extends Menupopup implements IdSpace {
     /**
      * Invoke owner's about dialog.
      * 
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     public void onClick$mnuAbout() throws Exception {
         owner.about();
@@ -245,7 +245,7 @@ public class DesignContextMenu extends Menupopup implements IdSpace {
     /**
      * Copies the XML layout with the owner as the root node to the clipboard.
      * 
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     public void onClick$mnuCopy() throws Exception {
         clipboard.copy(UILayout.serialize(owner));
@@ -255,7 +255,7 @@ public class DesignContextMenu extends Menupopup implements IdSpace {
      * Copies the XML layout with the owner as the root node to the clipboard, then deletes the
      * owner.
      * 
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     public void onClick$mnuCut() throws Exception {
         onClick$mnuCopy();
@@ -265,7 +265,7 @@ public class DesignContextMenu extends Menupopup implements IdSpace {
     /**
      * Paste the XML layout in the clipboard into the layout with the owner as the parent node.
      * 
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     public void onClick$mnuPaste() throws Exception {
         Object data = clipboard.getData();
@@ -278,7 +278,7 @@ public class DesignContextMenu extends Menupopup implements IdSpace {
     /**
      * Display the clipboard viewer.
      * 
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     public void onClick$mnuView() throws Exception {
         clipboard.view();

@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -124,7 +124,7 @@ public class PluginDefinition {
      * 
      * @param name Display name of the plugin.
      * @param clazz Associated UI element class.
-     * @throws ClassNotFoundException
+     * @throws ClassNotFoundException If class not found.
      */
     public PluginDefinition(String name, Class<? extends UIElementBase> clazz) throws ClassNotFoundException {
         super();
@@ -175,7 +175,7 @@ public class PluginDefinition {
     /**
      * Sets the unique id of the plugin definition
      * 
-     * @param id
+     * @param id The unique plugin id.
      */
     public void setId(String id) {
         this.id = id;
@@ -193,7 +193,7 @@ public class PluginDefinition {
     /**
      * Sets the source of the plugin.
      * 
-     * @param source
+     * @param source Plugin source.
      */
     public void setSource(String source) {
         this.source = source;
@@ -211,25 +211,25 @@ public class PluginDefinition {
     /**
      * Sets the display name of the plugin definition.
      * 
-     * @param name
+     * @param name Plugin display name.
      */
     public void setName(String name) {
         this.name = name;
     }
     
     /**
-     * Returns the url of the principal zul page for the plugin.
+     * Returns the URL of the principal zul page for the plugin.
      * 
-     * @return The url of the principal zul page.
+     * @return The URL of the principal zul page.
      */
     public String getUrl() {
         return url;
     }
     
     /**
-     * Sets the url of the principal zul page for the plugin.
+     * Sets the URL of the principal zul page for the plugin.
      * 
-     * @param url
+     * @param url The URL of the principal zul page.
      */
     public void setUrl(String url) {
         this.url = url;
@@ -241,7 +241,7 @@ public class PluginDefinition {
      * sufficient for access. If no authorities are associated with the plugin, this setting is
      * ignored.
      * 
-     * @param requiresAll
+     * @param requiresAll The requiresAll flag.
      */
     public void setRequiresAll(boolean requiresAll) {
         this.requiresAll = requiresAll;
@@ -275,7 +275,7 @@ public class PluginDefinition {
      * initialized until it is first activity. When false, the plugin is initialized immediately
      * after deserialization.
      * 
-     * @param lazyLoad
+     * @param lazyLoad The lazyLoad flag.
      */
     public void setLazyLoad(boolean lazyLoad) {
         this.lazyLoad = lazyLoad;
@@ -331,7 +331,7 @@ public class PluginDefinition {
     /**
      * Adds authorities from the list to the list of authorities associated with this plugin.
      * 
-     * @param authorities
+     * @param authorities Authorities required by this plugin.
      */
     public void setAuthorities(List<Authority> authorities) {
         this.authorities.addAll(authorities);
@@ -349,7 +349,7 @@ public class PluginDefinition {
     /**
      * Adds properties from the list to the list of properties associated with this plugin.
      * 
-     * @param properties
+     * @param properties List of associated properties.
      */
     public void setProperties(List<PropertyInfo> properties) {
         this.properties.addAll(properties);
@@ -358,7 +358,7 @@ public class PluginDefinition {
     /**
      * Sets a reference to the plugin registry.
      * 
-     * @param pluginRegistry
+     * @param pluginRegistry The plugin registry.
      */
     public void setPluginRegistry(PluginRegistry pluginRegistry) {
         this.pluginRegistry = pluginRegistry;
@@ -385,8 +385,8 @@ public class PluginDefinition {
     /**
      * Sets the UI element class associated with this definition.
      * 
-     * @param clazz
-     * @throws ClassNotFoundException
+     * @param clazz The associated class.
+     * @throws ClassNotFoundException If class not found.
      */
     public void setClazz(Class<? extends UIElementBase> clazz) throws ClassNotFoundException {
         this.clazz = clazz;
@@ -405,7 +405,7 @@ public class PluginDefinition {
     /**
      * Sets the description of this plugin.
      * 
-     * @param description
+     * @param description The plugin description.
      */
     public void setDescription(String description) {
         this.description = description;
@@ -415,7 +415,7 @@ public class PluginDefinition {
      * Sets the category under which this plugin is to be classified. This can be specified as a
      * tree node path using "\" to separate the path components.
      * 
-     * @param category
+     * @param category The plugin category.
      */
     public void setCategory(String category) {
         this.category = category;
@@ -443,7 +443,7 @@ public class PluginDefinition {
     /**
      * Sets the name of the creator of this plugin.
      * 
-     * @param creator
+     * @param creator The plugin creator.
      */
     public void setCreator(String creator) {
         this.creator = creator;
@@ -461,7 +461,7 @@ public class PluginDefinition {
     /**
      * Sets any copyright information for this plugin.
      * 
-     * @param copyright
+     * @param copyright Plugin copyright information.
      */
     public void setCopyright(String copyright) {
         this.copyright = copyright;
@@ -479,7 +479,7 @@ public class PluginDefinition {
     /**
      * Sets version information about the plugin.
      * 
-     * @param version
+     * @param version The plugin version.
      */
     public void setVersion(String version) {
         this.version = version;
@@ -622,7 +622,7 @@ public class PluginDefinition {
      * @param propertySource Property source for initializing element properties (may be null).
      * @return Newly created element (may be null if access is restricted or plugin has been
      *         disabled).
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     public UIElementBase createElement(UIElementBase parent, IPropertyProvider propertySource) throws Exception {
         UIElementBase element = null;

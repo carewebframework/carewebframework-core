@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -49,8 +49,8 @@ public class ActionListener implements IGenericEvent<Object> {
     /**
      * Unbinds all action listeners from the specified target.
      * 
-     * @param target
-     * @param actionListeners
+     * @param target The action target.
+     * @param actionListeners List of action listeners.
      */
     public static void unbindActionListeners(IActionTarget target, List<ActionListener> actionListeners) {
         if (actionListeners != null) {
@@ -83,7 +83,7 @@ public class ActionListener implements IGenericEvent<Object> {
     /**
      * Binds the specified action target to this event listener.
      * 
-     * @param target
+     * @param target The action target to bind.
      */
     private void bind(IActionTarget target) {
         if (targets.isEmpty()) {
@@ -96,7 +96,7 @@ public class ActionListener implements IGenericEvent<Object> {
     /**
      * Unbinds the specified action target from this event listener.
      * 
-     * @param target
+     * @param target The action target to unbind.
      */
     private void unbind(IActionTarget target) {
         if (targets.remove(target) && targets.isEmpty()) {
@@ -107,7 +107,7 @@ public class ActionListener implements IGenericEvent<Object> {
     /**
      * Returns a reference to the event manager.
      * 
-     * @return
+     * @return The event manager.
      */
     private IEventManager getEventManager() {
         if (eventManager == null) {

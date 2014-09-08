@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -22,14 +22,14 @@ import org.carewebframework.api.CompositeException;
 /**
  * Dispatches creation and destruction events to registered listeners.
  * 
- * @param <T> The object whose creation and destruction is being monitored.
+ * @param <T> The class of object whose creation and destruction is being monitored.
  */
 public class LifecycleEventListener<T extends Object> {
     
     /**
      * Registered listeners must implement this interface.
      * 
-     * @param <T>
+     * @param <T> Class of monitored object.
      */
     public interface ILifecycleCallback<T> {
         

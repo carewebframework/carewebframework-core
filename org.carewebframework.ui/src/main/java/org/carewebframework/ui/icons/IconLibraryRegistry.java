@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -82,7 +82,7 @@ public class IconLibraryRegistry extends AbstractRegistry<String, IIconLibrary> 
      * Returns the default icon library. If none has been explicitly set, assumes the first
      * registered library to be default.
      * 
-     * @return
+     * @return The default icon library.
      */
     public String getDefaultLibrary() {
         if (defaultLibrary == null || defaultLibrary.isEmpty()) {

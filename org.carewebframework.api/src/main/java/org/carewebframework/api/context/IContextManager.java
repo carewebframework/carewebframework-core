@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -18,7 +18,7 @@ public interface IContextManager {
      * Initiates a local context change.
      * 
      * @param managedContext The context that is changing.
-     * @throws ContextException
+     * @throws ContextException Context exception.
      */
     void localChangeBegin(IManagedContext managedContext) throws ContextException;
     
@@ -28,7 +28,7 @@ public interface IContextManager {
      * 
      * @param managedContext The context that is changing.
      * @return Reason if change was rejected.
-     * @throws ContextException
+     * @throws ContextException Context exception.
      */
     String localChangeEnd(IManagedContext managedContext) throws ContextException;
     
@@ -46,7 +46,7 @@ public interface IContextManager {
      * 
      * @param keyStoreName The name of the keystore.
      * @return The context marshaler.
-     * @throws ContextException
+     * @throws ContextException Context exception.
      */
     ContextMarshaller getContextMarshaller(String keyStoreName) throws ContextException;
     

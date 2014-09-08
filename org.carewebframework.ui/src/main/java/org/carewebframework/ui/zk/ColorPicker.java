@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -274,7 +274,7 @@ public class ColorPicker extends AbstractPicker<Color> {
      * displayed in the text box and the drop down button background is set to the color. If false,
      * no text is displayed and the text box background is set to the color.
      * 
-     * @param showText
+     * @param showText The show text flag.
      */
     public void setShowText(boolean showText) {
         if (this.showText != showText) {
@@ -286,7 +286,7 @@ public class ColorPicker extends AbstractPicker<Color> {
     /**
      * Returns the status of the ShowText property.
      * 
-     * @return The show text value.
+     * @return The show text flag.
      */
     public boolean getShowText() {
         return showText;

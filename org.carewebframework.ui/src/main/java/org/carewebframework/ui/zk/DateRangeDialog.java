@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -99,7 +99,7 @@ public class DateRangeDialog extends Window {
     /**
      * Entering return in the start date box sets focus to the end date box.
      * 
-     * @param event
+     * @param event The onOK event.
      */
     public void onOK$startDate(Event event) {
         endDate.setFocus(true);
@@ -108,7 +108,7 @@ public class DateRangeDialog extends Window {
     /**
      * Entering return in the end date box is same as clicking the OK button.
      * 
-     * @param event
+     * @param event The onOK event.
      */
     public void onOK$endDate(Event event) {
         onClick$btnOK(event);
@@ -117,7 +117,7 @@ public class DateRangeDialog extends Window {
     /**
      * Clicking the cancel button aborts the input.
      * 
-     * @param event
+     * @param event the onClick event.
      */
     public void onClick$btnCancel(Event event) {
         detach();
@@ -127,7 +127,7 @@ public class DateRangeDialog extends Window {
      * Clicking the OK button creates a DateRangeItem object with the responses from the dialog and
      * closes the dialog.
      * 
-     * @param event
+     * @param event The onClick event.
      */
     public void onClick$btnOK(Event event) {
         if (startDate.getValue().after(endDate.getValue())) {
@@ -143,7 +143,7 @@ public class DateRangeDialog extends Window {
     /**
      * Sets the end date value equal to the start date value.
      * 
-     * @param event
+     * @param event The onClick event.
      */
     public void onClick$btnSameAsStart(Event event) {
         endDate.setValue(startDate.getValue());
@@ -152,7 +152,7 @@ public class DateRangeDialog extends Window {
     /**
      * Sets the start date value equal to the end date value.
      * 
-     * @param event
+     * @param event The onClick event.
      */
     public void onClick$btnSameAsEnd(Event event) {
         startDate.setValue(endDate.getValue());

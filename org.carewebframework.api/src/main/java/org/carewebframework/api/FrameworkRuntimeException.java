@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -56,8 +56,8 @@ public class FrameworkRuntimeException extends NestedRuntimeException implements
     /**
      * Override to provide any special message formatting.
      * 
-     * @param msg
-     * @return
+     * @param msg Message to format.
+     * @return Formatted message.
      */
     protected String formatMessage(String msg) {
         return msg;

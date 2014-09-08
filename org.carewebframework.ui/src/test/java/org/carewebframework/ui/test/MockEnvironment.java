@@ -77,7 +77,7 @@ public class MockEnvironment {
      * Initializes the mock environment.
      * 
      * @param configLocations Additional config file locations.
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     public void init(String... configLocations) throws Exception {
         // Set up web app
@@ -129,7 +129,7 @@ public class MockEnvironment {
      * 
      * @param value If true, the current thread becomes an event thread. If false, it is not an
      *            event thread.
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     public void inEventListener(boolean value) throws Exception {
         Method inEventListener = BeanUtils.findMethod(EventProcessor.class, "inEventListener", boolean.class);
@@ -152,7 +152,7 @@ public class MockEnvironment {
      * 
      * @param configuration The configuration.
      * @return The initialized configuration.
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     protected Configuration init(Configuration configuration) throws Exception {
         configuration.addListener(LifecycleEventDispatcher.class);

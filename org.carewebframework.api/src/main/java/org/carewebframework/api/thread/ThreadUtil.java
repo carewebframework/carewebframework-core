@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -62,7 +62,7 @@ public class ThreadUtil {
      * Starts a thread. If an executor service is available, that is used. Otherwise, the thread's
      * start method is called.
      * 
-     * @param thread
+     * @param thread Thread to start.
      */
     public static void startThread(Thread thread) {
         if (log.isDebugEnabled()) {

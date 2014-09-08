@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -21,6 +21,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
+ * Serialization to and from file.
  */
 public class Serializer {
     
@@ -37,14 +38,12 @@ public class Serializer {
      * {@link org.carewebframework.ui.util.SerializerConfig#getSerializationFileLocation()} for
      * location to write file
      * 
-     * @param serializationFileName
-     * @param object
-     * @throws SerializationException
-     * @throws FileNotFoundException
-     * @throws IOException
+     * @param serializationFileName File to receive serialized object.
+     * @param object Object to serialize.
+     * @throws SerializationException If serialization error.
+     * @throws IOException If IO exception.
      */
-    public void serializeObject(String serializationFileName, Object object) throws SerializationException,
-                                                                            FileNotFoundException, IOException {
+    public void serializeObject(String serializationFileName, Object object) throws SerializationException, IOException {
         File file = new File(getSerializerConfig().getSerializationFileLocation(), serializationFileName);
         if (!file.isFile()) {
             File dir = new File(getSerializerConfig().getSerializationFileLocation());
@@ -90,10 +89,10 @@ public class Serializer {
      * {@link org.carewebframework.ui.util.SerializerConfig#getSerializationFileLocation()} for
      * location to read file
      * 
-     * @param serializationFileName
+     * @param serializationFileName File containing serialized object.
      * @return Deserialized object.
-     * @throws SerializationException
-     * @throws FileNotFoundException
+     * @throws SerializationException If exception on deserialization.
+     * @throws FileNotFoundException If file not found.
      */
     public Object deserializeObject(String serializationFileName) throws SerializationException, FileNotFoundException {
         File file = new File(getSerializerConfig().getSerializationFileLocation(), serializationFileName);

@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -86,7 +86,7 @@ public class ZK2XML {
      *            qualified by a component name (e.g., "window.uuid"). Optionally, an entry may be
      *            followed by an "=" and a value to exclude matches with a specific value. Note that
      *            "innerAttrs" and "outerAttrs" are always excluded.
-     * @throws ParserConfigurationException
+     * @throws ParserConfigurationException On parser exception.
      */
     private ZK2XML(String[] excludedProperties) throws ParserConfigurationException {
         doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
@@ -104,8 +104,8 @@ public class ZK2XML {
      * properties that return String or primitive types. Then, recurses over all of the root
      * component's children.
      * 
-     * @param root
-     * @param parent
+     * @param root The root component.
+     * @param parent The parent XML node.
      */
     private void toXML(Component root, Node parent) {
         TreeMap<String, String> properties = new TreeMap<String, String>(String.CASE_INSENSITIVE_ORDER);

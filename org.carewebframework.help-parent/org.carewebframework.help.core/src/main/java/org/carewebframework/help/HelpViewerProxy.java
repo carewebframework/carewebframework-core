@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -101,7 +101,7 @@ public class HelpViewerProxy implements IHelpViewer {
     /**
      * Returns true if the remote viewer is active (i.e., its event queue exists).
      * 
-     * @return
+     * @return True if remove viewer is active.
      */
     private boolean remoteViewerActive() {
         if (remoteQueue == null) {
@@ -166,8 +166,7 @@ public class HelpViewerProxy implements IHelpViewer {
     }
     
     /**
-     * @see org.carewebframework.help.IHelpViewer#show(IHelpSet, java.lang.String,
-     *      java.lang.String)
+     * @see org.carewebframework.help.IHelpViewer#show(IHelpSet, java.lang.String, java.lang.String)
      */
     @Override
     public void show(IHelpSet helpSet, String topicId, String topicLabel) {
@@ -209,7 +208,7 @@ public class HelpViewerProxy implements IHelpViewer {
     /**
      * Sets the remote queue associated with the proxy.
      * 
-     * @param remoteQueue
+     * @param remoteQueue The remote queue.
      */
     public void setRemoteQueue(InvocationRequestQueue remoteQueue) {
         this.remoteQueue = remoteQueue;

@@ -76,7 +76,7 @@ public abstract class AbstractGlobalEventDispatcher implements IGlobalEventDispa
      * Sets the local event dispatcher to be used for dispatching events received from the remote
      * server to local subscribers.
      *
-     * @param localEventDispatcher
+     * @param localEventDispatcher Local event dispatcher.
      */
     public void setLocalEventDispatcher(ILocalEventDispatcher localEventDispatcher) {
         this.localEventDispatcher = localEventDispatcher;

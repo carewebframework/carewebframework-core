@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -34,8 +34,8 @@ public interface IInfoPanel extends IDropHandler {
     /**
      * Registers a menu item with the drop panel using the specified menu path.
      * 
-     * @param menuitem
-     * @param path
+     * @param menuitem The menu item.
+     * @param path The menu path.
      */
     void registerMenuItem(Menuitem menuitem, String path);
     
@@ -44,14 +44,14 @@ public interface IInfoPanel extends IDropHandler {
      * removed. Calling this method is preferable to detaching the menu item directly since it
      * allows for proper maintenance of parent menu items.
      * 
-     * @param menuItem
+     * @param menuItem The menu item.
      */
     void unregisterMenuItem(Menuitem menuItem);
     
     /**
      * Displays an alert.
      * 
-     * @param root
+     * @param root The root component.
      */
     void showAlert(Component root);
     

@@ -19,7 +19,7 @@ public interface IPropertyAccessor {
      * 
      * @param propInfo The property descriptor.
      * @return The value of the property.
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     public Object getPropertyValue(PropertyInfo propInfo) throws Exception;
     
@@ -28,7 +28,7 @@ public interface IPropertyAccessor {
      * 
      * @param propInfo The property descriptor.
      * @param value The new value of the property.
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     public void setPropertyValue(PropertyInfo propInfo, Object value) throws Exception;
     

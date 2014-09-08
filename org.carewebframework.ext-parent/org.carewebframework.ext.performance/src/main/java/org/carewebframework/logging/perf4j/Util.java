@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -47,10 +47,10 @@ public class Util {
     /**
      * Formats timing information suitable for perf4j logging.
      * 
-     * @param tag
-     * @param start
-     * @param time
-     * @param map
+     * @param tag The tag.
+     * @param start The start time.
+     * @param time The current time.
+     * @param map The message map.
      * @return Formatted timing info.
      */
     public static String formatForLogging(String tag, long start, long time, Map<String, Object> map) {

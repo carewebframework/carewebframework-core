@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -45,7 +45,7 @@ public class ClipboardViewer extends Window {
      * Show viewer.
      * 
      * @param clipboard Clipboard whose contents is to be accessed.
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     public static void execute(Clipboard clipboard) throws Exception {
         PageDefinition def = ZKUtil.loadCachedPageDefinition(DesignConstants.RESOURCE_PREFIX + "ClipboardViewer.zul");
@@ -62,7 +62,7 @@ public class ClipboardViewer extends Window {
     /**
      * Commit changes in viewer to clipboard.
      * 
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     private void commit() throws Exception {
         if (modified) {
@@ -105,7 +105,7 @@ public class ClipboardViewer extends Window {
     /**
      * Clicking OK button commits changes and closes viewer.
      * 
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     public void onClick$btnOK() throws Exception {
         commit();
@@ -122,7 +122,7 @@ public class ClipboardViewer extends Window {
     /**
      * Clicking save button commits changes.
      * 
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     public void onClick$btnSave() throws Exception {
         commit();

@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -77,8 +77,8 @@ public abstract class BaseMojo extends AbstractMojo {
     /**
      * Form a version string from the module version and build number.
      * 
-     * @param moduleVersion
-     * @return
+     * @param moduleVersion The module version.
+     * @return Version string.
      */
     protected String getVersion(String moduleVersion) {
         StringBuilder sb = new StringBuilder();
@@ -123,7 +123,7 @@ public abstract class BaseMojo extends AbstractMojo {
      * @param template Path to config file template.
      * @param moduleId The id of the module (used to name the spring config file).
      * @param params Replaceable parameters for the template.
-     * @throws MojoExecutionException
+     * @throws MojoExecutionException Unspecified exception.
      */
     protected void createConfigEntry(File parentDirectory, String template, String moduleId, String... params)
                                                                                                               throws MojoExecutionException {
@@ -168,10 +168,10 @@ public abstract class BaseMojo extends AbstractMojo {
     /**
      * Creates the archive.
      * 
-     * @param archiveSourceDir
-     * @param classifier
+     * @param archiveSourceDir The archive source directory.
+     * @param classifier The classifier.
      * @return The archive file.
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     protected File createArchive(File archiveSourceDir, String classifier) throws Exception {
         getLog().info("Creating archive.");

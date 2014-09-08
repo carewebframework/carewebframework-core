@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -92,7 +92,7 @@ public class WonderbarUtil {
      * lower case and removes any empty tokens.
      * 
      * @param text Text to be tokenized.
-     * @return
+     * @return Token list.
      */
     public static List<String> tokenize(String text) {
         String[] pcs = text.toLowerCase().trim().split("\\W");
@@ -115,7 +115,7 @@ public class WonderbarUtil {
      * 
      * @param text Text to be tokenized.
      * @param sortByLength If true, sort list by token length, largest first.
-     * @return
+     * @return The token list.
      */
     public static List<String> tokenize(String text, boolean sortByLength) {
         List<String> list = tokenize(text);

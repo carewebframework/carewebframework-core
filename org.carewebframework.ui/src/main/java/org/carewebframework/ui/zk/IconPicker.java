@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -25,18 +25,18 @@ public class IconPicker extends AbstractPicker<Image> {
     }
     
     /**
-     * Adds an icon with the specified url.
+     * Adds an icon with the specified URL.
      * 
-     * @param url
+     * @param url The URL.
      */
     public void addIconByUrl(String url) {
         addItem(new Image(url));
     }
     
     /**
-     * Adds multiple icons, given a list of urls.
+     * Adds multiple icons, given a list of URLs.
      * 
-     * @param urls List of urls.
+     * @param urls List of URLs.
      */
     public void addIconsByUrl(List<String> urls) {
         for (String url : urls) {
@@ -47,7 +47,7 @@ public class IconPicker extends AbstractPicker<Image> {
     }
     
     /**
-     * Sets the tooltip text to the file name extracted from the url.
+     * Sets the tooltip text to the file name extracted from the URL.
      */
     @Override
     protected Image prepItem(Image icon) {
@@ -58,7 +58,7 @@ public class IconPicker extends AbstractPicker<Image> {
     }
     
     /**
-     * Two images are equal if their urls are the same.
+     * Two images are equal if their URLs are the same.
      */
     @Override
     protected boolean itemsAreEqual(Image image1, Image image2) {
@@ -76,8 +76,8 @@ public class IconPicker extends AbstractPicker<Image> {
     /**
      * Locates an icon by its url.
      * 
-     * @param url Url whose associated icon is sought.
-     * @return The icon associated with the specified url, or null if none found.
+     * @param url URL whose associated icon is sought.
+     * @return The icon associated with the specified URL, or null if none found.
      */
     public Image findIcon(String url) {
         int i = findItem(new Image(url), false);

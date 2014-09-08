@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -75,7 +75,7 @@ public class ChatService implements IParticipantUpdate {
     /**
      * Creates the chat service, supplying event manager instance.
      * 
-     * @param eventManager
+     * @param eventManager The event manager.
      */
     public ChatService(IEventManager eventManager) {
         this.eventManager = eventManager;
@@ -222,7 +222,7 @@ public class ChatService implements IParticipantUpdate {
     /**
      * Returns true if the service is actively listening for events.
      * 
-     * @return
+     * @return The active state.
      */
     public boolean isActive() {
         return active;
@@ -232,7 +232,7 @@ public class ChatService implements IParticipantUpdate {
      * Sets the listening state of the service. When set to false, the service stops listening to
      * all events.
      * 
-     * @param active
+     * @param active The active state.
      */
     public void setActive(boolean active) {
         if (this.active != active) {
@@ -248,7 +248,7 @@ public class ChatService implements IParticipantUpdate {
     /**
      * Returns a list of candidate participants.
      * 
-     * @return
+     * @return Candidate participant list.
      */
     public Collection<IPublisherInfo> getChatCandidates() {
         return participants;

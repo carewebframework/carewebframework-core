@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -205,7 +205,7 @@ public abstract class ListViewForm<DAO> extends CaptionedForm {
      * 
      * <pre>
      *   List Pane Size:Sort Column:Sort Direction;Column 0 Index:Column 0 Width;...
-     * @return
+     * @return The layout data.
      */
     public String getLayout() {
         StringBuilder sb = new StringBuilder();
@@ -222,7 +222,7 @@ public abstract class ListViewForm<DAO> extends CaptionedForm {
      * Setter method for Layout property. This property allows an application to control the
      * position of the splitter bar and ordering of columns.
      * 
-     * @param layout
+     * @param layout The layout data.
      */
     public void setLayout(String layout) {
         String[] pcs = StrUtil.split(layout, ";");
@@ -262,8 +262,8 @@ public abstract class ListViewForm<DAO> extends CaptionedForm {
     /**
      * Returns the column corresponding to the specified index.
      * 
-     * @param index
-     * @return
+     * @param index Column index.
+     * @return List header at index.
      */
     private Listheader getColumnByIndex(int index) {
         for (Component comp : listhead.getChildren()) {

@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -55,7 +55,7 @@ public class MainController extends PluginController {
     /**
      * Sets the id of the bean that implements the ISettingsProvider interface.
      * 
-     * @param beanId
+     * @param beanId The bean id.
      */
     public void setProvider(String beanId) {
         provider = getAppContext().getBean(beanId, ISettingsProvider.class);
@@ -75,7 +75,7 @@ public class MainController extends PluginController {
     /**
      * Sets the unique id of the settings group that is to be loaded.
      * 
-     * @param groupId
+     * @param groupId The group id.
      */
     public void setGroup(String groupId) {
         this.groupId = groupId;

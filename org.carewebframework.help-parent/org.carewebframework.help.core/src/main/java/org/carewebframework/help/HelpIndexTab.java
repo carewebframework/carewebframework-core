@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -50,8 +50,8 @@ public class HelpIndexTab extends HelpTab implements ListitemRenderer<HelpTopic>
     /**
      * Create the help tab for the specified viewer and viewType.
      * 
-     * @param viewer
-     * @param viewType
+     * @param viewer The viewer.
+     * @param viewType The help view type.
      */
     public HelpIndexTab(HelpViewer viewer, HelpViewType viewType) {
         super(viewer, viewType, "helpIndexTab.zul");
@@ -103,7 +103,7 @@ public class HelpIndexTab extends HelpTab implements ListitemRenderer<HelpTopic>
     /**
      * Locates and selects a matching keyword as the user types in the quick find text box.
      * 
-     * @param event
+     * @param event The input event.
      */
     public void onChanging$txtFind(Event event) {
         String find = ((InputEvent) ZKUtil.getEventOrigin(event)).getValue().toLowerCase();
@@ -172,8 +172,8 @@ public class HelpIndexTab extends HelpTab implements ListitemRenderer<HelpTopic>
     /**
      * Traverse the keyword topic tree, adding keywords and topics to the list.
      * 
-     * @param node
-     * @param topics
+     * @param node Help topic node.
+     * @param topics Topic list to receive results.
      */
     private void addKeywordTopic(HelpTopicNode node, List<HelpTopic> topics) {
         HelpTopic topic = node.getTopic();
@@ -194,8 +194,8 @@ public class HelpIndexTab extends HelpTab implements ListitemRenderer<HelpTopic>
     /**
      * Returns the topic list for the specified keyword, creating one if it does not already exist.
      * 
-     * @param keyword
-     * @return
+     * @param keyword The key word.
+     * @return Topic list for key word.
      */
     private List<HelpTopic> getTopics(String keyword) {
         List<HelpTopic> topics = topicIndex.get(keyword);

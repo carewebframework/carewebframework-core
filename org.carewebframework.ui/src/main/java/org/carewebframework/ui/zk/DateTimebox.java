@@ -50,7 +50,7 @@ public class DateTimebox extends Bandbox implements IdSpace {
     /**
      * Creates all required child components.
      * 
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     public void onCreate() throws Exception {
         Bandpopup bp = new Bandpopup();

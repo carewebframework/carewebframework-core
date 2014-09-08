@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -92,8 +92,8 @@ public class UIElementProxy extends UIElementBase implements IPropertyAccessor {
      * a deletion and the target does not exist, a new target is instantiated as a child to the
      * specified parent.
      * 
-     * @param parent
-     * @throws Exception
+     * @param parent The parent UI element.
+     * @throws Exception Unspecified exception.
      */
     public void realize(UIElementBase parent) throws Exception {
         if (!deleted && target == null) {

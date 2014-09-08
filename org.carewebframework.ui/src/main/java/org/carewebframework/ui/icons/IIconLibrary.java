@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -33,12 +33,12 @@ public interface IIconLibrary {
     String getIconUrl(String iconName, String dimensions);
     
     /**
-     * Returns a list of urls for icons that match the criteria. Criteria may include wildcard
+     * Returns a list of URLs for icons that match the criteria. Criteria may include wildcard
      * characters. For example, <code>getMatching("weather*", "*x16")</code>
      * 
      * @param iconName Name of icon to match.
      * @param dimensions Desired dimensions to match.
-     * @return
+     * @return List of matching URLs.
      */
     List<String> getMatching(String iconName, String dimensions);
     

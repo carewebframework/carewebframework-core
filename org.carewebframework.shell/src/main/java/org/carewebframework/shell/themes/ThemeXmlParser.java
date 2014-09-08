@@ -41,7 +41,7 @@ public class ThemeXmlParser extends BaseXmlParser {
      * 
      * @param xml XML containing theme definition.
      * @return A theme definition instance.
-     * @throws Exception
+     * @throws Exception Unspecified exception.
      */
     public static ThemeDefinition fromXml(String xml) throws Exception {
         return (ThemeDefinition) new ThemeXmlParser().fromXml(xml, "theme");
