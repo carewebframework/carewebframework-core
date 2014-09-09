@@ -50,14 +50,4 @@
 			Returns true if user is authorized for all given authorities.
 		</description>
     </function>       
-    <function>
-        <name>getUsername</name>
-        <function-class>org.carewebframework.api.security.SecurityUtil</function-class>
-        <function-signature>
-            java.lang.String getAuthenticatedUsername()
-        </function-signature>
-		<description>
-			Returns the username of the authenticated user.
-		</description>
-    </function> 
 </taglib>
