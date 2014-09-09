@@ -26,12 +26,15 @@ cwf.ext.MenuEx = zk.$extends(zul.menu.Menu, {
 	bind_: function(){
 		this.$supers(cwf.ext.MenuEx, 'bind_', arguments);
 		var a = this.getAnchor_();
-		var b = this.getButton_();
 
-		if (a)
-			jq(a).css('color', this._color);
+		if (a && this._color) {
+			jq(a).children('.z-menu-text,.z-menuitem-text').css('color', this._color);
+			
+			if (this.menupopup) {
+				this.menupopup._style = '';
+				this.menupopup.rerender();
+			}
+		}
 
-		if (b)
-			jq(b).css('color', this._color);
 	}
 });
