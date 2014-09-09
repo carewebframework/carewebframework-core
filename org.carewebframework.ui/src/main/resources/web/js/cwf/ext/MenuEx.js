@@ -11,18 +11,16 @@ cwf.ext.MenuEx = zk.$extends(zul.menu.Menu, {
 	},
 
 	doClick_ : function(evt) {
-		evt.opts.toServer = true;
-		this.$supers('doClick_', arguments);
-	},
-
-	_getArrowWidth : function() {
-		return this.getZclass() == 'z-menuitem' ? 0 : 20;
+		if (this.isTopmost())
+			this.$supers('doClick_', arguments);
+		else
+			this.fireX(new zk.Event(this, 'onClick', evt.data));
 	},
 
 	getZclass : function() {
 		return this._zclass ? this._zclass : 'z-menu';
 	},
-
+	
 	bind_: function(){
 		this.$supers(cwf.ext.MenuEx, 'bind_', arguments);
 		var a = this.getAnchor_();
