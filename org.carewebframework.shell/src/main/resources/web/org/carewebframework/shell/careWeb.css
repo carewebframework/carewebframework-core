@@ -91,7 +91,7 @@
 	display: none;
 }
 
-.cwf-tabbox .z-tabs-cnt {
+.cwf-tabbox .z-tabs-content {
 	min-height: 20px;
 }
 
@@ -330,7 +330,7 @@
 	}
 
 	/* used for print to ensure all data is on the page with 'shrink to fit' option */
-	.z-window-modal-cnt-noborder,.z-window-highlighted-cnt-noborder,.z-window-embedded-cnt-noborder,.z-window-overlapped-cnt-noborder,.z-window-popup-cnt-noborder
+	.z-window-modal-content-noborder,.z-window-highlighted-content-noborder,.z-window-embedded-content-noborder,.z-window-overlapped-content-noborder,.z-window-popup-content-noborder
 	{
 		border: 0;
 		overflow: visible !important;

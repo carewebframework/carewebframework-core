@@ -127,13 +127,13 @@
     margin: 0!important;
 }
 
-.cwf-gridpicker .z-row-cnt>* {
+.cwf-gridpicker .z-row-content>* {
     cursor: pointer;
     border: 1px solid lightgray;
     padding: 4px;
 }
 
-.cwf-gridpicker .z-row-cnt>*:hover {
+.cwf-gridpicker .z-row-content>*:hover {
     border: 1px solid black;
 }
 
@@ -160,7 +160,7 @@
 	border-bottom: 1px solid lightgray !important;
 }
 
-.cwf-manifest-viewer .z-listcell-cnt {
+.cwf-manifest-viewer .z-listcell-content {
 	max-height: 200px;
 	overflow: auto;
 	padding: 2px !important;
