@@ -116,7 +116,7 @@
 	background: transparent;
 }
 
-.cwf-treeview .z-treecell-cnt {
+.cwf-treeview .z-treecell-content {
     white-space: nowrap;
     text-overflow: ellipsis;
 }
@@ -252,11 +252,17 @@
 
 .cwf-propertygrid-info .z-groupbox {
     margin-right: 1px;
+    margin-bottom: 2px;
+    padding-top: 8px;
 }
 
-.cwf-propertygrid-info .z-groupbox-cnt {
+.cwf-propertygrid-info .z-groupbox-content {
 	overflow-x: hidden;
     overflow-y: auto;
+}
+
+.cwf-propertygrid-info .z-groupbox-header {
+	height: 8px;
 }
 
 .cwf-propertygrid-grid .z-row>td {

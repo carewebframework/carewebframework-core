@@ -1,6 +1,6 @@
 <zk>
 	<window border="normal" height="500px"
-		width="460px" position="center"
+		width="500px" position="center"
 		use="org.carewebframework.shell.designer.LayoutDesigner">
 		<caption label="${labels.cwf.shell.designer.layout.designer.caption}" style="font-weight:bold"/>
 		<toolbar>
@@ -65,7 +65,7 @@
 				style="background:transparent"
 				image="~./org/carewebframework/shell/images/refresh.png" />
 		</toolbar>
-		<tree id="tree" vflex="true" zclass="z-dottree"
+		<tree id="tree" vflex="true"
 			style="text-overflow:ellipsis;white-space:nowrap;overflow:auto;border:none;margin-bottom:12px">
 			<treechildren />
 		</tree>

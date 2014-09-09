@@ -117,7 +117,7 @@
 	color: magenta;
 }
 
-.cwf-treerow-hidebtn .z-tree-ico {
+.cwf-treerow-hidebtn .z-tree-icon {
 	visibility: hidden;
 }
 
@@ -170,41 +170,7 @@
 	display: none!important;
 }
 
-/* ZK 5.x compatibility */
-
-tr.z-row td.z-row-inner, tr.z-row .z-cell, .z-listhead {
-	line-height: 11px;
-}
-
-div.z-listbox-body .z-listcell {
-	padding: 0 5px 0 5px;
-}
-
-.z-window-embedded-hm, .z-window-modal-hm, .z-window-highlighted-hm, .z-window-overlapped-hm, .z-window-popup-hm {
-	margin-left: -1px;
-	margin-right: -1px;
-}
-
-.z-grid td.z-detail-outer {
-    padding-left: 1px;
-}
-
-.z-row-cnt.z-overflow-hidden {
-    width: inherit;
-}
-
-.z-detail-faker td {
-    overflow-x: hidden;
-}
-
-.z-menubar-hor .z-menu-body-clk-over .z-menu-inner-m div {
-	background: transparent no-repeat right -14px;
-	background-image: url(${c:encodeThemeURL('~./zul/img/menu/btn-arrow.gif')});
-}
-.z-menubar-ver .z-menu-body-clk-over .z-menu-inner-m div {
-	background: transparent no-repeat right 0;
-	background-image: url(${c:encodeThemeURL('~./zul/img/menu/btn-arrow.gif')});
-}
+/* ZK overrides */
 
 .z-errbox-center {
 	word-wrap: break-word;
@@ -212,6 +178,10 @@ div.z-listbox-body .z-listcell {
 
 .z-caption .z-toolbar a {
     color: blue;
+}
+
+.z-window-header {
+	font-weight: bold;
 }
 
 /* JQuery-UI overrides */
