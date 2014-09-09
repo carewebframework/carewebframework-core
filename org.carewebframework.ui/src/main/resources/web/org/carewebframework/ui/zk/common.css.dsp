@@ -142,7 +142,7 @@
 }
 
 .cwf-gridpicker .z-grid-body {
-    margin-right: 14px;
+    padding-right: 14px;
     overflow: hidden;
 }
 

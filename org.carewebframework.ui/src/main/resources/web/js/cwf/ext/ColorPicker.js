@@ -18,6 +18,11 @@ cwf.ext.ColorPicker = zk.$extends(zul.inp.Bandbox, {
 		}
 	},
 	
+	getZclass: function () {
+		var zcs = this._zclass;
+		return zcs != null ? zcs: 'z-bandbox';
+	},
+	
 	_updateStyle: function() {
 		this.__updateStyle(this._showtext, this._selcolor);
 		this.__updateStyle(!this._showtext, 'inherit')

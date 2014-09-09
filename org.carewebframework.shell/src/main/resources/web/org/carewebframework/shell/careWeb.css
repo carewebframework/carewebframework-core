@@ -242,6 +242,7 @@
 }
 
 .cwf-propertygrid-info .z-caption {
+	background-color: lightyellow!important;
 	font-weight: bold;
 }
 

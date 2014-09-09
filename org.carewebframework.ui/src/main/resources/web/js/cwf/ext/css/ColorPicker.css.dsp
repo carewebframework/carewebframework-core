@@ -1,11 +1,24 @@
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 
+.cwf-colorpicker .z-grid {
+	border: none;	
+}
+
+.cwf-colorpicker .z-row-content {
+	padding: 0;	
+	line-height: inherit;
+	background-color: white;
+}
+
 .cwf-colorpicker-colorcell {
+    width: 15px;
     height: 15px;
     text-align: center;
-    width: 15px;
     display: inline-block;
-    padding: 0!important;
+}
+
+.cwf-colorpicker-colorcell:hover {
+	border: 2px solid white;
 }
 
 .cwf-colorpicker-colorcell-nocolor {
