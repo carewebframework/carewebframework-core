@@ -28,12 +28,6 @@
 	border: none;
 }
 
-.cwf-desktop-title * {
-	font-weight: bold;
-	white-space: nowrap;
-	padding-right: 5px;
-}
-
 .cwf-desktop-title {
  	border-right: solid 1px gray;
 	padding-top: 6px;
@@ -43,6 +37,12 @@
  	border-right: none;
  	padding-top: 0px;
  }
+
+.cwf-desktop-title .z-label {
+	padding: 2px 5px 2px 5px;
+	white-space: nowrap;
+	font-weight: bold;
+}
 
 .cwf-plugin-container {
 	position: relative;

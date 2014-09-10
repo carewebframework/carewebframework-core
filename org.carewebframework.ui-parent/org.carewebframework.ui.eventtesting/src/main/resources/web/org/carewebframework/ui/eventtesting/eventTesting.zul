@@ -1,20 +1,6 @@
 <?page title="new page title" contentType="text/html;charset=UTF-8"?>
 <zk>
 
-<zscript>
-	import org.carewebframework.*;
-	import org.carewebframework.api.event.*;
-	EventManager eventManager = FrameworkUtil.getEventManager();
-	
-	class Listener implements IGenericEvent {
-    	void eventCallback(String eventName, String eventData) {
-    		getFellow("eventResults").setText(eventName + ": " + eventData);
-    	}
-	}
-	
-	Listener listener = new Listener();
-</zscript>
-
 <window title="Remote Event Testing" border="normal" height="100%" width="100%"
 	use="org.carewebframework.ui.eventtesting.EventTesting">
 <borderlayout>
@@ -84,5 +70,21 @@
 		<label id="info"/>
 	</south>
 </borderlayout>
+<zscript>
+	import org.carewebframework.*;
+	import org.carewebframework.api.event.*;
+	IEventManager eventManager = EventManager.getInstance();
+	
+	class Listener implements IGenericEvent {
+    	public void eventCallback(String eventName, Object eventData) {
+    		eventResults.setText(eventName + ": " + eventData);
+    	}
+	}
+	
+	Listener listener = new Listener();
+</zscript>
+
+
 </window>
+
 </zk>

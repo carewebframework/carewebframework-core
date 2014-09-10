@@ -8,7 +8,7 @@
 	left="50%" top="50%"
 	title="Popup Message"
 	contentSclass="cwf-popup"
-	zclass="z-window-highlighted"
+	mode="highlighted"
 	style="position:absolute">
 		<label id="messagetext" value="message text" multiline="true"/>
 </window>
