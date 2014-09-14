@@ -14,9 +14,9 @@ import java.util.List;
 /**
  * Interface for a domain object factory.
  * 
- * @param <T> Base class created by factory.
+ * @param <D> Base class created by factory.
  */
-public interface IDomainFactory<T> {
+public interface IDomainFactory<D> {
     
     /**
      * Creates a new instance of an object of this domain.
@@ -24,7 +24,7 @@ public interface IDomainFactory<T> {
      * @param clazz Class of object to create.
      * @return The new domain object instance.
      */
-    T newObject(Class<T> clazz);
+    <T extends D> T newObject(Class<T> clazz);
     
     /**
      * Fetches an object, identified by its unique id, from the underlying data store.
@@ -33,7 +33,7 @@ public interface IDomainFactory<T> {
      * @param id Unique id of the object.
      * @return The requested object.
      */
-    T fetchObject(Class<T> clazz, String id);
+    <T extends D> T fetchObject(Class<T> clazz, String id);
     
     /**
      * Fetches multiple domain objects as specified by an array of identifier values.
@@ -42,7 +42,7 @@ public interface IDomainFactory<T> {
      * @param ids An array of unique identifiers.
      * @return A list of domain objects in the same order as requested in the ids parameter.
      */
-    List<T> fetchObjects(Class<T> clazz, String[] ids);
+    <T extends D> List<T> fetchObjects(Class<T> clazz, String[] ids);
     
     /**
      * Returns the alias for the domain class.

@@ -60,7 +60,9 @@ public class DomainFactoryRegistry extends BeanRegistry<IDomainFactory> {
     @SuppressWarnings("unchecked")
     public static <T> IDomainFactory<T> getFactory(Class<T> clazz) {
         for (IDomainFactory<?> factory : instance) {
-            if (factory.getAlias(clazz) != null) {
+            String alias = factory.getAlias(clazz);
+            
+            if (alias != null) {
                 return (IDomainFactory<T>) factory;
             }
         }

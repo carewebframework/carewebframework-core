@@ -110,7 +110,12 @@ public class UserHeader extends PluginController implements IUserContextEvent {
         }
         
         currentUser = user;
-        String text = user == null ? "" : user.getFullName() + "@" + user.getDomainName();
+        String text = user == null ? "" : user.getFullName();
+        
+        if (!StringUtils.isEmpty(user.getDomainName())) {
+            text += "@" + user.getDomainName();
+        }
+        
         HttpServletRequest request = FrameworkWebSupport.getHttpServletRequest();
         String info = StringUtils.trimToEmpty((request == null ? "" : request.getLocalAddr()) + " " + dbRegion);
         userHeader.setValue(text + (info.isEmpty() ? "" : " (" + info + ")"));
