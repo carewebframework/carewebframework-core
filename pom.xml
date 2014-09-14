@@ -3,7 +3,7 @@
 	
 	<groupId>org.carewebframework</groupId>
 	<artifactId>org.carewebframework-parent</artifactId>
-	<version>4.0.0-SNAPSHOT</version>
+	<version>3.1.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>CareWeb Framework Root POM</name>
 	<description>CareWeb Framework Root POM</description>
@@ -20,6 +20,10 @@
 		<name>Regenstrief Center for Biomedical Informatics</name>
 		<url>http://www.carewebframework.org/</url>
 	</organization>
+
+	<prerequisites>
+		<maven>3.0.5</maven>
+	</prerequisites>
 
 	<licenses>
 		<license>
@@ -44,13 +48,13 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<org.carewebframework.version>4.0.0-SNAPSHOT</org.carewebframework.version>
-		<org.springframework.version>4.1.0.RELEASE</org.springframework.version>
+		<org.carewebframework.version>3.1.0-SNAPSHOT</org.carewebframework.version>
+		<org.springframework.version>4.0.6.RELEASE</org.springframework.version>
 		<org.springframework.security.version>3.2.5.RELEASE</org.springframework.security.version>
-		<org.springframework.amqp.version>1.3.6.RELEASE</org.springframework.amqp.version>
+		<org.springframework.amqp.version>1.3.3.RELEASE</org.springframework.amqp.version>
 		<org.apache.activemq.version>5.9.0</org.apache.activemq.version>
-		<org.zkoss.zk.version>7.0.2</org.zkoss.zk.version>
-		<com.rabbitmq.version>3.3.5</com.rabbitmq.version>
+		<org.zkoss.zk.version>6.5.4</org.zkoss.zk.version>
+		<com.rabbitmq.version>3.3.1</com.rabbitmq.version>
 		<jackson.version>2.4.2</jackson.version>
 		<servlet.api.version>3.0.1</servlet.api.version>
 
@@ -662,13 +666,6 @@
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
-				<groupId>commons-logging</groupId>
-				<artifactId>commons-logging</artifactId>
-				<version>1.1.3</version>
-				<type>jar</type>
-				<scope>compile</scope>
-			</dependency>
-			<dependency>
 				<groupId>commons-digester</groupId>
 				<artifactId>commons-digester</artifactId>
 				<version>2.1</version>
@@ -696,6 +693,13 @@
 			</dependency>
 			<!-- Logging -->
 			<dependency>
+				<groupId>commons-logging</groupId>
+				<artifactId>commons-logging</artifactId>
+				<version>1.2</version>
+				<type>jar</type>
+				<scope>compile</scope>
+			</dependency>
+			<dependency>
 				<groupId>log4j</groupId>
 				<artifactId>log4j</artifactId>
 				<version>1.2.17</version>
@@ -704,8 +708,8 @@
 			</dependency>
 			<dependency>
 				<groupId>org.slf4j</groupId>
-				<artifactId>slf4j-log4j12</artifactId>
-				<version>1.7.5</version>
+				<artifactId>slf4j-jcl</artifactId>
+				<version>1.7.7</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
