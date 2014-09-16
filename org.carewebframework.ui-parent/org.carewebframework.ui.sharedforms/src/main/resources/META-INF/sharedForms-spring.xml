@@ -17,8 +17,5 @@
 			destroy-method="destroy" abstract="true">
 		</bean>
 
-		<bean name="sharedFormCoverController" scope="prototype"
-			parent="sharedFormListViewController" abstract="true" />
-
 	</beans>
 </beans>

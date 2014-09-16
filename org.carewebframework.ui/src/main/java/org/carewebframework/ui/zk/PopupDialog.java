@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -11,6 +11,9 @@ package org.carewebframework.ui.zk;
 
 import java.util.Hashtable;
 import java.util.Map;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import org.carewebframework.api.AppFramework;
 import org.carewebframework.api.FrameworkUtil;
@@ -33,6 +36,8 @@ import org.zkoss.zul.Window;
  * Base class for a ZK popup window.
  */
 public class PopupDialog extends Window {
+    
+    private static final Log log = LogFactory.getLog(PopupDialog.class);
     
     private static final long serialVersionUID = 1L;
     
@@ -82,7 +87,7 @@ public class PopupDialog extends Window {
                 window.setParent(null); // Window created successfully, remove temporary parent
                 window.setPage(currentPage);
                 parent.detach();
-            } else { // Otherwise, use the current parent as top 
+            } else { // Otherwise, use the current parent as top
                 window = parent;
             }
             
@@ -167,6 +172,7 @@ public class PopupDialog extends Window {
             PageDefinition pageDefinition = ZKUtil.loadZulPageDefinition(zulPage, args);
             return popup(pageDefinition, args, closable, sizable, show);
         } catch (final Exception e) {
+            log.error(e);
             return null;
         }
     }
