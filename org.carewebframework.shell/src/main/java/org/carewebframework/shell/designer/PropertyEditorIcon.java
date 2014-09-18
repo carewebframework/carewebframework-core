@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -11,6 +11,8 @@ package org.carewebframework.shell.designer;
 
 import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.property.PropertyInfo;
+import org.carewebframework.ui.icons.IconLibraryRegistry;
+import org.carewebframework.ui.icons.IconPickerEx;
 import org.carewebframework.ui.icons.IconUtil;
 import org.carewebframework.ui.zk.IconPicker;
 
@@ -23,12 +25,12 @@ import org.zkoss.zul.Image;
  */
 public class PropertyEditorIcon extends PropertyEditorBase {
     
-    private final IconPicker iconPicker;
+    private final IconPickerEx iconPicker;
     
     public PropertyEditorIcon() {
-        super(new IconPicker());
-        iconPicker = (IconPicker) component;
-        iconPicker.setAutoAdd(true);
+        super(new IconPickerEx());
+        iconPicker = (IconPickerEx) component;
+        iconPicker.setAutoAdd(false);
     }
     
     @Override
@@ -38,11 +40,10 @@ public class PropertyEditorIcon extends PropertyEditorBase {
         String[] values = propInfo.getConfigValueArray("values");
         
         if (values == null) {
-            iconPicker.setAutoAdd(true);
-            iconPicker.addIconsByUrl(IconUtil.getMatching("*", "16x16", null));
+            String dflt = IconLibraryRegistry.getInstance().getDefaultLibrary();
+            iconPicker.setIconLibrary(dflt);
         } else {
-            iconPicker.setAutoAdd(false);
-            iconPicker.clear();
+            iconPicker.setSelectorVisible(false);
             
             for (String choice : values) {
                 if (choice.startsWith("~./")) {

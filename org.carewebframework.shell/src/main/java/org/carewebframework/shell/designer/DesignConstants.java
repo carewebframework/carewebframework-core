@@ -62,17 +62,17 @@ public class DesignConstants {
     
     public static final String ATTR_DESIGN_MENU = RESOURCE_PREFIX + "DesignMenu";
     
-    public static final String DESIGN_ICON_INACTIVE = Constants.IMAGE_PATH + "designOff.png";
+    public static final String DESIGN_ICON_INACTIVE = Constants.ICON_PATH + "designOff.png";
     
-    public static final String DESIGN_ICON_ACTIVE = Constants.IMAGE_PATH + "designOn.png";;
+    public static final String DESIGN_ICON_ACTIVE = Constants.ICON_PATH + "designOn.png";;
     
     public static final String DESIGN_MODE_PRIVS = "PRIV_CAREWEB_DESIGNER";
     
     public static final String DESIGN_FAVORITES_PROPERTY = "CAREWEB.DESIGN.FAVORITES";
     
-    public static final String DESIGN_FAVORITES_INACTIVE = Constants.IMAGE_PATH + "starOff.png";
+    public static final String DESIGN_FAVORITES_INACTIVE = Constants.ICON_PATH + "starOff.png";
     
-    public static final String DESIGN_FAVORITES_ACTIVE = Constants.IMAGE_PATH + "starOn.png";
+    public static final String DESIGN_FAVORITES_ACTIVE = Constants.ICON_PATH + "starOn.png";
     
     /**
      * Enforce static class.

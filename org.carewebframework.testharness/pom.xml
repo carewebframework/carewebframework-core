@@ -15,11 +15,6 @@
 		</dependency>
 		<dependency>
 			<groupId>org.carewebframework</groupId>
-			<artifactId>org.carewebframework.icons.famfamfam</artifactId>
-			<version>${org.carewebframework.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.carewebframework</groupId>
 			<artifactId>org.carewebframework.ui.statuspanel</artifactId>
 			<version>${org.carewebframework.version}</version>
 		</dependency>
