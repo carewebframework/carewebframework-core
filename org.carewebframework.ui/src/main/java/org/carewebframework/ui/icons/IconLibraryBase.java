@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -35,12 +35,19 @@ public class IconLibraryBase implements IIconLibrary, ApplicationContextAware {
     
     private final String resourcePath;
     
+    private final String urlPattern;
+    
     private ApplicationContext applicationContext;
     
     protected IconLibraryBase(String id, String resourcePath, String dimensions) {
+        this(id, resourcePath, dimensions, "%1$s/%2$s/%3$s/%4$s");
+    }
+    
+    protected IconLibraryBase(String id, String resourcePath, String dimensions, String urlPattern) {
         this.id = id;
         this.resourcePath = resourcePath;
         this.dimensions = StringUtils.split(dimensions, ',');
+        this.urlPattern = urlPattern;
     }
     
     @Override
@@ -89,7 +96,7 @@ public class IconLibraryBase implements IIconLibrary, ApplicationContextAware {
             }
         }
         
-        return prefix + resourcePath + getId() + "/" + dims + "/" + iconName;
+        return prefix + String.format(urlPattern, resourcePath, id, dims, iconName).replace("//", "/");
     }
     
 }
