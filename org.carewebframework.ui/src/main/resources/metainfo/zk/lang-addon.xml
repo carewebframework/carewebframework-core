@@ -101,6 +101,17 @@
 		</mold>
 	</component>
 	<component>
+		<component-name>iconpickerEx</component-name>
+		<extends>bandbox</extends>
+		<component-class>org.carewebframework.ui.icons.IconPickerEx
+		</component-class>
+		<widget-class>cwf.ext.IconPicker
+		</widget-class>
+		<mold>
+			<mold-name>default</mold-name>
+		</mold>
+	</component>
+	<component>
 		<component-name>splitterview</component-name>
 		<component-class>org.carewebframework.ui.zk.SplitterView
 		</component-class>
