@@ -21,6 +21,8 @@ import org.zkoss.zul.Bandbox;
 import org.zkoss.zul.Bandpopup;
 import org.zkoss.zul.Grid;
 import org.zkoss.zul.ListModelList;
+import org.zkoss.zul.Panel;
+import org.zkoss.zul.Panelchildren;
 import org.zkoss.zul.Row;
 import org.zkoss.zul.RowRenderer;
 import org.zkoss.zul.Rows;
@@ -45,6 +47,8 @@ public abstract class AbstractPicker<T extends Component> extends Bandbox {
     private int itemsPerRow;
     
     private final Grid grid;
+    
+    protected final Panel panel;
     
     private final T itemNoChoice;
     
@@ -99,10 +103,14 @@ public abstract class AbstractPicker<T extends Component> extends Bandbox {
         this.itemNoChoice = itemNoChoice;
         setReadonly(true);
         Bandpopup bp = new Bandpopup();
-        bp.setSclass("cwf-gridpicker" + (sclass == null ? "" : " " + sclass));
+        ZKUtil.updateSclass(bp, "cwf-gridpicker", false);
         appendChild(bp);
+        panel = new Panel();
+        bp.appendChild(panel);
+        Panelchildren pc = new Panelchildren();
+        panel.appendChild(pc);
         grid = new Grid();
-        bp.appendChild(grid);
+        pc.appendChild(grid);
         grid.setSizedByContent(true);
         grid.setOddRowSclass("none");
         grid.appendChild(new Rows());
@@ -173,7 +181,7 @@ public abstract class AbstractPicker<T extends Component> extends Bandbox {
         }
         
         grid.setModel(model);
-        Clients.resize(this.getFirstChild());
+        Clients.resize(this);
     }
     
     /**

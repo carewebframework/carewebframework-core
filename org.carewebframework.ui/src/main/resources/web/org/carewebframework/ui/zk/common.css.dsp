@@ -121,6 +121,11 @@
 	visibility: hidden;
 }
 
+.cwf-gridpicker .z-panelchildren {
+	max-height: 300px;
+	overflow: auto;
+}
+
 .cwf-gridpicker .z-row-inner {
     width: auto!important;
     padding: 0!important;

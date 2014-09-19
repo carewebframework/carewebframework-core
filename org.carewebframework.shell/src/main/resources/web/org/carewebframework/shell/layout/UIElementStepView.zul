@@ -11,9 +11,9 @@
 					<toolbarbutton id="btnHome"
 						image="~./org/carewebframework/shell/images/home.png" />
 					<toolbarbutton id="btnLeft"
-						image="~./org/carewebframework/shell/images/arrowL.png" />
+						image="~./org/carewebframework/shell/images/16x16/arrowL.png" />
 					<toolbarbutton id="btnRight"
-						image="~./org/carewebframework/shell/images/arrowR.png" />
+						image="~./org/carewebframework/shell/images/16x16/arrowR.png" />
 				</hbox>
 				<div id="tbarCenter" sclass="cwf-step-taskbar" hflex="1" />
 				<hbox id="tbarRight" sclass="cwf-step-taskbar-right" hflex="min" align="center"/>

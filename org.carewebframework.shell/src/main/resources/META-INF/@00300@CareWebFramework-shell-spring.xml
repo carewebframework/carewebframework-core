@@ -27,6 +27,13 @@
 			<constructor-arg ref="propertyService" />
 		</bean>
 
+		<bean class="org.carewebframework.ui.icons.IconLibraryBase">
+			<constructor-arg value="carewebframework" />
+			<constructor-arg value="/org/carewebframework/shell/images/" />
+			<constructor-arg value="16x16" />
+			<constructor-arg value="%1$s/%3$s/%4$s" />
+		</bean>
+		
 		<!-- Controller for about dialog. -->
 		<bean id="aboutDialogController" class="org.carewebframework.shell.AboutDialog"
 			scope="prototype">

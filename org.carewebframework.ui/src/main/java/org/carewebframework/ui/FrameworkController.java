@@ -27,6 +27,7 @@ import org.springframework.context.ApplicationContext;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.util.GenericForwardComposer;
 
 /**
@@ -39,6 +40,8 @@ public class FrameworkController extends GenericForwardComposer<Component> {
     
     private static final long serialVersionUID = 1L;
     
+    private static final String THREAD_COMPLETION_EVENT = "onThreadComplete";
+    
     private ApplicationContext appContext;
     
     private AppFramework appFramework;
@@ -47,7 +50,32 @@ public class FrameworkController extends GenericForwardComposer<Component> {
     
     protected Component root;
     
+    private Component comp;
+    
     private final List<ZKThread> threads = new ArrayList<ZKThread>();
+    
+    private final EventListener<Event> threadCompletionListener = new EventListener<Event>() {
+        
+        /**
+         * Background thread completion will be notified via this event listener. The listener will
+         * in turn invoke either the threadFinished or threadAborted methods, as appropriate.
+         * 
+         * @param event The completion event.
+         */
+        @Override
+        public void onEvent(Event event) {
+            final ZKThread thread = (ZKThread) ZKUtil.getEventOrigin(event).getData();
+            
+            if (thread != null) {
+                if (removeThread(thread).isAborted()) {
+                    threadAborted(thread);
+                } else {
+                    threadFinished(thread);
+                }
+            }
+        }
+        
+    };
     
     private final IGenericEvent<Object> refreshListener = new IGenericEvent<Object>() {
         
@@ -125,7 +153,9 @@ public class FrameworkController extends GenericForwardComposer<Component> {
     public void doAfterCompose(Component comp) throws Exception {
         super.doAfterCompose(comp);
         root = comp;
+        this.comp = comp;
         comp.setAttribute(Constants.ATTR_COMPOSER, this);
+        comp.addEventListener(THREAD_COMPLETION_EVENT, threadCompletionListener);
         appContext = SpringUtil.getAppContext();
         appFramework = FrameworkUtil.getAppFramework();
         eventManager = EventManager.getInstance();
@@ -194,28 +224,10 @@ public class FrameworkController extends GenericForwardComposer<Component> {
      * @return The new thread.
      */
     protected ZKThread startBackgroundThread(ZKRunnable runnable) {
-        ZKThread thread = new ZKThread(runnable, root, "onThreadComplete");
+        ZKThread thread = new ZKThread(runnable, comp, THREAD_COMPLETION_EVENT);
         threads.add(thread);
         thread.start();
         return thread;
-    }
-    
-    /**
-     * Background thread completion will be notified via this event listener. The listener will in
-     * turn invoke either the threadFinished or threadAborted methods, as appropriate.
-     * 
-     * @param event The completion event.
-     */
-    public void onThreadComplete(Event event) {
-        final ZKThread thread = (ZKThread) ZKUtil.getEventOrigin(event).getData();
-        
-        if (thread != null) {
-            if (removeThread(thread).isAborted()) {
-                threadAborted(thread);
-            } else {
-                threadFinished(thread);
-            }
-        }
     }
     
     /**
