@@ -121,38 +121,23 @@
 	visibility: hidden;
 }
 
-.cwf-gridpicker .z-panelchildren {
+.cwf-picker .z-panelchildren {
 	max-height: 300px;
 	overflow: auto;
 }
 
-.cwf-gridpicker .z-row-inner {
-    width: auto!important;
-    padding: 0!important;
-    margin: 0!important;
+.cwf-picker .z-hlayout {
+	padding-right: 20px;
 }
 
-.cwf-gridpicker .z-row-content>* {
+.cwf-picker-cell {
     cursor: pointer;
-    border: 1px solid lightgray;
-    padding: 4px;
+    border: 1px solid transparent;
+	padding: 2px;
 }
 
-.cwf-gridpicker .z-row-content>*:hover {
+.cwf-picker-cell:hover {
     border: 1px solid black;
-}
-
-.cwf-gridpicker table {
-	width: auto;
-}
-
-.cwf-gridpicker .z-grid-body {
-    padding-right: 14px;
-    overflow: hidden;
-}
-
-.cwf-gridpicker tr.z-row-over>td.z-row-inner {
-	background: none;
 }
 
 .cwf-manifest-viewer td {

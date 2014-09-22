@@ -209,7 +209,7 @@ public class ColorPicker extends AbstractPicker<Color> {
             _addItem(new Color(color[1], color[0]));
         }
         
-        updateModel();
+        render();
     }
     
     /**
@@ -222,7 +222,7 @@ public class ColorPicker extends AbstractPicker<Color> {
             _addItem(new Color(color, null));
         }
         
-        updateModel();
+        render();
     }
     
     /**

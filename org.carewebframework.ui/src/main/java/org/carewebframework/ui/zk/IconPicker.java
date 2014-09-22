@@ -43,7 +43,7 @@ public class IconPicker extends AbstractPicker<Image> {
             _addItem(new Image(url));
         }
         
-        updateModel();
+        render();
     }
     
     /**

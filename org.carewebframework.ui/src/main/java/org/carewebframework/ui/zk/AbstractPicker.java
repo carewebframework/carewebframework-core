@@ -19,13 +19,10 @@ import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Bandbox;
 import org.zkoss.zul.Bandpopup;
-import org.zkoss.zul.Grid;
-import org.zkoss.zul.ListModelList;
+import org.zkoss.zul.Div;
+import org.zkoss.zul.Hlayout;
 import org.zkoss.zul.Panel;
 import org.zkoss.zul.Panelchildren;
-import org.zkoss.zul.Row;
-import org.zkoss.zul.RowRenderer;
-import org.zkoss.zul.Rows;
 
 /**
  * Base class for grid-based item pickers.
@@ -46,38 +43,11 @@ public abstract class AbstractPicker<T extends Component> extends Bandbox {
     
     private int itemsPerRow;
     
-    private final Grid grid;
-    
     protected final Panel panel;
     
     private final T itemNoChoice;
     
     private final List<T> items = new ArrayList<T>();
-    
-    private final ListModelList<Integer> model = new ListModelList<Integer>();
-    
-    /**
-     * Row render for grid.
-     */
-    private final RowRenderer<Integer> renderer = new RowRenderer<Integer>() {
-        
-        /**
-         * Renders a grid row.
-         * 
-         * @param row The row to render.
-         * @param start Index of first item to render in row.
-         * @param index Not used.
-         */
-        @Override
-        public void render(Row row, Integer start, int index) {
-            int end = Math.min(start + itemsPerRow, items.size());
-            
-            for (int i = start; i < end; i++) {
-                row.appendChild(items.get(i));
-            }
-        }
-        
-    };
     
     /**
      * Click event listener for each item. Causes item to be selected when it is clicked.
@@ -103,18 +73,12 @@ public abstract class AbstractPicker<T extends Component> extends Bandbox {
         this.itemNoChoice = itemNoChoice;
         setReadonly(true);
         Bandpopup bp = new Bandpopup();
-        ZKUtil.updateSclass(bp, "cwf-gridpicker", false);
         appendChild(bp);
         panel = new Panel();
+        ZKUtil.updateSclass(panel, "cwf-picker", false);
         bp.appendChild(panel);
         Panelchildren pc = new Panelchildren();
         panel.appendChild(pc);
-        grid = new Grid();
-        pc.appendChild(grid);
-        grid.setSizedByContent(true);
-        grid.setOddRowSclass("none");
-        grid.appendChild(new Rows());
-        grid.setRowRenderer(renderer);
         setItemsPerRow(20);
         
         if (itemNoChoice != null) {
@@ -128,7 +92,7 @@ public abstract class AbstractPicker<T extends Component> extends Bandbox {
      */
     public void clear() {
         items.clear();
-        updateModel();
+        render();
     }
     
     /**
@@ -138,7 +102,7 @@ public abstract class AbstractPicker<T extends Component> extends Bandbox {
      */
     public void addItem(T item) {
         _addItem(item);
-        updateModel();
+        render();
     }
     
     /**
@@ -151,7 +115,7 @@ public abstract class AbstractPicker<T extends Component> extends Bandbox {
             _addItem(item);
         }
         
-        updateModel();
+        render();
     }
     
     /**
@@ -173,14 +137,23 @@ public abstract class AbstractPicker<T extends Component> extends Bandbox {
      * Updates the model. The model entry consists of the index of the first item to appear on each
      * row.
      */
-    protected void updateModel() {
-        model.clear();
+    protected void render() {
+        Panelchildren pc = panel.getPanelchildren();
+        ZKUtil.detachChildren(pc);
         
         for (int i = 0; i < items.size(); i += itemsPerRow) {
-            model.add(i);
+            int max = Math.min(i + itemsPerRow, items.size());
+            Hlayout row = new Hlayout();
+            pc.appendChild(row);
+            
+            for (int j = i; j < max; j++) {
+                Div div = new Div();
+                div.setSclass("cwf-picker-cell");
+                row.appendChild(div);
+                div.appendChild(items.get(j));
+            }
         }
         
-        grid.setModel(model);
         Clients.resize(this);
     }
     
@@ -330,7 +303,7 @@ public abstract class AbstractPicker<T extends Component> extends Bandbox {
         
         if (this.itemsPerRow != itemsPerRow) {
             this.itemsPerRow = itemsPerRow;
-            updateModel();
+            render();
         }
     }
     
