@@ -17,7 +17,7 @@
 		<c:set var="warning" value="${cw:getCookie('logoutWarningMessage')}"/>
 		<c:set var="target" value="${cw:getCookie('logoutTargetURI')}"/>
 
-		<div style="position: fixed; min-width: 200px; top: 50%; left: 50%; margin-top: -100px; margin-left: -100px;" 
+		<div style="position: relative; min-width: 200px; max-width: 33%; margin-top: 10%; margin-left: auto; margin-right: auto" 
 			class="z-window z-window-noborder z-window-modal z-window-shadow">
 			
 			<div class="z-window-header z-window-header-move">${c:l('logout.window.title')}</div>
