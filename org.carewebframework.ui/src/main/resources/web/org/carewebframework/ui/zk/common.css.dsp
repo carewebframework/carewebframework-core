@@ -124,6 +124,7 @@
 .cwf-picker .z-panelchildren {
 	max-height: 300px;
 	overflow: auto;
+	padding: 5px;
 }
 
 .cwf-picker .z-hlayout {
@@ -132,8 +133,8 @@
 
 .cwf-picker-cell {
     cursor: pointer;
-    border: 1px solid transparent;
-	padding: 2px;
+	padding: 1px;
+	border: 1px solid transparent;
 }
 
 .cwf-picker-cell:hover {
