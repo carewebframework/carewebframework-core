@@ -9,7 +9,9 @@
  */
 package org.carewebframework.ui.zk;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.jar.Attributes;
@@ -22,15 +24,14 @@ import org.carewebframework.common.StrUtil;
 import org.carewebframework.ui.FrameworkController;
 
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.InputEvent;
 import org.zkoss.zk.ui.event.SortEvent;
-import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.A;
 import org.zkoss.zul.Caption;
 import org.zkoss.zul.Html;
-import org.zkoss.zul.ListModel;
 import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listcell;
@@ -48,7 +49,7 @@ public class ManifestViewer extends FrameworkController {
     
     private interface Matchable<T> extends Comparable<T> {
         
-        boolean matches(String searchText);
+        boolean matches(String filter);
     }
     
     /**
@@ -114,10 +115,9 @@ public class ManifestViewer extends FrameworkController {
         }
         
         @Override
-        public boolean matches(String searchText) {
-            return StringUtils.containsIgnoreCase(implModule, searchText)
-                    || StringUtils.containsIgnoreCase(implVendor, searchText)
-                    || StringUtils.containsIgnoreCase(implVersion, searchText);
+        public boolean matches(String filter) {
+            return StringUtils.containsIgnoreCase(implModule, filter) || StringUtils.containsIgnoreCase(implVendor, filter)
+                    || StringUtils.containsIgnoreCase(implVersion, filter);
         }
     }
     
@@ -141,8 +141,8 @@ public class ManifestViewer extends FrameworkController {
         }
         
         @Override
-        public boolean matches(String searchText) {
-            return StringUtils.containsIgnoreCase(name, searchText) || StringUtils.containsIgnoreCase(value, searchText);
+        public boolean matches(String filter) {
+            return StringUtils.containsIgnoreCase(name, filter) || StringUtils.containsIgnoreCase(value, filter);
         }
         
     }
@@ -207,7 +207,7 @@ public class ManifestViewer extends FrameworkController {
                 
                 @Override
                 public void onEvent(SortEvent event) throws Exception {
-                    Events.postEvent("onAfterSort", list, null);
+                    Events.postEvent("onAfterSort", list, event);
                 }
                 
             });
@@ -267,7 +267,11 @@ public class ManifestViewer extends FrameworkController {
     
     private Textbox txtSearch;
     
-    private int matchIndex = -1;
+    private SortEvent sortEvent;
+    
+    private final List<Matchable<?>> items = new ArrayList<Matchable<?>>();
+    
+    private final ListModelList<Matchable<?>> model = new ListModelList<Matchable<?>>();
     
     /**
      * Display a summary dialog of all known manifests.
@@ -284,18 +288,16 @@ public class ManifestViewer extends FrameworkController {
     private static void execute(ManifestItem manifestItem) {
         Map<Object, Object> args = new HashMap<Object, Object>();
         args.put("manifestItem", manifestItem);
-        PopupDialog.popup(Constants.RESOURCE_PREFIX + "manifestViewer.zul", args, true, true, true);
+        PopupDialog.popup(Constants.RESOURCE_PREFIX + "manifestViewer.zul", args, true, false, true);
     }
     
     /**
      * Display the contents of a single manifest or all discovered manifests.
      */
-    @SuppressWarnings({ "rawtypes" })
     @Override
     public void doAfterCompose(Component comp) throws Exception {
         super.doAfterCompose(comp);
         ManifestItem manifestItem = (ManifestItem) arg.get("manifestItem");
-        ListModelList<Matchable> model = new ListModelList<Matchable>();
         BaseRenderer<?> renderer;
         
         if (manifestItem != null) {
@@ -303,7 +305,7 @@ public class ManifestViewer extends FrameworkController {
             caption.setLabel(manifestItem.implModule);
             
             for (Entry<Object, Object> entry : manifestItem.manifest.getMainAttributes().entrySet()) {
-                model.add(new AttributeItem(entry));
+                items.add(new AttributeItem(entry));
             }
         } else {
             renderer = manifestItemRenderer;
@@ -311,18 +313,16 @@ public class ManifestViewer extends FrameworkController {
             for (Manifest mnfst : ManifestIterator.getInstance()) {
                 ManifestItem anItem = new ManifestItem(mnfst);
                 
-                if (!anItem.isEmpty() && !model.contains(anItem)) {
-                    model.add(anItem);
+                if (!anItem.isEmpty() && !items.contains(anItem)) {
+                    items.add(anItem);
                 }
             }
         }
         
         renderer.init(list);
-        int rows = model.size();
+        int rows = items.size();
         list.setRows(rows > 15 ? 15 : rows);
-        model.sort(null, true);
-        list.setModel(model);
-        list.renderAll();
+        filterChanged(null);
     }
     
     /**
@@ -339,8 +339,11 @@ public class ManifestViewer extends FrameworkController {
     
     /**
      * Force rendering of all list items after sorting (so printing works correctly).
+     * 
+     * @param event The sort event.
      */
-    public void onAfterSort$list() {
+    public void onAfterSort$list(Event event) {
+        sortEvent = (SortEvent) ZKUtil.getEventOrigin(event).getData();
         list.renderAll();
     }
     
@@ -350,49 +353,40 @@ public class ManifestViewer extends FrameworkController {
      * @param event The input event.
      */
     public void onChanging$txtSearch(InputEvent event) {
-        findMatchingItem(event.getValue(), matchIndex - 1);
+        filterChanged(event.getValue());
         
-    }
-    
-    public void onOK$txtSearch() {
-        findMatchingItem(txtSearch.getValue(), matchIndex);
     }
     
     public void onSelect$list() {
-        matchIndex = list.getSelectedIndex();
         txtSearch.focus();
     }
     
-    private void findMatchingItem(String searchText, int i) {
-        list.clearSelection();
+    public void filterChanged(String filter) {
+        list.setModel((ListModelList<?>) null);
+        model.clear();
         
-        if (StringUtils.isEmpty(searchText)) {
-            return;
-        }
-        
-        ListModel<Matchable<?>> model = list.getModel();
-        int max = model.getSize();
-        boolean wrapped = false;
-        
-        if (i < 0) {
-            i = 0;
-        }
-        
-        while (true) {
-            if (++i >= max) {
-                if (wrapped) {
-                    break;
-                } else {
-                    wrapped = true;
-                    i = -1;
+        if (StringUtils.isEmpty(filter)) {
+            model.addAll(items);
+        } else {
+            for (Matchable<?> item : items) {
+                if (item.matches(filter)) {
+                    model.add(item);
                 }
-            } else if (model.getElementAt(i).matches(searchText)) {
-                matchIndex = i;
-                Listitem matchItem = list.getItemAtIndex(i);
-                matchItem.setSelected(true);
-                Clients.scrollIntoView(matchItem);
-                break;
             }
         }
+        
+        if (sortEvent == null) {
+            model.sort(null, true);
+        }
+        
+        list.setModel(model);
+        
+        if (sortEvent != null) {
+            Listheader lh = (Listheader) sortEvent.getTarget();
+            lh.sort(sortEvent.isAscending(), true);
+        }
+        
+        list.renderAll();
     }
+    
 }
