@@ -276,6 +276,15 @@
 	min-height: 20px;
 }
 
+.cwf-menuitem .z-menu-content {
+	padding-right: 0;
+}
+
+.cwf-menuitem .z-menu-icon,
+.cwf-menuitem .z-menu-separator {
+	display: none!important;
+}
+
 .cwf-tab-menubar {
 	background: none;
 	border: none!important;

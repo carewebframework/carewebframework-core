@@ -11,10 +11,14 @@ cwf.ext.MenuEx = zk.$extends(zul.menu.Menu, {
 	},
 
 	doClick_ : function(evt) {
-		if (this.isTopmost())
-			this.$supers('doClick_', arguments);
-		else
+		zk.currentFocus = null;
+		
+		if (jq(this).hasClass('cwf-menuitem')) {
 			this.fireX(new zk.Event(this, 'onClick', evt.data));
+			zWatch.fire('onFloatUp', this.getMenubar()); 
+		} else {
+			this.$supers('doClick_', arguments);
+		}
 	},
 
 	getZclass : function() {
@@ -26,7 +30,7 @@ cwf.ext.MenuEx = zk.$extends(zul.menu.Menu, {
 		var a = this.getAnchor_();
 
 		if (a && this._color) {
-			jq(a).children('.z-menu-text,.z-menuitem-text').css('color', this._color);
+			jq(a).children('.z-menu-text').css('color', this._color);
 			
 			if (this.menupopup) {
 				this.menupopup._style = '';

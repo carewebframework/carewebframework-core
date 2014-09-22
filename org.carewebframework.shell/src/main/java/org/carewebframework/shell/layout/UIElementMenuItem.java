@@ -13,11 +13,8 @@ import org.carewebframework.ui.action.ActionListener;
 import org.carewebframework.ui.zk.MenuUtil;
 import org.carewebframework.ui.zk.ZKUtil;
 
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.Menu;
-import org.zkoss.zul.Menubar;
 import org.zkoss.zul.Menupopup;
 
 /**
@@ -43,24 +40,6 @@ public class UIElementMenuItem extends UIElementActionBase {
             setWidgetClass("cwf.ext.MenuEx");
             setWidgetOverride(CUSTOM_COLOR_OVERRIDE, "function(value) {this.setColor(value?value:'');}");
             appendChild(new Menupopup());
-            addEventListener(Events.ON_CLICK, new EventListener<Event>() {
-                
-                /**
-                 * Auto close the menu when it is clicked.
-                 * 
-                 * @param event The click event.
-                 * @throws Exception Unspecified exception.
-                 */
-                @Override
-                public void onEvent(Event event) throws Exception {
-                    if (MenuEx.this.getParent() instanceof Menubar) {
-                        MenuEx.this.open();
-                    } else {
-                        MenuUtil.close(MenuEx.this);
-                    }
-                }
-                
-            });
         }
         
         @Override
