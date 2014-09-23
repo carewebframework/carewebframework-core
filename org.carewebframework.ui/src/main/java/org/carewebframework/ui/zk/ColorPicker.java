@@ -153,7 +153,6 @@ public class ColorPicker extends AbstractPicker<Color> {
             
             if (StringUtils.isEmpty(value)) {
                 setSclass("cwf-colorpicker-colorcell cwf-colorpicker-colorcell-nocolor");
-                setStyle("background-color: transparent");
             } else {
                 setSclass("cwf-colorpicker-colorcell");
                 setStyle("background-color: " + value);

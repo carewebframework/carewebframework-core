@@ -75,11 +75,10 @@ public abstract class AbstractPicker<T extends Component> extends Bandbox {
         Bandpopup bp = new Bandpopup();
         appendChild(bp);
         panel = new Panel();
-        ZKUtil.updateSclass(panel, "cwf-picker", false);
+        panel.setSclass("cwf-picker");
         bp.appendChild(panel);
-        Panelchildren pc = new Panelchildren();
-        panel.appendChild(pc);
-        setItemsPerRow(20);
+        panel.appendChild(new Panelchildren());
+        setItemsPerRow(15);
         
         if (itemNoChoice != null) {
             itemNoChoice.addEventListener(Events.ON_CLICK, clickListener);
@@ -134,8 +133,7 @@ public abstract class AbstractPicker<T extends Component> extends Bandbox {
     }
     
     /**
-     * Updates the model. The model entry consists of the index of the first item to appear on each
-     * row.
+     * Renders the picker items.
      */
     protected void render() {
         Panelchildren pc = panel.getPanelchildren();
