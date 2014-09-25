@@ -1,35 +1,30 @@
 @CHARSET "UTF-8";
 
-.sharedForms-captioned-header .z-caption .z-caption-l {
+.sharedForms-captioned-header .z-caption-content {
 	font-size: 1.25em;
-	padding: 2px 5px 2px 5px;
+	font-family: arial;
+	font-weight: bold;
 }
 
 .sharedForms-captioned-caption-hidden .z-caption {
 	display: none;		
 }
 
-.sharedForms-captioned-caption-title .z-caption-l {
+.sharedForms-captioned-caption-title .z-caption-content,
+.sharedForms-captioned-caption-frame .z-caption-content,
+.sharedForms-captioned-caption-left .z-caption-content {
 	text-align: left;
-	padding: 1px;	
+	padding-left: 5px;
 }
 
-.sharedForms-captioned-caption-left .z-caption-l {
-	text-align: left;	
-	padding: 1px;	
-}
-
-.sharedForms-captioned-caption-right .z-caption-l {
+.sharedForms-captioned-caption-right .z-caption-content {
 	text-align: right;	
-	padding: 1px;	
+	width: 100%;
+	padding-right: 5px;
 }
 
-.sharedForms-captioned-caption-center .z-caption-l {
+.sharedForms-captioned-caption-center .z-caption-content {
 	text-align: center;
-	padding: 1px;	
-}
-
-.sharedForms-captioned-caption-frame .z-caption-l {
-	text-align: left;
+	width: 100%;
 }
 

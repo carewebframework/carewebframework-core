@@ -25,6 +25,6 @@ div.z-listbox-body {
 	max-height: inherit !important;
 }
 
-tr.z-listitem-seld {
+tr.z-listitem-selected {
 	background-image: inherit;
 }

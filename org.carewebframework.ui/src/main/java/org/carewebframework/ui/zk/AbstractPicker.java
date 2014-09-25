@@ -152,7 +152,7 @@ public abstract class AbstractPicker<T extends Component> extends Bandbox {
             }
         }
         
-        Clients.resize(this);
+        Clients.resize(getFirstChild());
     }
     
     /**
