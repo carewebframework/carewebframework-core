@@ -266,6 +266,33 @@ public class MenuUtil {
     }
     
     /**
+     * Opens a menu and all popups that precede it.
+     * 
+     * @param menu Menu to open.
+     * @return True if the menu was opened.
+     */
+    public static boolean open(Menu menu) {
+        Component parent = menu.getParent();
+        
+        if (parent instanceof Menupopup) {
+            Menupopup menupopup = (Menupopup) parent;
+            parent = parent.getParent();
+            
+            if (parent == null) {
+                menupopup.open(parent, "after_start");
+                return true;
+            } else if (parent instanceof Menu) {
+                menu = (Menu) parent;
+                String position = open(menu) ? "end_before" : "after_start";
+                menupopup.open(menu, position);
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    /**
      * Closes a menu.
      * 
      * @param menu Menu to close.
@@ -311,6 +338,7 @@ public class MenuUtil {
             Menupopup child = ((Menu) comp).getMenupopup();
             boolean hasChildren = child != null && ZKUtil.firstVisibleChild(child, false) != null;
             ZKUtil.updateSclass((Menu) comp, "cwf-menuitem", hasChildren);
+            ZKUtil.updateSclass((Menu) comp, "cwf-menu", !hasChildren);
         }
         
         for (Component child : comp.getChildren()) {

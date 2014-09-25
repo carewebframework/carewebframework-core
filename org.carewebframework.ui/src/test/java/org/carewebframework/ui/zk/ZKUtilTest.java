@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -44,6 +44,31 @@ public class ZKUtilTest {
         String result = ZKUtil.updateStyle(cmpt, styleName, newValue);
         assertEquals(newStyle, cmpt.getStyle());
         assertEquals(oldValue, result);
+    }
+    
+    @Test
+    public void updateSclassTest() {
+        updateSclassTest("cwf-orig1 cwf-orig2", "cwf-new1", "cwf-new2");
+        updateSclassTest(null, "cwf-new1", "cwf-new2");
+    }
+    
+    private void updateSclassTest(String initialClass, String class1, String class2) {
+        Div cmpt = new Div();
+        String pfx = initialClass == null || initialClass.isEmpty() ? "" : initialClass + " ";
+        cmpt.setSclass(initialClass);
+        String old1 = ZKUtil.updateSclass(cmpt, class1, false);
+        assertEquals(pfx + class1, cmpt.getSclass());
+        assertEquals(initialClass, old1);
+        old1 = cmpt.getSclass();
+        String old2 = ZKUtil.updateSclass(cmpt, class2, false);
+        assertEquals(pfx + class1 + " " + class2, cmpt.getSclass());
+        assertEquals(old1, old2);
+        cmpt.setSclass(initialClass);
+        old1 = ZKUtil.toggleSclass(cmpt, class1, class2, true);
+        assertEquals(initialClass, old1);
+        assertEquals(pfx + class1, cmpt.getSclass());
+        ZKUtil.toggleSclass(cmpt, class1, class2, false);
+        assertEquals(pfx + class2, cmpt.getSclass());
     }
     
     private static final String ATTR_TEST = "ATTR_TEST";

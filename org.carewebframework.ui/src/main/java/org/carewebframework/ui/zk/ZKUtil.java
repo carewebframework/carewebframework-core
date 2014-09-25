@@ -627,7 +627,7 @@ public class ZKUtil {
      * @return Returns the original sclass property value.
      */
     public static String updateSclass(HtmlBasedComponent component, String className, boolean remove) {
-        final String oclass = component.getSclass();
+        String oclass = component.getSclass();
         String sclass = oclass;
         
         if (StringUtils.isEmpty(sclass)) {
@@ -652,6 +652,22 @@ public class ZKUtil {
             component.setSclass(StringUtils.trimToNull(sclass));
         }
         
+        return oclass;
+    }
+    
+    /**
+     * Toggles between two mutually exclusive sclass values, depending on the given boolean value.
+     * 
+     * @param component Component whose sclass will be modified.
+     * @param classIfTrue Style class to be applied if value is true.
+     * @param classIfFalse Style class to be applied if value is false.
+     * @param value Value to determine which class is added and which is removed.
+     * @return Returns the original sclass property value.
+     */
+    public static String toggleSclass(HtmlBasedComponent component, String classIfTrue, String classIfFalse, boolean value) {
+        String oclass = component.getSclass();
+        updateSclass(component, classIfTrue, !value);
+        updateSclass(component, classIfFalse, value);
         return oclass;
     }
     
