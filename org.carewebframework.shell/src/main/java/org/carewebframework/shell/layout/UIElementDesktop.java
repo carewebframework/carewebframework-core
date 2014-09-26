@@ -15,9 +15,9 @@ import org.carewebframework.api.security.SecurityUtil;
 import org.carewebframework.shell.CareWebShell;
 import org.carewebframework.shell.designer.DesignConstants;
 import org.carewebframework.shell.designer.DesignMenu;
-import org.carewebframework.shell.layout.UIElementMenuItem.MenuEx;
 import org.carewebframework.shell.plugins.PluginResourceHelp;
 import org.carewebframework.ui.action.ActionListener;
+import org.carewebframework.ui.zk.MenuEx;
 import org.carewebframework.ui.zk.MenuUtil;
 
 import org.zkoss.zk.ui.Component;

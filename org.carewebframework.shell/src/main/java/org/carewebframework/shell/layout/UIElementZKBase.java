@@ -16,7 +16,6 @@ import org.carewebframework.shell.designer.PropertyGrid;
 import org.carewebframework.ui.zk.PromptDialog;
 import org.carewebframework.ui.zk.ZKUtil;
 
-import org.zkoss.zk.au.out.AuInvoke;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.HtmlBasedComponent;
@@ -38,8 +37,6 @@ public abstract class UIElementZKBase extends UIElementBase {
     private static final String SAVED_CONTEXT_MENU = ATTR_PREFIX + "SavedContextMenu";
     
     private static final String SAVED_TOOLTIP_TEXT = ATTR_PREFIX + "SavedTooltipText";
-    
-    protected static final String CUSTOM_COLOR_OVERRIDE = "setCustomColor";
     
     private boolean enableDesignModeMask;
     
@@ -368,13 +365,7 @@ public abstract class UIElementZKBase extends UIElementBase {
     @Override
     protected void applyColor(Object cmpt) {
         if (cmpt instanceof HtmlBasedComponent) {
-            HtmlBasedComponent comp = (HtmlBasedComponent) cmpt;
-            
-            if (comp.getWidgetOverride(CUSTOM_COLOR_OVERRIDE) != null) {
-                Executions.getCurrent().addAuResponse(new AuInvoke(comp, CUSTOM_COLOR_OVERRIDE, getColor()));
-            } else {
-                ZKUtil.updateStyle(comp, "background-color", getColor());
-            }
+            ZKUtil.applyColor((HtmlBasedComponent) cmpt, getColor());
         }
     }
     
