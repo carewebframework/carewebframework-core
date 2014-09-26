@@ -42,20 +42,16 @@ public abstract class UIElementZKBase extends UIElementBase {
         
         final String contextMenu;
         
-        final String sclass;
-        
         public SavedState(XulElement comp) {
             this.comp = comp;
             tooltipText = comp.getTooltiptext();
             contextMenu = comp.getContext();
-            sclass = comp.getSclass();
             comp.setAttribute(SAVED_STATE, this);
         }
         
         private void restore() {
             comp.setTooltiptext(tooltipText);
             comp.setContext(contextMenu);
-            comp.setSclass(sclass);
         }
         
         public static void restore(XulElement comp) {
@@ -301,6 +297,7 @@ public abstract class UIElementZKBase extends UIElementBase {
                     ZKUtil.removeMask(comp);
                 } else {
                     SavedState.restore(comp);
+                    ZKUtil.updateSclass(comp, "cwf-designmode-active", true);
                 }
             } else {
                 if (enableDesignModeMask) {
