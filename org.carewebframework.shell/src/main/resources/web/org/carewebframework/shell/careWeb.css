@@ -4,25 +4,6 @@
 	Global stylesheet for CareWeb application.  Styles here will be applied to all components.
 */
 
-.z-window-modal-header {
-	font-weight: bold;
-}
-
-.z-toolbar-start {
-	clear: none;
-	float: none;
-}
-
-.z-west-splt, .z-east-splt {
-    width: 6px;
-    background: none;
-}
-
-.z-north-splt, .z-south-splt {
-    height: 6px;
-    background: none;
-}
-
 .cwf-desktop-titlebar {
 	background: none;
 	border: none;
@@ -272,25 +253,6 @@
 	border-right: 1px solid lightgray!important;
 }
 
-.cwf-menubar {
-	min-height: 20px;
-}
-
-.cwf-menu .z-menu-separator {
-	display: inline;
-	padding-left: 1px;
-	margin-left: -1px;
-}
-
-.cwf-menuitem .z-menu-content {
-	padding-right: 0;
-}
-
-.cwf-menuitem .z-menu-icon,
-.cwf-menuitem .z-menu-separator {
-	display: none!important;
-}
-
 .cwf-tab .z-icon-times {
 	height: 100%;	
 	width: 100%;
@@ -322,6 +284,10 @@
 .cwf-designer-addcomponent .z-tree-tee,
 .cwf-designer-addcomponent .z-tree-last {
 	display: none;
+}
+
+.cwf-mask:hover {
+	ourline: 2px dotted red;	
 }
 
 @media print {

@@ -30,13 +30,45 @@ import org.zkoss.zul.impl.XulElement;
  */
 public abstract class UIElementZKBase extends UIElementBase {
     
+    /**
+     * Saves various states of a component prior to configuring it for design mode. The restore
+     * method then restores to the saved state.
+     */
+    private static class SavedState {
+        
+        final XulElement comp;
+        
+        final String tooltipText;
+        
+        final String contextMenu;
+        
+        final String sclass;
+        
+        public SavedState(XulElement comp) {
+            this.comp = comp;
+            tooltipText = comp.getTooltiptext();
+            contextMenu = comp.getContext();
+            sclass = comp.getSclass();
+            comp.setAttribute(SAVED_STATE, this);
+        }
+        
+        private void restore() {
+            comp.setTooltiptext(tooltipText);
+            comp.setContext(contextMenu);
+            comp.setSclass(sclass);
+        }
+        
+        public static void restore(XulElement comp) {
+            SavedState ss = (SavedState) comp.removeAttribute(SAVED_STATE);
+            ss.restore();
+        }
+    }
+    
     private static final String ATTR_PREFIX = UIElementZKBase.class.getName() + ".";
     
     private static final String ASSOC_ELEMENT = ATTR_PREFIX + "AssociatedUIElement";
     
-    private static final String SAVED_CONTEXT_MENU = ATTR_PREFIX + "SavedContextMenu";
-    
-    private static final String SAVED_TOOLTIP_TEXT = ATTR_PREFIX + "SavedTooltipText";
+    private static final String SAVED_STATE = ATTR_PREFIX + "SavedState";
     
     private boolean enableDesignModeMask;
     
@@ -268,9 +300,7 @@ public abstract class UIElementZKBase extends UIElementBase {
                     comp.removeEventListener("onMask", maskListener);
                     ZKUtil.removeMask(comp);
                 } else {
-                    comp.setContext((String) comp.removeAttribute(SAVED_CONTEXT_MENU));
-                    comp.setTooltiptext((String) comp.removeAttribute(SAVED_TOOLTIP_TEXT));
-                    ZKUtil.updateStyle(comp, "box-shadow", null);
+                    SavedState.restore(comp);
                 }
             } else {
                 if (enableDesignModeMask) {
@@ -278,11 +308,10 @@ public abstract class UIElementZKBase extends UIElementBase {
                     maskEvent = new Event("onMask", comp, contextMenu);
                     applyMask(false);
                 } else {
-                    comp.setAttribute(SAVED_CONTEXT_MENU, comp.getContext());
-                    comp.setAttribute(SAVED_TOOLTIP_TEXT, comp.getTooltiptext());
+                    new SavedState(comp);
                     comp.setContext(contextMenu);
                     comp.setTooltiptext(getDefinition().getName());
-                    ZKUtil.updateStyle(comp, "box-shadow", "0 0 0 1px lightgray inset");
+                    ZKUtil.updateSclass(comp, "cwf-designmode-active", false);
                 }
             }
         }

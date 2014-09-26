@@ -56,6 +56,7 @@ public class UIElementTabMenuPane extends UIElementMenuItem {
     @Override
     protected void updateVisibility(boolean visible, boolean activated) {
         div.setVisible(visible && activated);
+        getMenu().setVisible(visible);
     }
     
     /**

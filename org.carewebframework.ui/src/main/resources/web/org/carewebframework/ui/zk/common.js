@@ -197,7 +197,7 @@ cwf.addMask = function(uuid, msg, popid, hint) {
 
 	zAu.cmd0.showBusy(uuid, msg);
 	var w = jq('#' + uuid + '-shby');
-	w.addClass('cwf-mask');
+	w.children().addClass('cwf-mask');
 	w.find('*').removeClass('z-apply-loading-icon');
 	var ctx;
 

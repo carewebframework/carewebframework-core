@@ -19,6 +19,7 @@ import org.carewebframework.shell.plugins.PluginResourceHelp;
 import org.carewebframework.ui.action.ActionListener;
 import org.carewebframework.ui.zk.MenuEx;
 import org.carewebframework.ui.zk.MenuUtil;
+import org.carewebframework.ui.zk.ZKUtil;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.EventListener;
@@ -30,7 +31,6 @@ import org.zkoss.zul.Image;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Menu;
 import org.zkoss.zul.Menubar;
-import org.zkoss.zul.Menuitem;
 import org.zkoss.zul.Menupopup;
 import org.zkoss.zul.Menuseparator;
 import org.zkoss.zul.Toolbar;
@@ -71,9 +71,9 @@ public class UIElementDesktop extends UIElementZKBase {
     
     private Menupopup helpMenuRoot;
     
-    private Menuitem mnuTOC;
+    private Menu mnuTOC;
     
-    private Menuitem mnuAbout;
+    private Menu mnuAbout;
     
     private Menuseparator helpSeparator;
     
@@ -138,7 +138,7 @@ public class UIElementDesktop extends UIElementZKBase {
     public void setTitle(String text) {
         title.setValue(text);
         win.getPage().setTitle(text);
-        titleCell.setSclass(StringUtils.isEmpty(text) ? "cwf-desktop-notitle" : "cwf-desktop-title");
+        ZKUtil.toggleSclass(titleCell, "cwf-desktop-notitle", "cwf-desktop-title", StringUtils.isEmpty(text));
     }
     
     /**

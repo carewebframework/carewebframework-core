@@ -16,8 +16,8 @@
 					style="border:none;background:none">
 					<menu id="helpMenu" label="${labels.cwf.shell.plugin._desktop.menu.help.label}">
 						<menupopup id="helpMenuRoot">
-							<menuitem id="mnuAbout" label="${labels.cwf.shell.plugin._desktop.menu.about.label}" />
-							<menuitem id="mnuTOC" visible="false" label="${labels.cwf.shell.plugin._desktop.menu.toc.label}" />
+							<menuEx id="mnuAbout" label="${labels.cwf.shell.plugin._desktop.menu.about.label}" />
+							<menuEx id="mnuTOC" visible="false" label="${labels.cwf.shell.plugin._desktop.menu.toc.label}" />
 							<menuseparator id="helpSeparator" visible="false" />
 						</menupopup>
 					</menu>

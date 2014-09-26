@@ -157,11 +157,53 @@
 	padding: 2px !important;
 }
 
+.cwf-menubar {
+	min-height: 20px;
+}
+
 .cwf-menupopup-empty {
 	display: none!important;
 }
 
+.cwf-menupopup-noimages .z-menu-image {
+	display: none;	
+}
+
+.cwf-menu .z-menu-separator {
+	display: inline;
+	padding-left: 1px;
+	margin-left: -1px;
+}
+
+.cwf-menuitem .z-menu-content {
+	padding-right: 5px;
+}
+
+.cwf-menuitem .z-menu-icon,
+.cwf-menuitem .z-menu-separator {
+	display: none!important;
+}
+
 /* ZK overrides */
+
+.z-window-modal-header {
+	font-weight: bold;
+}
+
+.z-toolbar-start {
+	clear: none;
+	float: none;
+}
+
+.z-west-splt, .z-east-splt {
+    width: 6px;
+    background: none;
+}
+
+.z-north-splt, .z-south-splt {
+    height: 6px;
+    background: none;
+}
 
 .z-errbox-center {
 	word-wrap: break-word;
@@ -173,6 +215,14 @@
 
 .z-window-header {
 	font-weight: bold;
+}
+
+.z-menupopup-separator {
+	display: none;
+}
+
+.z-apply-loading {
+	pointer-events: none;
 }
 
 /* JQuery-UI overrides */

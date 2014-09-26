@@ -9,13 +9,10 @@
  */
 package org.carewebframework.shell.layout;
 
-import org.carewebframework.ui.action.ActionListener;
+import org.carewebframework.ui.zk.MenuEx;
 import org.carewebframework.ui.zk.MenuUtil;
-import org.carewebframework.ui.zk.ZKUtil;
 
-import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.Menu;
-import org.zkoss.zul.Menupopup;
 
 /**
  * Single menu item. The path determines the position of the menu item in the parent menu tree. Note
@@ -29,59 +26,6 @@ public class UIElementMenuItem extends UIElementActionBase {
         registerAllowedParentClass(UIElementMenuItem.class, UIElementMenubar.class);
         registerAllowedParentClass(UIElementMenuItem.class, UIElementMenuItem.class);
         registerAllowedChildClass(UIElementMenuItem.class, UIElementMenuItem.class);
-    }
-    
-    public static class MenuEx extends Menu {
-        
-        private static final long serialVersionUID = 1L;
-        
-        public MenuEx() {
-            super();
-            setWidgetClass("cwf.ext.MenuEx");
-            setWidgetOverride(CUSTOM_COLOR_OVERRIDE, "function(value) {this.setColor(value?value:'');}");
-            appendChild(new Menupopup());
-        }
-        
-        @Override
-        public boolean setVisible(boolean visible) {
-            boolean result = super.setVisible(visible);
-            adjustVisibility(visible);
-            return result;
-        }
-        
-        /**
-         * Adjust visibility of parent menu elements.
-         * 
-         * @param visible The visibility state.
-         */
-        private void adjustVisibility(boolean visible) {
-            Menu menu = this;
-            Menupopup menuPopup = null;
-            
-            while ((menuPopup = getParentPopup(menu)) != null) {
-                visible |= ZKUtil.firstVisibleChild(menuPopup, false) != null;
-                menu = (Menu) menuPopup.getParent();
-                visible |= ActionListener.getListener(menu, Events.ON_CLICK) != null;
-                
-                if (visible == menu.setVisible(visible)) {
-                    break;
-                }
-            }
-            
-            if (menu != null) {
-                MenuUtil.updateStyles(menu);
-            }
-        }
-        
-        /**
-         * Returns the parent menu popup for this menu, or null if none.
-         * 
-         * @param menu Menu whose parent menu popup is sought.
-         * @return The parent menu popup or null if none.
-         */
-        private Menupopup getParentPopup(Menu menu) {
-            return menu.isTopmost() ? null : (Menupopup) menu.getParent();
-        }
     }
     
     private final Menu menu = new MenuEx();

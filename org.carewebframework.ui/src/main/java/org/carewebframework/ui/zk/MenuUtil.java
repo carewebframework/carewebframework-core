@@ -331,17 +331,31 @@ public class MenuUtil {
      * @param comp Current menu tree component.
      */
     public static void updateStyles(Component comp) {
+        if (comp == null) {
+            return;
+        }
+        
+        Menupopup menupopup = null;
+        
         if (comp instanceof Menupopup) {
-            boolean hasChildren = ZKUtil.firstVisibleChild(comp, false) != null;
-            ((Menupopup) comp).setZclass(hasChildren ? null : "cwf-menupopup-empty");
+            menupopup = (Menupopup) comp;
+            boolean hasChildren = ZKUtil.firstVisibleChild(menupopup, false) != null;
+            menupopup.setZclass(hasChildren ? null : "cwf-menupopup-empty");
         } else if (comp instanceof Menu) {
             Menupopup child = ((Menu) comp).getMenupopup();
             boolean hasChildren = child != null && ZKUtil.firstVisibleChild(child, false) != null;
             ZKUtil.toggleSclass((Menu) comp, "cwf-menu", "cwf-menuitem", hasChildren);
         }
         
+        boolean hasImages = menupopup == null;
+        
         for (Component child : comp.getChildren()) {
             updateStyles(child);
+            hasImages |= child instanceof Menu && ((Menu) child).isImageAssigned();
+        }
+        
+        if (menupopup != null) {
+            ZKUtil.updateSclass(menupopup, "cwf-menupopup-noimages", hasImages);
         }
     }
     

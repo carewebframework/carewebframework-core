@@ -18,6 +18,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zul.Div;
 import org.zkoss.zul.Menu;
 import org.zkoss.zul.Menupopup;
+import org.zkoss.zul.Tab;
 
 /**
  * Implements a tab-based menubar. When dropped on a tab pane, provides a drop-down menu on the
@@ -36,20 +37,54 @@ public class UIElementTabMenu extends UIElementZKBase {
         
         private static final long serialVersionUID = 1L;
         
-        private Component reference;
+        private Tab tab;
         
-        public void open() {
-            open(reference, "after_start");
+        public void onOpenMenu() {
+            open(tab, "after_start");
         }
         
         @Override
         public void open(Component ref, String position) {
+            ref = ref == null ? tab : ref;
+            
+            if (getPage() == null) {
+                setPage(ref.getPage());
+            }
+            
             MenuUtil.updateStyles(this);
-            super.open(ref == null ? reference : ref, position);
+            super.open(ref, position);
         }
         
-        public void setReference(Component reference) {
-            this.reference = reference;
+        @Override
+        public void onChildAdded(Component child) {
+            super.onChildAdded(child);
+            tab.setClosable(true);
+        }
+        
+        @Override
+        public void onChildRemoved(Component child) {
+            super.onChildRemoved(child);
+            tab.setClosable(getFirstChild() != null);
+        }
+        
+        /**
+         * Sets the associated tab and captures its onClose event to open the popup.
+         * 
+         * @param tab Tab to associate.
+         */
+        public void setTab(Tab tab) {
+            if (this.tab != null) {
+                this.tab.removeForward("onClose", this, "onOpenMenu");
+                this.tab.setClosable(false);
+            }
+            
+            this.tab = tab;
+            
+            if (this.tab != null) {
+                this.tab.addForward("onClose", this, "onOpenMenu");
+                this.tab.setClosable(getFirstChild() != null);
+            }
+            
         }
     }
     
@@ -65,6 +100,7 @@ public class UIElementTabMenu extends UIElementZKBase {
         fullSize(paneAnchor);
         paneAnchor.setSclass("cwf-tab-menu");
         associateComponent(paneAnchor);
+        maxChildren = Integer.MAX_VALUE;
     }
     
     /**
@@ -99,11 +135,6 @@ public class UIElementTabMenu extends UIElementZKBase {
         // do nothing
     }
     
-    @Override
-    public void activate(boolean activate) {
-        super.activate(activate);
-    }
-    
     /**
      * Only one child, the active menu pane, can be active at a time. If there is no active menu
      * pane, activate the first one.
@@ -128,7 +159,7 @@ public class UIElementTabMenu extends UIElementZKBase {
     @Override
     protected void bind() {
         UIElementTabPane tabPane = (UIElementTabPane) getParent();
-        tabPane.getTab().setPopup(menupopup);
+        menupopup.setTab(tabPane.getTab());
         tabPane.getInnerComponent().appendChild(paneAnchor);
     }
     
@@ -136,7 +167,7 @@ public class UIElementTabMenu extends UIElementZKBase {
     protected void unbind() {
         super.unbind();
         paneAnchor.detach();
-        UIElementTabPane tabPane = (UIElementTabPane) getParent();
-        tabPane.getTab().setPopup((Menupopup) null);
+        menupopup.setTab(null);
+        menupopup.detach();
     }
 }

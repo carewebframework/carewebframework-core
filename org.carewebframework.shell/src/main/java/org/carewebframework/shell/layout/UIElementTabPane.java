@@ -9,7 +9,6 @@
  */
 package org.carewebframework.shell.layout;
 
-import org.carewebframework.shell.layout.UIElementTabMenu.MenupopupEx;
 import org.carewebframework.ui.zk.ZKUtil;
 
 import org.zkoss.zul.Menupopup;
@@ -34,42 +33,20 @@ public class UIElementTabPane extends UIElementZKBase {
         
         private static final long serialVersionUID = 1L;
         
-        private MenupopupEx popup;
-        
         public TabEx() {
             super();
             setSclass("cwf-tab");
-            setWidgetOverride(CUSTOM_COLOR_OVERRIDE,
-                "function(value) {jq(this).find('.z-tab-text').css('color',value?value:'');}");
-        }
-        
-        private void openMenu() {
-            popup.open();
+            ZKUtil.setCustomColorLogic(this, "jq(this).find('.z-tab-text').css('color',value?value:'');");
         }
         
         @Override
         public void onClose() {
-            openMenu();
+            // Ignore
         }
         
-        public void setPopup(MenupopupEx popup) {
-            if (this.popup != null) {
-                this.popup.detach();
-                this.popup.setReference(null);
-            }
-            
-            this.popup = popup;
-            setClosable(popup != null);
-            
-            if (popup != null) {
-                this.popup.setReference(this);
-                popup.setPage(getPage());
-                openMenu();
-            }
-        }
     };
     
-    private final TabEx tab = new TabEx();
+    private final Tab tab = new TabEx();
     
     private final Tabpanel tabPanel = new Tabpanel();
     
@@ -117,7 +94,7 @@ public class UIElementTabPane extends UIElementZKBase {
     @Override
     protected void updateVisibility(boolean visible, boolean activated) {
         tab.setVisible(visible);
-        tab.setSelected(activated);
+        tab.setSelected(visible && activated);
     }
     
     /**
@@ -163,7 +140,7 @@ public class UIElementTabPane extends UIElementZKBase {
         tabPanel.detach();
     }
     
-    /*package*/TabEx getTab() {
+    /*package*/Tab getTab() {
         return tab;
     }
     
