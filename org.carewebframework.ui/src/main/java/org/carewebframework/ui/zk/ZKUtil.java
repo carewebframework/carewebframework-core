@@ -631,28 +631,51 @@ public class ZKUtil {
      */
     public static String updateSclass(HtmlBasedComponent component, String className, boolean remove) {
         String oclass = component.getSclass();
-        String sclass = oclass;
-        
-        if (StringUtils.isEmpty(sclass)) {
-            if (!remove) {
-                component.setSclass(className);
-            }
-            
-            return oclass;
+        component.setSclass(updateCSSclass(oclass, className, remove));
+        return oclass;
+    }
+    
+    /**
+     * Adds or removes a class from a component's zclass property, preserving any other class names
+     * that may be present.
+     * 
+     * @param component Component whose zclass will be modified.
+     * @param className The class name to add or remove.
+     * @param remove If true, the class is removed; otherwise, it is appended.
+     * @return Returns the original sclass property value.
+     */
+    public static String updateZclass(HtmlBasedComponent component, String className, boolean remove) {
+        String oclass = component.getZclass();
+        component.setZclass(updateCSSclass(oclass, className, remove));
+        return oclass;
+    }
+    
+    /**
+     * Adds or removes a class from a list of style classes, preserving any other class names that
+     * may be present.
+     * 
+     * @param oclass Current style classes.
+     * @param className The class name to add or remove.
+     * @param remove If true, the class is removed; otherwise, it is appended.
+     * @return Returns the new class values.
+     */
+    public static String updateCSSclass(String oclass, String className, boolean remove) {
+        if (StringUtils.isEmpty(oclass)) {
+            return remove ? null : className;
         }
         
-        sclass = " " + sclass + " ";
+        String nclass = " " + oclass + " ";
         className = " " + className + " ";
-        boolean exists = sclass.contains(className);
+        boolean exists = nclass.contains(className);
         
         if (exists == remove) {
             if (remove) {
-                sclass = sclass.replace(className, " ");
+                nclass = nclass.replace(className, " ");
             } else {
-                sclass = oclass + className;
+                nclass = oclass + className;
             }
             
-            component.setSclass(StringUtils.trimToNull(sclass));
+            return StringUtils.trimToNull(nclass);
         }
         
         return oclass;
