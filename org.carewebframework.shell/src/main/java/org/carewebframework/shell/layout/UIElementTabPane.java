@@ -9,7 +9,9 @@
  */
 package org.carewebframework.shell.layout;
 
-import org.zkoss.zul.Caption;
+import org.carewebframework.shell.layout.UIElementTabMenu.MenupopupEx;
+import org.carewebframework.ui.zk.ZKUtil;
+
 import org.zkoss.zul.Menupopup;
 import org.zkoss.zul.Tab;
 import org.zkoss.zul.Tabbox;
@@ -25,9 +27,49 @@ public class UIElementTabPane extends UIElementZKBase {
         registerAllowedChildClass(UIElementTabPane.class, UIElementBase.class);
     }
     
-    private final Tab tab = new Tab();
+    /**
+     * Re-purpose close tab button for drop down menu.
+     */
+    public static class TabEx extends Tab {
+        
+        private static final long serialVersionUID = 1L;
+        
+        private MenupopupEx popup;
+        
+        public TabEx() {
+            super();
+            setSclass("cwf-tab");
+            setWidgetOverride(CUSTOM_COLOR_OVERRIDE,
+                "function(value) {jq(this).find('.z-tab-text').css('color',value?value:'');}");
+        }
+        
+        private void openMenu() {
+            popup.open();
+        }
+        
+        @Override
+        public void onClose() {
+            openMenu();
+        }
+        
+        public void setPopup(MenupopupEx popup) {
+            if (this.popup != null) {
+                this.popup.detach();
+                this.popup.setReference(null);
+            }
+            
+            this.popup = popup;
+            setClosable(popup != null);
+            
+            if (popup != null) {
+                this.popup.setReference(this);
+                popup.setPage(getPage());
+                openMenu();
+            }
+        }
+    };
     
-    private final Caption caption = new Caption();
+    private final TabEx tab = new TabEx();
     
     private final Tabpanel tabPanel = new Tabpanel();
     
@@ -41,11 +83,6 @@ public class UIElementTabPane extends UIElementZKBase {
         associateComponent(tab);
         tabPanel.setSclass("cwf-tab-panel");
         tabPanel.setHeight("100%");
-        tab.setSclass("cwf-tab");
-        tab.setWidgetOverride(CUSTOM_COLOR_OVERRIDE,
-            "function(value) {jq(this).find('.z-tab-text').css('color',value?value:'');}");
-        tab.appendChild(caption);
-        caption.setSclass("cwf-tab-caption");
     }
     
     /**
@@ -79,8 +116,8 @@ public class UIElementTabPane extends UIElementZKBase {
      */
     @Override
     protected void updateVisibility(boolean visible, boolean activated) {
-        tab.setSelected(activated);
         tab.setVisible(visible);
+        tab.setSelected(activated);
     }
     
     /**
@@ -100,7 +137,7 @@ public class UIElementTabPane extends UIElementZKBase {
     @Override
     public void setEnabled(boolean enabled) {
         super.setEnabled(enabled);
-        tab.setSclass(enabled ? "cwf-tab" : "cwf-tab-disabled");
+        ZKUtil.toggleSclass(tab, "cwf-tab", "cwf-tab-disabled", enabled);
     }
     
     /**
@@ -126,8 +163,8 @@ public class UIElementTabPane extends UIElementZKBase {
         tabPanel.detach();
     }
     
-    /*package*/Caption getCaption() {
-        return caption;
+    /*package*/TabEx getTab() {
+        return tab;
     }
     
     /**
@@ -136,7 +173,7 @@ public class UIElementTabPane extends UIElementZKBase {
      * @return The caption label.
      */
     public String getLabel() {
-        return caption.getLabel();
+        return tab.getLabel();
     }
     
     /**
@@ -146,7 +183,6 @@ public class UIElementTabPane extends UIElementZKBase {
      */
     public void setLabel(String value) {
         tab.setLabel(value);
-        caption.setLabel(value);
     }
     
     /**
@@ -155,7 +191,7 @@ public class UIElementTabPane extends UIElementZKBase {
      * @return The tab icon.
      */
     public String getIcon() {
-        return caption.getImage();
+        return tab.getImage();
     }
     
     /**
@@ -165,7 +201,6 @@ public class UIElementTabPane extends UIElementZKBase {
      */
     public void setIcon(String value) {
         tab.setImage(value);
-        caption.setImage(value);
     }
     
     /**

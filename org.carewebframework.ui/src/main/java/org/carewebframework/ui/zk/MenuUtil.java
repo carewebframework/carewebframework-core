@@ -337,8 +337,7 @@ public class MenuUtil {
         } else if (comp instanceof Menu) {
             Menupopup child = ((Menu) comp).getMenupopup();
             boolean hasChildren = child != null && ZKUtil.firstVisibleChild(child, false) != null;
-            ZKUtil.updateSclass((Menu) comp, "cwf-menuitem", hasChildren);
-            ZKUtil.updateSclass((Menu) comp, "cwf-menu", !hasChildren);
+            ZKUtil.toggleSclass((Menu) comp, "cwf-menu", "cwf-menuitem", hasChildren);
         }
         
         for (Component child : comp.getChildren()) {

@@ -115,6 +115,15 @@ public class UIElementMenuItem extends UIElementActionBase {
     }
     
     @Override
+    public void bringToFront() {
+        super.bringToFront();
+        
+        if (isDesignMode()) {
+            MenuUtil.open(menu);
+        }
+    }
+    
+    @Override
     protected void afterAddChild(UIElementBase child) {
         super.afterAddChild(child);
         MenuUtil.updateStyles(menu);

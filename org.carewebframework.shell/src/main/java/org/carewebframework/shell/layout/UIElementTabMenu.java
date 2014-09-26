@@ -11,11 +11,12 @@ package org.carewebframework.shell.layout;
 
 import org.carewebframework.shell.designer.PropertyEditorTabMenu;
 import org.carewebframework.shell.property.PropertyTypeRegistry;
+import org.carewebframework.ui.zk.MenuUtil;
+import org.carewebframework.ui.zk.ZKUtil;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zul.Div;
 import org.zkoss.zul.Menu;
-import org.zkoss.zul.Menubar;
 import org.zkoss.zul.Menupopup;
 
 /**
@@ -23,7 +24,7 @@ import org.zkoss.zul.Menupopup;
  * associated tab. By adding tab menu panes (UIElementTabMenuPane) as children, menu items may be
  * added to to the drop-down menu. Clicking on a menu item activates the associated tab menu pane.
  */
-public class UIElementTabMenu extends UIElementMenuBase {
+public class UIElementTabMenu extends UIElementZKBase {
     
     static {
         registerAllowedChildClass(UIElementTabMenu.class, UIElementTabMenuPane.class);
@@ -31,17 +32,36 @@ public class UIElementTabMenu extends UIElementMenuBase {
         PropertyTypeRegistry.register("tabmenuitems", null, PropertyEditorTabMenu.class);
     }
     
+    public static class MenupopupEx extends Menupopup {
+        
+        private static final long serialVersionUID = 1L;
+        
+        private Component reference;
+        
+        public void open() {
+            open(reference, "after_start");
+        }
+        
+        @Override
+        public void open(Component ref, String position) {
+            MenuUtil.updateStyles(this);
+            super.open(ref == null ? reference : ref, position);
+        }
+        
+        public void setReference(Component reference) {
+            this.reference = reference;
+        }
+    }
+    
     private UIElementTabMenuPane activePane;
     
     private final Div paneAnchor = new Div();
     
+    private final MenupopupEx menupopup = new MenupopupEx();
+    
     public UIElementTabMenu() {
-        super(new Menubar(), new Menupopup());
-        Menubar menubar = getMenubar();
-        menubar.setSclass("cwf-tab-menubar");
-        Menu menu = new Menu();
-        menubar.appendChild(menu);
-        menu.appendChild(getInnerComponent());
+        super();
+        setOuterComponent(menupopup);
         fullSize(paneAnchor);
         paneAnchor.setSclass("cwf-tab-menu");
         associateComponent(paneAnchor);
@@ -55,17 +75,33 @@ public class UIElementTabMenu extends UIElementMenuBase {
     protected void setActivePane(UIElementTabMenuPane activePane) {
         if (this.activePane != null) {
             this.activePane.activate(false);
+            updateMenuStyle(this.activePane.getMenu(), false);
         }
         
         this.activePane = activePane;
         
         if (this.activePane != null) {
             this.activePane.activate(true);
+            updateMenuStyle(this.activePane.getMenu(), true);
         }
+    }
+    
+    private void updateMenuStyle(Menu menu, boolean selected) {
+        ZKUtil.toggleSclass(menu, "cwf-tab-menu-seld", "cwf-tab-menu", selected);
     }
     
     /*package*/Component getPaneAnchor() {
         return paneAnchor;
+    }
+    
+    @Override
+    protected void updateVisibility(boolean visible, boolean activated) {
+        // do nothing
+    }
+    
+    @Override
+    public void activate(boolean activate) {
+        super.activate(activate);
     }
     
     /**
@@ -92,7 +128,7 @@ public class UIElementTabMenu extends UIElementMenuBase {
     @Override
     protected void bind() {
         UIElementTabPane tabPane = (UIElementTabPane) getParent();
-        tabPane.getCaption().appendChild(getMenubar());
+        tabPane.getTab().setPopup(menupopup);
         tabPane.getInnerComponent().appendChild(paneAnchor);
     }
     
@@ -100,5 +136,7 @@ public class UIElementTabMenu extends UIElementMenuBase {
     protected void unbind() {
         super.unbind();
         paneAnchor.detach();
+        UIElementTabPane tabPane = (UIElementTabPane) getParent();
+        tabPane.getTab().setPopup((Menupopup) null);
     }
 }
