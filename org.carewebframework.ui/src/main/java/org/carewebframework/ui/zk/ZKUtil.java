@@ -33,6 +33,7 @@ import org.zkoss.json.JavaScriptValue;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.au.AuResponse;
+import org.zkoss.zk.au.out.AuInvoke;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.ComponentNotFoundException;
 import org.zkoss.zk.ui.Desktop;
@@ -58,6 +59,8 @@ public class ZKUtil {
      * Resource prefix for resources within this package
      */
     public static final String RESOURCE_PREFIX = getResourcePath(ZKUtil.class);
+    
+    private static final String CUSTOM_COLOR_OVERRIDE = "setCustomColor";
     
     private static final EventListener<Event> deferredDelivery = new EventListener<Event>() {
         
@@ -1084,6 +1087,34 @@ public class ZKUtil {
     public static JavaScriptValue toJavaScriptValue(String snippet) {
         return snippet == null ? null : new JavaScriptValue(snippet.startsWith("function") ? snippet : "function() {"
                 + snippet + "}");
+    }
+    
+    /**
+     * Applies the specified color setting to the target component. If the target implements a
+     * custom method for performing this operation, that method will be invoked. Otherwise, the
+     * background color of the target is set.
+     * 
+     * @param comp Component to receive the color setting.
+     * @param color Color value.
+     */
+    public static void applyColor(HtmlBasedComponent comp, String color) {
+        if (comp.getWidgetOverride(CUSTOM_COLOR_OVERRIDE) != null) {
+            Executions.getCurrent().addAuResponse(new AuInvoke(comp, CUSTOM_COLOR_OVERRIDE, color));
+        } else {
+            updateStyle(comp, "background-color", color);
+        }
+    }
+    
+    /**
+     * Sets the JS code for applying a custom color to a component.
+     * 
+     * @param comp Target component.
+     * @param snippet The JS snippet. If a function body is not supplied, a single argument function
+     *            wrapper will be applied.
+     */
+    public static void setCustomColorLogic(HtmlBasedComponent comp, String snippet) {
+        snippet = snippet == null ? null : snippet.startsWith("function") ? snippet : "function(value) {" + snippet + "}";
+        comp.setWidgetOverride(CUSTOM_COLOR_OVERRIDE, snippet);
     }
     
     /**

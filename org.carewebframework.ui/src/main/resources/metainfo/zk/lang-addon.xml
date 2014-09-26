@@ -154,6 +154,8 @@
 	</component>
 	<component>
 		<component-name>menuEx</component-name>
+		<component-class>org.carewebframework.ui.zk.MenuEx
+		</component-class>
 		<extends>menu</extends>
 		<widget-class>cwf.ext.MenuEx</widget-class>
 	</component>
