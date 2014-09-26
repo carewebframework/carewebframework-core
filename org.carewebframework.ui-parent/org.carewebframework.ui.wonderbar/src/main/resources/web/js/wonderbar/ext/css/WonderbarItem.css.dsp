@@ -12,11 +12,22 @@
 	zoom: 1;
 }
 
-.cwf-wonderbar-item a.ui-state-focus {
-    border: 1px solid #79b7e7;
-    background: #d0e5f5;
-    font-weight: bold;
-    color: #1d5987;
+.cwf-wonderbar-item.ui-state-focus {
+    border: 1px solid #79b7e7 !important;
+    background: #d0e5f5 !important;    
+}
+
+.cwf-wonderbar-item.ui-state-focus a {
+    font-weight: normal !important;
+    color: #1d5987 !important;
+}
+
+.cwf-wonderbar-item.ui-state-focus {
+	margin: 0px !important;
+}
+
+.cwf-wonderbar-item.ui-menu-item {
+	border: 1px solid transparent;
 }
 
 .cwf-wonderbar-item-numbered {

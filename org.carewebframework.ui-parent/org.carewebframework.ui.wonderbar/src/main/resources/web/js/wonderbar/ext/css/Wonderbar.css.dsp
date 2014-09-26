@@ -1,5 +1,12 @@
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 
+/* I'd like to only set this for cwf-wonderbar, but the UL element where this is needed does not have any cwf* class */
+.ui-autocomplete {
+	overflow-y: auto;
+	overflow-x: hidden;
+	max-height: 450px;
+}
+
 .cwf-wonderbar {
 	display: inline;
 }
