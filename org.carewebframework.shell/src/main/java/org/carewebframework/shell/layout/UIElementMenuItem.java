@@ -9,18 +9,10 @@
  */
 package org.carewebframework.shell.layout;
 
-import org.carewebframework.ui.zk.MenuEx;
-import org.carewebframework.ui.zk.MenuUtil;
-
-import org.zkoss.zul.Menu;
-
 /**
- * Single menu item. The path determines the position of the menu item in the parent menu tree. Note
- * that we use the Menu class exclusively to represent menu items, not the Menuitem class. The Menu
- * class has been modified to allow it to behave as a menu and a menu item. This simplifies the
- * creation and manipulation of hierarchical menu trees.
+ * Single menu item for inclusion in a menubar-based tree.
  */
-public class UIElementMenuItem extends UIElementActionBase {
+public class UIElementMenuItem extends UIElementMenuItemBase {
     
     static {
         registerAllowedParentClass(UIElementMenuItem.class, UIElementMenubar.class);
@@ -28,68 +20,11 @@ public class UIElementMenuItem extends UIElementActionBase {
         registerAllowedChildClass(UIElementMenuItem.class, UIElementMenuItem.class);
     }
     
-    private final Menu menu = new MenuEx();
-    
     public UIElementMenuItem() {
         super();
-        maxChildren = Integer.MAX_VALUE;
         autoHide = false;
-        setOuterComponent(menu);
-        setInnerComponent(menu.getMenupopup());
+        setOuterComponent(getMenu());
+        setInnerComponent(getMenu().getMenupopup());
     }
     
-    public String getLabel() {
-        return menu.getLabel();
-    }
-    
-    public void setLabel(String label) {
-        menu.setLabel(label);
-    }
-    
-    protected Menu getMenu() {
-        return menu;
-    }
-    
-    /**
-     * The caption label is the instance name.
-     */
-    @Override
-    public String getInstanceName() {
-        return getLabel();
-    }
-    
-    @Override
-    public void bringToFront() {
-        super.bringToFront();
-        
-        if (isDesignMode()) {
-            MenuUtil.open(menu);
-        }
-    }
-    
-    @Override
-    protected void afterAddChild(UIElementBase child) {
-        super.afterAddChild(child);
-        MenuUtil.updateStyles(menu);
-    }
-    
-    @Override
-    protected void afterRemoveChild(UIElementBase child) {
-        super.afterRemoveChild(child);
-        MenuUtil.updateStyles(menu);
-    }
-    
-    @Override
-    protected void bind() {
-        if (getParent() instanceof UIElementMenuItem) {
-            ((UIElementMenuItem) getParent()).menu.getMenupopup().appendChild(menu);
-        } else {
-            super.bind();
-        }
-    }
-    
-    @Override
-    protected void unbind() {
-        menu.detach();
-    }
 }

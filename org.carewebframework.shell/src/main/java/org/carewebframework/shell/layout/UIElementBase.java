@@ -11,8 +11,10 @@ package org.carewebframework.shell.layout;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -39,24 +41,24 @@ public abstract class UIElementBase {
      */
     private static class RelatedClassMap {
         
-        private final Map<Class<? extends UIElementBase>, List<Class<? extends UIElementBase>>> map = new HashMap<Class<? extends UIElementBase>, List<Class<? extends UIElementBase>>>();
+        private final Map<Class<? extends UIElementBase>, Set<Class<? extends UIElementBase>>> map = new HashMap<Class<? extends UIElementBase>, Set<Class<? extends UIElementBase>>>();
         
         /**
-         * Returns the list of related classes for the specified class. If no list yet exists, one
-         * is created.
+         * Returns the set of related classes for the specified class. If no set yet exists, one is
+         * created.
          * 
          * @param clazz Class whose related class list is sought.
-         * @return The list of classes related to the specified class.
+         * @return The set of classes related to the specified class.
          */
-        private List<Class<? extends UIElementBase>> getRelatedClasses(Class<? extends UIElementBase> clazz) {
-            List<Class<? extends UIElementBase>> list = map.get(clazz);
+        private Set<Class<? extends UIElementBase>> getRelatedClasses(Class<? extends UIElementBase> clazz) {
+            Set<Class<? extends UIElementBase>> set = map.get(clazz);
             
-            if (list == null) {
-                list = new ArrayList<Class<? extends UIElementBase>>();
-                map.put(clazz, list);
+            if (set == null) {
+                set = new HashSet<Class<? extends UIElementBase>>();
+                map.put(clazz, set);
             }
             
-            return list;
+            return set;
         }
         
         /**
@@ -76,8 +78,8 @@ public abstract class UIElementBase {
          * @return True if the specified class has any related classes.
          */
         public boolean hasRelated(Class<? extends UIElementBase> clazz) {
-            List<Class<? extends UIElementBase>> list = map.get(clazz);
-            return list != null && list.size() > 0;
+            Set<Class<? extends UIElementBase>> set = map.get(clazz);
+            return set != null && !set.isEmpty();
         }
         
         /**
@@ -88,10 +90,10 @@ public abstract class UIElementBase {
          * @return True if class clazz2 or a superclass of clazz2 is related to clazz1.
          */
         public boolean isRelated(Class<? extends UIElementBase> clazz1, Class<? extends UIElementBase> clazz2) {
-            List<Class<? extends UIElementBase>> list = map.get(clazz1);
+            Set<Class<? extends UIElementBase>> set = map.get(clazz1);
             
-            if (list != null) {
-                for (Class<?> clazz : list) {
+            if (set != null) {
+                for (Class<?> clazz : set) {
                     if (clazz.isAssignableFrom(clazz2)) {
                         return true;
                     }
