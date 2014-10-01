@@ -8,8 +8,7 @@
 
 	<panel self="@define(sharedFormsBase)" id="panel" closable="false"
 		height="100%" width="100%" border="none"
-		zclass="sharedForms-captioned">
-		<caption />
+		sclass="sharedForms-captioned">
 		<panelchildren self="@insert(sharedFormsCaptioned)" style="border:none" />
 		<toolbar self="@insert(sharedFormsToolbar)" id="toolbar"
 			visible="false" />

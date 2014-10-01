@@ -1,15 +1,10 @@
 @CHARSET "UTF-8";
 
-.sharedForms-captioned-header .z-caption-content {
-	font-size: 1.25em;
+.sharedForms-captioned>.z-panel-head * {
+	font-size: 100%;
 	font-family: arial;
 	font-weight: bold;
 }
-
-.sharedForms-captioned-caption-hidden .z-caption {
-	display: none;		
-}
-
 .sharedForms-captioned-caption-title .z-caption-content,
 .sharedForms-captioned-caption-frame .z-caption-content,
 .sharedForms-captioned-caption-left .z-caption-content {

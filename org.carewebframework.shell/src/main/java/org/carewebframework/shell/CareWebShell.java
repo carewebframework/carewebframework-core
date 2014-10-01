@@ -375,6 +375,7 @@ public class CareWebShell extends Div implements AfterCompose {
         layout.deserialize(desktop);
         layout.moveTop();
         desktop.setTitle(layout.readString("title", ""));
+        desktop.setIcon(layout.readString("icon", ""));
         desktop.setAppId(FrameworkUtil.getAppName());
         desktop.activate(true);
         
