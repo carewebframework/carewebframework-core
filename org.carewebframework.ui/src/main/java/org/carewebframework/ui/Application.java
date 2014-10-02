@@ -118,6 +118,18 @@ public class Application {
         
         private final Session session;
         
+        private final int maxInactiveInterval;
+        
+        private String remoteAddress;
+        
+        private String localAddress;
+        
+        private String localName;
+        
+        private String remoteHost;
+        
+        private String serverName;
+        
         /**
          * Creates a session info instance for this session.
          * 
@@ -125,6 +137,7 @@ public class Application {
          */
         private SessionInfo(final Session session) {
             this.session = session;
+            maxInactiveInterval = session.getMaxInactiveInterval();
         }
         
         /**
@@ -134,12 +147,22 @@ public class Application {
          */
         private void addDesktop(final Desktop desktop) {
             synchronized (activeDesktops) {
+                desktop.getSession().setMaxInactiveInterval(maxInactiveInterval);
                 activeDesktops.put(desktop.getId(), desktop);
                 this.desktops.add(desktop);
                 final DesktopInfo desktopInfo = new DesktopInfo(desktop);
                 desktop.setAttribute(DesktopInfo.class.getName(), desktopInfo);
                 desktop.addListener(desktopInfo);
                 desktop.addListener(uiLifeCycle);
+                
+                if (remoteAddress == null) {
+                    Execution exec = desktop.getExecution();
+                    remoteAddress = exec.getRemoteAddr();
+                    localAddress = exec.getLocalAddr();
+                    localName = exec.getLocalName();
+                    remoteHost = exec.getRemoteHost();
+                    serverName = exec.getServerName();
+                }
             }
         }
         
@@ -160,11 +183,9 @@ public class Application {
                     }
                     
                     if (desktops.isEmpty()) {
-                        session.invalidate();
-                        log.debug("Session explicitly invalidated: " + session);
+                        session.setMaxInactiveInterval(10);
+                        log.debug("Session marked for invalidation: " + session);
                     }
-                } else {
-                    log.warn(String.format("Desktop[%s] not found in managed list, already removed?", desktop));
                 }
             }
         }
@@ -226,12 +247,7 @@ public class Application {
                         String.valueOf(new Date(httpSession.getLastAccessedTime())));
                 }
                 final String deviceType = this.session.getDeviceType();
-                final String localAddress = this.session.getLocalAddr();
-                final String localName = this.session.getLocalName();
                 final int maxInactiveInterval = this.session.getMaxInactiveInterval();
-                final String remoteAddress = this.session.getRemoteAddr();
-                final String remoteHost = this.session.getRemoteHost();
-                final String serverName = this.session.getServerName();
                 
                 final Map<?, ?> attributes = this.session.getAttributes();
                 if (attributes != null) {
