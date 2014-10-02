@@ -9,6 +9,10 @@
 	border: none;
 }
 
+.cwf-desktop-titlebar>.z-caption-content {
+	width: 100%;
+}
+
 .cwf-desktop-title {
  	border-right: solid 1px gray;
 	padding-top: 6px;
