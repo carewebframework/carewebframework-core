@@ -384,15 +384,15 @@ wonderbar.ext.Wonderbar = zk.$extends(zul.inp.InputWidget, {
                     // bottom of the screen
                     if ($autopop.position().top + ah > bh) {
                         var atopo = parseInt($autopop.css('top'), 10);
-                        var ih = $wb.height() + 12;
+                        var ih = $wb.height() + 5;
                         var ntop = atopo - ah - ih;
 
-                        if (Math.abs(ntop) > bh) {
+						if (ntop < 0 || ntop > bh) {
 
                             // see what has more room... above or
                             // below
-                            var brm = Math.abs(atopo) - 8;
-                            var arm = ah - (Math.abs(ntop) - bh) - 4;
+                            var arm = Math.abs(atopo) - ih;
+                            var brm = bh - (atopo) - 4;
                             if (brm > arm) {
                                 // just squish it but leave it below
                                 $autopop.css('height', brm + 'px');
