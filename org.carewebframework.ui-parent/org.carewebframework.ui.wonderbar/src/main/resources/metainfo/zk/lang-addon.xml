@@ -3,7 +3,7 @@
 	<addon-name>wonderbar.addon</addon-name>
 	<language-name>xul/html</language-name>
 
-	<javascript-module name="wonderbar" version="3.3.3"/>
+	<javascript-module name="wonderbar" version="4.0.0"/>
 
 	<component>
 		<component-name>wonderbar</component-name>
