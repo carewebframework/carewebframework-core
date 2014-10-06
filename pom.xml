@@ -44,7 +44,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<org.carewebframework-core.version>4.0.0-SNAPSHOT</org.carewebframework-core.version>
+		<org.carewebframework.core.version>4.0.0-SNAPSHOT</org.carewebframework.core.version>
 		<org.springframework.version>4.1.0.RELEASE</org.springframework.version>
 		<org.springframework.security.version>3.2.5.RELEASE</org.springframework.security.version>
 		<org.springframework.amqp.version>1.3.6.RELEASE</org.springframework.amqp.version>
@@ -335,7 +335,7 @@
 				<plugin>
 					<groupId>org.carewebframework</groupId>
 					<artifactId>org.carewebframework.mvn.plugin.helpconverter</artifactId>
-					<version>${org.carewebframework-core.version}</version>
+					<version>${org.carewebframework.core.version}</version>
 					<executions>
 						<execution>
 							<goals>
@@ -362,7 +362,7 @@
 				<plugin>
 					<groupId>org.carewebframework</groupId>
 					<artifactId>org.carewebframework.mvn.plugin.themegenerator</artifactId>
-					<version>${org.carewebframework-core.version}</version>
+					<version>${org.carewebframework.core.version}</version>
 					<executions>
 						<execution>
 							<goals>
@@ -928,98 +928,98 @@
 			<dependency>
 				<groupId>org.carewebframework</groupId>
 				<artifactId>org.carewebframework.api</artifactId>
-				<version>${org.carewebframework-core.version}</version>
+				<version>${org.carewebframework.core.version}</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.carewebframework</groupId>
 				<artifactId>org.carewebframework.api</artifactId>
-				<version>${org.carewebframework-core.version}</version>
+				<version>${org.carewebframework.core.version}</version>
 				<type>test-jar</type>
 				<scope>test</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.carewebframework</groupId>
 				<artifactId>org.carewebframework.ui</artifactId>
-				<version>${org.carewebframework-core.version}</version>
+				<version>${org.carewebframework.core.version}</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.carewebframework</groupId>
 				<artifactId>org.carewebframework.ui</artifactId>
-				<version>${org.carewebframework-core.version}</version>
+				<version>${org.carewebframework.core.version}</version>
 				<type>test-jar</type>
 				<scope>test</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.carewebframework</groupId>
 				<artifactId>org.carewebframework.help.core</artifactId>
-				<version>${org.carewebframework-core.version}</version>
+				<version>${org.carewebframework.core.version}</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.carewebframework</groupId>
 				<artifactId>org.carewebframework.help.javahelp</artifactId>
-				<version>${org.carewebframework-core.version}</version>
+				<version>${org.carewebframework.core.version}</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.carewebframework</groupId>
 				<artifactId>org.carewebframework.testharness</artifactId>
-				<version>${org.carewebframework-core.version}</version>
+				<version>${org.carewebframework.core.version}</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.carewebframework</groupId>
 				<artifactId>org.carewebframework.ui.sharedforms</artifactId>
-				<version>${org.carewebframework-core.version}</version>
+				<version>${org.carewebframework.core.version}</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.carewebframework</groupId>
 				<artifactId>org.carewebframework.ui.wonderbar</artifactId>
-				<version>${org.carewebframework-core.version}</version>
+				<version>${org.carewebframework.core.version}</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.carewebframework</groupId>
 				<artifactId>org.carewebframework.shell</artifactId>
-				<version>${org.carewebframework-core.version}</version>
+				<version>${org.carewebframework.core.version}</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.carewebframework</groupId>
 				<artifactId>org.carewebframework.common</artifactId>
-				<version>${org.carewebframework-core.version}</version>
+				<version>${org.carewebframework.core.version}</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.carewebframework</groupId>
 				<artifactId>org.carewebframework.security.spring.core</artifactId>
-				<version>${org.carewebframework-core.version}</version>
+				<version>${org.carewebframework.core.version}</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.carewebframework</groupId>
 				<artifactId>org.carewebframework.jms.core</artifactId>
-				<version>${org.carewebframework-core.version}</version>
+				<version>${org.carewebframework.core.version}</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.carewebframework</groupId>
 				<artifactId>org.carewebframework.jms.activemq</artifactId>
-				<version>${org.carewebframework-core.version}</version>
+				<version>${org.carewebframework.core.version}</version>
 				<type>jar</type>
 				<scope>compile</scope>
 			</dependency>

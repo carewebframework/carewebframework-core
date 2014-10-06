@@ -16,7 +16,7 @@
 		<dependency>
 			<groupId>org.carewebframework</groupId>
 			<artifactId>org.carewebframework.ui.statuspanel</artifactId>
-			<version>${org.carewebframework-core.version}</version>
+			<version>${org.carewebframework.core.version}</version>
 		</dependency>
 		<!-- ZK Libraries -->
 		<dependency>
