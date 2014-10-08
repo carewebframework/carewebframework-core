@@ -209,7 +209,7 @@ cwf.ext.SplitterPane = zk.$extends(zul.Widget, {
 				ghosting: SplitterPane._ghosting,
 				snap: SplitterPane._snap,
 				zIndex: 12000,
-				overlay: true,
+				overlay: false,
 				initSensitivity: 0,
 				ignoredrag: SplitterPane._ignoredrag,
 				endeffect: SplitterPane._endeffect
