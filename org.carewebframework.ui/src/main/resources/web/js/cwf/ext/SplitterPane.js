@@ -366,6 +366,7 @@ cwf.ext.SplitterPane = zk.$extends(zul.Widget, {
 			width: sreal.style.width,
 			height: sreal.style.height
 		}, evt.data));
+		jq(document.body).css('overflow', '');
 	},
 	_snap: function(dg, pointer) {
 		var wgt = dg.control,
@@ -399,7 +400,7 @@ cwf.ext.SplitterPane = zk.$extends(zul.Widget, {
 			.css('height', jq.px(el.offsetHeight))
 			.css('top', jq.px(ofs[1]))
 			.css('left', jq.px(ofs[0]));
-		jq(document.body).prepend(ghost);
+		jq(document.body).prepend(ghost).css('overflow','hidden');
 		return ghost[0];
 	}
 });
