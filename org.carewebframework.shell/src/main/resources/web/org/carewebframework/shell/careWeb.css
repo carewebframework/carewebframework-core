@@ -4,34 +4,13 @@
 	Global stylesheet for CareWeb application.  Styles here will be applied to all components.
 */
 
-.z-window-modal-header {
-	font-weight: bold;
-}
-
-.z-toolbar-start {
-	clear: none;
-	float: none;
-}
-
-.z-west-splt, .z-east-splt {
-    width: 6px;
-    background: none;
-}
-
-.z-north-splt, .z-south-splt {
-    height: 6px;
-    background: none;
-}
-
 .cwf-desktop-titlebar {
 	background: none;
 	border: none;
 }
 
-.cwf-desktop-title * {
-	font-weight: bold;
-	white-space: nowrap;
-	padding-right: 5px;
+.cwf-desktop-titlebar>.z-caption-content {
+	width: 100%;
 }
 
 .cwf-desktop-title {
@@ -43,6 +22,12 @@
  	border-right: none;
  	padding-top: 0px;
  }
+
+.cwf-desktop-title .z-label {
+	padding: 2px 5px 2px 5px;
+	white-space: nowrap;
+	font-weight: bold;
+}
 
 .cwf-plugin-container {
 	position: relative;
@@ -91,7 +76,7 @@
 	display: none;
 }
 
-.cwf-tabbox .z-tabs-cnt {
+.cwf-tabbox .z-tabs-content {
 	min-height: 20px;
 }
 
@@ -116,7 +101,7 @@
 	background: transparent;
 }
 
-.cwf-treeview .z-treecell-cnt {
+.cwf-treeview .z-treecell-content {
     white-space: nowrap;
     text-overflow: ellipsis;
 }
@@ -130,7 +115,7 @@
 }
 
 .cwf-header-row {
-	padding: 5px;
+	padding: 0 5px 0 5px;
 	overflow: hidden;
 }
 
@@ -242,6 +227,7 @@
 }
 
 .cwf-propertygrid-info .z-caption {
+	background-color: lightyellow!important;
 	font-weight: bold;
 }
 
@@ -251,11 +237,17 @@
 
 .cwf-propertygrid-info .z-groupbox {
     margin-right: 1px;
+    margin-bottom: 2px;
+    padding-top: 8px;
 }
 
-.cwf-propertygrid-info .z-groupbox-cnt {
+.cwf-propertygrid-info .z-groupbox-content {
 	overflow-x: hidden;
     overflow-y: auto;
+}
+
+.cwf-propertygrid-info .z-groupbox-header {
+	height: 8px;
 }
 
 .cwf-propertygrid-grid .z-row>td {
@@ -265,36 +257,23 @@
 	border-right: 1px solid lightgray!important;
 }
 
-.cwf-menubar {
-	min-height: 20px;
+.cwf-tab .z-icon-times {
+	height: 100%;	
+	width: 100%;
+	top: 0;
+	left: 0;
+	margin: 0;
+	padding: 6px  0 0 2px;
+	zoom: 1.4;
+	text-align: left;
 }
 
-.cwf-tab-menubar {
-	background: none;
-	border: none!important;
-	padding: 0;
+.cwf-tab .z-icon-times:before,
+.cwf-tab-disabled .z-icon-times:before {
+	content: "\f0d7";
 }
 
-.cwf-tab-menubar .z-menu-inner-l,
-.cwf-tab-menubar .z-menu-inner-r {
-    display: none;
-}
-
-.cwf-tab-menubar .z-menu-inner-m {
-    height: inherit!important;
-    padding: 0!important;
-    background: none;
-}
-
-.cwf-tab-menubar .z-menu-inner-m>div {
-    margin-top: -5px!important;
-}
-
-.cwf-tab-menubar .z-menu-btn {
-    padding: 0!important;
-}
-
-.cwf-tab-menu-seld a {
+.cwf-tab-menu-seld .z-menu-text {
 	font-weight: bold;
 }
 
@@ -323,7 +302,7 @@
 	}
 
 	/* used for print to ensure all data is on the page with 'shrink to fit' option */
-	.z-window-modal-cnt-noborder,.z-window-highlighted-cnt-noborder,.z-window-embedded-cnt-noborder,.z-window-overlapped-cnt-noborder,.z-window-popup-cnt-noborder
+	.z-window-modal-content-noborder,.z-window-highlighted-content-noborder,.z-window-embedded-content-noborder,.z-window-overlapped-content-noborder,.z-window-popup-content-noborder
 	{
 		border: 0;
 		overflow: visible !important;

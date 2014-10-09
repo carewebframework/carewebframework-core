@@ -6,7 +6,7 @@
 		apply="${manifestViewer}">
 		<caption id="caption" />
 		<div id="printRoot">
-			<listbox id="list" sclass="cwf-manifest-viewer">
+			<listbox id="list" sclass="cwf-manifest-viewer" vflex="1">
 				<listhead sizable="true" />
 			</listbox>
 		</div>

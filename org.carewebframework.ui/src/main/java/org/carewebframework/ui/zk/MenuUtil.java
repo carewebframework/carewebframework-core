@@ -266,6 +266,33 @@ public class MenuUtil {
     }
     
     /**
+     * Opens a menu and all popups that precede it.
+     * 
+     * @param menu Menu to open.
+     * @return True if the menu was opened.
+     */
+    public static boolean open(Menu menu) {
+        Component parent = menu.getParent();
+        
+        if (parent instanceof Menupopup) {
+            Menupopup menupopup = (Menupopup) parent;
+            parent = parent.getParent();
+            
+            if (parent == null) {
+                menupopup.open(parent, "after_start");
+                return true;
+            } else if (parent instanceof Menu) {
+                menu = (Menu) parent;
+                String position = open(menu) ? "end_before" : "after_start";
+                menupopup.open(menu, position);
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    /**
      * Closes a menu.
      * 
      * @param menu Menu to close.
@@ -304,17 +331,31 @@ public class MenuUtil {
      * @param comp Current menu tree component.
      */
     public static void updateStyles(Component comp) {
+        if (comp == null) {
+            return;
+        }
+        
+        Menupopup menupopup = null;
+        
         if (comp instanceof Menupopup) {
-            boolean hasChildren = ZKUtil.firstVisibleChild(comp, false) != null;
-            ((Menupopup) comp).setZclass(hasChildren ? null : "cwf-menupopup-empty");
+            menupopup = (Menupopup) comp;
+            boolean hasChildren = ZKUtil.firstVisibleChild(menupopup, false) != null;
+            menupopup.setZclass(hasChildren ? null : "cwf-menupopup-empty");
         } else if (comp instanceof Menu) {
             Menupopup child = ((Menu) comp).getMenupopup();
             boolean hasChildren = child != null && ZKUtil.firstVisibleChild(child, false) != null;
-            ((Menu) comp).setZclass(hasChildren ? null : "z-menuitem");
+            ZKUtil.toggleSclass((Menu) comp, "cwf-menu", "cwf-menuitem", hasChildren);
         }
+        
+        boolean hasImages = menupopup == null;
         
         for (Component child : comp.getChildren()) {
             updateStyles(child);
+            hasImages |= child instanceof Menu && ((Menu) child).isImageAssigned();
+        }
+        
+        if (menupopup != null) {
+            ZKUtil.updateSclass(menupopup, "cwf-menupopup-noimages", hasImages);
         }
     }
     

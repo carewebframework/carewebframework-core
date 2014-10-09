@@ -11,27 +11,32 @@ cwf.ext.MenuEx = zk.$extends(zul.menu.Menu, {
 	},
 
 	doClick_ : function(evt) {
-		evt.opts.toServer = true;
-		this.$supers('doClick_', arguments);
-	},
-
-	_getArrowWidth : function() {
-		return this.getZclass() == 'z-menuitem' ? 0 : 20;
+		zk.currentFocus = null;
+		
+		if (jq(this).hasClass('cwf-menuitem')) {
+			this.fireX(new zk.Event(this, 'onClick', evt.data));
+			zWatch.fire('onFloatUp', this.getMenubar()); 
+		} else {
+			this.$supers('doClick_', arguments);
+		}
 	},
 
 	getZclass : function() {
 		return this._zclass ? this._zclass : 'z-menu';
 	},
-
+	
 	bind_: function(){
 		this.$supers(cwf.ext.MenuEx, 'bind_', arguments);
 		var a = this.getAnchor_();
-		var b = this.getButton_();
 
-		if (a)
-			jq(a).css('color', this._color);
+		if (a && this._color) {
+			jq(a).children('.z-menu-text').css('color', this._color);
+			
+			if (this.menupopup) {
+				this.menupopup._style = '';
+				this.menupopup.rerender();
+			}
+		}
 
-		if (b)
-			jq(b).css('color', this._color);
 	}
 });

@@ -64,7 +64,7 @@
 				<cwp:property id="orientation" type="choice"
 					name="${labels.cwf.shell.plugin.tabview.orientation.name}" description="${labels.cwf.shell.plugin.tabview.orientation.description}">
 					<cwp:config>
-						<cwp:entry key="values">horizontal,vertical,accordion</cwp:entry>
+						<cwp:entry key="values">top,bottom,right,left,accordion</cwp:entry>
 					</cwp:config>
 				</cwp:property>
 				<cwp:property id="color" type="color"

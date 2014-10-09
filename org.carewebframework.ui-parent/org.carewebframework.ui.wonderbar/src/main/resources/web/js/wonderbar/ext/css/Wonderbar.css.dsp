@@ -1,6 +1,6 @@
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 
-/* UL element where this is needed does not have any cwf* class */
+/* The UL element where this is needed does not have any cwf* class */
 .ui-autocomplete {
 	overflow-y: auto;
 	overflow-x: hidden;

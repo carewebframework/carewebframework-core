@@ -21,10 +21,10 @@ div.z-listbox-body {
 	width: 100% !important;
 }
 
-.z-listcell-cnt {
+.z-listcell-content {
 	max-height: inherit !important;
 }
 
-tr.z-listitem-seld {
+tr.z-listitem-selected {
 	background-image: inherit;
 }

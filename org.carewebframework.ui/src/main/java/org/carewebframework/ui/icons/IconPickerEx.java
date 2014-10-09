@@ -30,6 +30,8 @@ public class IconPickerEx extends IconPicker {
     
     private final Combobox cboLibrary;
     
+    private final Toolbar toolbar;
+    
     private final IconLibraryRegistry iconRegistry = IconLibraryRegistry.getInstance();
     
     private boolean selectorVisible;
@@ -51,9 +53,9 @@ public class IconPickerEx extends IconPicker {
             
         });
         
-        Toolbar tb = new Toolbar();
-        panel.addToolbar("tbar", tb);
-        tb.appendChild(cboLibrary);
+        toolbar = new Toolbar();
+        panel.addToolbar("tbar", toolbar);
+        toolbar.appendChild(cboLibrary);
         
         for (IIconLibrary lib : iconRegistry) {
             Comboitem item = new Comboitem(lib.getId());
@@ -94,7 +96,7 @@ public class IconPickerEx extends IconPicker {
     
     public void setSelectorVisible(boolean visible) {
         selectorVisible = visible;
-        cboLibrary.setVisible(visible && cboLibrary.getItemCount() > 1);
+        toolbar.setVisible(visible && cboLibrary.getItemCount() > 1);
     }
     
     private void libraryChanged() {

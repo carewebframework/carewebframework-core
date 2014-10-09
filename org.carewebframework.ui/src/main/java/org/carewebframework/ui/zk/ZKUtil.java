@@ -33,6 +33,7 @@ import org.zkoss.json.JavaScriptValue;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.au.AuResponse;
+import org.zkoss.zk.au.out.AuInvoke;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.ComponentNotFoundException;
 import org.zkoss.zk.ui.Desktop;
@@ -58,6 +59,8 @@ public class ZKUtil {
      * Resource prefix for resources within this package
      */
     public static final String RESOURCE_PREFIX = getResourcePath(ZKUtil.class);
+    
+    private static final String CUSTOM_COLOR_OVERRIDE = "setCustomColor";
     
     private static final EventListener<Event> deferredDelivery = new EventListener<Event>() {
         
@@ -627,31 +630,70 @@ public class ZKUtil {
      * @return Returns the original sclass property value.
      */
     public static String updateSclass(HtmlBasedComponent component, String className, boolean remove) {
-        final String oclass = component.getSclass();
-        String sclass = oclass;
-        
-        if (StringUtils.isEmpty(sclass)) {
-            if (!remove) {
-                component.setSclass(className);
-            }
-            
-            return oclass;
+        String oclass = component.getSclass();
+        component.setSclass(updateCSSclass(oclass, className, remove));
+        return oclass;
+    }
+    
+    /**
+     * Adds or removes a class from a component's zclass property, preserving any other class names
+     * that may be present.
+     * 
+     * @param component Component whose zclass will be modified.
+     * @param className The class name to add or remove.
+     * @param remove If true, the class is removed; otherwise, it is appended.
+     * @return Returns the original sclass property value.
+     */
+    public static String updateZclass(HtmlBasedComponent component, String className, boolean remove) {
+        String oclass = component.getZclass();
+        component.setZclass(updateCSSclass(oclass, className, remove));
+        return oclass;
+    }
+    
+    /**
+     * Adds or removes a class from a list of style classes, preserving any other class names that
+     * may be present.
+     * 
+     * @param oclass Current style classes.
+     * @param className The class name to add or remove.
+     * @param remove If true, the class is removed; otherwise, it is appended.
+     * @return Returns the new class values.
+     */
+    public static String updateCSSclass(String oclass, String className, boolean remove) {
+        if (StringUtils.isEmpty(oclass)) {
+            return remove ? null : className;
         }
         
-        sclass = " " + sclass + " ";
+        String nclass = " " + oclass + " ";
         className = " " + className + " ";
-        boolean exists = sclass.contains(className);
+        boolean exists = nclass.contains(className);
         
         if (exists == remove) {
             if (remove) {
-                sclass = sclass.replace(className, " ");
+                nclass = nclass.replace(className, " ");
             } else {
-                sclass = oclass + className;
+                nclass = oclass + className;
             }
             
-            component.setSclass(StringUtils.trimToNull(sclass));
+            return StringUtils.trimToNull(nclass);
         }
         
+        return oclass;
+    }
+    
+    /**
+     * Toggles between two mutually exclusive sclass values, depending on the given boolean value.
+     * 
+     * @param component Component whose sclass will be modified.
+     * @param classIfTrue Style class to be applied if value is true.
+     * @param classIfFalse Style class to be applied if value is false.
+     * @param value Value to determine which class is added and which is removed.
+     * @return Returns the original sclass property value.
+     */
+    public static String toggleSclass(HtmlBasedComponent component, String classIfTrue, String classIfFalse, boolean value) {
+        String oclass = component.getSclass();
+        updateSclass(component, classIfTrue, !value);
+        updateSclass(component, classIfFalse, value);
         return oclass;
     }
     
@@ -1068,6 +1110,34 @@ public class ZKUtil {
     public static JavaScriptValue toJavaScriptValue(String snippet) {
         return snippet == null ? null : new JavaScriptValue(snippet.startsWith("function") ? snippet : "function() {"
                 + snippet + "}");
+    }
+    
+    /**
+     * Applies the specified color setting to the target component. If the target implements a
+     * custom method for performing this operation, that method will be invoked. Otherwise, the
+     * background color of the target is set.
+     * 
+     * @param comp Component to receive the color setting.
+     * @param color Color value.
+     */
+    public static void applyColor(HtmlBasedComponent comp, String color) {
+        if (comp.getWidgetOverride(CUSTOM_COLOR_OVERRIDE) != null) {
+            Executions.getCurrent().addAuResponse(new AuInvoke(comp, CUSTOM_COLOR_OVERRIDE, color));
+        } else {
+            updateStyle(comp, "background-color", color);
+        }
+    }
+    
+    /**
+     * Sets the JS code for applying a custom color to a component.
+     * 
+     * @param comp Target component.
+     * @param snippet The JS snippet. If a function body is not supplied, a single argument function
+     *            wrapper will be applied.
+     */
+    public static void setCustomColorLogic(HtmlBasedComponent comp, String snippet) {
+        snippet = snippet == null ? null : snippet.startsWith("function") ? snippet : "function(value) {" + snippet + "}";
+        comp.setWidgetOverride(CUSTOM_COLOR_OVERRIDE, snippet);
     }
     
     /**

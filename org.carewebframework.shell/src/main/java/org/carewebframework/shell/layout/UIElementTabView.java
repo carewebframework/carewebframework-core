@@ -56,10 +56,10 @@ public class UIElementTabView extends UIElementZKBase {
      */
     public void setOrientation(String orientation) {
         if ("accordion".equals(orientation)) {
-            tabBox.setOrient("horizontal");
+            tabBox.setOrient("top");
             tabBox.setMold("accordion");
         } else {
-            tabBox.setMold(null);
+            tabBox.setMold("default");
             tabBox.setOrient(orientation);
         }
     }

@@ -9,24 +9,10 @@
  */
 package org.carewebframework.shell.layout;
 
-import org.carewebframework.ui.action.ActionListener;
-import org.carewebframework.ui.zk.MenuUtil;
-import org.carewebframework.ui.zk.ZKUtil;
-
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zul.Menu;
-import org.zkoss.zul.Menubar;
-import org.zkoss.zul.Menupopup;
-
 /**
- * Single menu item. The path determines the position of the menu item in the parent menu tree. Note
- * that we use the Menu class exclusively to represent menu items, not the Menuitem class. The Menu
- * class has been modified to allow it to behave as a menu and a menu item. This simplifies the
- * creation and manipulation of hierarchical menu trees.
+ * Single menu item for inclusion in a menubar-based tree.
  */
-public class UIElementMenuItem extends UIElementActionBase {
+public class UIElementMenuItem extends UIElementMenuItemBase {
     
     static {
         registerAllowedParentClass(UIElementMenuItem.class, UIElementMenubar.class);
@@ -34,130 +20,11 @@ public class UIElementMenuItem extends UIElementActionBase {
         registerAllowedChildClass(UIElementMenuItem.class, UIElementMenuItem.class);
     }
     
-    public static class MenuEx extends Menu {
-        
-        private static final long serialVersionUID = 1L;
-        
-        public MenuEx() {
-            super();
-            setWidgetClass("cwf.ext.MenuEx");
-            setWidgetOverride(CUSTOM_COLOR_OVERRIDE, "function(value) {this.setColor(value?value:'');}");
-            appendChild(new Menupopup());
-            addEventListener(Events.ON_CLICK, new EventListener<Event>() {
-                
-                /**
-                 * Auto close the menu when it is clicked.
-                 * 
-                 * @param event The click event.
-                 * @throws Exception Unspecified exception.
-                 */
-                @Override
-                public void onEvent(Event event) throws Exception {
-                    if (MenuEx.this.getParent() instanceof Menubar) {
-                        MenuEx.this.open();
-                    } else {
-                        MenuUtil.close(MenuEx.this);
-                    }
-                }
-                
-            });
-        }
-        
-        @Override
-        public boolean setVisible(boolean visible) {
-            boolean result = super.setVisible(visible);
-            adjustVisibility(visible);
-            return result;
-        }
-        
-        /**
-         * Adjust visibility of parent menu elements.
-         * 
-         * @param visible The visibility state.
-         */
-        private void adjustVisibility(boolean visible) {
-            Menu menu = this;
-            Menupopup menuPopup = null;
-            
-            while ((menuPopup = getParentPopup(menu)) != null) {
-                visible |= ZKUtil.firstVisibleChild(menuPopup, false) != null;
-                menu = (Menu) menuPopup.getParent();
-                visible |= ActionListener.getListener(menu, Events.ON_CLICK) != null;
-                
-                if (visible == menu.setVisible(visible)) {
-                    break;
-                }
-            }
-            
-            if (menu != null) {
-                MenuUtil.updateStyles(menu);
-            }
-        }
-        
-        /**
-         * Returns the parent menu popup for this menu, or null if none.
-         * 
-         * @param menu Menu whose parent menu popup is sought.
-         * @return The parent menu popup or null if none.
-         */
-        private Menupopup getParentPopup(Menu menu) {
-            return menu.isTopmost() ? null : (Menupopup) menu.getParent();
-        }
-    }
-    
-    private final Menu menu = new MenuEx();
-    
     public UIElementMenuItem() {
         super();
-        maxChildren = Integer.MAX_VALUE;
         autoHide = false;
-        setOuterComponent(menu);
-        setInnerComponent(menu.getMenupopup());
+        setOuterComponent(getMenu());
+        setInnerComponent(getMenu().getMenupopup());
     }
     
-    public String getLabel() {
-        return menu.getLabel();
-    }
-    
-    public void setLabel(String label) {
-        menu.setLabel(label);
-    }
-    
-    protected Menu getMenu() {
-        return menu;
-    }
-    
-    /**
-     * The caption label is the instance name.
-     */
-    @Override
-    public String getInstanceName() {
-        return getLabel();
-    }
-    
-    @Override
-    protected void afterAddChild(UIElementBase child) {
-        super.afterAddChild(child);
-        MenuUtil.updateStyles(menu);
-    }
-    
-    @Override
-    protected void afterRemoveChild(UIElementBase child) {
-        super.afterRemoveChild(child);
-        MenuUtil.updateStyles(menu);
-    }
-    
-    @Override
-    protected void bind() {
-        if (getParent() instanceof UIElementMenuItem) {
-            ((UIElementMenuItem) getParent()).menu.getMenupopup().appendChild(menu);
-        } else {
-            super.bind();
-        }
-    }
-    
-    @Override
-    protected void unbind() {
-        menu.detach();
-    }
 }

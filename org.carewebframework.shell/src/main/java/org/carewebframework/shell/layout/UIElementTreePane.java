@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -50,8 +50,7 @@ public class UIElementTreePane extends UIElementZKBase {
         setOuterComponent(pane);
         node.appendChild(new Treechildren());
         associateComponent(node);
-        node.setWidgetOverride(CUSTOM_COLOR_OVERRIDE,
-            "function(value) {jq(this).find('.z-treecell-cnt').css('color',value?value:'');}");
+        ZKUtil.setCustomColorLogic(node, "jq(this).find('.z-treecell-content').css('color',value?value:'');");
     }
     
     @Override

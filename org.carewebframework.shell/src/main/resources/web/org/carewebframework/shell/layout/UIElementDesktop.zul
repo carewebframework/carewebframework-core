@@ -1,23 +1,23 @@
 <window height="100%" width="100%" border="none">
 	<caption sclass="cwf-desktop-titlebar">
 		<hbox id="titlebar" width="100%" spacing="3px">
-			<cell style="vertical-align:middle;padding-right:4px" visible="false">
+			<cell hflex="min" visible="false">
 				<image id="icon" />
 			</cell>
 			<cell id="titleCell" sclass="cwf-desktop-title">
 				<label id="title" value="${labels.cwf.shell.plugin._desktop.title.$}" />
 			</cell>
-			<cell>
+			<cell hflex="min">
 				<menubar id="menubar1"
 					style="border:none;background:none" />
 			</cell>
-			<cell>
+			<cell hflex="min">
 				<menubar id="menubar2"
 					style="border:none;background:none">
 					<menu id="helpMenu" label="${labels.cwf.shell.plugin._desktop.menu.help.label}">
 						<menupopup id="helpMenuRoot">
-							<menuitem id="mnuAbout" label="${labels.cwf.shell.plugin._desktop.menu.about.label}" />
-							<menuitem id="mnuTOC" visible="false" label="${labels.cwf.shell.plugin._desktop.menu.toc.label}" />
+							<menuEx id="mnuAbout" label="${labels.cwf.shell.plugin._desktop.menu.about.label}" />
+							<menuEx id="mnuTOC" visible="false" label="${labels.cwf.shell.plugin._desktop.menu.toc.label}" />
 							<menuseparator id="helpSeparator" visible="false" />
 						</menupopup>
 					</menu>

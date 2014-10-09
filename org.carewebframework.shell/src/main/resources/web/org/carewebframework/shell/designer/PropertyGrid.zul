@@ -4,7 +4,6 @@
 	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd ">
 
 	<window border="normal" height="400px" width="400px"
-		zclass="z-window-modal"
 		use="org.carewebframework.shell.designer.PropertyGrid">
 		<borderlayout height="100%" width="100%">
 			<north splittable="true" style="overflow:hidden;border:none"

@@ -16,6 +16,7 @@ import org.carewebframework.ui.zk.ZKUtil;
 
 import org.zkoss.web.fn.ThemeFns;
 import org.zkoss.zk.ui.util.Clients;
+import org.zkoss.zul.Caption;
 import org.zkoss.zul.Panel;
 
 /**
@@ -41,6 +42,8 @@ public class CaptionedForm extends BaseForm {
     private String color1;
     
     private String color2;
+    
+    private final Caption caption = new Caption();
     
     @Override
     protected void init() {
@@ -87,8 +90,15 @@ public class CaptionedForm extends BaseForm {
         
         }
         
-        panel.setSclass("sharedForms-captioned-caption-" + cs.name().toLowerCase());
-        ZKUtil.updateStyle(panel.getCaption(), "background", background);
+        panel.setSclass("sharedForms-captioned sharedForms-captioned-caption-" + cs.name().toLowerCase());
+        ZKUtil.updateStyle(caption, "background", background);
+        
+        if (cs == CaptionStyle.HIDDEN) {
+            caption.detach();
+        } else {
+            caption.setParent(panel);
+        }
+        
         Clients.resize(panel);
     }
     
@@ -146,7 +156,7 @@ public class CaptionedForm extends BaseForm {
      * @return Current caption.
      */
     public String getCaption() {
-        return panel.getCaption().getLabel();
+        return caption.getLabel();
     }
     
     /**
@@ -155,7 +165,7 @@ public class CaptionedForm extends BaseForm {
      * @param caption Current caption.
      */
     public void setCaption(String caption) {
-        panel.getCaption().setLabel(caption);
+        this.caption.setLabel(caption);
     }
     
     /**
@@ -164,7 +174,7 @@ public class CaptionedForm extends BaseForm {
      * @return Caption icon URL.
      */
     public String getIcon() {
-        return panel.getCaption().getImage();
+        return caption.getImage();
     }
     
     /**
@@ -173,7 +183,7 @@ public class CaptionedForm extends BaseForm {
      * @param url URL of icon.
      */
     public void setIcon(String url) {
-        panel.getCaption().setImage(url);
+        caption.setImage(url);
     }
     
 }

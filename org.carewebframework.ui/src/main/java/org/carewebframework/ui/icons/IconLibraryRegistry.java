@@ -96,20 +96,20 @@ public class IconLibraryRegistry extends AbstractRegistry<String, IIconLibrary> 
      * Returns the paths to matching icon resources given name, dimensions, and library name, any
      * one of which may contain wildcard characters.
      * 
-     * @param library Library name containing the icon (e.g., "silk").
+     * @param library Library name containing the icon (e.g., "silk"). If null, all libraries are
+     *            searched.
      * @param iconName Name of the requested icon (e.g., "help*.png").
      * @param dimensions Dimensions of the requested icon (e.g., "16x*").
      * @return The icon path.
      */
     public List<String> getMatching(String library, final String iconName, String dimensions) {
         SimpleRegexMatcher matcher = new SimpleRegexMatcher();
-        library = library == null ? getDefaultLibrary() : library;
         dimensions = dimensions == null ? defaultDimensions : dimensions;
         
         List<String> results = null;
         
         for (IIconLibrary lib : this) {
-            if (matcher.match(lib.getId(), library)) {
+            if (library == null || matcher.match(lib.getId(), library)) {
                 List<String> urls = lib.getMatching(iconName, dimensions);
                 
                 if (results == null) {

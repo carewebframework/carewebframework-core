@@ -378,10 +378,10 @@ public abstract class ListViewForm<DAO> extends CaptionedForm {
         if (message != null) {
             status.setLabel(StrUtil.piece(message, StrUtil.U));
             status.setTooltiptext(StrUtil.piece(message, StrUtil.U, 2, 999));
-            status.setVisible(true);
+            status.getParent().setVisible(true);
             listhead.setVisible(false);
         } else {
-            status.setVisible(false);
+            status.getParent().setVisible(false);
             listhead.setVisible(true);
         }
     }

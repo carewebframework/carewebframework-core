@@ -10,9 +10,8 @@
 		height="100%" width="100%">
 		<splitterpane id="listPane" relativeSize="100">
 			<listbox id="listbox" hflex="1" vflex="1">
-				<auxhead>
-					<auxheader id="status" visible="false"
-						colspan="999" />
+				<auxhead visible="false">
+					<auxheader id="status" colspan="999" />
 				</auxhead>
 				<listhead id="listhead" sizable="true" />
 			</listbox>

@@ -3,7 +3,7 @@
 	<addon-name>cwf.ui</addon-name>
 	<language-name>xul/html</language-name>
 
-	<javascript-module name="cwf" version="3.1.1" />
+	<javascript-module name="cwf" version="4.0.0" />
 
 	<javascript src="~./org/carewebframework/ui/zk/common.js"
 		merge="true" />
@@ -154,6 +154,8 @@
 	</component>
 	<component>
 		<component-name>menuEx</component-name>
+		<component-class>org.carewebframework.ui.zk.MenuEx
+		</component-class>
 		<extends>menu</extends>
 		<widget-class>cwf.ext.MenuEx</widget-class>
 	</component>

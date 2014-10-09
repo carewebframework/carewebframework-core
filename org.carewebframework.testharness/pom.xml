@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>org.carewebframework</groupId>
 		<artifactId>org.carewebframework-parent</artifactId>
-		<version>3.1.1</version>
+		<version>4.0.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>org.carewebframework.testharness</artifactId>
 	<name>CareWeb Framework Test Harness Base Support</name>
@@ -16,7 +16,7 @@
 		<dependency>
 			<groupId>org.carewebframework</groupId>
 			<artifactId>org.carewebframework.ui.statuspanel</artifactId>
-			<version>${org.carewebframework.version}</version>
+			<version>${org.carewebframework.core.version}</version>
 		</dependency>
 		<!-- ZK Libraries -->
 		<dependency>
