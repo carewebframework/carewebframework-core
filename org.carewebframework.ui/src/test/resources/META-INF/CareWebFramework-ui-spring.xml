@@ -10,7 +10,7 @@
 
 	<beans profile="root-test">
 
-		<bean id="propertyService" class="org.carewebframework.api.property.MockPropertyService"
+		<bean id="propertyService" class="org.carewebframework.api.property.mock.MockPropertyService"
 			cwf:override="always">
 
 			<constructor-arg value="META-INF/CareWebFramework-ui-mock.properties" />

@@ -3,47 +3,54 @@
 	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd ">
 
 	<style>
-		.ri-background {
+		.cwf-login-background {
 			color:black;
 			background-color: #A99141;
 		}
 
-		.ri-highlight {
+		.cwf-login-highlight {
 			background-color: #405C69;
 		}
 
-		.ri-banner {
+		.cwf-login-banner {
 			padding:10px;
 			margin:10px;
 			background:white !important;
 			border:solid 2px #405C69 !important;
 		}
 
-	.z-button .ri-button * {
-		color: white;
-		background-color: #405C69;
-    	background-image: none;
-    	font-weight: bold;
-	}
-	.z-button .ri-button {
-    	border: solid 2px gray;
+		.z-button .cwf-login-button * {
+			color: white;
+			background-color: #405C69;
+	    	background-image: none;
+	    	font-weight: bold;
+		}
+		
+		.z-button .cwf-login-button {
+	    	border: solid 2px gray;
 	}
 	</style>
 
-	<div id="loginRoot" width="600px" apply="${loginPaneController}"
+	<div id="loginRoot" width="600px" apply="${securityLoginPaneController}"
 		style="margin-left:auto;margin-right:auto;border:2px solid black">
 		<div width="100%" height="90px">
-			<image id="imgInstitution" style="padding:5px;float:left" align="right" src="${labels.login.form.title.image}" />
-			<vbox height="100%" pack="middle" align="end"
+			<image id="imgDomain" style="padding:5px;float:left" align="right" src="${labels.login.form.title.image}" />
+			<vbox height="100%" pack="middle"
 				style="float:right;color:#405C69;font-style:italic;padding:5px;padding-right:10px">
-				<label id="lblInstitution" value="Test Harness"
+				<label id="lblDomain" value="${labels.login.form.domain.name.label}"
 					style="font-size:1.2em;font-weight:bold;display:block" />
 				<label id="lblTitle" value="${labels.login.form.title.label}" />
 			</vbox>
 		</div>
 		<vbox width="100%" align="center" spacing="10px"
-			style="border-top:solid 2px" sclass="ri-background">
-			<vlayout id="loginPrompts" hflex="1" sclass="ri-banner" style="margin: 30px 80px 0 80px">
+			style="border-top:solid 2px" sclass="cwf-login-background">
+			<vlayout id="loginPrompts" hflex="1" sclass="cwf-login-banner" style="margin: 30px 80px 0 80px">
+				<hlayout id="cmpDomainList" visible="false">
+					<div hflex="1" align="right">${labels.login.form.domain.label}</div>
+					<listbox id="j_domain" name="j_domain"
+						 hflex="2" mold="select" />
+					<div hflex="1" />
+				</hlayout>
 				<hlayout>
 					<div hflex="1" align="right">${labels.login.form.username.label}</div>
 					<textbox id="j_username" name="j_username"
@@ -56,9 +63,14 @@
 						type="password" hflex="2" />
 					<div hflex="1">
 						<button id="btnLogin"
-							label="${labels.login.form.button.login.label}" sclass="ri-button" />
+							label="${labels.login.form.button.login.label}" sclass="cwf-login-button" />
 					</div>
 				</hlayout>
+				<div id="divDomain" hflex="1">
+					<toolbarbutton id="btnDomain"
+						style="background:none;color:#405C69"
+						label="${labels.login.form.button.alternate.domain.label}" />
+				</div>
 			</vlayout>
 			<label id="lblState" visible="false" />
 			<div hflex="1" style="color:red;background:white;align:center">
@@ -69,7 +81,7 @@
 				style="margin: 20px" />
 			<html id="htmlLogin" visible="false" style="margin: 20px" />
 			<separator height="20px" bar="true" />
-			<div sclass="ri-banner">
+			<div sclass="cwf-login-banner">
 				<label id="lblFooterTitle"
 					style="font-weight:bold;font-size:1.1em;display:block"
 					value="${labels.login.form.footer.title.label}" />
@@ -80,7 +92,7 @@
 					visible="false" />
 			</div>
 			<label value="${labels.login.form.footer.browser.recommendation}" />
-			<hlayout sclass="ri-highlight" hflex="1" valign="middle"
+			<hlayout sclass="cwf-login-highlight" hflex="1" valign="middle"
 				style="color: white; text-align: left; padding-left: 20px">
 				<label value="${labels.login.form.copyright.prefix}"
 					style="font-style:italic" />

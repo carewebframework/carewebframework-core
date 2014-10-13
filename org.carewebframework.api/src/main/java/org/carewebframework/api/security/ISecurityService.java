@@ -9,6 +9,8 @@
  */
 package org.carewebframework.api.security;
 
+import java.util.List;
+
 import org.carewebframework.api.domain.IUser;
 
 /**
@@ -120,4 +122,11 @@ public interface ISecurityService {
      * @return Returns the login disabled message if logins are disabled; null otherwise.
      */
     public String loginDisabled();
+    
+    /**
+     * Returns a list of security domains known to this service.
+     * 
+     * @return List of known security domains.
+     */
+    public List<ISecurityDomain> getSecurityDomains();
 }

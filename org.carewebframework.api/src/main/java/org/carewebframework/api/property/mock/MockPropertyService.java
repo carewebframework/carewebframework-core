@@ -7,7 +7,7 @@
  * Disclaimer of Warranty and Limitation of Liability available at
  * http://www.carewebframework.org/licensing/disclaimer.
  */
-package org.carewebframework.api.property;
+package org.carewebframework.api.property.mock;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -19,6 +19,7 @@ import java.util.Properties;
 
 import org.apache.commons.lang.StringEscapeUtils;
 
+import org.carewebframework.api.property.IPropertyService;
 import org.carewebframework.common.StrUtil;
 
 import org.springframework.core.io.Resource;

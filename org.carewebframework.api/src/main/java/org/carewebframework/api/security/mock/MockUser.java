@@ -7,9 +7,10 @@
  * Disclaimer of Warranty and Limitation of Liability available at
  * http://www.carewebframework.org/licensing/disclaimer.
  */
-package org.carewebframework.api.security;
+package org.carewebframework.api.security.mock;
 
 import org.carewebframework.api.domain.IUser;
+import org.carewebframework.api.security.ISecurityDomain;
 
 /**
  * Mock user for testing.
@@ -22,12 +23,15 @@ public class MockUser implements IUser {
     
     private final String fullName;
     
-    private final String domainName;
+    private final String loginName;
     
-    public MockUser(String logicalId, String fullName, String domainName) {
+    private final ISecurityDomain securityDomain;
+    
+    public MockUser(String logicalId, String fullName, String loginName, ISecurityDomain securityDomain) {
         this.logicalId = logicalId;
         this.fullName = fullName;
-        this.domainName = domainName;
+        this.loginName = loginName;
+        this.securityDomain = securityDomain;
     }
     
     @Override
@@ -41,8 +45,13 @@ public class MockUser implements IUser {
     }
     
     @Override
-    public String getDomainName() {
-        return domainName;
+    public String getLoginName() {
+        return loginName;
+    }
+    
+    @Override
+    public ISecurityDomain getSecurityDomain() {
+        return securityDomain;
     }
     
     @Override

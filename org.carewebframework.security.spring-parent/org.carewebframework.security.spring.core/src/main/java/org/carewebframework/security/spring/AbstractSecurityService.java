@@ -25,12 +25,15 @@ import org.carewebframework.api.domain.IUser;
 import org.carewebframework.api.security.ISecurityService;
 import org.carewebframework.ui.Application;
 import org.carewebframework.ui.FrameworkWebSupport;
+import org.carewebframework.ui.zk.PopupDialog;
+import org.carewebframework.ui.zk.PromptDialog;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.ObjectUtils;
 
+import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Desktop;
 
 /**
@@ -40,7 +43,9 @@ public abstract class AbstractSecurityService implements ISecurityService {
     
     private static final Log log = LogFactory.getLog(AbstractSecurityService.class);
     
-    private String logoutTarget = Constants.LOGOUT_TARGET;
+    private String logoutTarget;
+    
+    private String passwordChangeUrl;
     
     private final AliasType authorityAlias = AliasTypeRegistry.getType(ALIAS_TYPE_AUTHORITY);
     
@@ -84,7 +89,7 @@ public abstract class AbstractSecurityService implements ISecurityService {
      * @param deflt Default value to return if none found.
      * @return Value of the attribute, which is automatically converted from its base64 encoding.
      */
-    protected static String getLogoutAttribute(final String attributeName, final String deflt) {
+    public static String getLogoutAttribute(final String attributeName, final String deflt) {
         final String value = FrameworkWebSupport.getCookieValue(attributeName);
         //delete cookie
         FrameworkWebSupport.setCookie(attributeName, null);
@@ -113,7 +118,7 @@ public abstract class AbstractSecurityService implements ISecurityService {
                 } catch (final Exception e) {}
             }
             
-            AbstractSecurityService.setLogoutAttributes(target, message);
+            setLogoutAttributes(target, message);
             final Desktop contextDesktop = FrameworkWebSupport.getDesktop();
             log.debug("Redirecting Desktop to logout filter URI: " + contextDesktop);
             String queryParam = replaceParam(replaceParam(logoutTarget, "%target%", target), "%message%", message);
@@ -295,7 +300,39 @@ public abstract class AbstractSecurityService implements ISecurityService {
      * @param logoutTarget Logout target url.
      */
     public void setLogoutTarget(String logoutTarget) {
-        this.logoutTarget = StringUtils.isEmpty(logoutTarget) ? Constants.LOGOUT_TARGET : logoutTarget;
+        this.logoutTarget = logoutTarget;
+    }
+    
+    /**
+     * Sets the url of the password change dialog.
+     * 
+     * @param passwordChangeUrl Url of the password change dialog.
+     */
+    public void setPasswordChangeUrl(String passwordChangeUrl) {
+        this.passwordChangeUrl = passwordChangeUrl;
+    }
+    
+    /**
+     * @see org.carewebframework.api.security.ISecurityService#changePassword()
+     */
+    @Override
+    public void changePassword() {
+        if (canChangePassword()) {
+            if (PopupDialog.popup(passwordChangeUrl, false, false) == null) {
+                PromptDialog.showError(Labels.getLabel("password.change.dialog.unavailable"));
+            }
+            
+        } else {
+            PromptDialog.showWarning(Labels.getLabel(Constants.LBL_PASSWORD_CHANGE_UNAVAILABLE));
+        }
+    }
+    
+    /**
+     * @see org.carewebframework.api.security.ISecurityService#canChangePassword()
+     */
+    @Override
+    public boolean canChangePassword() {
+        return passwordChangeUrl != null;
     }
     
 }

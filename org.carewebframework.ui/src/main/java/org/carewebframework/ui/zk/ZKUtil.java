@@ -146,7 +146,7 @@ public class ZKUtil {
             }
             
             if (containingClass == null) {
-                return Executions.getCurrent().getPageDefinition(filename);
+                return Executions.getCurrent().getPageDefinition(filename.replace("/zkau/web/", "~./"));
             }
             
             is = containingClass.getResourceAsStream(filename);

@@ -7,7 +7,7 @@
 	<separator height="20%" />
 	<window title="${labels.logout.window.title}" border="normal"
 		contentStyle="text-align:center;padding:20px" mode="highlighted"
-		apply="org.carewebframework.security.spring.LogoutController">
+		apply="org.carewebframework.security.spring.controller.LogoutController">
 		<label id="lblMessage" value="${labels.logout.message.dflt}"
 			style="color:red;font-weight:bold;white-space:pre-wrap" />
 		<separator bar="true" height="20px" />

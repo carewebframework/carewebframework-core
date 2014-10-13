@@ -7,9 +7,14 @@
  * Disclaimer of Warranty and Limitation of Liability available at
  * http://www.carewebframework.org/licensing/disclaimer.
  */
-package org.carewebframework.api.security;
+package org.carewebframework.api.security.mock;
+
+import java.util.Collections;
+import java.util.List;
 
 import org.carewebframework.api.domain.IUser;
+import org.carewebframework.api.security.ISecurityDomain;
+import org.carewebframework.api.security.ISecurityService;
 
 /**
  * Mock security service for testing.
@@ -83,6 +88,11 @@ public class MockSecurityService implements ISecurityService {
     @Override
     public String loginDisabled() {
         return null;
+    }
+    
+    @Override
+    public List<ISecurityDomain> getSecurityDomains() {
+        return Collections.emptyList();
     }
     
 }

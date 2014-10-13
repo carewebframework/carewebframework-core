@@ -11,6 +11,8 @@ package org.carewebframework.api.domain;
 
 import java.io.Serializable;
 
+import org.carewebframework.api.security.ISecurityDomain;
+
 /**
  * Interface for a user.
  */
@@ -24,11 +26,18 @@ public interface IUser extends Serializable {
     String getFullName();
     
     /**
-     * Returns the name of the user's domain.
+     * Return the user's login name.
      * 
-     * @return User's domain.
+     * @return User's login name.
      */
-    String getDomainName();
+    String getLoginName();
+    
+    /**
+     * Returns the user's security domain.
+     * 
+     * @return User's security domain.
+     */
+    ISecurityDomain getSecurityDomain();
     
     /**
      * Returns the logical identifier for the user.

@@ -2,18 +2,19 @@
  * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
  * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
- * 
+ *
  * This Source Code Form is also subject to the terms of the Health-Related Additional
  * Disclaimer of Warranty and Limitation of Liability available at
  * http://www.carewebframework.org/licensing/disclaimer.
  */
-package org.carewebframework.security.spring.mock;
+package org.carewebframework.security.spring.controller;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import org.carewebframework.api.domain.IUser;
 import org.carewebframework.api.security.SecurityUtil;
+import org.carewebframework.security.spring.Constants;
 import org.carewebframework.ui.zk.ZKUtil;
 
 import org.springframework.security.authentication.CredentialsExpiredException;
@@ -42,6 +43,36 @@ public class LoginWindowController extends GenericForwardComposer<Component> {
     
     private SavedRequest savedRequest;
     
+    private final String loginPaneUrl;
+    
+    private final String passwordPaneUrl;
+    
+    /**
+     * If this authentication exception (or its cause) is of the expected type, return it.
+     * Otherwise, return null.
+     * 
+     * @param exc The authentication exception.
+     * @param clazz The desired type.
+     * @return The original exception or its cause if one of them is of the expected type.
+     */
+    @SuppressWarnings("unchecked")
+    protected static <T extends AuthenticationException> T getException(AuthenticationException exc, Class<T> clazz) {
+        if (exc != null) {
+            if (clazz.isInstance(exc)) {
+                return (T) exc;
+            } else if (clazz.isInstance(exc.getCause())) {
+                return (T) exc.getCause();
+            }
+        }
+        return null;
+    }
+    
+    public LoginWindowController(String loginPaneUrl, String passwordPaneUrl) {
+        super();
+        this.loginPaneUrl = loginPaneUrl;
+        this.passwordPaneUrl = passwordPaneUrl;
+    }
+    
     /**
      * Initialize the login form.
      * 
@@ -54,15 +85,17 @@ public class LoginWindowController extends GenericForwardComposer<Component> {
         savedRequest = (SavedRequest) session.removeAttribute(org.carewebframework.security.spring.Constants.SAVED_REQUEST);
         final AuthenticationException authError = (AuthenticationException) session
                 .removeAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
-        IUser user = authError != null && authError.getCause() instanceof CredentialsExpiredException ? (IUser) ((CredentialsExpiredException) authError
-                .getCause()).getExtraInformation() : null;
-        String form = LoginPaneController.DIALOG_LOGIN_PANE;
+        CredentialsExpiredException expired = getException(authError, CredentialsExpiredException.class);
+        IUser user = expired != null && SecurityUtil.getSecurityService().canChangePassword() ? (IUser) expired
+                .getExtraInformation() : null;
+        String form = user != null ? passwordPaneUrl : loginPaneUrl;
         Map<Object, Object> args = new HashMap<Object, Object>();
         args.put("savedRequest", savedRequest);
         args.put("authError", authError);
         args.put("user", user);
         ZKUtil.loadZulPage(form, loginForm, args, this);
-        getPage().setTitle(user != null ? "Change Password" : "Please Login");
+        getPage().setTitle(
+            Labels.getLabel(user != null ? Constants.LBL_PASSWORD_CHANGE_PAGE_TITLE : Constants.LBL_LOGIN_PAGE_TITLE));
         resetTimer();
     }
     
@@ -93,7 +126,7 @@ public class LoginWindowController extends GenericForwardComposer<Component> {
     /**
      * Resets the timer when the user types.
      * 
-     * @param event The key press event.
+     * @param event The onChanging event.
      */
     public void onChanging$j_password1(Event event) {
         resetTimer();
@@ -102,7 +135,7 @@ public class LoginWindowController extends GenericForwardComposer<Component> {
     /**
      * Resets the timer when the user types.
      * 
-     * @param event The key press event.
+     * @param event The onChanging event.
      */
     public void onChanging$j_password2(Event event) {
         resetTimer();
@@ -143,7 +176,7 @@ public class LoginWindowController extends GenericForwardComposer<Component> {
     /**
      * Close the dialog and display the specified message.
      * 
-     * @param message Message to display.
+     * @param message The message text.
      */
     private void close(String message) {
         SecurityUtil.getSecurityService().logout(true, savedRequest == null ? null : savedRequest.getRedirectUrl(), message);

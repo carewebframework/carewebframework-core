@@ -6,7 +6,7 @@
 	xmlns:h="http://www.w3.org/1999/xhtml"
 	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd ">
 
-	<div apply="${loginWindowController}">
+	<div apply="${securityLoginWindowController}">
 		<separator height="30px" />
 		<h:form id="loginForm" name="loginForm"
 			action="${c:encodeURL('/login/j_spring_security_check')}"

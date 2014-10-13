@@ -60,7 +60,7 @@ public class MockAuthenticationProvider extends AbstractAuthenticationProvider<I
         return user;
     }
     
-    private IUser authenticate(final String username, final String password, final String domain) {
+    private IUser authenticate(String username, String password, String domain) {
         if (!check("mock.username", username) || !check("mock.password", password) || !check("mock.domainid", domain)) {
             throw new BadCredentialsException("Authentication failed.");
         }

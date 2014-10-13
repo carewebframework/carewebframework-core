@@ -84,7 +84,7 @@
 		<bean id="securityAccessDeniedHandler"
 			class="org.springframework.security.web.access.AccessDeniedHandlerImpl">
 			<property name="errorPage"
-				value="/zkau/web/org/carewebframework/security/spring/accessDenied.zul" />
+				value="${org.carewebframework.security.access.denied.url}" />
 		</bean>
 
 		<bean id="securityExceptionTranslationFilter"
@@ -160,6 +160,23 @@
 		<!-- Automatically receives AuthenticationEvent messages -->
 		<bean id="securityLoggerListener"
 			class="org.springframework.security.authentication.event.LoggerListener" />
+
+		<!-- Controllers -->
+		<bean id="securityLoginWindowController" class="org.carewebframework.security.spring.controller.LoginWindowController"
+			scope="prototype">
+			<constructor-arg value="${org.carewebframework.security.login.pane.url}" />
+			<constructor-arg value="${org.carewebframework.security.password.change.url}" />
+		</bean>
+
+		<bean id="securityLoginPaneController" class="org.carewebframework.security.spring.controller.LoginPaneController"
+			scope="prototype">
+			<property name="securityService" ref="securityService" />
+		</bean>
+
+		<bean id="securityPasswordChangeController" class="org.carewebframework.security.spring.controller.PasswordChangeController"
+			scope="prototype">
+			<property name="securityService" ref="securityService" />
+		</bean>
 
 	</beans>
 

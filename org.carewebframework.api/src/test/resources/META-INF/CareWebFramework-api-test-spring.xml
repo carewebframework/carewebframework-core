@@ -9,16 +9,22 @@
 		http://www.carewebframework.org/schema/spring/spring-extensions.xsd">
 
 	<beans profile="root-test">
-		<bean id="propertyService" class="org.carewebframework.api.property.MockPropertyService"
+		<bean id="propertyService" class="org.carewebframework.api.property.mock.MockPropertyService"
 			cwf:override="ignore" />
 
-		<bean id="securityService" class="org.carewebframework.api.security.MockSecurityService"
+		<bean id="securityService" class="org.carewebframework.api.security.mock.MockSecurityService"
 			cwf:override="ignore">
 			<constructor-arg>
-				<bean class="org.carewebframework.api.security.MockUser">
+				<bean class="org.carewebframework.api.security.mock.MockUser">
 					<constructor-arg value="1" />
 					<constructor-arg value="User, Mock" />
-					<constructor-arg value="Mock Domain" />
+					<constructor-arg value="mockusername" />
+					<constructor-arg>
+						<bean class="org.carewebframework.api.security.mock.MockSecurityDomain">
+							<constructor-arg value="1" />
+							<constructor-arg value="Mock_Domain" />
+						</bean>
+					</constructor-arg>
 				</bean>
 			</constructor-arg>
 		</bean>

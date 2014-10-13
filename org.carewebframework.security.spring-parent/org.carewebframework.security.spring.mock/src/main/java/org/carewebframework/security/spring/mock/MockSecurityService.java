@@ -9,19 +9,26 @@
  */
 package org.carewebframework.security.spring.mock;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 
+import org.carewebframework.api.security.ISecurityDomain;
+import org.carewebframework.api.security.mock.MockSecurityDomain;
 import org.carewebframework.api.spring.SpringUtil;
 import org.carewebframework.security.spring.AbstractSecurityService;
-import org.carewebframework.ui.zk.PromptDialog;
+import org.carewebframework.security.spring.Constants;
 
 import org.zkoss.util.resource.Labels;
 
 /**
- * Security service implementation.
+ * Mock Spring-based service implementation.
  */
-public class SecurityServiceImpl extends AbstractSecurityService {
+public class MockSecurityService extends AbstractSecurityService {
+    
+    private final List<ISecurityDomain> securityDomains = new ArrayList<ISecurityDomain>();
     
     /**
      * Validates the current user's password.
@@ -59,22 +66,6 @@ public class SecurityServiceImpl extends AbstractSecurityService {
     }
     
     /**
-     * @see org.carewebframework.api.security.ISecurityService#changePassword()
-     */
-    @Override
-    public void changePassword() {
-        PromptDialog.showWarning(Labels.getLabel(Constants.LBL_CHANGE_PASSWORD_UNAVAILABLE));
-    }
-    
-    /**
-     * @see org.carewebframework.api.security.ISecurityService#canChangePassword()
-     */
-    @Override
-    public boolean canChangePassword() {
-        return false;
-    }
-    
-    /**
      * Return login disabled message.
      */
     @Override
@@ -82,4 +73,12 @@ public class SecurityServiceImpl extends AbstractSecurityService {
         return null;
     }
     
+    @Override
+    public List<ISecurityDomain> getSecurityDomains() {
+        return securityDomains;
+    }
+    
+    public void setMockSecurityDomain(MockSecurityDomain securityDomain) {
+        securityDomains.add(securityDomain);
+    }
 }
