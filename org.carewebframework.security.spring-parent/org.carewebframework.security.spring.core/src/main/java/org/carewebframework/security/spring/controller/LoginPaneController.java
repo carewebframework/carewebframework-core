@@ -71,6 +71,8 @@ public class LoginPaneController extends GenericForwardComposer<Component> {
     
     private Component divDomain;
     
+    private Component divInfo;
+    
     private Label lblHeader;
     
     private Html htmlHeader;
@@ -92,6 +94,8 @@ public class LoginPaneController extends GenericForwardComposer<Component> {
     private String defaultPassword;
     
     private String defaultLogoUrl;
+    
+    private boolean autoLogin;
     
     /**
      * Initialize the login form.
@@ -179,7 +183,7 @@ public class LoginPaneController extends GenericForwardComposer<Component> {
         defaultLogoUrl = imgDomain.getSrc();
         domainChanged();
         
-        if (authError == null && defaultPassword != null) {
+        if (authError == null && autoLogin) {
             comp.setVisible(false);
             Events.echoEvent("onSubmit", comp, null);
         }
@@ -298,8 +302,8 @@ public class LoginPaneController extends GenericForwardComposer<Component> {
         lblDomain.setValue(securityDomain.getName());
         String logoUrl = securityDomain.getAttribute(Constants.PROP_LOGIN_LOGO);
         imgDomain.setSrc(logoUrl == null ? defaultLogoUrl : logoUrl);
-        setMessageText(securityDomain.getAttribute(Constants.PROP_LOGIN_HEADER), lblHeader, htmlHeader);
-        setMessageText(securityDomain.getAttribute(Constants.PROP_LOGIN_INFO), lblInfo, htmlInfo);
+        setMessageText(securityDomain.getAttribute(Constants.PROP_LOGIN_HEADER), lblHeader, htmlHeader, null);
+        setMessageText(securityDomain.getAttribute(Constants.PROP_LOGIN_INFO), lblInfo, htmlInfo, divInfo);
     }
     
     /**
@@ -309,13 +313,18 @@ public class LoginPaneController extends GenericForwardComposer<Component> {
      * @param value The message text.
      * @param plainText Component to display plain text.
      * @param htmlText Component to display html.
+     * @param parent If not null, parent will be hidden if text is empty.
      */
-    private void setMessageText(String value, Label plainText, Html htmlText) {
+    private void setMessageText(String value, Label plainText, Html htmlText, Component parent) {
         value = StringUtils.trimToEmpty(value);
         boolean isHtml = StringUtils.startsWithIgnoreCase(value, "<html>");
         boolean notEmpty = !value.isEmpty();
         plainText.setVisible(notEmpty && !isHtml);
         htmlText.setVisible(notEmpty && isHtml);
+        
+        if (parent != null) {
+            parent.setVisible(notEmpty);
+        }
         
         if (isHtml) {
             htmlText.setContent(value);
@@ -349,5 +358,14 @@ public class LoginPaneController extends GenericForwardComposer<Component> {
      */
     public void setDefaultPassword(String value) {
         defaultPassword = value;
+    }
+    
+    /**
+     * If true, login proceeds without user input.
+     * 
+     * @param autoLogin True to automatically log in.
+     */
+    public void setAutoLogin(boolean autoLogin) {
+        this.autoLogin = autoLogin;
     }
 }

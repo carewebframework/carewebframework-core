@@ -15,13 +15,13 @@
 
 		<bean id="securityDomain" class="org.carewebframework.api.security.mock.MockSecurityDomain" 
 			cwf:override="ignore">
-			<constructor-arg value="${mock.domainid:}" />
-			<constructor-arg value="${mock.domainname:}" />
+			<constructor-arg value="${mock.domainid}" />
+			<constructor-arg value="${mock.domainname}" />
 		</bean>
 		
 		<bean id="securityService" class="org.carewebframework.security.spring.mock.MockSecurityService">
 			<property name="logoutTarget" value="${org.carewebframework.security.logout.url}" />
-			<property name="mockSecurityDomain" ref="securityDomain" />
+			<property name="securityDomain" ref="securityDomain" />
 		</bean>
 
 		<bean id="mockUser" class="org.carewebframework.api.security.mock.MockUser" 
@@ -42,7 +42,7 @@
 			<property name="securityService" ref="securityService" />
 			<property name="defaultUsername" value="${mock.username}" />
 			<property name="defaultPassword" value="${mock.password}" />
-			<property name="footerText" value="${mock.greeting}" />
+			<property name="autoLogin" value="${mock.autologin}" />
 		</bean>
 
 	</beans>

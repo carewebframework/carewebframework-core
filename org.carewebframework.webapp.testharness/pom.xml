@@ -12,7 +12,7 @@
 	<name>CareWeb Framework Test Harness</name>
 	
 	<properties>
-		<org.carewebframework.security.profile>org.carewebframework.testharness.security.impl</org.carewebframework.security.profile>
+		<org.carewebframework.security.profile>org.carewebframework.security.spring.mock</org.carewebframework.security.profile>
 	</properties>
 	
 	<build>
@@ -91,7 +91,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.carewebframework</groupId>
-			<artifactId>org.carewebframework.security.spring.mock</artifactId>
+			<artifactId>${org.carewebframework.security.profile}</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>

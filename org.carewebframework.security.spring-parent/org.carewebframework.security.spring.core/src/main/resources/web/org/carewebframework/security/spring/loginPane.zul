@@ -52,7 +52,7 @@
 				style="margin: 20px" />
 			<html id="htmlHeader" visible="false" style="margin: 20px" />
 			<separator height="20px" bar="true" />
-			<div sclass="cwf-login-banner">
+			<div id="divInfo" sclass="cwf-login-banner">
 				<label id="lblInfoTitle"
 					style="font-weight:bold;font-size:1.1em;display:block"
 					value="${labels.login.form.info.title.label}" />
