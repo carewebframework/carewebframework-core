@@ -35,13 +35,13 @@ public class PasswordChangeController extends GenericForwardComposer<Component> 
     
     private Panel panel;
     
-    private Textbox j_username;
+    private Textbox txtUsername;
     
-    private Textbox j_password;
+    private Textbox txtPassword;
     
-    private Textbox j_password1;
+    private Textbox txtPassword1;
     
-    private Textbox j_password2;
+    private Textbox txtPassword2;
     
     private Label lblInfo;
     
@@ -85,23 +85,23 @@ public class PasswordChangeController extends GenericForwardComposer<Component> 
     /**
      * Pressing return in the current password text box moves to the new password text box.
      */
-    public void onOK$j_password() {
-        j_password1.setFocus(true);
-        j_password1.select();
+    public void onOK$txtPassword() {
+        txtPassword1.setFocus(true);
+        txtPassword1.select();
     }
     
     /**
      * Pressing return in the new password text box moves to the confirm password text box.
      */
-    public void onOK$j_password1() {
-        j_password2.setFocus(true);
-        j_password2.select();
+    public void onOK$txtPassword1() {
+        txtPassword2.setFocus(true);
+        txtPassword2.select();
     }
     
     /**
      * Pressing return in confirm password text box submits the form.
      */
-    public void onOK$j_password2() {
+    public void onOK$txtPassword2() {
         doSubmit();
     }
     
@@ -136,9 +136,9 @@ public class PasswordChangeController extends GenericForwardComposer<Component> 
      */
     private void doSubmit() {
         showMessage("");
-        String password = j_password.getValue().trim();
-        String password1 = j_password1.getValue().trim();
-        String password2 = j_password2.getValue().trim();
+        String password = txtPassword.getValue().trim();
+        String password1 = txtPassword1.getValue().trim();
+        String password2 = txtPassword2.getValue().trim();
         
         if (!securityService.validatePassword(password)) {
             showMessage(Labels.getLabel("password.change.dialog.current.password.incorrect"));
@@ -154,7 +154,7 @@ public class PasswordChangeController extends GenericForwardComposer<Component> 
                     showMessage(result);
                 } else if (forced) {
                     String inst = user.getSecurityDomain().getLogicalId();
-                    j_username.setValue(inst + "\\" + user.getLoginName());
+                    txtUsername.setValue(inst + "\\" + user.getLoginName());
                     Events.sendEvent("onSubmit", panel.getRoot(), null);
                 } else {
                     doCancel();
@@ -167,10 +167,10 @@ public class PasswordChangeController extends GenericForwardComposer<Component> 
                         .getLabel("password.change.dialog.password.change.error", new String[] { e1.getMessage() }));
             }
         }
-        j_password.setValue("");
-        j_password1.setValue("");
-        j_password2.setValue("");
-        j_password.setFocus(true);
+        txtPassword.setValue("");
+        txtPassword1.setValue("");
+        txtPassword2.setValue("");
+        txtPassword.setFocus(true);
     }
     
     /**

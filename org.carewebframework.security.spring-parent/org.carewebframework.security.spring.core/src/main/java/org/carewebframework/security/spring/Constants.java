@@ -31,9 +31,9 @@ public class Constants {
     
     public static final String SAVED_REQUEST = "SPRING_SECURITY_SAVED_REQUEST";
     
-    public static final String DEFAULT_SECURITY_DOMAIN = "defaultDomain";
+    public static final String DEFAULT_SECURITY_DOMAIN = "@defaultDomain";
     
-    public static final String DEFAULT_USERNAME = "defaultUsername";
+    public static final String DEFAULT_USERNAME = "@defaultUsername";
     
     public static final String DIALOG_ACCESS_DENIED = RESOURCE_PREFIX + "accessDenied.zul";
     
@@ -49,7 +49,13 @@ public class Constants {
     
     // Login constants
     
-    public static final String LOGIN_PROPERTIES_PREFIX = "LOGIN.";
+    public static final String PROP_LOGIN_LOGO = "LOGIN.LOGO";
+    
+    public static final String PROP_LOGIN_HEADER = "LOGIN.HEADER";
+    
+    public static final String PROP_LOGIN_FOOTER = "LOGIN.FOOTER";
+    
+    public static final String PROP_LOGIN_INFO = "LOGIN.INFO";
     
     public static final String LBL_LOGIN_PAGE_TITLE = "login.form.panel.title";
     
@@ -61,7 +67,7 @@ public class Constants {
     
     public static final String LBL_LOGIN_REQUIRED_FIELDS = "login.required.fields";
     
-    public static final String LBL_LOGIN_NO_VALID_DOMAINS = "login.no.valid.domains";
+    public static final String LBL_LOGIN_NO_VALID_DOMAINS = "login.error.no.valid.domains";
     
     public static final String LBL_LOGIN_ERROR_INVALID = "login.error.invalid";
     

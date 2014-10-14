@@ -9,6 +9,8 @@
  */
 package org.carewebframework.api.security.mock;
 
+import java.util.Map;
+
 import org.carewebframework.api.security.ISecurityDomain;
 
 /**
@@ -22,9 +24,16 @@ public class MockSecurityDomain implements ISecurityDomain {
     
     private final String name;
     
+    private final Map<String, String> attributes;
+    
     public MockSecurityDomain(String logicalId, String name) {
+        this(logicalId, name, null);
+    }
+    
+    public MockSecurityDomain(String logicalId, String name, Map<String, String> attributes) {
         this.logicalId = logicalId;
         this.name = name;
+        this.attributes = attributes;
     }
     
     @Override
@@ -40,6 +49,11 @@ public class MockSecurityDomain implements ISecurityDomain {
     @Override
     public String getLogicalId() {
         return logicalId;
+    }
+    
+    @Override
+    public String getAttribute(String name) {
+        return attributes == null ? null : attributes.get(name);
     }
     
     @Override

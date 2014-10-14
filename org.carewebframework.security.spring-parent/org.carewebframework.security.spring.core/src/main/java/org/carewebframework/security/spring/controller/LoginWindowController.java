@@ -25,10 +25,14 @@ import org.springframework.security.web.savedrequest.SavedRequest;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zk.ui.util.GenericForwardComposer;
+import org.zkoss.zul.Button;
 import org.zkoss.zul.Timer;
+import org.zkoss.zul.impl.InputElement;
+import org.zkoss.zul.impl.MeshElement;
 
 /**
  * Controller for the login component.
@@ -46,6 +50,15 @@ public class LoginWindowController extends GenericForwardComposer<Component> {
     private final String loginPaneUrl;
     
     private final String passwordPaneUrl;
+    
+    private final EventListener<Event> changeListener = new EventListener<Event>() {
+        
+        @Override
+        public void onEvent(Event event) throws Exception {
+            resetTimer();
+        }
+        
+    };
     
     /**
      * If this authentication exception (or its cause) is of the expected type, return it.
@@ -93,10 +106,29 @@ public class LoginWindowController extends GenericForwardComposer<Component> {
         args.put("savedRequest", savedRequest);
         args.put("authError", authError);
         args.put("user", user);
-        ZKUtil.loadZulPage(form, loginForm, args, this);
+        wireListener(ZKUtil.loadZulPage(form, loginForm, args));
         getPage().setTitle(
             Labels.getLabel(user != null ? Constants.LBL_PASSWORD_CHANGE_PAGE_TITLE : Constants.LBL_LOGIN_PAGE_TITLE));
         resetTimer();
+    }
+    
+    /**
+     * Wire change listener to all input elements of child form.
+     * 
+     * @param root Root element.
+     */
+    private void wireListener(Component root) {
+        for (Component child : root.getChildren()) {
+            if (child instanceof MeshElement) {
+                child.addEventListener(Events.ON_SELECT, changeListener);
+            } else if (child instanceof InputElement) {
+                child.addEventListener(Events.ON_CHANGING, changeListener);
+            } else if (child instanceof Button) {
+                child.addEventListener(Events.ON_CLICK, changeListener);
+            } else {
+                wireListener(child);
+            }
+        }
     }
     
     /**
@@ -107,45 +139,6 @@ public class LoginWindowController extends GenericForwardComposer<Component> {
         if (timer != null) {
             timer.start();
         }
-    }
-    
-    /**
-     * Reset the timer when user types anything.
-     */
-    public void onChanging$j_username() {
-        resetTimer();
-    }
-    
-    /**
-     * Reset the timer when user types anything.
-     */
-    public void onChanging$j_password() {
-        resetTimer();
-    }
-    
-    /**
-     * Resets the timer when the user types.
-     * 
-     * @param event The onChanging event.
-     */
-    public void onChanging$j_password1(Event event) {
-        resetTimer();
-    }
-    
-    /**
-     * Resets the timer when the user types.
-     * 
-     * @param event The onChanging event.
-     */
-    public void onChanging$j_password2(Event event) {
-        resetTimer();
-    }
-    
-    /**
-     * Reset timer when selected institution changes.
-     */
-    public void onSelect$j_domain() {
-        resetTimer();
     }
     
     /**

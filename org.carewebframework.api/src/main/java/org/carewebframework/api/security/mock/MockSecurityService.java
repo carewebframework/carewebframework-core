@@ -92,7 +92,13 @@ public class MockSecurityService implements ISecurityService {
     
     @Override
     public List<ISecurityDomain> getSecurityDomains() {
-        return Collections.emptyList();
+        ISecurityDomain securityDomain = mockUser == null ? null : mockUser.getSecurityDomain();
+        
+        if (securityDomain == null) {
+            return Collections.emptyList();
+        }
+        
+        return Collections.singletonList(securityDomain);
     }
     
 }

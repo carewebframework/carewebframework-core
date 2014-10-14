@@ -31,6 +31,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.util.GenericForwardComposer;
 import org.zkoss.zul.Html;
+import org.zkoss.zul.Image;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listcell;
@@ -42,21 +43,27 @@ import org.zkoss.zul.Textbox;
  */
 public class LoginPaneController extends GenericForwardComposer<Component> {
     
+    private enum DomainSelectionMode {
+        ALLOW, DISALLOW, OPTIONAL
+    };
+    
     private static final long serialVersionUID = 1L;
     
     private static final Log log = LogFactory.getLog(LoginPaneController.class);
     
     protected static final String DIALOG_LOGIN_PANE = ZKUtil.getResourcePath(LoginPaneController.class) + "loginPane.zul";
     
-    protected Listbox j_domain;
+    protected Listbox lstDomain;
     
-    protected Textbox j_username;
+    protected Textbox txtUsername;
     
-    protected Textbox j_password;
+    protected Textbox txtPassword;
     
     private Label lblMessage;
     
-    private Label lblState;
+    private Label lblStatus;
+    
+    private Image imgDomain;
     
     private Label lblDomain;
     
@@ -64,9 +71,13 @@ public class LoginPaneController extends GenericForwardComposer<Component> {
     
     private Component divDomain;
     
-    private Label lblFooterText;
+    private Label lblHeader;
     
-    private Html htmlFooterText;
+    private Html htmlHeader;
+    
+    private Label lblInfo;
+    
+    private Html htmlInfo;
     
     private Component loginPrompts;
     
@@ -80,7 +91,7 @@ public class LoginPaneController extends GenericForwardComposer<Component> {
     
     private String defaultPassword;
     
-    private String footerText;
+    private String defaultLogoUrl;
     
     /**
      * Initialize the login form.
@@ -91,7 +102,7 @@ public class LoginPaneController extends GenericForwardComposer<Component> {
     public void doAfterCompose(Component comp) throws Exception {
         super.doAfterCompose(comp);
         savedRequest = (SavedRequest) arg.get("savedRequest");
-        AuthenticationException authError = getAuthException();
+        AuthenticationException authError = (AuthenticationException) arg.get("authError");
         String loginFailureMessage = Labels.getLabel(Constants.LBL_LOGIN_ERROR);//reset back to default
         
         if (LoginWindowController.getException(authError, CredentialsExpiredException.class) != null) {
@@ -103,17 +114,16 @@ public class LoginPaneController extends GenericForwardComposer<Component> {
         String username = (String) session.removeAttribute(Constants.DEFAULT_USERNAME);
         username = authError == null ? defaultUsername : username;
         showMessage(authError == null ? null : loginFailureMessage);
-        j_username.setText(username);
-        j_password.setText(defaultPassword);
+        txtUsername.setText(username);
+        txtPassword.setText(defaultPassword);
         
         if (StringUtils.isEmpty(username)) {
-            j_username.setFocus(true);
+            txtUsername.setFocus(true);
         } else {
-            j_password.setFocus(true);
+            txtPassword.setFocus(true);
         }
         
         List<ISecurityDomain> securityDomains = securityService.getSecurityDomains();
-        divDomain.setVisible(securityDomains.size() > 1);
         String defaultDomain = securityDomains.size() == 1 ? securityDomains.get(0).getLogicalId() : null;
         
         if (StringUtils.isEmpty(defaultDomain)) {
@@ -121,9 +131,6 @@ public class LoginPaneController extends GenericForwardComposer<Component> {
         }
         
         if (StringUtils.isEmpty(defaultDomain)) {
-            SavedRequest savedRequest = (SavedRequest) session
-                    .getAttribute(org.carewebframework.security.spring.Constants.SAVED_REQUEST);
-            
             if (savedRequest != null) {
                 String params[] = savedRequest.getParameterValues(Constants.DEFAULT_SECURITY_DOMAIN);
                 
@@ -135,34 +142,41 @@ public class LoginPaneController extends GenericForwardComposer<Component> {
             }
         }
         
-        if (StringUtils.isEmpty(defaultDomain)) {
-            allowDomainSelection();
-        }
-        
         if (log.isDebugEnabled()) {
             log.debug("Security domains:" + (securityDomains == null ? "null" : securityDomains.size()));
+        }
+        
+        switch (securityDomains.size()) {
+            case 0:
+                showStatus(Labels.getLabel(Constants.LBL_LOGIN_NO_VALID_DOMAINS));
+                return;
+                
+            case 1:
+                setDomainSelectionMode(DomainSelectionMode.DISALLOW);
+                break;
+            
+            default:
+                setDomainSelectionMode(DomainSelectionMode.OPTIONAL);
+                break;
         }
         
         for (ISecurityDomain securityDomain : securityDomains) {
             Listitem li = new Listitem();
             li.setValue(securityDomain);
-            j_domain.appendChild(li);
+            lstDomain.appendChild(li);
             li.appendChild(new Listcell(securityDomain.getName()));
             
-            if (securityDomain.getLogicalId().equals(defaultDomain)) {
+            if (defaultDomain != null && defaultDomain.equals(securityDomain.getLogicalId())) {
                 li.setSelected(true);
+                defaultDomain = null;
             }
         }
         
-        if (j_domain.getChildren().size() > 0) {
-            if (j_domain.getSelectedIndex() == -1) {
-                j_domain.setSelectedIndex(0);
-            }
-        } else {
-            showState(Labels.getLabel(Constants.LBL_LOGIN_NO_VALID_DOMAINS));
+        if (lstDomain.getSelectedIndex() == -1) {
+            lstDomain.setSelectedIndex(0);
         }
         
-        setFooterText(getFooterText());
+        defaultLogoUrl = imgDomain.getSrc();
         domainChanged();
         
         if (authError == null && defaultPassword != null) {
@@ -173,57 +187,25 @@ public class LoginPaneController extends GenericForwardComposer<Component> {
     }
     
     /**
-     * Returns the cached authentication exception, if any.
-     * 
-     * @return The cached authentication exception, or null if none.
-     */
-    protected AuthenticationException getAuthException() {
-        return (AuthenticationException) arg.get("authError");
-    }
-    
-    /**
-     * Returns footer text.
-     * 
-     * @return Footer text (may be null).
-     */
-    protected String getFooterText() {
-        return footerText;
-    }
-    
-    /**
-     * Sets the footer message text to the specified value. If the text starts with an html tag, it
-     * will be rendered as such.
-     *
-     * @param value Footer message text.
-     */
-    public void setFooterText(String value) {
-        footerText = value;
-        
-        if (lblFooterText != null) {
-            setMessageText(value, lblFooterText, htmlFooterText);
-        }
-    }
-    
-    /**
      * Username onOK event handler.
      */
-    public void onOK$j_username() {
-        j_password.setFocus(true);
+    public void onOK$txtUsername() {
+        txtPassword.setFocus(true);
     }
     
     /**
      * Password onOK event handler.
      */
-    public void onOK$j_password() {
+    public void onOK$txtPassword() {
         onSubmit();
     }
     
     /**
      * Authority onSelect event handler.
      */
-    public void onSelect$j_domain() {
+    public void onSelect$lstDomain() {
         domainChanged();
-        j_username.setFocus(true);
+        txtUsername.setFocus(true);
     }
     
     /**
@@ -237,15 +219,15 @@ public class LoginPaneController extends GenericForwardComposer<Component> {
      * Enable domain selection.
      */
     public void onClick$btnDomain() {
-        allowDomainSelection();
+        setDomainSelectionMode(DomainSelectionMode.ALLOW);
     }
     
     /**
-     * Enables selection of the domain.
+     * Enables/disables selection of the domain.
      */
-    private void allowDomainSelection() {
-        cmpDomainList.setVisible(true);
-        divDomain.setVisible(false);
+    private void setDomainSelectionMode(DomainSelectionMode mode) {
+        cmpDomainList.setVisible(mode == DomainSelectionMode.ALLOW);
+        divDomain.setVisible(mode == DomainSelectionMode.OPTIONAL);
     }
     
     /**
@@ -254,7 +236,7 @@ public class LoginPaneController extends GenericForwardComposer<Component> {
      * @return An ISecurityDomain object. May be null.
      */
     protected ISecurityDomain getSelectedSecurityDomain() {
-        Listitem item = j_domain.getSelectedItem();
+        Listitem item = lstDomain.getSelectedItem();
         return item == null ? null : (ISecurityDomain) item.getValue();
     }
     
@@ -265,8 +247,8 @@ public class LoginPaneController extends GenericForwardComposer<Component> {
         showMessage("");
         final ISecurityDomain securityDomain = getSelectedSecurityDomain();
         String securityDomainId = securityDomain == null ? null : securityDomain.getLogicalId();
-        String username = j_username.getValue().trim();
-        final String password = j_password.getValue();
+        String username = txtUsername.getValue().trim();
+        final String password = txtPassword.getValue();
         
         if (username.contains("\\")) {
             String[] pcs = username.split("\\\\", 2);
@@ -278,8 +260,8 @@ public class LoginPaneController extends GenericForwardComposer<Component> {
             session.setAttribute(Constants.DEFAULT_SECURITY_DOMAIN, securityDomainId);
             FrameworkWebSupport.setCookie(Constants.DEFAULT_SECURITY_DOMAIN, securityDomainId);
             session.setAttribute(Constants.DEFAULT_USERNAME, username);
-            j_username.setValue(securityDomainId + "\\" + username);
-            showState(Labels.getLabel(Constants.LBL_LOGIN_PROGRESS));
+            txtUsername.setValue(securityDomainId + "\\" + username);
+            showStatus(Labels.getLabel(Constants.LBL_LOGIN_PROGRESS));
             session.setAttribute(org.carewebframework.security.spring.Constants.SAVED_REQUEST, savedRequest);
             Events.sendEvent("onSubmit", loginRoot.getRoot(), null);
         } else {
@@ -300,16 +282,24 @@ public class LoginPaneController extends GenericForwardComposer<Component> {
     /**
      * Disable all user input elements.
      *
-     * @param text State text to display.
+     * @param text Status text to display.
      */
-    private void showState(final String text) {
-        lblState.setValue(text);
+    private void showStatus(final String text) {
+        lblStatus.setValue(text);
         loginPrompts.setVisible(false);
-        lblState.setVisible(true);
+        lblStatus.setVisible(true);
     }
     
+    /**
+     * Update dependent UI elements when security domain selection has changed.
+     */
     private void domainChanged() {
-        lblDomain.setValue(getSelectedSecurityDomain().getName());
+        ISecurityDomain securityDomain = getSelectedSecurityDomain();
+        lblDomain.setValue(securityDomain.getName());
+        String logoUrl = securityDomain.getAttribute(Constants.PROP_LOGIN_LOGO);
+        imgDomain.setSrc(logoUrl == null ? defaultLogoUrl : logoUrl);
+        setMessageText(securityDomain.getAttribute(Constants.PROP_LOGIN_HEADER), lblHeader, htmlHeader);
+        setMessageText(securityDomain.getAttribute(Constants.PROP_LOGIN_INFO), lblInfo, htmlInfo);
     }
     
     /**

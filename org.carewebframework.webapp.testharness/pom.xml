@@ -12,7 +12,7 @@
 	<name>CareWeb Framework Test Harness</name>
 	
 	<properties>
-		<org.carewebframework.security.artifact>org.carewebframework.testharness.security.impl</org.carewebframework.security.artifact>
+		<org.carewebframework.security.profile>org.carewebframework.testharness.security.impl</org.carewebframework.security.profile>
 	</properties>
 	
 	<build>

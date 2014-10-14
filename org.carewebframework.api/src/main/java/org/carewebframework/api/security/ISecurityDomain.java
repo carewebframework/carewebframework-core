@@ -32,6 +32,14 @@ public interface ISecurityDomain extends Serializable {
     String getLogicalId();
     
     /**
+     * Returns a named attribute for the security domain.
+     * 
+     * @param name The attribute name.
+     * @return The attribute value, or null if not found.
+     */
+    String getAttribute(String name);
+    
+    /**
      * Returns the native security domain object if this is a proxy.
      * 
      * @return The native security domain object.
