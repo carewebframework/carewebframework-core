@@ -44,7 +44,7 @@
 	height: 15px;
 	position: absolute;
 	right: 3px;
-	top: 2px;
+	top: 0;
 	z-index: 15;
 	zoom: 1;
 }
