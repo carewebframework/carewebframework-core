@@ -16,7 +16,6 @@ import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 
 import org.carewebframework.api.security.ISecurityDomain;
-import org.carewebframework.api.security.mock.MockSecurityDomain;
 import org.carewebframework.api.spring.SpringUtil;
 import org.carewebframework.security.spring.AbstractSecurityService;
 import org.carewebframework.security.spring.Constants;
@@ -78,7 +77,7 @@ public class MockSecurityService extends AbstractSecurityService {
         return securityDomains;
     }
     
-    public void setMockSecurityDomain(MockSecurityDomain securityDomain) {
+    public void setSecurityDomain(ISecurityDomain securityDomain) {
         securityDomains.add(securityDomain);
     }
 }
