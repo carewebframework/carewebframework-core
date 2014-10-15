@@ -93,6 +93,8 @@ public class LoginPaneController extends GenericForwardComposer<Component> {
     
     private String defaultPassword;
     
+    private String defaultDomain;
+    
     private String defaultLogoUrl;
     
     private boolean autoLogin;
@@ -128,22 +130,26 @@ public class LoginPaneController extends GenericForwardComposer<Component> {
         }
         
         List<ISecurityDomain> securityDomains = securityService.getSecurityDomains();
-        String defaultDomain = securityDomains.size() == 1 ? securityDomains.get(0).getLogicalId() : null;
+        String securityDomainId = securityDomains.size() == 1 ? securityDomains.get(0).getLogicalId() : null;
         
-        if (StringUtils.isEmpty(defaultDomain)) {
-            defaultDomain = (String) session.getAttribute(Constants.DEFAULT_SECURITY_DOMAIN);
+        if (StringUtils.isEmpty(securityDomainId)) {
+            securityDomainId = (String) session.getAttribute(Constants.DEFAULT_SECURITY_DOMAIN);
         }
         
-        if (StringUtils.isEmpty(defaultDomain)) {
+        if (StringUtils.isEmpty(securityDomainId)) {
             if (savedRequest != null) {
                 String params[] = savedRequest.getParameterValues(Constants.DEFAULT_SECURITY_DOMAIN);
                 
                 if (params != null && params.length > 0) {
-                    defaultDomain = params[0];
+                    securityDomainId = params[0];
                 }
             } else {
-                defaultDomain = execution.getParameter(Constants.DEFAULT_SECURITY_DOMAIN);
+                securityDomainId = execution.getParameter(Constants.DEFAULT_SECURITY_DOMAIN);
             }
+        }
+        
+        if (StringUtils.isEmpty(securityDomainId)) {
+            securityDomainId = defaultDomain;
         }
         
         if (log.isDebugEnabled()) {
@@ -170,9 +176,9 @@ public class LoginPaneController extends GenericForwardComposer<Component> {
             lstDomain.appendChild(li);
             li.appendChild(new Listcell(securityDomain.getName()));
             
-            if (defaultDomain != null && defaultDomain.equals(securityDomain.getLogicalId())) {
+            if (securityDomainId != null && securityDomainId.equals(securityDomain.getLogicalId())) {
                 li.setSelected(true);
-                defaultDomain = null;
+                securityDomainId = null;
             }
         }
         
@@ -343,7 +349,7 @@ public class LoginPaneController extends GenericForwardComposer<Component> {
     }
     
     /**
-     * Sets the default username (for testing/debugging only)
+     * Sets the default username (for testing/debugging only).
      * 
      * @param value Default username.
      */
@@ -358,6 +364,15 @@ public class LoginPaneController extends GenericForwardComposer<Component> {
      */
     public void setDefaultPassword(String value) {
         defaultPassword = value;
+    }
+    
+    /**
+     * Sets the default security domain.
+     * 
+     * @param value Default security domain logical id.
+     */
+    public void setDefaultDomain(String value) {
+        defaultDomain = value;
     }
     
     /**
