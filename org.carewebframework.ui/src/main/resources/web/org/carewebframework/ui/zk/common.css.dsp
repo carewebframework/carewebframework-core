@@ -225,6 +225,12 @@
 	pointer-events: none;
 }
 
+body {
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+}
+
 /* JQuery-UI overrides */
 
 .ui-front {
