@@ -29,7 +29,6 @@ import org.carewebframework.api.spring.SpringUtil;
 import org.carewebframework.help.IHelpSet;
 import org.carewebframework.shell.help.HelpDefinition;
 import org.carewebframework.shell.help.HelpUtil;
-import org.carewebframework.shell.layout.LayoutIdentifier;
 import org.carewebframework.shell.layout.UIElementDesktop;
 import org.carewebframework.shell.layout.UIElementZKBase;
 import org.carewebframework.shell.layout.UILayout;
@@ -265,7 +264,7 @@ public class CareWebShell extends Div implements AfterCompose {
     }
     
     /**
-     * Loads a configuration from the specified resource.
+     * Loads a layout from the specified resource.
      * 
      * @param resource URL of the resource containing the layout configuration.
      *            <p>
@@ -280,16 +279,7 @@ public class CareWebShell extends Div implements AfterCompose {
      * @throws Exception Unspecified exception.
      */
     public void loadLayoutFromResource(String resource) throws Exception {
-        if (resource.startsWith("app:")) {
-            layout.loadByAppId(resource.substring(4));
-        } else if (resource.startsWith("shared:")) {
-            layout.loadFromProperty(new LayoutIdentifier(resource.substring(7), true));
-        } else if (resource.startsWith("private:")) {
-            layout.loadFromProperty(new LayoutIdentifier(resource.substring(8), false));
-        } else {
-            layout.loadFromUrl(resource);
-        }
-        
+        layout.loadFromResource(resource);
         FrameworkUtil.setAppName(layout.getName());
         buildUI(layout);
     }

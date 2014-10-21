@@ -222,6 +222,33 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
     }
     
     /**
+     * Loads a layout from the specified resource.
+     * 
+     * @param resource URL of the resource containing the layout configuration.
+     *            <p>
+     *            If url of format "app:xxx", then layout associated with application id "xxx" is
+     *            loaded.
+     *            <p>
+     *            If url of format "shared:xxx", then shared layout named "xxx" is loaded.
+     *            <p>
+     *            If url of format "private:xxx", then user layout named "xxx" is loaded.
+     *            <p>
+     *            Otherwise, resource is assumed to be a resource url.
+     * @throws Exception Unspecified exception.
+     */
+    public void loadFromResource(String resource) throws Exception {
+        if (resource.startsWith("app:")) {
+            loadByAppId(resource.substring(4));
+        } else if (resource.startsWith("shared:")) {
+            loadFromProperty(new LayoutIdentifier(resource.substring(7), true));
+        } else if (resource.startsWith("private:")) {
+            loadFromProperty(new LayoutIdentifier(resource.substring(8), false));
+        } else {
+            loadFromUrl(resource);
+        }
+    }
+    
+    /**
      * Load the layout from a file.
      * 
      * @param url Resource path.

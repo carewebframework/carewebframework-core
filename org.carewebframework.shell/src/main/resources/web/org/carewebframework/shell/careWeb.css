@@ -290,6 +290,13 @@
 	display: none;
 }
 
+.cwf-about-header {
+	font-size: 150%;
+	white-space: normal;
+	font-weight: bold;
+	color: darkblue;
+}
+
 @media print {
 
 	/* used for print to ensure all data is on the page with 'shrink to fit' option */

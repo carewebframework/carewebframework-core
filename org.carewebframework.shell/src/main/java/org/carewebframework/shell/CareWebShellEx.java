@@ -287,12 +287,12 @@ public class CareWebShellEx extends CareWebShell {
      * Registers a layout at the specified path.
      * 
      * @param path Format is &lt;tab name&gt;\&lt;tree node path&gt;
-     * @param url Location of the xml layout.
+     * @param resource Location of the xml layout.
      * @throws Exception Unspecified exception.
      */
-    public void registerLayout(String path, String url) throws Exception {
+    public void registerLayout(String path, String resource) throws Exception {
         UILayout layout = new UILayout();
-        layout.loadFromUrl(url);
+        layout.loadFromResource(resource);
         UIElementBase parent = parentFromPath(path);
         
         if (parent != null) {

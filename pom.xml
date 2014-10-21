@@ -252,6 +252,8 @@
 								</Implementation-Title>
 								<Implementation-Vendor>${project.organization.name}
 								</Implementation-Vendor>
+								<Implementation-Description>${project.description}
+								</Implementation-Description>
 							</manifestEntries>
 						</archive>
 					</configuration>
@@ -271,6 +273,8 @@
 								</Implementation-Title>
 								<Implementation-Vendor>${project.organization.name}
 								</Implementation-Vendor>
+								<Implementation-Description>${project.description}
+								</Implementation-Description>
 							</manifestEntries>
 						</archive>
 					</configuration>

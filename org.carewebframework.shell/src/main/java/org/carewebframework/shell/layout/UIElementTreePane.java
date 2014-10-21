@@ -139,7 +139,7 @@ public class UIElementTreePane extends UIElementZKBase {
     public void bind() {
         setTreeView(getAncestor(UIElementTreeView.class));
         UIElementBase parent = getParent();
-        Tree tree = treeView.getTree();
+        Tree tree = treeView == null ? null : treeView.getTree();
         Treechildren tc = parent == treeView ? tree.getTreechildren() : ((UIElementTreePane) parent).node.getTreechildren();
         UIElementBase sib = getNextSibling(false);
         
@@ -149,7 +149,10 @@ public class UIElementTreePane extends UIElementZKBase {
         
         Component refNode = sib instanceof UIElementTreePane ? ((UIElementTreePane) sib).node : null;
         tc.insertBefore(node, refNode);
-        TreeUtil.adjustVisibility(tree);
+        
+        if (tree != null) {
+            TreeUtil.adjustVisibility(tree);
+        }
     }
     
     /**

@@ -9,14 +9,17 @@
 						<image src="${$composer.icon}" />
 					</column>
 					<column width="50%" style="text-align:center">
-						<label value="${$composer.source}"
-							style="font-size:150%;white-space:normal;font-weight:bold;color:darkblue" />
+						<label value="${$composer.source}" sclass="cwf-about-header" />
 					</column>
 				</columns>
 				<rows>
 					<row forEach="${arg}">
-						<label value="${each.key}" />
-						<label value="${each.value}" />
+						<cell visible="${not empty each.key}">
+							<label value="${each.key}" />
+						</cell>
+						<cell colspan="${empty each.key ? 2 : 1}">
+							<label value="${each.value}" />
+						</cell>
 					</row>
 				</rows>
 			</grid>

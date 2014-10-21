@@ -10,6 +10,7 @@
 	<artifactId>org.carewebframework.webapp.testharness</artifactId>
 	<packaging>war</packaging>
 	<name>CareWeb Framework Test Harness</name>
+	<description>Plugin Test Harness for the CareWeb Framework.</description>
 	
 	<properties>
 		<org.carewebframework.security.profile>org.carewebframework.security.spring.mock</org.carewebframework.security.profile>
