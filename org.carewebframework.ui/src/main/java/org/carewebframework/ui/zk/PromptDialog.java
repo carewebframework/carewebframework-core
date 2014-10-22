@@ -15,12 +15,14 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import org.carewebframework.api.property.PropertyUtil;
 import org.carewebframework.common.StrUtil;
 
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
@@ -43,6 +45,8 @@ public class PromptDialog extends Window {
     
     protected static final Log log = LogFactory.getLog(PromptDialog.class.getClass());
     
+    private static final String ATTR_RESPONSE = "response";
+    
     private static final String SAVED_RESPONSE_PROP_NAME = "CAREWEB.SAVED.RESPONSES";
     
     private static final String RESOURCE_PREFIX = ZKUtil.getResourcePath(PromptDialog.class);
@@ -55,7 +59,78 @@ public class PromptDialog extends Window {
     
     private static final String LABEL_IDS_CANCEL_OK = LABEL_ID_CANCEL + "|" + LABEL_ID_OK;
     
-    private String _result;
+    /**
+     * A response object that will be associated the button that, when clicked, will generate the
+     * response.
+     */
+    public static class Response {
+        
+        private final int index;
+        
+        private final String label;
+        
+        private final boolean excluded;
+        
+        private final boolean ok;
+        
+        private final boolean dflt;
+        
+        Response(int index, String label, boolean excluded, boolean ok, boolean dflt) {
+            this.index = index;
+            this.label = StrUtil.formatMessage(label);
+            this.excluded = excluded;
+            this.ok = ok;
+            this.dflt = dflt;
+        }
+        
+        /**
+         * Returns the response index.
+         * 
+         * @return The response index.
+         */
+        public int getIndex() {
+            return index;
+        }
+        
+        /**
+         * Returns the response label.
+         * 
+         * @return The response label.
+         */
+        public String getLabel() {
+            return label;
+        }
+        
+        /**
+         * Returns true if the response is never to be saved.
+         * 
+         * @return True to suppress saving of response.
+         */
+        public boolean isExcluded() {
+            return excluded;
+        }
+        
+        /**
+         * True if this response corresponds to an "OK" response.
+         * 
+         * @return True if OK response.
+         */
+        public boolean isOk() {
+            return ok;
+        }
+        
+        /**
+         * True if this is the default response.
+         * 
+         * @return True if default response.
+         */
+        public boolean isDflt() {
+            return dflt;
+        }
+        
+    }
+    
+    private Response _response;
     
     private EventListener<Event> _listener;
     
@@ -68,6 +143,8 @@ public class PromptDialog extends Window {
     private Listbox listBox;
     
     private Checkbox chkRemember;
+    
+    private Component buttonParent;
     
     /**
      * Display the prompt dialog.
@@ -92,16 +169,11 @@ public class PromptDialog extends Window {
     public static <T> T show(final String message, final String title, final T[] responses, final String styles,
                              final T defaultResponse, final EventListener<Event> eventListener, final String saveResponseId,
                              final T[] excludeResponses) {
-        String rsp = show(message, title, toResponseList(responses), styles, defaultResponse == null ? null
-                : defaultResponse.toString(), eventListener, saveResponseId, toResponseList(excludeResponses));
+        int rsp = show(message, title, toResponseStr(responses), styles,
+            defaultResponse == null ? null : defaultResponse.toString(), eventListener, saveResponseId,
+            toResponseStr(excludeResponses));
         
-        for (T response : responses) {
-            if (response != null && rsp.equals(response.toString())) {
-                return response;
-            }
-        }
-        
-        return null;
+        return rsp < 0 ? null : responses[rsp];
     }
     
     /**
@@ -123,26 +195,19 @@ public class PromptDialog extends Window {
      * @param excludeResponses Only applies if saveResponseId is specified. This is a list of
      *            responses that will not be saved and is specified in the same format as the
      *            buttonCaptions parameter.
-     * @return Caption of button that was clicked.
+     * @return Index of button that was clicked.
      */
-    public static String show(final String message, final String title, final String buttonCaptions, final String styles,
-                              String defaultButton, final EventListener<Event> eventListener, final String saveResponseId,
-                              final String excludeResponses) {
-        final List<String> responseList = toResponseList(buttonCaptions);
-        List<String> excludeList = null;
-        String result;
+    public static int show(final String message, final String title, final String buttonCaptions, final String styles,
+                           String defaultButton, final EventListener<Event> eventListener, final String saveResponseId,
+                           final String excludeResponses) {
+        final List<Response> responseList = toResponseList(buttonCaptions, excludeResponses, defaultButton);
         
         if (saveResponseId != null) {
-            excludeList = toResponseList(excludeResponses);
-            result = getLastResponse(saveResponseId);
+            int i = getLastResponse(saveResponseId);
             
-            if (result != null && !result.isEmpty() && responseList.contains(result) && !excludeList.contains(result)) {
-                return result;
+            if (i >= 0 && i < responseList.size() && !responseList.get(i).isExcluded()) {
+                return i;
             }
-        }
-        
-        if (defaultButton == null && responseList.size() == 1) {
-            defaultButton = responseList.get(0);
         }
         
         final Map<Object, Object> args = initArgs(message, title);
@@ -150,22 +215,22 @@ public class PromptDialog extends Window {
         args.put("icon", sclass == null ? null : sclass[0]);
         args.put("sclass", sclass == null ? null : sclass[1]);
         args.put("focus", StrUtil.formatMessage(defaultButton));
-        args.put("buttons", responseList);
+        args.put("responses", responseList);
         args.put("remember", saveResponseId != null);
         args.put("input", null);
         final PromptDialog dlg = showDialog(args, eventListener, false);
         
         if (dlg != null) {
-            result = dlg._result;
+            Response response = dlg._response;
             
-            if (dlg._remember && !excludeList.contains(result)) {
-                saveLastResponse(saveResponseId, result);
+            if (dlg._remember && !response.isExcluded()) {
+                saveLastResponse(saveResponseId, response.getIndex());
             }
             
-            return result;
+            return response.getIndex();
             
         }
-        return null;
+        return -1;
     }
     
     /**
@@ -193,10 +258,10 @@ public class PromptDialog extends Window {
      * @param styles SClass specifiers for icon and text, respectively, separated by vertical bars.
      * @param defaultButton Caption of button to have initial focus
      * @param eventListener Optional event listener to intercept click events
-     * @return Caption of button that was clicked.
+     * @return Index of button that was clicked.
      */
-    public static String show(final String message, final String title, final String buttonCaptions, final String styles,
-                              final String defaultButton, final EventListener<Event> eventListener) {
+    public static int show(final String message, final String title, final String buttonCaptions, final String styles,
+                           final String defaultButton, final EventListener<Event> eventListener) {
         return show(message, title, buttonCaptions, styles, defaultButton, eventListener, null, null);
     }
     
@@ -223,10 +288,10 @@ public class PromptDialog extends Window {
      * @param buttonCaptions Button captions separated by vertical bars
      * @param styles SClass specifiers for icon and text, respectively, separated by vertical bars.
      * @param defaultButton Caption of button to have initial focus
-     * @return Caption of button that was clicked.
+     * @return Index of button that was clicked.
      */
-    public static String show(final String message, final String title, final String buttonCaptions, final String styles,
-                              final String defaultButton) {
+    public static int show(final String message, final String title, final String buttonCaptions, final String styles,
+                           final String defaultButton) {
         return show(message, title, buttonCaptions, styles, defaultButton, null);
     }
     
@@ -250,9 +315,9 @@ public class PromptDialog extends Window {
      * @param title Title of dialog
      * @param buttonCaptions Button captions separated by vertical bars
      * @param styles SClass specifiers for icon and text, respectively, separated by vertical bars.
-     * @return Caption of button that was clicked.
+     * @return Index of button that was clicked.
      */
-    public static String show(final String message, final String title, final String buttonCaptions, final String styles) {
+    public static int show(final String message, final String title, final String buttonCaptions, final String styles) {
         return show(message, title, buttonCaptions, styles, null);
     }
     
@@ -274,9 +339,9 @@ public class PromptDialog extends Window {
      * @param message Text message
      * @param title Title of dialog
      * @param buttonCaptions Button captions separated by vertical bars
-     * @return Caption of button that was clicked.
+     * @return Index of button that was clicked.
      */
-    public static String show(final String message, final String title, final String buttonCaptions) {
+    public static int show(final String message, final String title, final String buttonCaptions) {
         return show(message, title, buttonCaptions, Messagebox.INFORMATION);
     }
     
@@ -437,17 +502,17 @@ public class PromptDialog extends Window {
      * @return True if user clicked OK, false otherwise.
      */
     public static boolean confirm(final String message, final String title, final String responseId) {
-        return isOK(show(message, title, LABEL_IDS_CANCEL_OK, Messagebox.QUESTION, null, null, responseId, LABEL_ID_CANCEL));
+        return 1 == show(message, title, LABEL_IDS_CANCEL_OK, Messagebox.QUESTION, null, null, responseId, LABEL_ID_CANCEL);
     }
     
     /**
-     * Returns true if the result corresponds to an OK result.
+     * Returns true if the text corresponds to an OK result.
      * 
-     * @param result Result value to test.
+     * @param text Text to test.
      * @return True if represents an OK result.
      */
-    private static boolean isOK(String result) {
-        return StrUtil.formatMessage(LABEL_ID_OK).equals(result);
+    private static boolean isOK(String text) {
+        return StrUtil.formatMessage(LABEL_ID_OK).equals(text);
     }
     
     /**
@@ -455,44 +520,53 @@ public class PromptDialog extends Window {
      * 
      * @param responseId Unique response id.
      */
-    public static void removeSavedResponse(final String responseId) {
-        saveLastResponse(responseId, null);
+    public static void removeSavedResponse(String responseId) {
+        saveLastResponse(responseId, -1);
     }
     
     /**
-     * Returns the last response for this dialog.
+     * Returns the index of the last response for this dialog.
      * 
      * @param responseId Unique id of response.
-     * @return Value of last response or null if none saved.
+     * @return Index of last response or -1 if none saved.
      */
-    private static String getLastResponse(final String responseId) {
-        return PropertyUtil.getValue(SAVED_RESPONSE_PROP_NAME, responseId);
+    private static int getLastResponse(String responseId) {
+        String saved = PropertyUtil.getValue(SAVED_RESPONSE_PROP_NAME, responseId);
+        return NumberUtils.toInt(saved, -1);
     }
     
     /**
      * Saves the last response under the named responseId.
      * 
      * @param responseId Unique id of response.
-     * @param response Response to save.
+     * @param index Index of response to save. A value less than zero will delete any saved
+     *            response.
      */
-    private static void saveLastResponse(final String responseId, final String response) {
-        PropertyUtil.saveValue(SAVED_RESPONSE_PROP_NAME, responseId, false, response);
+    private static void saveLastResponse(String responseId, int index) {
+        PropertyUtil.saveValue(SAVED_RESPONSE_PROP_NAME, responseId, false, index < 0 ? null : Integer.toString(index));
     }
     
     /**
-     * Returns a string of vertical bar delimited items a string list.
+     * Returns list of response objects created from a string of vertical bar delimited captions.
      * 
      * @param responses Response list separated by vertical bars.
-     * @return List of responses.
+     * @param exclusions Exclusion list separated by vertical bars (may be null).
+     * @param dflt Default response (may be null).
+     * @return List of response objects corresponding to response list.
      */
-    private static List<String> toResponseList(final String responses) {
-        List<String> result = StrUtil.toList(responses, "|");
+    private static List<Response> toResponseList(String responses, String exclusions, String dflt) {
+        List<String> excList = StrUtil.toList(exclusions, "|");
+        List<String> rspList = StrUtil.toList(responses, "|");
+        List<Response> list = new ArrayList<Response>();
+        boolean forceDefault = dflt == null && rspList.size() == 1;
         
-        for (int i = 0; i < result.size(); i++) {
-            result.set(i, StrUtil.formatMessage(result.get(i)));
+        for (int i = 0; i < rspList.size(); i++) {
+            String label = rspList.get(i);
+            Response rsp = new Response(i, label, excList.contains(label), isOK(label), forceDefault || label.equals(dflt));
+            list.add(rsp);
         }
         
-        return result;
+        return list;
     }
     
     /**
@@ -501,21 +575,8 @@ public class PromptDialog extends Window {
      * @param responses Array of response objects.
      * @return Vertical bar delimited list.
      */
-    private static <T> String toResponseList(final T[] responses) {
-        if (responses == null) {
-            return null;
-        }
-        
-        StringBuilder sb = new StringBuilder();
-        
-        for (T response : responses) {
-            if (sb.length() > 0) {
-                sb.append('|');
-            }
-            
-            sb.append(response.toString());
-        }
-        return sb.toString();
+    private static <T> String toResponseStr(final T[] responses) {
+        return StringUtils.join(responses, "|");
     }
     
     /**
@@ -584,15 +645,15 @@ public class PromptDialog extends Window {
      * @return Result of input, or null if canceled.
      */
     private static Object input(final Map<Object, Object> args) {
-        final List<String> responseList = toResponseList(LABEL_IDS_CANCEL_OK);
+        List<Response> responseList = toResponseList(LABEL_IDS_CANCEL_OK, null, null);
         args.put("icon", null);
         args.put("focus", null);
         args.put("remember", false);
-        args.put("buttons", responseList);
-        final PromptDialog dlg = showDialog(args, null, true);
+        args.put("responses", responseList);
+        PromptDialog dlg = showDialog(args, null, true);
         
         if (dlg != null) {
-            return isOK(dlg._result) ? dlg._input : null;
+            return dlg._response.isOk() ? dlg._input : null;
             
         }
         return null;
@@ -632,12 +693,12 @@ public class PromptDialog extends Window {
     }
     
     /**
-     * Retrieve the responses and close the dialog.
+     * Retrieve the response and close the dialog.
      * 
-     * @param result The caption of the clicked button.
+     * @param button The button that was clicked.
      */
-    private void close(final String result) {
-        _result = result;
+    private void close(Button button) {
+        _response = getResponse(button);
         _remember = chkRemember.isChecked();
         
         if (textBox.isVisible()) {
@@ -653,19 +714,50 @@ public class PromptDialog extends Window {
     /**
      * Returns true if valid input is present.
      * 
-     * @param result The input value to test.
+     * @param button The button that was clicked.
      * @return True if input is valid.
      */
-    private boolean inputCheck(final String result) {
-        if (isOK(result)) {
-            if (textBox.isVisible()) {
-                return !StringUtils.isEmpty(textBox.getValue());
-            } else if (listBox.isVisible()) {
-                return listBox.getSelectedItem() != null;
-            }
+    private boolean inputCheck(Button button) {
+        if (!getResponse(button).isOk()) {
+            return true;
+        }
+        
+        if (textBox.isVisible()) {
+            return !StringUtils.isEmpty(textBox.getValue());
+        }
+        
+        if (listBox.isVisible()) {
+            return listBox.getSelectedItem() != null;
         }
         
         return true;
+    }
+    
+    /**
+     * Returns the response object associated with the button.
+     * 
+     * @param button A button.
+     * @return The associated response object.
+     */
+    private Response getResponse(Button button) {
+        return (Response) button.getAttribute(ATTR_RESPONSE);
+    }
+    
+    /**
+     * Returns the button associated with an OK response.
+     * 
+     * @return The OK button (could be null).
+     */
+    private Button getOKButton() {
+        Button button = null;
+        
+        while ((button = ZKUtil.findChild(buttonParent, Button.class, button)) != null) {
+            if (getResponse(button).isOk()) {
+                break;
+            }
+        }
+        
+        return button;
     }
     
     /**
@@ -675,7 +767,7 @@ public class PromptDialog extends Window {
         
         @Override
         public void onEvent(final Event event) throws Exception {
-            if (!inputCheck(((Button) event.getTarget()).getLabel())) {
+            if (!inputCheck(((Button) event.getTarget()))) {
                 event.stopPropagation();
             }
         }
@@ -712,10 +804,10 @@ public class PromptDialog extends Window {
      * @param event OK event.
      */
     public void onInputOK(final Event event) {
-        String okResult = StrUtil.formatMessage(LABEL_ID_OK);
+        Button button = getOKButton();
         
-        if (inputCheck(okResult)) {
-            close(okResult);
+        if (button != null && inputCheck(button)) {
+            close(button);
         }
     }
     
@@ -737,6 +829,6 @@ public class PromptDialog extends Window {
             }
         }
         
-        close(((Button) event.getTarget()).getLabel());
+        close(((Button) event.getTarget()));
     }
 }

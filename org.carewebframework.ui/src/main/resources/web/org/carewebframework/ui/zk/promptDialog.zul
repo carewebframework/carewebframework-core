@@ -24,9 +24,11 @@
 			label="${labels.cwf.prompt.chx.reminder.label}"
 			visible="${arg.remember}" />
 		<separator bar="true" />
-		<toolbar align="center" style="background:transparent;border:none;">
-			<button label="${each}" forward="promptDialog.onButtonClick"
-				forEach="${arg.buttons}" focus="${each eq arg.focus}" style="margin: 0 2px 0 2px"/>
+		<toolbar id="buttonParent" align="center" style="background:transparent;border:none;">
+			<button label="${each.label}" forward="promptDialog.onButtonClick"
+				forEach="${arg.responses}" focus="${each.dflt}" style="margin: 0 2px 0 2px">
+				<custom-attributes response="${each}" />
+			</button>
 		</toolbar>
 	</vlayout>
 </window>
