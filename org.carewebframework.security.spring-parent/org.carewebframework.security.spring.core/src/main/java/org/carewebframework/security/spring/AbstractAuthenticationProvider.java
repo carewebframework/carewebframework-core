@@ -17,6 +17,8 @@ import java.util.Set;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import org.carewebframework.api.domain.IUser;
+
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -29,10 +31,8 @@ import org.springframework.security.core.userdetails.User;
 /**
  * Provides authentication support for the framework. Takes provided authentication credentials and
  * authenticates them against the database.
- * 
- * @param <T> User class
  */
-public abstract class AbstractAuthenticationProvider<T> implements AuthenticationProvider {
+public abstract class AbstractAuthenticationProvider implements AuthenticationProvider {
     
     private static final Log log = LogFactory.getLog(AbstractAuthenticationProvider.class);
     
@@ -87,7 +87,8 @@ public abstract class AbstractAuthenticationProvider<T> implements Authenticatio
             throw new BadCredentialsException("Missing security credentials.");
         }
         
-        T user = login(details, username, password, domain);
+        IUser user = authenticate(username, password, domain);
+        details.setDetail("user", user);
         List<GrantedAuthority> userPrivs = new ArrayList<GrantedAuthority>();
         List<String> list = getAuthorities(user);
         Set<String> privs = list == null ? new HashSet<String>() : new HashSet<String>(list);
@@ -114,17 +115,8 @@ public abstract class AbstractAuthenticationProvider<T> implements Authenticatio
         return authentication;
     }
     
-    protected abstract List<String> getAuthorities(T user);
+    protected abstract IUser authenticate(String username, String password, String domain);
     
-    /**
-     * Performs a user login.
-     * 
-     * @param details Authentication details
-     * @param username Username for the login.
-     * @param password Password for the login (ignored if the user is pre-authenticated).
-     * @param domain Domain for which the login is requested.
-     * @return User object
-     */
-    protected abstract T login(CWFAuthenticationDetails details, String username, String password, String domain);
+    protected abstract List<String> getAuthorities(IUser user);
     
 }

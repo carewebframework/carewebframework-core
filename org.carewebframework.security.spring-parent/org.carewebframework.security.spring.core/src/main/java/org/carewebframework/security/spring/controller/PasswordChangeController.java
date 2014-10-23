@@ -15,7 +15,9 @@ import org.carewebframework.api.FrameworkUtil;
 import org.carewebframework.api.context.UserContext;
 import org.carewebframework.api.domain.IUser;
 import org.carewebframework.api.security.ISecurityService;
+import org.carewebframework.common.StrUtil;
 import org.carewebframework.ui.zk.PromptDialog;
+import org.carewebframework.ui.zk.ZKUtil;
 
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
@@ -27,7 +29,7 @@ import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Toolbar;
 
 /**
- * Controller for the login component.
+ * Controller for the password change dialog.
  */
 public class PasswordChangeController extends GenericForwardComposer<Component> {
     
@@ -78,7 +80,7 @@ public class PasswordChangeController extends GenericForwardComposer<Component> 
             doCancel();
         } else {
             panel.setTitle(Labels.getLabel(title) + " - " + user.getFullName());
-            lblInfo.setValue(Labels.getLabel(label, new String[] { MESSAGE_PASSWORD_RULES }));
+            lblInfo.setValue(ZKUtil.getLabel(label, MESSAGE_PASSWORD_RULES));
         }
     }
     
@@ -141,11 +143,11 @@ public class PasswordChangeController extends GenericForwardComposer<Component> 
         String password2 = txtPassword2.getValue().trim();
         
         if (!securityService.validatePassword(password)) {
-            showMessage(Labels.getLabel("password.change.dialog.current.password.incorrect"));
+            showMessage("@password.change.dialog.current.password.incorrect");
         } else if (password.isEmpty() || password1.isEmpty() || password2.isEmpty()) {
-            showMessage(Labels.getLabel("password.change.dialog.required.fields"));
+            showMessage("@password.change.dialog.required.fields");
         } else if (!password1.equals(password2)) {
-            showMessage(Labels.getLabel("password.change.dialog.confirm.passwords"));
+            showMessage("@password.change.dialog.confirm.passwords");
         } else {
             try {
                 String result = securityService.changePassword(password, password1);
@@ -158,13 +160,12 @@ public class PasswordChangeController extends GenericForwardComposer<Component> 
                     Events.sendEvent("onSubmit", panel.getRoot(), null);
                 } else {
                     doCancel();
-                    PromptDialog.showInfo(Labels.getLabel("password.change.dialog.password.changed"),
-                        Labels.getLabel("password.change.dialog.password.changed.dialog.title"));
+                    PromptDialog.showInfo("@password.change.dialog.password.changed",
+                        "@password.change.dialog.password.changed.dialog.title");
                 }
             } catch (Exception e) {
                 Throwable e1 = e.getCause() == null ? e : e.getCause();
-                showMessage(Labels
-                        .getLabel("password.change.dialog.password.change.error", new String[] { e1.getMessage() }));
+                showMessage("@password.change.dialog.password.change.error", e1.getMessage());
             }
         }
         txtPassword.setValue("");
@@ -177,8 +178,10 @@ public class PasswordChangeController extends GenericForwardComposer<Component> 
      * Displays the specified message text on the form.
      * 
      * @param text Message text to display.
+     * @param args Additional args for message.
      */
-    private void showMessage(String text) {
+    private void showMessage(String text, Object... args) {
+        text = StrUtil.formatMessage(text, args);
         lblMessage.setValue(text);
         tbMessage.setVisible(!StringUtils.isEmpty(text));
     }
