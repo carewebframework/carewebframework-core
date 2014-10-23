@@ -52,7 +52,7 @@ public class MockAuthenticationProvider extends AbstractAuthenticationProvider {
         return new MockUser(SpringUtil.getProperty("mock.userid"), SpringUtil.getProperty("mock.fullname"), username, domain);
     }
     
-    private boolean check(String property, String value) {
+    protected boolean check(String property, String value) {
         return value.equals(SpringUtil.getProperty(property));
     }
     
