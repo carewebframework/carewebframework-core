@@ -9,7 +9,7 @@
  */
 package org.carewebframework.api.security;
 
-import java.util.List;
+import java.util.Collection;
 
 import org.carewebframework.api.domain.IUser;
 
@@ -124,9 +124,18 @@ public interface ISecurityService {
     public String loginDisabled();
     
     /**
-     * Returns a list of security domains known to this service.
+     * Returns a collection of security domains known to this service.
      * 
-     * @return List of known security domains.
+     * @return Collection of known security domains.
      */
-    public List<ISecurityDomain> getSecurityDomains();
+    public Collection<ISecurityDomain> getSecurityDomains();
+    
+    /**
+     * Returns a security domain given its logical id.
+     * 
+     * @param logicalId Logical id of security domain.
+     * @return Security domain corresponding to specified logical id.
+     */
+    public ISecurityDomain getSecurityDomain(String logicalId);
+    
 }

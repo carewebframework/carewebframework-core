@@ -9,7 +9,7 @@
  */
 package org.carewebframework.security.spring.controller;
 
-import java.util.List;
+import java.util.Collection;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -129,8 +129,8 @@ public class LoginPaneController extends GenericForwardComposer<Component> {
             txtPassword.setFocus(true);
         }
         
-        List<ISecurityDomain> securityDomains = securityService.getSecurityDomains();
-        String securityDomainId = securityDomains.size() == 1 ? securityDomains.get(0).getLogicalId() : null;
+        Collection<ISecurityDomain> securityDomains = securityService.getSecurityDomains();
+        String securityDomainId = securityDomains.size() == 1 ? securityDomains.iterator().next().getLogicalId() : null;
         
         if (StringUtils.isEmpty(securityDomainId)) {
             securityDomainId = (String) session.getAttribute(Constants.DEFAULT_SECURITY_DOMAIN);

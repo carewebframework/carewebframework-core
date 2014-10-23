@@ -9,9 +9,6 @@
  */
 package org.carewebframework.security.spring.mock;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 
@@ -26,8 +23,6 @@ import org.zkoss.util.resource.Labels;
  * Mock Spring-based service implementation.
  */
 public class MockSecurityService extends AbstractSecurityService {
-    
-    private final List<ISecurityDomain> securityDomains = new ArrayList<ISecurityDomain>();
     
     /**
      * Validates the current user's password.
@@ -72,12 +67,7 @@ public class MockSecurityService extends AbstractSecurityService {
         return null;
     }
     
-    @Override
-    public List<ISecurityDomain> getSecurityDomains() {
-        return securityDomains;
-    }
-    
     public void setSecurityDomain(ISecurityDomain securityDomain) {
-        securityDomains.add(securityDomain);
+        registerSecurityDomain(securityDomain);
     }
 }

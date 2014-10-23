@@ -9,8 +9,8 @@
  */
 package org.carewebframework.api.security.mock;
 
+import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 
 import org.carewebframework.api.domain.IUser;
 import org.carewebframework.api.security.ISecurityDomain;
@@ -23,8 +23,11 @@ public class MockSecurityService implements ISecurityService {
     
     private final IUser mockUser;
     
+    private final ISecurityDomain securityDomain;
+    
     public MockSecurityService(IUser mockUser) {
         this.mockUser = mockUser;
+        securityDomain = mockUser == null ? null : mockUser.getSecurityDomain();
     }
     
     @Override
@@ -91,14 +94,13 @@ public class MockSecurityService implements ISecurityService {
     }
     
     @Override
-    public List<ISecurityDomain> getSecurityDomains() {
-        ISecurityDomain securityDomain = mockUser == null ? null : mockUser.getSecurityDomain();
-        
-        if (securityDomain == null) {
-            return Collections.emptyList();
-        }
-        
-        return Collections.singletonList(securityDomain);
+    public Collection<ISecurityDomain> getSecurityDomains() {
+        return securityDomain == null ? Collections.<ISecurityDomain> emptyList() : Collections.singleton(securityDomain);
+    }
+    
+    @Override
+    public ISecurityDomain getSecurityDomain(String logicalId) {
+        return securityDomain != null && logicalId.equals(securityDomain.getLogicalId()) ? securityDomain : null;
     }
     
 }
