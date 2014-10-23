@@ -12,6 +12,8 @@ package org.carewebframework.security.spring.mock;
 import java.util.List;
 
 import org.carewebframework.api.domain.IUser;
+import org.carewebframework.api.security.ISecurityDomain;
+import org.carewebframework.api.security.mock.MockUser;
 import org.carewebframework.api.spring.SpringUtil;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.security.spring.AbstractAuthenticationProvider;
@@ -25,8 +27,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 public class MockAuthenticationProvider extends AbstractAuthenticationProvider {
     
     private String mockAuthorities;
-    
-    private IUser mockUser;
     
     /**
      * No-arg constructor.
@@ -44,12 +44,12 @@ public class MockAuthenticationProvider extends AbstractAuthenticationProvider {
     }
     
     @Override
-    protected IUser authenticate(String username, String password, String domain) {
-        if (!check("mock.username", username) || !check("mock.password", password) || !check("mock.domainid", domain)) {
+    protected IUser authenticate(String username, String password, ISecurityDomain domain) {
+        if (!check("mock.username", username) || !check("mock.password", password)) {
             throw new BadCredentialsException("Authentication failed.");
         }
         
-        return mockUser;
+        return new MockUser(SpringUtil.getProperty("mock.userid"), SpringUtil.getProperty("mock.fullname"), username, domain);
     }
     
     private boolean check(String property, String value) {
@@ -63,10 +63,6 @@ public class MockAuthenticationProvider extends AbstractAuthenticationProvider {
     
     public void setMockAuthorities(String mockAuthorities) {
         this.mockAuthorities = mockAuthorities;
-    }
-    
-    public void setMockUser(IUser mockUser) {
-        this.mockUser = mockUser;
     }
     
 }

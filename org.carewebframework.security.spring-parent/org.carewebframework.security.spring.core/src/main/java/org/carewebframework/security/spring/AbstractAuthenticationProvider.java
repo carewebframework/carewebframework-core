@@ -18,6 +18,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import org.carewebframework.api.domain.IUser;
+import org.carewebframework.api.security.ISecurityDomain;
+import org.carewebframework.api.security.SecurityUtil;
 
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -83,11 +85,13 @@ public abstract class AbstractAuthenticationProvider implements AuthenticationPr
             username = pcs.length > 1 ? pcs[1] : null;
         }
         
-        if (username == null || password == null || domain == null) {
+        ISecurityDomain securityDomain = domain == null ? null : SecurityUtil.getSecurityService().getSecurityDomain(domain);
+        
+        if (username == null || password == null || securityDomain == null) {
             throw new BadCredentialsException("Missing security credentials.");
         }
         
-        IUser user = authenticate(username, password, domain);
+        IUser user = authenticate(username, password, securityDomain);
         details.setDetail("user", user);
         List<GrantedAuthority> userPrivs = new ArrayList<GrantedAuthority>();
         List<String> list = getAuthorities(user);
@@ -115,7 +119,7 @@ public abstract class AbstractAuthenticationProvider implements AuthenticationPr
         return authentication;
     }
     
-    protected abstract IUser authenticate(String username, String password, String domain);
+    protected abstract IUser authenticate(String username, String password, ISecurityDomain domain);
     
     protected abstract List<String> getAuthorities(IUser user);
     

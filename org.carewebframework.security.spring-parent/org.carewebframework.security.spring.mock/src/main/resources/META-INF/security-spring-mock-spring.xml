@@ -24,17 +24,8 @@
 			<property name="securityDomain" ref="securityDomain" />
 		</bean>
 
-		<bean id="mockUser" class="org.carewebframework.api.security.mock.MockUser" 
-			cwf:override="ignore">
-			<constructor-arg value="${mock.userid}" />
-			<constructor-arg value="${mock.fullname}" />
-			<constructor-arg value="${mock.username}" />
-			<constructor-arg ref="securityDomain" />
-		</bean>
-		
 		<bean id="securityAuthenticationProvider" class="org.carewebframework.security.spring.mock.MockAuthenticationProvider">
 			<property name="mockAuthorities" value="${mock.authorities:}" />
-			<property name="mockUser" ref="mockUser" />
 		</bean>
 	
 		<bean id="securityLoginPaneController" class="org.carewebframework.security.spring.controller.LoginPaneController"
