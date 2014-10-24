@@ -297,6 +297,11 @@
 	color: darkblue;
 }
 
+.cwf-about-description {
+	background: lightyellow;
+	border-top: 1px solid gray;
+}
+
 @media print {
 
 	/* used for print to ensure all data is on the page with 'shrink to fit' option */

@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -39,13 +39,17 @@ public class ManifestIterator implements ApplicationContextAware, Iterable<Manif
         private ManifestEx(Resource resource) throws IOException {
             super(resource.getInputStream());
             path = StringUtils.removeEnd(resource.getURL().getPath(), MANIFEST_PATH);
-            
-            for (String licFile : LICENSE_FILES) {
-                Resource license = resource.createRelative(licFile);
+            processFiles(resource, LICENSE_FILES, "License");
+            processFiles(resource, README_FILES, "Description");
+        }
+        
+        private void processFiles(Resource resource, String[] files, String attributeName) throws IOException {
+            for (String file : files) {
+                Resource res = resource.createRelative(file);
                 
-                if (license.exists()) {
-                    String licText = new String(IOUtils.toCharArray(license.getInputStream(), StrUtil.CHARSET));
-                    getMainAttributes().putValue("License", licText);
+                if (res.exists()) {
+                    String text = new String(IOUtils.toCharArray(res.getInputStream(), StrUtil.CHARSET));
+                    getMainAttributes().putValue(attributeName, text);
                     break;
                 }
             }
@@ -59,6 +63,8 @@ public class ManifestIterator implements ApplicationContextAware, Iterable<Manif
     protected static final String MANIFEST_PATH = "META-INF/MANIFEST.MF";
     
     private static final String[] LICENSE_FILES = { "LICENSE.TXT", "license.txt", "LICENSE", "license" };
+    
+    private static final String[] README_FILES = { "README.TXT", "readme.txt", "README", "readme" };
     
     private Manifest primaryManifest;
     

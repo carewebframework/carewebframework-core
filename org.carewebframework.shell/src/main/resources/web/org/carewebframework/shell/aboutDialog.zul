@@ -14,12 +14,11 @@
 				</columns>
 				<rows>
 					<row forEach="${arg}">
-						<cell visible="${not empty each.key}">
-							<label value="${each.key}" />
-						</cell>
-						<cell colspan="${empty each.key ? 2 : 1}">
-							<label value="${each.value}" />
-						</cell>
+						<label value="${each.key}" />
+						<label value="${each.value}" />
+					</row>
+					<row visible="false">
+						<cell id="cellDescription" colspan="2" sclass="cwf-about-description"/>
 					</row>
 				</rows>
 			</grid>

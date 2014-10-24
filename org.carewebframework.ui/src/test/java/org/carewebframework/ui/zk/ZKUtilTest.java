@@ -19,7 +19,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.zkoss.zul.A;
 import org.zkoss.zul.Div;
+import org.zkoss.zul.Html;
+import org.zkoss.zul.Label;
+import org.zkoss.zul.impl.XulElement;
 
 import org.junit.Test;
 
@@ -142,5 +146,18 @@ public class ZKUtilTest {
         
         ZKUtil.wireController(map, controller);
         controller.doAssertions();
+    }
+    
+    @Test
+    public void getTextComponentTest() {
+        XulElement cmp;
+        cmp = ZKUtil.getTextComponent("general text");
+        assertTrue(cmp instanceof Label);
+        cmp = ZKUtil.getTextComponent("<html>html text</html>");
+        assertTrue(cmp instanceof Html);
+        cmp = ZKUtil.getTextComponent("https://url");
+        assertTrue(cmp instanceof A);
+        cmp = ZKUtil.getTextComponent("http://url");
+        assertTrue(cmp instanceof A);
     }
 }

@@ -47,6 +47,9 @@ import org.zkoss.zk.ui.ext.Disable;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zk.ui.util.ConventionWires;
+import org.zkoss.zul.A;
+import org.zkoss.zul.Html;
+import org.zkoss.zul.Label;
 import org.zkoss.zul.Popup;
 import org.zkoss.zul.impl.XulElement;
 
@@ -1009,6 +1012,31 @@ public class ZKUtil {
      */
     public static String getLabel(String key, Object... args) {
         return Labels.getLabel(key.startsWith("@") ? key.substring(1) : key, args);
+    }
+    
+    /**
+     * Returns a component of a type suitable for displaying the specified text. For text that is a
+     * URL, returns an anchor. For text that begins with &lt;html&gt;, returns an HTML component.
+     * All other text returns a label.
+     * 
+     * @param text Text to be displayed.
+     * @return Component of the appropriate type.
+     */
+    public static XulElement getTextComponent(String text) {
+        String frag = text == null ? "" : StringUtils.substring(text, 0, 20).toLowerCase();
+        
+        if (frag.contains("<html>")) {
+            return new Html(text);
+        }
+        
+        if (frag.matches("^https?:\\/\\/.+$")) {
+            A anchor = new A(text);
+            anchor.setHref(text);
+            anchor.setTarget("_blank");
+            return anchor;
+        }
+        
+        return new Label(text);
     }
     
     /**

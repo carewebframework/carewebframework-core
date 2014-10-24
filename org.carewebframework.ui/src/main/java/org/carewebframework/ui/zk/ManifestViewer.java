@@ -29,9 +29,7 @@ import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.InputEvent;
 import org.zkoss.zk.ui.event.SortEvent;
-import org.zkoss.zul.A;
 import org.zkoss.zul.Caption;
-import org.zkoss.zul.Html;
 import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listcell;
@@ -157,27 +155,28 @@ public class ManifestViewer extends FrameworkController {
         public abstract void init(Listbox list);
         
         /**
+         * Adds a cell with the specified content to the list item.
+         * 
+         * @param item List item.
+         * @param label Content for cell. Auto-detects type of content.
+         * @return Newly created cell.
+         */
+        public Listcell addContent(Listitem item, String label) {
+            Listcell cell = new Listcell();
+            cell.appendChild(ZKUtil.getTextComponent(label));
+            item.appendChild(cell);
+            return cell;
+        }
+        
+        /**
          * Adds a cell to the list item.
          * 
          * @param item List item.
-         * @param label Text label for cell.
+         * @param label Label text for cell.
          * @return Newly created cell.
          */
-        public Listcell addCell(Listitem item, String label) {
-            String frag = label == null ? "" : StringUtils.substring(label, 1, 20).toLowerCase();
-            boolean isHTML = frag.contains("html>");
-            boolean isURL = !isHTML && frag.startsWith("http");
-            Listcell cell = new Listcell(isHTML || isURL ? "" : label);
-            
-            if (isHTML) {
-                cell.appendChild(new Html(label));
-            } else if (isURL) {
-                A anchor = new A(label);
-                anchor.setHref(label);
-                anchor.setTarget("manifest");
-                cell.appendChild(anchor);
-            }
-            
+        public Listcell addLabel(Listitem item, String label) {
+            Listcell cell = new Listcell(label);
             item.appendChild(cell);
             return cell;
         }
@@ -224,9 +223,9 @@ public class ManifestViewer extends FrameworkController {
         @Override
         public void render(Listitem item, ManifestItem manifestItem, int index) throws Exception {
             item.setValue(manifestItem);
-            addCell(item, manifestItem.implModule);
-            addCell(item, manifestItem.implVersion);
-            addCell(item, manifestItem.implVendor);
+            addLabel(item, manifestItem.implModule);
+            addLabel(item, manifestItem.implVersion);
+            addLabel(item, manifestItem.implVendor);
         }
         
         @Override
@@ -248,8 +247,8 @@ public class ManifestViewer extends FrameworkController {
         @Override
         public void render(Listitem item, AttributeItem attributeItem, int index) throws Exception {
             item.setValue(attributeItem);
-            addCell(item, attributeItem.name);
-            addCell(item, attributeItem.value);
+            addLabel(item, attributeItem.name);
+            addContent(item, attributeItem.value);
         }
         
         @Override

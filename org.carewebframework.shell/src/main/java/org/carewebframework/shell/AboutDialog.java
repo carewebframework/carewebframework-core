@@ -49,17 +49,19 @@ public class AboutDialog extends FrameworkController {
         
         private String custom;
         
+        private String description;
+        
         public AboutParams(PluginDefinition def) {
             super();
             title = def.getName();
             source = def.getSource();
             icon = def.getIcon();
+            description = def.getDescription();
             set("name", def.getName());
             set("version", def.getVersion());
             set("creator", def.getCreator());
             set("copyright", def.getCopyright());
             set("release", def.getReleased());
-            set("description", def.getDescription());
         }
         
         public AboutParams(Manifest manifest) {
@@ -70,9 +72,9 @@ public class AboutDialog extends FrameworkController {
                 title = attributes.getValue("Implementation-Title");
                 source = attributes.getValue("Implementation-Vendor");
                 custom = getLabel("installation.details");
+                description = attributes.getValue("Description");
                 set("name", title);
                 set("version", attributes.getValue("Implementation-Version"));
-                set("", attributes.getValue("Implementation-Description"));
             }
         }
         
@@ -190,6 +192,18 @@ public class AboutDialog extends FrameworkController {
     private String source;
     
     private String icon;
+    
+    private Component cellDescription;
+    
+    @Override
+    public void doAfterCompose(Component comp) throws Exception {
+        super.doAfterCompose(comp);
+        
+        if (!StringUtils.isEmpty(aboutParams.description)) {
+            cellDescription.appendChild(ZKUtil.getTextComponent(aboutParams.description));
+            cellDescription.getParent().setVisible(true);
+        }
+    }
     
     @Override
     public void doBeforeComposeChildren(Component comp) throws Exception {
