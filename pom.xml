@@ -858,22 +858,6 @@
 				<version>1.1.0.FL.20120607</version>
 				<scope>test</scope>
 			</dependency>
-			<!-- Jasper Reports -->
-			<dependency>
-				<groupId>net.sf.jasperreports</groupId>
-				<artifactId>jasperreports</artifactId>
-				<version>5.6.1</version>
-				<exclusions>
-					<exclusion>
-						<groupId>jfree</groupId>
-						<artifactId>jcommon</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>jfree</groupId>
-						<artifactId>jfreechart</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
 			<!-- JUnit -->
 			<dependency>
 				<groupId>junit</groupId>
