@@ -13,15 +13,9 @@
 		<!-- Service for reading and writing persisted properties. -->
 		<bean id="propertyService" class="org.carewebframework.api.property.mock.MockPropertyService" />
 
-		<bean id="securityDomain" class="org.carewebframework.api.security.mock.MockSecurityDomain" 
-			cwf:override="ignore">
-			<constructor-arg value="${mock.domainid}" />
-			<constructor-arg value="${mock.domainname}" />
-		</bean>
-		
 		<bean id="securityService" class="org.carewebframework.security.spring.mock.MockSecurityService">
 			<property name="logoutTarget" value="${org.carewebframework.security.logout.url}" />
-			<property name="securityDomain" ref="securityDomain" />
+			<property name="securityDomains" value="${mock.domains}" />
 		</bean>
 
 		<bean id="securityAuthenticationProvider" class="org.carewebframework.security.spring.mock.MockAuthenticationProvider">

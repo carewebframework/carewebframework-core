@@ -138,4 +138,11 @@ public interface ISecurityService {
      */
     public ISecurityDomain getSecurityDomain(String logicalId);
     
+    /**
+     * Returns the security domain that authenticated the user.
+     * 
+     * @return The security domain.
+     */
+    public ISecurityDomain getAuthenticatingDomain();
+    
 }

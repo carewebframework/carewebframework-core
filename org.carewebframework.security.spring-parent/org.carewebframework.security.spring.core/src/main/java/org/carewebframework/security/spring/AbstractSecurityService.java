@@ -202,6 +202,17 @@ public abstract class AbstractSecurityService implements ISecurityService {
     }
     
     /**
+     * Returns the security domain that authenticated the user.
+     * 
+     * @return The security domain.
+     */
+    @Override
+    public ISecurityDomain getAuthenticatingDomain() {
+        IUser user = getAuthenticatedUser();
+        return user == null ? null : user.getSecurityDomain();
+    }
+    
+    /**
      * <p>
      * Returns true if the Authentication object is granted debug privilege (determined by the role
      * {@link Constants#PRIV_DEBUG})

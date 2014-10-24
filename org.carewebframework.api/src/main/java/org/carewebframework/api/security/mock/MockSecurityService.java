@@ -103,4 +103,9 @@ public class MockSecurityService implements ISecurityService {
         return securityDomain != null && logicalId.equals(securityDomain.getLogicalId()) ? securityDomain : null;
     }
     
+    @Override
+    public ISecurityDomain getAuthenticatingDomain() {
+        return mockUser == null ? null : mockUser.getSecurityDomain();
+    }
+    
 }
