@@ -849,13 +849,13 @@
 			<dependency>
 				<groupId>org.zkoss.zats</groupId>
 				<artifactId>zats-mimic</artifactId>
-				<version>1.1.0.FL.20120607</version>
+				<version>1.2.0</version>
 				<scope>test</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.zkoss.zats</groupId>
-				<artifactId>zats-mimic-ext6</artifactId>
-				<version>1.1.0.FL.20120607</version>
+				<artifactId>zats-mimic-ext7</artifactId>
+				<version>1.2.0</version>
 				<scope>test</scope>
 			</dependency>
 			<!-- JUnit -->
