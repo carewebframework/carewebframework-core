@@ -80,18 +80,21 @@ public class PopupDialog extends Window {
         try {
             final Page currentPage = ExecutionsCtrl.getCurrentCtrl().getCurrentPage();
             parent.setPage(currentPage);
-            final Component top = Executions.getCurrent().createComponents(zulPageDefinition, parent, args);
+            Executions.getCurrent().createComponents(zulPageDefinition, parent, args);
+            window = ZKUtil.findChild(parent, Window.class);
             
-            if (top instanceof Window && top.getNextSibling() == null) { // If top component is a window
-                window = (Window) top;
-                window.setParent(null); // Window created successfully, remove temporary parent
+            if (window != null) { // If any top component is a window, discard temp parent
+                window.setParent(null);
                 window.setPage(currentPage);
+                
+                for (Component child : parent.getChildren()) {
+                    child.setParent(window);
+                }
                 parent.detach();
-            } else { // Otherwise, use the current parent as top
+            } else { // Otherwise, use the temp parent as the window
                 window = parent;
             }
             
-            parent = null;
             window.setClosable(closable);
             window.setSizable(sizable);
             PopupManager.getInstance().registerPopup(window);
@@ -99,16 +102,16 @@ public class PopupDialog extends Window {
             if (show) {
                 window.doModal();
             }
-        } catch (final Exception e) {
+        } catch (Exception e) {
             if (window != null) {
                 window.detach();
+                window = null;
             }
             
             if (parent != null) {
                 parent.detach();
             }
             
-            window = null;
             PromptDialog.showError(e);
         }
         
