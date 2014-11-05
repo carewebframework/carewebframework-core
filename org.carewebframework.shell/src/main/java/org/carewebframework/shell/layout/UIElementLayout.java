@@ -41,6 +41,8 @@ public class UIElementLayout extends UIElementZKBase {
     
     private boolean loaded;
     
+    private boolean initializing;
+    
     public UIElementLayout() {
         fullSize(div);
         setOuterComponent(div);
@@ -111,6 +113,12 @@ public class UIElementLayout extends UIElementZKBase {
         initDefinition();
     }
     
+    @Override
+    public void beforeInitialize(boolean deserializing) throws Exception {
+        initializing = true;
+        super.beforeInitialize(deserializing);
+    }
+    
     /**
      * If this is a linked layout, must deserialize from it.
      */
@@ -121,6 +129,8 @@ public class UIElementLayout extends UIElementZKBase {
         if (linked) {
             internalDeserialize(false);
         }
+        
+        initializing = false;
     }
     
     /**
@@ -134,18 +144,15 @@ public class UIElementLayout extends UIElementZKBase {
     /**
      * Deserialize from the associated layout.
      * 
-     * @param forced If true, force derserialization regardless of load state.
+     * @param forced If true, force deserialization regardless of load state.
      */
     private void internalDeserialize(boolean forced) {
         if (!forced && loaded) {
             return;
         }
         
-        if (loaded) {
-            lockDescendants(false);
-            removeChildren();
-        }
-        
+        lockDescendants(false);
+        removeChildren();
         loaded = true;
         
         try {
@@ -219,8 +226,11 @@ public class UIElementLayout extends UIElementZKBase {
     public void setLinked(boolean linked) {
         if (linked != this.linked) {
             this.linked = linked;
-            internalDeserialize(true);
-            getRoot().activate(true);
+            
+            if (!initializing) {
+                internalDeserialize(true);
+                getRoot().activate(true);
+            }
         }
     }
 }
