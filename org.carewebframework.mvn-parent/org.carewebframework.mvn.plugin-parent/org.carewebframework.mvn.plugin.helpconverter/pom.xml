@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.carewebframework</groupId>
 		<artifactId>org.carewebframework.mvn.plugin-parent</artifactId>
-		<version>3.1.1</version>
+		<version>3.1.2</version>
 	</parent>
 	
 	<artifactId>org.carewebframework.mvn.plugin.helpconverter</artifactId>
