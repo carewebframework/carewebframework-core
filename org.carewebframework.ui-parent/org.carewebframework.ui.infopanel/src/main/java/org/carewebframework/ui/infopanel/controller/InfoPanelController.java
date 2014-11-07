@@ -104,7 +104,7 @@ public class InfoPanelController extends PluginController implements IInfoPanel 
      * 
      * @param menuitem The menu item to register.
      * @param path The menu path under which the item should appear.
-     * @see #org.carewebframework.ui.infopanel.model.IInfoPanel.registerMenuItem(Menuitem, String)
+     * @see org.carewebframework.ui.infopanel.model.IInfoPanel#registerMenuItem(Menuitem, String)
      */
     @Override
     public void registerMenuItem(final Menuitem menuitem, final String path) {
@@ -119,7 +119,7 @@ public class InfoPanelController extends PluginController implements IInfoPanel 
      * Removes a menu item from the panel's menu bar.
      * 
      * @param menuitem Menu item to remove.
-     * @see #org.carewebframework.ui.infopanel.model.IInfoPanel.unregisterMenuItem(Menuitem)
+     * @see org.carewebframework.ui.infopanel.model.IInfoPanel#unregisterMenuItem(Menuitem)
      */
     @Override
     public void unregisterMenuItem(final Menuitem menuitem) {
@@ -207,7 +207,7 @@ public class InfoPanelController extends PluginController implements IInfoPanel 
     /**
      * Returns the drop id for the panel.
      * 
-     * @see #org.carewebframework.ui.zk.IDropHandler.getDropId()
+     * @see org.carewebframework.ui.zk.IDropHandler#getDropId()
      */
     @Override
     public String getDropId() {
@@ -218,7 +218,7 @@ public class InfoPanelController extends PluginController implements IInfoPanel 
      * Drops the specified item onto the panel, invoking its renderer.
      * 
      * @param droppedItem Item to drop.
-     * @see #org.carewebframework.ui.zk.IDropHandler.drop(Component)
+     * @see org.carewebframework.ui.zk.IDropHandler#drop(Component)
      */
     @Override
     public void drop(final Component droppedItem) {

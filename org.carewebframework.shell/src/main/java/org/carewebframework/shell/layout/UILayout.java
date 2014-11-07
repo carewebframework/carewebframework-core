@@ -523,7 +523,7 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
     }
     
     /**
-     * @see #org.carewebframework.shell.property.IPropertyProvider.getProperty(String)
+     * @see org.carewebframework.shell.property.IPropertyProvider#getProperty(String)
      */
     @Override
     public String getProperty(String key) {

@@ -44,7 +44,7 @@ public class RequestProcessingServlet extends HttpServlet {
     
     private static final Log log = LogFactory.getLog(RequestProcessingServlet.class);
     
-    private static final String REQUEST_PROCESSOR_BEAN = "requestProcessorBean";
+    protected static final String REQUEST_PROCESSOR_BEAN = "requestProcessorBean";
     
     private static final String EXC_REC_PROC = "@cwf.error.ui.req.proc";
     
