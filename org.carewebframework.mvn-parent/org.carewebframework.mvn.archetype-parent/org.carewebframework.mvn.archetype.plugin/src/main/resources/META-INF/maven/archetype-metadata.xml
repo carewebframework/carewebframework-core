@@ -10,23 +10,18 @@
 			if the defaults are incorrect. -->
 		<requiredProperty key="cwpName">
 			<!-- Descriptive Name -->
-			<defaultValue>My CareWeb Plugin</defaultValue>
 		</requiredProperty>
 		<requiredProperty key="cwpUCC">
 			<!-- Upper Camel Case Plugin Name/ID : No Spaces -->
-			<defaultValue>MyPlugin</defaultValue>
 		</requiredProperty>
 		<requiredProperty key="cwpLCC">
 			<!-- Lower Camel Case Plugin Name/ID : No Spaces -->
-			<defaultValue>myPlugin</defaultValue>
 		</requiredProperty>
 		<requiredProperty key="cwpLC">
 			<!-- Lower Case Plugin Name/ID : No Spaces -->
-			<defaultValue>myplugin</defaultValue>
 		</requiredProperty>
 		<requiredProperty key="cwfVersion">
 			<!-- CareWeb Framework Version -->
-			<defaultValue>${project.parent.version}</defaultValue>
 		</requiredProperty>
 	</requiredProperties>
 	<fileSets>
