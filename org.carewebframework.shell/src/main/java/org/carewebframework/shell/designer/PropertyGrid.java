@@ -184,12 +184,13 @@ public class PropertyGrid extends Window {
         ZKUtil.detachChildren(gridProperties.getRows());
         
         if (target == null) {
-            setVisible(false);
+            getFirstChild().setVisible(false);
+            setTitle(" ");
             disableButtons(true);
             return;
         }
         
-        setVisible(true);
+        getFirstChild().setVisible(true);
         setTitle(StrUtil.formatMessage("@cwf.shell.designer.property.grid.title", target.getDisplayName()));
         PluginDefinition def = target.getDefinition();
         List<PropertyInfo> props = def.getProperties();
@@ -402,7 +403,7 @@ public class PropertyGrid extends Window {
     public void onClose() {
         if (embedded) {
             setVisible(false);
-        } else {
+        } else if (inModal()) {
             super.onClose();
         }
     }

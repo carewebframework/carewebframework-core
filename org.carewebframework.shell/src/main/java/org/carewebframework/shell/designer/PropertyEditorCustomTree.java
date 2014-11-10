@@ -224,6 +224,7 @@ public abstract class PropertyEditorCustomTree<T extends UIElementBase> extends 
         btnRight.setVisible(hierarchical);
         btnLeft.setVisible(hierarchical);
         propertyGrid = PropertyGrid.create(null, gridParent);
+        propertyGrid.setClosable(true);
         Events.addEventListeners(propertyGrid, this);
         bandpopup.setWidth("600px");
         bandpopup.setHeight("400px");
@@ -545,9 +546,21 @@ public abstract class PropertyEditorCustomTree<T extends UIElementBase> extends 
     }
     
     @Override
-    public void onClose() {
+    public void doClose() {
         tree.focus();
         Events.echoEvent(Events.ON_SELECT, tree, null); // Must be done asynchronously to allow server to sync with client changes
+    }
+    
+    /**
+     * If the property grid is closed, instead close the bandbox.
+     * 
+     * @param event The close event.
+     */
+    public void onClose(Event event) {
+        if (event.getTarget() == propertyGrid) {
+            bandbox.close();
+            doClose();
+        }
     }
     
     /**
