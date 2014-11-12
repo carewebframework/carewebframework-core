@@ -12,15 +12,9 @@ package org.carewebframework.security.spring.mock;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.lang.RandomStringUtils;
-import org.apache.commons.lang.math.NumberUtils;
-
 import org.carewebframework.api.security.mock.MockSecurityDomain;
 import org.carewebframework.api.spring.SpringUtil;
 import org.carewebframework.security.spring.AbstractSecurityService;
-import org.carewebframework.security.spring.Constants;
-
-import org.zkoss.util.resource.Labels;
 
 /**
  * Mock Spring-based service implementation.
@@ -36,18 +30,6 @@ public class MockSecurityService extends AbstractSecurityService {
     @Override
     public boolean validatePassword(final String password) {
         return password.equals(SpringUtil.getProperty("mock.password"));
-    }
-    
-    /**
-     * Generates a new random password Length of password dictated by
-     * {@link Constants#LBL_PASSWORD_RANDOM_CHARACTER_LENGTH}
-     * 
-     * @return String The generated password
-     */
-    @Override
-    public String generateRandomPassword() {
-        int len = NumberUtils.toInt(Labels.getLabel(Constants.LBL_PASSWORD_RANDOM_CHARACTER_LENGTH), 12);
-        return RandomStringUtils.random(len);
     }
     
     /**

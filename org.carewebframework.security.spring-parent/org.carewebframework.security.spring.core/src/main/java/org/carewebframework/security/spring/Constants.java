@@ -81,7 +81,9 @@ public class Constants {
     
     public static final String PASSWORD_EXPIRED_EXCEPTION = "expiredPasswordException";
     
-    public static final String LBL_PASSWORD_RANDOM_CHARACTER_LENGTH = "password.random.character.length";
+    public static final String LBL_PASSWORD_RANDOM_LENGTH = "password.random.length";
+    
+    public static final String LBL_PASSWORD_RANDOM_CONSTRAINTS = "password.random.constraints";
     
     public static final String LBL_PASSWORD_CHANGE_UNAVAILABLE = "password.change.unavailable";
     

@@ -11,6 +11,8 @@ package org.carewebframework.api.security;
 
 import java.util.Map;
 
+import org.apache.commons.lang.math.RandomUtils;
+
 import org.carewebframework.api.domain.IUser;
 import org.carewebframework.api.spring.SpringUtil;
 
@@ -144,6 +146,58 @@ public class SecurityUtil {
         }
         
         return null;
+    }
+    
+    /**
+     * Generates a random password within the specified parameters.
+     * 
+     * @param minLength Minimum password length.
+     * @param maxLength Maximum password length.
+     * @param constraints Password constraints. This is an array of character groups, each of the
+     *            format <code>[minimum required occurrences],[string of characters in group]
+     * @return A random password.
+     */
+    public static String generateRandomPassword(int minLength, int maxLength, String[] constraints) {
+        if (constraints == null || constraints.length == 0 || minLength <= 0 || maxLength < minLength) {
+            throw new IllegalArgumentException();
+        }
+        
+        int pwdLength = RandomUtils.nextInt(maxLength - minLength + 1) + minLength;
+        int[] min = new int[constraints.length];
+        String[] chars = new String[constraints.length];
+        char[] pwd = new char[pwdLength];
+        int totalRequired = 0;
+        
+        for (int i = 0; i < constraints.length; i++) {
+            String[] pcs = constraints[i].split("\\,", 2);
+            min[i] = Integer.parseInt(pcs[0]);
+            chars[i] = pcs[1];
+            totalRequired += min[i];
+        }
+        
+        if (totalRequired > maxLength) {
+            throw new IllegalArgumentException("Maximum length and constraints in conflict.");
+        }
+        
+        int grp = 0;
+        
+        while (pwdLength-- > 0) {
+            if (min[grp] <= 0) {
+                grp = totalRequired > 0 ? grp + 1 : RandomUtils.nextInt(constraints.length);
+            }
+            
+            int i = RandomUtils.nextInt(pwd.length);
+            
+            while (pwd[i] != 0) {
+                i = ++i % pwd.length;
+            }
+            
+            pwd[i] = chars[grp].charAt(RandomUtils.nextInt(chars[grp].length()));
+            min[grp]--;
+            totalRequired--;
+        }
+        
+        return new String(pwd);
     }
     
     /**

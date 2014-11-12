@@ -18,6 +18,7 @@ import java.util.Map;
 
 import org.apache.commons.lang.CharEncoding;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -28,6 +29,7 @@ import org.carewebframework.api.context.IContextManager;
 import org.carewebframework.api.domain.IUser;
 import org.carewebframework.api.security.ISecurityDomain;
 import org.carewebframework.api.security.ISecurityService;
+import org.carewebframework.api.security.SecurityUtil;
 import org.carewebframework.ui.Application;
 import org.carewebframework.ui.FrameworkWebSupport;
 import org.carewebframework.ui.zk.PopupDialog;
@@ -353,6 +355,29 @@ public abstract class AbstractSecurityService implements ISecurityService {
     @Override
     public boolean canChangePassword() {
         return passwordChangeUrl != null;
+    }
+    
+    /**
+     * Generates a new random password Length of password dictated by
+     * {@link Constants#LBL_PASSWORD_RANDOM_LENGTH} and
+     * {@link Constants#LBL_PASSWORD_RANDOM_CONSTRAINTS}
+     * 
+     * @return String The generated password
+     */
+    @Override
+    public String generateRandomPassword() {
+        int len = getRandomPasswordLength();
+        return SecurityUtil.generateRandomPassword(len, len, Labels.getLabel(Constants.LBL_PASSWORD_RANDOM_CONSTRAINTS)
+                .split("\n"));
+    }
+    
+    /**
+     * Returns the minimum length for random password.
+     * 
+     * @return Minimum length for random password.
+     */
+    protected int getRandomPasswordLength() {
+        return NumberUtils.toInt(Labels.getLabel(Constants.LBL_PASSWORD_RANDOM_LENGTH), 12);
     }
     
     /**
