@@ -17,6 +17,7 @@ import org.carewebframework.api.security.mock.MockUser;
 import org.carewebframework.api.spring.SpringUtil;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.security.spring.AbstractAuthenticationProvider;
+import org.carewebframework.security.spring.CWFAuthenticationDetails;
 
 import org.springframework.security.authentication.BadCredentialsException;
 
@@ -44,7 +45,7 @@ public class MockAuthenticationProvider extends AbstractAuthenticationProvider {
     }
     
     @Override
-    protected IUser authenticate(String username, String password, ISecurityDomain domain) {
+    protected IUser authenticate(String username, String password, ISecurityDomain domain, CWFAuthenticationDetails details) {
         if (!check("mock.username", username) || !check("mock.password", password)) {
             throw new BadCredentialsException("Authentication failed.");
         }

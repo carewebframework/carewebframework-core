@@ -91,7 +91,7 @@ public abstract class AbstractAuthenticationProvider implements AuthenticationPr
             throw new BadCredentialsException("Missing security credentials.");
         }
         
-        IUser user = authenticate(username, password, securityDomain);
+        IUser user = authenticate(username, password, securityDomain, details);
         details.setDetail("user", user);
         List<GrantedAuthority> userAuthorities = new ArrayList<GrantedAuthority>();
         List<String> list = getAuthorities(user);
@@ -119,7 +119,8 @@ public abstract class AbstractAuthenticationProvider implements AuthenticationPr
         return authentication;
     }
     
-    protected abstract IUser authenticate(String username, String password, ISecurityDomain domain);
+    protected abstract IUser authenticate(String username, String password, ISecurityDomain domain,
+                                          CWFAuthenticationDetails details);
     
     protected abstract List<String> getAuthorities(IUser user);
     
