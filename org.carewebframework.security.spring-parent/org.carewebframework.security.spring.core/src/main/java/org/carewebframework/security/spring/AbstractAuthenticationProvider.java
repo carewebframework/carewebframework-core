@@ -40,19 +40,19 @@ public abstract class AbstractAuthenticationProvider implements AuthenticationPr
     
     protected boolean preAuthenticated;
     
-    private final List<String> grantedRoles = new ArrayList<String>();
+    protected final List<String> grantedAuthorities = new ArrayList<String>();
     
     protected AbstractAuthenticationProvider(boolean debugRole) {
-        grantedRoles.add(Constants.ROLE_USER);
+        grantedAuthorities.add(Constants.ROLE_USER);
         
         if (debugRole) {
-            grantedRoles.add(Constants.PRIV_DEBUG);
+            grantedAuthorities.add(Constants.PRIV_DEBUG);
         }
     }
     
-    protected AbstractAuthenticationProvider(List<String> grantedRoles) {
+    protected AbstractAuthenticationProvider(List<String> grantedAuthorities) {
         this(false);
-        this.grantedRoles.addAll(grantedRoles);
+        this.grantedAuthorities.addAll(grantedAuthorities);
     }
     
     @Override
@@ -93,25 +93,25 @@ public abstract class AbstractAuthenticationProvider implements AuthenticationPr
         
         IUser user = authenticate(username, password, securityDomain);
         details.setDetail("user", user);
-        List<GrantedAuthority> userPrivs = new ArrayList<GrantedAuthority>();
+        List<GrantedAuthority> userAuthorities = new ArrayList<GrantedAuthority>();
         List<String> list = getAuthorities(user);
-        Set<String> privs = list == null ? new HashSet<String>() : new HashSet<String>(list);
+        Set<String> authorities = list == null ? new HashSet<String>() : new HashSet<String>(list);
         
-        for (String grantedRole : grantedRoles) {
-            if (grantedRole.startsWith("-")) {
-                privs.remove(grantedRole.substring(1));
+        for (String grantedAuthority : grantedAuthorities) {
+            if (grantedAuthority.startsWith("-")) {
+                authorities.remove(grantedAuthority.substring(1));
             } else {
-                privs.add(grantedRole);
+                authorities.add(grantedAuthority);
             }
         }
         
-        for (String priv : privs) {
-            if (!priv.isEmpty()) {
-                userPrivs.add(new SimpleGrantedAuthority(priv));
+        for (String authority : authorities) {
+            if (!authority.isEmpty()) {
+                userAuthorities.add(new SimpleGrantedAuthority(authority));
             }
         }
         
-        User principal = new User(username, password, true, true, true, true, userPrivs);
+        User principal = new User(username, password, true, true, true, true, userAuthorities);
         
         authentication = new UsernamePasswordAuthenticationToken(principal, principal.getPassword(),
                 principal.getAuthorities());
