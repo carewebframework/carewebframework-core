@@ -61,6 +61,11 @@
 		<!-- Insert any plugins to be tested here. -->
 		<dependency>
 			<groupId>org.carewebframework</groupId>
+			<artifactId>org.carewebframework.ui.gliffy</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.carewebframework</groupId>
 			<artifactId>org.carewebframework.ui.popupsupport</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>

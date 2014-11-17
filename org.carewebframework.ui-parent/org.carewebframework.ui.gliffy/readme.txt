@@ -1,0 +1,1 @@
+Simple component to provide a view of gliffy-based wireframes.

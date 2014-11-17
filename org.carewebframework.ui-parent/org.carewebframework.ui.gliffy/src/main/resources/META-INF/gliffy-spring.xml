@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:cwp="http://www.carewebframework.org/schema/plugin"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation=
+		"http://www.springframework.org/schema/beans 
+		 http://www.springframework.org/schema/beans/spring-beans.xsd
+		 http://www.carewebframework.org/schema/plugin
+		 http://www.carewebframework.org/schema/plugin/plugin-extensions.xsd">
+
+	<beans profile="root">
+		<!--
+		********************************************************************* 
+		
+		This profile is processed during web server startup.  
+		
+		*********************************************************************
+		-->
+		
+		<cwp:plugin id="gliffyViewer" name="Gliffy Viewer" url="~./org/carewebframework/ui/gliffy/main.zul"
+			description="Plugin to allow embedding Gliffy wireframes for quick UI prototyping.">
+			<cwp:serialization>
+				<cwp:property id="gliffyId" name="Gliffy Identifier" type="text"
+					description="The unique Gliffy identifier" />
+			</cwp:serialization>
+		</cwp:plugin>
+		
+		<bean id="gliffyController" class="org.carewebframework.ui.gliffy.MainController" scope="prototype" />
+	</beans>
+</beans>
