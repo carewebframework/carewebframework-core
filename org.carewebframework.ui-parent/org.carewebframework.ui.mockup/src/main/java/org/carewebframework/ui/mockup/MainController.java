@@ -16,7 +16,6 @@ import org.apache.commons.lang.StringUtils;
 import org.carewebframework.shell.plugins.PluginContainer;
 import org.carewebframework.shell.plugins.PluginController;
 
-import org.zkoss.zk.ui.Component;
 import org.zkoss.zul.Iframe;
 
 /**
@@ -38,17 +37,18 @@ public class MainController extends PluginController {
         this.mockupTypes = mockupTypes;
     }
     
-    @Override
-    public void doAfterCompose(Component comp) throws Exception {
-        super.doAfterCompose(comp);
-    }
-    
+    /**
+     * Register published properties.
+     */
     @Override
     public void onLoad(PluginContainer container) {
         super.onLoad(container);
         container.registerProperties(this, "mockupType", "mockupId");
     }
     
+    /**
+     * Refreshes the iframe content.
+     */
     @Override
     public void refresh() {
         String url = mockupTypes.getUrl(mockupType);
@@ -61,19 +61,39 @@ public class MainController extends PluginController {
         iframe.setSrc(String.format(url, mockupId));
     }
     
+    /**
+     * Returns the unique identifier for the mockup within the selected framework.
+     * 
+     * @return The unique mockup identifier.
+     */
     public String getMockupId() {
         return mockupId;
     }
     
+    /**
+     * Sets the unique identifier for the mockup within the selected framework.
+     * 
+     * @param mockupId The unique mockup identifier.
+     */
     public void setMockupId(String mockupId) {
         this.mockupId = StringUtils.trimToNull(mockupId);
         refresh();
     }
     
+    /**
+     * Returns the mockup framework type.
+     * 
+     * @return The mockup framework type.
+     */
     public String getMockupType() {
         return mockupType;
     }
     
+    /**
+     * Sets the mockup framework type.
+     * 
+     * @param mockupType The mockup framework type.
+     */
     public void setMockupType(String mockupType) {
         this.mockupType = mockupType;
     }
