@@ -58,7 +58,7 @@ public class MainController extends PluginController {
             return;
         }
         
-        iframe.setSrc(String.format(url, mockupId));
+        iframe.setSrc(String.format(url, mockupId, System.currentTimeMillis()));
     }
     
     /**
