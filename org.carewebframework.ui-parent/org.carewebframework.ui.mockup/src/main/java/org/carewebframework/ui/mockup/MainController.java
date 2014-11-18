@@ -7,32 +7,36 @@
  * Disclaimer of Warranty and Limitation of Liability available at
  * http://www.carewebframework.org/licensing/disclaimer.
  */
-package org.carewebframework.ui.gliffy;
+package org.carewebframework.ui.mockup;
+
+import java.io.IOException;
 
 import org.apache.commons.lang.StringUtils;
 
 import org.carewebframework.shell.plugins.PluginContainer;
 import org.carewebframework.shell.plugins.PluginController;
 
-import org.zkoss.util.media.AMedia;
-import org.zkoss.util.media.Media;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zul.Iframe;
 
 /**
- * Simple component to display gliffy-based wireframes.
+ * Simple component to display third-party UI mockups.
  */
 public class MainController extends PluginController {
     
     private static final long serialVersionUID = 1L;
     
-    private static final String GLIFFY_DATA = "<script src='http://www.gliffy.com/diagramEmbed.js' "
-            + "type='text/javascript'> </script><script type='text/javascript'> gliffy_did = '%s'; "
-            + "embedGliffy(); </script>";
-    
     private Iframe iframe;
     
-    private String gliffyId;
+    private String mockupId;
+    
+    private String mockupType;
+    
+    private final MockupTypeEnumerator mockupTypes;
+    
+    public MainController(MockupTypeEnumerator mockupTypes) throws IOException {
+        this.mockupTypes = mockupTypes;
+    }
     
     @Override
     public void doAfterCompose(Component comp) throws Exception {
@@ -42,28 +46,36 @@ public class MainController extends PluginController {
     @Override
     public void onLoad(PluginContainer container) {
         super.onLoad(container);
-        container.registerProperties(this, "gliffyId");
+        container.registerProperties(this, "mockupType", "mockupId");
     }
     
     @Override
     public void refresh() {
-        if (gliffyId == null) {
+        String url = mockupTypes.getUrl(mockupType);
+        
+        if (mockupId == null || url == null) {
             iframe.setContent(null);
             return;
         }
         
-        String data = String.format(GLIFFY_DATA, gliffyId);
-        Media media = new AMedia(null, null, "text/html", data);
-        iframe.setContent(media);
+        iframe.setSrc(String.format(url, mockupId));
     }
     
-    public String getGliffyId() {
-        return gliffyId;
+    public String getMockupId() {
+        return mockupId;
     }
     
-    public void setGliffyId(String gliffyId) {
-        this.gliffyId = StringUtils.trimToNull(gliffyId);
+    public void setMockupId(String mockupId) {
+        this.mockupId = StringUtils.trimToNull(mockupId);
         refresh();
+    }
+    
+    public String getMockupType() {
+        return mockupType;
+    }
+    
+    public void setMockupType(String mockupType) {
+        this.mockupType = mockupType;
     }
     
 }

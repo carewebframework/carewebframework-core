@@ -4,6 +4,16 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
 	
-	<iframe id="iframe" apply="${gliffyController}" height="99%" width="99%" />
+	<style>
+		.z-page {
+			display: none;
+		}
+	</style>
 	
+	<script src="http://www.gliffy.com/diagramEmbed.js" type="text/javascript" /> 
+
+	<script type="text/javascript">
+		gliffy_did = "${param.ident}"; 
+		embedGliffy(); 
+	</script>	
 </zk>

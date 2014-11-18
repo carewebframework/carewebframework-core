@@ -7,8 +7,8 @@
 		<version>4.0.0-SNAPSHOT</version>
 	</parent>
 	
-	<name>CareWeb Framework Gliffy Plugin</name>
-	<artifactId>org.carewebframework.ui.gliffy</artifactId>
+	<name>UI Mockup Plugin</name>
+	<artifactId>org.carewebframework.ui.mockup</artifactId>
 	
 	<dependencies>
 		<dependency>

@@ -61,7 +61,7 @@
 		<!-- Insert any plugins to be tested here. -->
 		<dependency>
 			<groupId>org.carewebframework</groupId>
-			<artifactId>org.carewebframework.ui.gliffy</artifactId>
+			<artifactId>org.carewebframework.ui.mockup</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>

@@ -20,7 +20,7 @@
 		<module>org.carewebframework.ui.eventtesting</module>
 		<module>org.carewebframework.ui.jmstesting</module>
 		<module>org.carewebframework.ui.filetailer</module>
-		<module>org.carewebframework.ui.gliffy</module>
+		<module>org.carewebframework.ui.mockup</module>
 		<module>org.carewebframework.ui.sessiontracker</module>
 		<module>org.carewebframework.ui.sharedforms</module>
 		<module>org.carewebframework.ui.settings</module>
