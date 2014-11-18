@@ -2,7 +2,10 @@ package org.carewebframework.ui.mockup;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Properties;
 
 import org.apache.commons.io.IOUtils;
@@ -39,7 +42,9 @@ public class MockupTypeEnumerator implements Iterable<String> {
     
     @Override
     public Iterator<String> iterator() {
-        return mockupTypes.stringPropertyNames().iterator();
+        List<String> list = new ArrayList<String>(mockupTypes.stringPropertyNames());
+        Collections.sort(list, String.CASE_INSENSITIVE_ORDER);
+        return list.iterator();
     }
     
 }
