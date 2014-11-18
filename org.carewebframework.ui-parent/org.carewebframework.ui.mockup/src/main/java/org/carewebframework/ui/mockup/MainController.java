@@ -96,6 +96,7 @@ public class MainController extends PluginController {
      */
     public void setMockupType(String mockupType) {
         this.mockupType = mockupType;
+        refresh();
     }
     
 }
