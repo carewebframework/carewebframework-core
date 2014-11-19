@@ -20,14 +20,14 @@
 		<cwp:plugin id="mockupViewer" name="Mockup Viewer" url="~./org/carewebframework/ui/mockup/main.zul"
 			description="Plugin to allow embedding third-party wireframes for quick UI prototyping.">
 			<cwp:serialization>
-				<cwp:property id="mockupType" name="Mockup Type" type="enum"
-					description="The type of mockup.">
+				<cwp:property id="mockupType" name="${labels.mockup.type.name}" type="enum"
+					description="${labels.mockup.type.description}">
 					<cwp:config>
 						<cwp:entry key="bean">mockupTypeEnumerator</cwp:entry>
 					</cwp:config>
 				</cwp:property>
-				<cwp:property id="mockupId" name="Mockup Identifier" type="text"
-					description="The unique mockup identifier." />
+				<cwp:property id="mockupId" name="${labels.mockup.identifier.name}" type="text"
+					description="${labels.mockup.identifier.description}" />
 			</cwp:serialization>
 		</cwp:plugin>
 		
