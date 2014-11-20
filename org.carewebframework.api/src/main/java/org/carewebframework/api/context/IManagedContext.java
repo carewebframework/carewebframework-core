@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -12,8 +12,10 @@ package org.carewebframework.api.context;
 /**
  * Every context object must implement this interface. The context manager uses this interface to
  * manage context changes.
+ * 
+ * @param <DomainClass> This represents the domain class that is wrapped by this managed context.
  */
-public interface IManagedContext {
+public interface IManagedContext<DomainClass> extends ISharedContext<DomainClass> {
     
     /**
      * Commits or rejects the pending context change.

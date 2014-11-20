@@ -33,7 +33,7 @@ import org.carewebframework.common.StopWatchFactory.IStopWatch;
  * 
  * @param <DomainClass> Class of underlying domain object.
  */
-public class ManagedContext<DomainClass> implements Comparable<IManagedContext>, IRegisterEvent, IManagedContext, ISharedContext<DomainClass> {
+public class ManagedContext<DomainClass> implements Comparable<IManagedContext<DomainClass>>, IRegisterEvent, IManagedContext<DomainClass> {
     
     private static final Log log = LogFactory.getLog(ManagedContext.class);
     
@@ -425,7 +425,7 @@ public class ManagedContext<DomainClass> implements Comparable<IManagedContext>,
      * Compares by priority, with higher priorities collating first.
      */
     @Override
-    public int compareTo(IManagedContext o) {
+    public int compareTo(IManagedContext<DomainClass> o) {
         int pri1 = o.getPriority();
         int pri2 = getPriority();
         return this == o ? 0 : pri1 < pri2 ? -1 : 1;
