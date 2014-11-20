@@ -9,6 +9,8 @@
  */
 package org.carewebframework.api.context;
 
+import java.util.List;
+
 /**
  * Interface for access to public context manager services.
  */
@@ -31,6 +33,13 @@ public interface IContextManager {
      * @throws ContextException Context exception.
      */
     String localChangeEnd(IManagedContext<?> managedContext) throws ContextException;
+    
+    /**
+     * Returns a list of all registered shared contexts.
+     * 
+     * @return A list of all registered shared contexts.
+     */
+    List<ISharedContext<?>> getSharedContexts();
     
     /**
      * Gets the shared context corresponding to the named class. If the context object has not yet

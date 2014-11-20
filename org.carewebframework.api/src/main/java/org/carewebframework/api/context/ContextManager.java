@@ -9,6 +9,9 @@
  */
 package org.carewebframework.api.context;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 import java.util.Stack;
 import java.util.TreeSet;
 
@@ -35,7 +38,7 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
     
     private static final Log log = LogFactory.getLog(ContextManager.class);
     
-    private final TreeSet<IManagedContext<?>> managedContexts = new TreeSet<IManagedContext<?>>();
+    private final Set<IManagedContext<?>> managedContexts = new TreeSet<IManagedContext<?>>();
     
     private final Stack<IManagedContext<?>> pendingStack = new Stack<IManagedContext<?>>();
     
@@ -464,6 +467,14 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
     }
     
     /**
+     * @see org.carewebframework.api.context.IContextManager#getSharedContexts
+     */
+    @Override
+    public List<ISharedContext<?>> getSharedContexts() {
+        return new ArrayList<ISharedContext<?>>(managedContexts);
+    }
+    
+    /**
      * @see org.carewebframework.api.context.IContextManager#getSharedContext
      */
     @Override
@@ -477,7 +488,7 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
                 }
             }
             
-            ISharedContext<?> ctx = (ISharedContext<?>) contextClass.newInstance();
+            IManagedContext<?> ctx = (IManagedContext<?>) contextClass.newInstance();
             registerObject(ctx);
             return ctx;
         } catch (Exception e) {
