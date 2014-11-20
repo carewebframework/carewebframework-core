@@ -20,7 +20,7 @@ public interface IContextManager {
      * @param managedContext The context that is changing.
      * @throws ContextException Context exception.
      */
-    void localChangeBegin(IManagedContext managedContext) throws ContextException;
+    void localChangeBegin(IManagedContext<?> managedContext) throws ContextException;
     
     /**
      * Completes a local context change. When all requested context changes have been completed,
@@ -30,7 +30,7 @@ public interface IContextManager {
      * @return Reason if change was rejected.
      * @throws ContextException Context exception.
      */
-    String localChangeEnd(IManagedContext managedContext) throws ContextException;
+    String localChangeEnd(IManagedContext<?> managedContext) throws ContextException;
     
     /**
      * Gets the shared context corresponding to the named class. If the context object has not yet

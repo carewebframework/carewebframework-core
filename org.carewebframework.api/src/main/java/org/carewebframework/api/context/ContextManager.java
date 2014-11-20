@@ -26,7 +26,7 @@ import org.carewebframework.api.spring.SpringUtil;
 /**
  * Manages context objects and mediates context change requests on their behalf. Context objects are
  * special services that maintain information about different shared context states (user, patient,
- * etc.) Each context object must implement the IManagedContext interface which is used by the
+ * etc.) Each context object must implement the IManagedContext<?> interface which is used by the
  * context manager to interact with the context object. Furthermore, each context object must
  * declare an extension of the IContextEvent interface which will be implemented by subscribers to
  * process context change events.
@@ -35,11 +35,11 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
     
     private static final Log log = LogFactory.getLog(ContextManager.class);
     
-    private final TreeSet<IManagedContext> managedContexts = new TreeSet<IManagedContext>();
+    private final TreeSet<IManagedContext<?>> managedContexts = new TreeSet<IManagedContext<?>>();
     
-    private final Stack<IManagedContext> pendingStack = new Stack<IManagedContext>();
+    private final Stack<IManagedContext<?>> pendingStack = new Stack<IManagedContext<?>>();
     
-    private Stack<IManagedContext> commitStack = new Stack<IManagedContext>();
+    private Stack<IManagedContext<?>> commitStack = new Stack<IManagedContext<?>>();
     
     private CCOWContextManager ccowContextManager;
     
@@ -168,7 +168,7 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
      * @param item Managed context to initialize or, if null, initializes all managed contexts.
      * @return True if the operation was successful.
      */
-    public boolean init(IManagedContext item) {
+    public boolean init(IManagedContext<?> item) {
         contextItems.clear();
         boolean result = true;
         
@@ -179,7 +179,7 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
         if (item != null) {
             result = initItem(item);
         } else {
-            for (IManagedContext managedContext : managedContexts) {
+            for (IManagedContext<?> managedContext : managedContexts) {
                 result &= initItem(managedContext);
             }
         }
@@ -192,7 +192,7 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
      * @param item Managed context to initialize.
      * @return True if change was accepted.
      */
-    private boolean initItem(IManagedContext item) {
+    private boolean initItem(IManagedContext<?> item) {
         try {
             localChangeBegin(item);
             
@@ -238,10 +238,10 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
      * @param all If false, only polled subscribers are notified.
      */
     private void commitContexts(boolean accept, boolean all) {
-        Stack<IManagedContext> stack = commitStack;
-        commitStack = new Stack<IManagedContext>();
+        Stack<IManagedContext<?>> stack = commitStack;
+        commitStack = new Stack<IManagedContext<?>>();
         // First, commit or cancel all pending context changes.
-        for (IManagedContext managedContext : stack) {
+        for (IManagedContext<?> managedContext : stack) {
             if (managedContext.isPending()) {
                 managedContext.commit(accept);
             }
@@ -284,7 +284,7 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
     /*package*/String setMarshaledContext(ContextItems marshaledContext, boolean commit) {
         StringBuilder reason = new StringBuilder();
         
-        for (IManagedContext managedContext : managedContexts) {
+        for (IManagedContext<?> managedContext : managedContexts) {
             try {
                 if (managedContext.setContextItems(marshaledContext)) {
                     localChangeBegin(managedContext);
@@ -327,7 +327,7 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
     public ContextItems getMarshaledContext() {
         ContextItems marshaledContext = new ContextItems();
         
-        for (IManagedContext managedContext : managedContexts) {
+        for (IManagedContext<?> managedContext : managedContexts) {
             marshaledContext.addItems(managedContext.getContextItems(false));
         }
         
@@ -371,14 +371,15 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
     // ***********************************************************************************************/
     
     /**
-     * Register an object with the context manager if it implements the IManagedContext interface.
+     * Register an object with the context manager if it implements the IManagedContext<?>
+     * interface.
      * 
      * @param object Object to register.
      */
     @Override
     public void registerObject(Object object) {
         if (object instanceof IManagedContext) {
-            managedContexts.add((IManagedContext) object);
+            managedContexts.add((IManagedContext<?>) object);
         }
     }
     
@@ -390,7 +391,7 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
     @Override
     public void unregisterObject(Object object) {
         if (object instanceof IContextEvent) {
-            for (IManagedContext managedContext : managedContexts) {
+            for (IManagedContext<?> managedContext : managedContexts) {
                 managedContext.removeSubscriber(object);
             }
         }
@@ -408,7 +409,7 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
      * @see org.carewebframework.api.context.IContextManager#localChangeBegin
      */
     @Override
-    public void localChangeBegin(IManagedContext managedContext) throws ContextException {
+    public void localChangeBegin(IManagedContext<?> managedContext) throws ContextException {
         if (pendingStack.contains(managedContext) || commitStack.contains(managedContext)) {
             throw new ContextException("Circular context change detected.");
         }
@@ -420,7 +421,7 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
      * @see org.carewebframework.api.context.IContextManager#localChangeEnd
      */
     @Override
-    public String localChangeEnd(IManagedContext managedContext) throws ContextException {
+    public String localChangeEnd(IManagedContext<?> managedContext) throws ContextException {
         return localChangeEnd(managedContext, false, false);
     }
     
@@ -433,8 +434,8 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
      * @return The response(s) returned by subscribers.
      * @throws ContextException during illegal context change nesting
      */
-    public String localChangeEnd(IManagedContext managedContext, boolean silent, boolean deferCommit)
-                                                                                                     throws ContextException {
+    public String localChangeEnd(IManagedContext<?> managedContext, boolean silent, boolean deferCommit)
+                                                                                                        throws ContextException {
         
         if (pendingStack.isEmpty() || pendingStack.peek() != managedContext) {
             throw new ContextException("Illegal context change nesting.");
@@ -470,15 +471,17 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
         try {
             Class<?> contextClass = Class.forName(className);
             
-            for (IManagedContext managedContext : managedContexts) {
-                if (contextClass.isInstance(managedContext)) {
-                    return (ISharedContext<?>) managedContext;
+            for (ISharedContext<?> sharedContext : managedContexts) {
+                if (contextClass.isInstance(sharedContext)) {
+                    return sharedContext;
                 }
             }
             
-            return (ISharedContext<?>) contextClass.newInstance();
+            ISharedContext<?> ctx = (ISharedContext<?>) contextClass.newInstance();
+            registerObject(ctx);
+            return ctx;
         } catch (Exception e) {
-            return null;
+            throw new ContextException(e.getMessage());
         }
     }
     
@@ -504,7 +507,7 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
         commitStack.clear();
         boolean result = true;
         
-        for (IManagedContext managedContext : managedContexts) {
+        for (IManagedContext<?> managedContext : managedContexts) {
             result &= resetItem(managedContext, silent);
             
             if (!silent && !result) {
@@ -524,7 +527,7 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
      * @param silent Silent flag.
      * @return True if change was accepted.
      */
-    private boolean resetItem(IManagedContext item, boolean silent) {
+    private boolean resetItem(IManagedContext<?> item, boolean silent) {
         try {
             localChangeBegin(item);
             item.reset();
