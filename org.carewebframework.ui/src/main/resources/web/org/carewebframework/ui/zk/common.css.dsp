@@ -217,6 +217,10 @@
 	font-weight: bold;
 }
 
+.z-menuitem-content {
+	text-decoration: none!important;
+}
+
 .z-menupopup-separator {
 	display: none;
 }

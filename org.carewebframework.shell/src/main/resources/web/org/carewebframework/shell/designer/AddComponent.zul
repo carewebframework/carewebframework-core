@@ -14,8 +14,11 @@
 				</tree>
 			</panelchildren>
 			<toolbar align="end">
-				<button id="btnOK" label="${labels.cwf.shell.designer.add.component.btn.ok.label}" disabled="true" />
-				<button id="btnCancel" label="${labels.cwf.shell.designer.add.component.btn.cancel.label}" />
+				<button id="btnOK" zclass="btn btn-default btn-sm"
+					label="${labels.cwf.shell.designer.add.component.btn.ok.label}" 
+					disabled="true" />
+				<button id="btnCancel" zclass="btn btn-default btn-sm"
+					label="${labels.cwf.shell.designer.add.component.btn.cancel.label}" />
 				<separator orient="vertical" width="20px" />
 			</toolbar>
 		</panel>

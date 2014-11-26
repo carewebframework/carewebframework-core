@@ -19,26 +19,26 @@
 						label="${labels.cwf.shell.designer.layout.manager.radio.private_.label}" />
 				</radiogroup>
 				<separator orient="vertical" />
-				<button id="btnOK"
+				<button id="btnOK" zclass="btn btn-default btn-sm"
 					label="${labels.cwf.shell.designer.layout.manager.btn.ok.label}" />
-				<button id="btnCancel"
+				<button id="btnCancel" zclass="btn btn-default btn-sm"
 					label="${labels.cwf.shell.designer.layout.manager.btn.cancel.label}"
 					forward="onClose" />
 			</toolbar>
 			<toolbar id="tbarManage" align="end">
-				<button id="btnImport"
+				<button id="btnImport" zclass="btn btn-default btn-sm"
 					label="${labels.cwf.shell.designer.layout.manager.btn.import_.label}" />
-				<button id="btnExport"
+				<button id="btnExport" zclass="btn btn-default btn-sm"
 					label="${labels.cwf.shell.designer.layout.manager.btn.export.label}" />
 				<separator orient="vertical" />
-				<button id="btnClone"
+				<button id="btnClone" zclass="btn btn-default btn-sm"
 					label="${labels.cwf.shell.designer.layout.manager.btn.clone.label}" />
-				<button id="btnRename"
+				<button id="btnRename" zclass="btn btn-default btn-sm"
 					label="${labels.cwf.shell.designer.layout.manager.btn.rename.label}" />
-				<button id="btnDelete"
+				<button id="btnDelete" zclass="btn btn-default btn-sm"
 					label="${labels.cwf.shell.designer.layout.manager.btn.delete.label}" />
 				<separator orient="vertical" />
-				<button id="btnClose"
+				<button id="btnClose" zclass="btn btn-default btn-sm"
 					label="${labels.cwf.shell.designer.layout.manager.btn.close.label}"
 					forward="onClose" />
 			</toolbar>

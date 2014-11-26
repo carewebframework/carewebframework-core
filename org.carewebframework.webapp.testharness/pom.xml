@@ -31,6 +31,10 @@
 							<themeName>lilac</themeName>
 							<baseColor>3e48ac</baseColor>
 						</theme>
+						<theme>
+							<themeName>slate</themeName>
+							<themeUri>src/main/resources/slate.bootstrap.min.css</themeUri>
+						</theme>
 					</themes>
 				</configuration>
 			</plugin>

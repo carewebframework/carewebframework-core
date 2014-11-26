@@ -13,17 +13,17 @@
 			</center>
 			<south>
 				<toolbar align="end">
-					<button id="btnSave"
+					<button id="btnSave" zclass="btn btn-default btn-sm"
 						label="${labels.cwf.shell.clipboard.viewer.btn.save.label}"
 						tooltiptext="${labels.cwf.shell.clipboard.viewer.btn.save.hint}" />
-					<button id="btnRestore"
+					<button id="btnRestore" zclass="btn btn-default btn-sm"
 						label="${labels.cwf.shell.clipboard.viewer.btn.restore.label}"
 						tooltiptext="${labels.cwf.shell.clipboard.viewer.btn.restore.hint}" />
 					<separator orient="vertical" width="40px" />
-					<button id="btnOK"
+					<button id="btnOK" zclass="btn btn-default btn-sm"
 						label="${labels.cwf.shell.clipboard.viewer.btn.ok.label}"
 						tooltiptext="${labels.cwf.shell.clipboard.viewer.btn.ok.hint}" />
-					<button id="btnCancel"
+					<button id="btnCancel" zclass="btn btn-default btn-sm"
 						label="${labels.cwf.shell.clipboard.viewer.btn.cancel.label}"
 						tooltiptext="${labels.cwf.shell.clipboard.viewer.btn.cancel.hint}" />
 					<separator orient="vertical" width="20px" />

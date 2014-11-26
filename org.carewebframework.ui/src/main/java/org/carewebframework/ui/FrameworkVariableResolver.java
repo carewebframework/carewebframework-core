@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -53,12 +53,16 @@ public class FrameworkVariableResolver implements VariableResolver {
         
         Object object = null;
         
-        if (FrameworkUtil.isInitialized()) {
-            object = FrameworkUtil.getAttribute(name);
-        }
-        
-        if (object == null && getAppContext().containsBean(name)) {
-            object = getAppContext().getBean(name);
+        try {
+            if (FrameworkUtil.isInitialized()) {
+                object = FrameworkUtil.getAttribute(name);
+            }
+            
+            if (object == null && appContext.containsBean(name)) {
+                object = appContext.getBean(name);
+            }
+        } catch (Exception e) {
+            
         }
         
         return object;

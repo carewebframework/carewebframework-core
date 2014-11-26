@@ -7,7 +7,7 @@
 		<version>4.0.0-SNAPSHOT</version>
 	</parent>
 	
-	<name>UI Mockup Plugin</name>
+	<name>CareWeb Framework UI Mockup Plugin</name>
 	<artifactId>org.carewebframework.ui.mockup</artifactId>
 	
 	<dependencies>

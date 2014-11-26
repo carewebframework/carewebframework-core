@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -14,6 +14,8 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+
+import org.carewebframework.shell.themes.ThemeDefinition.ThemeType;
 
 import org.zkoss.zk.ui.Execution;
 
@@ -87,6 +89,10 @@ public class ThemeProvider implements org.zkoss.zk.ui.util.ThemeProvider {
             } else {
                 newUris.add(uri);
             }
+        }
+        
+        if (def.getType() == ThemeType.CSS) {
+            newUris.add(def.expandURI(""));
         }
         
         return newUris;

@@ -24,11 +24,17 @@ import org.springframework.core.io.Resource;
  */
 public class ThemeDefinition implements ApplicationContextAware {
     
+    public enum ThemeType {
+        ZK, CSS
+    };
+    
     private static final String URI_PREFIX = "~./";
     
     private String url;
     
     private String id;
+    
+    private ThemeType type = ThemeType.ZK;
     
     private String description;
     
@@ -75,15 +81,15 @@ public class ThemeDefinition implements ApplicationContextAware {
     }
     
     public void setUrl(String url) {
-        if (url != null && url.startsWith(URI_PREFIX)) {
-            url = url.substring(URI_PREFIX.length());
-        }
-        
-        if (url != null && !url.endsWith("/")) {
-            url += "/";
-        }
-        
-        this.url = url;
+        this.url = url != null && url.startsWith(URI_PREFIX) ? url.substring(URI_PREFIX.length()) : url;
+    }
+    
+    public ThemeType getType() {
+        return type;
+    }
+    
+    public void setType(ThemeType type) {
+        this.type = type;
     }
     
     public String getDescription() {
@@ -139,8 +145,11 @@ public class ThemeDefinition implements ApplicationContextAware {
         }
         
         final String mappedUri = uri.substring(URI_PREFIX.length());
-        return files.contains(mappedUri) ? ("/zkau/web/" + (StringUtils.isEmpty(version) ? "" : "_zv" + version + "/") + url + mappedUri)
-                : uri;
+        return files.contains(mappedUri) ? expandURI(mappedUri) : uri;
+    }
+    
+    protected String expandURI(String uri) {
+        return "/zkau/web/" + (StringUtils.isEmpty(version) ? "" : "_zv" + version + "/") + url + uri;
     }
     
     /**

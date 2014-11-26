@@ -3,11 +3,14 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	xmlns:cwp="http://www.carewebframework.org/schema/plugin"
+	xmlns:cwt="http://www.carewebframework.org/schema/theme"
 	xsi:schemaLocation="
 		http://www.springframework.org/schema/beans
-		 http://www.springframework.org/schema/beans/spring-beans.xsd
-		 http://www.carewebframework.org/schema/plugin
-		 http://www.carewebframework.org/schema/plugin/plugin-extensions.xsd">
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.carewebframework.org/schema/plugin
+		http://www.carewebframework.org/schema/plugin/plugin-extensions.xsd
+		http://www.carewebframework.org/schema/theme
+		http://www.carewebframework.org/schema/theme/theme-extensions.xsd">
 
 	<beans profile="root">
 		<!-- helpRegistry: Represents a registry of all known CareWeb help modules. -->
@@ -41,6 +44,10 @@
 			<property name="source" value="${labels.cwf.shell.about.source}" />
 		</bean>
 
+		<!-- Default bootstrap theme. -->
+		<cwt:theme id="theme-default" type="CSS" 
+			url="org/carewebframework/ui/ext/bootstrap/css/bootstrap-theme.min.css" version="4.0.0" />
+			
 		<!-- Stock UI component definitions follow. -->
 		<cwp:plugin id="_desktop"
 			class="org.carewebframework.shell.layout.UIElementDesktop" name="${labels.cwf.shell.plugin._desktop.name}"

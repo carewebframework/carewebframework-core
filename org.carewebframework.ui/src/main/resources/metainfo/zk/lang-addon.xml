@@ -23,6 +23,9 @@
 	<javascript
 		src="~./org/carewebframework/ui/ext/jquery/jquery.watermark.js"
 		merge="true" />
+	<javascript
+		src="~./org/carewebframework/ui/ext/bootstrap/js/bootstrap.min.js"
+		merge="true" />
 
 	<stylesheet
 		href="~./org/carewebframework/ui/ext/jquery/ui/1.11.2/jquery-ui.min.css"
@@ -32,6 +35,9 @@
 		type="text/css" />
 	<stylesheet
 		href="~./org/carewebframework/ui/ext/jquery/ui/1.11.2/jquery-ui.theme.min.css"
+		type="text/css" />
+	<stylesheet
+		href="~./org/carewebframework/ui/ext/bootstrap/css/bootstrap.min.css"
 		type="text/css" />
 	<!-- common.css.dsp should be last in list -->
 	<stylesheet href="~./org/carewebframework/ui/zk/common.css.dsp"

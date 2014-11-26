@@ -18,9 +18,9 @@
 						label="${labels.cwf.shell.designer.layout.manager.radio.private_.label}" />
 				</radiogroup>
 				<separator orient="vertical" />
-				<button id="btnOK"
+				<button id="btnOK" zclass="btn btn-default btn-sm"
 					label="${labels.cwf.shell.designer.layout.manager.btn.ok.label}" />
-				<button id="btnCancel"
+				<button id="btnCancel" zclass="btn btn-default btn-sm"
 					label="${labels.cwf.shell.designer.layout.manager.btn.cancel.label}"
 					forward="onClose" />
 			</toolbar>

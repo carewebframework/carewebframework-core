@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:cwt="http://www.carewebframework.org/schema/theme"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.carewebframework.org/schema/theme
+		http://www.carewebframework.org/schema/theme/theme-extensions.xsd">
+
+	<!-- Theme declaration. -->
+
+	<beans profile="root">
+	
+		<cwt:theme id="theme-{0}" type="CSS" url="org/carewebframework/themes/css/{0}/{2}" version="{1}" />
+		
+	</beans>
+	
+</beans>

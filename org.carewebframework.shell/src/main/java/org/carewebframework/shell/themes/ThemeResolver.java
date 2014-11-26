@@ -82,7 +82,7 @@ public class ThemeResolver implements org.zkoss.web.theme.ThemeResolver {
                     break;
                 
                 case 5: // Default theme when all else fails.
-                    themeName = "default";
+                    themeName = "theme-default";
                     break;
             }
         } while (themeName == null || themeName.isEmpty());

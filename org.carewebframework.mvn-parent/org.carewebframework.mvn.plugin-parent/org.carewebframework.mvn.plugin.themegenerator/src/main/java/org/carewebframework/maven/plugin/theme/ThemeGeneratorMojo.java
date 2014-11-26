@@ -47,6 +47,8 @@ import org.apache.maven.plugins.annotations.ResolutionScope;
 
 import org.carewebframework.maven.plugin.core.BaseMojo;
 
+import org.codehaus.plexus.util.FileUtils;
+
 /**
  * <p>
  * Goal which produces CareWeb theme modules from selected source jars.
@@ -181,24 +183,23 @@ public class ThemeGeneratorMojo extends BaseMojo {
     @Parameter(property = "maven.careweb.theme.skip", defaultValue = "false", required = false)
     private boolean skip;
     
-    private List<ThemeGenerator> themeGenerators;
+    private List<ThemeGeneratorBase> themeGenerators;
     
     /**
      * @see org.apache.maven.plugin.Mojo#execute()
      */
     @Override
     public void execute() throws MojoExecutionException {
-        if (this.skip) {
+        if (skip) {
             getLog().info("Skipping theme generation.");
             return;
         }
         
         try {
-            getLog().info("Preparing theme source.");
-            prepareSource();
+            validateSource();
             copyDependencies();
         } catch (final Exception e) {
-            throwMojoException("Exception occurred preparing theme source.", e);
+            throwMojoException("Exception occurred validating theme source.", e);
         }
         
         try {
@@ -210,7 +211,8 @@ public class ThemeGeneratorMojo extends BaseMojo {
         
         try {
             getLog().info("Processing theme sources.");
-            processSources();
+            processZKSources();
+            processCSSSources();
         } catch (final Exception e) {
             throwMojoException("Exception occurred processing source files for theme(s).", e);
         }
@@ -223,14 +225,16 @@ public class ThemeGeneratorMojo extends BaseMojo {
     }
     
     /**
-     * Auto generated method comment
+     * Ensure that source directory exists.
      * 
      * @throws Exception Unspecified exception.
      */
-    private void prepareSource() throws Exception {
-        this.sourceDirectory.mkdir();
-        if (!this.sourceDirectory.exists() || !this.sourceDirectory.isDirectory()) {
-            throw new Exception("Source directory was not found: " + this.sourceDirectory);
+    private void validateSource() throws Exception {
+        getLog().info("Validating theme source.");
+        sourceDirectory.mkdir();
+        
+        if (!sourceDirectory.exists() || !sourceDirectory.isDirectory()) {
+            throw new Exception("Source directory was not found: " + sourceDirectory);
         }
     }
     
@@ -238,22 +242,22 @@ public class ThemeGeneratorMojo extends BaseMojo {
         boolean copyExplicitThemeSourceArtifacts = false;
         boolean hasNoSource = true;
         
-        if (this.themeSources != null) {
-            getLog().debug("Theme-sources list: " + this.themeSources);
+        if (themeSources != null) {
+            getLog().debug("Theme-sources list: " + themeSources);
             copyExplicitThemeSourceArtifacts = true;
             getLog().info("Default theme source based on dependencies overridden by configuration");
         }
         
-        final Set<?> deps = (this.excludeTransitiveDependencies ? this.mavenProject.getDependencyArtifacts()
-                : this.mavenProject.getArtifacts());
+        final Set<?> deps = (excludeTransitiveDependencies ? mavenProject.getDependencyArtifacts() : mavenProject
+                .getArtifacts());
         
-        for (final Object o : deps) {
+        for (Object o : deps) {
             boolean copyDependency = true;
-            final Artifact a = (Artifact) o;
+            Artifact a = (Artifact) o;
             getLog().debug("Artifact: " + a);
             
             if (copyExplicitThemeSourceArtifacts) {
-                final String dependencyConflictId = a.getDependencyConflictId();
+                String dependencyConflictId = a.getDependencyConflictId();
                 
                 if (!this.themeSources.contains(dependencyConflictId)) {
                     getLog().debug("Ignoring dependency from theme source: " + dependencyConflictId);
@@ -262,29 +266,36 @@ public class ThemeGeneratorMojo extends BaseMojo {
             }
             if (copyDependency) {
                 hasNoSource = false;
-                final File artifactFile = a.getFile();
-                final File artifactCopyLocation = new File(this.sourceDirectory, artifactFile.getName());
+                File artifactFile = a.getFile();
+                File artifactCopyLocation = new File(this.sourceDirectory, artifactFile.getName());
                 getLog().debug("Copying dependency : " + artifactFile);
                 Files.copy(artifactFile, artifactCopyLocation);
             }
         }
         if (hasNoSource) {
-            throw new Exception("There is no theme source to consider");
+            throw new Exception("There is no theme source to consider.");
         }
     }
     
     /**
-     * Auto generated method comment
+     * Generates a theme generator instance for each source theme.
      * 
      * @throws Exception Unspecified exception.
      */
     private void initThemeGenerators() throws Exception {
-        this.themeGenerators = new ArrayList<ThemeGenerator>();
+        themeGenerators = new ArrayList<ThemeGeneratorBase>();
         
-        for (final Theme theme : this.themes) {
-            this.themeGenerators.add(new ThemeGenerator(theme.getThemeName(), theme.getBaseColor(),
-                    getVersion(themeVersion), buildDirectory, new WildcardFileFilter(this.exclusions)));
+        for (Theme theme : themes) {
             getLog().info("Considering the following theme for processing: " + theme);
+            ThemeGeneratorBase themeGenerator;
+            
+            if (theme.getBaseColor() != null) {
+                themeGenerator = new ThemeGeneratorZK(theme, buildDirectory, new WildcardFileFilter(exclusions));
+            } else {
+                themeGenerator = new ThemeGeneratorCSS(theme, buildDirectory, new WildcardFileFilter(exclusions));
+            }
+            
+            themeGenerators.add(themeGenerator);
         }
     }
     
@@ -293,7 +304,7 @@ public class ThemeGeneratorMojo extends BaseMojo {
      * 
      * @throws Exception Unspecified exception.
      */
-    private void processSources() throws Exception {
+    private void processZKSources() throws Exception {
         final FileFilter filter = new WildcardFileFilter("*.jar");
         
         for (final File file : this.sourceDirectory.listFiles(filter)) {
@@ -311,9 +322,9 @@ public class ThemeGeneratorMojo extends BaseMojo {
      * @param file A jar file from the source folder.
      * @throws Exception Unspecified exception.
      */
-    private void processJarFile(final File file) throws Exception {
-        final JarFile sourceJar = new JarFile(file);
-        final Enumeration<JarEntry> entries = sourceJar.entries();
+    private void processJarFile(File file) throws Exception {
+        JarFile sourceJar = new JarFile(file);
+        Enumeration<JarEntry> entries = sourceJar.entries();
         boolean wasProcessed = false;
         
         while (entries.hasMoreElements()) {
@@ -323,11 +334,15 @@ public class ThemeGeneratorMojo extends BaseMojo {
                 continue;
             }
             
-            for (final ThemeGenerator themeGen : this.themeGenerators) {
-                if (!themeGen.process(sourceJar, entry)) {
-                    break;
-                } else {
-                    wasProcessed = true;
+            IThemeResource resource = new ThemeResourceJarEntry(sourceJar, entry);
+            
+            for (ThemeGeneratorBase gen : themeGenerators) {
+                if (gen instanceof ThemeGeneratorZK) {
+                    if (!gen.process(resource)) {
+                        break;
+                    } else {
+                        wasProcessed = true;
+                    }
                 }
             }
             
@@ -339,11 +354,29 @@ public class ThemeGeneratorMojo extends BaseMojo {
         }
     }
     
+    /**
+     * Process a simple CSS themes.
+     */
+    private void processCSSSources() throws Exception {
+        for (ThemeGeneratorBase gen : themeGenerators) {
+            if (gen instanceof ThemeGeneratorCSS) {
+                Theme theme = gen.getTheme();
+                File file = new File(mavenProject.getBasedir(), theme.getThemeUri());
+                IThemeResource resource = new ThemeResourceCSS(file);
+                gen.process(resource);
+            }
+        }
+        
+    }
+    
     private void createThemeConfigEntryAndAssembleArchive() throws Exception {
-        for (final ThemeGenerator gen : this.themeGenerators) {
-            getLog().info("Creating theme config for theme: " + gen.getThemeName());
-            createConfigEntry(gen.getBuildDirectory(), "/theme-config.xml", ARCHIVE_PREFIX + gen.getThemeName(),
-                gen.getThemeName(), getVersion(themeVersion));
+        for (ThemeGeneratorBase gen : themeGenerators) {
+            Theme theme = gen.getTheme();
+            String themeName = theme.getThemeName();
+            String fileName = theme.getThemeUri() == null ? null : FileUtils.filename(theme.getThemeUri());
+            getLog().info("Creating theme config for theme: " + themeName);
+            createConfigEntry(gen.getBuildDirectory(), gen.getConfigTemplate(), ARCHIVE_PREFIX + themeName, themeName,
+                getVersion(themeVersion), fileName);
         }
         
         getLog().info("Assembling theme archive");
@@ -362,8 +395,8 @@ public class ThemeGeneratorMojo extends BaseMojo {
         
     }
     
-    private void throwMojoException(final String msg, final Throwable e) throws MojoExecutionException {
-        if (this.failOnError) {
+    private void throwMojoException(String msg, Throwable e) throws MojoExecutionException {
+        if (failOnError) {
             throw new MojoExecutionException(msg, e);
         } else {
             getLog().error(msg, e);

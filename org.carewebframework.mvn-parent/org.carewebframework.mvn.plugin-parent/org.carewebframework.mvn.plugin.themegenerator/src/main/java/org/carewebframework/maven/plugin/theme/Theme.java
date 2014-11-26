@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -20,26 +20,36 @@ public class Theme {
     
     private String baseColor;
     
+    private String themeUri;
+    
     /**
-     * @return the themeName
+     * @return The theme name.
      */
     public String getThemeName() {
-        return this.themeName;
+        return themeName;
     }
     
     /**
-     * @return the baseColor
+     * @return The base color (for ZK themes).
      */
     public String getBaseColor() {
-        return this.baseColor;
+        return baseColor;
     }
     
     /**
-     * @return themeName + ":" + baseColor
+     * @return The source uri (for Bootstrap themes).
+     */
+    public String getThemeUri() {
+        return themeUri;
+    }
+    
+    /**
+     * @return Display friendly representation.
      */
     @Override
     public String toString() {
-        return StringUtils.trimToEmpty(this.themeName) + ":" + StringUtils.trimToEmpty(this.baseColor);
+        String type = baseColor != null ? baseColor : themeUri;
+        return StringUtils.trimToEmpty(this.themeName) + ":" + StringUtils.trimToEmpty(type);
     }
     
 }

@@ -12,7 +12,7 @@
 
 	<beans profile="root">
 	
-		<cwt:theme id="theme-{0}" url="org/carewebframework/themes/{0}" version="{1}" />
+		<cwt:theme id="theme-{0}" type="ZK" url="org/carewebframework/themes/zk/{0}/" version="{1}" />
 		
 	</beans>
 	
