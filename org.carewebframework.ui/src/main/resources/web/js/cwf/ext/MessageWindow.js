@@ -14,29 +14,39 @@ cwf.ext.MessageWindow = zk.$extends(zul.wgt.Div, {
 		cmp.show();
 		var zcls = this.getZclass();
 		var real = jq(this.$n('real'));
-		var cave = jq('<div>').addClass(zcls + '-cave');
-		var cap = jq('<div>').addClass('z-toolbar ' + zcls + '-cap').appendTo(cave);
+		var cave = jq('<div>').addClass('alert');
+		options.color = options.color || 'info';
+		var styles = ['warning', 'error', 'success', 'info'];
+		
+		if (styles.indexOf(options.color) < 0) {
+			cave.css('background-color', options.color);
+		} else {
+			cave.addClass('alert-' + options.color);
+		}
+		
+		cave.addClass(zcls + '-cave');
+		var cap = jq('<div>').addClass(zcls + '-cap').appendTo(cave);
 		var _this = this;
 		
-		if (options.caption)
+		if (options.caption) {
 			jq('<span>').addClass(zcls + '-title').text(options.caption).appendTo(cap);
+		}
+		
+		var btns = jq('<span>').addClass(zcls + '-btns').appendTo(cap);
 		
 		if (options.action) {
-			var act = jq('<span>').addClass(zcls + '-btn').addClass(zcls + '-btn-action').appendTo(cap);
+			var act = jq('<span>').addClass(zcls + '-btn glyphicon glyphicon-flash').appendTo(btns);
 			act.bind('click', function () {
 				if (options.action.call(_this))
 					_this._close(cave);
 			});
 		}
 		
-		var btn = jq('<span>').addClass(zcls + '-btn').addClass(zcls + '-btn-close').appendTo(cap);
+		var btn = jq('<span>').addClass(zcls + '-btn glyphicon glyphicon-remove').appendTo(btns);
 		var msg = jq('<div>').addClass(zcls + '-msg').appendTo(cave);
 
 		if (options.tag)
 			cave.data('tag', options.tag);
-
-		if (options.color)
-			cave.css('background-color', options.color);
 
 		if (jq.trim(options.message).substring(0, 6) === '<html>')
 			msg.append(options.message);
