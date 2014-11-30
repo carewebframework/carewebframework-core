@@ -1,10 +1,10 @@
 <zk>
 	<window zclass="cwf-timeout">
 		<vlayout>
-			<div id="timeoutPanel" sclass="cwf-timeout-panel">
-				<label id="lblDuration" style="font-weight:bold" />
+			<div id="timeoutPanel" sclass="cwf-timeout-panel alert">
+				<label id="lblDuration" style="font-weight:bold" sclass="alert-link"/>
 				<separator orient="vertical" width="40px" />
-				<button id="btnKeepOpen"
+				<button id="btnKeepOpen" sclass="alert-link"
 					label="${labels.cwf.timeout.keepalive.label}" />
 			</div>
 			<div id="lockPanel" sclass="cwf-timeout-lock-panel">

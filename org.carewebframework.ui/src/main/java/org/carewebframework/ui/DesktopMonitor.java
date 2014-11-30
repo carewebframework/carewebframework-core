@@ -300,7 +300,7 @@ public class DesktopMonitor extends Thread {
                     lblDuration.setValue(s);
                     if (!isDesktopLockingDisabled) {
                         setSclass(SCLASS_COUNTDOWN);
-                        ZKUtil.updateStyle(timeoutPanel, "background", countdown <= 10000 ? "red" : "yellow");
+                        timeoutPanel.setZclass(countdown <= 10000 ? "alert-danger" : "alert-warning");
                     }
                     resetActivity(false);
                     break;
