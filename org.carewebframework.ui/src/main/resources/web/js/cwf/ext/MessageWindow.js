@@ -16,9 +16,8 @@ cwf.ext.MessageWindow = zk.$extends(zul.wgt.Div, {
 		var real = jq(this.$n('real'));
 		var cave = jq('<div>').addClass('alert');
 		options.color = options.color || 'info';
-		var styles = ['warning', 'error', 'success', 'info'];
 		
-		if (styles.indexOf(options.color) < 0) {
+		if (['warning', 'danger', 'success', 'info'].indexOf(options.color) < 0) {
 			cave.css('background-color', options.color);
 		} else {
 			cave.addClass('alert-' + options.color);

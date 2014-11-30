@@ -180,7 +180,7 @@ public class MessageWindow extends XulElement {
      * 
      * @param message Message text. If begins with &lt;html&gt; tag, is interpreted as html.
      * @param caption Optional caption text.
-     * @param color Background color (html format) or Bootstrap alert style (warning, error,
+     * @param color Background color (html format) or Bootstrap alert style (warning, danger,
      *            success, info). Null means default color.
      * @param duration Message duration (in milliseconds). Null means default duration.
      * @param tag Tag to classify message for selective deletion. May be null.
@@ -194,7 +194,7 @@ public class MessageWindow extends XulElement {
      * 
      * @param message Message text. If begins with &lt;html&gt; tag, is interpreted as html.
      * @param caption Optional caption text.
-     * @param color Background color (html format) or Bootstrap alert style (warning, error,
+     * @param color Background color (html format) or Bootstrap alert style (warning, danger,
      *            success, info). Null means default color.
      * @param duration Message duration (in milliseconds). Null means default duration.
      * @param tag Tag to classify message for selective deletion. May be null.
