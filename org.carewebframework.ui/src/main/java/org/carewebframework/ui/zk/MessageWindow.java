@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -180,7 +180,8 @@ public class MessageWindow extends XulElement {
      * 
      * @param message Message text. If begins with &lt;html&gt; tag, is interpreted as html.
      * @param caption Optional caption text.
-     * @param color Background color (html format). Null means default color.
+     * @param color Background color (html format) or Bootstrap alert style (warning, error,
+     *            success, info). Null means default color.
      * @param duration Message duration (in milliseconds). Null means default duration.
      * @param tag Tag to classify message for selective deletion. May be null.
      */
@@ -193,7 +194,8 @@ public class MessageWindow extends XulElement {
      * 
      * @param message Message text. If begins with &lt;html&gt; tag, is interpreted as html.
      * @param caption Optional caption text.
-     * @param color Background color (html format). Null means default color.
+     * @param color Background color (html format) or Bootstrap alert style (warning, error,
+     *            success, info). Null means default color.
      * @param duration Message duration (in milliseconds). Null means default duration.
      * @param tag Tag to classify message for selective deletion. May be null.
      * @param action Javascript action to associate with message. Null means no action.
