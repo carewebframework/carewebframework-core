@@ -229,6 +229,10 @@
 	pointer-events: none;
 }
 
+.z-errorbox-content {
+	word-break: break-word;
+}
+
 body {
 	-moz-user-select: none;
 	-webkit-user-select: none;
