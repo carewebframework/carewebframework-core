@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -12,7 +12,6 @@ package org.carewebframework.shell.property;
 import java.lang.reflect.Method;
 import java.util.Properties;
 
-import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -24,9 +23,9 @@ public class PropertyInfo {
     
     private String id;
     
-    private String typeName = "text";
+    private String type = "text";
     
-    private PropertyType type;
+    private PropertyType propertyType;
     
     private String description;
     
@@ -84,21 +83,26 @@ public class PropertyInfo {
         this.setter = setter;
     }
     
-    public PropertyType getTypeInfo() {
-        if (type == null) {
-            type = PropertyTypeRegistry.getInstance().get(typeName);
+    public PropertyType getPropertyType() {
+        if (propertyType == null) {
+            propertyType = PropertyTypeRegistry.getInstance().get(getType());
         }
         
-        return type;
+        return propertyType;
     }
     
     public String getType() {
-        return typeName;
+        if (!"enum".equals(type)) {
+            return type;
+        }
+        
+        String className = getConfigValue("class");
+        return "enum:" + (className != null ? "class:" + className : "bean:" + getConfigValue("bean"));
     }
     
-    public void setType(String typeName) {
-        this.typeName = typeName;
-        type = null;
+    public void setType(String type) {
+        this.type = type;
+        propertyType = null;
     }
     
     public String getDescription() {
@@ -147,16 +151,6 @@ public class PropertyInfo {
     }
     
     /**
-     * Returns the java class that corresponds to the property's value.
-     * 
-     * @return Java class of property value.
-     */
-    public Class<?> getJavaType() {
-        PropertyType type = getTypeInfo();
-        return type == null ? null : type.getJavaClass();
-    }
-    
-    /**
      * Returns the property value for a specified object instance.
      * 
      * @param instance The object instance.
@@ -165,14 +159,15 @@ public class PropertyInfo {
      */
     public Object getPropertyValue(Object instance) throws Exception {
         if (instance == null) {
-            return dflt;
+            return dflt == null || !isSerializable() ? null : getPropertyType().getSerializer().deserialize(dflt);
         }
         
         if (instance instanceof IPropertyAccessor) {
             return ((IPropertyAccessor) instance).getPropertyValue(this);
         }
         
-        return getter == null ? null : instance.getClass().getMethod(getter).invoke(instance);
+        Method method = PropertyUtil.findGetter(getter, instance, null);
+        return method == null ? null : method.invoke(instance);
     }
     
     /**
@@ -188,15 +183,18 @@ public class PropertyInfo {
             return;
         }
         
-        if (setter == null) {
-            return;
-        }
+        Method method = null;
         
-        Class<?> propType = getJavaType();
-        Method method = instance.getClass().getMethod(setter, propType);
-        
-        if (value != null && !propType.isInstance(value)) {
-            value = ConvertUtils.convert(value, propType);
+        try {
+            method = PropertyUtil.findSetter(setter, instance, value == null ? null : value.getClass());
+        } catch (Exception e) {
+            if (value != null) {
+                PropertySerializer<?> serializer = getPropertyType().getSerializer();
+                value = value instanceof String ? serializer.deserialize((String) value) : serializer.serialize(value);
+                method = PropertyUtil.findSetter(setter, instance, value.getClass());
+            } else {
+                throw e;
+            }
         }
         
         method.invoke(instance, value);
@@ -208,7 +206,7 @@ public class PropertyInfo {
      * @return True if the property is serializable.
      */
     public boolean isSerializable() {
-        return serializable && getTypeInfo().getJavaClass() != null;
+        return serializable && getPropertyType().getSerializer() != null;
     }
     
     /**

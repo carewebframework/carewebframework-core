@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -23,7 +23,7 @@ public class UIElementMenubar extends UIElementMenuBase {
     static {
         registerAllowedChildClass(UIElementMenubar.class, UIElementMenuItem.class);
         registerAllowedParentClass(UIElementMenubar.class, UIElementBase.class);
-        PropertyTypeRegistry.register("menuitems", null, PropertyEditorMenubar.class);
+        PropertyTypeRegistry.register("menuitems", PropertyEditorMenubar.class);
     }
     
     /**

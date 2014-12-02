@@ -26,7 +26,7 @@ public class UIElementTabView extends UIElementZKBase {
     static {
         registerAllowedParentClass(UIElementTabView.class, UIElementBase.class);
         registerAllowedChildClass(UIElementTabView.class, UIElementTabPane.class);
-        PropertyTypeRegistry.register("tabs", null, PropertyEditorTabView.class);
+        PropertyTypeRegistry.register("tabs", PropertyEditorTabView.class);
     }
     
     private final Tabbox tabBox;

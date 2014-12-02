@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -18,20 +18,21 @@ public class PropertyType {
     
     private final String typeName;
     
-    private final Class<?> javaClass;
-    
     private final Class<? extends PropertyEditorBase> editorClass;
+    
+    private final PropertySerializer<Object> serializer;
     
     /**
      * Creates a property type with the specified attributes.
      * 
      * @param typeName The name of the property type as used in the plug-in declaration.
-     * @param javaClass The java class of the return value.
+     * @param serializer Serializer for properties of this type.
      * @param editorClass The property editor class to use to edit this property's value.
      */
-    public PropertyType(String typeName, Class<?> javaClass, Class<? extends PropertyEditorBase> editorClass) {
+    @SuppressWarnings("unchecked")
+    public PropertyType(String typeName, PropertySerializer<?> serializer, Class<? extends PropertyEditorBase> editorClass) {
         this.typeName = typeName;
-        this.javaClass = javaClass;
+        this.serializer = (PropertySerializer<Object>) serializer;
         this.editorClass = editorClass;
     }
     
@@ -45,15 +46,6 @@ public class PropertyType {
     }
     
     /**
-     * Returns the class of the return type.
-     * 
-     * @return Class of the return type.
-     */
-    public Class<?> getJavaClass() {
-        return javaClass;
-    }
-    
-    /**
      * Returns the class of the associated property editor.
      * 
      * @return Class of the associated property editor.
@@ -62,4 +54,12 @@ public class PropertyType {
         return editorClass;
     }
     
+    /**
+     * Returns the property serializer for this property type.
+     * 
+     * @return Property serializer.
+     */
+    public PropertySerializer<Object> getSerializer() {
+        return serializer;
+    }
 }

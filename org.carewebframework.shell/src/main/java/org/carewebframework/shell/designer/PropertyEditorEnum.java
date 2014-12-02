@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -9,7 +9,6 @@
  */
 package org.carewebframework.shell.designer;
 
-import org.carewebframework.api.spring.SpringUtil;
 import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.property.PropertyInfo;
 
@@ -28,47 +27,11 @@ public class PropertyEditorEnum extends PropertyEditorList {
     protected void init(UIElementBase target, PropertyInfo propInfo, PropertyGrid propGrid) {
         super.init(target, propInfo, propGrid);
         
-        try {
-            String className = propInfo.getConfigValue("class");
-            Iterable<?> iter = null;
-            
-            if (className != null) {
-                Class<?> clazz = Class.forName(className);
-                
-                if (clazz.isEnum()) {
-                    for (Object value : clazz.getEnumConstants()) {
-                        Enum<?> enm = (Enum<?>) value;
-                        appendItem(enm.toString(), enm.name());
-                    }
-                    
-                    return;
-                }
-                
-                if (Iterable.class.isAssignableFrom(clazz)) {
-                    iter = (Iterable<?>) clazz.newInstance();
-                } else {
-                    throw new RuntimeException("Not an enumerable type: " + className);
-                }
-            }
-            
-            if (iter == null) {
-                String beanId = propInfo.getConfigValue("bean");
-                
-                if (beanId == null) {
-                    throw new RuntimeException("Missing config parameter.");
-                }
-                
-                iter = SpringUtil.getAppContext().getBean(beanId, Iterable.class);
-            }
-            
-            for (Object value : iter) {
-                appendItem(value.toString());
-            }
-            
-        } catch (RuntimeException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new RuntimeException("Error processing enumerable type.", e);
+        Iterable<?> iter = (Iterable<?>) propInfo.getPropertyType().getSerializer();
+        
+        for (Object value : iter) {
+            appendItem(value.toString(), value);
         }
+        
     }
 }

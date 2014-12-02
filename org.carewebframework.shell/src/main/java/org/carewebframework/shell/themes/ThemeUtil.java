@@ -1,0 +1,81 @@
+package org.carewebframework.shell.themes;
+
+import org.zkoss.zk.ui.HtmlBasedComponent;
+
+/**
+ * Utility methods for manipulating theme styles.
+ */
+public class ThemeUtil {
+    
+    public interface IThemeClass {
+        
+        public String getThemeClass();
+    }
+    
+    /**
+     * Applies one or more theme classes to a component.
+     * 
+     * @param component Component to receive the theme classes.
+     * @param baseClass A base theme class (may be null).
+     * @param themeClasses A list of theme classes to apply.
+     */
+    public static void applyThemeClass(HtmlBasedComponent component, String baseClass, IThemeClass... themeClasses) {
+        StringBuilder sb = baseClass == null ? new StringBuilder() : new StringBuilder(baseClass);
+        
+        for (IThemeClass themeClass : themeClasses) {
+            String cls = themeClass == null ? null : themeClass.getThemeClass();
+            
+            if (cls != null) {
+                sb.append(sb.length() > 0 ? " " : "").append(themeClass.getThemeClass());
+            }
+        }
+        
+        component.setSclass(sb.toString());
+    }
+    
+    /**
+     * Corresponds to Bootstrap button size classes.
+     */
+    public enum ButtonSize implements IThemeClass {
+        DEFAULT(null), LARGE("btn-lg"), SMALL("btn-sm"), TINY("btn-xs");
+        
+        private final String themeClass;
+        
+        ButtonSize(String themeClass) {
+            this.themeClass = themeClass;
+        }
+        
+        @Override
+        public String getThemeClass() {
+            return themeClass;
+        }
+        
+        @Override
+        public String toString() {
+            return name().toLowerCase();
+        }
+    };
+    
+    /**
+     * Corresponds to Bootstrap button style classes.
+     */
+    public enum ButtonStyle implements IThemeClass {
+        DEFAULT, PRIMARY, SUCCESS, INFO, WARNING, DANGER, LINK;
+        
+        @Override
+        public String getThemeClass() {
+            return "btn-" + name().toLowerCase();
+        }
+        
+        @Override
+        public String toString() {
+            return name().toLowerCase();
+        }
+    };
+    
+    /**
+     * Enforce static class.
+     */
+    private ThemeUtil() {
+    };
+}

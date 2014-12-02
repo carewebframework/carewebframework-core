@@ -131,7 +131,7 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
         
         for (PropertyInfo propInfo : def.getProperties()) {
             Object value = propInfo.isSerializable() ? propInfo.getPropertyValue(parent) : null;
-            String val = value == null ? null : value.toString();
+            String val = value == null ? null : propInfo.getPropertyType().getSerializer().serialize(value);
             
             if (!ObjectUtils.equals(value, propInfo.getDefault())) {
                 writeString(propInfo.getId(), val);

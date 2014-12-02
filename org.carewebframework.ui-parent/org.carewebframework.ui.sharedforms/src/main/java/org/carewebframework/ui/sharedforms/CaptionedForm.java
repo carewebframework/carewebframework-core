@@ -53,12 +53,12 @@ public class CaptionedForm extends BaseForm {
         updateStyle();
     }
     
-    public String getCaptionStyle() {
-        return captionStyle.name();
+    public CaptionStyle getCaptionStyle() {
+        return captionStyle;
     }
     
-    public void setCaptionStyle(String captionStyle) {
-        this.captionStyle = CaptionStyle.valueOf(captionStyle);
+    public void setCaptionStyle(CaptionStyle captionStyle) {
+        this.captionStyle = captionStyle;
         updateStyle();
     }
     

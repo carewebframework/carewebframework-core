@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -8,6 +8,8 @@
  * http://www.carewebframework.org/licensing/disclaimer.
  */
 package org.carewebframework.shell.layout;
+
+import org.carewebframework.shell.themes.ThemeUtil;
 
 import org.zkoss.zul.Button;
 
@@ -22,9 +24,18 @@ public class UIElementButton extends UIElementActionBase {
     
     private final Button button = new Button();
     
+    private ThemeUtil.ButtonSize size = ThemeUtil.ButtonSize.DEFAULT;
+    
+    private ThemeUtil.ButtonStyle style = ThemeUtil.ButtonStyle.DEFAULT;
+    
     public UIElementButton() {
         super();
         setOuterComponent(button);
+        updateStyle();
+    }
+    
+    private void updateStyle() {
+        ThemeUtil.applyThemeClass(button, "btn", style, size);
     }
     
     @Override
@@ -67,6 +78,24 @@ public class UIElementButton extends UIElementActionBase {
      */
     public String getIcon() {
         return button.getImage();
+    }
+    
+    public ThemeUtil.ButtonSize getSize() {
+        return size;
+    }
+    
+    public void setSize(ThemeUtil.ButtonSize size) {
+        this.size = size;
+        updateStyle();
+    }
+    
+    public ThemeUtil.ButtonStyle getStyle() {
+        return style;
+    }
+    
+    public void setStyle(ThemeUtil.ButtonStyle style) {
+        this.style = style;
+        updateStyle();
     }
     
 }

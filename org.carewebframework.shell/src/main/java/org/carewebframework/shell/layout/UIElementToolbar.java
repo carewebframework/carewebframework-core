@@ -26,7 +26,7 @@ public class UIElementToolbar extends UIElementZKBase {
     static {
         registerAllowedChildClass(UIElementToolbar.class, UIElementBase.class);
         registerAllowedParentClass(UIElementToolbar.class, UIElementBase.class);
-        PropertyTypeRegistry.register("children", null, PropertyEditorOrderedChildren.class);
+        PropertyTypeRegistry.register("children", PropertyEditorOrderedChildren.class);
     }
     
     private final Toolbar toolbar;

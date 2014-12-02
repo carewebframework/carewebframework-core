@@ -31,7 +31,7 @@ public class UIElementTreeView extends UIElementZKBase {
     static {
         registerAllowedParentClass(UIElementTreeView.class, UIElementBase.class);
         registerAllowedChildClass(UIElementTreeView.class, UIElementTreePane.class);
-        PropertyTypeRegistry.register("nodes", null, PropertyEditorTreeView.class);
+        PropertyTypeRegistry.register("nodes", PropertyEditorTreeView.class);
     }
     
     private final EventListener<SelectEvent<?, ?>> selectListener = new EventListener<SelectEvent<?, ?>>() {

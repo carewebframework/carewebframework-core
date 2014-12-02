@@ -136,19 +136,18 @@ public class PropertyEditorList extends PropertyEditorBase {
     }
     
     @Override
-    protected String getValue() {
+    protected Object getValue() {
         Comboitem item = combobox.getSelectedItem();
         Object value = item != null ? item.getValue() : combobox.isReadonly() ? null : combobox.getValue();
-        return value == null ? "" : value.toString();
+        return value;
     }
     
     @Override
     protected void setValue(Object value) {
-        int index = value == null ? -1 : ListUtil.findComboboxItem(combobox, value, false);
-        combobox.setSelectedIndex(index);
+        int index = value == null ? -1 : ListUtil.selectComboboxData(combobox, value);
         
         if (index < 0) {
-            combobox.setValue((String) value);
+            combobox.setValue(value == null ? null : value.toString());
         }
         
         updateValue();

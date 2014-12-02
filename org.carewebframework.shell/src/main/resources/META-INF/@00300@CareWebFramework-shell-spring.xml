@@ -312,6 +312,18 @@
 					name="${labels.cwf.shell.plugin.button.icon.name}" description="${labels.cwf.shell.plugin.button.icon.description}" />
 				<cwp:property id="hint"
 					name="${labels.cwf.shell.plugin.button.hint.name}" description="${labels.cwf.shell.plugin.button.hint.description}" />
+				<cwp:property id="size"
+					name="${labels.cwf.shell.plugin.button.size.name}" description="${labels.cwf.shell.plugin.button.size.description}" type="enum">
+					<cwp:config>
+						<cwp:entry key="class">org.carewebframework.shell.themes.ThemeUtil$ButtonSize</cwp:entry>
+					</cwp:config>
+				</cwp:property>
+				<cwp:property id="style"
+					name="${labels.cwf.shell.plugin.button.style.name}" description="${labels.cwf.shell.plugin.button.style.description}" type="enum">
+					<cwp:config>
+						<cwp:entry key="class">org.carewebframework.shell.themes.ThemeUtil$ButtonStyle</cwp:entry>
+					</cwp:config>
+				</cwp:property>
 				<cwp:property id="action" type="action"
 					name="${labels.cwf.shell.plugin.button.action.name}" description="${labels.cwf.shell.plugin.button.action.description}" />
 			</cwp:serialization>

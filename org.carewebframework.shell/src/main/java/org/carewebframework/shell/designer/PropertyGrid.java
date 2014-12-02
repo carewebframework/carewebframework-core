@@ -224,7 +224,7 @@ public class PropertyGrid extends Window {
         PropertyEditorBase editor = null;
         
         try {
-            PropertyType type = propInfo.getTypeInfo();
+            PropertyType type = propInfo.getPropertyType();
             
             if (type == null) {
                 throw new UIException("Unknown property type: " + propInfo.getType());

@@ -28,7 +28,7 @@ public class UIElementStepView extends UIElementZKBase {
     static {
         registerAllowedParentClass(UIElementStepView.class, UIElementBase.class);
         registerAllowedChildClass(UIElementStepView.class, UIElementStepPane.class);
-        PropertyTypeRegistry.register("step", null, PropertyEditorStepView.class);
+        PropertyTypeRegistry.register("step", PropertyEditorStepView.class);
     }
     
     private final Component outer;

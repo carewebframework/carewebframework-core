@@ -30,7 +30,7 @@ public class UIElementTabMenu extends UIElementZKBase {
     static {
         registerAllowedChildClass(UIElementTabMenu.class, UIElementTabMenuPane.class);
         registerAllowedParentClass(UIElementTabMenu.class, UIElementTabPane.class);
-        PropertyTypeRegistry.register("tabmenuitems", null, PropertyEditorTabMenu.class);
+        PropertyTypeRegistry.register("tabmenuitems", PropertyEditorTabMenu.class);
     }
     
     public static class MenupopupEx extends Menupopup {
