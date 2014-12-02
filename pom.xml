@@ -421,8 +421,22 @@
 						</lifecycleMappingMetadata>
 					</configuration>
 				</plugin>
+				<!-- LESS stylesheet compiler -->
+				<plugin>
+				    <groupId>org.lesscss</groupId>
+				    <artifactId>lesscss-maven-plugin</artifactId>
+				    <version>1.7.0.1.1</version>
+				    <executions>
+				        <execution>
+				            <goals>
+				                <goal>compile</goal>
+				            </goals>
+				        </execution>
+				    </executions>
+				</plugin>
 			</plugins>
 		</pluginManagement>
+		
 		<plugins>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
@@ -437,6 +451,7 @@
 				<artifactId>maven-javadoc-plugin</artifactId>
 			</plugin>
 		</plugins>
+		
 	</build>
 
 	<profiles>
