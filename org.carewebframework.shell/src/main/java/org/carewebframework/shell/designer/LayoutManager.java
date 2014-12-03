@@ -36,6 +36,7 @@ import org.carewebframework.ui.zk.PromptDialog;
 import org.carewebframework.ui.zk.ZKUtil;
 
 import org.zkoss.util.media.Media;
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Filedownload;
@@ -46,7 +47,6 @@ import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listitem;
 import org.zkoss.zul.ListitemRenderer;
 import org.zkoss.zul.Radiogroup;
-import org.zkoss.zul.Toolbar;
 import org.zkoss.zul.Window;
 
 /**
@@ -72,11 +72,13 @@ public class LayoutManager extends Window {
     
     private Listbox lstLayouts;
     
+    private Label lblTitle;
+    
     private Label lblPrompt;
     
     private Radiogroup radioGroup;
     
-    private Toolbar tbarManage;
+    private Component pnlManage;
     
     private boolean shared;
     
@@ -126,7 +128,7 @@ public class LayoutManager extends Window {
         
         try {
             dlg = (LayoutManager) PopupDialog.popup(ZKUtil.loadCachedPageDefinition(RESOURCE_PREFIX + "LayoutManager.zul"),
-                null, true, true, false);
+                null, false, true, false);
             return dlg.show(manage, deflt);
         } catch (Exception e) {
             return null;
@@ -161,12 +163,12 @@ public class LayoutManager extends Window {
     private LayoutIdentifier show(boolean manage, String deflt) {
         this.shared = defaultIsShared();
         ZKUtil.wireController(this);
-        setTitle(StrUtil.formatMessage(manage ? CAP_LAYOUT_MANAGE : CAP_LAYOUT_LOAD));
+        lblTitle.setValue(StrUtil.formatMessage(manage ? CAP_LAYOUT_MANAGE : CAP_LAYOUT_LOAD));
         lblPrompt.setValue(StrUtil.formatMessage(manage ? MSG_LAYOUT_MANAGE : MSG_LAYOUT_LOAD));
         lstLayouts.setItemRenderer(renderer);
         btnOK.setVisible(!manage);
         btnCancel.setVisible(!manage);
-        tbarManage.setVisible(manage);
+        pnlManage.setVisible(manage);
         radioGroup.setSelectedIndex(shared ? 0 : 1);
         refresh(deflt);
         doModal();

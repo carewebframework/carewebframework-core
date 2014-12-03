@@ -64,7 +64,7 @@ public class PromptDialog extends Window {
     
     private static final String STYLES_ERROR = Messagebox.ERROR + "||panel-danger";
     
-    private static final String STYLES_QUESTION = Messagebox.QUESTION + "||panel-success";
+    private static final String STYLES_QUESTION = Messagebox.QUESTION + "||panel-primary";
     
     /**
      * A response object that will be associated the button that, when clicked, will generate the

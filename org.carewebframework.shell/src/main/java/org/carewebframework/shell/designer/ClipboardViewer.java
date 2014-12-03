@@ -15,6 +15,7 @@ import org.carewebframework.ui.zk.ZKUtil;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
+import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zk.ui.util.ConventionWires;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Textbox;
@@ -62,16 +63,24 @@ public class ClipboardViewer extends Window {
     /**
      * Commit changes in viewer to clipboard.
      * 
-     * @throws Exception Unspecified exception.
+     * @return True if successful.
      */
-    private void commit() throws Exception {
+    private boolean commit() {
         if (modified) {
             String text = txtData.getText();
-            clipboard.copy(data instanceof String ? text : data instanceof IClipboardAware ? ((IClipboardAware<?>) data)
-                    .fromClipboard(text) : null);
+            try {
+                clipboard.copy(data instanceof String ? text : data instanceof IClipboardAware ? ((IClipboardAware<?>) data)
+                        .fromClipboard(text) : null);
+            } catch (Exception e) {
+                Clients.wrongValue(txtData, ZKUtil.formatExceptionForDisplay(e));
+                txtData.focus();
+                return false;
+            }
             modified = false;
             updateControls();
         }
+        
+        return true;
     }
     
     /**
@@ -92,6 +101,7 @@ public class ClipboardViewer extends Window {
     private void updateControls() {
         btnSave.setDisabled(!modified);
         btnRestore.setDisabled(!modified);
+        Clients.clearWrongValue(txtData);
     }
     
     /**
@@ -108,8 +118,9 @@ public class ClipboardViewer extends Window {
      * @throws Exception Unspecified exception.
      */
     public void onClick$btnOK() throws Exception {
-        commit();
-        detach();
+        if (commit()) {
+            detach();
+        }
     }
     
     /**

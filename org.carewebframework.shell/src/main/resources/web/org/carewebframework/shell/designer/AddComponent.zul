@@ -1,26 +1,31 @@
 <zk>
-	<window border="normal" height="400px"
-		width="400px" sclass="cwf-designer-addcomponent"
+	<window zclass="cwf-window" contentSclass="panel panel-primary" width="400px"
 		use="org.carewebframework.shell.designer.AddComponent">
-		<panel vflex="1">
-			<panelchildren>
-				<tree id="tree" vflex="true"
-					style="background:none;border:none;text-overflow:ellipsis;white-space:nowrap">
-					<treechildren>
-						<treeitem id="itmFavorites" visible="false" label="${labels.cwf.shell.plugin.category.favorite}">
-							<treechildren />
-						</treeitem>
-					</treechildren>
-				</tree>
-			</panelchildren>
-			<toolbar align="end">
-				<button id="btnOK" zclass="btn btn-default btn-sm"
+		<div zclass="panel-heading">
+			<span zclass="glyphicon glyphicon-remove" 
+				style="float:right;cursor:pointer" 
+				forward="onClick=onClose"/>
+			<label id="lblTitle" zclass="panel-title" value="title" />
+		</div>
+		<div zclass="panel-body" height="400px">
+			<tree id="tree" vflex="true"
+				style="background:none;border:none;text-overflow:ellipsis;white-space:nowrap">
+				<treechildren>
+					<treeitem id="itmFavorites" visible="false" label="${labels.cwf.shell.plugin.category.favorite}">
+						<treechildren />
+					</treeitem>
+				</treechildren>
+			</tree>
+		</div>
+		<div zclass="panel-footer">
+			<div zclass="btn-toolbar" align="end">
+				<button id="btnOK" zclass="btn" sclass="btn-success btn-sm"
 					label="${labels.cwf.shell.designer.add.component.btn.ok.label}" 
 					disabled="true" />
-				<button id="btnCancel" zclass="btn btn-default btn-sm"
+				<button id="btnCancel" zclass="btn" sclass="btn-danger btn-sm"
 					label="${labels.cwf.shell.designer.add.component.btn.cancel.label}" />
 				<separator orient="vertical" width="20px" />
-			</toolbar>
-		</panel>
+			</div>
+		</div>
 	</window>
 </zk>

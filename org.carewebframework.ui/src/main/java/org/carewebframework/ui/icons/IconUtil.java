@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -60,7 +60,7 @@ public class IconUtil {
      * @param iconName Name of the icon in question
      * @return Path to icon resource (i.e. ~./org/carewebframework/ui/icons/silk/16x16/help.png)
      */
-    public static String getIconPath(final String iconName) {
+    public static String getIconPath(String iconName) {
         return getIconPath(iconName, null, null);
     }
     
@@ -74,7 +74,7 @@ public class IconUtil {
      * @param library Library name containing the icon (e.g., "silk"). Specify null to use default.
      * @return The icon path.
      */
-    public static List<String> getMatching(final String iconName, final String dimensions, final String library) {
+    public static List<String> getMatching(String iconName, String dimensions, String library) {
         return IconLibraryRegistry.getInstance().getMatching(library, iconName, dimensions);
     }
     
@@ -87,7 +87,7 @@ public class IconUtil {
      * @param library Library name containing the icon (e.g., "silk"). Specify null to use default.
      * @return The icon path.
      */
-    public static String getIconPath(final String iconName, final String dimensions, final String library) {
+    public static String getIconPath(String iconName, String dimensions, String library) {
         IconParams icon = new IconParams(iconName, dimensions, library);
         IIconLibrary lib = IconLibraryRegistry.getInstance().get(icon.library);
         return lib == null ? null : lib.getIconUrl(icon.name, icon.dimensions);

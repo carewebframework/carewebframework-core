@@ -3,33 +3,34 @@
 	xmlns:h="http://www.w3.org/1999/xhtml"
 	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd ">
 
-	<window title="${labels.cwf.shell.clipboard.viewer.title}" width="400px"
-		height="400px"
+	<window zclass="cwf-window" contentSclass="panel panel-primary" width="400px"
 		use="org.carewebframework.shell.designer.ClipboardViewer">
-		<borderlayout>
-			<center>
-				<textbox id="txtData" multiline="true" height="100%"
-					width="100%" style="overflow:auto" />
-			</center>
-			<south>
-				<toolbar align="end">
-					<button id="btnSave" zclass="btn btn-default btn-sm"
-						label="${labels.cwf.shell.clipboard.viewer.btn.save.label}"
-						tooltiptext="${labels.cwf.shell.clipboard.viewer.btn.save.hint}" />
-					<button id="btnRestore" zclass="btn btn-default btn-sm"
-						label="${labels.cwf.shell.clipboard.viewer.btn.restore.label}"
-						tooltiptext="${labels.cwf.shell.clipboard.viewer.btn.restore.hint}" />
-					<separator orient="vertical" width="40px" />
-					<button id="btnOK" zclass="btn btn-default btn-sm"
-						label="${labels.cwf.shell.clipboard.viewer.btn.ok.label}"
-						tooltiptext="${labels.cwf.shell.clipboard.viewer.btn.ok.hint}" />
-					<button id="btnCancel" zclass="btn btn-default btn-sm"
-						label="${labels.cwf.shell.clipboard.viewer.btn.cancel.label}"
-						tooltiptext="${labels.cwf.shell.clipboard.viewer.btn.cancel.hint}" />
-					<separator orient="vertical" width="20px" />
-				</toolbar>
-			</south>
-		</borderlayout>
+		<div zclass="panel-heading">
+			<span zclass="glyphicon glyphicon-remove" 
+				style="float:right;cursor:pointer" 
+				forward="onClick=onClose"/>
+			<label zclass="panel-title" value="${labels.cwf.shell.clipboard.viewer.title}" />
+		</div>
+		<div zclass="panel-body" height="400px">
+			<textbox id="txtData" multiline="true" height="100%"
+				width="100%" style="overflow:auto" />
+		</div>
+		<div zclass="panel-footer">
+			<div zclass="btn-toolbar" align="end">
+				<button id="btnSave" zclass="btn" sclass="btn-default btn-sm"
+					label="${labels.cwf.shell.clipboard.viewer.btn.save.label}"
+					tooltiptext="${labels.cwf.shell.clipboard.viewer.btn.save.hint}" />
+				<button id="btnRestore" zclass="btn" sclass="btn-default btn-sm"
+					label="${labels.cwf.shell.clipboard.viewer.btn.restore.label}"
+					tooltiptext="${labels.cwf.shell.clipboard.viewer.btn.restore.hint}" />
+				<separator orient="vertical" width="40px" />
+				<button id="btnOK" zclass="btn" sclass="btn-success btn-sm"
+					label="${labels.cwf.shell.clipboard.viewer.btn.ok.label}"
+					tooltiptext="${labels.cwf.shell.clipboard.viewer.btn.ok.hint}" />
+				<button id="btnCancel" zclass="btn" sclass="btn-danger btn-sm"
+					label="${labels.cwf.shell.clipboard.viewer.btn.cancel.label}"
+					tooltiptext="${labels.cwf.shell.clipboard.viewer.btn.cancel.hint}" />
+			</div>
+		</div>
 	</window>
-
 </zk>

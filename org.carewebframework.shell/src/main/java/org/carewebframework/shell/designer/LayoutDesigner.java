@@ -28,7 +28,7 @@ import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.ext.AfterCompose;
 import org.zkoss.zk.ui.util.UiLifeCycle;
-import org.zkoss.zul.Toolbarbutton;
+import org.zkoss.zul.Button;
 import org.zkoss.zul.Tree;
 import org.zkoss.zul.Treechildren;
 import org.zkoss.zul.Treeitem;
@@ -57,29 +57,27 @@ public class LayoutDesigner extends Window implements AfterCompose {
     
     private UIElementBase rootElement;
     
-    private Toolbarbutton btnCut;
+    private Button btnCut;
     
-    private Toolbarbutton btnCopy;
+    private Button btnCopy;
     
-    private Toolbarbutton btnPaste;
+    private Button btnPaste;
     
-    private Toolbarbutton btnAdd;
+    private Button btnAdd;
     
-    private Toolbarbutton btnDelete;
+    private Button btnDelete;
     
-    private Toolbarbutton btnUp;
+    private Button btnUp;
     
-    private Toolbarbutton btnDown;
+    private Button btnDown;
     
-    private Toolbarbutton btnLeft;
+    private Button btnLeft;
     
-    private Toolbarbutton btnRight;
+    private Button btnRight;
     
-    private Toolbarbutton btnProperties;
+    private Button btnProperties;
     
-    private Toolbarbutton btnAbout;
-    
-    private Toolbarbutton btnToFront;
+    private Button btnAbout;
     
     private final Clipboard clipboard = Clipboard.getInstance();
     
@@ -346,7 +344,6 @@ public class LayoutDesigner extends Window implements AfterCompose {
         target = selectedItem == null ? null : (Treeitem) selectedItem.getNextSibling();
         btnDown.setDisabled(movementType(selectedItem, target, true) == MovementType.INVALID);
         contextMenu.setOwner(selectedElement);
-        ZKUtil.updateStyle(btnToFront, "opacity", bringToFront ? null : "0.5");
         
         if (selectedItem != null) {
             selectedItem.setSelected(false);

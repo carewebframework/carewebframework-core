@@ -27,11 +27,13 @@ import org.carewebframework.ui.zk.ZKUtil;
 
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.Button;
-import org.zkoss.zul.Image;
+import org.zkoss.zul.Label;
+import org.zkoss.zul.Span;
 import org.zkoss.zul.Tree;
 import org.zkoss.zul.Treeitem;
 import org.zkoss.zul.Window;
@@ -54,6 +56,8 @@ public class AddComponent extends Window {
     private Tree tree;
     
     private Button btnOK;
+    
+    private Label lblTitle;
     
     private boolean createChild;
     
@@ -211,7 +215,8 @@ public class AddComponent extends Window {
             onSelect$tree();
         }
         
-        setTitle(StrUtil.formatMessage("@cwf.shell.designer.add.component.title", parentElement.getDefinition().getName()));
+        lblTitle.setValue(StrUtil.formatMessage("@cwf.shell.designer.add.component.title", parentElement.getDefinition()
+                .getName()));
     }
     
     private void loadFavorites() {
@@ -254,7 +259,9 @@ public class AddComponent extends Window {
         }
         
         if (favorites != null) {
-            Image image = new Image();
+            Span image = new Span();
+            image.setZclass("glyphicon glyphicon-star");
+            image.setStyle("float:left");
             Component cell = item.getTreerow().getFirstChild();
             cell.insertBefore(image, cell.getFirstChild());
             image.addForward(Events.ON_CLICK, item, ON_FAVORITE);
@@ -279,9 +286,11 @@ public class AddComponent extends Window {
      * @param isFavorite If true, the item is a favorite.
      * @return The original image.
      */
-    private Image setFavoriteStatus(Treeitem item, boolean isFavorite) {
-        Image image = (Image) item.getAttribute("image");
-        image.setSrc(isFavorite ? DesignConstants.DESIGN_FAVORITES_ACTIVE : DesignConstants.DESIGN_FAVORITES_INACTIVE);
+    private HtmlBasedComponent setFavoriteStatus(Treeitem item, boolean isFavorite) {
+        HtmlBasedComponent image = (HtmlBasedComponent) item.getAttribute("image");
+        ZKUtil.updateSclass(image, "text-muted", isFavorite);
+        ZKUtil.updateSclass(image, "text-primary", !isFavorite);
+        ZKUtil.updateStyle(image, "opacity", isFavorite ? null : "0.6");
         image.setTooltiptext(isFavorite ? favoritesRemoveHint : favoritesAddHint);
         item.setAttribute("favorite", isFavorite);
         itmFavorites.setVisible(isFavorite || itmFavorites.getTreechildren().getFirstChild() != null);

@@ -1,47 +1,54 @@
 <zk>
-	<window border="normal" height="300px" width="500px"
-		contentStyle="padding:0"
+	<window zclass="cwf-window" contentSclass="panel panel-primary" width="500px"
 		use="org.carewebframework.shell.designer.LayoutManager">
-		<panel vflex="1">
-			<toolbar mold="panel" style="background-color:lightyellow"
-				align="center">
-				<label id="lblPrompt" />
-			</toolbar>
-			<panelchildren style="overflow:auto">
-				<listbox id="lstLayouts"
-					style="border-left:0; border-right:0" vflex="1" />
-			</panelchildren>
-			<toolbar align="end">
-				<radiogroup id="radioGroup" orient="horizontal">
-					<radio style="padding-right: 10px" selected="true"
-						label="${labels.cwf.shell.designer.layout.manager.radio.shared.label}" />
-					<radio
-						label="${labels.cwf.shell.designer.layout.manager.radio.private_.label}" />
-				</radiogroup>
-				<separator orient="vertical" />
-				<button id="btnOK" zclass="btn btn-default btn-sm"
-					label="${labels.cwf.shell.designer.layout.manager.btn.ok.label}" />
-				<button id="btnCancel" zclass="btn btn-default btn-sm"
-					label="${labels.cwf.shell.designer.layout.manager.btn.cancel.label}"
-					forward="onClose" />
-			</toolbar>
-			<toolbar id="tbarManage" align="end">
-				<button id="btnImport" zclass="btn btn-default btn-sm"
-					label="${labels.cwf.shell.designer.layout.manager.btn.import_.label}" />
-				<button id="btnExport" zclass="btn btn-default btn-sm"
-					label="${labels.cwf.shell.designer.layout.manager.btn.export.label}" />
-				<separator orient="vertical" />
-				<button id="btnClone" zclass="btn btn-default btn-sm"
-					label="${labels.cwf.shell.designer.layout.manager.btn.clone.label}" />
-				<button id="btnRename" zclass="btn btn-default btn-sm"
-					label="${labels.cwf.shell.designer.layout.manager.btn.rename.label}" />
-				<button id="btnDelete" zclass="btn btn-default btn-sm"
-					label="${labels.cwf.shell.designer.layout.manager.btn.delete.label}" />
-				<separator orient="vertical" />
-				<button id="btnClose" zclass="btn btn-default btn-sm"
-					label="${labels.cwf.shell.designer.layout.manager.btn.close.label}"
-					forward="onClose" />
-			</toolbar>
-		</panel>
+		<div zclass="panel-heading">
+			<span zclass="glyphicon glyphicon-remove" 
+				style="float:right;cursor:pointer" 
+				forward="onClick=onClose"/>
+			<label id="lblTitle" zclass="panel-title" />
+		</div>
+		<div zclass="panel-body" height="300px">
+			<label id="lblPrompt" sclass="text-primary" />
+			<listbox id="lstLayouts" vflex="1" />
+		</div>
+		<div zclass="panel-footer">
+			<div zclass="btn-toolbar">
+				<div zclass="btn-group" sclass="btn-group-sm">
+					<radiogroup id="radioGroup" orient="horizontal">
+						<radio selected="true"
+							label="${labels.cwf.shell.designer.layout.manager.radio.shared.label}" />
+						<radio
+							label="${labels.cwf.shell.designer.layout.manager.radio.private_.label}" />
+					</radiogroup>
+				</div>
+				<div zclass="btn-group" sclass="btn-group-sm">
+					<button id="btnOK" zclass="btn" sclass="btn-success"
+						label="${labels.cwf.shell.designer.layout.manager.btn.ok.label}" />
+					<button id="btnCancel" zclass="btn" sclass="btn-danger"
+						label="${labels.cwf.shell.designer.layout.manager.btn.cancel.label}"
+						forward="onClose" />
+				</div>
+			</div>
+			<div zclass="btn-toolbar">
+				<div id="pnlManage" zclass="btn-group" sclass="btn-group-sm">
+					<button id="btnImport" zclass="btn" sclass="btn-default"
+						label="${labels.cwf.shell.designer.layout.manager.btn.import_.label}" />
+					<button id="btnExport" zclass="btn" sclass="btn-default"
+						label="${labels.cwf.shell.designer.layout.manager.btn.export.label}" />
+					<separator orient="vertical" />
+					<button id="btnClone" zclass="btn" sclass="btn-default"
+						label="${labels.cwf.shell.designer.layout.manager.btn.clone.label}" />
+					<button id="btnRename" zclass="btn" sclass="btn-default"
+						label="${labels.cwf.shell.designer.layout.manager.btn.rename.label}" />
+					<button id="btnDelete" zclass="btn" sclass="btn-default"
+						label="${labels.cwf.shell.designer.layout.manager.btn.delete.label}" />
+				</div>
+				<div zclass="btn-group" sclass="btn-group-sm">
+					<button id="btnClose" zclass="btn" sclass="btn-default"
+						label="${labels.cwf.shell.designer.layout.manager.btn.close.label}"
+						forward="onClose" />
+				</div>
+			</div>
+		</div>
 	</window>
 </zk>

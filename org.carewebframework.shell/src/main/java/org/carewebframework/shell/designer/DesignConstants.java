@@ -70,10 +70,6 @@ public class DesignConstants {
     
     public static final String DESIGN_FAVORITES_PROPERTY = "CAREWEB.DESIGN.FAVORITES";
     
-    public static final String DESIGN_FAVORITES_INACTIVE = Constants.ICON_PATH + "starOff.png";
-    
-    public static final String DESIGN_FAVORITES_ACTIVE = Constants.ICON_PATH + "starOn.png";
-    
     /**
      * Enforce static class.
      */

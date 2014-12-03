@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -39,6 +39,8 @@ public class LayoutPrompt extends Window {
     
     private Label lblPrompt;
     
+    private Label lblTitle;
+    
     private Textbox txtLayout;
     
     private boolean allowDups;
@@ -60,7 +62,7 @@ public class LayoutPrompt extends Window {
         try {
             LayoutPrompt lp = (LayoutPrompt) ZKUtil.loadZulPage(DIALOG, null);
             ZKUtil.wireController(lp);
-            lp.setTitle(StrUtil.formatMessage(title));
+            lp.lblTitle.setValue(StrUtil.formatMessage(title));
             lp.lblPrompt.setValue(StrUtil.formatMessage(prompt));
             lp.txtLayout.setText(dflt == null ? null : dflt.name);
             boolean shared = dflt == null ? LayoutManager.defaultIsShared() : dflt.shared;
@@ -107,6 +109,7 @@ public class LayoutPrompt extends Window {
             Clients.clearWrongValue(txtLayout);
         } else {
             Clients.wrongValue(txtLayout, StrUtil.formatMessage(message));
+            txtLayout.focus();
         }
     }
 }
