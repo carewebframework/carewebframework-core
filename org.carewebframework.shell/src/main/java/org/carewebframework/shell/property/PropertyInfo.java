@@ -197,7 +197,9 @@ public class PropertyInfo {
             }
         }
         
-        method.invoke(instance, value);
+        if (method != null) {
+            method.invoke(instance, value);
+        }
     }
     
     /**

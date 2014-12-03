@@ -32,14 +32,14 @@
 			</center>
 			<south style="border:none">
 				<toolbar id="toolbar" align="end">
-					<button id="btnApply" zclass="btn btn-default btn-sm"
+					<button id="btnApply" zclass="btn" sclass="btn-default btn-sm"
 						label="${labels.cwf.shell.designer.property.grid.btn.apply.label}" />
-					<button id="btnRestore" zclass="btn btn-default btn-sm"
+					<button id="btnRestore" zclass="btn" sclass="btn-default btn-sm"
 						label="${labels.cwf.shell.designer.property.grid.btn.restore.label}" />
 					<separator orient="vertical" width="40px" />
-					<button id="btnOK" zclass="btn btn-default btn-sm"
+					<button id="btnOK" zclass="btn" sclass="btn-default btn-sm"
 						label="${labels.cwf.shell.designer.property.grid.btn.ok.label}" />
-					<button id="btnCancel" zclass="btn btn-default btn-sm"
+					<button id="btnCancel" zclass="btn" sclass="btn-default btn-sm"
 						label="${labels.cwf.shell.designer.property.grid.btn.cancel.label}" />
 					<separator orient="vertical" width="20px" />
 				</toolbar>
