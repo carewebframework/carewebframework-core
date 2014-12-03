@@ -22,7 +22,6 @@ import org.apache.commons.logging.LogFactory;
 import org.carewebframework.api.property.PropertyUtil;
 import org.carewebframework.common.StrUtil;
 
-import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
@@ -58,6 +57,14 @@ public class PromptDialog extends Window {
     private static final String LABEL_ID_CANCEL = "@cwf.btn.cancel.label";
     
     private static final String LABEL_IDS_CANCEL_OK = LABEL_ID_CANCEL + "|" + LABEL_ID_OK;
+    
+    private static final String STYLES_INFO = Messagebox.INFORMATION + "||panel-info";
+    
+    private static final String STYLES_WARNING = Messagebox.EXCLAMATION + "||panel-warning";
+    
+    private static final String STYLES_ERROR = Messagebox.ERROR + "||panel-danger";
+    
+    private static final String STYLES_QUESTION = Messagebox.QUESTION + "||panel-success";
     
     /**
      * A response object that will be associated the button that, when clicked, will generate the
@@ -144,7 +151,7 @@ public class PromptDialog extends Window {
     
     private Checkbox chkRemember;
     
-    private Component buttonParent;
+    private Button btnOK;
     
     /**
      * Display the prompt dialog.
@@ -152,7 +159,7 @@ public class PromptDialog extends Window {
      * @param message Text message
      * @param title Title of dialog
      * @param responses Array of response objects.
-     * @param styles SClass specifiers for icon and text, respectively, separated by vertical bars.
+     * @param styles Style classes for icon, message text, and panel (pipe-delimited)
      * @param defaultResponse Default response object (associated button will have initial focus).
      * @param eventListener Optional event listener to intercept click events
      * @param saveResponseId Uniquely identifies this response for purposes of saving and retrieving
@@ -166,9 +173,8 @@ public class PromptDialog extends Window {
      *            responses that will not be saved.
      * @return Chosen response.
      */
-    public static <T> T show(final String message, final String title, final T[] responses, final String styles,
-                             final T defaultResponse, final EventListener<Event> eventListener, final String saveResponseId,
-                             final T[] excludeResponses) {
+    public static <T> T show(String message, String title, T[] responses, String styles, T defaultResponse,
+                             EventListener<Event> eventListener, String saveResponseId, T[] excludeResponses) {
         int rsp = show(message, title, toResponseStr(responses), styles,
             defaultResponse == null ? null : defaultResponse.toString(), eventListener, saveResponseId,
             toResponseStr(excludeResponses));
@@ -182,7 +188,7 @@ public class PromptDialog extends Window {
      * @param message Text message
      * @param title Title of dialog
      * @param buttonCaptions Button captions separated by vertical bars
-     * @param styles SClass specifiers for icon and text, respectively, separated by vertical bars.
+     * @param styles Style classes for icon, message text, and panel (pipe-delimited)
      * @param defaultButton Caption of button to have initial focus
      * @param eventListener Optional event listener to intercept click events
      * @param saveResponseId Uniquely identifies this response for purposes of saving and retrieving
@@ -197,10 +203,9 @@ public class PromptDialog extends Window {
      *            buttonCaptions parameter.
      * @return Index of button that was clicked.
      */
-    public static int show(final String message, final String title, final String buttonCaptions, final String styles,
-                           String defaultButton, final EventListener<Event> eventListener, final String saveResponseId,
-                           final String excludeResponses) {
-        final List<Response> responseList = toResponseList(buttonCaptions, excludeResponses, defaultButton);
+    public static int show(String message, String title, String buttonCaptions, String styles, String defaultButton,
+                           EventListener<Event> eventListener, String saveResponseId, String excludeResponses) {
+        List<Response> responseList = toResponseList(buttonCaptions, excludeResponses, defaultButton);
         
         if (saveResponseId != null) {
             int i = getLastResponse(saveResponseId);
@@ -210,15 +215,17 @@ public class PromptDialog extends Window {
             }
         }
         
-        final Map<Object, Object> args = initArgs(message, title);
-        String[] sclass = styles == null ? null : StrUtil.split(styles, "|", 2, false);
-        args.put("icon", sclass == null ? null : sclass[0]);
-        args.put("sclass", sclass == null ? null : sclass[1]);
+        Map<Object, Object> args = initArgs(message, title);
+        String[] sclass = styles == null ? null : StrUtil.split(styles, "|", 3, false);
+        args.put("iconClass", sclass == null ? null : sclass[0]);
+        args.put("textClass", sclass == null ? null : sclass[1]);
+        args.put("panelClass", sclass == null || sclass[2].isEmpty() ? "panel-primary" : sclass[2]);
+        args.put("sclass", "panel-default");
         args.put("focus", StrUtil.formatMessage(defaultButton));
         args.put("responses", responseList);
         args.put("remember", saveResponseId != null);
         args.put("input", null);
-        final PromptDialog dlg = showDialog(args, eventListener, false);
+        PromptDialog dlg = showDialog(args, eventListener, false);
         
         if (dlg != null) {
             Response response = dlg._response;
@@ -239,13 +246,13 @@ public class PromptDialog extends Window {
      * @param message Text message
      * @param title Title of dialog
      * @param responses Array of response objects.
-     * @param styles SClass specifiers for icon and text, respectively, separated by vertical bars.
+     * @param styles Style classes for icon, message text, and panel (pipe-delimited)
      * @param defaultResponse Default response object (associated button will have initial focus).
      * @param eventListener Optional event listener to intercept click events
      * @return Chosen response.
      */
-    public static <T> T show(final String message, final String title, final T[] responses, final String styles,
-                             final T defaultResponse, final EventListener<Event> eventListener) {
+    public static <T> T show(String message, String title, T[] responses, String styles, T defaultResponse,
+                             EventListener<Event> eventListener) {
         return show(message, title, responses, styles, defaultResponse, eventListener, null, null);
     }
     
@@ -255,13 +262,13 @@ public class PromptDialog extends Window {
      * @param message Text message
      * @param title Title of dialog
      * @param buttonCaptions Button captions separated by vertical bars
-     * @param styles SClass specifiers for icon and text, respectively, separated by vertical bars.
+     * @param styles Style classes for icon, message text, and panel (pipe-delimited)
      * @param defaultButton Caption of button to have initial focus
      * @param eventListener Optional event listener to intercept click events
      * @return Index of button that was clicked.
      */
-    public static int show(final String message, final String title, final String buttonCaptions, final String styles,
-                           final String defaultButton, final EventListener<Event> eventListener) {
+    public static int show(String message, String title, String buttonCaptions, String styles, String defaultButton,
+                           EventListener<Event> eventListener) {
         return show(message, title, buttonCaptions, styles, defaultButton, eventListener, null, null);
     }
     
@@ -271,12 +278,11 @@ public class PromptDialog extends Window {
      * @param message Text message
      * @param title Title of dialog
      * @param responses Array of response objects.
-     * @param styles SClass specifiers for icon and text, respectively, separated by vertical bars.
+     * @param styles Style classes for icon, message text, and panel (pipe-delimited)
      * @param defaultResponse Default response object (associated button will have initial focus).
      * @return Chosen response.
      */
-    public static <T> T show(final String message, final String title, final T[] responses, final String styles,
-                             final T defaultResponse) {
+    public static <T> T show(String message, String title, T[] responses, String styles, T defaultResponse) {
         return show(message, title, responses, styles, defaultResponse, null);
     }
     
@@ -286,12 +292,11 @@ public class PromptDialog extends Window {
      * @param message Text message
      * @param title Title of dialog
      * @param buttonCaptions Button captions separated by vertical bars
-     * @param styles SClass specifiers for icon and text, respectively, separated by vertical bars.
+     * @param styles Style classes for icon, message text, and panel (pipe-delimited)
      * @param defaultButton Caption of button to have initial focus
      * @return Index of button that was clicked.
      */
-    public static int show(final String message, final String title, final String buttonCaptions, final String styles,
-                           final String defaultButton) {
+    public static int show(String message, String title, String buttonCaptions, String styles, String defaultButton) {
         return show(message, title, buttonCaptions, styles, defaultButton, null);
     }
     
@@ -301,10 +306,10 @@ public class PromptDialog extends Window {
      * @param message Text message
      * @param title Title of dialog
      * @param responses Array of response objects.
-     * @param styles SClass specifiers for icon and text, respectively, separated by vertical bars.
+     * @param styles Style classes for icon, message text, and panel (pipe-delimited)
      * @return Chosen response.
      */
-    public static <T> T show(final String message, final String title, final T[] responses, final String styles) {
+    public static <T> T show(String message, String title, T[] responses, String styles) {
         return show(message, title, responses, styles, null);
     }
     
@@ -314,10 +319,10 @@ public class PromptDialog extends Window {
      * @param message Text message
      * @param title Title of dialog
      * @param buttonCaptions Button captions separated by vertical bars
-     * @param styles SClass specifiers for icon and text, respectively, separated by vertical bars.
+     * @param styles Style classes for icon, message text, and panel (pipe-delimited)
      * @return Index of button that was clicked.
      */
-    public static int show(final String message, final String title, final String buttonCaptions, final String styles) {
+    public static int show(String message, String title, String buttonCaptions, String styles) {
         return show(message, title, buttonCaptions, styles, null);
     }
     
@@ -329,8 +334,8 @@ public class PromptDialog extends Window {
      * @param responses Array of response objects.
      * @return Chosen response.
      */
-    public static <T> T show(final String message, final String title, final T[] responses) {
-        return show(message, title, responses, Messagebox.INFORMATION);
+    public static <T> T show(String message, String title, T[] responses) {
+        return show(message, title, responses, STYLES_INFO);
     }
     
     /**
@@ -341,8 +346,8 @@ public class PromptDialog extends Window {
      * @param buttonCaptions Button captions separated by vertical bars
      * @return Index of button that was clicked.
      */
-    public static int show(final String message, final String title, final String buttonCaptions) {
-        return show(message, title, buttonCaptions, Messagebox.INFORMATION);
+    public static int show(String message, String title, String buttonCaptions) {
+        return show(message, title, buttonCaptions, STYLES_INFO);
     }
     
     /**
@@ -352,8 +357,8 @@ public class PromptDialog extends Window {
      * @param title Title of dialog (if starts with "@", assumed to be a label name)
      * @return Initialized map of control parameters.
      */
-    private static Map<Object, Object> initArgs(final String message, final String title) {
-        final Map<Object, Object> args = new HashMap<Object, Object>();
+    private static Map<Object, Object> initArgs(String message, String title) {
+        Map<Object, Object> args = new HashMap<Object, Object>();
         args.put("message", StrUtil.formatMessage(message));
         args.put("title", StrUtil.formatMessage(title));
         return args;
@@ -367,8 +372,8 @@ public class PromptDialog extends Window {
      * @param useInputListener If true, use the generic input listener.
      * @return The prompt dialog.
      */
-    private static PromptDialog showDialog(final Map<Object, Object> args, final EventListener<Event> eventListener,
-                                           final boolean useInputListener) {
+    private static PromptDialog showDialog(Map<Object, Object> args, EventListener<Event> eventListener,
+                                           boolean useInputListener) {
         PromptDialog dlg = null;
         
         try {
@@ -379,7 +384,7 @@ public class PromptDialog extends Window {
             ZKUtil.suppressContextMenu(dlg, true);
             dlg.doModal();
             return dlg;
-        } catch (final Exception e) {
+        } catch (Exception e) {
             log.error("Error Displaying Dialog", e);
             
             if (dlg != null) {
@@ -396,8 +401,8 @@ public class PromptDialog extends Window {
      * @param message Text message
      * @param title Title of dialog
      */
-    public static void showInfo(final String message, final String title) {
-        show(message, title, LABEL_ID_OK, Messagebox.INFORMATION);
+    public static void showInfo(String message, String title) {
+        show(message, title, LABEL_ID_OK, STYLES_INFO);
     }
     
     /**
@@ -405,7 +410,7 @@ public class PromptDialog extends Window {
      * 
      * @param message Text message
      */
-    public static void showInfo(final String message) {
+    public static void showInfo(String message) {
         showInfo(message, "@cwf.prompt.info.title");
     }
     
@@ -415,8 +420,8 @@ public class PromptDialog extends Window {
      * @param message Text message
      * @param title Title of dialog
      */
-    public static void showWarning(final String message, final String title) {
-        show(message, title, LABEL_ID_OK, Messagebox.EXCLAMATION);
+    public static void showWarning(String message, String title) {
+        show(message, title, LABEL_ID_OK, STYLES_WARNING);
     }
     
     /**
@@ -424,7 +429,7 @@ public class PromptDialog extends Window {
      * 
      * @param message Text message
      */
-    public static void showWarning(final String message) {
+    public static void showWarning(String message) {
         showWarning(message, "@cwf.prompt.warning.title");
     }
     
@@ -434,9 +439,9 @@ public class PromptDialog extends Window {
      * @param message Text message
      * @param title Title of dialog
      */
-    public static void showError(final String message, final String title) {
+    public static void showError(String message, String title) {
         Clients.clearBusy();
-        show(message, title, LABEL_ID_OK, Messagebox.ERROR);
+        show(message, title, LABEL_ID_OK, STYLES_ERROR);
     }
     
     /**
@@ -444,7 +449,7 @@ public class PromptDialog extends Window {
      * 
      * @param message Text message
      */
-    public static void showError(final String message) {
+    public static void showError(String message) {
         showError(message, "@cwf.prompt.error.title");
     }
     
@@ -453,7 +458,7 @@ public class PromptDialog extends Window {
      * 
      * @param e Exception to display.
      */
-    public static void showError(final Throwable e) {
+    public static void showError(Throwable e) {
         showError(ZKUtil.formatExceptionForDisplay(e));
     }
     
@@ -463,7 +468,7 @@ public class PromptDialog extends Window {
      * @param message Text message
      * @param title Title of dialog
      */
-    public static void showText(final String message, final String title) {
+    public static void showText(String message, String title) {
         show(message, title, LABEL_ID_OK, STYLE_FIXED_FONT);
     }
     
@@ -474,7 +479,7 @@ public class PromptDialog extends Window {
      * @param message Prompt to present to the user.
      * @return True if user clicked OK, false otherwise.
      */
-    public static boolean confirm(final String message) {
+    public static boolean confirm(String message) {
         return confirm(message, "@cwf.prompt.confirm.title");
     }
     
@@ -486,7 +491,7 @@ public class PromptDialog extends Window {
      * @param title Caption of prompt dialog.
      * @return True if user clicked OK, false otherwise.
      */
-    public static boolean confirm(final String message, final String title) {
+    public static boolean confirm(String message, String title) {
         return confirm(message, title, null);
     }
     
@@ -501,8 +506,8 @@ public class PromptDialog extends Window {
      *            not prompted again.
      * @return True if user clicked OK, false otherwise.
      */
-    public static boolean confirm(final String message, final String title, final String responseId) {
-        return 1 == show(message, title, LABEL_IDS_CANCEL_OK, Messagebox.QUESTION, null, null, responseId, LABEL_ID_CANCEL);
+    public static boolean confirm(String message, String title, String responseId) {
+        return 1 == show(message, title, LABEL_IDS_CANCEL_OK, STYLES_QUESTION, null, null, responseId, LABEL_ID_CANCEL);
     }
     
     /**
@@ -512,7 +517,7 @@ public class PromptDialog extends Window {
      * @return True if represents an OK result.
      */
     private static boolean isOK(String text) {
-        return StrUtil.formatMessage(LABEL_ID_OK).equals(text);
+        return LABEL_ID_OK.equals(text) || StrUtil.formatMessage(LABEL_ID_OK).equals(text);
     }
     
     /**
@@ -575,7 +580,7 @@ public class PromptDialog extends Window {
      * @param responses Array of response objects.
      * @return Vertical bar delimited list.
      */
-    private static <T> String toResponseStr(final T[] responses) {
+    private static <T> String toResponseStr(T[] responses) {
         return StringUtils.join(responses, "|");
     }
     
@@ -586,7 +591,7 @@ public class PromptDialog extends Window {
      * @param title Text to display.
      * @return User input
      */
-    public static String input(final String message, final String title) {
+    public static String input(String message, String title) {
         return input(message, title, null);
     }
     
@@ -598,8 +603,8 @@ public class PromptDialog extends Window {
      * @param oldValue Old value of input.
      * @return User input
      */
-    public static String input(final String message, final String title, final String oldValue) {
-        final Map<Object, Object> args = initArgs(message, title);
+    public static String input(String message, String title, String oldValue) {
+        Map<Object, Object> args = initArgs(message, title);
         args.put("input", oldValue == null ? "" : oldValue);
         return (String) input(args);
     }
@@ -615,23 +620,22 @@ public class PromptDialog extends Window {
      * @param items List of items. If null or fewer entries than names, names are used as items.
      * @return Object representing input result(s)
      */
-    public static Object input(final String message, final String title, final String oldValue,
-                               final List<String> itemNames, final List<Object> items) {
-        final int nameCount = itemNames == null ? 0 : itemNames.size();
-        final int itemCount = items == null ? 0 : items.size();
-        final int count = itemCount > nameCount ? itemCount : nameCount;
+    public static Object input(String message, String title, String oldValue, List<String> itemNames, List<Object> items) {
+        int nameCount = itemNames == null ? 0 : itemNames.size();
+        int itemCount = items == null ? 0 : items.size();
+        int count = itemCount > nameCount ? itemCount : nameCount;
         
         if (count == 0) {
             return null;
         }
         
-        final List<InputItem> inputItems = new ArrayList<InputItem>(count);
+        List<InputItem> inputItems = new ArrayList<InputItem>(count);
         
         for (int i = 0; i < count; i++) {
             inputItems.add(new InputItem(i >= nameCount ? null : itemNames.get(i), i >= itemCount ? null : items.get(i)));
         }
         
-        final Map<Object, Object> args = initArgs(message, title);
+        Map<Object, Object> args = initArgs(message, title);
         args.put("selected", oldValue == null ? inputItems.get(0).getName() : oldValue);
         args.put("list", inputItems);
         args.put("size", count > 20 ? 20 : count);
@@ -644,7 +648,7 @@ public class PromptDialog extends Window {
      * @param args Control parameters.
      * @return Result of input, or null if canceled.
      */
-    private static Object input(final Map<Object, Object> args) {
+    private static Object input(Map<Object, Object> args) {
         List<Response> responseList = toResponseList(LABEL_IDS_CANCEL_OK, null, null);
         args.put("icon", null);
         args.put("focus", null);
@@ -668,7 +672,7 @@ public class PromptDialog extends Window {
         
         private final Object item;
         
-        private InputItem(final String name, final Object item) {
+        private InputItem(String name, Object item) {
             this.name = name;
             this.item = item;
         }
@@ -744,29 +748,12 @@ public class PromptDialog extends Window {
     }
     
     /**
-     * Returns the button associated with an OK response.
-     * 
-     * @return The OK button (could be null).
-     */
-    private Button getOKButton() {
-        Button button = null;
-        
-        while ((button = ZKUtil.findChild(buttonParent, Button.class, button)) != null) {
-            if (getResponse(button).isOk()) {
-                break;
-            }
-        }
-        
-        return button;
-    }
-    
-    /**
      * Used by input dialogs to disable closure if input is incomplete.
      */
     private class InputListener implements EventListener<Event> {
         
         @Override
-        public void onEvent(final Event event) throws Exception {
+        public void onEvent(Event event) throws Exception {
             if (!inputCheck(((Button) event.getTarget()))) {
                 event.stopPropagation();
             }
@@ -785,6 +772,10 @@ public class PromptDialog extends Window {
      * Select all of input text.
      */
     public void onShow() {
+        if (btnOK != null) {
+            btnOK.addForward(Events.ON_OK, this, null);
+        }
+        
         if (textBox.isVisible()) {
             textBox.select();
         }
@@ -800,14 +791,10 @@ public class PromptDialog extends Window {
     
     /**
      * Accept input when enter key is pressed.
-     * 
-     * @param event OK event.
      */
-    public void onInputOK(final Event event) {
-        Button button = getOKButton();
-        
-        if (button != null && inputCheck(button)) {
-            close(button);
+    public void onOK() {
+        if (btnOK != null && inputCheck(btnOK)) {
+            close(btnOK);
         }
     }
     

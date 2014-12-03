@@ -25,7 +25,7 @@
 				<groupbox closable="false" hflex="1" vflex="1">
 					<caption id="capPropertyName"
 						label="${labels.cwf.shell.designer.property.grid.gbox.caption}" />
-					<span zclass="help-block">
+					<span zclass="help-block" style="margin:0">
 						<label id="lblPropertyInfo" multiline="true" />
 					</span>
 				</groupbox>

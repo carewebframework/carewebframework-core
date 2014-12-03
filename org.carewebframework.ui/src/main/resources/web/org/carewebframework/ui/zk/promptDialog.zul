@@ -1,34 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<window title="${arg.title}" border="normal"
-	contentStyle="overflow:auto;" closable="true"
+<window zclass="cwf-window" contentSclass="panel ${arg.panelClass}"
 	use="org.carewebframework.ui.zk.PromptDialog">
-	<vlayout width="100%">
-		<hlayout width="100%">
-			<div sclass="${arg.icon}" style="cursor:default" />
-			<div sclass="z-messagebox" style="padding-top: 9px">
-				<label sclass="${arg.sclass}" value="${arg.message}" vflex="1"
-					multiline="true" style="white-space:pre-wrap" />
-				<textbox id="textBox" value="${arg.input}"
-					visible="${arg.input!=null}" width="200pt"
-					focus="${arg.input!=null}" forward="onOK=promptDialog.onInputOK" />
-				<listbox id="listBox" visible="${arg.list!=null}"
-					width="200pt" focus="${arg.list!=null}" rows="${arg.size}">
-					<listitem forEach="${arg.list}" label="${each.name}"
-						value="${each.item}" selected="${each.name eq arg.selected}"
-						forward="onOK=promptDialog.onInputOK,onDoubleClick=promptDialog.onInputOK" />
-				</listbox>
-			</div>
-		</hlayout>
-		<checkbox id="chkRemember"
-			label="${labels.cwf.prompt.chx.reminder.label}"
-			visible="${arg.remember}" />
-		<separator bar="true" />
-		<toolbar id="buttonParent" align="center" style="background:transparent;border:none;">
-			<button label="${each.label}" forward="promptDialog.onButtonClick"
-				forEach="${arg.responses}" focus="${each.dflt}" style="margin: 0 2px 0 2px">
+	<div sclass="panel-heading" visible="${arg.title!=null}">
+		<label zclass="cwf-label" value="${arg.title}" />
+	</div>
+	<div sclass="panel-body">
+		<span sclass="${arg.iconClass}" style="float:left;margin:0 10px 10px;cursor:default" />
+		<label zclass="cwf-label" sclass="${arg.textClass}" value="${arg.message}" vflex="1"
+			multiline="true" style="white-space:pre-wrap" />
+		<div style="margin-top:10px">
+			<textbox id="textBox" value="${arg.input}"
+				visible="${arg.input!=null}" width="200pt"
+				focus="${arg.input!=null}" forward="onOK=promptDialog.onOK" />
+			<listbox id="listBox" visible="${arg.list!=null}"
+				width="200pt" focus="${arg.list!=null}" rows="${arg.size}">
+				<listitem forEach="${arg.list}" label="${each.name}"
+					value="${each.item}" selected="${each.name eq arg.selected}"
+					forward="onOK=promptDialog.onOK,onDoubleClick=promptDialog.onOK" />
+			</listbox>
+			<checkbox id="chkRemember" style="display:block"
+				label="${labels.cwf.prompt.chx.reminder.label}"
+				visible="${arg.remember}" />
+		</div>
+		<div align="center" sclass="panel-footer btn-toolbar">
+			<button forEach="${arg.responses}" 
+				id="${each.ok?'btnOK':''}"
+				zclass="cwf-btn" 
+				sclass="btn btn-sm btn-${each.ok?'primary':'default'}" 
+				label="${each.label}" 
+				forward="onButtonClick"
+				focus="${each.dflt}">
 				<custom-attributes response="${each}" />
 			</button>
-		</toolbar>
-	</vlayout>
+		</div>
+	</div>
 </window>
