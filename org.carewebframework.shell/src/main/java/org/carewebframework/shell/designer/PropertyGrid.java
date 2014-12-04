@@ -163,6 +163,7 @@ public class PropertyGrid extends Window {
             setWidth("100%");
             setHeight("100%");
             setSizable(false);
+            setSclass("panel-primary cwf-propertygrid-embedded");
             toolbar.setVisible(embedded);
             setParent(parent);
         }
@@ -183,7 +184,7 @@ public class PropertyGrid extends Window {
         
         if (target == null) {
             getFirstChild().setVisible(false);
-            setTitle(" ");
+            setTitle(StrUtil.formatMessage("@cwf.shell.designer.property.grid.noselection"));
             disableButtons(true);
             return;
         }

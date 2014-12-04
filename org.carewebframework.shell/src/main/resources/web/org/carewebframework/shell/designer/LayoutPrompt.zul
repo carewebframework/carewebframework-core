@@ -1,8 +1,7 @@
 <zk>
-	<window width="500px" contentStyle="padding:0"
-		mold="bootstrap"
+	<window width="500px" mold="bootstrap"
 		use="org.carewebframework.shell.designer.LayoutPrompt">
-		<div style="padding:15px">
+		<div zclass="panel-body">
 			<label id="lblPrompt" sclass="text-primary" />
 			<textbox id="txtLayout" width="100%" />
 		</div>

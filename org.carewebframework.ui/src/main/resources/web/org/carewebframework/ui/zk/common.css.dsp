@@ -184,6 +184,24 @@
 	display: none!important;
 }
 
+/* Bootstrap additions */
+
+.panel-content {
+	margin: 0;
+	padding: 0;
+}
+
+.panel-icon {
+	float: right;
+	cursor: pointer;
+	margin:-5px -10px;
+	opacity: 0.7;
+}
+
+.panel-icon:hover {
+	opacity: 1;
+}
+
 /* ZK overrides */
 
 .z-window-modal-header {
@@ -233,11 +251,13 @@
 	word-break: break-word;
 }
 
-.z-radio input[type=radio] {
+.z-radio input[type=radio],
+.z-checkbox input[type=checkbox] {
 	margin: 0 2px 0 0;
 }
 
-.z-radio + .z-radio {
+.z-radio + .z-radio,
+.z-checkbox + .z-checkbox {
 	padding-left: 15px;
 }
 

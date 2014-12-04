@@ -1,5 +1,5 @@
 <zk>
-	<window width="400px" height="400px" mold="bootstrap" contentStyle="padding:0"
+	<window width="400px" height="400px" mold="bootstrap"
 		use="org.carewebframework.shell.designer.AddComponent">
 		<tree id="tree" vflex="true"
 			style="background:none;border:none;text-overflow:ellipsis;white-space:nowrap;padding:0 5px 0 5px">

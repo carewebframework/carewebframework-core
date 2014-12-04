@@ -1,9 +1,9 @@
 <zk>
-	<window title="${labels.cwf.shell.about.title}" border="normal"
-		width="500px" mold="bootstrap" sclass="panel-info"
-		contentStyle="padding:0" apply="${aboutDialogController}">
+	<window title="${labels.cwf.shell.about.title}"
+		width="500px" mold="bootstrap"
+		apply="${aboutDialogController}">
 		<caption label="${$composer.title}" />
-		<grid>
+		<grid style="border:none">
 			<columns>
 				<column width="50%" style="text-align:center">
 					<image src="${$composer.icon}" />

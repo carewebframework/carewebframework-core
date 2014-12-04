@@ -3,7 +3,7 @@
  */
 function (out, skipper) {
 	function genIcon(icon, type) {
-		out.push('<span id="', uuid, '-', type, '" class="glyphicon glyphicon-', icon, '" style="float:right;cursor:pointer;margin:-5px -10px" />')
+		out.push('<span id="', uuid, '-', type, '" class="panel-icon glyphicon glyphicon-', icon, '" />')
 	};
 	
 	var uuid = this.uuid,
@@ -18,8 +18,9 @@ function (out, skipper) {
 	if (caption || title) {
 		out.push('<div id="', uuid, '-cap" class="panel-heading">');
 		
-		if (caption && caption.isVisible()) {
-			var title2 = caption.getLabel();
+		if (caption) {
+			var vis = caption.isVisible(),
+				title2 = vis ? caption.getLabel() : null;
 			
 			if (title2) {
 				if (title) {
@@ -32,7 +33,7 @@ function (out, skipper) {
 			var w = caption.firstChild;
 			
 			if (w) {
-				out.push('<div>');
+				out.push('<div', vis ? '' : ' style="display:none"', '>');
 	
 				for (; w; w = w.nextSibling)
 					w.redraw(out);
@@ -65,7 +66,7 @@ function (out, skipper) {
 	if (contentSclass)
 		out.push(contentSclass, ' ');
 	
-	out.push('panel-body" ');
+	out.push('panel-content" ');
 	
 	if (contentStyle)
 		out.push(' style="', contentStyle, '"');

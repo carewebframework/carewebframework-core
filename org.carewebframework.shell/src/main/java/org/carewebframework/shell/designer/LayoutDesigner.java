@@ -75,6 +75,8 @@ public class LayoutDesigner extends Window implements AfterCompose {
     
     private Button btnRight;
     
+    private Button btnToFront;
+    
     private Button btnProperties;
     
     private Button btnAbout;
@@ -344,6 +346,7 @@ public class LayoutDesigner extends Window implements AfterCompose {
         target = selectedItem == null ? null : (Treeitem) selectedItem.getNextSibling();
         btnDown.setDisabled(movementType(selectedItem, target, true) == MovementType.INVALID);
         contextMenu.setOwner(selectedElement);
+        ZKUtil.updateStyle(btnToFront, "opacity", bringToFront ? null : "0.5");
         
         if (selectedItem != null) {
             selectedItem.setSelected(false);

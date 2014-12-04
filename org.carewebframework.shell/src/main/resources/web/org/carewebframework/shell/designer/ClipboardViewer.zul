@@ -1,9 +1,10 @@
 <zk>
-	<window width="400px" height="400px" mold="bootstrap" contentStyle="padding:0"
+	<window width="400px" height="400px" mold="bootstrap"
 		title="${labels.cwf.shell.clipboard.viewer.title}"
 		use="org.carewebframework.shell.designer.ClipboardViewer">
-		<textbox id="txtData" multiline="true" vflex="1" width="100%"
-			style="overflow:auto; padding:15px" />
+		<div zclass="panel-body" vflex="1">
+			<textbox id="txtData" multiline="true" vflex="1" width="100%" />
+		</div>
 		<div zclass="panel-footer">
 			<div zclass="btn-toolbar" align="end">
 				<button id="btnSave" zclass="btn"

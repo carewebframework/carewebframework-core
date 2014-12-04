@@ -4,9 +4,9 @@
 	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
 
 	<window width="700px" title="${labels.cwf.manifest.viewer.title}"
-		contentStyle="padding:0" mold="bootstrap" apply="${manifestViewer}">
+		mold="bootstrap" apply="${manifestViewer}">
 		<caption id="caption" />
-		<div id="printRoot" style="padding:15px">
+		<div id="printRoot" zclass="panel-body">
 			<listbox id="list" sclass="cwf-manifest-viewer" vflex="1">
 				<listhead sizable="true" />
 			</listbox>
@@ -23,10 +23,9 @@
 						label="${labels.cwf.manifest.viewer.btn.print.label}"
 						tooltiptext="${labels.cwf.manifest.viewer.btn.print.hint}"
 						w:onClick="cwf.print(this.$f('printRoot'),'~./org/carewebframework/ui/zk/manifestViewerPrint.css',true);" />
-					<button zclass="btn" sclass="btn-default btn-sm"
+					<button zclass="btn" sclass="btn-danger btn-sm"
 						label="${labels.cwf.manifest.viewer.btn.close.label}"
 						forward="onClick=onClose" />
-					<separator orient="vertical" />
 				</span>
 			</div>
 		</div>

@@ -1,39 +1,39 @@
-<splitterview width="100%" height="100%" horizontal="true">
+<?taglib uri="http://www.carewebframework.org/tld/core" prefix="rc"?>
+
+<splitterview vflex="1" hflex="1" horizontal="true" style="margin-right:5px">
 	<splitterpane relativeSize="30">
-		<panel height="100%" width="100%">
-			<toolbar>
-				<toolbarbutton id="btnUp"
+		<div height="100%" width="100%">
+			<div zclass="btn-toolbar btn-group btn-group-xs" style="min-height:33px;padding:5px">
+				<button id="btnUp" zclass="btn" sclass="btn-link"
 					tooltiptext="${labels.cwf.shell.designer.propedit.custom.btn.up.hint}"
 					style="background:transparent"
-					image="~./org/carewebframework/shell/images/16x16/arrowU.png" />
-				<toolbarbutton id="btnDown"
+					image="${rc:getIconPath('carewebframework:16x16:arrowU.png')}" />
+				<button id="btnDown" zclass="btn" sclass="btn-link"
 					tooltiptext="${labels.cwf.shell.designer.propedit.custom.btn.down.hint}"
 					style="background:transparent"
-					image="~./org/carewebframework/shell/images/16x16/arrowD.png" />
-				<toolbarbutton id="btnLeft"
+					image="${rc:getIconPath('carewebframework:16x16:arrowD.png')}" />
+				<button id="btnLeft" zclass="btn" sclass="btn-link"
 					tooltiptext="${labels.cwf.shell.designer.propedit.custom.btn.promote.hint}"
 					style="background:transparent"
-					image="~./org/carewebframework/shell/images/16x16/arrowL.png" />
-				<toolbarbutton id="btnRight"
+					image="${rc:getIconPath('carewebframework:16x16:arrowL.png')}" />
+				<button id="btnRight" zclass="btn" sclass="btn-link"
 					tooltiptext="${labels.cwf.shell.designer.propedit.custom.btn.demote.hint}"
 					style="background:transparent"
-					image="~./org/carewebframework/shell/images/16x16/arrowR.png" />
-				<toolbarbutton id="btnAdd"
+					image="${rc:getIconPath('carewebframework:16x16:arrowR.png')}" />
+				<button id="btnAdd" zclass="btn" sclass="btn-link"
 					tooltiptext="${labels.cwf.shell.designer.propedit.custom.btn.add.hint}"
 					style="background:transparent"
-					image="~./org/carewebframework/shell/images/16x16/add.png" />
-				<toolbarbutton id="btnDelete"
+					image="${rc:getIconPath('carewebframework:16x16:add.png')}" />
+				<button id="btnDelete" zclass="btn" sclass="btn-link"
 					tooltiptext="${labels.cwf.shell.designer.propedit.custom.btn.delete.hint}"
 					style="background:transparent"
-					image="~./org/carewebframework/shell/images/16x16/delete.png" />
-			</toolbar>
-			<panelchildren style="overflow:auto">
-				<tree id="tree"
-					style="text-overflow:ellipsis;white-space:nowrap">
-					<treechildren id="root" />
-				</tree>
-			</panelchildren>
-		</panel>
+					image="${rc:getIconPath('carewebframework:16x16:delete.png')}" />
+			</div>
+			<tree id="tree" vflex="1"
+				style="text-overflow:ellipsis;white-space:nowrap">
+				<treechildren id="root" />
+			</tree>
+		</div>
 	</splitterpane>
 	<splitterpane id="gridParent" relativeSize="70" />
 </splitterview>

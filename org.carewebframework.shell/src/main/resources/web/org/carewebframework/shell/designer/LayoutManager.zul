@@ -1,7 +1,7 @@
 <zk>
-	<window width="500px" height="300px" mold="bootstrap" contentStyle="padding:0"
+	<window width="500px" height="300px" mold="bootstrap"
 		use="org.carewebframework.shell.designer.LayoutManager">
-		<div vflex="1" style="padding:15px">
+		<div zclass="panel-body" vflex="1">
 			<label id="lblPrompt" sclass="text-primary" />
 			<listbox id="lstLayouts" vflex="1" />
 		</div>

@@ -1,8 +1,8 @@
 <zk>
 	<window sclass="${arg.panelClass}" mold="bootstrap" closable="true"
-		title="${arg.title}" contentStyle="padding:0"
+		title="${arg.title}"
 		use="org.carewebframework.ui.zk.PromptDialog">
-		<div style="padding:15px">
+		<div zclass="panel-body">
 			<span zclass="${arg.iconClass}"
 				style="float:left;margin:0 10px 10px;cursor:default" />
 			<label zclass="cwf-label" sclass="${arg.textClass}"

@@ -33,9 +33,9 @@ import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.util.Clients;
+import org.zkoss.zul.Button;
 import org.zkoss.zul.Constraint;
 import org.zkoss.zul.Textbox;
-import org.zkoss.zul.Toolbarbutton;
 import org.zkoss.zul.Tree;
 import org.zkoss.zul.Treechildren;
 import org.zkoss.zul.Treeitem;
@@ -161,15 +161,15 @@ public abstract class PropertyEditorCustomTree<T extends UIElementBase> extends 
     
     private static final String LABEL_ATTR = "ITEM_LABEL";
     
-    private Toolbarbutton btnUp;
+    private Button btnUp;
     
-    private Toolbarbutton btnDown;
+    private Button btnDown;
     
-    private Toolbarbutton btnRight;
+    private Button btnRight;
     
-    private Toolbarbutton btnLeft;
+    private Button btnLeft;
     
-    private Toolbarbutton btnDelete;
+    private Button btnDelete;
     
     private Tree tree;
     
@@ -226,10 +226,10 @@ public abstract class PropertyEditorCustomTree<T extends UIElementBase> extends 
         propertyGrid = PropertyGrid.create(null, gridParent);
         propertyGrid.setClosable(true);
         Events.addEventListeners(propertyGrid, this);
-        bandpopup.setWidth("600px");
-        bandpopup.setHeight("400px");
         txtLabel.setWidth("95%");
         txtLabel.setConstraint(new LabelConstraint());
+        bandpopup.setHeight("400px");
+        bandpopup.setWidth("600px");
         definition = childClass == null ? null : PluginRegistry.getInstance().get(childClass);
         
         EventListener<Event> labelEditorListener = new EventListener<Event>() {
@@ -783,9 +783,9 @@ public abstract class PropertyEditorCustomTree<T extends UIElementBase> extends 
         disableButton(btnDown, item == null || item.getNextSibling() == null);
     }
     
-    private void disableButton(Toolbarbutton btn, boolean disabled) {
+    private void disableButton(Button btn, boolean disabled) {
         btn.setDisabled(disabled);
-        btn.setStyle("opacity:" + (disabled ? ".2" : "1"));
+        btn.setStyle("opacity:" + (disabled ? ".4" : "1"));
     }
     
     /**

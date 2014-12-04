@@ -213,6 +213,15 @@
     text-align: center;
 }
 
+.cwf-propertygrid-grid {
+	border: none;
+}
+
+.cwf-propertygrid-embedded .panel-heading {
+	zoom: 0.75;
+	min-height: 43px;
+}
+
 .cwf-propertygrid-selectedrow .z-label {
     font-weight: bold;
 }
@@ -222,7 +231,6 @@
 }
 
 .cwf-propertygrid-info {
-	background-color: lightyellow;
 	border: none;
 }
 
@@ -242,11 +250,13 @@
 }
 
 .cwf-propertygrid-info .z-groupbox-content {
+	background-color: lightyellow;
 	overflow-x: hidden;
     overflow-y: auto;
 }
 
 .cwf-propertygrid-info .z-groupbox-header {
+	background-color: lightyellow;
 	height: 8px;
 }
 

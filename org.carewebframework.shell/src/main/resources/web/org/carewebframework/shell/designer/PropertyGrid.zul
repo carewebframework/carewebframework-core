@@ -3,11 +3,11 @@
 	xmlns:h="http://www.w3.org/1999/xhtml"
 	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd ">
 
-	<window width="400px" mold="bootstrap" contentStyle="padding:0"
+	<window width="400px" mold="bootstrap"
 		use="org.carewebframework.shell.designer.PropertyGrid">
-		<splitterview style="padding:15px" horizontal="false" height="400px">
+		<splitterview horizontal="false" height="400px">
 			<splitterpane relativeSize="75">
-				<grid id="gridProperties" width="99%" vflex="true"
+				<grid id="gridProperties" width="100%" vflex="true"
 					sclass="cwf-propertygrid-grid">
 					<columns sizable="true">
 						<column id="colProperty"
@@ -38,14 +38,13 @@
 				<button id="btnRestore" zclass="btn"
 					sclass="btn-default btn-sm"
 					label="${labels.cwf.shell.designer.property.grid.btn.restore.label}" />
-				<separator orient="vertical" width="40px" />
+				<space />
 				<button id="btnOK" zclass="btn"
-					sclass="btn-default btn-sm"
+					sclass="btn-success btn-sm"
 					label="${labels.cwf.shell.designer.property.grid.btn.ok.label}" />
 				<button id="btnCancel" zclass="btn"
-					sclass="btn-default btn-sm"
+					sclass="btn-danger btn-sm"
 					label="${labels.cwf.shell.designer.property.grid.btn.cancel.label}" />
-				<separator orient="vertical" width="20px" />
 			</div>
 		</div>
 	</window>
