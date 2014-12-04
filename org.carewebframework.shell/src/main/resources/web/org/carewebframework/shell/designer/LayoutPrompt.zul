@@ -1,28 +1,25 @@
 <zk>
-	<window zclass="cwf-window" contentSclass="panel panel-primary" width="500px"
+	<window width="500px" contentStyle="padding:0"
+		mold="bootstrap"
 		use="org.carewebframework.shell.designer.LayoutPrompt">
-		<div zclass="panel-heading">
-			<span zclass="glyphicon glyphicon-remove" 
-				style="float:right;cursor:pointer" 
-				forward="onClick=onClose"/>
-			<label id="lblTitle" zclass="panel-title" />
-		</div>
-		<div zclass="panel-body" height="100px">
+		<div style="padding:15px">
 			<label id="lblPrompt" sclass="text-primary" />
-			<textbox id="txtLayout" width="100%"/>
+			<textbox id="txtLayout" width="100%" />
 		</div>
 		<div zclass="panel-footer">
 			<div zclass="btn-toolbar" align="end">
 				<radiogroup id="radioGroup" orient="horizontal">
-					<radio style="padding-right: 10px" selected="true"
+					<radio selected="true"
 						label="${labels.cwf.shell.designer.layout.manager.radio.shared.label}" />
 					<radio
 						label="${labels.cwf.shell.designer.layout.manager.radio.private_.label}" />
 				</radiogroup>
 				<separator orient="vertical" />
-				<button id="btnOK" zclass="btn" sclass="btn-success btn-sm"
+				<button id="btnOK" zclass="btn"
+					sclass="btn-success btn-sm"
 					label="${labels.cwf.shell.designer.layout.manager.btn.ok.label}" />
-				<button id="btnCancel" zclass="btn" sclass="btn-danger btn-sm"
+				<button id="btnCancel" zclass="btn"
+					sclass="btn-danger btn-sm"
 					label="${labels.cwf.shell.designer.layout.manager.btn.cancel.label}"
 					forward="onClose" />
 			</div>

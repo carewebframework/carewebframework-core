@@ -165,4 +165,12 @@
 		<extends>menu</extends>
 		<widget-class>cwf.ext.MenuEx</widget-class>
 	</component>
+	<component>
+		<component-name>window</component-name>
+		<extends>window</extends>
+		<mold>
+			<mold-name>bootstrap</mold-name>
+			<mold-uri>/js/cwf/ext/mold/Window.bs.js</mold-uri>
+		</mold>
+	</component>
 </language-addon>

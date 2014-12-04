@@ -39,8 +39,6 @@ public class LayoutPrompt extends Window {
     
     private Label lblPrompt;
     
-    private Label lblTitle;
-    
     private Textbox txtLayout;
     
     private boolean allowDups;
@@ -62,7 +60,7 @@ public class LayoutPrompt extends Window {
         try {
             LayoutPrompt lp = (LayoutPrompt) ZKUtil.loadZulPage(DIALOG, null);
             ZKUtil.wireController(lp);
-            lp.lblTitle.setValue(StrUtil.formatMessage(title));
+            lp.setTitle(StrUtil.formatMessage(title));
             lp.lblPrompt.setValue(StrUtil.formatMessage(prompt));
             lp.txtLayout.setText(dflt == null ? null : dflt.name);
             boolean shared = dflt == null ? LayoutManager.defaultIsShared() : dflt.shared;

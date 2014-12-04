@@ -3,11 +3,10 @@
 	xmlns:h="http://www.w3.org/1999/xhtml"
 	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd ">
 
-	<window border="normal" height="400px" width="400px"
+	<window width="400px" mold="bootstrap" contentStyle="padding:0"
 		use="org.carewebframework.shell.designer.PropertyGrid">
-		<borderlayout height="100%" width="100%">
-			<north splittable="true" style="overflow:hidden;border:none"
-				height="75%">
+		<splitterview style="padding:15px" horizontal="false" height="400px">
+			<splitterpane relativeSize="75">
 				<grid id="gridProperties" width="99%" vflex="true"
 					sclass="cwf-propertygrid-grid">
 					<columns sizable="true">
@@ -20,8 +19,8 @@
 					</columns>
 					<rows></rows>
 				</grid>
-			</north>
-			<center sclass="cwf-propertygrid-info">
+			</splitterpane>
+			<splitterpane sclass="cwf-propertygrid-info">
 				<groupbox closable="false" hflex="1" vflex="1">
 					<caption id="capPropertyName"
 						label="${labels.cwf.shell.designer.property.grid.gbox.caption}" />
@@ -29,21 +28,25 @@
 						<label id="lblPropertyInfo" multiline="true" />
 					</span>
 				</groupbox>
-			</center>
-			<south style="border:none">
-				<toolbar id="toolbar" align="end">
-					<button id="btnApply" zclass="btn" sclass="btn-default btn-sm"
-						label="${labels.cwf.shell.designer.property.grid.btn.apply.label}" />
-					<button id="btnRestore" zclass="btn" sclass="btn-default btn-sm"
-						label="${labels.cwf.shell.designer.property.grid.btn.restore.label}" />
-					<separator orient="vertical" width="40px" />
-					<button id="btnOK" zclass="btn" sclass="btn-default btn-sm"
-						label="${labels.cwf.shell.designer.property.grid.btn.ok.label}" />
-					<button id="btnCancel" zclass="btn" sclass="btn-default btn-sm"
-						label="${labels.cwf.shell.designer.property.grid.btn.cancel.label}" />
-					<separator orient="vertical" width="20px" />
-				</toolbar>
-			</south>
-		</borderlayout>
+			</splitterpane>
+		</splitterview>
+		<div zclass="panel-footer">
+			<div zclass="btn-toolbar" id="toolbar" align="end">
+				<button id="btnApply" zclass="btn"
+					sclass="btn-default btn-sm"
+					label="${labels.cwf.shell.designer.property.grid.btn.apply.label}" />
+				<button id="btnRestore" zclass="btn"
+					sclass="btn-default btn-sm"
+					label="${labels.cwf.shell.designer.property.grid.btn.restore.label}" />
+				<separator orient="vertical" width="40px" />
+				<button id="btnOK" zclass="btn"
+					sclass="btn-default btn-sm"
+					label="${labels.cwf.shell.designer.property.grid.btn.ok.label}" />
+				<button id="btnCancel" zclass="btn"
+					sclass="btn-default btn-sm"
+					label="${labels.cwf.shell.designer.property.grid.btn.cancel.label}" />
+				<separator orient="vertical" width="20px" />
+			</div>
+		</div>
 	</window>
 </zk>

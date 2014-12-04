@@ -230,6 +230,10 @@ public class PromptDialog extends Window {
         if (dlg != null) {
             Response response = dlg._response;
             
+            if (response == null) {
+                return -1;
+            }
+            
             if (dlg._remember && !response.isExcluded()) {
                 saveLastResponse(saveResponseId, response.getIndex());
             }

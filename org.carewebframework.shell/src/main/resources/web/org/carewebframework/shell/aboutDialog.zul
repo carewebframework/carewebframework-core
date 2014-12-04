@@ -1,36 +1,38 @@
 <zk>
-	<window title="${labels.cwf.shell.about.title}" border="normal" width="500px"
-		apply="${aboutDialogController}">
+	<window title="${labels.cwf.shell.about.title}" border="normal"
+		width="500px" mold="bootstrap" sclass="panel-info"
+		contentStyle="padding:0" apply="${aboutDialogController}">
 		<caption label="${$composer.title}" />
-		<vbox width="100%" height="100%">
-			<grid>
-				<columns>
-					<column width="50%" style="text-align:center">
-						<image src="${$composer.icon}" />
-					</column>
-					<column width="50%" style="text-align:center">
-						<label value="${$composer.source}" sclass="cwf-about-header" />
-					</column>
-				</columns>
-				<rows>
-					<row forEach="${arg}">
-						<label value="${each.key}" />
-						<label value="${each.value}" />
-					</row>
-					<row visible="false">
-						<cell id="cellDescription" colspan="2" sclass="cwf-about-description"/>
-					</row>
-				</rows>
-			</grid>
-			<toolbar>
-				<span style="float:left" visible="${$composer.custom!=null}">
-					<button id="btnCustom" label="${$composer.custom}" />
-				</span>
-				<span style="float:right">
-					<button label="${labels.cwf.shell.about.btn.close.label}" width="80px"
-						forward="onClick=onClose" focus="true" />
-				</span>
-			</toolbar>
-		</vbox>
+		<grid>
+			<columns>
+				<column width="50%" style="text-align:center">
+					<image src="${$composer.icon}" />
+				</column>
+				<column width="50%" style="text-align:center">
+					<label value="${$composer.source}"
+						sclass="cwf-about-header" />
+				</column>
+			</columns>
+			<rows>
+				<row forEach="${arg}">
+					<label value="${each.key}" />
+					<label value="${each.value}" />
+				</row>
+				<row visible="false">
+					<cell id="cellDescription" colspan="2"
+						sclass="cwf-about-description" />
+				</row>
+			</rows>
+		</grid>
+		<div zclass="panel-footer">
+			<div zclass="btn-toolbar">
+				<button zclass="btn" sclass="btn-default btn-sm" style="float:left"
+					id="btnCustom" label="${$composer.custom}" 
+					visible="${$composer.custom!=null}" />
+				<button zclass="btn" sclass="btn-danger btn-sm" style="float:right"
+					label="${labels.cwf.shell.about.btn.close.label}" width="80px"
+					forward="onClick=onClose" focus="true" />
+			</div>
+		</div>
 	</window>
 </zk>

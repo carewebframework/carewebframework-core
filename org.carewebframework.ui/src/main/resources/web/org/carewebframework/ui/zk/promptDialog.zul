@@ -1,43 +1,38 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<window zclass="cwf-window" contentSclass="panel ${arg.panelClass}"
-	use="org.carewebframework.ui.zk.PromptDialog">
-	<div sclass="panel-heading" visible="${arg.title!=null}">
-		<span zclass="glyphicon glyphicon-remove" 
-			style="float:right;cursor:pointer" 
-			forward="onClick=onClose"/>
-		<label zclass="panel-title" value="${arg.title}" />
-	</div>
-	<div sclass="panel-body">
-		<span zclass="${arg.iconClass}" style="float:left;margin:0 10px 10px;cursor:default" />
-		<label zclass="cwf-label" sclass="${arg.textClass}" value="${arg.message}" vflex="1"
-			multiline="true" style="white-space:pre-wrap" />
-		<div style="margin-top:10px">
-			<textbox id="textBox" value="${arg.input}"
-				visible="${arg.input!=null}" width="200pt"
-				focus="${arg.input!=null}" forward="onOK=promptDialog.onOK" />
-			<listbox id="listBox" visible="${arg.list!=null}"
-				width="200pt" focus="${arg.list!=null}" rows="${arg.size}">
-				<listitem forEach="${arg.list}" label="${each.name}"
-					value="${each.item}" selected="${each.name eq arg.selected}"
-					forward="onOK=promptDialog.onOK,onDoubleClick=promptDialog.onOK" />
-			</listbox>
-			<checkbox id="chkRemember" style="display:block"
-				label="${labels.cwf.prompt.chx.reminder.label}"
-				visible="${arg.remember}" />
+<zk>
+	<window sclass="${arg.panelClass}" mold="bootstrap" closable="true"
+		title="${arg.title}" contentStyle="padding:0"
+		use="org.carewebframework.ui.zk.PromptDialog">
+		<div style="padding:15px">
+			<span zclass="${arg.iconClass}"
+				style="float:left;margin:0 10px 10px;cursor:default" />
+			<label zclass="cwf-label" sclass="${arg.textClass}"
+				value="${arg.message}" vflex="1" multiline="true"
+				style="white-space:pre-wrap" />
+			<div style="margin-top:10px">
+				<textbox id="textBox" value="${arg.input}"
+					visible="${arg.input!=null}" width="200pt"
+					focus="${arg.input!=null}" forward="onOK=promptDialog.onOK" />
+				<listbox id="listBox" visible="${arg.list!=null}"
+					width="200pt" focus="${arg.list!=null}" rows="${arg.size}">
+					<listitem forEach="${arg.list}" label="${each.name}"
+						value="${each.item}" selected="${each.name eq arg.selected}"
+						forward="onOK=promptDialog.onOK,onDoubleClick=promptDialog.onOK" />
+				</listbox>
+				<checkbox id="chkRemember" style="display:block"
+					label="${labels.cwf.prompt.chx.reminder.label}"
+					visible="${arg.remember}" />
+			</div>
 		</div>
-	</div>
-	<div zclass="panel-footer">
-		<div zclass="btn-toolbar" align="center">
-			<button forEach="${arg.responses}" 
-				id="${each.ok?'btnOK':''}"
-				zclass="btn" 
-				sclass="btn-sm btn-${each.ok?'success':'default'}" 
-				label="${each.label}" 
-				forward="onButtonClick"
-				focus="${each.dflt}">
-				<custom-attributes response="${each}" />
-			</button>
+		<div zclass="panel-footer">
+			<div zclass="btn-toolbar" align="center">
+				<button forEach="${arg.responses}"
+					id="${each.ok?'btnOK':''}" zclass="btn"
+					sclass="btn-sm btn-${each.ok?'success':'default'}"
+					label="${each.label}" forward="onButtonClick"
+					focus="${each.dflt}">
+					<custom-attributes response="${each}" />
+				</button>
+			</div>
 		</div>
-	</div>
-</window>
+	</window>
+</zk>

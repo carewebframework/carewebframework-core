@@ -1,14 +1,9 @@
 <?taglib uri="http://www.carewebframework.org/tld/core" prefix="rc"?>
 
 <zk>
-	<window zclass="cwf-window" contentSclass="panel panel-primary" width="500px" position="center"
+	<window width="500px" height="500px" position="center" mold="bootstrap" 
+		contentStyle="padding:0" title="${labels.cwf.shell.designer.layout.designer.caption}"
 		use="org.carewebframework.shell.designer.LayoutDesigner">
-		<div zclass="panel-heading">
-			<span zclass="glyphicon glyphicon-remove" 
-				style="float:right;cursor:pointer" 
-				forward="onClick=onClose"/>
-			<label zclass="panel-title" value="${labels.cwf.shell.designer.layout.designer.caption}" />
-		</div>
 		<div zclass="panel-footer">
 			<div zclass="btn-toolbar" align="end">
 				<div zclass="btn-group btn-group-xs">
@@ -79,11 +74,9 @@
 				</div>
 			</div>
 		</div>
-		<div zclass="panel-body" height="500px">
-			<tree id="tree" vflex="true"
-				style="text-overflow:ellipsis;white-space:nowrap;overflow:auto;border:none;margin-bottom:12px">
-				<treechildren />
-			</tree>
-		</div>
+		<tree id="tree" vflex="true"
+			style="text-overflow:ellipsis;white-space:nowrap;overflow:auto;border:none;margin-bottom:12px;padding:15px">
+			<treechildren />
+		</tree>
 	</window>
 </zk>

@@ -60,8 +60,6 @@ public class LayoutManager extends Window {
     
     private Button btnOK;
     
-    private Button btnCancel;
-    
     private Button btnDelete;
     
     private Button btnRename;
@@ -72,13 +70,13 @@ public class LayoutManager extends Window {
     
     private Listbox lstLayouts;
     
-    private Label lblTitle;
-    
     private Label lblPrompt;
     
     private Radiogroup radioGroup;
     
     private Component pnlManage;
+    
+    private Component pnlSelect;
     
     private boolean shared;
     
@@ -91,7 +89,7 @@ public class LayoutManager extends Window {
             item.setLabel(data);
             item.setValue(new LayoutIdentifier(data, shared));
             
-            if (btnOK.isVisible()) {
+            if (pnlSelect.isVisible()) {
                 item.addForward(Events.ON_DOUBLE_CLICK, btnOK, Events.ON_CLICK);
             }
         }
@@ -128,7 +126,7 @@ public class LayoutManager extends Window {
         
         try {
             dlg = (LayoutManager) PopupDialog.popup(ZKUtil.loadCachedPageDefinition(RESOURCE_PREFIX + "LayoutManager.zul"),
-                null, false, true, false);
+                null, true, true, false);
             return dlg.show(manage, deflt);
         } catch (Exception e) {
             return null;
@@ -163,11 +161,10 @@ public class LayoutManager extends Window {
     private LayoutIdentifier show(boolean manage, String deflt) {
         this.shared = defaultIsShared();
         ZKUtil.wireController(this);
-        lblTitle.setValue(StrUtil.formatMessage(manage ? CAP_LAYOUT_MANAGE : CAP_LAYOUT_LOAD));
+        setTitle(StrUtil.formatMessage(manage ? CAP_LAYOUT_MANAGE : CAP_LAYOUT_LOAD));
         lblPrompt.setValue(StrUtil.formatMessage(manage ? MSG_LAYOUT_MANAGE : MSG_LAYOUT_LOAD));
         lstLayouts.setItemRenderer(renderer);
-        btnOK.setVisible(!manage);
-        btnCancel.setVisible(!manage);
+        pnlSelect.setVisible(!manage);
         pnlManage.setVisible(manage);
         radioGroup.setSelectedIndex(shared ? 0 : 1);
         refresh(deflt);

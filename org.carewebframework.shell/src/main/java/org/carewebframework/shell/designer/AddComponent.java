@@ -32,7 +32,6 @@ import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.Button;
-import org.zkoss.zul.Label;
 import org.zkoss.zul.Span;
 import org.zkoss.zul.Tree;
 import org.zkoss.zul.Treeitem;
@@ -56,8 +55,6 @@ public class AddComponent extends Window {
     private Tree tree;
     
     private Button btnOK;
-    
-    private Label lblTitle;
     
     private boolean createChild;
     
@@ -215,8 +212,7 @@ public class AddComponent extends Window {
             onSelect$tree();
         }
         
-        lblTitle.setValue(StrUtil.formatMessage("@cwf.shell.designer.add.component.title", parentElement.getDefinition()
-                .getName()));
+        setTitle(StrUtil.formatMessage("@cwf.shell.designer.add.component.title", parentElement.getDefinition().getName()));
     }
     
     private void loadFavorites() {
@@ -260,7 +256,7 @@ public class AddComponent extends Window {
         
         if (favorites != null) {
             Span image = new Span();
-            image.setZclass("glyphicon glyphicon-star");
+            image.setZclass("glyphicon");
             image.setStyle("float:left");
             Component cell = item.getTreerow().getFirstChild();
             cell.insertBefore(image, cell.getFirstChild());
@@ -288,9 +284,7 @@ public class AddComponent extends Window {
      */
     private HtmlBasedComponent setFavoriteStatus(Treeitem item, boolean isFavorite) {
         HtmlBasedComponent image = (HtmlBasedComponent) item.getAttribute("image");
-        ZKUtil.updateSclass(image, "text-muted", isFavorite);
-        ZKUtil.updateSclass(image, "text-primary", !isFavorite);
-        ZKUtil.updateStyle(image, "opacity", isFavorite ? null : "0.6");
+        image.setSclass(isFavorite ? "glyphicon-star text-primary" : "glyphicon-star-empty text-muted");
         image.setTooltiptext(isFavorite ? favoritesRemoveHint : favoritesAddHint);
         item.setAttribute("favorite", isFavorite);
         itmFavorites.setVisible(isFavorite || itmFavorites.getTreechildren().getFirstChild() != null);

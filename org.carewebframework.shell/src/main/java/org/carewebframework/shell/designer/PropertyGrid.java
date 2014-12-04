@@ -38,7 +38,6 @@ import org.zkoss.zul.Grid;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Row;
 import org.zkoss.zul.Rows;
-import org.zkoss.zul.Toolbar;
 import org.zkoss.zul.Window;
 
 /**
@@ -102,7 +101,7 @@ public class PropertyGrid extends Window {
     
     private Button btnRestore;
     
-    private Toolbar toolbar;
+    private Component toolbar;
     
     private Row selectedRow;
     
@@ -135,7 +134,7 @@ public class PropertyGrid extends Window {
      */
     public static PropertyGrid create(UIElementBase target, Component parent, boolean embedded) throws Exception {
         PageDefinition def = ZKUtil.loadCachedPageDefinition(DesignConstants.RESOURCE_PREFIX + "PropertyGrid.zul");
-        PropertyGrid propertyGrid = (PropertyGrid) PopupDialog.popup(def, null, false, true, false);
+        PropertyGrid propertyGrid = (PropertyGrid) PopupDialog.popup(def, null, !embedded, true, false);
         propertyGrid.init(target, parent, embedded);
         
         if (parent == null) {
@@ -160,10 +159,9 @@ public class PropertyGrid extends Window {
         colProperty.setSortDescending(propSortDescending);
         
         if (parent != null) {
+            setClosable(false);
             setWidth("100%");
             setHeight("100%");
-            setBorder("none");
-            setContentStyle("border: solid 1px gray");
             setSizable(false);
             toolbar.setVisible(embedded);
             setParent(parent);

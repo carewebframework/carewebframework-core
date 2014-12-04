@@ -233,6 +233,14 @@
 	word-break: break-word;
 }
 
+.z-radio input[type=radio] {
+	margin: 0 2px 0 0;
+}
+
+.z-radio + .z-radio {
+	padding-left: 15px;
+}
+
 body {
 	-moz-user-select: none;
 	-webkit-user-select: none;

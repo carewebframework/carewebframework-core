@@ -2,30 +2,33 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:w="http://www.zkoss.org/2005/zk/client"
 	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+
 	<window width="700px" title="${labels.cwf.manifest.viewer.title}"
-		apply="${manifestViewer}">
+		contentStyle="padding:0" mold="bootstrap" apply="${manifestViewer}">
 		<caption id="caption" />
-		<div id="printRoot">
+		<div id="printRoot" style="padding:15px">
 			<listbox id="list" sclass="cwf-manifest-viewer" vflex="1">
 				<listhead sizable="true" />
 			</listbox>
 		</div>
-		<toolbar>
-			<span style="float:left">
-				<textbox id="txtSearch"
-					placeholder="${labels.cwf.manifest.viewer.txt.search.placeholder}"
-					focus="true" width="300px"/>
-			</span>
-			<span style="float:right">
-				<button
-					label="${labels.cwf.manifest.viewer.btn.print.label}"
-					tooltiptext="${labels.cwf.manifest.viewer.btn.print.hint}"
-					w:onClick="cwf.print(this.$f('printRoot'),'~./org/carewebframework/ui/zk/manifestViewerPrint.css',true);" />
-				<button
-					label="${labels.cwf.manifest.viewer.btn.close.label}"
-					forward="onClick=onClose" />
-				<separator orient="vertical" />
-			</span>
-		</toolbar>
+		<div zclass="panel-footer">
+			<div zclass="btn-toolbar">
+				<span style="float:left">
+					<textbox id="txtSearch"
+						placeholder="${labels.cwf.manifest.viewer.txt.search.placeholder}"
+						focus="true" width="300px" />
+				</span>
+				<span style="float:right">
+					<button zclass="btn" sclass="btn-default btn-sm"
+						label="${labels.cwf.manifest.viewer.btn.print.label}"
+						tooltiptext="${labels.cwf.manifest.viewer.btn.print.hint}"
+						w:onClick="cwf.print(this.$f('printRoot'),'~./org/carewebframework/ui/zk/manifestViewerPrint.css',true);" />
+					<button zclass="btn" sclass="btn-default btn-sm"
+						label="${labels.cwf.manifest.viewer.btn.close.label}"
+						forward="onClick=onClose" />
+					<separator orient="vertical" />
+				</span>
+			</div>
+		</div>
 	</window>
 </zk>
