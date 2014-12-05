@@ -6,7 +6,7 @@
 	 TODO: Look at this further.  Can we/zk prevent this error from happening?  Note that the end 
 	 user is not aware of this exception.
 -->
-<window mode="modal" maximizable="true" sizable="true" closable="true" width="50%">
-	<caption label="${labels.cwf.error.dialog.title}" style="font-weight:bold"/>
+<window maximizable="true" sizable="true" closable="true" width="50%" mold="bootstrap">
+	<caption label="${labels.cwf.error.dialog.title}" />
 	<include src="~./org/carewebframework/ui/zk/errorContent.zul" />
 </window>

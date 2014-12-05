@@ -61,7 +61,7 @@ function (out, skipper) {
 		out.push('</div>');
 	} 
 	
-	out.push('<div id="', uuid, '-cave" class="');
+	out.push('<span id="', uuid, '-cave" class="');
 	
 	if (contentSclass)
 		out.push(contentSclass, ' ');
@@ -78,5 +78,5 @@ function (out, skipper) {
 			if (w != caption)
 				w.redraw(out);
 	
-	out.push('</div></div>');
+	out.push('</span></div>');
 }

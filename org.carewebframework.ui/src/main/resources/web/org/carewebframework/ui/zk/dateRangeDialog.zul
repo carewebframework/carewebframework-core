@@ -1,31 +1,37 @@
-<zk xmlns="http://www.zkoss.org/2005/zul"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:h="http://www.w3.org/1999/xhtml"
-	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd ">
+<zk>
 
-<window title="${labels.cwf.date.range.win.title}" border="normal" width="170px"
-	use="org.carewebframework.ui.zk.DateRangeDialog">
-	<vbox width="100%">
-		<label value="${labels.cwf.date.range.start.date.label}"/>
-		<hbox align="center" pack="start" width="100%">
-			<datebox id="startDate" width="120px"
-				tooltiptext="${labels.cwf.date.range.start.date.dbx.hint}"/>
-			<toolbarbutton id="btnSameAsEnd" image="~./org/carewebframework/ui/zk/leftarrow.png"
-				tooltiptext="${labels.cwf.date.range.start.date.btn.hint}"/>
-		</hbox>
-		<label value="${labels.cwf.date.range.end.date.label}"/>
-		<hbox align="center" pack="start" width="100%">
-			<datebox id="endDate" width="120px"
-				tooltiptext="${labels.cwf.date.range.end.date.dbx.hint}"/>
-			<toolbarbutton id="btnSameAsStart" image="~./org/carewebframework/ui/zk/leftarrow.png"
-				tooltiptext="${labels.cwf.date.range.end.date.btn.hint}"/>
-		</hbox>
-		<separator />
-		<hbox align="center" pack="center" width="100%">
-			<button id="btnOK" label="${labels.cwf.date.range.btn.ok.label}" width="60px"/>
-			<button id="btnCancel" label="${labels.cwf.date.range.btn.cancel.label}" width="60px"/>
-		</hbox>
-	</vbox>
-</window>
+	<window title="${labels.cwf.date.range.win.title}" mold="bootstrap"
+		width="200px" use="org.carewebframework.ui.zk.DateRangeDialog">
+		<div width="100%" zclass="panel-body">
+			<label zclass="label" sclass="label-info"
+				value="${labels.cwf.date.range.start.date.label}" />
+			<div zclass="btn-group btn-xs" width="100%">
+				<datebox id="startDate" hflex="1" sclass="btn"
+					tooltiptext="${labels.cwf.date.range.start.date.dbx.hint}" />
+				<toolbarbutton id="btnSameAsEnd" zclass="btn"
+					sclass="btn-link glyphicon glyphicon-chevron-left"
+					tooltiptext="${labels.cwf.date.range.start.date.btn.hint}" />
+			</div>
+			<label zclass="label" sclass="label-info"
+				value="${labels.cwf.date.range.end.date.label}" />
+			<div zclass="btn-group btn-xs" width="100%">
+				<datebox id="endDate" hflex="1" sclass="btn"
+					tooltiptext="${labels.cwf.date.range.end.date.dbx.hint}" />
+				<toolbarbutton id="btnSameAsStart" zclass="btn"
+					sclass="btn-link glyphicon glyphicon-chevron-left"
+					tooltiptext="${labels.cwf.date.range.end.date.btn.hint}" />
+			</div>
+		</div>
+		<div zclass="panel-footer">
+			<div zclass="btn-toolbar" align="center">
+				<button id="btnOK" zclass="btn"
+					sclass="btn-success btn-sm"
+					label="${labels.cwf.date.range.btn.ok.label}" />
+				<button id="btnCancel" zclass="btn"
+					sclass="btn-danger btn-sm"
+					label="${labels.cwf.date.range.btn.cancel.label}" />
+			</div>
+		</div>
+	</window>
 
 </zk>
