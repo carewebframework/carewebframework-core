@@ -4,29 +4,40 @@
 	Global stylesheet for CareWeb application.  Styles here will be applied to all components.
 */
 
-.cwf-desktop-titlebar {
-	background: none;
-	border: none;
+.cwf-desktop-heading {
+	padding: 5px;
 }
 
-.cwf-desktop-titlebar>.z-caption-content {
-	width: 100%;
+.cwf-desktop .panel-heading * {
+	vertical-align: middle;
 }
 
 .cwf-desktop-title {
- 	border-right: solid 1px gray;
-	padding-top: 6px;
+ 	max-width: 200px;
+ 	margin-top: -2px;
+ }
+
+.cwf-desktop-title .panel-title {
+ 	zoom: 85%;
  }
 
 .cwf-desktop-notitle {
- 	border-right: none;
- 	padding-top: 0px;
+ 	display: none;
  }
 
 .cwf-desktop-title .z-label {
-	padding: 2px 5px 2px 5px;
 	white-space: nowrap;
 	font-weight: bold;
+}
+
+.cwf-desktop-menubar {
+	max-width: 200px;
+}
+
+.cwf-desktop-toolbar {
+	background: none;
+	border: none;
+	min-height: 20px
 }
 
 .cwf-plugin-container {
@@ -48,27 +59,27 @@
 
 .cwf-topToolbar {
 	position: absolute;
-	top: 0px;
-	left: 0px;
-	right: 0px;
+	top: 0;
+	left: 0;
+	right: 0;
 }
 
 .cwf-pluginWithToolbar {
 	position: absolute;
 	overflow: auto;
 	top: 30px;
-	bottom: 0px;
-	right: 0px;
-	left: 0px;
+	bottom: 0;
+	right: 0;
+	left: 0;
 }
 
 .cwf-pluginWithoutToolbar {
 	position: absolute;
 	overflow: auto;
-	top: 0px;
-	bottom: 0px;
-	right: 0px;
-	left: 0px;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
 }
 
 /* Suppress display of check box in list header */
@@ -137,7 +148,7 @@
 }
 
 .cwf-step-toolbar {
-    border: 0px;
+    border: 0;
 }
 
 .cwf-step-taskbar-left {
@@ -156,12 +167,12 @@
 	background-color: #F0F0F0 !important;
 	min-height: 25px;
     max-width: 100px;
-	min-width: 0px;
+	min-width: 0;
     cursor: pointer;
     white-space: pre-wrap;
     display: inline-block;
 	line-height: 20px;
-	margin: 2px 0px;
+	margin: 2px 0;
 }
 
 .cwf-step-button:hover {
@@ -298,6 +309,10 @@
 .cwf-designer-addcomponent .z-tree-tee,
 .cwf-designer-addcomponent .z-tree-last {
 	display: none;
+}
+
+*.cwf-designmode-active {
+	outline: 1px dotted gray;
 }
 
 .cwf-about-header {

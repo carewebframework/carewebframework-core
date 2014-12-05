@@ -36,7 +36,7 @@ import org.carewebframework.ui.zk.PromptDialog;
 import org.carewebframework.ui.zk.ZKUtil;
 
 import org.zkoss.util.media.Media;
-import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Filedownload;
@@ -74,9 +74,11 @@ public class LayoutManager extends Window {
     
     private Radiogroup radioGroup;
     
-    private Component pnlManage;
+    private HtmlBasedComponent pnlManage;
     
-    private Component pnlSelect;
+    private HtmlBasedComponent pnlSelect;
+    
+    private HtmlBasedComponent pnlScope;
     
     private boolean shared;
     
@@ -167,6 +169,7 @@ public class LayoutManager extends Window {
         pnlSelect.setVisible(!manage);
         pnlManage.setVisible(manage);
         radioGroup.setSelectedIndex(shared ? 0 : 1);
+        pnlScope.setSclass(manage ? "pull-right" : "pull-left");
         refresh(deflt);
         doModal();
         return manage || selectedLayout == null ? null : selectedLayout;

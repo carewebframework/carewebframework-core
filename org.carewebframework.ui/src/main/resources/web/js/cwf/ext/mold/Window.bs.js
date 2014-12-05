@@ -33,7 +33,7 @@ function (out, skipper) {
 			var w = caption.firstChild;
 			
 			if (w) {
-				out.push('<div', vis ? '' : ' style="display:none"', '>');
+				out.push('<div class="panel-caption ', caption.getSclass(), '" ', caption.domAttrs_({domClass:1}), '>');
 	
 				for (; w; w = w.nextSibling)
 					w.redraw(out);

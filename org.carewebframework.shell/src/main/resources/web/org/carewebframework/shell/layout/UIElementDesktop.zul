@@ -1,32 +1,33 @@
-<window height="100%" width="100%" border="none">
-	<caption sclass="cwf-desktop-titlebar">
-		<hbox id="titlebar" width="100%" spacing="3px">
-			<cell hflex="min" visible="false">
-				<image id="icon" />
-			</cell>
-			<cell id="titleCell" sclass="cwf-desktop-title">
-				<label id="title" value="${labels.cwf.shell.plugin._desktop.title.$}" />
-			</cell>
-			<cell hflex="min">
-				<menubar id="menubar1"
-					style="border:none;background:none" />
-			</cell>
-			<cell hflex="min">
-				<menubar id="menubar2"
-					style="border:none;background:none">
-					<menu id="helpMenu" label="${labels.cwf.shell.plugin._desktop.menu.help.label}">
-						<menupopup id="helpMenuRoot">
-							<menuEx id="mnuAbout" label="${labels.cwf.shell.plugin._desktop.menu.about.label}" />
-							<menuEx id="mnuTOC" visible="false" label="${labels.cwf.shell.plugin._desktop.menu.toc.label}" />
-							<menuseparator id="helpSeparator" visible="false" />
-						</menupopup>
-					</menu>
-				</menubar>
-			</cell>
-			<cell hflex="1">
-				<toolbar id="toolbar1" align="end" height="100%" />
-			</cell>
-		</hbox>
-	</caption>
-	<div id="desktopRoot" height="100%" width="100%" />
-</window>
+<idspace height="100%" width="100%" zclass="cwf-desktop panel" sclass="panel-info" style="margin:0">
+	<hlayout id="titlebar" sclass="cwf-desktop-heading panel-heading" spacing="0">
+		<div visible="false">
+			<image id="icon" />
+		</div>
+		<div id="titleCell" hflex="min" zclass="cwf-desktop-title">
+			<label id="title" zclass="panel-title"
+				value="${labels.cwf.shell.plugin._desktop.title.$}" />
+		</div>
+		<hlayout hflex="min" spacing="0" sclass="cwf-desktop-menubar">
+			<menubar id="menubar1"
+				style="border:none;background:none" />
+			<menubar id="menubar2"
+				style="border:none;background:none">
+				<menu id="helpMenu"
+					label="Help">
+					<menupopup id="helpMenuRoot">
+						<menuEx id="mnuAbout"
+							label="${labels.cwf.shell.plugin._desktop.menu.about.label}" />
+						<menuEx id="mnuTOC" visible="false"
+							label="${labels.cwf.shell.plugin._desktop.menu.toc.label}" />
+						<menuseparator id="helpSeparator"
+							visible="false" />
+					</menupopup>
+				</menu>
+			</menubar>
+		</hlayout>
+		<div hflex="1">
+			<toolbar sclass="cwf-desktop-toolbar btn-toolbar" id="toolbar1" align="end" />
+		</div>
+	</hlayout>
+	<div id="desktopInner" vflex="1" width="100%" zclass="panel-body" style="padding:0" />
+</idspace>

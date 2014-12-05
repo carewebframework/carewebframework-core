@@ -18,7 +18,7 @@
 						value="${each.item}" selected="${each.name eq arg.selected}"
 						forward="onOK=promptDialog.onOK,onDoubleClick=promptDialog.onOK" />
 				</listbox>
-				<checkbox id="chkRemember" style="display:block"
+				<checkbox id="chkRemember" style="display:block;text-align:center"
 					label="${labels.cwf.prompt.chx.reminder.label}"
 					visible="${arg.remember}" />
 			</div>
@@ -27,7 +27,7 @@
 			<div zclass="btn-toolbar" align="center">
 				<button forEach="${arg.responses}"
 					id="${each.ok?'btnOK':''}" zclass="btn"
-					sclass="btn-sm btn-${each.ok?'success':'default'}"
+					sclass="btn-sm btn-${each.ok?'success':each.cancel?'danger':'default'}"
 					label="${each.label}" forward="onButtonClick"
 					focus="${each.dflt}">
 					<custom-attributes response="${each}" />

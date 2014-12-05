@@ -7,7 +7,7 @@
 		</div>
 		<div zclass="panel-footer">
 			<div zclass="btn-toolbar">
-				<div id="pnlSelect" zclass="btn-group" sclass="btn-group-sm pull-right">
+				<div id="pnlSelect" zclass="btn-group-sm pull-right">
 					<button id="btnOK" zclass="btn" sclass="btn-success"
 						label="${labels.cwf.shell.designer.layout.manager.btn.ok.label}" />
 					<button id="btnCancel" zclass="btn"
@@ -15,7 +15,7 @@
 						label="${labels.cwf.shell.designer.layout.manager.btn.cancel.label}"
 						forward="onClose" />
 				</div>
-				<div zclass="btn-group" sclass="btn-group-sm pull-right">
+				<div id="pnlScope" zclass="btn-group-sm">
 					<radiogroup id="radioGroup" orient="horizontal">
 						<radio selected="true"
 							label="${labels.cwf.shell.designer.layout.manager.radio.shared.label}" />
@@ -25,15 +25,14 @@
 				</div>
 			</div>
 			<div id="pnlManage" zclass="btn-toolbar">
-				<div zclass="btn-group btn-group-sm pull-right"
-					sclass="btn-group-sm">
+				<div zclass="btn-group-sm pull-right">
 					<button id="btnImport" zclass="btn"
 						sclass="btn-default"
 						label="${labels.cwf.shell.designer.layout.manager.btn.import_.label}" />
 					<button id="btnExport" zclass="btn"
 						sclass="btn-default"
 						label="${labels.cwf.shell.designer.layout.manager.btn.export.label}" />
-					<separator orient="vertical" />
+					<space />
 					<button id="btnClone" zclass="btn"
 						sclass="btn-default"
 						label="${labels.cwf.shell.designer.layout.manager.btn.clone.label}" />

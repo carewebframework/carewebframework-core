@@ -12,7 +12,6 @@ package org.carewebframework.shell.layout;
 import org.carewebframework.shell.designer.PropertyEditorOrderedChildren;
 import org.carewebframework.shell.property.PropertyTypeRegistry;
 import org.carewebframework.ui.action.ActionListener;
-import org.carewebframework.ui.zk.ZKUtil;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.HtmlBasedComponent;
@@ -38,7 +37,8 @@ public class UIElementToolbar extends UIElementZKBase {
     public UIElementToolbar(Toolbar toolbar) {
         super();
         this.toolbar = toolbar;
-        toolbar.setStyle("align:right");
+        toolbar.setAlign("end");
+        toolbar.setSclass("cwf-desktop-toolbar btn-toolbar");
         setOuterComponent(toolbar);
         maxChildren = Integer.MAX_VALUE;
     }
@@ -85,16 +85,6 @@ public class UIElementToolbar extends UIElementZKBase {
     @Override
     protected void beforeRemoveChild(UIElementBase child) {
         super.beforeRemoveChild(child);
-    }
-    
-    /**
-     * Dummy component made visible during design mode to ensure that an otherwise empty toolbar is
-     * always visible.
-     */
-    @Override
-    public void setDesignMode(boolean designMode) {
-        super.setDesignMode(designMode);
-        ZKUtil.updateStyle(toolbar, "min-height", designMode ? "20px" : null);
     }
     
 }

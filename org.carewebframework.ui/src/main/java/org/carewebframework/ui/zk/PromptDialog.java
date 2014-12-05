@@ -80,13 +80,16 @@ public class PromptDialog extends Window {
         
         private final boolean ok;
         
+        private final boolean cancel;
+        
         private final boolean dflt;
         
-        Response(int index, String label, boolean excluded, boolean ok, boolean dflt) {
+        Response(int index, String label, boolean excluded, boolean dflt) {
             this.index = index;
+            this.ok = PromptDialog.isOK(label);
+            this.cancel = PromptDialog.isCancel(label);
             this.label = StrUtil.formatMessage(label);
             this.excluded = excluded;
-            this.ok = ok;
             this.dflt = dflt;
         }
         
@@ -124,6 +127,15 @@ public class PromptDialog extends Window {
          */
         public boolean isOk() {
             return ok;
+        }
+        
+        /**
+         * True if this response corresponds to a "Cancel" response.
+         * 
+         * @return True if cancel response.
+         */
+        public boolean isCancel() {
+            return cancel;
         }
         
         /**
@@ -515,13 +527,33 @@ public class PromptDialog extends Window {
     }
     
     /**
-     * Returns true if the text corresponds to an OK result.
+     * Returns true if the text corresponds to an OK response.
      * 
      * @param text Text to test.
      * @return True if represents an OK result.
      */
     private static boolean isOK(String text) {
-        return LABEL_ID_OK.equals(text) || StrUtil.formatMessage(LABEL_ID_OK).equals(text);
+        return isResponseType(text, LABEL_ID_OK);
+    }
+    
+    /**
+     * Returns true if the text corresponds to cancel response.
+     * 
+     * @param text Text to test.
+     * @return True if represents an OK result.
+     */
+    private static boolean isCancel(String text) {
+        return isResponseType(text, LABEL_ID_CANCEL);
+    }
+    
+    /**
+     * Returns true if the text corresponds to a specific response type.
+     * 
+     * @param text Text to test.
+     * @return True if represents the specified response type.
+     */
+    private static boolean isResponseType(String text, String label) {
+        return label.equals(text) || StrUtil.formatMessage(label).equals(text);
     }
     
     /**
@@ -571,7 +603,7 @@ public class PromptDialog extends Window {
         
         for (int i = 0; i < rspList.size(); i++) {
             String label = rspList.get(i);
-            Response rsp = new Response(i, label, excList.contains(label), isOK(label), forceDefault || label.equals(dflt));
+            Response rsp = new Response(i, label, excList.contains(label), forceDefault || label.equals(dflt));
             list.add(rsp);
         }
         

@@ -265,6 +265,8 @@ body {
 	-moz-user-select: none;
 	-webkit-user-select: none;
 	-ms-user-select: none;
+	padding: 1px;
+	margin: 0;
 }
 
 /* JQuery-UI overrides */

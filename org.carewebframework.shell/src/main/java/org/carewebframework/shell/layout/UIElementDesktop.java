@@ -22,11 +22,11 @@ import org.carewebframework.ui.zk.MenuUtil;
 import org.carewebframework.ui.zk.ZKUtil;
 
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.OpenEvent;
 import org.zkoss.zk.ui.util.Clients;
-import org.zkoss.zul.Cell;
 import org.zkoss.zul.Image;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Menu;
@@ -34,7 +34,6 @@ import org.zkoss.zul.Menubar;
 import org.zkoss.zul.Menupopup;
 import org.zkoss.zul.Menuseparator;
 import org.zkoss.zul.Toolbar;
-import org.zkoss.zul.Window;
 
 /**
  * This is the topmost component of the layout.
@@ -45,9 +44,9 @@ public class UIElementDesktop extends UIElementZKBase {
         registerAllowedChildClass(UIElementDesktop.class, UIElementBase.class);
     }
     
-    private final Window win;
+    private final Component desktopOuter;
     
-    private Component desktopRoot;
+    private Component desktopInner;
     
     private String appId;
     
@@ -55,7 +54,7 @@ public class UIElementDesktop extends UIElementZKBase {
     
     private Label title;
     
-    private Cell titleCell;
+    private HtmlBasedComponent titleCell;
     
     private Menubar menubar1;
     
@@ -91,9 +90,9 @@ public class UIElementDesktop extends UIElementZKBase {
         super();
         this.shell = shell;
         maxChildren = Integer.MAX_VALUE;
-        win = (Window) createFromTemplate();
-        setOuterComponent(win);
-        setInnerComponent(desktopRoot);
+        desktopOuter = createFromTemplate();
+        setOuterComponent(desktopOuter);
+        setInnerComponent(desktopInner);
         menubar = new UIElementMenubar(menubar1);
         toolbar = new UIElementToolbar(toolbar1);
         ActionListener.addAction(mnuAbout, "zscript:org.carewebframework.shell.CareWebUtil.about();");
@@ -118,7 +117,7 @@ public class UIElementDesktop extends UIElementZKBase {
         addChild(menubar);
         addChild(toolbar);
         setTitle(getTitle());
-        shell.appendChild(win);
+        shell.appendChild(desktopOuter);
     }
     
     /**
@@ -137,7 +136,7 @@ public class UIElementDesktop extends UIElementZKBase {
      */
     public void setTitle(String text) {
         title.setValue(text);
-        win.getPage().setTitle(text);
+        desktopOuter.getPage().setTitle(text);
         ZKUtil.toggleSclass(titleCell, "cwf-desktop-notitle", "cwf-desktop-title", StringUtils.isEmpty(text));
     }
     
@@ -239,7 +238,7 @@ public class UIElementDesktop extends UIElementZKBase {
      */
     @Override
     public void activate(boolean activate) {
-        Clients.resize(win);
+        Clients.resize(desktopOuter);
         super.activate(activate);
     }
     
