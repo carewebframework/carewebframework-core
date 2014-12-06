@@ -5,7 +5,7 @@
 */
 
 .cwf-desktop-heading {
-	padding: 5px;
+	padding: 2px;
 }
 
 .cwf-desktop .panel-heading * {
@@ -40,14 +40,17 @@
 	min-height: 20px
 }
 
-.cwf-plugin-container {
-	position: relative;
+.cwf-desktop-toolbar div {
 	display: inline-block;
-	overflow: auto
 }
 
-.cwf-toolbar-container {
-	display: inline-block;
+.cwf-desktop-toolbar .z-toolbar-content>* {
+	margin-left: 5px;
+}
+
+.cwf-plugin-container {
+	position: relative;
+	overflow: auto
 }
 
 .cwf-anchor {
