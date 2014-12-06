@@ -51,7 +51,7 @@ function (out, skipper) {
 		}
 		
 		if (this._minimizable) {
-			genIcon('plus', 'min');
+			genIcon('minus', 'min');
 		}
 		
 		if (title) {
@@ -61,7 +61,7 @@ function (out, skipper) {
 		out.push('</div>');
 	} 
 	
-	out.push('<span id="', uuid, '-cave" class="');
+	out.push('<div id="', uuid, '-cave" class="');
 	
 	if (contentSclass)
 		out.push(contentSclass, ' ');
@@ -78,5 +78,5 @@ function (out, skipper) {
 			if (w != caption)
 				w.redraw(out);
 	
-	out.push('</span></div>');
+	out.push('</div></div>');
 }
