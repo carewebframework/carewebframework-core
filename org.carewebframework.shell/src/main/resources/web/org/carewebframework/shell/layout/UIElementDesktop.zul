@@ -1,7 +1,7 @@
 <idspace height="100%" width="100%" zclass="cwf-desktop panel" sclass="panel-info" style="margin:0">
 	<hlayout id="titlebar" sclass="cwf-desktop-heading panel-heading" spacing="0">
 		<div visible="false">
-			<image id="icon" />
+			<image id="icon" style="padding-right:5px"/>
 		</div>
 		<div id="titleCell" hflex="min" zclass="cwf-desktop-title">
 			<label id="title" zclass="panel-title"
