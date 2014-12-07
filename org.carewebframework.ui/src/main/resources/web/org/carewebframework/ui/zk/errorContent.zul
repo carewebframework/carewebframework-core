@@ -1,12 +1,12 @@
 <?variable-resolver class="org.carewebframework.ui.FrameworkVariableResolver"?>
 
 <vlayout id="errorContent" apply="${exceptionController}" spacing="0">
-	<hbox align="bottom" hflex="1">
-		<html content="${labels.cwf.error.dialog.message}" hflex="1" />
-		<button id="btnDetail" zclass="btn" sclass="btn-info" style="padding-left:20px"
+	<html content="${labels.cwf.error.dialog.message}" hflex="1" />
+	<div zclass="btn-toolbar" style="text-align:center" hflex="1">
+		<button id="btnDetail" zclass="btn" sclass="btn-info btn-xs"
+			style="margin-top: 20px"
 			label="${labels.cwf.error.dialog.btn.detail.label}" />
-	</hbox>
-
+	</div>
 	<grid id="detail" fixedLayout="true" visible="false">
 		<columns sizable="false" visible="false">
 			<column width="20%" />
