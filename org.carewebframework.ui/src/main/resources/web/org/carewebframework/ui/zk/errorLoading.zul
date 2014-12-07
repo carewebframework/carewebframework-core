@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- Error page for errors that occur during the loading of a request, this window is not modal. -->
-<window sizable="true" height="100%" width="100%" mold="bootstrap">
+<window sizable="true" height="100%" width="100%" sclass="panel-danger"
+	mold="bootstrap">
 	<caption label="${labels.cwf.error.dialog.title}" />
-	<include src="~./org/carewebframework/ui/zk/errorContent.zul" zclass="panel-body"/>
+	<include src="~./org/carewebframework/ui/zk/errorContent.zul"
+		zclass="panel-body" />
 </window>
