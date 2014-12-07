@@ -1,17 +1,11 @@
 <?variable-resolver class="org.carewebframework.ui.FrameworkVariableResolver"?>
 
-<vlayout id="errorContent" apply="${exceptionController}" spacing="0"
-	style="border:1px solid lightgray">
-	<hlayout spacing="5px">
+<vlayout id="errorContent" apply="${exceptionController}" spacing="0">
+	<hbox align="bottom" hflex="1">
 		<html content="${labels.cwf.error.dialog.message}" hflex="1" />
-		<vbox vflex="1" style="border-left: 1px solid lightgray"
-			align="center" pack="center">
-			<button id="btnDetail"
-				label="${labels.cwf.error.dialog.btn.detail.label}" />
-			<button id="btnClose"
-				label="${labels.cwf.error.dialog.btn.close.label}" />
-		</vbox>
-	</hlayout>
+		<button id="btnDetail" zclass="btn" sclass="btn-info" style="padding-left:20px"
+			label="${labels.cwf.error.dialog.btn.detail.label}" />
+	</hbox>
 
 	<grid id="detail" fixedLayout="true" visible="false">
 		<columns sizable="false" visible="false">

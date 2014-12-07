@@ -2,8 +2,12 @@
  * Bootstrap mold.
  */
 function (out, skipper) {
-	function genIcon(icon, type) {
-		out.push('<span id="', uuid, '-', type, '" class="panel-icon glyphicon glyphicon-', icon, '" />')
+	function genIcon(type, icon) {
+		if (!iconPanel) {
+			iconPanel = true;
+			out.push('<span class="panel-icons">');
+		}
+		out.push('<span id="', uuid, '-', type, '" class="panel-icon"><span class="glyphicon ', icon, '" /></span>')
 	};
 	
 	var uuid = this.uuid,
@@ -11,8 +15,14 @@ function (out, skipper) {
 		caption = this.caption,
 		sclass = this.getSclass() || 'panel-primary',
 		contentStyle = this.getContentStyle(),
-		contentSclass = this.getContentSclass();
+		contentSclass = this.getContentSclass(),
+		iconPanel;
 
+	this._closableIconClass = 'glyphicon-remove';
+	this._maximizableIconClass = 'glyphicon-resize-full';
+	this._maximizedIconClass = 'glyphicon-resize-small';
+	this._minimizableIconClass = 'glyphicon-minus';
+	
 	out.push('<div class="panel ', sclass, '" ', this.domAttrs_({domClass:1}), '>');
 	
 	if (caption || title) {
@@ -42,16 +52,21 @@ function (out, skipper) {
 			}
 		}
 		
-		if (this._closable) {
-			genIcon('remove', 'close');
+		if (this._minimizable) {
+			genIcon('min', this._minizableIconClass);
 		}
 		
 		if (this._maximizable) {
-			genIcon(this._maximized ? 'resize-small' : 'resize-full', 'max');
+			genIcon('max', this._maximized ? this._maximizedIconClass:
+				this._maximizableIconClass);
 		}
 		
-		if (this._minimizable) {
-			genIcon('minus', 'min');
+		if (this._closable) {
+			genIcon('close', this._closableIconClass);
+		}
+		
+		if (iconPanel) {
+			out.push('</span>');
 		}
 		
 		if (title) {

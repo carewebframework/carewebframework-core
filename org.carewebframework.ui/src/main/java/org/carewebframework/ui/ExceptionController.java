@@ -63,8 +63,6 @@ public class ExceptionController extends GenericForwardComposer<Component> {
     
     private Button btnDetail;
     
-    private Button btnClose;
-    
     /**
      * Populate the display with information from the current execution.
      * 
@@ -75,7 +73,6 @@ public class ExceptionController extends GenericForwardComposer<Component> {
         super.doAfterCompose(comp);
         Clients.clearBusy();
         this.root = ZKUtil.findAncestor(comp, Window.class);
-        this.btnClose.setVisible(this.root.isMaximizable());
         final HttpServletRequest req = (HttpServletRequest) this.execution.getNativeRequest();
         
         Class<?> errClass = (Class<?>) req.getAttribute(WebUtils.ERROR_EXCEPTION_TYPE_ATTRIBUTE);

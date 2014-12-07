@@ -3,5 +3,5 @@
 <!-- Error page for errors that occur during the loading of a request, this window is not modal. -->
 <window sizable="true" height="100%" width="100%" mold="bootstrap">
 	<caption label="${labels.cwf.error.dialog.title}" />
-	<include src="~./org/carewebframework/ui/zk/errorContent.zul" />
+	<include src="~./org/carewebframework/ui/zk/errorContent.zul" zclass="panel-body"/>
 </window>

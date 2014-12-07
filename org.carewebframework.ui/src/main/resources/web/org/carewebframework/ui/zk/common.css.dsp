@@ -191,10 +191,14 @@
 	padding: 0;
 }
 
-.panel-icon {
+.panel-icons {
 	float: right;
+	margin: -5px -5px;
+}
+
+.panel-icon {
 	cursor: pointer;
-	margin:-5px -10px;
+	padding-left: 5px;
 	opacity: 0.7;
 }
 
