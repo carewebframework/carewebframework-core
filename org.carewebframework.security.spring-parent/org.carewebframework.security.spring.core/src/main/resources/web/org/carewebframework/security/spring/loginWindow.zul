@@ -6,12 +6,20 @@
 	xmlns:h="http://www.w3.org/1999/xhtml"
 	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd ">
 
-	<div apply="${securityLoginWindowController}">
-		<separator height="30px" />
+	<div apply="${securityLoginWindowController}" zclass="cwf-login-main">
 		<h:form id="loginForm" name="loginForm"
 			action="${c:encodeURL('/login/j_spring_security_check')}"
 			method="POST" autocomplete="off">
 		</h:form>
 		<timer id="timer" delay="60000" running="false" repeats="true" />
 	</div>
+	
+	<style>
+		.cwf-login-main {
+			background-image: url(${c:encodeURL(labels.login.form.background.image)});
+			height: 100%;
+			width: 100%;
+			padding-top: 10%;
+		}
+	</style>
 </zk>
