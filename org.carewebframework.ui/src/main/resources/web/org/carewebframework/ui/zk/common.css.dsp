@@ -186,6 +186,10 @@
 
 /* Bootstrap additions */
 
+.panel-primary>.panel-heading .z-menu-content {
+	background-color: white;
+}
+
 .panel-content {
 	margin: 0;
 	padding: 0;

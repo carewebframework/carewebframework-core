@@ -120,10 +120,8 @@ public class ZKUtil {
      * 
      * @param filename Filename of the zul page.
      * @return A page definition.
-     * @throws Exception if problem occurs loading cached zul page definition
-     * @throws IllegalArgumentException if filename is null
      */
-    public static PageDefinition loadCachedPageDefinition(String filename) throws Exception {
+    public static PageDefinition loadCachedPageDefinition(String filename) {
         Validate.notNull(filename, "'filename' argument must not be null");
         return ZulGlobalCache.getInstance().get(filename);
     }
@@ -176,9 +174,8 @@ public class ZKUtil {
      * @param url url of the zul page and, optionally, may include query parameters.
      * @param args Upon return, will be populated by any query parameters present in the url.
      * @return A page definition representing the zul page.
-     * @throws Exception if problem occurs loading zul page definition
      */
-    public static PageDefinition loadZulPageDefinition(String url, Map<Object, Object> args) throws Exception {
+    public static PageDefinition loadZulPageDefinition(String url, Map<Object, Object> args) {
         String pcs[] = url.split("\\?", 2);
         
         if (args != null) {
@@ -198,11 +195,15 @@ public class ZKUtil {
      * @param filename File name pointing to the zul page.
      * @param parent Component to become the parent of the created page.
      * @return The top level component of the created zul page.
-     * @throws Exception if problem occurs loading zul page
      */
-    public static Component loadZulPage(String filename, Component parent) throws Exception {
+    public static Component loadZulPage(String filename, Component parent) {
         Map<Object, Object> args = new HashMap<Object, Object>();
-        PageDefinition pageDefinition = loadZulPageDefinition(filename, args);
+        PageDefinition pageDefinition;
+        try {
+            pageDefinition = loadZulPageDefinition(filename, args);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         return Executions.getCurrent().createComponents(pageDefinition, parent, args);
     }
     
@@ -213,9 +214,8 @@ public class ZKUtil {
      * @param parent Component to become the parent of the created page.
      * @param args Arguments to pass to zul page.
      * @return The top level component of the created zul page.
-     * @throws Exception if problem occurs loading zul page
      */
-    public static Component loadZulPage(String filename, Component parent, Map<Object, Object> args) throws Exception {
+    public static Component loadZulPage(String filename, Component parent, Map<Object, Object> args) {
         return loadZulPage(filename, parent, args, null);
     }
     
@@ -227,10 +227,8 @@ public class ZKUtil {
      * @param args Arguments to pass to zul page.
      * @param controller If specified, the zul page is autowired to the controller.
      * @return The top level component of the created zul page.
-     * @throws Exception if problem occurs loading zul page
      */
-    public static Component loadZulPage(String filename, Component parent, Map<Object, Object> args, Object controller)
-                                                                                                                       throws Exception {
+    public static Component loadZulPage(String filename, Component parent, Map<Object, Object> args, Object controller) {
         PageDefinition pageDefinition = loadZulPageDefinition(filename);
         Component top = Executions.getCurrent().createComponents(pageDefinition, parent, args);
         wireController(top, controller);
