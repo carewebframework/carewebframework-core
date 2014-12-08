@@ -1,0 +1,7 @@
+<zk>
+	<window closable="true" minimizable="true" mold="bootstrap"
+		sclass="panel-info" width="100%"
+		use="org.carewebframework.ui.infopanel.controller.DropContainer">
+		<div id="container" zclass="panel-body" />
+	</window>
+</zk>

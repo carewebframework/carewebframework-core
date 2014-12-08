@@ -25,6 +25,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.event.DropEvent;
 import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Grid;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.LayoutRegion;
@@ -51,6 +52,8 @@ public class InfoPanelController extends PluginController implements IInfoPanel 
     
     private LayoutRegion alertPanel;
     
+    private HtmlBasedComponent menuPanel;
+    
     private Grid alertGrid;
     
     private Rows alertRoot;
@@ -73,7 +76,7 @@ public class InfoPanelController extends PluginController implements IInfoPanel 
     private final IGenericEvent<Component> dropListener = new IGenericEvent<Component>() {
         
         @Override
-        public void eventCallback(final String eventName, final Component comp) {
+        public void eventCallback(String eventName, Component comp) {
             if (isActive()) {
                 if (eventName.equals(DROP_EVENT_NAME)) {
                     drop(comp);
@@ -91,7 +94,7 @@ public class InfoPanelController extends PluginController implements IInfoPanel 
      * @param comp The root component of the info panel.
      */
     @Override
-    public void doAfterCompose(final Component comp) throws Exception {
+    public void doAfterCompose(Component comp) throws Exception {
         super.doAfterCompose(comp);
         ((HtmlBasedComponent) comp).setDroppable(getDropId());
         this.collapsedAlertPanelHeight = this.alertPanel.getHeight();
@@ -107,8 +110,9 @@ public class InfoPanelController extends PluginController implements IInfoPanel 
      * @see org.carewebframework.ui.infopanel.model.IInfoPanel#registerMenuItem(Menuitem, String)
      */
     @Override
-    public void registerMenuItem(final Menuitem menuitem, final String path) {
-        MenuUtil.addMenuItem(path + "\\" + menuitem.getLabel(), menuitem, this.menubar, null);
+    public void registerMenuItem(Menuitem menuitem, String path) {
+        MenuUtil.addMenuItem(path + "\\" + menuitem.getLabel(), menuitem, menubar, null);
+        menuPanel.setVisible(true);
         
         if (log.isDebugEnabled()) {
             log.debug("Registered menu item: " + menuitem);
@@ -122,12 +126,13 @@ public class InfoPanelController extends PluginController implements IInfoPanel 
      * @see org.carewebframework.ui.infopanel.model.IInfoPanel#unregisterMenuItem(Menuitem)
      */
     @Override
-    public void unregisterMenuItem(final Menuitem menuitem) {
-        final Component parent = menuitem.getParent();
+    public void unregisterMenuItem(Menuitem menuitem) {
+        Component parent = menuitem.getParent();
         menuitem.detach();
         
         if (parent != null) {
             MenuUtil.pruneMenus(parent);
+            menuPanel.setVisible(parent.getFirstChild() != null);
         }
         
         if (log.isDebugEnabled()) {
@@ -141,7 +146,7 @@ public class InfoPanelController extends PluginController implements IInfoPanel 
      * 
      * @param event The drop event.
      */
-    public void onDrop(final DropEvent event) {
+    public void onDrop(DropEvent event) {
         drop(event.getDragged());
     }
     
@@ -149,7 +154,7 @@ public class InfoPanelController extends PluginController implements IInfoPanel 
      * Toggles the alert panel open state.
      */
     public void onClick$alertIcon() {
-        openAlertPanel(!this.alertPanelOpen);
+        openAlertPanel(!alertPanelOpen);
     }
     
     /**
@@ -181,27 +186,29 @@ public class InfoPanelController extends PluginController implements IInfoPanel 
         
         int alertCount = 0;
         
-        for (Component cmp : this.alertRoot.getChildren()) {
+        for (Component cmp : alertRoot.getChildren()) {
             if (cmp.isVisible()) {
                 alertCount++;
             }
         }
         
         open = open == null ? alertCount > 0 : open;
-        this.alertPanelOpen = open;
-        this.alertGrid.setVisible(open);
-        this.alertIcon.setStyle(open ? "background-position: 0 -32px" : "");
-        this.alertPanel.setMinsize(open ? 70 : 0);
-        this.alertPanel.setSplittable(open);
-        this.alertPanel.setHeight(open ? this.openAlertPanelHeight : this.collapsedAlertPanelHeight);
+        alertPanelOpen = open;
+        alertGrid.setVisible(open);
+        alertPanel.setMinsize(open ? 70 : 0);
+        alertPanel.setSplittable(open);
+        alertPanel.setHeight(open ? this.openAlertPanelHeight : this.collapsedAlertPanelHeight);
+        alertIcon.setSclass(open ? "glyphicon-chevron-down" : "glyphicon-chevron-up");
         
-        if (alertCount != this.lastAlertCount) {
-            this.lastAlertCount = alertCount;
-            final String countStr = (alertCount == 0 ? "no" : Integer.toString(alertCount)) + " alert"
+        if (alertCount != lastAlertCount) {
+            lastAlertCount = alertCount;
+            String countStr = (alertCount == 0 ? "no" : Integer.toString(alertCount)) + " alert"
                     + (alertCount == 1 ? "" : "s");
-            this.alertTitle.setValue(this.alertTitlePrefix + " - " + countStr);
-            this.alertPanel.setVisible(alertCount > 0);
+            alertTitle.setValue(alertTitlePrefix + " - " + countStr);
+            alertPanel.setVisible(alertCount > 0);
         }
+        
+        Clients.resize(root);
     }
     
     /**
@@ -221,8 +228,8 @@ public class InfoPanelController extends PluginController implements IInfoPanel 
      * @see org.carewebframework.ui.zk.IDropHandler#drop(Component)
      */
     @Override
-    public void drop(final Component droppedItem) {
-        DropContainer.render(this.dropRoot, droppedItem);
+    public void drop(Component droppedItem) {
+        DropContainer.render(dropRoot, droppedItem);
     }
     
     /**
@@ -231,9 +238,9 @@ public class InfoPanelController extends PluginController implements IInfoPanel 
      * @param root Root component for the rendered alert.
      */
     @Override
-    public void showAlert(final Component root) {
-        AlertContainer.render(this.alertRoot, root);
-        this.alertGrid.setActivePage(0);
+    public void showAlert(Component root) {
+        AlertContainer.render(alertRoot, root);
+        alertGrid.setActivePage(0);
         openAlertPanel(true);
     }
     
@@ -242,7 +249,7 @@ public class InfoPanelController extends PluginController implements IInfoPanel 
      */
     @Override
     public void clearAlerts() {
-        List<Component> children = this.alertRoot.getChildren();
+        List<Component> children = alertRoot.getChildren();
         
         while (children.size() > 0) {
             AlertContainer alertContainer = (AlertContainer) children.get(0);
@@ -257,7 +264,7 @@ public class InfoPanelController extends PluginController implements IInfoPanel 
      */
     @Override
     public void onLoad(PluginContainer container) {
-        getEventManager().subscribe(EVENT_NAME, this.dropListener);
+        getEventManager().subscribe(EVENT_NAME, dropListener);
     }
     
     /**
@@ -265,7 +272,7 @@ public class InfoPanelController extends PluginController implements IInfoPanel 
      */
     @Override
     public void onUnload() {
-        getEventManager().unsubscribe(EVENT_NAME, this.dropListener);
+        getEventManager().unsubscribe(EVENT_NAME, dropListener);
     }
     
 }

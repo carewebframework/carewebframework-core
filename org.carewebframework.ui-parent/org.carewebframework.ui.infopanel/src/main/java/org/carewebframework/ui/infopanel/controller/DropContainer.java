@@ -19,22 +19,23 @@ import org.carewebframework.ui.zk.IDropRenderer;
 import org.carewebframework.ui.zk.ZKUtil;
 
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.IdSpace;
 import org.zkoss.zk.ui.event.DropEvent;
+import org.zkoss.zk.ui.event.MinimizeEvent;
 import org.zkoss.zk.ui.util.Clients;
-import org.zkoss.zul.Panel;
-import org.zkoss.zul.Panelchildren;
+import org.zkoss.zul.Window;
 
 /**
  * Container for receiving components rendered by drop renderer.
  */
-public class DropContainer extends Panel implements IdSpace, IActionTarget {
+public class DropContainer extends Window implements IActionTarget {
     
     private static final long serialVersionUID = 1L;
     
     private static final String SCLASS = "cwf-infopanel-container";
     
-    private final List<ActionListener> actionListeners;
+    private static final String TEMPLATE = "~./org/carewebframework/ui/infopanel/dropContainer.zul";
+    
+    private List<ActionListener> actionListeners;
     
     /**
      * Renders a droppedItem in a container.
@@ -64,8 +65,8 @@ public class DropContainer extends Panel implements IdSpace, IActionTarget {
                 dropContainer.setTitle(title);
                 dropContainer.moveToTop(dropRoot);
             } else {
-                dropContainer = new DropContainer(dropRoot, renderedItem, title,
-                        InfoPanelService.getActionListeners(droppedItem));
+                dropContainer = DropContainer.create(dropRoot, renderedItem, title,
+                    InfoPanelService.getActionListeners(droppedItem));
             }
         }
         
@@ -80,22 +81,17 @@ public class DropContainer extends Panel implements IdSpace, IActionTarget {
      * @param title Title to be associated with the container.
      * @param actionListeners Listeners to be bound to the drop container (optional).
      */
-    private DropContainer(Component dropRoot, Component cmpt, String title, List<ActionListener> actionListeners) {
-        super();
-        this.actionListeners = actionListeners;
-        setWidth("100%");
-        setTitle(title);
-        setBorder("none");
-        setCollapsible(true);
-        setClosable(true);
-        setSclass(SCLASS);
-        setDroppable(SCLASS);
-        setDraggable(SCLASS);
-        Panelchildren pc = new Panelchildren();
-        appendChild(pc);
-        pc.appendChild(cmpt);
-        moveToTop(dropRoot);
-        ActionListener.bindActionListeners(this, actionListeners);
+    private static DropContainer create(Component dropRoot, Component cmpt, String title,
+                                        List<ActionListener> actionListeners) {
+        DropContainer dc = (DropContainer) ZKUtil.loadZulPage(TEMPLATE, null);
+        dc.actionListeners = actionListeners;
+        dc.setTitle(title);
+        dc.setDroppable(SCLASS);
+        dc.setDraggable(SCLASS);
+        dc.getFellow("container").appendChild(cmpt);
+        dc.moveToTop(dropRoot);
+        ActionListener.bindActionListeners(dc, actionListeners);
+        return dc;
     }
     
     /**
@@ -119,11 +115,11 @@ public class DropContainer extends Panel implements IdSpace, IActionTarget {
                 break;
             
             case COLLAPSE:
-                setOpen(false);
+                setMinimized(true);
                 break;
             
             case EXPAND:
-                setOpen(true);
+                setMinimized(false);
                 break;
             
             case TOP:
@@ -162,6 +158,10 @@ public class DropContainer extends Panel implements IdSpace, IActionTarget {
         if (dragged instanceof DropContainer) {
             getParent().insertBefore(dragged, this);
         }
+    }
+    
+    public void onMinimize(MinimizeEvent event) {
+        getFellow("container").setVisible(!event.isMinimized());
     }
     
     @Override

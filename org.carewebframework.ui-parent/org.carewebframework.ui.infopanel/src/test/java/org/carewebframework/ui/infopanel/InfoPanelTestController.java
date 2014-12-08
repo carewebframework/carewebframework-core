@@ -79,7 +79,7 @@ public class InfoPanelTestController extends FrameworkController {
             listbox.appendChild(item);
         }
         
-        infoPanel = (IInfoPanel) getController(include.getFellow("infoPanel"));
+        infoPanel = (IInfoPanel) getController(include.getFellow("infoPanelRoot"));
         eventManager = EventManager.getInstance();
     }
     

@@ -22,6 +22,7 @@ function (out, skipper) {
 	this._maximizableIconClass = 'glyphicon-resize-full';
 	this._maximizedIconClass = 'glyphicon-resize-small';
 	this._minimizableIconClass = 'glyphicon-minus';
+	this._minimizedIconClass = 'glyphicon-plus';
 	
 	out.push('<div class="panel ', sclass, '" ', this.domAttrs_({domClass:1}), '>');
 	
@@ -53,7 +54,8 @@ function (out, skipper) {
 		}
 		
 		if (this._minimizable) {
-			genIcon('min', this._minizableIconClass);
+			genIcon('min', this._minimized ? this._minimizedIconClass:
+				this._minimizableIconClass);
 		}
 		
 		if (this._maximizable) {

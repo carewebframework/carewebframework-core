@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -29,9 +29,6 @@ import org.zkoss.zk.ui.Component;
 public class InfoPanelService {
     
     private static final String EVENT_LISTENER_ATTR = "@infopanel.listener";
-    
-    private InfoPanelService() {
-    };
     
     /**
      * Finds the "nearest" info panel.
@@ -127,7 +124,8 @@ public class InfoPanelService {
         if ((element instanceof UIElementPlugin) && (!activeOnly || element.isActivated())
                 && ((UIElementPlugin) element).getDefinition().getId().equals("infoPanelPlugin")) {
             PluginContainer container = ((UIElementPlugin) element).getContainer();
-            Component top = container.getFellow("infoPanel");
+            container.load();
+            Component top = container.getFellow("infoPanelRoot");
             return (IInfoPanel) FrameworkController.getController(top);
         }
         
@@ -173,4 +171,11 @@ public class InfoPanelService {
         
         return ActionListeners;
     }
+    
+    /**
+     * Enforce static class.
+     */
+    private InfoPanelService() {
+    }
+    
 }
