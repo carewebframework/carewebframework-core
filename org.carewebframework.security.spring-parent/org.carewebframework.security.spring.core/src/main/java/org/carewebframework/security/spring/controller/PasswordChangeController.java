@@ -9,8 +9,6 @@
  */
 package org.carewebframework.security.spring.controller;
 
-import org.apache.commons.lang.StringUtils;
-
 import org.carewebframework.api.FrameworkUtil;
 import org.carewebframework.api.context.UserContext;
 import org.carewebframework.api.domain.IUser;
@@ -24,9 +22,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.util.GenericForwardComposer;
 import org.zkoss.zul.Label;
-import org.zkoss.zul.Panel;
 import org.zkoss.zul.Textbox;
-import org.zkoss.zul.Toolbar;
 
 /**
  * Controller for the password change dialog.
@@ -35,7 +31,7 @@ public class PasswordChangeController extends GenericForwardComposer<Component> 
     
     private static final long serialVersionUID = 1L;
     
-    private Panel panel;
+    private Component panel;
     
     private Textbox txtUsername;
     
@@ -45,11 +41,11 @@ public class PasswordChangeController extends GenericForwardComposer<Component> 
     
     private Textbox txtPassword2;
     
+    private Label lblTitle;
+    
     private Label lblInfo;
     
     private Label lblMessage;
-    
-    private Toolbar tbMessage;
     
     private IUser user;
     
@@ -62,6 +58,7 @@ public class PasswordChangeController extends GenericForwardComposer<Component> 
     @Override
     public void doAfterCompose(Component comp) throws Exception {
         super.doAfterCompose(comp);
+        panel = comp;
         forced = !FrameworkUtil.isInitialized();
         String title;
         String label;
@@ -79,7 +76,7 @@ public class PasswordChangeController extends GenericForwardComposer<Component> 
         if (user == null) {
             doCancel();
         } else {
-            panel.setTitle(Labels.getLabel(title) + " - " + user.getFullName());
+            lblTitle.setValue(Labels.getLabel(title) + " - " + user.getFullName());
             lblInfo.setValue(ZKUtil.getLabel(label, MESSAGE_PASSWORD_RULES));
         }
     }
@@ -183,7 +180,6 @@ public class PasswordChangeController extends GenericForwardComposer<Component> 
     private void showMessage(String text, Object... args) {
         text = StrUtil.formatMessage(text, args);
         lblMessage.setValue(text);
-        tbMessage.setVisible(!StringUtils.isEmpty(text));
     }
     
     /**

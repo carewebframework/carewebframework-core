@@ -286,7 +286,7 @@ public class LoginPaneController extends GenericForwardComposer<Component> {
      */
     private void showMessage(final String text) {
         lblMessage.setValue(text);
-        lblMessage.setVisible(!StringUtils.isEmpty(text));
+        lblMessage.getParent().setVisible(!StringUtils.isEmpty(text));
     }
     
     /**
