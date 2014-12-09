@@ -167,6 +167,8 @@
 	</component>
 	<component>
 		<component-name>window</component-name>
+		<component-class>org.carewebframework.ui.zk.WindowEx
+		</component-class>
 		<extends>window</extends>
 		<widget-class>cwf.ext.Window</widget-class>
 		<mold>

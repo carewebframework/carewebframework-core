@@ -12,8 +12,6 @@ cwf.ext.Window = zk.$extends(zul.wnd.Window, {
 	
 	$define: {
 		minimized: function (minimized, fromServer) {
-			this.setVisible(true);
-			
 			if (this._maximized)
 				this.setMaximized(false);
 

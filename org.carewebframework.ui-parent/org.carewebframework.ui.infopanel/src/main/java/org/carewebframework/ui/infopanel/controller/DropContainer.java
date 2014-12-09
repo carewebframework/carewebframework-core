@@ -16,18 +16,18 @@ import org.carewebframework.ui.infopanel.model.IInfoPanel.Action;
 import org.carewebframework.ui.infopanel.service.InfoPanelService;
 import org.carewebframework.ui.zk.DropUtil;
 import org.carewebframework.ui.zk.IDropRenderer;
+import org.carewebframework.ui.zk.WindowEx;
 import org.carewebframework.ui.zk.ZKUtil;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.DropEvent;
 import org.zkoss.zk.ui.event.MinimizeEvent;
 import org.zkoss.zk.ui.util.Clients;
-import org.zkoss.zul.Window;
 
 /**
  * Container for receiving components rendered by drop renderer.
  */
-public class DropContainer extends Window implements IActionTarget {
+public class DropContainer extends WindowEx implements IActionTarget {
     
     private static final long serialVersionUID = 1L;
     
