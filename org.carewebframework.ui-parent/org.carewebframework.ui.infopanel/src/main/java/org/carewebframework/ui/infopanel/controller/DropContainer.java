@@ -116,16 +116,27 @@ public class DropContainer extends Window implements IActionTarget {
             
             case COLLAPSE:
                 setMinimized(true);
+                setCollapsed(true);
                 break;
             
             case EXPAND:
                 setMinimized(false);
+                setCollapsed(false);
                 break;
             
             case TOP:
                 moveToTop();
                 break;
         }
+    }
+    
+    /**
+     * Collapse/expand content.
+     * 
+     * @param collapsed If true, hide content.
+     */
+    private void setCollapsed(boolean collapsed) {
+        getFellow("container").setVisible(!collapsed);
     }
     
     /**
@@ -161,7 +172,7 @@ public class DropContainer extends Window implements IActionTarget {
     }
     
     public void onMinimize(MinimizeEvent event) {
-        getFellow("container").setVisible(!event.isMinimized());
+        setCollapsed(event.isMinimized());
     }
     
     @Override

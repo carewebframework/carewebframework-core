@@ -12,6 +12,8 @@ cwf.ext.Window = zk.$extends(zul.wnd.Window, {
 	
 	$define: {
 		minimized: function (minimized, fromServer) {
+			this.setVisible(true);
+			
 			if (this._maximized)
 				this.setMaximized(false);
 
@@ -25,8 +27,8 @@ cwf.ext.Window = zk.$extends(zul.wnd.Window, {
 				} else {
 					min.children('.' + up).removeClass(up).addClass(down);
 				}
+				
 				if (!fromServer) {
-					this._visible = false;
 					this.zsync();
 					var s = this.$n().style,
 						p = this._getPosByParent(this, s.left, s.top); 
