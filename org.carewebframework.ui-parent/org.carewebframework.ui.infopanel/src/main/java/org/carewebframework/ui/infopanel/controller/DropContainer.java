@@ -16,18 +16,17 @@ import org.carewebframework.ui.infopanel.model.IInfoPanel.Action;
 import org.carewebframework.ui.infopanel.service.InfoPanelService;
 import org.carewebframework.ui.zk.DropUtil;
 import org.carewebframework.ui.zk.IDropRenderer;
-import org.carewebframework.ui.zk.WindowEx;
 import org.carewebframework.ui.zk.ZKUtil;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.DropEvent;
-import org.zkoss.zk.ui.event.MinimizeEvent;
 import org.zkoss.zk.ui.util.Clients;
+import org.zkoss.zul.Panel;
 
 /**
  * Container for receiving components rendered by drop renderer.
  */
-public class DropContainer extends WindowEx implements IActionTarget {
+public class DropContainer extends Panel implements IActionTarget {
     
     private static final long serialVersionUID = 1L;
     
@@ -88,7 +87,7 @@ public class DropContainer extends WindowEx implements IActionTarget {
         dc.setTitle(title);
         dc.setDroppable(SCLASS);
         dc.setDraggable(SCLASS);
-        dc.getFellow("container").appendChild(cmpt);
+        dc.getPanelchildren().appendChild(cmpt);
         dc.moveToTop(dropRoot);
         ActionListener.bindActionListeners(dc, actionListeners);
         return dc;
@@ -115,28 +114,17 @@ public class DropContainer extends WindowEx implements IActionTarget {
                 break;
             
             case COLLAPSE:
-                setMinimized(true);
-                setCollapsed(true);
+                setOpen(false);
                 break;
             
             case EXPAND:
-                setMinimized(false);
-                setCollapsed(false);
+                setOpen(true);
                 break;
             
             case TOP:
                 moveToTop();
                 break;
         }
-    }
-    
-    /**
-     * Collapse/expand content.
-     * 
-     * @param collapsed If true, hide content.
-     */
-    private void setCollapsed(boolean collapsed) {
-        getFellow("container").setVisible(!collapsed);
     }
     
     /**
@@ -169,10 +157,6 @@ public class DropContainer extends WindowEx implements IActionTarget {
         if (dragged instanceof DropContainer) {
             getParent().insertBefore(dragged, this);
         }
-    }
-    
-    public void onMinimize(MinimizeEvent event) {
-        setCollapsed(event.isMinimized());
     }
     
     @Override

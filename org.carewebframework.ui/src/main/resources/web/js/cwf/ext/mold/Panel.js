@@ -10,21 +10,30 @@ function (out, skipper) {
 		out.push('<span id="', uuid, '-', type, '" class="panel-icon"><span class="glyphicon ', icon, '" /></span>')
 	};
 	
+	function genTbar(type, tbar) {
+		if (tbar) {
+			out.push('<div id="', uuid, '-', type, '" class="panel-footer" style="padding:0;">');
+			tbar.redraw(out);
+			out.push('</div>');
+		}
+	};
+	
 	var uuid = this.uuid,
 		title = this.getTitle(),
 		caption = this.caption,
 		sclass = this.getSclass() || 'panel-primary',
-		contentStyle = this.getContentStyle(),
-		contentSclass = this.getContentSclass(),
+		pc = this.panelchildren,
 		iconPanel;
 
 	this._closableIconClass = 'glyphicon-remove';
 	this._maximizableIconClass = 'glyphicon-resize-full';
 	this._maximizedIconClass = 'glyphicon-resize-small';
 	this._minimizableIconClass = 'glyphicon-minus';
+	this._collapseOpenIconClass = 'glyphicon-chevron-up';
+	this._collapseCloseIconClass = 'glyphicon-chevron-down';
 	
 	out.push('<div class="panel ', sclass, '" ', this.domAttrs_({domClass:1}), '>');
-	
+
 	if (caption || title) {
 		out.push('<div id="', uuid, '-cap" class="panel-heading">');
 		
@@ -52,6 +61,11 @@ function (out, skipper) {
 			}
 		}
 		
+		if (this._collapsible) {
+			genIcon('exp', this._open ? this._collapseOpenIconClass:
+				this._collapseCloseIconClass);
+		}
+		
 		if (this._minimizable) {
 			genIcon('min', this._minimizableIconClass);
 		}
@@ -76,22 +90,35 @@ function (out, skipper) {
 		out.push('</div>');
 	} 
 	
-	out.push('<div id="', uuid, '-cave" class="');
+	out.push('<div id="', uuid, '-body" class="panel-content"');
 	
-	if (contentSclass)
-		out.push(contentSclass, ' ');
-	
-	out.push('panel-content" ');
-	
-	if (contentStyle)
-		out.push(' style="', contentStyle, '"');
+	if (!this._open) 
+		out.push(' style="display:none;"');
 	
 	out.push('>');
-
-	if (!skipper)
-		for (var w = this.firstChild; w; w = w.nextSibling)
-			if (w != caption)
-				w.redraw(out);
 	
-	out.push('</div></div>');
+	if (!skipper) {
+		genTbar('tb', this.tbar);
+		
+		if (pc) {
+			out.push('<div class="panel-body');
+			var sc = pc.getSclass();
+			
+			if (sc) {
+				out.push(' ', sc);
+			}
+			
+			out.push('" ', this.domAttrs_({domClass:1}), '>');
+			
+			for (var w = pc.firstChild; w; w = w.nextSibling)
+				w.redraw(out);
+			
+			out.push('</div>');
+		}
+			
+		genTbar('bb', this.bbar);
+		genTbar('fb', this.fbar);
+	}
+	
+	out.push('</div>');
 }

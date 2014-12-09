@@ -178,4 +178,17 @@
 			<mold-uri>/js/cwf/ext/mold/Window.js</mold-uri>
 		</mold>
 	</component>
+	<component>
+		<component-name>panel</component-name>
+		<extends>panel</extends>
+		<widget-class>cwf.ext.Panel</widget-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>/js/zul/wnd/mold/panel.js</mold-uri>
+		</mold>
+		<mold>
+			<mold-name>bootstrap</mold-name>
+			<mold-uri>/js/cwf/ext/mold/Panel.js</mold-uri>
+		</mold>
+	</component>
 </language-addon>

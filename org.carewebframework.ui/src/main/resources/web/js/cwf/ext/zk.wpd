@@ -8,4 +8,5 @@
 	<widget name="MessageWindow"/>
 	<widget name="MenuEx"/>
 	<widget name="Window"/>
+	<widget name="Panel"/>
 </package>
