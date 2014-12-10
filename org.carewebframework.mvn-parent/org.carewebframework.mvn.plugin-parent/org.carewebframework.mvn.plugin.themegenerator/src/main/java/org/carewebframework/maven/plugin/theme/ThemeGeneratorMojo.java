@@ -51,7 +51,7 @@ import org.codehaus.plexus.util.FileUtils;
 
 /**
  * <p>
- * Goal which produces CareWeb theme modules from selected source jars.
+ * Goal which produces CareWeb theme modules from selected source jars or from source stylesheets.
  * </p>
  * 
  * <pre>
@@ -68,8 +68,8 @@ import org.codehaus.plexus.util.FileUtils;
  *                             <baseColor>003300</baseColor>
  *                         </theme>
  *                         <theme>
- *                             <themeName>lilac</themeName>
- *                             <baseColor>3e48ac</baseColor>
+ *                              <themeName>cerulean</themeName>
+ *                              <themeUri>src/main/themes/cerulean/bootstrap.min.css</themeUri>
  *                         </theme>
  *                     </themes>
  *                 </configuration>
