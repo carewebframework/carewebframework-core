@@ -380,8 +380,10 @@ public class ThemeGeneratorMojo extends BaseMojo {
         for (ThemeGeneratorBase gen : themeGenerators) {
             if (gen instanceof ThemeGeneratorCSS) {
                 Theme theme = gen.getTheme();
+                String mapper = theme.getCSSMapper();
                 File file = new File(mavenProject.getBasedir(), theme.getThemeUri());
-                IThemeResource resource = new ThemeResourceCSS(file);
+                File map = mapper == null ? null : new File(mavenProject.getBasedir(), mapper);
+                IThemeResource resource = new ThemeResourceCSS(file, map);
                 wasProcessed = gen.process(resource) || wasProcessed;
             }
         }

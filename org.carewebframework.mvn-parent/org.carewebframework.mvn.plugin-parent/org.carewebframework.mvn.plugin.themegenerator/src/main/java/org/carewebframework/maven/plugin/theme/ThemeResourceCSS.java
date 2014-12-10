@@ -21,11 +21,18 @@ public class ThemeResourceCSS implements IThemeResource {
     
     private final File file;
     
-    public ThemeResourceCSS(File file) {
+    private final File mapper;
+    
+    public ThemeResourceCSS(File file, File mapper) {
         this.file = file;
+        this.mapper = mapper;
         
         if (!file.exists()) {
             throw new RuntimeException("Failed to find CSS resource: " + file);
+        }
+        
+        if (mapper != null && !mapper.exists()) {
+            throw new RuntimeException("Failed to find mapper file: " + mapper);
         }
     }
     
@@ -44,4 +51,7 @@ public class ThemeResourceCSS implements IThemeResource {
         return file.lastModified();
     }
     
+    public File getMapper() {
+        return mapper;
+    }
 }

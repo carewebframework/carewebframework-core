@@ -22,6 +22,8 @@ public class Theme {
     
     private String themeUri;
     
+    private String cssMapper;
+    
     /**
      * @return The theme name.
      */
@@ -41,6 +43,13 @@ public class Theme {
      */
     public String getThemeUri() {
         return themeUri;
+    }
+    
+    /**
+     * @return The style mapper control file.
+     */
+    public String getCSSMapper() {
+        return cssMapper;
     }
     
     /**
