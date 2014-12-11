@@ -22,34 +22,19 @@ function (out, skipper) {
 	this._maximizableIconClass = 'glyphicon-resize-full';
 	this._maximizedIconClass = 'glyphicon-resize-small';
 	this._minimizableIconClass = 'glyphicon-minus';
+	this._default = true;
 	
 	out.push('<div class="panel ', sclass, '" ', this.domAttrs_({domClass:1}), '>');
 	
 	if (caption || title) {
-		out.push('<div id="', uuid, '-cap" class="panel-heading">');
+		out.push('<div id="', uuid, '-head" class="panel-heading">');
+		out.push('<div id="', uuid, '-cap" class="panel-caption">');
 		
 		if (caption) {
-			var vis = caption.isVisible(),
-				title2 = vis ? caption.getLabel() : null;
-			
-			if (title2) {
-				if (title) {
-					title += ' - ' + title2;
-				} else {
-					title = title2;
-				}
-			}
-			
-			var w = caption.firstChild;
-			
-			if (w) {
-				out.push('<div class="panel-caption ', caption.getSclass(), '" ', caption.domAttrs_({domClass:1}), '>');
-	
-				for (; w; w = w.nextSibling)
-					w.redraw(out);
-				
-				out.push('</div>');
-			}
+			caption._zclass = "panel-title";
+			caption.redraw(out);
+		} else {
+			out.push('<span class="panel-title">', zUtl.encodeXML(title), '</span>');
 		}
 		
 		if (this._minimizable) {
@@ -69,11 +54,7 @@ function (out, skipper) {
 			out.push('</span>');
 		}
 		
-		if (title) {
-			out.push('<span class="panel-title">', zUtl.encodeXML(title), '</span>');
-		}
-		
-		out.push('</div>');
+		out.push('</div></div>');
 	} 
 	
 	out.push('<div id="', uuid, '-cave" class="');

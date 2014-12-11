@@ -210,6 +210,11 @@ public class DesignContextMenu extends Menupopup implements IdSpace {
             Component ref = ((OpenEvent) event).getReference();
             setOwner(UIElementZKBase.getAssociatedUIElement(ref));
         }
+        
+        if (owner == null) {
+            event.stopPropagation();
+            this.close();
+        }
     }
     
     /**

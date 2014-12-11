@@ -1,84 +1,84 @@
 <?taglib uri="http://www.carewebframework.org/tld/core" prefix="rc"?>
 
 <zk>
-	<window width="500px" height="500px" position="center" mold="bootstrap" 
+	<window width="500px" position="center" mold="bootstrap" 
 		title="${labels.cwf.shell.designer.layout.designer.caption}"
 		use="org.carewebframework.shell.designer.LayoutDesigner">
 		<div zclass="panel-footer">
 			<div zclass="btn-toolbar" align="end">
 				<div zclass="btn-group btn-group-xs">
-					<button id="btnCut" zclass="btn" sclass="btn-link"
+					<toolbarbutton id="btnCut" zclass="btn" sclass="btn-link"
 						tooltiptext="${labels.cwf.shell.designer.layout.designer.cut.hint}"
 						style="background:transparent"
 						image="${rc:getIconPath('carewebframework:16x16:cut.png')}" />
-					<button id="btnCopy" zclass="btn" sclass="btn-link"
+					<toolbarbutton id="btnCopy" zclass="btn" sclass="btn-link"
 						tooltiptext="${labels.cwf.shell.designer.layout.designer.copy.hint}"
 						style="background:transparent"
 						image="${rc:getIconPath('carewebframework:16x16:copy.png')}" />
-					<button id="btnPaste" zclass="btn" sclass="btn-link"
+					<toolbarbutton id="btnPaste" zclass="btn" sclass="btn-link"
 						tooltiptext="${labels.cwf.shell.designer.layout.designer.paste.hint}"
 						style="background:transparent"
 						image="${rc:getIconPath('carewebframework:16x16:paste.png')}" />
-					<button id="btnView" zclass="btn" sclass="btn-link"
+					<toolbarbutton id="btnView" zclass="btn" sclass="btn-link"
 						tooltiptext="${labels.cwf.shell.designer.layout.designer.view.hint}"
 						style="background:transparent"
 						image="${rc:getIconPath('carewebframework:16x16:view.png')}" />
 				</div>
 				<div zclass="btn-group btn-group-xs">
-					<button id="btnAdd" zclass="btn" sclass="btn-link"
+					<toolbarbutton id="btnAdd" zclass="btn" sclass="btn-link"
 						tooltiptext="${labels.cwf.shell.designer.layout.designer.add.hint}"
 						style="background:transparent"
 						image="${rc:getIconPath('carewebframework:16x16:add.png')}" />
-					<button id="btnDelete" zclass="btn" sclass="btn-link"
+					<toolbarbutton id="btnDelete" zclass="btn" sclass="btn-link"
 						tooltiptext="${labels.cwf.shell.designer.layout.designer.delete.hint}"
 						style="background:transparent"
 						image="${rc:getIconPath('carewebframework:16x16:delete.png')}" />
 				</div>
 				<div zclass="btn-group btn-group-xs">
-					<button id="btnUp" zclass="btn" sclass="btn-link"
+					<toolbarbutton id="btnUp" zclass="btn" sclass="btn-link"
 						tooltiptext="${labels.cwf.shell.designer.layout.designer.up.hint}"
 						style="background:transparent"
 						image="${rc:getIconPath('carewebframework:16x16:arrowU.png')}" />
-					<button id="btnDown" zclass="btn" sclass="btn-link"
+					<toolbarbutton id="btnDown" zclass="btn" sclass="btn-link"
 						tooltiptext="${labels.cwf.shell.designer.layout.designer.down.hint}"
 						style="background:transparent"
 						image="${rc:getIconPath('carewebframework:16x16:arrowD.png')}" />
-					<button id="btnLeft" zclass="btn" sclass="btn-link"
+					<toolbarbutton id="btnLeft" zclass="btn" sclass="btn-link"
 						tooltiptext="${labels.cwf.shell.designer.layout.designer.promote.hint}"
 						style="background:transparent"
 						image="${rc:getIconPath('carewebframework:16x16:arrowL.png')}" />
-					<button id="btnRight" zclass="btn" sclass="btn-link"
+					<toolbarbutton id="btnRight" zclass="btn" sclass="btn-link"
 						tooltiptext="${labels.cwf.shell.designer.layout.designer.demote.hint}"
 						style="background:transparent"
 						image="${rc:getIconPath('carewebframework:16x16:arrowR.png')}" />
 				</div>
 				<div zclass="btn-group btn-group-xs">
-					<button id="btnProperties" zclass="btn" sclass="btn-link"
+					<toolbarbutton id="btnProperties" zclass="btn" sclass="btn-link"
 						tooltiptext="${labels.cwf.shell.designer.layout.designer.properties.hint}"
 						style="background:transparent"
 						image="${rc:getIconPath('carewebframework:16x16:properties.png')}" />
-					<button id="btnAbout" zclass="btn" sclass="btn-link"
+					<toolbarbutton id="btnAbout" zclass="btn" sclass="btn-link"
 						tooltiptext="${labels.cwf.shell.designer.layout.designer.about.hint}"
 						style="background:transparent"
 						image="${rc:getIconPath('carewebframework:16x16:about.png')}" />
 				</div>
 				<div zclass="btn-group btn-group-xs">
-					<button id="btnToFront" zclass="btn" sclass="btn-link"
+					<toolbarbutton id="btnToFront" zclass="btn" sclass="btn-link"
 						tooltiptext="${labels.cwf.shell.designer.layout.designer.tofront.hint}"
 						style="background:transparent"
 						image="${rc:getIconPath('carewebframework:16x16:bringToFront.png')}" />
-					<button id="btnRefresh" zclass="btn" sclass="btn-link"
+					<toolbarbutton id="btnRefresh" zclass="btn" sclass="btn-link"
 						tooltiptext="${labels.cwf.shell.designer.layout.designer.refresh.hint}"
 						style="background:transparent"
 						image="${rc:getIconPath('carewebframework:16x16:refresh.png')}" />
 				</div>
 			</div>
 		</div>
-		<div zclass="panel-body" vflex="1">
-			<tree id="tree" vflex="true"
-				style="text-overflow:ellipsis;white-space:nowrap;overflow:auto;padding:15px">
-				<treechildren />
-			</tree>
+		<div zclass="panel-body" style="padding:5px" height="400px">
+				<tree id="tree" vflex="true"
+					style="text-overflow:ellipsis;white-space:nowrap;overflow:auto">
+					<treechildren />
+				</tree>
 		</div>
 	</window>
 </zk>

@@ -190,6 +190,10 @@
 	background-color: white;
 }
 
+.panel-caption>.panel-title {
+	display: inline-block;
+}
+
 .panel-content {
 	margin: 0;
 	padding: 0;
@@ -202,7 +206,7 @@
 
 .panel-icon {
 	cursor: pointer;
-	padding-left: 5px;
+	margin-left: 5px;
 	opacity: 0.7;
 }
 

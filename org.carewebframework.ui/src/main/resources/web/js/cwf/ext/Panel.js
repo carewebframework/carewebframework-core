@@ -10,7 +10,12 @@ cwf.ext.Panel = zk.$extends(zul.wnd.Panel, {
 	_minimizableIconClass: null,
 	_collapseOpenIconClass: null,
 	_collapseCloseIconClass: null,
+	_default: null,
 		
+	_isDefault: function() {
+		return this._default;
+	},
+	
 	getClosableIconClass_: function () {
 		return this._closableIconClass || this.$supers('getClosableIconClass_', arguments);
 	},

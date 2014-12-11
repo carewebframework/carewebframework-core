@@ -8,7 +8,12 @@ cwf.ext.Window = zk.$extends(zul.wnd.Window, {
 	_maximizableIconClass: null,
 	_maximizedIconClass: null,
 	_minimizableIconClass: null,
-		
+	_default: null,
+	
+	_isDefault: function() {
+		return this._default;
+	},
+	
 	getClosableIconClass_: function () {
 		return this._closableIconClass || this.$supers('getClosableIconClass_', arguments);
 	},

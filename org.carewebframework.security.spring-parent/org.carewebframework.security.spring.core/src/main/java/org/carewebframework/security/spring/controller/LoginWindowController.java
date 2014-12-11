@@ -93,8 +93,9 @@ public class LoginWindowController extends GenericForwardComposer<Component> {
      */
     @SuppressWarnings("deprecation")
     @Override
-    public void doAfterCompose(final Component comp) throws Exception {
+    public void doAfterCompose(Component comp) throws Exception {
         super.doAfterCompose(comp);
+        timer.setDelay(execution.getSession().getMaxInactiveInterval() * 500);
         savedRequest = (SavedRequest) session.removeAttribute(org.carewebframework.security.spring.Constants.SAVED_REQUEST);
         final AuthenticationException authError = (AuthenticationException) session
                 .removeAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);

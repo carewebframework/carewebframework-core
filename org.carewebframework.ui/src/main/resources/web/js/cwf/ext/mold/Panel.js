@@ -31,34 +31,19 @@ function (out, skipper) {
 	this._minimizableIconClass = 'glyphicon-minus';
 	this._collapseOpenIconClass = 'glyphicon-chevron-up';
 	this._collapseCloseIconClass = 'glyphicon-chevron-down';
+	this._default = true;
 	
 	out.push('<div class="panel ', sclass, '" ', this.domAttrs_({domClass:1}), '>');
 
 	if (caption || title) {
-		out.push('<div id="', uuid, '-cap" class="panel-heading">');
+		out.push('<div id="', uuid, '-head" class="panel-heading">');
+		out.push('<div id="', uuid, '-cap" class="panel-caption">');
 		
 		if (caption) {
-			var vis = caption.isVisible(),
-				title2 = vis ? caption.getLabel() : null;
-			
-			if (title2) {
-				if (title) {
-					title += ' - ' + title2;
-				} else {
-					title = title2;
-				}
-			}
-			
-			var w = caption.firstChild;
-			
-			if (w) {
-				out.push('<div class="panel-caption ', caption.getSclass(), '" ', caption.domAttrs_({domClass:1}), '>');
-	
-				for (; w; w = w.nextSibling)
-					w.redraw(out);
-				
-				out.push('</div>');
-			}
+			caption._zclass = "panel-title";
+			caption.redraw(out);
+		} else {
+			out.push('<span class="panel-title">', zUtl.encodeXML(title), '</span>');
 		}
 		
 		if (this._collapsible) {
@@ -83,17 +68,14 @@ function (out, skipper) {
 			out.push('</span>');
 		}
 		
-		if (title) {
-			out.push('<span class="panel-title">', zUtl.encodeXML(title), '</span>');
-		}
-		
-		out.push('</div>');
+		out.push('</div></div>');
 	} 
 	
 	out.push('<div id="', uuid, '-body" class="panel-content"');
 	
-	if (!this._open) 
+	if (!this._open) {
 		out.push(' style="display:none;"');
+	}
 	
 	out.push('>');
 	
@@ -101,19 +83,8 @@ function (out, skipper) {
 		genTbar('tb', this.tbar);
 		
 		if (pc) {
-			out.push('<div class="panel-body');
-			var sc = pc.getSclass();
-			
-			if (sc) {
-				out.push(' ', sc);
-			}
-			
-			out.push('" ', this.domAttrs_({domClass:1}), '>');
-			
-			for (var w = pc.firstChild; w; w = w.nextSibling)
-				w.redraw(out);
-			
-			out.push('</div>');
+			pc._zclass = "panel-body";
+			pc.redraw(out);
 		}
 			
 		genTbar('bb', this.bbar);

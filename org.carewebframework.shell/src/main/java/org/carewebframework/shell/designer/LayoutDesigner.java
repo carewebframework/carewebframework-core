@@ -185,7 +185,6 @@ public class LayoutDesigner extends Window implements AfterCompose {
         layoutChangedEvent = new LayoutChangedEvent(this, null);
         contextMenu.setParent(this);
         contextMenu.setListener(this);
-        setContext(contextMenu);
         clipboard.addListener(this);
         getDesktop().addListener(layoutListener);
     }
@@ -345,8 +344,14 @@ public class LayoutDesigner extends Window implements AfterCompose {
         btnUp.setDisabled(movementType(selectedItem, target, true) == MovementType.INVALID);
         target = selectedItem == null ? null : (Treeitem) selectedItem.getNextSibling();
         btnDown.setDisabled(movementType(selectedItem, target, true) == MovementType.INVALID);
-        contextMenu.setOwner(selectedElement);
         ZKUtil.updateStyle(btnToFront, "opacity", bringToFront ? null : "0.5");
+        
+        if (selectedElement == null) {
+            ZKUtil.suppressContextMenu(this);
+        } else {
+            setContext(contextMenu);
+            contextMenu.setOwner(selectedElement);
+        }
         
         if (selectedItem != null) {
             selectedItem.setSelected(false);
