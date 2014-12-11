@@ -34,12 +34,16 @@
 }
 
 .cwf-timeout-lock-panel {
-	margin-top: 40px;
 	text-align: center;
-	padding: 2px;
     width: 100%;
     height: 100%;
     display: none;
+}
+
+.cwf-timeout-lock-panel>div {
+	width: 50%;
+	min-width: 200px;
+	display: inline-block
 }
 
 .cwf-timeout-baseline-countdown,
