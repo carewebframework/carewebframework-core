@@ -91,5 +91,5 @@ function (out, skipper) {
 		genTbar('fb', this.fbar);
 	}
 	
-	out.push('</div>');
+	out.push('</div></div>');
 }
