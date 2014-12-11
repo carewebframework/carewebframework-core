@@ -12,7 +12,7 @@ package org.carewebframework.shell.layout;
 import org.carewebframework.shell.themes.ThemeUtil;
 import org.carewebframework.ui.zk.ZKUtil;
 
-import org.zkoss.zul.Button;
+import org.zkoss.zul.A;
 import org.zkoss.zul.impl.LabelImageElement;
 
 /**
@@ -31,7 +31,7 @@ public class UIElementButton extends UIElementActionBase {
     private ThemeUtil.ButtonStyle style;
     
     public UIElementButton() {
-        this(new Button(), ThemeUtil.ButtonSize.DEFAULT, ThemeUtil.ButtonStyle.DEFAULT);
+        this(new A(), ThemeUtil.ButtonSize.DEFAULT, ThemeUtil.ButtonStyle.DEFAULT);
     }
     
     public UIElementButton(LabelImageElement component, ThemeUtil.ButtonSize size, ThemeUtil.ButtonStyle style) {
