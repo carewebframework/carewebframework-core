@@ -27,8 +27,7 @@ function (out, skipper) {
 	out.push('<div class="panel ', sclass, '" ', this.domAttrs_({domClass:1}), '>');
 	
 	if (caption || title) {
-		out.push('<div id="', uuid, '-head" class="panel-heading">');
-		out.push('<div id="', uuid, '-cap" class="panel-caption">');
+		out.push('<div id="', uuid, '-cap" class="panel-heading panel-caption">');
 		
 		if (caption) {
 			caption._zclass = "panel-title";
@@ -54,7 +53,7 @@ function (out, skipper) {
 			out.push('</span>');
 		}
 		
-		out.push('</div></div>');
+		out.push('</div>');
 	} 
 	
 	out.push('<div id="', uuid, '-cave" class="');

@@ -191,7 +191,7 @@
 }
 
 .panel-caption>.panel-title {
-	display: inline-block;
+    display: inline-block;
 }
 
 .panel-content {
