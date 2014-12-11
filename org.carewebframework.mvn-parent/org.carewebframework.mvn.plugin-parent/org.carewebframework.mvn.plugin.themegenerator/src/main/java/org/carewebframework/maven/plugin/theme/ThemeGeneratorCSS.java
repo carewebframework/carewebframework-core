@@ -23,6 +23,7 @@ import org.apache.commons.io.LineIterator;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 
 import org.codehaus.plexus.util.FileUtils;
+import org.codehaus.plexus.util.StringUtils;
 
 /**
  * Generates a new theme directly from a CSS file.
@@ -47,17 +48,39 @@ class ThemeGeneratorCSS extends ThemeGeneratorBase {
             }
             InputStream in = new FileInputStream(mapper);
             LineIterator lines = IOUtils.lineIterator(in, "UTF-8");
+            String line = "";
             
             while (lines.hasNext()) {
-                String[] pcs = lines.nextLine().split("\\=", 2);
+                line += lines.nextLine();
                 
-                if (pcs.length == 2) {
-                    map.put(pcs[0], pcs[1]);
+                if (line.endsWith("\\")) {
+                    line = StringUtils.left(line, line.length() - 1);
+                } else {
+                    addMapEntry(line);
+                    line = "";
                 }
             }
             
+            addMapEntry(line);
             IOUtils.closeQuietly(in);
             super.process(resource);
+        }
+        
+        /**
+         * Parses and adds the entry to the map.
+         * 
+         * @param s String entry.
+         */
+        private void addMapEntry(String s) {
+            String[] pcs = s.split("\\=", 2);
+            
+            if (pcs.length == 2) {
+                if (map.containsKey(pcs[0])) {
+                    map.put(pcs[0], map.get(pcs[0]) + pcs[1]);
+                } else {
+                    map.put(pcs[0], pcs[1]);
+                }
+            }
         }
         
         @Override
