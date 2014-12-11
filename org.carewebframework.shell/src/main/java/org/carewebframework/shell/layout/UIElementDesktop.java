@@ -16,6 +16,7 @@ import org.carewebframework.shell.CareWebShell;
 import org.carewebframework.shell.designer.DesignConstants;
 import org.carewebframework.shell.designer.DesignMenu;
 import org.carewebframework.shell.plugins.PluginResourceHelp;
+import org.carewebframework.shell.themes.ThemeUtil;
 import org.carewebframework.ui.action.ActionListener;
 import org.carewebframework.ui.zk.MenuEx;
 import org.carewebframework.ui.zk.MenuUtil;
@@ -44,9 +45,9 @@ public class UIElementDesktop extends UIElementZKBase {
         registerAllowedChildClass(UIElementDesktop.class, UIElementBase.class);
     }
     
-    private final Component desktopOuter;
+    private final HtmlBasedComponent desktopOuter;
     
-    private Component desktopInner;
+    private HtmlBasedComponent desktopInner;
     
     private String appId;
     
@@ -80,6 +81,8 @@ public class UIElementDesktop extends UIElementZKBase {
     
     private boolean sortHelpMenu;
     
+    private ThemeUtil.PanelStyle style = ThemeUtil.PanelStyle.INFO;
+    
     private final UIElementMenubar menubar;
     
     private final UIElementToolbar toolbar;
@@ -90,7 +93,7 @@ public class UIElementDesktop extends UIElementZKBase {
         super();
         this.shell = shell;
         maxChildren = Integer.MAX_VALUE;
-        desktopOuter = createFromTemplate();
+        desktopOuter = (HtmlBasedComponent) createFromTemplate();
         setOuterComponent(desktopOuter);
         setInnerComponent(desktopInner);
         menubar = new UIElementMenubar(menubar1);
@@ -157,6 +160,25 @@ public class UIElementDesktop extends UIElementZKBase {
     public void setIcon(String url) {
         this.icon.setSrc(url);
         icon.getParent().setVisible(!StringUtils.isEmpty(url));
+    }
+    
+    /**
+     * Returns the panel style to use for the desktop.
+     * 
+     * @return The panel style.
+     */
+    public ThemeUtil.PanelStyle getStyle() {
+        return style;
+    }
+    
+    /**
+     * Sets the panel style to use for the desktop.
+     * 
+     * @param style The panel style.
+     */
+    public void setStyle(ThemeUtil.PanelStyle style) {
+        this.style = style;
+        desktopOuter.setSclass("cwf-desktop " + style.getThemeClass());
     }
     
     /**

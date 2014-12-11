@@ -53,6 +53,12 @@
 			class="org.carewebframework.shell.layout.UIElementDesktop" name="${labels.cwf.shell.plugin._desktop.name}"
 			description="${labels.cwf.shell.plugin._desktop.description}">
 			<cwp:serialization>
+				<cwp:property id="style"
+					name="${labels.cwf.shell.plugin._desktop.style.name}" description="${labels.cwf.shell.plugin._desktop.style.description}" type="enum">
+					<cwp:config>
+						<cwp:entry key="class">org.carewebframework.shell.themes.ThemeUtil$PanelStyle</cwp:entry>
+					</cwp:config>
+				</cwp:property>
 				<cwp:property id="icon" type="icon"
 					name="${labels.cwf.shell.plugin._desktop.icon.name}" description="${labels.cwf.shell.plugin._desktop.icon.description}" />
 				<cwp:property id="title"

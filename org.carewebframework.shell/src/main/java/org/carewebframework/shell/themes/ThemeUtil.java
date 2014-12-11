@@ -78,6 +78,23 @@ public class ThemeUtil {
     };
     
     /**
+     * Corresponds to Bootstrap panel style classes.
+     */
+    public enum PanelStyle implements IThemeClass {
+        DEFAULT, PRIMARY, SUCCESS, INFO, WARNING, DANGER;
+        
+        @Override
+        public String getThemeClass() {
+            return "panel-" + name().toLowerCase();
+        }
+        
+        @Override
+        public String toString() {
+            return name().toLowerCase();
+        }
+    };
+    
+    /**
      * Enforce static class.
      */
     private ThemeUtil() {

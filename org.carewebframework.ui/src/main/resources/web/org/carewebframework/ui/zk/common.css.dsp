@@ -186,8 +186,14 @@
 
 /* Bootstrap additions */
 
-.panel-primary>.panel-heading .z-menu-content {
-	background-color: white;
+.panel-primary>.panel-heading .z-menu-content * {
+	color: white;
+	text-shadow: none;
+}
+
+.panel-primary>.panel-heading .z-menu-content:hover, 
+.panel-primary>.panel-heading .z-menu-selected>.z-menu-content {
+	background: #286090;
 }
 
 .panel-caption>.panel-title {

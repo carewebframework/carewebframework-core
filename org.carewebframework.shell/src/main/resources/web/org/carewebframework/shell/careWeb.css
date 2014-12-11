@@ -4,8 +4,13 @@
 	Global stylesheet for CareWeb application.  Styles here will be applied to all components.
 */
 
+.cwf-desktop {
+	padding: 1px;
+}
+
+.cwf-desktop>.panel-heading,
 .cwf-desktop-heading {
-	padding: 2px;
+	padding: 0px;
 }
 
 .cwf-desktop .panel-heading * {
@@ -14,11 +19,11 @@
 
 .cwf-desktop-title {
  	max-width: 200px;
- 	margin-top: -2px;
+ 	margin: 0 5px 5px;
  }
 
 .cwf-desktop-title .panel-title {
- 	zoom: 85%;
+ 	font-size: 85%;
  }
 
 .cwf-desktop-notitle {
