@@ -1,7 +1,7 @@
 <?taglib uri="http://www.carewebframework.org/tld/core" prefix="rc"?>
 
 <zk>
-	<window width="500px" position="center" mold="bootstrap" 
+	<window width="500px" height="450px" position="center" mold="bootstrap" 
 		title="${labels.cwf.shell.designer.layout.designer.caption}"
 		use="org.carewebframework.shell.designer.LayoutDesigner">
 		<div zclass="panel-footer">
@@ -74,7 +74,7 @@
 				</div>
 			</div>
 		</div>
-		<div zclass="panel-body" style="padding:5px" height="400px">
+		<div zclass="panel-body" style="padding:5px" vflex="1">
 				<tree id="tree" vflex="true"
 					style="text-overflow:ellipsis;white-space:nowrap;overflow:auto">
 					<treechildren />

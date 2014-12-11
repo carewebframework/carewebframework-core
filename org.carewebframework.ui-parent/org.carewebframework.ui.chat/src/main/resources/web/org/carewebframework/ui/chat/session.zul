@@ -3,8 +3,8 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
 	
-	<window height="500px" width="500px" title="${arg.title}" visible="false"
-		apply="${chatSessionController}" position="center">
+	<window width="500px" height="500px" title="${arg.title}" visible="false"
+		apply="${chatSessionController}" position="center" mold="bootstrap">
 		<style src="~./org/carewebframework/ui/chat/chat.css" />
 		<hbox vflex="1" hflex="1">
 			<cell width="50%">
@@ -12,7 +12,8 @@
 					<caption label="${labels.chat.session.group.dialog.caption}" />
 					<div id="pnlDialog" vflex="1" sclass="chat-dialog" />
 					<toolbar align="end">
-						<button id="btnClearDialog" label="${labels.chat.session.button.clear.dialog.label}" />
+						<button id="btnClearDialog" zclass="btn" sclass="btn-default btn-sm"
+							label="${labels.chat.session.button.clear.dialog.label}" />
 					</toolbar>
 				</groupbox>
 			</cell>
@@ -24,8 +25,10 @@
 							<caption label="${labels.chat.session.group.participants.caption}" />
 							<listbox id="lstParticipants" vflex="1" style="border:none" />
 							<toolbar align="end">
-								<button id="btnRefresh" label="${labels.chat.session.button.refresh.label}" />
-								<button id="btnInvite" label="${labels.chat.session.button.invite.label}" />
+								<button id="btnRefresh" zclass="btn" sclass="btn-default btn-sm"
+									label="${labels.chat.session.button.refresh.label}" />
+								<button id="btnInvite" zclass="btn" sclass="btn-default btn-sm"
+									label="${labels.chat.session.button.invite.label}" />
 							</toolbar>
 						</groupbox>
 					</cell>
@@ -34,8 +37,10 @@
 							<caption label="${labels.chat.session.group.message.caption}" />
 							<textbox id="txtMessage" vflex="1" width="100%" multiline="true" style="border:none"/>
 							<toolbar align="end">
-								<button id="btnClearMessage" label="${labels.chat.session.button.clear.message.label}" />
-								<button id="btnSendMessage" label="${labels.chat.session.button.send.message.label}" />
+								<button id="btnClearMessage" zclass="btn" sclass="btn-default btn-sm"
+									label="${labels.chat.session.button.clear.message.label}" />
+								<button id="btnSendMessage" zclass="btn" sclass="btn-default btn-sm"
+									label="${labels.chat.session.button.send.message.label}" />
 							</toolbar>
 						</groupbox>
 					</cell>

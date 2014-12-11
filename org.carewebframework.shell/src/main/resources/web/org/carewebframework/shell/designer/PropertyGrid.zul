@@ -3,9 +3,9 @@
 	xmlns:h="http://www.w3.org/1999/xhtml"
 	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd ">
 
-	<window width="400px" mold="bootstrap"
+	<window width="400px" height="500px" mold="bootstrap"
 		use="org.carewebframework.shell.designer.PropertyGrid">
-		<splitterview horizontal="false" height="400px">
+		<splitterview horizontal="false" vflex="1">
 			<splitterpane relativeSize="75">
 				<grid id="gridProperties" width="100%" vflex="true"
 					sclass="cwf-propertygrid-grid">
