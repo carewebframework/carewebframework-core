@@ -10,8 +10,10 @@
 package org.carewebframework.shell.layout;
 
 import org.carewebframework.shell.themes.ThemeUtil;
+import org.carewebframework.ui.zk.ZKUtil;
 
 import org.zkoss.zul.Button;
+import org.zkoss.zul.impl.LabelImageElement;
 
 /**
  * Simple button stock object.
@@ -22,20 +24,26 @@ public class UIElementButton extends UIElementActionBase {
         registerAllowedParentClass(UIElementButton.class, UIElementBase.class);
     }
     
-    private final Button button = new Button();
+    private final LabelImageElement component;
     
-    private ThemeUtil.ButtonSize size = ThemeUtil.ButtonSize.DEFAULT;
+    private ThemeUtil.ButtonSize size;
     
-    private ThemeUtil.ButtonStyle style = ThemeUtil.ButtonStyle.DEFAULT;
+    private ThemeUtil.ButtonStyle style;
     
     public UIElementButton() {
-        super();
-        setOuterComponent(button);
+        this(new Button(), ThemeUtil.ButtonSize.DEFAULT, ThemeUtil.ButtonStyle.DEFAULT);
+    }
+    
+    public UIElementButton(LabelImageElement component, ThemeUtil.ButtonSize size, ThemeUtil.ButtonStyle style) {
+        this.component = component;
+        this.size = size;
+        this.style = style;
+        setOuterComponent(component);
         updateStyle();
     }
     
     private void updateStyle() {
-        ThemeUtil.applyThemeClass(button, "btn", style, size);
+        ThemeUtil.applyThemeClass(component, "btn", style, size);
     }
     
     @Override
@@ -49,7 +57,7 @@ public class UIElementButton extends UIElementActionBase {
      * @return The label text.
      */
     public String getLabel() {
-        return button.getLabel();
+        return component.getLabel();
     }
     
     /**
@@ -58,7 +66,7 @@ public class UIElementButton extends UIElementActionBase {
      * @param value The label text.
      */
     public void setLabel(String value) {
-        button.setLabel(value);
+        component.setLabel(value);
     }
     
     /**
@@ -67,8 +75,8 @@ public class UIElementButton extends UIElementActionBase {
      * @param url Icon URL.
      */
     public void setIcon(String url) {
-        button.setImage(url);
-        button.invalidate();
+        component.setImage(url);
+        component.invalidate();
     }
     
     /**
@@ -77,7 +85,7 @@ public class UIElementButton extends UIElementActionBase {
      * @return Icon URL.
      */
     public String getIcon() {
-        return button.getImage();
+        return component.getImage();
     }
     
     public ThemeUtil.ButtonSize getSize() {
@@ -96,6 +104,11 @@ public class UIElementButton extends UIElementActionBase {
     public void setStyle(ThemeUtil.ButtonStyle style) {
         this.style = style;
         updateStyle();
+    }
+    
+    @Override
+    protected void applyColor() {
+        ZKUtil.updateStyle(component, "color", getColor());
     }
     
 }

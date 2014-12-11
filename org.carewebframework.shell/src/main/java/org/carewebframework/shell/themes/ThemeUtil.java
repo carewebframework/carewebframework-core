@@ -20,7 +20,11 @@ public class ThemeUtil {
      * @param themeClasses A list of theme classes to apply.
      */
     public static void applyThemeClass(HtmlBasedComponent component, String baseClass, IThemeClass... themeClasses) {
-        StringBuilder sb = baseClass == null ? new StringBuilder() : new StringBuilder(baseClass);
+        StringBuilder sb = new StringBuilder();
+        
+        if (baseClass != null) {
+            component.setZclass(baseClass);
+        }
         
         for (IThemeClass themeClass : themeClasses) {
             String cls = themeClass == null ? null : themeClass.getThemeClass();

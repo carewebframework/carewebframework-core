@@ -343,6 +343,12 @@
 					name="${labels.cwf.shell.plugin.link.icon.name}" description="${labels.cwf.shell.plugin.link.icon.description}" />
 				<cwp:property id="hint" name="${labels.cwf.shell.plugin.link.hint.name}"
 					description="${labels.cwf.shell.plugin.link.hint.description}" />
+				<cwp:property id="size"
+					name="${labels.cwf.shell.plugin.link.size.name}" description="${labels.cwf.shell.plugin.link.size.description}" type="enum">
+					<cwp:config>
+						<cwp:entry key="class">org.carewebframework.shell.themes.ThemeUtil$ButtonSize</cwp:entry>
+					</cwp:config>
+				</cwp:property>
 				<cwp:property id="action" type="action"
 					name="${labels.cwf.shell.plugin.link.action.name}" description="${labels.cwf.shell.plugin.link.action.description}" />
 			</cwp:serialization>
