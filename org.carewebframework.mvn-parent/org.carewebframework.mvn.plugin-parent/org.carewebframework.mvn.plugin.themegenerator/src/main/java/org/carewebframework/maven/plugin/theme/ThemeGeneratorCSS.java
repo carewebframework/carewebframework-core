@@ -12,15 +12,17 @@ package org.carewebframework.maven.plugin.theme;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.LineIterator;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
+import org.apache.maven.plugin.logging.Log;
 
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.StringUtils;
@@ -35,7 +37,9 @@ class ThemeGeneratorCSS extends ThemeGeneratorBase {
      */
     protected class CSSProcessor extends ResourceProcessor {
         
-        private final Map<String, String> map = new HashMap<String, String>();
+        private static final String DELIM = "|";
+        
+        private final Map<String, String> srcMap = new HashMap<String, String>();
         
         @Override
         protected void process(IThemeResource resource) throws Exception {
@@ -75,10 +79,10 @@ class ThemeGeneratorCSS extends ThemeGeneratorBase {
             String[] pcs = s.split("\\=", 2);
             
             if (pcs.length == 2) {
-                if (map.containsKey(pcs[0])) {
-                    map.put(pcs[0], map.get(pcs[0]) + pcs[1]);
+                if (srcMap.containsKey(pcs[0])) {
+                    srcMap.put(pcs[0], srcMap.get(pcs[0]) + pcs[1]);
                 } else {
-                    map.put(pcs[0], pcs[1]);
+                    srcMap.put(pcs[0], pcs[1]);
                 }
             }
         }
@@ -87,9 +91,9 @@ class ThemeGeneratorCSS extends ThemeGeneratorBase {
         protected void process() throws Exception {
             int c = 0;
             int state = 0;
-            List<String> list = new ArrayList<String>();
             StringBuilder sb = new StringBuilder();
-            List<String> templates = new ArrayList<String>();
+            Set<String> matches = new HashSet<String>();
+            Map<String, String> refMap = new LinkedHashMap<String, String>();
             Map<String, String> styles = new HashMap<String, String>();
             String prop = null;
             
@@ -104,16 +108,22 @@ class ThemeGeneratorCSS extends ThemeGeneratorBase {
                 
                 switch (state) {
                     case -1: // Process template
-                        for (String template : templates) {
+                        for (String match : matches) {
+                            String template = refMap.get(match);
+                            
+                            if (!template.contains(DELIM)) {
+                                continue;
+                            }
+                            
                             for (Entry<String, String> entry : styles.entrySet()) {
-                                String replace = '|' + entry.getKey() + '|';
+                                String replace = DELIM + entry.getKey() + DELIM;
                                 template = template.replace(replace, entry.getValue());
                             }
                             
-                            list.add(template);
+                            refMap.put(match, template);
                         }
                         
-                        templates.clear();
+                        matches.clear();
                         styles.clear();
                         
                         if (c == -1) {
@@ -149,8 +159,12 @@ class ThemeGeneratorCSS extends ThemeGeneratorBase {
                         String sel = sb.toString().trim();
                         sb.setLength(0);
                         
-                        if (map.containsKey(sel)) {
-                            templates.add(map.get(sel));
+                        if (srcMap.containsKey(sel)) {
+                            matches.add(sel);
+                            refMap.put(sel, srcMap.get(sel));
+                            srcMap.remove(sel);
+                        } else if (refMap.containsKey(sel)) {
+                            matches.add(sel);
                         }
                         
                         break;
@@ -207,7 +221,11 @@ class ThemeGeneratorCSS extends ThemeGeneratorBase {
                 
             }
             
-            for (String line : list) {
+            for (String line : refMap.values()) {
+                if (line.contains(DELIM)) {
+                    log.warn("Output contains unresolved reference: " + line);
+                }
+                
                 outputStream.write(line.getBytes());
             }
         }
@@ -217,11 +235,13 @@ class ThemeGeneratorCSS extends ThemeGeneratorBase {
      * @param theme The theme.
      * @param buildDirectory - Scratch build directory
      * @param exclusionFilters - WildcardFileFilter (i.e. exclude certain files)
+     * @param log The logger
      * @throws Exception if error occurs initializing generator
      */
-    public ThemeGeneratorCSS(Theme theme, File buildDirectory, WildcardFileFilter exclusionFilters) throws Exception {
+    public ThemeGeneratorCSS(Theme theme, File buildDirectory, WildcardFileFilter exclusionFilters, Log log)
+        throws Exception {
         
-        super(theme, buildDirectory, exclusionFilters);
+        super(theme, buildDirectory, exclusionFilters, log);
     }
     
     @Override

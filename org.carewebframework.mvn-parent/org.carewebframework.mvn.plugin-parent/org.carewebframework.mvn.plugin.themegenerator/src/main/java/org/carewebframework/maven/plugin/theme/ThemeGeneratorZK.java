@@ -28,6 +28,7 @@ import javax.imageio.ImageIO;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
+import org.apache.maven.plugin.logging.Log;
 import org.apache.sanselan.ImageFormat;
 import org.apache.sanselan.Sanselan;
 
@@ -125,11 +126,12 @@ class ThemeGeneratorZK extends ThemeGeneratorBase {
      * @param theme The theme.
      * @param buildDirectory - Scratch build directory
      * @param exclusionFilters - WildcardFileFilter (i.e. exclude certain files)
+     * @param log The logger
      * @throws Exception if error occurs initializing generator
      */
-    public ThemeGeneratorZK(Theme theme, File buildDirectory, WildcardFileFilter exclusionFilters) throws Exception {
+    public ThemeGeneratorZK(Theme theme, File buildDirectory, WildcardFileFilter exclusionFilters, Log log) throws Exception {
         
-        super(theme, buildDirectory, exclusionFilters);
+        super(theme, buildDirectory, exclusionFilters, log);
         color = toColor(theme.getBaseColor());
         hueFilter = new HueFilter(color);
     }

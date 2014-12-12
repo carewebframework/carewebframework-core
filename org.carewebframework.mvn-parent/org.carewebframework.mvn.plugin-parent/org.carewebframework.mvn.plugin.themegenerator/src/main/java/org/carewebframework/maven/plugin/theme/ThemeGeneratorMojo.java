@@ -305,9 +305,9 @@ public class ThemeGeneratorMojo extends BaseMojo {
             ThemeGeneratorBase themeGenerator;
             
             if (theme.getBaseColor() != null) {
-                themeGenerator = new ThemeGeneratorZK(theme, buildDirectory, new WildcardFileFilter(exclusions));
+                themeGenerator = new ThemeGeneratorZK(theme, buildDirectory, new WildcardFileFilter(exclusions), getLog());
             } else {
-                themeGenerator = new ThemeGeneratorCSS(theme, buildDirectory, new WildcardFileFilter(exclusions));
+                themeGenerator = new ThemeGeneratorCSS(theme, buildDirectory, new WildcardFileFilter(exclusions), getLog());
             }
             
             themeGenerators.add(themeGenerator);

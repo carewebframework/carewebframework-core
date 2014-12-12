@@ -22,6 +22,7 @@ import java.util.regex.Pattern;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.commons.lang.StringUtils;
+import org.apache.maven.plugin.logging.Log;
 
 /**
  * Generates a new theme from a base theme by using specialized processors to transform individual
@@ -67,6 +68,8 @@ public abstract class ThemeGeneratorBase {
     
     private final WildcardFileFilter exclusionFilters;
     
+    protected final Log log;
+    
     private final String rootPath;
     
     private final Theme theme;
@@ -77,11 +80,12 @@ public abstract class ThemeGeneratorBase {
     
     /**
      * @param theme The theme.
-     * @param buildDirectory - Scratch build directory
-     * @param exclusionFilters - WildcardFileFilter (i.e. exclude certain files)
+     * @param buildDirectory Scratch build directory
+     * @param exclusionFilters WildcardFileFilter (i.e. exclude certain files)
+     * @param log The logger
      * @throws Exception if error occurs initializing generator
      */
-    public ThemeGeneratorBase(Theme theme, final File buildDirectory, final WildcardFileFilter exclusionFilters)
+    public ThemeGeneratorBase(Theme theme, File buildDirectory, WildcardFileFilter exclusionFilters, Log log)
         throws Exception {
         if (theme == null || theme.getThemeName() == null || !theme.getThemeName().matches(THEME_NAME_REGEX)) {
             throw new Exception(
@@ -92,6 +96,7 @@ public abstract class ThemeGeneratorBase {
         this.theme = theme;
         this.buildDirectory = buildDirectory;
         this.rootPath = getRootPath() + theme.getThemeName();
+        this.log = log;
         registerProcessors(processors);
     }
     
