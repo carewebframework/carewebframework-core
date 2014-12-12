@@ -24,7 +24,7 @@ function (out, skipper) {
 	this._minimizableIconClass = 'glyphicon-minus';
 	this._default = true;
 	
-	out.push('<div class="panel ', sclass, '" ', this.domAttrs_({domClass:1}), '>');
+	out.push('<div', this.domAttrs_(), '>');
 	
 	if (caption || title) {
 		out.push('<div id="', uuid, '-cap" class="panel-heading panel-caption">');

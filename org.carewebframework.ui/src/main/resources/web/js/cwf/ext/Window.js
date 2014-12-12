@@ -14,6 +14,18 @@ cwf.ext.Window = zk.$extends(zul.wnd.Window, {
 		return this._default;
 	},
 	
+	domClass_: function (no) {
+		var zclass = this._zclass;
+		
+		if (this._default && (!zclass || zclass == 'z-window')) {
+			this._zclass = 'panel';
+		}
+		
+		var result = this.$supers('domClass_', arguments);
+		this._zclass = zclass;
+		return result;
+	},
+	
 	getClosableIconClass_: function () {
 		return this._closableIconClass || this.$supers('getClosableIconClass_', arguments);
 	},
