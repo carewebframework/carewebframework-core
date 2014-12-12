@@ -15,14 +15,17 @@ cwf.ext.Window = zk.$extends(zul.wnd.Window, {
 	},
 	
 	domClass_: function (no) {
-		var zclass = this._zclass;
+		var zclass = this._zclass,
+			sclass = this._sclass;
 		
 		if (this._default && (!zclass || zclass == 'z-window')) {
 			this._zclass = 'panel';
+			this._sclass = sclass || 'panel-primary';
 		}
 		
 		var result = this.$supers('domClass_', arguments);
 		this._zclass = zclass;
+		this._sclass = sclass;
 		return result;
 	},
 	

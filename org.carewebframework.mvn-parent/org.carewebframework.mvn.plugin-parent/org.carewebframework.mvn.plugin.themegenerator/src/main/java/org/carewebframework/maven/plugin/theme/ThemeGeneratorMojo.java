@@ -321,6 +321,7 @@ public class ThemeGeneratorMojo extends BaseMojo {
      */
     private void processZKSources() throws Exception {
         final FileFilter filter = new WildcardFileFilter("*.jar");
+        getLog().info("Processing ZK theme sources.");
         
         for (final File file : this.sourceDirectory.listFiles(filter)) {
             try {
@@ -376,10 +377,12 @@ public class ThemeGeneratorMojo extends BaseMojo {
      */
     private boolean processCSSSources() throws Exception {
         boolean wasProcessed = false;
+        getLog().info("Processing CSS theme sources.");
         
         for (ThemeGeneratorBase gen : themeGenerators) {
             if (gen instanceof ThemeGeneratorCSS) {
                 Theme theme = gen.getTheme();
+                getLog().info("Processing theme: " + theme.getThemeName());
                 String mapper = theme.getCSSMapper();
                 File file = new File(mavenProject.getBasedir(), theme.getThemeUri());
                 File map = mapper == null ? null : new File(mavenProject.getBasedir(), mapper);

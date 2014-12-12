@@ -17,17 +17,19 @@ cwf.ext.Panel = zk.$extends(zul.wnd.Panel, {
 	},
 	
 	domClass_: function (no) {
-		var zclass = this._zclass;
+		var zclass = this._zclass,
+			sclass = this._sclass;
 		
 		if (this._default && (!zclass || zclass == 'z-panel')) {
 			this._zclass = 'panel';
+			this._sclass = sclass || 'panel-primary';
 		}
 		
 		var result = this.$supers('domClass_', arguments);
 		this._zclass = zclass;
+		this._sclass = sclass;
 		return result;
 	},
-	
 	getClosableIconClass_: function () {
 		return this._closableIconClass || this.$supers('getClosableIconClass_', arguments);
 	},

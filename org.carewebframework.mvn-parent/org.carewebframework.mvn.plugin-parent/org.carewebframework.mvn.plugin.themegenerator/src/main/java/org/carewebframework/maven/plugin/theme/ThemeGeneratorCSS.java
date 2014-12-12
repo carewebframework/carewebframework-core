@@ -11,6 +11,7 @@ package org.carewebframework.maven.plugin.theme;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -40,6 +41,8 @@ class ThemeGeneratorCSS extends ThemeGeneratorBase {
         private static final String DELIM = "|";
         
         private final Map<String, String> srcMap = new HashMap<String, String>();
+        
+        private final Map<String, String> defMap = new HashMap<String, String>();
         
         @Override
         protected void process(IThemeResource resource) throws Exception {
@@ -71,7 +74,7 @@ class ThemeGeneratorCSS extends ThemeGeneratorBase {
         }
         
         /**
-         * Parses and adds the entry to the map.
+         * Parses and adds the entry to the source or default map.
          * 
          * @param s String entry.
          */
@@ -79,10 +82,53 @@ class ThemeGeneratorCSS extends ThemeGeneratorBase {
             String[] pcs = s.split("\\=", 2);
             
             if (pcs.length == 2) {
-                if (srcMap.containsKey(pcs[0])) {
-                    srcMap.put(pcs[0], srcMap.get(pcs[0]) + pcs[1]);
+                String sel = pcs[0].trim();
+                boolean deflt = sel.startsWith("!");
+                Map<String, String> map = deflt ? defMap : srcMap;
+                sel = deflt ? sel.substring(1) : sel;
+                
+                if (map.containsKey(sel)) {
+                    map.put(sel, map.get(sel) + pcs[1]);
                 } else {
-                    srcMap.put(pcs[0], pcs[1]);
+                    map.put(sel, pcs[1]);
+                }
+            }
+        }
+        
+        /**
+         * Checks the selector for a match in either the source map or the reference map. If found
+         * in the source map, it is moved to the reference map and added to the matches set. If
+         * found in the reference map, it is added to the matches set. If not found, no action is
+         * taken.
+         * 
+         * @param sel The CSS selector.
+         * @param matches The matches set.
+         * @param refMap The map of referenced selectors.
+         */
+        private void checkForMatch(String sel, Set<String> matches, Map<String, String> refMap) {
+            sel = sel.trim();
+            
+            if (srcMap.containsKey(sel)) {
+                matches.add(sel);
+                refMap.put(sel, srcMap.remove(sel));
+                defMap.remove(sel);
+            } else if (refMap.containsKey(sel)) {
+                matches.add(sel);
+            }
+        }
+        
+        /**
+         * Writes the map contents to the output stream.
+         * 
+         * @param map Map to write.
+         * @throws IOException IO exception.
+         */
+        private void writeMap(Map<String, String> map) throws IOException {
+            for (Entry<String, String> entry : map.entrySet()) {
+                if (entry.getValue().contains(DELIM)) {
+                    log.warn("Output contains unresolved reference: " + entry);
+                } else {
+                    outputStream.write(entry.getValue().getBytes());
                 }
             }
         }
@@ -96,6 +142,7 @@ class ThemeGeneratorCSS extends ThemeGeneratorBase {
             Map<String, String> refMap = new LinkedHashMap<String, String>();
             Map<String, String> styles = new HashMap<String, String>();
             String prop = null;
+            checkForMatch("@before@", matches, refMap);
             
             while (c != -1) {
                 c = inputStream.read();
@@ -147,26 +194,19 @@ class ThemeGeneratorCSS extends ThemeGeneratorBase {
                                 state = 20;
                                 break;
                             
-                            case ',':
-                                state = 30;
+                            case ',': // Selector separator
                                 break;
                             
+                            case '}': // Don't know why these occur, but ignore them.
+                                continue;
+                                
                             default:
                                 sb.append((char) c);
                                 continue;
                         }
                         
-                        String sel = sb.toString().trim();
+                        checkForMatch(sb.toString(), matches, refMap);
                         sb.setLength(0);
-                        
-                        if (srcMap.containsKey(sel)) {
-                            matches.add(sel);
-                            refMap.put(sel, srcMap.get(sel));
-                            srcMap.remove(sel);
-                        } else if (refMap.containsKey(sel)) {
-                            matches.add(sel);
-                        }
-                        
                         break;
                     
                     case 1: // Possible comment
@@ -221,11 +261,15 @@ class ThemeGeneratorCSS extends ThemeGeneratorBase {
                 
             }
             
-            for (Entry<String, String> entry : refMap.entrySet()) {
-                if (entry.getValue().contains(DELIM)) {
-                    log.warn("Output contains unresolved reference: " + entry);
-                } else {
-                    outputStream.write(entry.getValue().getBytes());
+            checkForMatch("@after@", matches, refMap);
+            writeMap(refMap);
+            writeMap(defMap);
+            
+            if (!srcMap.isEmpty()) {
+                log.warn("The following entries failed to match and were ignored:");
+                
+                for (Entry<String, String> entry : srcMap.entrySet()) {
+                    log.warn("   " + entry);
                 }
             }
         }
