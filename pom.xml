@@ -1,6 +1,7 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	
+
 	<groupId>org.carewebframework</groupId>
 	<artifactId>org.carewebframework-parent</artifactId>
 	<version>4.0.0-SNAPSHOT</version>
@@ -8,14 +9,14 @@
 	<name>CareWeb Framework Root POM</name>
 	<description>CareWeb Framework Root POM</description>
 	<url>http://www.carewebframework.org</url>
-	
+
 	<developers>
 		<developer>
 			<name>CareWeb Development Team</name>
 			<email>support@carewebframework.org</email>
 		</developer>
 	</developers>
-	
+
 	<organization>
 		<name>Regenstrief Center for Biomedical Informatics</name>
 		<url>http://www.carewebframework.org/</url>
@@ -423,20 +424,33 @@
 				</plugin>
 				<!-- LESS stylesheet compiler -->
 				<plugin>
-				    <groupId>org.lesscss</groupId>
-				    <artifactId>lesscss-maven-plugin</artifactId>
-				    <version>1.7.0.1.1</version>
-				    <executions>
-				        <execution>
-				            <goals>
-				                <goal>compile</goal>
-				            </goals>
-				        </execution>
-				    </executions>
+					<groupId>org.lesscss</groupId>
+					<artifactId>lesscss-maven-plugin</artifactId>
+					<version>1.7.0.1.1</version>
+					<executions>
+						<execution>
+							<goals>
+								<goal>compile</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+				<!-- CSS/JS minify plugin -->
+				<plugin>
+					<groupId>org.zkoss.maven</groupId>
+					<artifactId>yuicompressor-maven-plugin-zk</artifactId>
+					<version>1.1.6</version>
+					<executions>
+						<execution>
+							<goals>
+								<goal>compress</goal>
+							</goals>
+						</execution>
+					</executions>
 				</plugin>
 			</plugins>
 		</pluginManagement>
-		
+
 		<plugins>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
@@ -451,10 +465,30 @@
 				<artifactId>maven-javadoc-plugin</artifactId>
 			</plugin>
 		</plugins>
-		
+
 	</build>
 
 	<profiles>
+		<profile>
+			<id>minify</id>
+			<activation>
+				<property>
+					<name>minify</name>
+					<value>true</value>
+				</property>
+				<file>
+					<exists>${basedir}/src/main/resources/web</exists>
+				</file>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.zkoss.maven</groupId>
+						<artifactId>yuicompressor-maven-plugin-zk</artifactId>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
 		<profile>
 			<id>sign</id>
 			<activation>
@@ -482,7 +516,7 @@
 			</build>
 		</profile>
 	</profiles>
-	
+
 	<dependencyManagement>
 		<dependencies>
 			<!-- Spring Framework -->
