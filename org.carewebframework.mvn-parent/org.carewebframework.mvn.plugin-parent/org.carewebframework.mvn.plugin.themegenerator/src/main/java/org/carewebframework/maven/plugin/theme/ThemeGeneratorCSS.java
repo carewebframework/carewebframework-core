@@ -221,12 +221,12 @@ class ThemeGeneratorCSS extends ThemeGeneratorBase {
                 
             }
             
-            for (String line : refMap.values()) {
-                if (line.contains(DELIM)) {
-                    log.warn("Output contains unresolved reference: " + line);
+            for (Entry<String, String> entry : refMap.entrySet()) {
+                if (entry.getValue().contains(DELIM)) {
+                    log.warn("Output contains unresolved reference: " + entry);
+                } else {
+                    outputStream.write(entry.getValue().getBytes());
                 }
-                
-                outputStream.write(line.getBytes());
             }
         }
     }
