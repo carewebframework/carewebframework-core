@@ -7,7 +7,7 @@ function (out, skipper) {
 			iconPanel = true;
 			out.push('<span class="panel-icons">');
 		}
-		out.push('<span id="', uuid, '-', type, '" class="panel-icon"><span class="glyphicon ', icon, '" /></span>')
+		out.push('<span id="', uuid, '-', type, '" class="panel-icon"><span class="glyphicon ', icon, '"></span></span>')
 	};
 	
 	var uuid = this.uuid,
