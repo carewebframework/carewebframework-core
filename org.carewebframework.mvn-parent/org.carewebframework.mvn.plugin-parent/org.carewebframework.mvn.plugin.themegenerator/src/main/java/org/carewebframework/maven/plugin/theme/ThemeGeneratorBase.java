@@ -87,15 +87,18 @@ public abstract class ThemeGeneratorBase {
      */
     public ThemeGeneratorBase(Theme theme, File buildDirectory, WildcardFileFilter exclusionFilters, Log log)
         throws Exception {
-        if (theme == null || theme.getThemeName() == null || !theme.getThemeName().matches(THEME_NAME_REGEX)) {
-            throw new Exception(
-                    "Theme names must not be null and must be alphanumeric with no blanks, conforming to regexp: "
-                            + THEME_NAME_REGEX);
+        
+        if (theme != null) {
+            if (theme.getThemeName() == null || !theme.getThemeName().matches(THEME_NAME_REGEX)) {
+                throw new Exception(
+                        "Theme names must not be null and must be alphanumeric with no blanks, conforming to regexp: "
+                                + THEME_NAME_REGEX);
+            }
         }
         this.exclusionFilters = exclusionFilters;
         this.theme = theme;
         this.buildDirectory = buildDirectory;
-        this.rootPath = getRootPath() + theme.getThemeName();
+        this.rootPath = getRootPath() + (theme == null ? "" : theme.getThemeName());
         this.log = log;
         registerProcessors(processors);
     }

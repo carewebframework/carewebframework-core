@@ -124,8 +124,8 @@ class ThemeGeneratorZK extends ThemeGeneratorBase {
     
     /**
      * @param theme The theme.
-     * @param buildDirectory - Scratch build directory
-     * @param exclusionFilters - WildcardFileFilter (i.e. exclude certain files)
+     * @param buildDirectory Scratch build directory
+     * @param exclusionFilters WildcardFileFilter (i.e. exclude certain files)
      * @param log The logger
      * @throws Exception if error occurs initializing generator
      */

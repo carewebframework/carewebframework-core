@@ -143,6 +143,12 @@ public class ThemeGeneratorMojo extends BaseMojo {
     private List<String> exclusions;
     
     /**
+     * Additional resources to copy.
+     */
+    @Parameter(property = "resources", required = false)
+    private List<String> resources;
+    
+    /**
      * Themes to be built.
      */
     @Parameter(property = "themes", required = true)
@@ -223,6 +229,8 @@ public class ThemeGeneratorMojo extends BaseMojo {
             if (!wasProcessed) {
                 throw new Exception("No theme resources were found for processing.");
             }
+            
+            processResources();
         } catch (final Exception e) {
             throwMojoException("Exception occurred processing source files for theme(s).", e);
         }
@@ -320,10 +328,10 @@ public class ThemeGeneratorMojo extends BaseMojo {
      * @throws Exception Unspecified exception.
      */
     private void processZKSources() throws Exception {
-        final FileFilter filter = new WildcardFileFilter("*.jar");
+        FileFilter filter = new WildcardFileFilter("*.jar");
         getLog().info("Processing ZK theme sources.");
         
-        for (final File file : this.sourceDirectory.listFiles(filter)) {
+        for (File file : this.sourceDirectory.listFiles(filter)) {
             try {
                 processJarFile(file);
             } catch (final Exception e) {
@@ -344,7 +352,7 @@ public class ThemeGeneratorMojo extends BaseMojo {
         boolean wasProcessed = false;
         
         while (entries.hasMoreElements()) {
-            final JarEntry entry = entries.nextElement();
+            JarEntry entry = entries.nextElement();
             
             if (entry.isDirectory()) {
                 continue;
@@ -394,6 +402,37 @@ public class ThemeGeneratorMojo extends BaseMojo {
         return wasProcessed;
     }
     
+    private boolean processResources() throws Exception {
+        if (resources != null && !resources.isEmpty()) {
+            getLog().info("Copying additional resources.");
+            ThemeGeneratorResource themeGenerator = new ThemeGeneratorResource(buildDirectory, new WildcardFileFilter(
+                    exclusions), getLog());
+            
+            for (String resource : resources) {
+                File src = new File(resource);
+                
+                if (src.exists()) {
+                    processResource(src, themeGenerator, null);
+                }
+            }
+            return true;
+        }
+        
+        return false;
+    }
+    
+    private void processResource(File file, ThemeGeneratorResource themeGenerator, String root) throws Exception {
+        if (file.isDirectory()) {
+            root = root == null ? file.getPath() : root;
+            
+            for (File f : file.listFiles()) {
+                processResource(f, themeGenerator, root);
+            }
+        } else {
+            themeGenerator.process(new ThemeResourceFile(file, root));
+        }
+    }
+    
     private void createThemeConfigEntryAndAssembleArchive() throws Exception {
         for (ThemeGeneratorBase gen : themeGenerators) {
             Theme theme = gen.getTheme();
@@ -401,7 +440,7 @@ public class ThemeGeneratorMojo extends BaseMojo {
             String fileName = theme.getThemeUri() == null ? null : FileUtils.filename(theme.getThemeUri());
             getLog().info("Creating theme config for theme: " + themeName);
             createConfigEntry(gen.getBuildDirectory(), gen.getConfigTemplate(), ARCHIVE_PREFIX + themeName, themeName,
-                getVersion(themeVersion), fileName);
+                getVersion(themeVersion), fileName, gen.getRootPath());
         }
         
         getLog().info("Assembling theme archive");

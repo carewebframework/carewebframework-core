@@ -277,8 +277,8 @@ class ThemeGeneratorCSS extends ThemeGeneratorBase {
     
     /**
      * @param theme The theme.
-     * @param buildDirectory - Scratch build directory
-     * @param exclusionFilters - WildcardFileFilter (i.e. exclude certain files)
+     * @param buildDirectory Scratch build directory
+     * @param exclusionFilters WildcardFileFilter (i.e. exclude certain files)
      * @param log The logger
      * @throws Exception if error occurs initializing generator
      */
@@ -307,7 +307,7 @@ class ThemeGeneratorCSS extends ThemeGeneratorBase {
     
     @Override
     protected String relocateResource(String resourceName, String rootPath) {
-        return "web/" + rootPath + "/" + FileUtils.filename(resourceName);
+        return "web/" + getRootPath() + "/" + getTheme().getThemeName() + "-" + FileUtils.filename(resourceName);
     }
     
 }
