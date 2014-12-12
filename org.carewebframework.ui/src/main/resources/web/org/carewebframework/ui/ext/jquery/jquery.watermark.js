@@ -24,7 +24,7 @@
 				return;
 			}
 			
-			var native = !jq.browser.msie && !hideOnFocus && ("placeholder" in input.get(0));
+			var _native = !jq.browser.msie && !hideOnFocus && ("placeholder" in input.get(0));
 
 			function hideWatermark() {
 				input.data("cwf_wm_visible", false);
@@ -98,7 +98,7 @@
 			if (!text)
 				return;
 
-			if (native) {
+			if (_native) {
 				input.attr("placeholder", text);
 				var style = "color: " + (color ? color : "gray") + ";";
 				
