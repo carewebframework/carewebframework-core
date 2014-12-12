@@ -6,12 +6,15 @@
 
 .cwf-desktop {
 	padding: 1px;
+}
+
+.cwf-desktop.panel {
 	margin: 0;
 }
 
 .cwf-desktop>.panel-heading,
 .cwf-desktop-heading {
-	padding: 0px;
+	padding: 0;
 }
 
 .cwf-desktop .panel-heading * {
