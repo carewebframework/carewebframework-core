@@ -1,19 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:cwt="http://www.carewebframework.org/schema/theme"
+	xmlns:cwh="http://www.carewebframework.org/schema/help" 
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="
 		http://www.springframework.org/schema/beans 
 		http://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.carewebframework.org/schema/theme
-		http://www.carewebframework.org/schema/theme/theme-extensions.xsd">
-
-	<!-- Theme declaration. -->
+		http://www.carewebframework.org/schema/help
+		http://www.carewebframework.org/schema/help/help-extensions.xsd">
 
 	<beans profile="root">
+
+*help*		<cwh:help id="{0}" url="{1}" title="{2}" version="{3}" format="{4}" />
 	
-		<cwt:theme id="theme-{0}" type="ZK" url="{3}{0}/" version="{1}" />
-		
 	</beans>
 	
 </beans>

@@ -18,9 +18,13 @@ import java.awt.image.BufferedImage;
 import java.awt.image.FilteredImageSource;
 import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileFilter;
 import java.io.PrintStream;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -28,7 +32,6 @@ import javax.imageio.ImageIO;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
-import org.apache.maven.plugin.logging.Log;
 import org.apache.sanselan.ImageFormat;
 import org.apache.sanselan.Sanselan;
 
@@ -124,16 +127,15 @@ class ThemeGeneratorZK extends ThemeGeneratorBase {
     
     /**
      * @param theme The theme.
-     * @param buildDirectory Scratch build directory
-     * @param exclusionFilters WildcardFileFilter (i.e. exclude certain files)
-     * @param log The logger
+     * @param mojo The theme generator mojo.
      * @throws Exception if error occurs initializing generator
      */
-    public ThemeGeneratorZK(Theme theme, File buildDirectory, WildcardFileFilter exclusionFilters, Log log) throws Exception {
+    public ThemeGeneratorZK(Theme theme, ThemeGeneratorMojo mojo) throws Exception {
         
-        super(theme, buildDirectory, exclusionFilters, log);
+        super(theme, mojo);
         color = toColor(theme.getBaseColor());
         hueFilter = new HueFilter(color);
+        addConfigEntry("zk");
     }
     
     @Override
@@ -146,26 +148,20 @@ class ThemeGeneratorZK extends ThemeGeneratorBase {
         processors.put(".wcs", processCss);
     }
     
-    @Override
-    protected String getConfigTemplate() {
-        return "/theme-config-zk.xml";
-    }
-    
-    @Override
-    protected String getRootPath() {
-        return "org/carewebframework/themes/zk/";
-    }
-    
     /**
      * Modifies the path of a jar entry to use the new root path.
      * 
      * @param resourceName Path to modify.
-     * @param rootPath The root path.
      * @return The modified path.
      */
     @Override
-    protected String relocateResource(String resourceName, String rootPath) {
-        return resourceName.replaceFirst("^web", "web/" + rootPath);
+    protected String relocateResource(String resourceName) {
+        return resourceName.replaceFirst("^web", "web/" + getResourceBase());
+    }
+    
+    @Override
+    protected String getResourceBase() {
+        return mojo.getThemeBase() + "zk/" + getTheme().getThemeName();
     }
     
     private Color toColor(String colorString) {
@@ -178,6 +174,48 @@ class ThemeGeneratorZK extends ThemeGeneratorBase {
         }
         
         return new Color(Integer.parseInt(colorString, 16));
+    }
+    
+    @Override
+    protected void process() throws Exception {
+        FileFilter filter = new WildcardFileFilter("*.jar");
+        mojo.getLog().info("Processing ZK theme sources.");
+        
+        for (File file : mojo.getSourceDirectory().listFiles(filter)) {
+            try {
+                processJarFile(file);
+            } catch (final Exception e) {
+                throw new Exception("Exception occurred processing source jar:" + file.getName(), e);
+            }
+        }
+    }
+    
+    /**
+     * Process one jar file from the source folder.
+     * 
+     * @param file A jar file from the source folder.
+     * @throws Exception Unspecified exception.
+     */
+    private void processJarFile(File file) throws Exception {
+        JarFile sourceJar = new JarFile(file);
+        Enumeration<JarEntry> entries = sourceJar.entries();
+        boolean wasProcessed = false;
+        
+        while (entries.hasMoreElements()) {
+            JarEntry entry = entries.nextElement();
+            
+            if (entry.isDirectory()) {
+                continue;
+            }
+            
+            IThemeResource resource = new ThemeResourceJarEntry(sourceJar, entry);
+            process(resource);
+        }
+        sourceJar.close();
+        
+        if (!wasProcessed) {
+            mojo.getLog().info("Source jar contained no themeable resources: " + file.getName());
+        }
     }
     
     /**

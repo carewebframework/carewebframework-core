@@ -103,6 +103,7 @@ public class HelpConverterMojo extends BaseMojo {
             return;
         }
         
+        init("help", moduleVersion);
         registerLoader(new SourceLoader("javahelp", "*.hs", ZipSource.class.getName()));
         registerLoader(new SourceLoader("ohj", "*.hs", ZipSource.class.getName()));
         registerExternalLoaders();
@@ -148,8 +149,13 @@ public class HelpConverterMojo extends BaseMojo {
                     IOUtils.closeQuietly(out);
                 }
             }
-            createHelpConfigEntry(outputDirectory);
-            createArchive(outputDirectory, "help");
+            
+            if (hsFilePath == null) {
+                throwMojoException("Help set definition file not found in source jar.", null);
+            }
+            
+            addConfigEntry("help", moduleId, moduleId, hsFilePath, moduleName, getVersion(moduleVersion), moduleFormat);
+            assembleArchive();
         } catch (Exception e) {
             throw new MojoExecutionException("Unexpected error.", e);
         } finally {
@@ -172,21 +178,6 @@ public class HelpConverterMojo extends BaseMojo {
     
     private void registerLoader(SourceLoader loader) {
         sourceArchiveMap.put(loader.getFormatSpecifier(), loader);
-    }
-    
-    /**
-     * Create the xml configuration descriptor.
-     * 
-     * @param outputDirectory The directory where the configuration descriptor is to be created.
-     * @throws MojoExecutionException Unspecified exception.
-     */
-    private void createHelpConfigEntry(File outputDirectory) throws MojoExecutionException {
-        if (hsFilePath == null) {
-            throw new MojoExecutionException("Help set definition file not found in source jar.");
-        }
-        
-        createConfigEntry(outputDirectory, "/help-config.xml", moduleId, moduleId, hsFilePath, moduleName,
-            getVersion(moduleVersion), moduleFormat);
     }
     
 }

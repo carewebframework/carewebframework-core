@@ -38,4 +38,5 @@ public interface IThemeResource {
      * @return Resource timestamp.
      */
     long getTime();
+    
 }

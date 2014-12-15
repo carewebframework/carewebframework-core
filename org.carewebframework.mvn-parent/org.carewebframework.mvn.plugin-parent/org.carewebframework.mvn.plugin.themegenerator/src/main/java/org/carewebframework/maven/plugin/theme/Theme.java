@@ -24,6 +24,8 @@ public class Theme {
     
     private String cssMapper;
     
+    private String themeVersion;
+    
     /**
      * @return The theme name.
      */
@@ -46,10 +48,33 @@ public class Theme {
     }
     
     /**
+     * @return The version of this theme.
+     */
+    public String getThemeVersion() {
+        return themeVersion;
+    }
+    
+    /**
+     * Sets the theme version.
+     * 
+     * @param themeVersion The theme version.
+     */
+    protected void setThemeVersion(String themeVersion) {
+        this.themeVersion = themeVersion;
+    }
+    
+    /**
      * @return The style mapper control file.
      */
     public String getCSSMapper() {
         return cssMapper;
+    }
+    
+    /**
+     * @return The theme type (zk or css).
+     */
+    public String getType() {
+        return themeUri == null ? "zk" : "css";
     }
     
     /**

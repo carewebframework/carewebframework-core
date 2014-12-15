@@ -27,12 +27,8 @@ package org.carewebframework.maven.plugin.theme;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.Set;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
 
 import com.google.common.io.Files;
 
@@ -44,6 +40,7 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
+import org.apache.maven.project.MavenProject;
 
 import org.carewebframework.maven.plugin.core.BaseMojo;
 
@@ -105,36 +102,11 @@ import org.codehaus.plexus.util.FileUtils;
 @Execute(goal = "prepare", phase = LifecyclePhase.PREPARE_PACKAGE)
 public class ThemeGeneratorMojo extends BaseMojo {
     
-    private static final String ARCHIVE_PREFIX = "theme-";
-    
-    /**
-     * Work directory containing theme generation results. Note: archives will be created in
-     * ${project.build.directory}.
-     */
-    @Parameter(property = "maven.careweb.theme.buildDirectory", defaultValue = "${project.build.directory}/theme-module", required = true)
-    private File buildDirectory;
-    
     /**
      * Directory containing source to consider when generating themes.
      */
     @Parameter(property = "maven.careweb.theme.sourceDirectory", defaultValue = "${project.build.directory}/theme-source", required = true)
     private File sourceDirectory;
-    
-    /**
-     * Webapp lib directory.
-     */
-    @Parameter(defaultValue = "${project.build.directory}/${project.build.finalName}/WEB-INF/lib", readonly = true)
-    private File webappLibDirectory;
-    
-    /**
-     * If packaging is of type war, archives will be copied to destination dir:
-     * ${project.build.directory}/${project.build.finalName}/WEB-INF/lib
-     * <p>
-     * <b>Note: phase must remain as prepare-package</b>
-     * </p>
-     */
-    @Parameter(property = "maven.careweb.theme.warInclusion", defaultValue = "true", required = true)
-    private boolean warInclusion;
     
     /**
      * Exclude files.
@@ -169,10 +141,10 @@ public class ThemeGeneratorMojo extends BaseMojo {
     private String themeVersion;
     
     /**
-     * Whether to fail build on error
+     * Theme base path
      */
-    @Parameter(property = "maven.careweb.theme.failOnError", defaultValue = "true", required = false)
-    private boolean failOnError;
+    @Parameter(property = "themeBase", defaultValue = "org/carewebframework/themes/${buildNumber}/", required = true)
+    private String themeBase;
     
     /**
      * Whether to exclude transitive dependencies when considering theme source. Default is false.
@@ -189,7 +161,7 @@ public class ThemeGeneratorMojo extends BaseMojo {
     @Parameter(property = "maven.careweb.theme.skip", defaultValue = "false", required = false)
     private boolean skip;
     
-    private List<ThemeGeneratorBase> themeGenerators;
+    private FileFilter exclusionFilter;
     
     /**
      * @see org.apache.maven.plugin.Mojo#execute()
@@ -201,45 +173,76 @@ public class ThemeGeneratorMojo extends BaseMojo {
             return;
         }
         
-        boolean wasProcessed = false;
+        init("theme", themeVersion);
+        exclusionFilter = new WildcardFileFilter(exclusions);
         
+        // Copy theme dependencies
         try {
             validateSource();
-            wasProcessed = copyDependencies();
+            copyDependencies();
         } catch (final Exception e) {
             throwMojoException("Exception occurred validating theme source.", e);
         }
         
-        try {
-            getLog().info("Initializing theme generators.");
-            initThemeGenerators();
-        } catch (final Exception e) {
-            throwMojoException("Exception occurred initializing theme generators.", e);
-        }
-        
+        // Process the theme sources.
         try {
             getLog().info("Processing theme sources.");
             
-            if (wasProcessed) {
-                processZKSources();
+            for (Theme theme : themes) {
+                if (theme.getThemeVersion() == null) {
+                    theme.setThemeVersion(moduleVersion);
+                }
+                
+                processTheme(theme);
             }
             
-            wasProcessed = processCSSSources() || wasProcessed;
-            
-            if (!wasProcessed) {
-                throw new Exception("No theme resources were found for processing.");
-            }
-            
-            processResources();
+            processTheme(null);
         } catch (final Exception e) {
             throwMojoException("Exception occurred processing source files for theme(s).", e);
         }
         
+        // Assemble the archive
         try {
-            createThemeConfigEntryAndAssembleArchive();
+            assembleArchive();
         } catch (final Exception e) {
             throwMojoException("Exception occurred creating theme config and assembly", e);
         }
+    }
+    
+    protected String getThemeBase() {
+        return themeBase;
+    }
+    
+    protected File getSourceDirectory() {
+        return sourceDirectory;
+    }
+    
+    protected List<String> getResources() {
+        return resources;
+    }
+    
+    protected MavenProject getMavenProject() {
+        return mavenProject;
+    }
+    
+    /**
+     * Returns true if the specified file is in the exclusion list.
+     * 
+     * @param fileName Name of file to check.
+     * @return True if the file is to be excluded.
+     */
+    public boolean isExcluded(String fileName) {
+        return isExcluded(new File(fileName));
+    }
+    
+    /**
+     * Returns true if the specified file is in the exclusion list.
+     * 
+     * @param file File instance to check.
+     * @return True if the file is to be excluded.
+     */
+    public boolean isExcluded(File file) {
+        return exclusionFilter.accept(file);
     }
     
     /**
@@ -301,169 +304,23 @@ public class ThemeGeneratorMojo extends BaseMojo {
     }
     
     /**
-     * Generates a theme generator instance for each source theme.
+     * Processes a theme.
      * 
+     * @param theme The theme.
      * @throws Exception Unspecified exception.
      */
-    private void initThemeGenerators() throws Exception {
-        themeGenerators = new ArrayList<ThemeGeneratorBase>();
+    private void processTheme(Theme theme) throws Exception {
+        ThemeGeneratorBase themeGenerator;
         
-        for (Theme theme : themes) {
-            getLog().info("Considering the following theme for processing: " + theme);
-            ThemeGeneratorBase themeGenerator;
-            
-            if (theme.getBaseColor() != null) {
-                themeGenerator = new ThemeGeneratorZK(theme, buildDirectory, new WildcardFileFilter(exclusions), getLog());
-            } else {
-                themeGenerator = new ThemeGeneratorCSS(theme, buildDirectory, new WildcardFileFilter(exclusions), getLog());
-            }
-            
-            themeGenerators.add(themeGenerator);
-        }
-    }
-    
-    /**
-     * Process all jars in the source folder.
-     * 
-     * @throws Exception Unspecified exception.
-     */
-    private void processZKSources() throws Exception {
-        FileFilter filter = new WildcardFileFilter("*.jar");
-        getLog().info("Processing ZK theme sources.");
-        
-        for (File file : this.sourceDirectory.listFiles(filter)) {
-            try {
-                processJarFile(file);
-            } catch (final Exception e) {
-                throw new Exception("Exception occurred processing source jar:" + file.getName(), e);
-            }
-        }
-    }
-    
-    /**
-     * Process one jar file from the source folder.
-     * 
-     * @param file A jar file from the source folder.
-     * @throws Exception Unspecified exception.
-     */
-    private void processJarFile(File file) throws Exception {
-        JarFile sourceJar = new JarFile(file);
-        Enumeration<JarEntry> entries = sourceJar.entries();
-        boolean wasProcessed = false;
-        
-        while (entries.hasMoreElements()) {
-            JarEntry entry = entries.nextElement();
-            
-            if (entry.isDirectory()) {
-                continue;
-            }
-            
-            IThemeResource resource = new ThemeResourceJarEntry(sourceJar, entry);
-            
-            for (ThemeGeneratorBase gen : themeGenerators) {
-                if (gen instanceof ThemeGeneratorZK) {
-                    if (!gen.process(resource)) {
-                        break;
-                    } else {
-                        wasProcessed = true;
-                    }
-                }
-            }
-            
-        }
-        sourceJar.close();
-        
-        if (!wasProcessed) {
-            getLog().info("Source jar contained no themeable resources: " + file.getName());
-        }
-    }
-    
-    /**
-     * Process simple CSS themes.
-     * 
-     * @return True if any themes were processed.
-     */
-    private boolean processCSSSources() throws Exception {
-        boolean wasProcessed = false;
-        getLog().info("Processing CSS theme sources.");
-        
-        for (ThemeGeneratorBase gen : themeGenerators) {
-            if (gen instanceof ThemeGeneratorCSS) {
-                Theme theme = gen.getTheme();
-                getLog().info("Processing theme: " + theme.getThemeName());
-                String mapper = theme.getCSSMapper();
-                File file = new File(mavenProject.getBasedir(), theme.getThemeUri());
-                File map = mapper == null ? null : new File(mavenProject.getBasedir(), mapper);
-                IThemeResource resource = new ThemeResourceCSS(file, map);
-                wasProcessed = gen.process(resource) || wasProcessed;
-            }
-        }
-        
-        return wasProcessed;
-    }
-    
-    private boolean processResources() throws Exception {
-        if (resources != null && !resources.isEmpty()) {
-            getLog().info("Copying additional resources.");
-            ThemeGeneratorResource themeGenerator = new ThemeGeneratorResource(buildDirectory, new WildcardFileFilter(
-                    exclusions), getLog());
-            
-            for (String resource : resources) {
-                File src = new File(resource);
-                
-                if (src.exists()) {
-                    processResource(src, themeGenerator, null);
-                }
-            }
-            return true;
-        }
-        
-        return false;
-    }
-    
-    private void processResource(File file, ThemeGeneratorResource themeGenerator, String root) throws Exception {
-        if (file.isDirectory()) {
-            root = root == null ? file.getPath() : root;
-            
-            for (File f : file.listFiles()) {
-                processResource(f, themeGenerator, root);
-            }
+        if (theme == null) {
+            themeGenerator = new ThemeGeneratorResource(theme, this);
+        } else if (theme.getBaseColor() != null) {
+            themeGenerator = new ThemeGeneratorZK(theme, this);
         } else {
-            themeGenerator.process(new ThemeResourceFile(file, root));
+            themeGenerator = new ThemeGeneratorCSS(theme, this);
         }
+        
+        themeGenerator.process();
     }
     
-    private void createThemeConfigEntryAndAssembleArchive() throws Exception {
-        for (ThemeGeneratorBase gen : themeGenerators) {
-            Theme theme = gen.getTheme();
-            String themeName = theme.getThemeName();
-            String fileName = theme.getThemeUri() == null ? null : FileUtils.filename(theme.getThemeUri());
-            getLog().info("Creating theme config for theme: " + themeName);
-            createConfigEntry(gen.getBuildDirectory(), gen.getConfigTemplate(), ARCHIVE_PREFIX + themeName, themeName,
-                getVersion(themeVersion), fileName, gen.getRootPath());
-        }
-        
-        getLog().info("Assembling theme archive");
-        
-        try {
-            File archive = createArchive(buildDirectory, "theme");
-            
-            if ("war".equalsIgnoreCase(mavenProject.getPackaging()) && this.warInclusion) {
-                webappLibDirectory.mkdirs();
-                File webappLibArchive = new File(this.webappLibDirectory, archive.getName());
-                Files.copy(archive, webappLibArchive);
-            }
-        } catch (final Exception e) {
-            throw new Exception("Exception occurred assembling theme archive.", e);
-        }
-        
-    }
-    
-    private void throwMojoException(String msg, Throwable e) throws MojoExecutionException {
-        if (failOnError) {
-            throw new MojoExecutionException(msg, e);
-        } else {
-            getLog().error(msg, e);
-        }
-    }
 }

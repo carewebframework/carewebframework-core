@@ -20,9 +20,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.io.filefilter.WildcardFileFilter;
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.maven.plugin.logging.Log;
 
 /**
  * Generates a new theme from a base theme by using specialized processors to transform individual
@@ -66,50 +65,37 @@ public abstract class ThemeGeneratorBase {
     
     private static final Pattern URL_PATTERN = Pattern.compile("~\\./");
     
-    private final WildcardFileFilter exclusionFilters;
-    
-    protected final Log log;
-    
-    private final String rootPath;
-    
     private final Theme theme;
     
-    private final File buildDirectory;
+    protected final ThemeGeneratorMojo mojo;
     
     private final Map<String, ResourceProcessor> processors = new HashMap<String, ResourceProcessor>();
     
     /**
      * @param theme The theme.
-     * @param buildDirectory Scratch build directory
-     * @param exclusionFilters WildcardFileFilter (i.e. exclude certain files)
-     * @param log The logger
+     * @param mojo The theme generator mojo.
      * @throws Exception if error occurs initializing generator
      */
-    public ThemeGeneratorBase(Theme theme, File buildDirectory, WildcardFileFilter exclusionFilters, Log log)
-        throws Exception {
+    public ThemeGeneratorBase(Theme theme, ThemeGeneratorMojo mojo) throws Exception {
         
         if (theme != null) {
             if (theme.getThemeName() == null || !theme.getThemeName().matches(THEME_NAME_REGEX)) {
-                throw new Exception(
-                        "Theme names must not be null and must be alphanumeric with no blanks, conforming to regexp: "
-                                + THEME_NAME_REGEX);
+                throw new Exception("Theme names must be alphanumeric with no blanks, conforming to regexp: "
+                        + THEME_NAME_REGEX);
             }
         }
-        this.exclusionFilters = exclusionFilters;
         this.theme = theme;
-        this.buildDirectory = buildDirectory;
-        this.rootPath = getRootPath() + (theme == null ? "" : theme.getThemeName());
-        this.log = log;
+        this.mojo = mojo;
         registerProcessors(processors);
     }
     
     protected abstract void registerProcessors(Map<String, ResourceProcessor> processors);
     
-    protected abstract String getConfigTemplate();
+    protected abstract String relocateResource(String resourceName);
     
-    protected abstract String getRootPath();
+    protected abstract void process() throws Exception;
     
-    protected abstract String relocateResource(String resourceName, String rootPath);
+    protected abstract String getResourceBase();
     
     /**
      * Adjust any url references in the line to use new root path.
@@ -120,14 +106,14 @@ public abstract class ThemeGeneratorBase {
     public String replaceURLs(String line) {
         StringBuffer sb = new StringBuffer();
         Matcher matcher = URL_PATTERN.matcher(line);
-        String newPath = "~./" + rootPath + "/";
+        String newPath = "~./" + getResourceBase() + "/";
         
         while (matcher.find()) {
             char dlm = line.charAt(matcher.start() - 1);
             int i = line.indexOf(dlm, matcher.end());
             String url = i > 0 ? line.substring(matcher.start(), i) : null;
             
-            if (url == null || (!isExcluded(url) && getProcessor(url) != null)) {
+            if (url == null || (!mojo.isExcluded(url) && getProcessor(url) != null)) {
                 matcher.appendReplacement(sb, newPath);
             }
         }
@@ -137,32 +123,19 @@ public abstract class ThemeGeneratorBase {
     }
     
     /**
-     * Creates a new file in the build directory. Ensures that all folders in the path are also
-     * created.
-     * 
-     * @param entryName Entry name to create.
-     * @param modTime Modification timestamp for the new entry. If 0, defaults to the current time.
-     * @return the new file
-     */
-    public File newFile(String entryName, long modTime) {
-        File file = new File(this.buildDirectory, entryName);
-        
-        if (modTime != 0) {
-            file.setLastModified(modTime);
-        }
-        
-        file.getParentFile().mkdirs();
-        return file;
-    }
-    
-    /**
      * Creates a new jar file entry from an existing theme resource.
      * 
      * @param resource Old resource.
      * @return The new file
      */
     public File newFile(IThemeResource resource) {
-        return newFile(relocateResource(resource.getName(), rootPath), resource.getTime());
+        return mojo.newFile(relocateResource(resource.getName()), resource.getTime());
+    }
+    
+    protected void addConfigEntry(String insertionTag, String... params) {
+        params = (String[]) ArrayUtils.addAll(
+            new String[] { theme.getThemeName(), theme.getThemeVersion(), mojo.getThemeBase() }, params);
+        mojo.addConfigEntry(insertionTag, params);
     }
     
     /**
@@ -172,10 +145,10 @@ public abstract class ThemeGeneratorBase {
      * @return True if a processor was found for the jar entry.
      * @throws Exception Unspecified exception.
      */
-    public boolean process(IThemeResource resource) throws Exception {
+    protected boolean process(IThemeResource resource) throws Exception {
         final String name = StringUtils.trimToEmpty(resource.getName());
         
-        if (isExcluded(name)) {
+        if (mojo.isExcluded(name)) {
             return false;
         }
         
@@ -208,37 +181,10 @@ public abstract class ThemeGeneratorBase {
     }
     
     /**
-     * Returns true if the specified file is in the exclusion list.
-     * 
-     * @param fileName Name of file to check.
-     * @return True if the file is to be excluded.
-     */
-    protected boolean isExcluded(String fileName) {
-        return isExcluded(new File(fileName));
-    }
-    
-    /**
-     * Returns true if the specified file is in the exclusion list.
-     * 
-     * @param file File instance to check.
-     * @return True if the file is to be excluded.
-     */
-    protected boolean isExcluded(File file) {
-        return exclusionFilters.accept(file);
-    }
-    
-    /**
      * @return The theme.
      */
     public Theme getTheme() {
         return theme;
-    }
-    
-    /**
-     * @return the buildDirectory
-     */
-    public File getBuildDirectory() {
-        return buildDirectory;
     }
     
 }

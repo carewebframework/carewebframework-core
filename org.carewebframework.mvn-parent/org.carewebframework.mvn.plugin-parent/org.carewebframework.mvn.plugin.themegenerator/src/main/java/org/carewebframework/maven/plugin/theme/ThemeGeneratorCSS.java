@@ -22,8 +22,7 @@ import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.LineIterator;
-import org.apache.commons.io.filefilter.WildcardFileFilter;
-import org.apache.maven.plugin.logging.Log;
+import org.apache.maven.project.MavenProject;
 
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.StringUtils;
@@ -126,7 +125,7 @@ class ThemeGeneratorCSS extends ThemeGeneratorBase {
         private void writeMap(Map<String, String> map) throws IOException {
             for (Entry<String, String> entry : map.entrySet()) {
                 if (entry.getValue().contains(DELIM)) {
-                    log.warn("Output contains unresolved reference: " + entry);
+                    mojo.getLog().warn("Output contains unresolved reference: " + entry);
                 } else {
                     outputStream.write(entry.getValue().getBytes());
                 }
@@ -266,10 +265,10 @@ class ThemeGeneratorCSS extends ThemeGeneratorBase {
             writeMap(defMap);
             
             if (!srcMap.isEmpty()) {
-                log.warn("The following entries failed to match and were ignored:");
+                mojo.getLog().warn("The following entries failed to match and were ignored:");
                 
                 for (Entry<String, String> entry : srcMap.entrySet()) {
-                    log.warn("   " + entry);
+                    mojo.getLog().warn("   " + entry);
                 }
             }
         }
@@ -277,15 +276,11 @@ class ThemeGeneratorCSS extends ThemeGeneratorBase {
     
     /**
      * @param theme The theme.
-     * @param buildDirectory Scratch build directory
-     * @param exclusionFilters WildcardFileFilter (i.e. exclude certain files)
-     * @param log The logger
+     * @param mojo The theme generator mojo.
      * @throws Exception if error occurs initializing generator
      */
-    public ThemeGeneratorCSS(Theme theme, File buildDirectory, WildcardFileFilter exclusionFilters, Log log)
-        throws Exception {
-        
-        super(theme, buildDirectory, exclusionFilters, log);
+    public ThemeGeneratorCSS(Theme theme, ThemeGeneratorMojo mojo) throws Exception {
+        super(theme, mojo);
     }
     
     @Override
@@ -296,18 +291,26 @@ class ThemeGeneratorCSS extends ThemeGeneratorBase {
     }
     
     @Override
-    protected String getConfigTemplate() {
-        return "/theme-config-css.xml";
+    protected String relocateResource(String resourceName) {
+        return "web/" + getResourceBase() + getTheme().getThemeName() + "-" + FileUtils.filename(resourceName);
     }
     
     @Override
-    protected String getRootPath() {
-        return "org/carewebframework/themes/css/";
+    protected String getResourceBase() {
+        return mojo.getThemeBase() + "css/";
     }
     
     @Override
-    protected String relocateResource(String resourceName, String rootPath) {
-        return "web/" + getRootPath() + "/" + getTheme().getThemeName() + "-" + FileUtils.filename(resourceName);
+    protected void process() throws Exception {
+        Theme theme = getTheme();
+        MavenProject mavenProject = mojo.getMavenProject();
+        mojo.getLog().info("Processing theme: " + theme.getThemeName());
+        String mapper = theme.getCSSMapper();
+        File file = new File(mavenProject.getBasedir(), theme.getThemeUri());
+        File map = mapper == null ? null : new File(mavenProject.getBasedir(), mapper);
+        IThemeResource resource = new ThemeResourceCSS(file, map);
+        addConfigEntry("css", resource.getName());
+        process(resource);
     }
     
 }

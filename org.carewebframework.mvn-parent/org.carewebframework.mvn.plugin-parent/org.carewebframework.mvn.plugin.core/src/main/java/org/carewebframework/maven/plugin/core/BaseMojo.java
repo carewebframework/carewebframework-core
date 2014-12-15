@@ -9,14 +9,10 @@
  */
 package org.carewebframework.maven.plugin.core;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.PrintStream;
 
-import org.apache.commons.io.IOUtils;
+import com.google.common.io.Files;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.maven.archiver.MavenArchiveConfiguration;
 import org.apache.maven.archiver.MavenArchiver;
@@ -58,13 +54,43 @@ public abstract class BaseMojo extends AbstractMojo {
     protected MavenArchiveConfiguration archive = new MavenArchiveConfiguration();
     
     /**
+     * Webapp lib directory.
+     */
+    @Parameter(defaultValue = "${project.build.directory}/${project.build.finalName}/WEB-INF/lib", readonly = true)
+    private File webappLibDirectory;
+    
+    /**
+     * If packaging is of type war, archives will be copied to destination dir:
+     * ${project.build.directory}/${project.build.finalName}/WEB-INF/lib
+     * <p>
+     * <b>Note: phase must remain as prepare-package</b>
+     * </p>
+     */
+    @Parameter(property = "maven.careweb.theme.warInclusion", defaultValue = "true", required = true)
+    private boolean warInclusion;
+    
+    /**
+     * Whether to fail build on error
+     */
+    @Parameter(property = "maven.careweb.theme.failOnError", defaultValue = "true", required = false)
+    private boolean failOnError;
+    
+    protected File stagingDirectory;
+    
+    protected ConfigTemplate configTemplate;
+    
+    protected String classifier;
+    
+    protected String moduleVersion;
+    
+    /**
      * Creates a new subdirectory under the specified parent directory.
      * 
      * @param parentDirectory The directory under which the subdirectory will be created.
      * @param path The full path of the subdirectory.
      * @return The subdirectory just created.
      */
-    protected File newSubdirectory(File parentDirectory, String path) {
+    protected static File newSubdirectory(File parentDirectory, String path) {
         File dir = new File(parentDirectory, path);
         
         if (!dir.exists()) {
@@ -72,6 +98,13 @@ public abstract class BaseMojo extends AbstractMojo {
         }
         
         return dir;
+    }
+    
+    protected void init(String classifier, String version) throws MojoExecutionException {
+        this.classifier = classifier;
+        stagingDirectory = new File(buildDirectory, classifier + "-staging");
+        configTemplate = new ConfigTemplate(classifier + "-spring.xml");
+        moduleVersion = getVersion(version);
     }
     
     /**
@@ -96,6 +129,10 @@ public abstract class BaseMojo extends AbstractMojo {
         return sb.toString();
     }
     
+    public void addConfigEntry(String insertionTag, String... params) {
+        configTemplate.addEntry(insertionTag, params);
+    }
+    
     /**
      * Append the version piece to the version # under construction.
      * 
@@ -116,70 +153,74 @@ public abstract class BaseMojo extends AbstractMojo {
     }
     
     /**
-     * Create the xml configuration descriptor.
+     * Creates a new file in the staging directory. Ensures that all folders in the path are also
+     * created.
      * 
-     * @param parentDirectory The parent directory where the configuration descriptor is to be
-     *            created.
-     * @param template Path to config file template.
-     * @param moduleId The id of the module (used to name the spring config file).
-     * @param params Replaceable parameters for the template.
-     * @throws MojoExecutionException Unspecified exception.
+     * @param entryName Entry name to create.
+     * @param modTime Modification timestamp for the new entry. If 0, defaults to the current time.
+     * @return the new file
      */
-    protected void createConfigEntry(File parentDirectory, String template, String moduleId, String... params)
-                                                                                                              throws MojoExecutionException {
-        getLog().info("Building Spring configuration descriptor.");
-        InputStream in = getClass().getResourceAsStream(template);
+    public File newFile(String entryName, long modTime) {
+        File file = new File(stagingDirectory, entryName);
         
-        if (in == null) {
-            throw new MojoExecutionException("Cannot find config file template.");
+        if (modTime != 0) {
+            file.setLastModified(modTime);
         }
         
-        File targetDirectory = newSubdirectory(parentDirectory, "META-INF");
-        InputStreamReader isr = null;
-        BufferedReader br = null;
-        PrintStream ps = null;
+        file.getParentFile().mkdirs();
+        return file;
+    }
+    
+    protected void assembleArchive() throws Exception {
+        getLog().info("Assembling " + classifier + " archive");
         
         try {
-            isr = new InputStreamReader(in);
-            br = new BufferedReader(isr);
-            File newEntry = new File(targetDirectory, moduleId + "-spring.xml");
-            FileOutputStream out = new FileOutputStream(newEntry);
-            ps = new PrintStream(out);
-            String line;
+            File archive = createArchive();
             
-            while ((line = br.readLine()) != null) {
-                if (line.contains("{")) {
-                    for (int i = 0; i < params.length; i++) {
-                        line = line.replace("{" + i + "}", StringUtils.defaultString(params[i]));
-                    }
-                }
-                ps.println(line);
+            if ("war".equalsIgnoreCase(mavenProject.getPackaging()) && this.warInclusion) {
+                webappLibDirectory.mkdirs();
+                File webappLibArchive = new File(this.webappLibDirectory, archive.getName());
+                Files.copy(archive, webappLibArchive);
             }
-        } catch (Exception e) {
-            throw new MojoExecutionException("Unexpected error while create configuration file.", e);
-        } finally {
-            IOUtils.closeQuietly(ps);
-            IOUtils.closeQuietly(br);
-            IOUtils.closeQuietly(isr);
-            IOUtils.closeQuietly(in);
+        } catch (final Exception e) {
+            throw new Exception("Exception occurred assembling theme archive.", e);
+        }
+        
+    }
+    
+    public void throwMojoException(String msg, Throwable e) throws MojoExecutionException {
+        if (failOnError) {
+            if (e == null) {
+                throw new MojoExecutionException(msg);
+            }
+            
+            if (e instanceof MojoExecutionException) {
+                throw (MojoExecutionException) e;
+            }
+            
+            throw new MojoExecutionException(msg, e);
+        } else {
+            getLog().error(msg, e);
         }
     }
     
     /**
      * Creates the archive.
      * 
-     * @param archiveSourceDir The archive source directory.
-     * @param classifier The classifier.
      * @return The archive file.
      * @throws Exception Unspecified exception.
      */
-    protected File createArchive(File archiveSourceDir, String classifier) throws Exception {
+    private File createArchive() throws Exception {
+        if (configTemplate != null) {
+            getLog().info("Creating config file.");
+            configTemplate.createFile(stagingDirectory);
+        }
         getLog().info("Creating archive.");
         Artifact artifact = mavenProject.getArtifact();
         String archiveName = artifact.getArtifactId() + "-" + artifact.getVersion() + "-" + classifier + ".jar";
         File jarFile = new File(mavenProject.getBuild().getDirectory(), archiveName);
         MavenArchiver archiver = new MavenArchiver();
-        jarArchiver.addDirectory(archiveSourceDir);
+        jarArchiver.addDirectory(stagingDirectory);
         archiver.setArchiver(jarArchiver);
         archiver.setOutputFile(jarFile);
         getLog().info(archive.getManifestEntries().toString());

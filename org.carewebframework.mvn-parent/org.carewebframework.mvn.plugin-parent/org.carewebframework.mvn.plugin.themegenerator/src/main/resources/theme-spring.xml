@@ -8,11 +8,12 @@
 		http://www.carewebframework.org/schema/theme
 		http://www.carewebframework.org/schema/theme/theme-extensions.xsd">
 
-	<!-- Theme declaration. -->
+	<!-- Theme declarations. -->
 
 	<beans profile="root">
 	
-		<cwt:theme id="theme-{0}" type="CSS" url="{3}{0}-{2}" version="{1}" />
+*css*		<cwt:theme id="theme-{0}" type="CSS" url="{2}css/{0}-{3}" version="{1}" />
+*zk*		<cwt:theme id="theme-{0}" type="ZK" url="{2}zk/{0}/" version="{1}" />
 		
 	</beans>
 	

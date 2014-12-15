@@ -10,10 +10,8 @@
 package org.carewebframework.maven.plugin.theme;
 
 import java.io.File;
+import java.util.List;
 import java.util.Map;
-
-import org.apache.commons.io.filefilter.WildcardFileFilter;
-import org.apache.maven.plugin.logging.Log;
 
 /**
  * Copies additional theme resources without special processing.
@@ -21,14 +19,12 @@ import org.apache.maven.plugin.logging.Log;
 class ThemeGeneratorResource extends ThemeGeneratorBase {
     
     /**
-     * @param buildDirectory Scratch build directory
-     * @param exclusionFilters WildcardFileFilter (i.e. exclude certain files)
-     * @param log The logger
+     * @param theme The theme.
+     * @param mojo The theme generator mojo.
      * @throws Exception if error occurs initializing generator
      */
-    public ThemeGeneratorResource(File buildDirectory, WildcardFileFilter exclusionFilters, Log log) throws Exception {
-        
-        super(null, buildDirectory, exclusionFilters, log);
+    public ThemeGeneratorResource(Theme theme, ThemeGeneratorMojo mojo) throws Exception {
+        super(theme, mojo);
     }
     
     @Override
@@ -38,18 +34,42 @@ class ThemeGeneratorResource extends ThemeGeneratorBase {
     }
     
     @Override
-    protected String getConfigTemplate() {
-        return null;
+    protected String relocateResource(String resourceName) {
+        return "web/" + getResourceBase() + "/" + resourceName;
     }
     
     @Override
-    protected String getRootPath() {
-        return "org/carewebframework/themes/";
+    protected String getResourceBase() {
+        return mojo.getThemeBase();
     }
     
     @Override
-    protected String relocateResource(String resourceName, String rootPath) {
-        return "web/" + rootPath + "/" + resourceName;
+    public void process() throws Exception {
+        List<String> resources = mojo.getResources();
+        
+        if (resources != null && !resources.isEmpty()) {
+            mojo.getLog().info("Copying additional resources.");
+            
+            for (String resource : resources) {
+                File src = new File(resource);
+                
+                if (src.exists()) {
+                    processResource(src, null);
+                }
+            }
+        }
+    }
+    
+    private void processResource(File file, String root) throws Exception {
+        if (file.isDirectory()) {
+            root = root == null ? file.getPath() : root;
+            
+            for (File f : file.listFiles()) {
+                processResource(f, root);
+            }
+        } else {
+            process(new ThemeResourceFile(file, root));
+        }
     }
     
 }
