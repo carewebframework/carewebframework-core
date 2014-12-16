@@ -22,7 +22,7 @@ import org.codehaus.plexus.util.FileUtils;
 /**
  * Generates a new theme directly from a CSS file.
  */
-class CSSThemeProcessor extends AbstractThemeProcessor {
+public class CSSThemeProcessor extends AbstractThemeProcessor {
     
     /**
      * @param theme The theme.

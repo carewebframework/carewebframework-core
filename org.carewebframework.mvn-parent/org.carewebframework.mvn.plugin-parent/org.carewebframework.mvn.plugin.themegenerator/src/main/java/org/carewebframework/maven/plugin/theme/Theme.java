@@ -12,7 +12,7 @@ package org.carewebframework.maven.plugin.theme;
 import org.apache.commons.lang.StringUtils;
 
 /**
- *
+ * Represents configuration information for a single theme.
  */
 public class Theme {
     

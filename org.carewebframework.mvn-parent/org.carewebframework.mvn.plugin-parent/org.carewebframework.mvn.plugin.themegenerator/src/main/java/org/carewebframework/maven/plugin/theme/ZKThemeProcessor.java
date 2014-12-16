@@ -38,7 +38,7 @@ import org.carewebframework.maven.plugin.transform.AbstractTransform;
  * Generates a new theme from a base theme by using specialized processors to transform individual
  * theme elements.
  */
-class ZKThemeProcessor extends AbstractThemeProcessor {
+public class ZKThemeProcessor extends AbstractThemeProcessor {
     
     /**
      * Base class for processing gif- and png-formatted images.
