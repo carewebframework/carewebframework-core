@@ -14,16 +14,18 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.carewebframework.maven.plugin.resource.IResource;
+
 /**
  * Represents a CSS resource entry.
  */
-public class ThemeResourceCSS implements IThemeResource {
+public class CSSResource implements IResource {
     
     private final File file;
     
     private final File mapper;
     
-    public ThemeResourceCSS(File file, File mapper) {
+    public CSSResource(File file, File mapper) {
         this.file = file;
         this.mapper = mapper;
         
@@ -42,13 +44,18 @@ public class ThemeResourceCSS implements IThemeResource {
     }
     
     @Override
-    public String getName() {
+    public String getRelativePath() {
         return file.getName();
     }
     
     @Override
     public long getTime() {
         return file.lastModified();
+    }
+    
+    @Override
+    public boolean isDirectory() {
+        return file.isDirectory();
     }
     
     public File getMapper() {

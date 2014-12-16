@@ -7,49 +7,50 @@
  * Disclaimer of Warranty and Limitation of Liability available at
  * http://www.carewebframework.org/licensing/disclaimer.
  */
-package org.carewebframework.maven.plugin.theme;
+package org.carewebframework.maven.plugin.processor;
 
 import java.io.File;
 import java.util.List;
-import java.util.Map;
+
+import org.carewebframework.maven.plugin.core.BaseMojo;
+import org.carewebframework.maven.plugin.resource.FileResource;
+import org.carewebframework.maven.plugin.transform.CopyTransform;
 
 /**
- * Copies additional theme resources without special processing.
+ * Copies additional resources without special processing.
  */
-class ThemeGeneratorResource extends ThemeGeneratorBase {
+public class ResourceProcessor extends AbstractProcessor<BaseMojo> {
+    
+    private final String resourceBase;
+    
+    private final List<String> resources;
     
     /**
-     * @param theme The theme.
-     * @param mojo The theme generator mojo.
+     * @param mojo The mojo.
+     * @param resourceBase The resource base path.
+     * @param resources The resources to process.
      * @throws Exception if error occurs initializing generator
      */
-    public ThemeGeneratorResource(Theme theme, ThemeGeneratorMojo mojo) throws Exception {
-        super(theme, mojo);
+    public ResourceProcessor(BaseMojo mojo, String resourceBase, List<String> resources) throws Exception {
+        super(mojo);
+        this.resourceBase = resourceBase;
+        this.resources = resources;
+        registerTransform("*.*", new CopyTransform(mojo));
     }
     
     @Override
-    protected void registerProcessors(Map<String, ResourceProcessor> processors) {
-        ResourceProcessor processor = new CopyProcessor();
-        processors.put("", processor);
-    }
-    
-    @Override
-    protected String relocateResource(String resourceName) {
+    public String relocateResource(String resourceName) {
         return "web/" + getResourceBase() + "/" + resourceName;
     }
     
     @Override
-    protected String getResourceBase() {
-        return mojo.getThemeBase();
+    public String getResourceBase() {
+        return resourceBase;
     }
     
     @Override
-    public void process() throws Exception {
-        List<String> resources = mojo.getResources();
-        
+    public void transform() throws Exception {
         if (resources != null && !resources.isEmpty()) {
-            mojo.getLog().info("Copying additional resources.");
-            
             for (String resource : resources) {
                 File src = new File(resource);
                 
@@ -62,13 +63,13 @@ class ThemeGeneratorResource extends ThemeGeneratorBase {
     
     private void processResource(File file, String root) throws Exception {
         if (file.isDirectory()) {
-            root = root == null ? file.getPath() : root;
+            root = root == null ? file.getAbsolutePath() : root;
             
             for (File f : file.listFiles()) {
                 processResource(f, root);
             }
         } else {
-            process(new ThemeResourceFile(file, root));
+            transform(new FileResource(file, root));
         }
     }
     

@@ -9,15 +9,10 @@
  */
 package org.carewebframework.maven.plugin.help;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Execute;
@@ -26,8 +21,7 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 
 import org.carewebframework.maven.plugin.core.BaseMojo;
-import org.carewebframework.maven.plugin.help.SourceLoader.ISourceArchive;
-import org.carewebframework.maven.plugin.help.SourceLoader.ISourceArchiveEntry;
+import org.carewebframework.maven.plugin.iterator.ZipIterator;
 
 import org.codehaus.plexus.util.FileUtils;
 
@@ -44,6 +38,12 @@ public class HelpConverterMojo extends BaseMojo {
      */
     @Parameter(property = "basedir/src/main/help/", required = true)
     private String baseDirectory;
+    
+    /**
+     * Help module base path
+     */
+    @Parameter(property = "moduleBase", defaultValue = "org/carewebframework/help/content/", required = true)
+    private String moduleBase;
     
     /**
      * Module id
@@ -87,11 +87,16 @@ public class HelpConverterMojo extends BaseMojo {
     @Parameter(property = "maven.carewebframework.help.archiveLoaders")
     private List<SourceLoader> archiveLoaders;
     
-    // This is the relative path to the help set definition file.
-    private String hsFilePath;
-    
     // Maps help format specifier to the associated source archive loader.
-    private final Map<String, SourceLoader> sourceArchiveMap = new HashMap<String, SourceLoader>();
+    private final Map<String, SourceLoader> sourceLoaders = new HashMap<String, SourceLoader>();
+    
+    public String getModuleBase() {
+        return moduleBase;
+    }
+    
+    public String getModuleId() {
+        return moduleId;
+    }
     
     /**
      * Main execution entry point for plug-in.
@@ -103,65 +108,24 @@ public class HelpConverterMojo extends BaseMojo {
             return;
         }
         
-        init("help", moduleVersion);
-        registerLoader(new SourceLoader("javahelp", "*.hs", ZipSource.class.getName()));
-        registerLoader(new SourceLoader("ohj", "*.hs", ZipSource.class.getName()));
+        init("help", moduleVersion, moduleBase);
+        registerLoader(new SourceLoader("javahelp", "*.hs", ZipIterator.class.getName()));
+        registerLoader(new SourceLoader("ohj", "*.hs", ZipIterator.class.getName()));
         registerExternalLoaders();
-        
-        SourceLoader loader = sourceArchiveMap.get(moduleFormat);
+        SourceLoader loader = sourceLoaders.get(moduleFormat);
         
         if (loader == null) {
             throw new MojoExecutionException("No source loader found for format " + moduleFormat);
         }
         
-        ISourceArchive sourceArchive = null;
-        String rootPath = "org/carewebframework/help/content/" + moduleId + "/";
-        String fullPath = "web/" + rootPath;
-        
         try {
             String sourceFilename = FileUtils.normalize(baseDirectory + "/" + moduleSource);
-            getLog().info("Extracting help module source from " + sourceFilename);
-            sourceArchive = loader.load(sourceFilename);
-            File outputDirectory = newSubdirectory(buildDirectory, "help-module");
-            File rootDirectory = newSubdirectory(outputDirectory, fullPath);
-            Iterator<? extends ISourceArchiveEntry> entries = sourceArchive.entries();
-            
-            while (entries.hasNext()) {
-                ISourceArchiveEntry entry = entries.next();
-                String entryPath = entry.getRelativePath();
-                
-                if (entryPath.startsWith("META-INF/")) {
-                    continue;
-                }
-                
-                if (hsFilePath == null && loader.isHelpSetFile(entryPath)) {
-                    hsFilePath = rootPath + entryPath;
-                }
-                
-                if (entry.isDirectory()) {
-                    newSubdirectory(rootDirectory, entryPath);
-                } else {
-                    InputStream in = entry.getInputStream();
-                    File outputFile = new File(rootDirectory, entryPath);
-                    FileOutputStream out = new FileOutputStream(outputFile);
-                    IOUtils.copy(in, out);
-                    IOUtils.closeQuietly(in);
-                    IOUtils.closeQuietly(out);
-                }
-            }
-            
-            if (hsFilePath == null) {
-                throwMojoException("Help set definition file not found in source jar.", null);
-            }
-            
-            addConfigEntry("help", moduleId, moduleId, hsFilePath, moduleName, getVersion(moduleVersion), moduleFormat);
+            HelpProcessor processor = new HelpProcessor(this, sourceFilename, loader);
+            processor.transform();
+            addConfigEntry("help", moduleId, processor.getHelpSetFile(), moduleName, getVersion(moduleVersion), moduleFormat);
             assembleArchive();
         } catch (Exception e) {
             throw new MojoExecutionException("Unexpected error.", e);
-        } finally {
-            if (sourceArchive != null) {
-                sourceArchive.close();
-            }
         }
     }
     
@@ -177,7 +141,7 @@ public class HelpConverterMojo extends BaseMojo {
     }
     
     private void registerLoader(SourceLoader loader) {
-        sourceArchiveMap.put(loader.getFormatSpecifier(), loader);
+        sourceLoaders.put(loader.getFormatSpecifier(), loader);
     }
     
 }

@@ -9,11 +9,9 @@
  */
 package org.carewebframework.maven.plugin.core;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -22,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.LineIterator;
 import org.apache.commons.lang.StringUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 
@@ -34,13 +33,13 @@ public class ConfigTemplate {
         
         String template;
         
-        int insertionPoint;
+        int placeholder;
         
         List<String> buffer = new ArrayList<String>();
         
-        ConfigEntry(String template, int insertionPoint) {
+        ConfigEntry(String template, int placeholder) {
             this.template = template;
-            this.insertionPoint = insertionPoint;
+            this.placeholder = placeholder;
         }
     }
     
@@ -61,18 +60,15 @@ public class ConfigTemplate {
         InputStream in = getClass().getResourceAsStream("/" + filename);
         
         if (in == null) {
-            throw new MojoExecutionException("Cannot find config file template.");
+            throw new MojoExecutionException("Cannot find config file template: " + filename);
         }
         
-        InputStreamReader isr = null;
-        BufferedReader br = null;
-        
         try {
-            isr = new InputStreamReader(in);
-            br = new BufferedReader(isr);
-            String line;
+            LineIterator lines = IOUtils.lineIterator(in, "UTF-8");
             
-            while ((line = br.readLine()) != null) {
+            while (lines.hasNext()) {
+                String line = lines.next();
+                
                 if (line.startsWith("*")) {
                     String[] pcs = line.split("\\*", 3);
                     entries.put(pcs[1], new ConfigEntry(pcs[2], buffer.size()));
@@ -84,8 +80,6 @@ public class ConfigTemplate {
         } catch (Exception e) {
             throw new MojoExecutionException("Unexpected error while creating configuration file.", e);
         } finally {
-            IOUtils.closeQuietly(br);
-            IOUtils.closeQuietly(isr);
             IOUtils.closeQuietly(in);
         }
         
@@ -97,11 +91,11 @@ public class ConfigTemplate {
     /**
      * Adds an entry to the config file.
      * 
-     * @param insertionTag Tag identifying insertion point for entry.
+     * @param placeholder Placeholder identifying insertion point for entry.
      * @param params Parameters to be applied to the template.
      */
-    public void addEntry(String insertionTag, String... params) {
-        ConfigEntry entry = entries.get(insertionTag);
+    public void addEntry(String placeholder, String... params) {
+        ConfigEntry entry = entries.get(placeholder);
         String line = entry.template;
         
         for (int i = 0; i < params.length; i++) {
@@ -119,7 +113,7 @@ public class ConfigTemplate {
      * @throws MojoExecutionException Unspecified exception.
      */
     protected void createFile(File stagingDirectory) throws MojoExecutionException {
-        File targetDirectory = BaseMojo.newSubdirectory(stagingDirectory, "META-INF");
+        File targetDirectory = newSubdirectory(stagingDirectory, "META-INF");
         PrintStream ps = null;
         
         try {
@@ -134,7 +128,7 @@ public class ConfigTemplate {
                     entry = iter.next();
                 }
                 
-                if (entry != null && entry.insertionPoint == i) {
+                if (entry != null && entry.placeholder == i) {
                     for (String line : entry.buffer) {
                         ps.println(line);
                     }
@@ -151,4 +145,22 @@ public class ConfigTemplate {
             IOUtils.closeQuietly(ps);
         }
     }
+    
+    /**
+     * Creates a new subdirectory under the specified parent directory.
+     * 
+     * @param parentDirectory The directory under which the subdirectory will be created.
+     * @param path The full path of the subdirectory.
+     * @return The subdirectory just created.
+     */
+    private File newSubdirectory(File parentDirectory, String path) {
+        File dir = new File(parentDirectory, path);
+        
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+        
+        return dir;
+    }
+    
 }

@@ -26,13 +26,11 @@ package org.carewebframework.maven.plugin.theme;
  */
 
 import java.io.File;
-import java.io.FileFilter;
 import java.util.List;
 import java.util.Set;
 
 import com.google.common.io.Files;
 
-import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Execute;
@@ -40,9 +38,9 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
-import org.apache.maven.project.MavenProject;
 
 import org.carewebframework.maven.plugin.core.BaseMojo;
+import org.carewebframework.maven.plugin.processor.AbstractProcessor;
 
 import org.codehaus.plexus.util.FileUtils;
 
@@ -109,18 +107,6 @@ public class ThemeGeneratorMojo extends BaseMojo {
     private File sourceDirectory;
     
     /**
-     * Exclude files.
-     */
-    @Parameter(property = "maven.careweb.theme.exclusions", required = true)
-    private List<String> exclusions;
-    
-    /**
-     * Additional resources to copy.
-     */
-    @Parameter(property = "resources", required = false)
-    private List<String> resources;
-    
-    /**
      * Themes to be built.
      */
     @Parameter(property = "themes", required = true)
@@ -161,8 +147,6 @@ public class ThemeGeneratorMojo extends BaseMojo {
     @Parameter(property = "maven.careweb.theme.skip", defaultValue = "false", required = false)
     private boolean skip;
     
-    private FileFilter exclusionFilter;
-    
     /**
      * @see org.apache.maven.plugin.Mojo#execute()
      */
@@ -173,8 +157,7 @@ public class ThemeGeneratorMojo extends BaseMojo {
             return;
         }
         
-        init("theme", themeVersion);
-        exclusionFilter = new WildcardFileFilter(exclusions);
+        init("theme", themeVersion, themeBase);
         
         // Copy theme dependencies
         try {
@@ -196,7 +179,6 @@ public class ThemeGeneratorMojo extends BaseMojo {
                 processTheme(theme);
             }
             
-            processTheme(null);
         } catch (final Exception e) {
             throwMojoException("Exception occurred processing source files for theme(s).", e);
         }
@@ -215,34 +197,6 @@ public class ThemeGeneratorMojo extends BaseMojo {
     
     protected File getSourceDirectory() {
         return sourceDirectory;
-    }
-    
-    protected List<String> getResources() {
-        return resources;
-    }
-    
-    protected MavenProject getMavenProject() {
-        return mavenProject;
-    }
-    
-    /**
-     * Returns true if the specified file is in the exclusion list.
-     * 
-     * @param fileName Name of file to check.
-     * @return True if the file is to be excluded.
-     */
-    public boolean isExcluded(String fileName) {
-        return isExcluded(new File(fileName));
-    }
-    
-    /**
-     * Returns true if the specified file is in the exclusion list.
-     * 
-     * @param file File instance to check.
-     * @return True if the file is to be excluded.
-     */
-    public boolean isExcluded(File file) {
-        return exclusionFilter.accept(file);
     }
     
     /**
@@ -310,17 +264,16 @@ public class ThemeGeneratorMojo extends BaseMojo {
      * @throws Exception Unspecified exception.
      */
     private void processTheme(Theme theme) throws Exception {
-        ThemeGeneratorBase themeGenerator;
+        AbstractProcessor<?> processor;
+        getLog().info("Processing theme: " + theme);
         
-        if (theme == null) {
-            themeGenerator = new ThemeGeneratorResource(theme, this);
-        } else if (theme.getBaseColor() != null) {
-            themeGenerator = new ThemeGeneratorZK(theme, this);
+        if (theme.getBaseColor() != null) {
+            processor = new ZKThemeProcessor(theme, this);
         } else {
-            themeGenerator = new ThemeGeneratorCSS(theme, this);
+            processor = new CSSThemeProcessor(theme, this);
         }
         
-        themeGenerator.process();
+        processor.transform();
     }
     
 }

@@ -7,15 +7,15 @@
  * Disclaimer of Warranty and Limitation of Liability available at
  * http://www.carewebframework.org/licensing/disclaimer.
  */
-package org.carewebframework.maven.plugin.theme;
+package org.carewebframework.maven.plugin.resource;
 
 import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * Represents a resource file within a theme.
+ * Represents an input resource to be processed.
  */
-public interface IThemeResource {
+public interface IResource {
     
     /**
      * Returns an input stream for the resource.
@@ -26,11 +26,11 @@ public interface IThemeResource {
     InputStream getInputStream() throws IOException;
     
     /**
-     * Returns the name of the resource.
+     * Returns the relative path of the resource.
      * 
-     * @return The resource name.
+     * @return The relative path.
      */
-    String getName();
+    String getRelativePath();
     
     /**
      * Returns the timestamp of the resource.
@@ -39,4 +39,10 @@ public interface IThemeResource {
      */
     long getTime();
     
+    /**
+     * Returns true if resource is a directory.
+     * 
+     * @return True if the resource is a directory.
+     */
+    boolean isDirectory();
 }

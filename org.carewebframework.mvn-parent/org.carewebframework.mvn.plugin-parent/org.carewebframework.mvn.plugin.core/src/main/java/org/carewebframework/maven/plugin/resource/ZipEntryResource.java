@@ -7,40 +7,45 @@
  * Disclaimer of Warranty and Limitation of Liability available at
  * http://www.carewebframework.org/licensing/disclaimer.
  */
-package org.carewebframework.maven.plugin.theme;
+package org.carewebframework.maven.plugin.resource;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 /**
- * Represents a resource entry within a jar file.
+ * Represents a resource entry within a zip file.
  */
-public class ThemeResourceJarEntry implements IThemeResource {
+public class ZipEntryResource implements IResource {
     
-    private final JarFile jarFile;
+    private final ZipFile zipFile;
     
-    private final JarEntry jarEntry;
+    private final ZipEntry zipEntry;
     
-    public ThemeResourceJarEntry(JarFile jarFile, JarEntry jarEntry) {
-        this.jarFile = jarFile;
-        this.jarEntry = jarEntry;
+    public ZipEntryResource(ZipFile zipFile, ZipEntry zipEntry) {
+        this.zipFile = zipFile;
+        this.zipEntry = zipEntry;
     }
     
     @Override
     public InputStream getInputStream() throws IOException {
-        return jarFile.getInputStream(jarEntry);
+        return zipFile.getInputStream(zipEntry);
     }
     
     @Override
-    public String getName() {
-        return jarEntry.getName();
+    public String getRelativePath() {
+        return zipEntry.getName();
     }
     
     @Override
     public long getTime() {
-        return jarEntry.getTime();
+        return zipEntry.getTime();
+    }
+    
+    @Override
+    public boolean isDirectory() {
+        return zipEntry.isDirectory();
     }
     
 }

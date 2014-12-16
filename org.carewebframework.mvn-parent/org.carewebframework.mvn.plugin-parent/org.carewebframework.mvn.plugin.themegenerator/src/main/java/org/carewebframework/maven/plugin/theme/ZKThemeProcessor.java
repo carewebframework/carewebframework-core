@@ -16,35 +16,38 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.awt.image.FilteredImageSource;
-import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.PrintStream;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.Map;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.imageio.ImageIO;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.LineIterator;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.sanselan.ImageFormat;
 import org.apache.sanselan.Sanselan;
+
+import org.carewebframework.maven.plugin.core.BaseMojo;
+import org.carewebframework.maven.plugin.iterator.ZipIterator;
+import org.carewebframework.maven.plugin.transform.AbstractTransform;
 
 /**
  * Generates a new theme from a base theme by using specialized processors to transform individual
  * theme elements.
  */
-class ThemeGeneratorZK extends ThemeGeneratorBase {
+class ZKThemeProcessor extends AbstractThemeProcessor {
     
     /**
      * Base class for processing gif- and png-formatted images.
      */
-    protected class ImageProcessor extends ResourceProcessor {
+    protected class ImageTransform extends AbstractTransform {
+        
+        public ImageTransform(BaseMojo mojo) {
+            super(mojo);
+        }
         
         protected Graphics2D g;
         
@@ -57,13 +60,13 @@ class ThemeGeneratorZK extends ThemeGeneratorBase {
         protected int height;
         
         @Override
-        protected void process() throws Exception {
+        public void process() throws Exception {
             final BufferedImage orig = ImageIO.read(this.inputStream);
             this.width = orig.getWidth();
             this.height = orig.getHeight();
             
             this.resultImg = Toolkit.getDefaultToolkit().createImage(
-                new FilteredImageSource(orig.getSource(), ThemeGeneratorZK.this.hueFilter));
+                new FilteredImageSource(orig.getSource(), ZKThemeProcessor.this.hueFilter));
             
             this.result = new BufferedImage(this.width, this.height, BufferedImage.TYPE_INT_ARGB);
             this.g = this.result.createGraphics();
@@ -73,10 +76,14 @@ class ThemeGeneratorZK extends ThemeGeneratorBase {
     /**
      * Processes a png image.
      */
-    protected class PngProcessor extends ImageProcessor {
+    protected class PngTransform extends ImageTransform {
+        
+        public PngTransform(BaseMojo mojo) {
+            super(mojo);
+        }
         
         @Override
-        protected void process() throws Exception {
+        public void process() throws Exception {
             super.process();
             g.drawImage(resultImg, 0, 0, null);
             ImageIO.write(result, "png", outputStream);
@@ -87,10 +94,14 @@ class ThemeGeneratorZK extends ThemeGeneratorBase {
     /**
      * Process a gif image.
      */
-    protected class GifProcessor extends ImageProcessor {
+    protected class GifTransform extends ImageTransform {
+        
+        public GifTransform(BaseMojo mojo) {
+            super(mojo);
+        }
         
         @Override
-        protected void process() throws Exception {
+        public void process() throws Exception {
             super.process();
             g.setColor(java.awt.Color.white);
             g.setComposite(AlphaComposite.Clear);
@@ -106,15 +117,19 @@ class ThemeGeneratorZK extends ThemeGeneratorBase {
      * Processes style sheets and related resources. Applies color morphing to any color references
      * and adjusts url references to use new path.
      */
-    protected class CssProcessor extends ResourceProcessor {
+    protected class CssTransform extends AbstractTransform {
+        
+        public CssTransform(BaseMojo mojo) {
+            super(mojo);
+        }
         
         @Override
-        protected void process() throws Exception {
-            List<String> readLines = IOUtils.readLines(new BufferedInputStream(inputStream));
+        public void process() throws Exception {
+            LineIterator iter = IOUtils.lineIterator(inputStream, "UTF-8");
             PrintStream ps = new PrintStream(outputStream);
             
-            for (final String line : readLines) {
-                ps.println(replaceURLs(replaceColor(line)));
+            while (iter.hasNext()) {
+                ps.println(replaceURLs(replaceColor(iter.next())));
             }
         }
     }
@@ -130,22 +145,18 @@ class ThemeGeneratorZK extends ThemeGeneratorBase {
      * @param mojo The theme generator mojo.
      * @throws Exception if error occurs initializing generator
      */
-    public ThemeGeneratorZK(Theme theme, ThemeGeneratorMojo mojo) throws Exception {
+    public ZKThemeProcessor(Theme theme, ThemeGeneratorMojo mojo) throws Exception {
         
         super(theme, mojo);
         color = toColor(theme.getBaseColor());
         hueFilter = new HueFilter(color);
         addConfigEntry("zk");
-    }
-    
-    @Override
-    protected void registerProcessors(Map<String, ResourceProcessor> processors) {
-        processors.put(".gif", new GifProcessor());
-        processors.put(".png", new PngProcessor());
-        CssProcessor processCss = new CssProcessor();
-        processors.put(".css", processCss);
-        processors.put(".css.dsp", processCss);
-        processors.put(".wcs", processCss);
+        registerTransform("*.gif", new GifTransform(mojo));
+        registerTransform("*.png", new PngTransform(mojo));
+        CssTransform cssTransform = new CssTransform(mojo);
+        registerTransform("*.css", cssTransform);
+        registerTransform("*.css.dsp", cssTransform);
+        registerTransform("*.wcs", cssTransform);
     }
     
     /**
@@ -155,13 +166,13 @@ class ThemeGeneratorZK extends ThemeGeneratorBase {
      * @return The modified path.
      */
     @Override
-    protected String relocateResource(String resourceName) {
+    public String relocateResource(String resourceName) {
         return resourceName.replaceFirst("^web", "web/" + getResourceBase());
     }
     
     @Override
-    protected String getResourceBase() {
-        return mojo.getThemeBase() + "zk/" + getTheme().getThemeName();
+    public String getResourceBase() {
+        return getThemeBase() + "zk/" + getTheme().getThemeName();
     }
     
     private Color toColor(String colorString) {
@@ -177,44 +188,12 @@ class ThemeGeneratorZK extends ThemeGeneratorBase {
     }
     
     @Override
-    protected void process() throws Exception {
+    public void transform() throws Exception {
         FileFilter filter = new WildcardFileFilter("*.jar");
         mojo.getLog().info("Processing ZK theme sources.");
         
-        for (File file : mojo.getSourceDirectory().listFiles(filter)) {
-            try {
-                processJarFile(file);
-            } catch (final Exception e) {
-                throw new Exception("Exception occurred processing source jar:" + file.getName(), e);
-            }
-        }
-    }
-    
-    /**
-     * Process one jar file from the source folder.
-     * 
-     * @param file A jar file from the source folder.
-     * @throws Exception Unspecified exception.
-     */
-    private void processJarFile(File file) throws Exception {
-        JarFile sourceJar = new JarFile(file);
-        Enumeration<JarEntry> entries = sourceJar.entries();
-        boolean wasProcessed = false;
-        
-        while (entries.hasMoreElements()) {
-            JarEntry entry = entries.nextElement();
-            
-            if (entry.isDirectory()) {
-                continue;
-            }
-            
-            IThemeResource resource = new ThemeResourceJarEntry(sourceJar, entry);
-            process(resource);
-        }
-        sourceJar.close();
-        
-        if (!wasProcessed) {
-            mojo.getLog().info("Source jar contained no themeable resources: " + file.getName());
+        for (File jarFile : mojo.getSourceDirectory().listFiles(filter)) {
+            transform(new ZipIterator(jarFile));
         }
     }
     

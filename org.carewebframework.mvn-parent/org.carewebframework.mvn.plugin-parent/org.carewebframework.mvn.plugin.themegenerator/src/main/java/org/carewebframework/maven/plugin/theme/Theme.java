@@ -71,13 +71,6 @@ public class Theme {
     }
     
     /**
-     * @return The theme type (zk or css).
-     */
-    public String getType() {
-        return themeUri == null ? "zk" : "css";
-    }
-    
-    /**
      * @return Display friendly representation.
      */
     @Override

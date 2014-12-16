@@ -10,9 +10,12 @@
 package org.carewebframework.maven.plugin.core;
 
 import java.io.File;
+import java.io.FileFilter;
+import java.util.List;
 
 import com.google.common.io.Files;
 
+import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.commons.lang.StringUtils;
 import org.apache.maven.archiver.MavenArchiveConfiguration;
 import org.apache.maven.archiver.MavenArchiver;
@@ -24,6 +27,8 @@ import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectHelper;
+
+import org.carewebframework.maven.plugin.processor.ResourceProcessor;
 
 import org.codehaus.plexus.archiver.jar.JarArchiver;
 
@@ -54,6 +59,18 @@ public abstract class BaseMojo extends AbstractMojo {
     protected MavenArchiveConfiguration archive = new MavenArchiveConfiguration();
     
     /**
+     * Excluded files.
+     */
+    @Parameter(property = "exclusions", required = false)
+    private List<String> exclusions;
+    
+    /**
+     * Additional resources to copy.
+     */
+    @Parameter(property = "resources", required = false)
+    private List<String> resources;
+    
+    /**
      * Webapp lib directory.
      */
     @Parameter(defaultValue = "${project.build.directory}/${project.build.finalName}/WEB-INF/lib", readonly = true)
@@ -75,6 +92,8 @@ public abstract class BaseMojo extends AbstractMojo {
     @Parameter(property = "maven.careweb.theme.failOnError", defaultValue = "true", required = false)
     private boolean failOnError;
     
+    private FileFilter exclusionFilter;
+    
     protected File stagingDirectory;
     
     protected ConfigTemplate configTemplate;
@@ -83,28 +102,35 @@ public abstract class BaseMojo extends AbstractMojo {
     
     protected String moduleVersion;
     
-    /**
-     * Creates a new subdirectory under the specified parent directory.
-     * 
-     * @param parentDirectory The directory under which the subdirectory will be created.
-     * @param path The full path of the subdirectory.
-     * @return The subdirectory just created.
-     */
-    protected static File newSubdirectory(File parentDirectory, String path) {
-        File dir = new File(parentDirectory, path);
-        
-        if (!dir.exists()) {
-            dir.mkdirs();
-        }
-        
-        return dir;
-    }
+    protected String moduleBase;
     
-    protected void init(String classifier, String version) throws MojoExecutionException {
+    /**
+     * Subclasses must call this method early in their execute method.
+     * 
+     * @param classifier The output jar classifier.
+     * @param version The packaging version.
+     * @param moduleBase The base path for generated resources.
+     * @throws MojoExecutionException Unspecified exception.
+     */
+    protected void init(String classifier, String version, String moduleBase) throws MojoExecutionException {
         this.classifier = classifier;
+        this.moduleBase = moduleBase;
         stagingDirectory = new File(buildDirectory, classifier + "-staging");
         configTemplate = new ConfigTemplate(classifier + "-spring.xml");
         moduleVersion = getVersion(version);
+        exclusionFilter = exclusions == null || exclusions.isEmpty() ? null : new WildcardFileFilter(exclusions);
+    }
+    
+    public MavenProject getMavenProject() {
+        return mavenProject;
+    }
+    
+    public List<String> getResources() {
+        return resources;
+    }
+    
+    public File getBuildDirectory() {
+        return buildDirectory;
     }
     
     /**
@@ -129,8 +155,14 @@ public abstract class BaseMojo extends AbstractMojo {
         return sb.toString();
     }
     
-    public void addConfigEntry(String insertionTag, String... params) {
-        configTemplate.addEntry(insertionTag, params);
+    /**
+     * Helper method to add a configuration file entry.
+     * 
+     * @param placeholder The insertion placeholder.
+     * @param params Parameter list.
+     */
+    public void addConfigEntry(String placeholder, String... params) {
+        configTemplate.addEntry(placeholder, params);
     }
     
     /**
@@ -160,7 +192,7 @@ public abstract class BaseMojo extends AbstractMojo {
      * @param modTime Modification timestamp for the new entry. If 0, defaults to the current time.
      * @return the new file
      */
-    public File newFile(String entryName, long modTime) {
+    public File newStagingFile(String entryName, long modTime) {
         File file = new File(stagingDirectory, entryName);
         
         if (modTime != 0) {
@@ -171,7 +203,31 @@ public abstract class BaseMojo extends AbstractMojo {
         return file;
     }
     
-    protected void assembleArchive() throws Exception {
+    /**
+     * Returns true if the specified file is in the exclusion list.
+     * 
+     * @param fileName Name of file to check.
+     * @return True if the file is to be excluded.
+     */
+    public boolean isExcluded(String fileName) {
+        return isExcluded(new File(fileName));
+    }
+    
+    /**
+     * Returns true if the specified file is in the exclusion list.
+     * 
+     * @param file File instance to check.
+     * @return True if the file is to be excluded.
+     */
+    public boolean isExcluded(File file) {
+        return exclusionFilter != null && exclusionFilter.accept(file);
+    }
+    
+    /**
+     * Assembles the archive file. Optionally, copies to the war application directory if the
+     * packaging type is "war".
+     */
+    protected void assembleArchive() {
         getLog().info("Assembling " + classifier + " archive");
         
         try {
@@ -182,12 +238,20 @@ public abstract class BaseMojo extends AbstractMojo {
                 File webappLibArchive = new File(this.webappLibDirectory, archive.getName());
                 Files.copy(archive, webappLibArchive);
             }
-        } catch (final Exception e) {
-            throw new Exception("Exception occurred assembling theme archive.", e);
+        } catch (Exception e) {
+            throw new RuntimeException("Exception occurred assembling theme archive.", e);
         }
         
     }
     
+    /**
+     * If "failOnError" is enabled, throws a MojoExecutionException. Otherwise, logs the exception
+     * and resumes execution.
+     * 
+     * @param msg The exception message.
+     * @param e The original exceptions.
+     * @throws MojoExecutionException Thrown exception.
+     */
     public void throwMojoException(String msg, Throwable e) throws MojoExecutionException {
         if (failOnError) {
             if (e == null) {
@@ -205,12 +269,17 @@ public abstract class BaseMojo extends AbstractMojo {
     }
     
     /**
-     * Creates the archive.
+     * Creates the archive from data in the staging directory.
      * 
      * @return The archive file.
      * @throws Exception Unspecified exception.
      */
     private File createArchive() throws Exception {
+        if (resources != null && !resources.isEmpty()) {
+            getLog().info("Copying additional resources.");
+            new ResourceProcessor(this, moduleBase, resources).transform();
+        }
+        
         if (configTemplate != null) {
             getLog().info("Creating config file.");
             configTemplate.createFile(stagingDirectory);

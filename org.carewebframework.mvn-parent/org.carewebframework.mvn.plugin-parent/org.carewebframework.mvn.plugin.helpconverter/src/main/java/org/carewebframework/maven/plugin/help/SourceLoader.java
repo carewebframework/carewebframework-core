@@ -11,33 +11,16 @@ package org.carewebframework.maven.plugin.help;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.io.InputStream;
-import java.util.Iterator;
 
 import org.apache.commons.io.filefilter.WildcardFileFilter;
+
+import org.carewebframework.maven.plugin.iterator.DirectoryIterator;
+import org.carewebframework.maven.plugin.iterator.IResourceIterator;
 
 /**
  * Definition file for a source archive loader.
  */
 public class SourceLoader {
-    
-    public interface ISourceArchiveEntry {
-        
-        String getRelativePath();
-        
-        InputStream getInputStream();
-        
-        boolean isDirectory();
-        
-    }
-    
-    public interface ISourceArchive {
-        
-        Iterator<? extends ISourceArchiveEntry> entries();
-        
-        void close();
-        
-    }
     
     private String formatSpecifier;
     
@@ -96,15 +79,15 @@ public class SourceLoader {
      * @return An ISourceArchive instance.
      * @throws Exception Unspecified exception.
      */
-    public ISourceArchive load(String archiveName) throws Exception {
+    public IResourceIterator load(String archiveName) throws Exception {
         File file = new File(archiveName);
         
         if (file.isDirectory()) {
-            return new FolderSource(file);
+            return new DirectoryIterator(file);
         }
         
         @SuppressWarnings("unchecked")
-        Class<? extends ISourceArchive> clazz = (Class<? extends ISourceArchive>) Class.forName(loaderClass);
+        Class<? extends IResourceIterator> clazz = (Class<? extends IResourceIterator>) Class.forName(loaderClass);
         return clazz.getConstructor(String.class).newInstance(archiveName);
         
     }
