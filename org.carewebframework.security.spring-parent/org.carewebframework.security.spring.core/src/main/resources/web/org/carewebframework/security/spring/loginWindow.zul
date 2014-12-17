@@ -17,6 +17,9 @@
 	<style>
 		body {
 			background-image: url(${c:encodeURL(labels.login.form.background.image)});
+			background-repeat: no-repeat;
+			background-position: center;
+			background-size: cover;
 			padding-top: 40px;
 		}
 	</style>
