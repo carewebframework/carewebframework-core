@@ -162,7 +162,7 @@ public class ThemeGeneratorMojo extends BaseMojo {
             assembleArchive();
             task = "cleaning up";
             FileUtils.deleteDirectory(sourceDirectory);
-        } catch (final Exception e) {
+        } catch (Exception e) {
             throwMojoException("Exception occurred while " + task + ".", e);
         }
         

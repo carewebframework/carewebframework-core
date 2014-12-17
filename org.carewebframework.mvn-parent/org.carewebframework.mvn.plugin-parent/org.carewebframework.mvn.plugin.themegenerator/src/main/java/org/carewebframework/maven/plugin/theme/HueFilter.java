@@ -51,7 +51,7 @@ class HueFilter extends RGBImageFilter {
      * 
      * @param fg - Color
      */
-    public HueFilter(final Color fg) {
+    public HueFilter(Color fg) {
         Color.RGBtoHSB(fg.getRed(), fg.getGreen(), fg.getBlue(), this.hsbvals);
         this.fgHue = this.hsbvals[0];
         this.fgSaturation = this.hsbvals[1];
@@ -64,15 +64,15 @@ class HueFilter extends RGBImageFilter {
      * components to be similar to the indicated new foreground color.
      */
     @Override
-    public int filterRGB(final int x, final int y, int rgb) {
-        final int alpha = (rgb >> 24) & 0xff;
-        final int red = (rgb >> 16) & 0xff;
-        final int green = (rgb >> 8) & 0xff;
-        final int blue = (rgb) & 0xff;
+    public int filterRGB(int x, int y, int rgb) {
+        int alpha = (rgb >> 24) & 0xff;
+        int red = (rgb >> 16) & 0xff;
+        int green = (rgb >> 8) & 0xff;
+        int blue = (rgb) & 0xff;
         Color.RGBtoHSB(red, green, blue, this.hsbvals);
-        final float newHue = this.fgHue;
-        final float newSaturation = this.hsbvals[1] * this.fgSaturation;
-        final float newBrightness = this.hsbvals[2] * ((this.hsbvals[1] * this.fgBrightness) + (1 - this.hsbvals[1]));
+        float newHue = this.fgHue;
+        float newSaturation = this.hsbvals[1] * this.fgSaturation;
+        float newBrightness = this.hsbvals[2] * ((this.hsbvals[1] * this.fgBrightness) + (1 - this.hsbvals[1]));
         rgb = Color.HSBtoRGB(newHue, newSaturation, newBrightness);
         return (rgb & 0x00ffffff) | (alpha << 24);
     }

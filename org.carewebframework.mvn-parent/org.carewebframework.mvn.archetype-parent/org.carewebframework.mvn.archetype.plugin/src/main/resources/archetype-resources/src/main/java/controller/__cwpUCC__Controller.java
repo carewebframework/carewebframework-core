@@ -43,7 +43,7 @@ public class ${cwpUCC}Controller extends PluginController {
      * @see org.carewebframework.ui.FrameworkController${symbol_pound}doAfterCompose(org.zkoss.zk.ui.Component)
      */
     @Override
-    public void doAfterCompose(final Component comp) throws Exception {
+    public void doAfterCompose(Component comp) throws Exception {
         super.doAfterCompose(comp);
         log.trace("Controller composed");
     }
@@ -52,7 +52,7 @@ public class ${cwpUCC}Controller extends PluginController {
      * @see org.carewebframework.shell.plugins.IPluginEvent${symbol_pound}onLoad(org.carewebframework.shell.plugins.PluginContainer)
      */
     @Override
-    public void onLoad(final PluginContainer container) {
+    public void onLoad(PluginContainer container) {
         super.onLoad(container);
     }
     

@@ -120,7 +120,7 @@ public abstract class AbstractProcessor<T extends BaseMojo> {
      * @throws Exception Unspecified exception.
      */
     protected boolean transform(IResource resource) throws Exception {
-        final String name = StringUtils.trimToEmpty(resource.getRelativePath());
+        String name = StringUtils.trimToEmpty(resource.getRelativePath());
         
         if (mojo.isExcluded(name)) {
             return false;

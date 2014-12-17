@@ -176,7 +176,7 @@ public abstract class BaseMojo extends AbstractMojo {
      * @param pc The version piece to add. If null, it is ignored. If non-numeric, a value of "0" is
      *            used.
      */
-    private void appendVersionPiece(final StringBuilder sb, String pc) {
+    private void appendVersionPiece(StringBuilder sb, String pc) {
         if ((pc != null) && !pc.isEmpty()) {
             pc = pc.trim();
             

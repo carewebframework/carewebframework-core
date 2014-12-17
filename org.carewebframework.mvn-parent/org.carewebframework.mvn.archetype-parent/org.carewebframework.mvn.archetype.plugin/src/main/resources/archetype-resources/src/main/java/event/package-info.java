@@ -12,8 +12,8 @@
  *  public class DeactivateButtonListener implements EventListener {
  * 
  *      //@Override annotation commented out only for formatting
- *      public void onEvent(final Event forwardEvent) throws Exception {
- *          final Event event = ZKUtil.getEventOrigin(forwardEvent);
+ *      public void onEvent(Event forwardEvent) throws Exception {
+ *          Event event = ZKUtil.getEventOrigin(forwardEvent);
  *      }
  *  }
  *  </pre>
