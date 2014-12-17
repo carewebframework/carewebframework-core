@@ -33,6 +33,7 @@ import org.apache.maven.project.MavenProjectHelper;
 import org.carewebframework.maven.plugin.processor.ResourceProcessor;
 
 import org.codehaus.plexus.archiver.jar.JarArchiver;
+import org.codehaus.plexus.util.FileUtils;
 
 /**
  * Base plugin.
@@ -236,14 +237,6 @@ public abstract class BaseMojo extends AbstractMojo {
      */
     public void throwMojoException(String msg, Throwable e) throws MojoExecutionException {
         if (failOnError) {
-            if (e == null) {
-                throw new MojoExecutionException(msg);
-            }
-            
-            if (e instanceof MojoExecutionException) {
-                throw (MojoExecutionException) e;
-            }
-            
             throw new MojoExecutionException(msg, e);
         } else {
             getLog().error(msg, e);
@@ -303,6 +296,7 @@ public abstract class BaseMojo extends AbstractMojo {
         getLog().info(archive.getManifestEntries().toString());
         archiver.createArchive(mavenSession, mavenProject, archive);
         projectHelper.attachArtifact(mavenProject, "jar", classifier, jarFile);
+        FileUtils.deleteDirectory(stagingDirectory);
         return jarFile;
     }
 }

@@ -29,8 +29,6 @@ import java.io.File;
 import java.util.List;
 import java.util.Set;
 
-import com.google.common.io.Files;
-
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Execute;
@@ -151,38 +149,23 @@ public class ThemeGeneratorMojo extends BaseMojo {
             return;
         }
         
-        init("theme", themeBase);
+        String task = null;
         
-        // Copy theme dependencies
         try {
-            validateSource();
+            task = "initializing";
+            init("theme", themeBase);
+            task = "copying theme dependencies";
             copyDependencies();
-        } catch (final Exception e) {
-            throwMojoException("Exception occurred validating theme source.", e);
-        }
-        
-        // Process the theme sources.
-        try {
-            getLog().info("Processing theme sources.");
-            
-            for (Theme theme : themes) {
-                if (theme.getThemeVersion() == null) {
-                    theme.setThemeVersion(getModuleVersion());
-                }
-                
-                processTheme(theme);
-            }
-            
-        } catch (final Exception e) {
-            throwMojoException("Exception occurred processing source files for theme(s).", e);
-        }
-        
-        // Assemble the archive
-        try {
+            task = "processing themes";
+            processThemes();
+            task = "assembling the archive";
             assembleArchive();
+            task = "cleaning up";
+            FileUtils.deleteDirectory(sourceDirectory);
         } catch (final Exception e) {
-            throwMojoException("Exception occurred creating theme config and assembly", e);
+            throwMojoException("Exception occurred while " + task + ".", e);
         }
+        
     }
     
     protected String getThemeBase() {
@@ -191,20 +174,6 @@ public class ThemeGeneratorMojo extends BaseMojo {
     
     protected File getSourceDirectory() {
         return sourceDirectory;
-    }
-    
-    /**
-     * Ensure that source directory exists.
-     * 
-     * @throws Exception Unspecified exception.
-     */
-    private void validateSource() throws Exception {
-        getLog().info("Validating theme source.");
-        FileUtils.forceMkdir(sourceDirectory);
-        
-        if (!sourceDirectory.exists() || !sourceDirectory.isDirectory()) {
-            throw new Exception("Source directory was not found: " + sourceDirectory);
-        }
     }
     
     /**
@@ -239,16 +208,36 @@ public class ThemeGeneratorMojo extends BaseMojo {
                     copyDependency = false;
                 }
             }
+            
             if (copyDependency) {
-                hasSource = true;
+                if (!hasSource) {
+                    hasSource = true;
+                    getLog().info("Copying theme dependencies.");
+                }
+                
                 File artifactFile = a.getFile();
                 File artifactCopyLocation = new File(this.sourceDirectory, artifactFile.getName());
                 getLog().debug("Copying dependency : " + artifactFile);
-                Files.copy(artifactFile, artifactCopyLocation);
+                FileUtils.copyFile(artifactFile, artifactCopyLocation);
             }
         }
         
         return hasSource;
+    }
+    
+    /**
+     * Process all themes
+     * 
+     * @throws Exception unspecified exception.
+     */
+    private void processThemes() throws Exception {
+        for (Theme theme : themes) {
+            if (theme.getThemeVersion() == null) {
+                theme.setThemeVersion(getModuleVersion());
+            }
+            
+            processTheme(theme);
+        }
     }
     
     /**

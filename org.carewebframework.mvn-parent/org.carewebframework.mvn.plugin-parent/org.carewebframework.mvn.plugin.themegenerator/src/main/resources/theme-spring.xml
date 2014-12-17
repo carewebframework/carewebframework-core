@@ -12,7 +12,7 @@
 
 	<beans profile="root">
 	
-			<!-- Theme declarations. -->
+		<!-- Theme declarations. -->
 *css*		<cwt:theme id="theme-{0}" type="CSS" url="{2}css/{0}-{3}" version="{1}" />
 *zk*		<cwt:theme id="theme-{0}" type="ZK" url="{2}zk/{0}/" version="{1}" />
 		
