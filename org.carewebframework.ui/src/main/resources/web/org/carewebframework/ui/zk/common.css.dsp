@@ -190,6 +190,10 @@
 
 /* Bootstrap additions */
 
+.panel {
+	margin: 0;
+}
+
 .panel-primary>.panel-heading .z-menu-content * {
 	color: white;
 	text-shadow: none;
