@@ -11,6 +11,7 @@ package org.carewebframework.maven.plugin.core;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.util.Date;
 import java.util.List;
 
 import com.google.common.io.Files;
@@ -23,6 +24,7 @@ import org.apache.maven.artifact.Artifact;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.descriptor.PluginDescriptor;
 import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
@@ -49,8 +51,14 @@ public abstract class BaseMojo extends AbstractMojo {
     @Parameter(property = "session", readonly = true, required = true)
     protected MavenSession mavenSession;
     
+    @Parameter(property = "plugin", readonly = true, required = true)
+    private PluginDescriptor pluginDescriptor;
+    
     @Parameter(property = "project.build.directory", required = true)
     protected File buildDirectory;
+    
+    @Parameter(property = "project.version", required = true)
+    protected String projectVersion;
     
     @Parameter(property = "buildNumber", required = false)
     protected String buildNumber;
@@ -100,24 +108,20 @@ public abstract class BaseMojo extends AbstractMojo {
     
     protected String classifier;
     
-    protected String moduleVersion;
-    
     protected String moduleBase;
     
     /**
      * Subclasses must call this method early in their execute method.
      * 
      * @param classifier The output jar classifier.
-     * @param version The packaging version.
      * @param moduleBase The base path for generated resources.
      * @throws MojoExecutionException Unspecified exception.
      */
-    protected void init(String classifier, String version, String moduleBase) throws MojoExecutionException {
+    protected void init(String classifier, String moduleBase) throws MojoExecutionException {
         this.classifier = classifier;
         this.moduleBase = moduleBase;
         stagingDirectory = new File(buildDirectory, classifier + "-staging");
         configTemplate = new ConfigTemplate(classifier + "-spring.xml");
-        moduleVersion = getVersion(version);
         exclusionFilter = exclusions == null || exclusions.isEmpty() ? null : new WildcardFileFilter(exclusions);
     }
     
@@ -134,16 +138,15 @@ public abstract class BaseMojo extends AbstractMojo {
     }
     
     /**
-     * Form a version string from the module version and build number.
+     * Form a version string from the project version and build number.
      * 
-     * @param moduleVersion The module version.
      * @return Version string.
      */
-    protected String getVersion(String moduleVersion) {
+    protected String getModuleVersion() {
         StringBuilder sb = new StringBuilder();
         int pcs = 0;
         
-        for (String pc : moduleVersion.split("\\.")) {
+        for (String pc : projectVersion.split("\\.")) {
             if (pcs++ > 3) {
                 break;
             } else {
@@ -282,6 +285,8 @@ public abstract class BaseMojo extends AbstractMojo {
         
         if (configTemplate != null) {
             getLog().info("Creating config file.");
+            configTemplate
+                    .addEntry("info", pluginDescriptor.getName(), pluginDescriptor.getVersion(), new Date().toString());
             configTemplate.createFile(stagingDirectory);
         }
         getLog().info("Creating archive.");

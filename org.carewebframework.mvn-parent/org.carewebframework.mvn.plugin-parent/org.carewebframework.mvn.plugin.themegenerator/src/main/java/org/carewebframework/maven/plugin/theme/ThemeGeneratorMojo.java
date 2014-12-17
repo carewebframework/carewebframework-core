@@ -101,16 +101,16 @@ import org.codehaus.plexus.util.FileUtils;
 public class ThemeGeneratorMojo extends BaseMojo {
     
     /**
-     * Directory containing source to consider when generating themes.
-     */
-    @Parameter(property = "maven.careweb.theme.sourceDirectory", defaultValue = "${project.build.directory}/theme-source", required = true)
-    private File sourceDirectory;
-    
-    /**
      * Themes to be built.
      */
     @Parameter(property = "themes", required = true)
     private List<Theme> themes;
+    
+    /**
+     * Directory containing source to consider when generating themes.
+     */
+    @Parameter(property = "maven.careweb.theme.sourceDirectory", defaultValue = "${project.build.directory}/theme-source", required = true)
+    private File sourceDirectory;
     
     /**
      * By default, all resolved dependencies will be considered in theme source. This parameter will
@@ -119,12 +119,6 @@ public class ThemeGeneratorMojo extends BaseMojo {
      */
     @Parameter(property = "themeSources", required = false)
     private List<String> themeSources;
-    
-    /**
-     * Theme version
-     */
-    @Parameter(property = "maven.careweb.theme.version", defaultValue = "${project.version}", required = true)
-    private String themeVersion;
     
     /**
      * Theme base path
@@ -157,7 +151,7 @@ public class ThemeGeneratorMojo extends BaseMojo {
             return;
         }
         
-        init("theme", themeVersion, themeBase);
+        init("theme", themeBase);
         
         // Copy theme dependencies
         try {
@@ -173,7 +167,7 @@ public class ThemeGeneratorMojo extends BaseMojo {
             
             for (Theme theme : themes) {
                 if (theme.getThemeVersion() == null) {
-                    theme.setThemeVersion(moduleVersion);
+                    theme.setThemeVersion(getModuleVersion());
                 }
                 
                 processTheme(theme);

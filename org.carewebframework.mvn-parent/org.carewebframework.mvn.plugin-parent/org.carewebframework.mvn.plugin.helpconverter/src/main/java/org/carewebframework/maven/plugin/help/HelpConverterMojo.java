@@ -64,12 +64,6 @@ public class HelpConverterMojo extends BaseMojo {
     private String moduleFormat;
     
     /**
-     * Module version
-     */
-    @Parameter(property = "project.version", required = true)
-    private String moduleVersion;
-    
-    /**
      * Source file name (Help jar file)
      */
     @Parameter(property = "maven.carewebframework.help.moduleSource")
@@ -108,7 +102,7 @@ public class HelpConverterMojo extends BaseMojo {
             return;
         }
         
-        init("help", moduleVersion, moduleBase);
+        init("help", moduleBase);
         registerLoader(new SourceLoader("javahelp", "*.hs", ZipIterator.class.getName()));
         registerLoader(new SourceLoader("ohj", "*.hs", ZipIterator.class.getName()));
         registerExternalLoaders();
@@ -122,7 +116,7 @@ public class HelpConverterMojo extends BaseMojo {
             String sourceFilename = FileUtils.normalize(baseDirectory + "/" + moduleSource);
             HelpProcessor processor = new HelpProcessor(this, sourceFilename, loader);
             processor.transform();
-            addConfigEntry("help", moduleId, processor.getHelpSetFile(), moduleName, getVersion(moduleVersion), moduleFormat);
+            addConfigEntry("help", moduleId, processor.getHelpSetFile(), moduleName, getModuleVersion(), moduleFormat);
             assembleArchive();
         } catch (Exception e) {
             throw new MojoExecutionException("Unexpected error.", e);

@@ -8,6 +8,8 @@
 		http://www.carewebframework.org/schema/help
 		http://www.carewebframework.org/schema/help/help-extensions.xsd">
 
+*info*	<!-- Assembled by {0} (v{1}) on {2}. -->
+
 	<beans profile="root">
 
 *help*		<cwh:help id="{0}" url="{1}" title="{2}" version="{3}" format="{4}" />
