@@ -41,9 +41,9 @@ public class CSSTransform extends AbstractTransform {
     
     private static final String DELIM = "|";
     
-    private final Map<String, String> srcMap = new HashMap<String, String>();
+    private final Map<String, String> srcMap = new LinkedHashMap<String, String>();
     
-    private final Map<String, String> defMap = new HashMap<String, String>();
+    private final Map<String, String> defMap = new LinkedHashMap<String, String>();
     
     @Override
     public void process(IResource resource, OutputStream outputStream) throws Exception {
@@ -110,8 +110,8 @@ public class CSSTransform extends AbstractTransform {
         
         if (srcMap.containsKey(sel)) {
             matches.add(sel);
-            refMap.put(sel, srcMap.remove(sel));
             defMap.remove(sel);
+            refMap.put(sel, srcMap.remove(sel));
         } else if (refMap.containsKey(sel)) {
             matches.add(sel);
         }
@@ -124,11 +124,11 @@ public class CSSTransform extends AbstractTransform {
      * @throws IOException IO exception.
      */
     private void writeMap(Map<String, String> map) throws IOException {
-        for (Entry<String, String> entry : map.entrySet()) {
-            if (entry.getValue().contains(DELIM)) {
-                //mojo.getLog().warn("Output contains unresolved reference: " + entry);
+        for (String entry : map.values()) {
+            if (entry.contains(DELIM)) {
+                mojo.getLog().warn("Output contains unresolved reference: " + entry);
             } else {
-                outputStream.write(entry.getValue().getBytes());
+                outputStream.write(entry.getBytes());
             }
         }
     }
@@ -261,7 +261,7 @@ public class CSSTransform extends AbstractTransform {
             
         }
         
-        checkForMatch("@after@", matches, refMap);
+        checkForMatch("@after@", matches, defMap);
         writeMap(refMap);
         writeMap(defMap);
         
