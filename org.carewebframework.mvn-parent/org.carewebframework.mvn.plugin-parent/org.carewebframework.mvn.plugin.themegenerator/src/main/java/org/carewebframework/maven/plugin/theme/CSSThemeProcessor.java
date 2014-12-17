@@ -50,7 +50,6 @@ public class CSSThemeProcessor extends AbstractThemeProcessor {
     public void transform() throws Exception {
         Theme theme = getTheme();
         MavenProject mavenProject = mojo.getMavenProject();
-        mojo.getLog().info("Processing theme: " + theme.getThemeName());
         String mapper = theme.getCSSMapper();
         File file = new File(mavenProject.getBasedir(), theme.getThemeUri());
         File map = mapper == null ? null : new File(mavenProject.getBasedir(), mapper);

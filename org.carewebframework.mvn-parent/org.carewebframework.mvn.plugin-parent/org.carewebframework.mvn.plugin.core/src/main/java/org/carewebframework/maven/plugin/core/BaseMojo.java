@@ -227,27 +227,6 @@ public abstract class BaseMojo extends AbstractMojo {
     }
     
     /**
-     * Assembles the archive file. Optionally, copies to the war application directory if the
-     * packaging type is "war".
-     */
-    protected void assembleArchive() {
-        getLog().info("Assembling " + classifier + " archive");
-        
-        try {
-            File archive = createArchive();
-            
-            if ("war".equalsIgnoreCase(mavenProject.getPackaging()) && this.warInclusion) {
-                webappLibDirectory.mkdirs();
-                File webappLibArchive = new File(this.webappLibDirectory, archive.getName());
-                Files.copy(archive, webappLibArchive);
-            }
-        } catch (Exception e) {
-            throw new RuntimeException("Exception occurred assembling theme archive.", e);
-        }
-        
-    }
-    
-    /**
      * If "failOnError" is enabled, throws a MojoExecutionException. Otherwise, logs the exception
      * and resumes execution.
      * 
@@ -272,12 +251,14 @@ public abstract class BaseMojo extends AbstractMojo {
     }
     
     /**
-     * Creates the archive from data in the staging directory.
+     * Assembles the archive file. Optionally, copies to the war application directory if the
+     * packaging type is "war".
      * 
-     * @return The archive file.
      * @throws Exception Unspecified exception.
      */
-    private File createArchive() throws Exception {
+    protected void assembleArchive() throws Exception {
+        getLog().info("Assembling " + classifier + " archive");
+        
         if (resources != null && !resources.isEmpty()) {
             getLog().info("Copying additional resources.");
             new ResourceProcessor(this, moduleBase, resources).transform();
@@ -289,6 +270,28 @@ public abstract class BaseMojo extends AbstractMojo {
                     .addEntry("info", pluginDescriptor.getName(), pluginDescriptor.getVersion(), new Date().toString());
             configTemplate.createFile(stagingDirectory);
         }
+        
+        try {
+            File archive = createArchive();
+            
+            if ("war".equalsIgnoreCase(mavenProject.getPackaging()) && this.warInclusion) {
+                webappLibDirectory.mkdirs();
+                File webappLibArchive = new File(this.webappLibDirectory, archive.getName());
+                Files.copy(archive, webappLibArchive);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Exception occurred assembling theme archive.", e);
+        }
+        
+    }
+    
+    /**
+     * Creates the archive from data in the staging directory.
+     * 
+     * @return The archive file.
+     * @throws Exception Unspecified exception.
+     */
+    private File createArchive() throws Exception {
         getLog().info("Creating archive.");
         Artifact artifact = mavenProject.getArtifact();
         String archiveName = artifact.getArtifactId() + "-" + artifact.getVersion() + "-" + classifier + ".jar";
