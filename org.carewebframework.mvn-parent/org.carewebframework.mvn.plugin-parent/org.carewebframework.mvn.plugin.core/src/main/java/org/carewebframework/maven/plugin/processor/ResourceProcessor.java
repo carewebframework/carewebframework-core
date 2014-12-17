@@ -10,6 +10,7 @@
 package org.carewebframework.maven.plugin.processor;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.List;
 
 import org.carewebframework.maven.plugin.core.BaseMojo;
@@ -52,10 +53,12 @@ public class ResourceProcessor extends AbstractProcessor<BaseMojo> {
     public void transform() throws Exception {
         if (resources != null && !resources.isEmpty()) {
             for (String resource : resources) {
-                File src = new File(resource);
+                File src = new File(mojo.getMavenProject().getBasedir(), resource);
                 
                 if (src.exists()) {
                     processResource(src, null);
+                } else {
+                    throw new FileNotFoundException(src.getPath());
                 }
             }
         }
