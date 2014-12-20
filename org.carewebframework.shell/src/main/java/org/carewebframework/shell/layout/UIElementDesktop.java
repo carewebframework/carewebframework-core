@@ -81,7 +81,7 @@ public class UIElementDesktop extends UIElementZKBase {
     
     private boolean sortHelpMenu;
     
-    private ThemeUtil.PanelStyle style = ThemeUtil.PanelStyle.INFO;
+    private ThemeUtil.PanelStyle style = ThemeUtil.PanelStyle.DEFAULT;
     
     private final UIElementMenubar menubar;
     
@@ -141,6 +141,7 @@ public class UIElementDesktop extends UIElementZKBase {
         title.setValue(text);
         desktopOuter.getPage().setTitle(text);
         ZKUtil.toggleSclass(titleCell, "cwf-desktop-notitle", "cwf-desktop-title", StringUtils.isEmpty(text));
+        Clients.resize(titlebar);
     }
     
     /**

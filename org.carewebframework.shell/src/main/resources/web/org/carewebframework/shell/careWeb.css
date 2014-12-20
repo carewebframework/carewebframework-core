@@ -22,21 +22,19 @@
 }
 
 .cwf-desktop-title {
- 	max-width: 200px;
- 	margin: 0 5px 5px;
- }
+ 	border-right: 1px solid;
+	max-width: 150px;
+	margin: 0 0 5px 5px;
+	padding-right: 5px;
+}
 
 .cwf-desktop-title .panel-title {
- 	font-size: 85%;
- }
+	font-size: 90%;
+ 	font-weight: bold;
+}
 
 .cwf-desktop-notitle {
  	display: none;
- }
-
-.cwf-desktop-title .z-label {
-	white-space: nowrap;
-	font-weight: bold;
 }
 
 .cwf-desktop-menubar {

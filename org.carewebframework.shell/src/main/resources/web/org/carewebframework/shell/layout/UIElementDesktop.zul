@@ -1,10 +1,10 @@
-<window height="100%" width="100%" sclass="cwf-desktop panel-info"
+<window height="100%" width="100%" sclass="cwf-desktop panel-default"
 	mold="bootstrap">
 	<caption style="padding:0;width:100%">
 		<hlayout id="titlebar" width="100%"
 			sclass="cwf-desktop-heading panel-heading" spacing="0">
 			<div visible="false">
-				<image id="icon" style="padding-right:5px" />
+				<image id="icon" style="padding:5px" />
 			</div>
 			<div id="titleCell" hflex="min"
 				zclass="cwf-desktop-title">

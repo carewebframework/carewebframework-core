@@ -138,6 +138,7 @@
 .cwf-picker-cell {
     cursor: pointer;
 	padding: 1px;
+	margin-bottom: 1px;
 	border: 1px solid transparent;
 }
 
