@@ -157,72 +157,44 @@
 	color: black!important;
 }
 
-.cwf-step-toolbar {
-    border: 0;
+.cwf-step-taskbar > * {
+	display: inline-block;
 }
 
 .cwf-step-taskbar-left {
 	float: left;
 }
 
-.cwf-step-taskbar-right {
-	float: right;
+.cwf-step-taskbar-left img {
+	max-height: 20px;
 }
 
-.cwf-step-button {
-	font-size: 0.75em;
+.cwf-step-taskbar-center {
 	text-align: center;
-	vertical-align: middle;
-	border: 1px solid #666;
-	background-color: #F0F0F0 !important;
-	min-height: 25px;
-    max-width: 100px;
-	min-width: 0;
-    cursor: pointer;
-    white-space: pre-wrap;
-    display: inline-block;
-	line-height: 20px;
-	margin: 2px 0;
+}
+
+.cwf-step-title {
+	margin-right: 10px;
+}
+
+.cwf-step-title:empty {
+	display: none;
 }
 
 .cwf-step-button:hover {
 	outline: 2px solid #CDE9FD;
 }
 
-.cwf-step-button-selected {
-	background-color: #D0D0D0 !important;
-	outline: 2px solid #E9FDCD !important;
-	cursor: default;
-}
-
-.cwf-step-button-disabled {
-	color: gray !important;
-}
-
 .cwf-step-separator {
 	display: inline-block;
 	vertical-align: middle;
-	background-image: url('images/stepConnector.png');
-	background-repeat: no-repeat;
-    height: 10px;
-    width: 10px;
-    margin: 4px 4px 4px 6px;
+	margin: 0 5px 0 5px;
+  	font-family: 'Glyphicons Halflings';
+  	font-size: 50%;
 }
 
-.cwf-step-toolbar {
-    min-height: 30px;
-}
-
-.cwf-step-toolbar table {
-	width: 100%;
-}
-
-.cwf-step-nonav button {
-	background: transparent!important;
-	border-width: 0;
-	color: white;
-	margin: 0 0 2px 0;
-	padding: 0 2px 0 2px;
+.cwf-step-separator:after {
+  content: "\e080\e080";
 }
 
 .cwf-step-nonav .cwf-step-separator {

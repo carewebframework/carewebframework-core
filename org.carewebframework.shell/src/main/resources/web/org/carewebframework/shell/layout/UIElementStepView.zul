@@ -4,10 +4,12 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
 
-	<idspace width="100%" height="100%">
-		<panel id="panel" width="100%" height="100%">
-			<toolbar id="toolbar" mold="panel" align="center" sclass="cwf-step-toolbar">
-				<hbox id="tbarLeft" sclass="cwf-step-taskbar-left" hflex="min" align="center">
+	<window id="outer" width="100%" height="100%" mold="bootstrap">
+		<caption id="caption" hflex="1">
+			<div zclass="cwf-step-taskbar" hflex="1">
+				<hbox id="tbarLeft" sclass="cwf-step-taskbar-left" hflex="min"
+					align="center">
+					<label zclass="cwf-step-title" id="lblTitle" />
 					<toolbarbutton id="btnHome"
 						image="~./org/carewebframework/shell/images/home.png" />
 					<toolbarbutton id="btnLeft"
@@ -15,10 +17,12 @@
 					<toolbarbutton id="btnRight"
 						image="~./org/carewebframework/shell/images/16x16/arrowR.png" />
 				</hbox>
-				<div id="tbarCenter" sclass="cwf-step-taskbar" hflex="1" />
-				<hbox id="tbarRight" sclass="cwf-step-taskbar-right" hflex="min" align="center"/>
-			</toolbar>
-			<panelchildren id="inner" style="overflow:auto" />
-		</panel>
-	</idspace>
+				<div id="tbarCenter" zclass="cwf-step-taskbar-center"
+					hflex="1" align="center" />
+				<hbox id="tbarRight" sclass="cwf-step-taskbar-right" hflex="min"
+					align="center" />
+			</div>
+		</caption>
+		<div id="inner" zclass="panel-body" height="100%" />
+	</window>
 </zk>

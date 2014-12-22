@@ -208,8 +208,12 @@
 			<cwp:serialization>
 				<cwp:property id="caption"
 					name="${labels.cwf.shell.plugin.stepview.caption.name}" description="${labels.cwf.shell.plugin.stepview.caption.description}" />
-				<cwp:property id="color" type="color"
-					name="${labels.cwf.shell.plugin.stepview.color.name}" description="${labels.cwf.shell.plugin.stepview.color.description}" />
+				<cwp:property id="style"
+					name="${labels.cwf.shell.plugin.stepview.style.name}" description="${labels.cwf.shell.plugin._desktop.style.description}" type="enum">
+					<cwp:config>
+						<cwp:entry key="class">org.carewebframework.shell.themes.ThemeUtil$PanelStyle</cwp:entry>
+					</cwp:config>
+				</cwp:property>
 				<cwp:property id="noHome" type="boolean"
 					name="${labels.cwf.shell.plugin.stepview.nohome.name}" description="${labels.cwf.shell.plugin.stepview.nohome.description}">
 					<cwp:config>

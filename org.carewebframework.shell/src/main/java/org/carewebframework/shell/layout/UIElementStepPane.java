@@ -51,6 +51,7 @@ public class UIElementStepPane extends UIElementZKBase {
         pane.setVisible(false);
         separator.setZclass("cwf-step-separator");
         button.setZclass("cwf-step-button");
+        button.setSclass("btn btn-sm");
         button.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
             
             @Override
@@ -157,10 +158,8 @@ public class UIElementStepPane extends UIElementZKBase {
      * Updates the button's styling based on the current state.
      */
     private void updateButtonStyle() {
-        String zclass = button.getZclass();
-        String sclass = isActivated() ? (zclass + "-selected ") : "";
-        sclass += isEnabled() ? "" : (zclass + "-disabled");
-        button.setSclass(sclass);
+        ZKUtil.updateSclass(button, "disabled", isEnabled());
+        ZKUtil.toggleSclass(button, "btn-primary", "btn-default", isActivated());
     }
     
     @Override

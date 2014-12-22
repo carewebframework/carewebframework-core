@@ -11,13 +11,15 @@ package org.carewebframework.shell.layout;
 
 import org.carewebframework.shell.designer.PropertyEditorStepView;
 import org.carewebframework.shell.property.PropertyTypeRegistry;
+import org.carewebframework.shell.themes.ThemeUtil;
 import org.carewebframework.ui.zk.ZKUtil;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Button;
-import org.zkoss.zul.Panel;
+import org.zkoss.zul.Label;
+import org.zkoss.zul.Window;
 
 /**
  * A step-oriented UI Element. This is implemented as a ZK panel component with a top toolbar
@@ -31,11 +33,11 @@ public class UIElementStepView extends UIElementZKBase {
         PropertyTypeRegistry.register("step", PropertyEditorStepView.class);
     }
     
-    private final Component outer;
+    private final Window outer;
     
-    private Component inner;
+    private HtmlBasedComponent inner;
     
-    private HtmlBasedComponent toolbar;
+    private Label lblTitle;
     
     private HtmlBasedComponent tbarCenter;
     
@@ -45,8 +47,6 @@ public class UIElementStepView extends UIElementZKBase {
     
     private Button btnHome;
     
-    private Panel panel;
-    
     private UIElementStepPane activePane;
     
     private boolean noNavigation;
@@ -54,6 +54,8 @@ public class UIElementStepView extends UIElementZKBase {
     private boolean noHome;
     
     private final String defaultHomeIcon;
+    
+    private ThemeUtil.PanelStyle style = ThemeUtil.PanelStyle.PRIMARY;
     
     /**
      * Creates the ZK components that comprise this UI element.
@@ -63,11 +65,10 @@ public class UIElementStepView extends UIElementZKBase {
     public UIElementStepView() throws Exception {
         super();
         maxChildren = Integer.MAX_VALUE;
-        outer = createFromTemplate();
+        outer = (Window) createFromTemplate();
         setOuterComponent(outer);
         setInnerComponent(inner);
         associateComponent(tbarCenter);
-        setColor("#1F4D69");
         defaultHomeIcon = btnHome.getImage();
     }
     
@@ -97,12 +98,12 @@ public class UIElementStepView extends UIElementZKBase {
     }
     
     /**
-     * Sets the caption of the panel.
+     * Sets the caption.
      * 
-     * @param caption The panel caption.
+     * @param caption The caption.
      */
     public void setCaption(String caption) {
-        panel.setTitle(caption);
+        lblTitle.setValue(caption);
     }
     
     /**
@@ -111,17 +112,7 @@ public class UIElementStepView extends UIElementZKBase {
      * @return The panel caption.
      */
     public String getCaption() {
-        return panel.getTitle();
-    }
-    
-    /**
-     * Apply color changes to toolbar only.
-     * 
-     * @see org.carewebframework.shell.layout.UIElementZKBase#applyColor()
-     */
-    @Override
-    public void applyColor() {
-        ZKUtil.updateStyle(toolbar, "background-color", getColor());
+        return lblTitle.getValue();
     }
     
     /**
@@ -201,7 +192,7 @@ public class UIElementStepView extends UIElementZKBase {
         btnRight.setVisible(!noNavigation && anyVisible);
         btnLeft.setDisabled(nextVisiblePaneIndex(false, i) < (noHome ? 0 : 1));
         btnRight.setDisabled(nextVisiblePaneIndex(true, i) == -1);
-        Clients.resize(panel);
+        Clients.resize(outer);
     }
     
     /**
@@ -311,7 +302,27 @@ public class UIElementStepView extends UIElementZKBase {
         updateState();
     }
     
+    /**
+     * Returns the panel style to use for the desktop.
+     * 
+     * @return The panel style.
+     */
+    public ThemeUtil.PanelStyle getStyle() {
+        return style;
+    }
+    
+    /**
+     * Sets the panel style to use for the desktop.
+     * 
+     * @param style The panel style.
+     */
+    public void setStyle(ThemeUtil.PanelStyle style) {
+        this.style = style;
+        outer.setSclass(style.getThemeClass());
+    }
+    
     private void updateSclass() {
-        toolbar.setSclass("cwf-step-toolbar" + (noNavigation ? " cwf-step-nonav" : "") + (noHome ? " cwf-step-nohome" : ""));
+        ZKUtil.updateSclass(outer.getCaption(), "cwf-step-nonav", !noNavigation);
+        ZKUtil.updateSclass(outer.getCaption(), "cwf-step-nohome", !noHome);
     }
 }
