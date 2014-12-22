@@ -35,7 +35,7 @@ public class UIElementStepPane extends UIElementZKBase {
     
     private final A button = new A("New Step");
     
-    private final Span separator = new Span();
+    private final Span step = new Span();
     
     private boolean isHomePane;
     
@@ -47,9 +47,9 @@ public class UIElementStepPane extends UIElementZKBase {
         fullSize(pane);
         setOuterComponent(pane);
         associateComponent(button);
-        associateComponent(separator);
+        associateComponent(step);
         pane.setVisible(false);
-        separator.setZclass("cwf-step-separator");
+        step.appendChild(button);
         button.setZclass("cwf-step-button");
         button.setSclass("btn btn-sm");
         button.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
@@ -82,8 +82,7 @@ public class UIElementStepPane extends UIElementZKBase {
     protected void bind() {
         super.bind();
         Component root = ((UIElementStepView) getParent()).getToolbarRoot();
-        root.appendChild(button);
-        root.appendChild(separator);
+        root.appendChild(step);
     }
     
     /**
@@ -94,8 +93,7 @@ public class UIElementStepPane extends UIElementZKBase {
     @Override
     protected void unbind() {
         super.unbind();
-        button.detach();
-        separator.detach();
+        step.detach();
     }
     
     /**
@@ -117,8 +115,7 @@ public class UIElementStepPane extends UIElementZKBase {
     @Override
     protected void afterMoveTo(int index) {
         super.afterMoveTo(index);
-        moveChild(button, index * 2);
-        moveChild(separator, index * 2 + 1);
+        moveChild(step, index);
         updateParentState();
     }
     
@@ -165,8 +162,8 @@ public class UIElementStepPane extends UIElementZKBase {
     @Override
     protected void updateVisibility(boolean visible, boolean activated) {
         super.updateVisibility(visible, activated);
-        button.setVisible(visible && !isHomePane);
-        separator.setVisible(button.isVisible() && getNextSibling(true) != null);
+        step.setVisible(visible && !isHomePane);
+        step.setZclass(getNextSibling(true) != null ? "cwf-step-separator" : null);
         updateButtonStyle();
     }
     

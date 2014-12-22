@@ -171,6 +171,8 @@
 
 .cwf-step-taskbar-center {
 	text-align: center;
+	padding-left: 0;
+	padding-right: 0;
 }
 
 .cwf-step-title {
@@ -189,25 +191,16 @@
 	outline: 2px solid #CDE9FD;
 }
 
-.cwf-step-separator {
-	display: inline-block;
-	vertical-align: middle;
+.cwf-step-separator:after {
 	margin: 0 5px 0 5px;
   	font-family: 'Glyphicons Halflings';
   	font-size: 50%;
+	content: "\e080\e080";
 }
 
-.cwf-step-separator:after {
-  content: "\e080\e080";
-}
-
-.cwf-step-nonav .cwf-step-separator {
+.cwf-step-nonav .cwf-step-separator:after {
 	visibility: hidden;
-	width: 0;
-}
-
-.cwf-step-nonav .z-toolbar-panel-hor {
-    text-align: center;
+	margin: 0;
 }
 
 .cwf-propertygrid-grid {
