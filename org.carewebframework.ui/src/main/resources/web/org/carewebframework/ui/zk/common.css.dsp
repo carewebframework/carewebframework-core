@@ -85,17 +85,6 @@
 	font-size: 2em;
 }
 
-.cwf-datetimebox-tbar {
-	background: none;
-	border: none;
-}
-
-.cwf-datetimebox-tbar .z-a {
-	color: blue;
-	background: none;
-	border: none
-}
-
 .cwf-mask * {
     cursor: default;
 }

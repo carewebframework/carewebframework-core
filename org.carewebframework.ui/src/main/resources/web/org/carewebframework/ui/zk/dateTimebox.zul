@@ -1,29 +1,35 @@
 <zk>
-	<grid id="grid" oddRowSclass="none" sizedByContent="true" width="300px">
+	<grid id="grid" oddRowSclass="none" sizedByContent="true"
+		width="350px" style="border-radius:6px">
 		<columns>
 			<column hflex="10" />
 			<column hflex="6" />
-			<column hflex="5" align="center" />
+			<column hflex="4" align="center" />
 		</columns>
 		<rows>
 			<row>
 				<datebox id="datebox" hflex="1" />
 				<timebox id="timebox" hflex="1" />
-				<button id="btnOK" label="${labels.cwf.datetime.btn.ok.label}" width="55px" />
+				<button id="btnOK" hflex="1"
+					label="${labels.cwf.datetime.btn.ok.label}"
+					zclass="btn" sclass="btn-sm btn-success" />
 			</row>
 			<row>
-				<toolbar sclass="cwf-datetimebox-tbar" width="100%">
-					<a id="btnToday" label="${labels.cwf.datetime.btn.today.label}" />
-				</toolbar>
-				<toolbar sclass="cwf-datetimebox-tbar" width="100%">
-					<a id="btnNow" label="${labels.cwf.datetime.btn.now.label}" />
-					<separator orient="vertical" width="5px" />
-					<a id="btnClear" label="${labels.cwf.datetime.btn.clear.label}" />
-				</toolbar>
-				<button id="btnCancel" label="${labels.cwf.datetime.btn.cancel.label}" width="55px" />
+				<a id="btnToday"
+					label="${labels.cwf.datetime.btn.today.label}" />
+				<div width="100%">
+					<a id="btnNow"
+						label="${labels.cwf.datetime.btn.now.label}" />
+					<space hflex="1" />
+					<a id="btnClear"
+						label="${labels.cwf.datetime.btn.clear.label}" />
+				</div>
+				<button id="btnCancel" hflex="1"
+					label="${labels.cwf.datetime.btn.cancel.label}"
+					zclass="btn" sclass="btn-sm btn-danger" />
 			</row>
 			<row spans="3" style="text-align:center">
-				<label id="error" style="color:red" />
+				<label id="error" zclass="text-danger" />
 			</row>
 		</rows>
 	</grid>
