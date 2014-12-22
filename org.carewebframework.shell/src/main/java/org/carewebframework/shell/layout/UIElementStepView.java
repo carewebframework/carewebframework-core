@@ -17,8 +17,8 @@ import org.carewebframework.ui.zk.ZKUtil;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.util.Clients;
-import org.zkoss.zul.Button;
 import org.zkoss.zul.Label;
+import org.zkoss.zul.Toolbarbutton;
 import org.zkoss.zul.Window;
 
 /**
@@ -41,11 +41,11 @@ public class UIElementStepView extends UIElementZKBase {
     
     private HtmlBasedComponent tbarCenter;
     
-    private Button btnLeft;
+    private Toolbarbutton btnLeft;
     
-    private Button btnRight;
+    private Toolbarbutton btnRight;
     
-    private Button btnHome;
+    private Toolbarbutton btnHome;
     
     private UIElementStepPane activePane;
     
@@ -141,6 +141,7 @@ public class UIElementStepView extends UIElementZKBase {
             activePane.activate(true);
         }
         
+        ZKUtil.updateSclass(btnHome, "z-toolbarbutton-checked", activePane == null || activePane.getIndex() != 0);
         updateNavigationElements();
     }
     

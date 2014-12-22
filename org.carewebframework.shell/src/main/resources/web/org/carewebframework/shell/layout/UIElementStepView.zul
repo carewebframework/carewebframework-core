@@ -10,7 +10,7 @@
 				<hlayout id="tbarLeft" sclass="cwf-step-taskbar-left"
 					hflex="min">
 					<label zclass="cwf-step-title" id="lblTitle" />
-					<toolbarbutton id="btnHome"
+					<toolbarbutton id="btnHome" style="margin-bottom:2px"
 						image="~./org/carewebframework/shell/images/home.png" />
 					<toolbarbutton id="btnLeft"
 						image="~./org/carewebframework/shell/images/16x16/arrowL.png" />
