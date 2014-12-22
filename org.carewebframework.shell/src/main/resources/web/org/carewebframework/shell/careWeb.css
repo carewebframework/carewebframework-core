@@ -183,8 +183,8 @@
 	display: none;
 }
 
-.panel-primary .cwf-step-button.btn-primary {
-	border: solid white;
+.cwf-step-button.btn-primary {
+	outline: solid 1px;
 }
 
 .cwf-step-button:hover {
