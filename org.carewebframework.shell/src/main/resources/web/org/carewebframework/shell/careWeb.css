@@ -181,6 +181,10 @@
 	display: none;
 }
 
+.panel-primary .cwf-step-button.btn-primary {
+	border: solid white;
+}
+
 .cwf-step-button:hover {
 	outline: 2px solid #CDE9FD;
 }

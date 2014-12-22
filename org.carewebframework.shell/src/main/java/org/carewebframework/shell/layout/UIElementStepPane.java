@@ -15,7 +15,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zul.Button;
+import org.zkoss.zul.A;
 import org.zkoss.zul.Div;
 import org.zkoss.zul.Menupopup;
 import org.zkoss.zul.Span;
@@ -33,7 +33,7 @@ public class UIElementStepPane extends UIElementZKBase {
     
     private final Div pane = new Div();
     
-    private final Button button = new Button("New Step");
+    private final A button = new A("New Step");
     
     private final Span separator = new Span();
     
