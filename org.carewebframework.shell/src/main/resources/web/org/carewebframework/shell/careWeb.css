@@ -109,23 +109,58 @@
 	padding: 0;
 }
 
-.cwf-tree-node-disabled * {
-	color: gray;
+.cwf-treeview {
+	overflow: auto;
 }
 
-.cwf-treeview .z-tree-body {
-	padding-right: 10px;
+.cwf-treeview-node {
+	text-align: left;
+	display: block;
 }
 
-.cwf-treeview .z-tree {
+.cwf-treeview-node > .cwf-treeview-node {
+	margin-left: 8px;
+}
+
+.cwf-treeview-node > a {
+	background-image: none;
+}
+
+.cwf-treeview-node > a:before {
+	display: inline-block;
+	width: 0;
+	height: 0;
+	margin-right: 5px;
+	margin-left: -5px;
+	vertical-align: middle;
+	border: 6px solid transparent;
+	content: " ";
+}
+
+.cwf-treeview-node-disabled {
+	opacity: 0.5;
+}
+
+.cwf-treeview-node-exp > a:before {
+	border-top: 6px solid;
+}
+
+.cwf-treeview-node-col > a:before {
+	border-left: 6px solid;
+	margin-top: -4px;
+}
+
+.cwf-treeview-node-col > span {
+	display: none;
+}
+		
+.cwf-treeview-node > a {
+	width: 100%;
 	border: none;
-	background: transparent;
-}
-
-.cwf-treeview .z-treecell-content {
-    white-space: nowrap;
-    text-overflow: ellipsis;
-}
+	text-align: left;
+	padding-top: 2px;
+	padding-bottom: 2px;
+}	
 
 .cwf-header-cell * {
 	text-overflow: ellipsis;

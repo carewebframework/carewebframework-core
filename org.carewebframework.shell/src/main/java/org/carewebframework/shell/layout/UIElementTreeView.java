@@ -11,15 +11,9 @@ package org.carewebframework.shell.layout;
 
 import org.carewebframework.shell.designer.PropertyEditorTreeView;
 import org.carewebframework.shell.property.PropertyTypeRegistry;
-import org.carewebframework.ui.zk.TreeUtil;
 
-import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.event.SelectEvent;
 import org.zkoss.zul.Div;
 import org.zkoss.zul.LayoutRegion;
-import org.zkoss.zul.Tree;
-import org.zkoss.zul.Treeitem;
 
 /**
  * A tree view consists of a selector pane on the left containing a ZK tree component and a view
@@ -34,21 +28,9 @@ public class UIElementTreeView extends UIElementZKBase {
         PropertyTypeRegistry.register("nodes", PropertyEditorTreeView.class);
     }
     
-    private final EventListener<SelectEvent<?, ?>> selectListener = new EventListener<SelectEvent<?, ?>>() {
-        
-        @Override
-        public void onEvent(SelectEvent<?, ?> event) throws Exception {
-            UIElementTreePane pane = (UIElementTreePane) getAssociatedUIElement(event.getReference());
-            
-            if (pane != null) {
-                setActivePane(pane);
-            }
-        }
-    };
-    
     private Div innerPane;
     
-    private Tree tree;
+    private Div selector;
     
     private LayoutRegion selectorPane;
     
@@ -59,7 +41,6 @@ public class UIElementTreeView extends UIElementZKBase {
         maxChildren = Integer.MAX_VALUE;
         setOuterComponent(createFromTemplate());
         setInnerComponent(innerPane);
-        tree.addEventListener(Events.ON_SELECT, selectListener);
     }
     
     /**
@@ -109,14 +90,14 @@ public class UIElementTreeView extends UIElementZKBase {
         super.beforeRemoveChild(child);
     }
     
-    /*package*/Tree getTree() {
-        return tree;
+    /*package*/Div getSelector() {
+        return selector;
     }
     
     @Override
     public void setDesignMode(boolean designMode) {
         super.setDesignMode(designMode);
-        TreeUtil.adjustVisibility(tree);
+        //TreeUtil.adjustVisibility(tree);
     }
     
     /**
@@ -125,8 +106,7 @@ public class UIElementTreeView extends UIElementZKBase {
     @Override
     public void activateChildren(boolean activate) {
         if (activePane == null || !activePane.isVisible()) {
-            Treeitem selItem = tree.getSelectedItem();
-            UIElementBase active = selItem == null ? getFirstVisibleChild() : getAssociatedUIElement(selItem);
+            UIElementBase active = getFirstVisibleChild();
             setActivePane((UIElementTreePane) active);
         }
         

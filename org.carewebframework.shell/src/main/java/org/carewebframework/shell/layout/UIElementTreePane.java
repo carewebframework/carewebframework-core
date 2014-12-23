@@ -9,16 +9,16 @@
  */
 package org.carewebframework.shell.layout;
 
-import org.carewebframework.ui.zk.TreeUtil;
 import org.carewebframework.ui.zk.ZKUtil;
 
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.MouseEvent;
+import org.zkoss.zul.A;
 import org.zkoss.zul.Div;
 import org.zkoss.zul.Menupopup;
-import org.zkoss.zul.Tree;
-import org.zkoss.zul.Treechildren;
-import org.zkoss.zul.Treeitem;
-import org.zkoss.zul.Treerow;
+import org.zkoss.zul.Span;
 
 /**
  * A child of a UIElementTreeView, this UI element specifies the tree path where its associated tree
@@ -32,9 +32,24 @@ public class UIElementTreePane extends UIElementZKBase {
         registerAllowedChildClass(UIElementTreePane.class, UIElementBase.class);
     }
     
+    private final EventListener<MouseEvent> clickListener = new EventListener<MouseEvent>() {
+        
+        @Override
+        public void onEvent(MouseEvent event) throws Exception {
+            if (canOpen && event.getX() < 20) {
+                setOpen(!open);
+            } else {
+                treeView.setActivePane(UIElementTreePane.this);
+            }
+        }
+        
+    };
+    
     private final Div pane = new Div();
     
-    private final Treeitem node = new Treeitem();
+    private final Span node;
+    
+    private final A anchor;
     
     private UIElementBase mainChild;
     
@@ -42,41 +57,70 @@ public class UIElementTreePane extends UIElementZKBase {
     
     private UIElementTreeView treeView;
     
+    private boolean open = true;
+    
+    private boolean canOpen;
+    
     public UIElementTreePane() {
         super();
         maxChildren = Integer.MAX_VALUE;
         fullSize(pane);
         pane.setVisible(false);
         setOuterComponent(pane);
-        node.appendChild(new Treechildren());
+        node = (Span) createFromTemplate();
         associateComponent(node);
-        ZKUtil.setCustomColorLogic(node, "jq(this).find('.z-treecell-content').css('color',value?value:'');");
+        anchor = (A) node.getFirstChild();
+        anchor.addEventListener(Events.ON_CLICK, clickListener);
+        associateComponent(anchor);
+    }
+    
+    private void setSelected(boolean selected) {
+        ZKUtil.toggleSclass(anchor, "btn-primary", "btn-default", selected);
+    }
+    
+    private void setOpen(boolean open) {
+        this.open = open;
+        
+        if (!canOpen) {
+            node.setSclass(null);
+        } else {
+            ZKUtil.toggleSclass(node, "cwf-treeview-node-exp", "cwf-treeview-node-col", open);
+        }
+    }
+    
+    private void checkChildren() {
+        UIElementBase child = getFirstVisibleChild();
+        
+        while (child != null && !(child instanceof UIElementTreePane)) {
+            child = child.getNextSibling(true);
+        }
+        
+        boolean oldOpen = canOpen;
+        canOpen = child != null;
+        
+        if (oldOpen != canOpen) {
+            setOpen(open);
+        }
     }
     
     @Override
     public void bringToFront() {
         super.bringToFront();
-        node.setSelected(true);
+        setSelected(true);
         treeView.setActivePane(this);
     }
     
     @Override
     protected void updateVisibility(boolean visible, boolean activated) {
         super.updateVisibility(visible, activated);
-        node.setSelected(activated);
+        setSelected(activated);
         node.setVisible(visible);
     }
     
     @Override
     public void setEnabled(boolean enabled) {
         super.setEnabled(enabled);
-        Treerow tr = node.getTreerow();
-        
-        if (tr == null) {
-            node.appendChild(tr = new Treerow());
-        }
-        
-        ZKUtil.updateSclass(tr, "cwf-tree-node-disabled", enabled);
+        ZKUtil.updateSclass(anchor, "cwf-treeview-node-disabled", enabled);
     }
     
     /**
@@ -110,6 +154,10 @@ public class UIElementTreePane extends UIElementZKBase {
         if (!(child instanceof UIElementTreePane)) {
             mainChild = child;
         }
+        
+        if (child instanceof UIElementTreePane) {
+            checkChildren();
+        }
     }
     
     @Override
@@ -122,6 +170,10 @@ public class UIElementTreePane extends UIElementZKBase {
         
         if (activeChild == child) {
             activeChild = null;
+        }
+        
+        if (child instanceof UIElementTreePane) {
+            checkChildren();
         }
     }
     
@@ -138,21 +190,10 @@ public class UIElementTreePane extends UIElementZKBase {
     @Override
     public void bind() {
         setTreeView(getAncestor(UIElementTreeView.class));
+        treeView.getInnerComponent().appendChild(pane);
         UIElementBase parent = getParent();
-        Tree tree = treeView == null ? null : treeView.getTree();
-        Treechildren tc = parent == treeView ? tree.getTreechildren() : ((UIElementTreePane) parent).node.getTreechildren();
-        UIElementBase sib = getNextSibling(false);
-        
-        while (sib != null && !(sib instanceof UIElementTreePane)) {
-            sib = sib.getNextSibling(false);
-        }
-        
-        Component refNode = sib instanceof UIElementTreePane ? ((UIElementTreePane) sib).node : null;
-        tc.insertBefore(node, refNode);
-        
-        if (tree != null) {
-            TreeUtil.adjustVisibility(tree);
-        }
+        Component root = parent == treeView ? treeView.getSelector() : ((UIElementTreePane) parent).node;
+        root.appendChild(node);
     }
     
     /**
@@ -164,7 +205,6 @@ public class UIElementTreePane extends UIElementZKBase {
     private void setTreeView(UIElementTreeView treeView) {
         if (this.treeView != treeView) {
             this.treeView = treeView;
-            treeView.getInnerComponent().appendChild(pane);
             
             for (UIElementBase child : getChildren()) {
                 if (child instanceof UIElementTreePane) {
@@ -181,11 +221,6 @@ public class UIElementTreePane extends UIElementZKBase {
     public void unbind() {
         node.detach();
         pane.detach();
-        
-        if (treeView != null) {
-            TreeUtil.adjustVisibility(treeView.getTree());
-            treeView = null;
-        }
     }
     
     /**
@@ -198,14 +233,7 @@ public class UIElementTreePane extends UIElementZKBase {
     
     @Override
     public void afterMoveTo(int index) {
-        super.afterMoveTo(index);
-        moveChild(node, index);
-    }
-    
-    @Override
-    protected void applyColor() {
-        applyColor(pane);
-        applyColor(node);
+        moveChild(node, index + 1);
     }
     
     @Override
@@ -230,6 +258,8 @@ public class UIElementTreePane extends UIElementZKBase {
             
             parent.activate(true);
         }
+        
+        setSelected(active);
     }
     
     private boolean checkChildClass(Class<? extends UIElementBase> clazz) {
@@ -242,10 +272,10 @@ public class UIElementTreePane extends UIElementZKBase {
     }
     
     public String getLabel() {
-        return node.getLabel();
+        return anchor.getLabel();
     }
     
     public void setLabel(String label) {
-        node.setLabel(label);
+        anchor.setLabel(label);
     }
 }
