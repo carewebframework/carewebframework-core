@@ -143,6 +143,12 @@
 						<cwp:entry key="false">collapsed</cwp:entry>
 					</cwp:config>
 				</cwp:property>
+				<cwp:property id="selectionStyle"
+					name="${labels.cwf.shell.plugin.treeview.selection.style.name}" description="${labels.cwf.shell.plugin.treeview.selection.style.description}" type="enum">
+					<cwp:config>
+						<cwp:entry key="class">org.carewebframework.shell.themes.ThemeUtil$ButtonStyle</cwp:entry>
+					</cwp:config>
+				</cwp:property>
 				<cwp:property id=""
 					name="${labels.cwf.shell.plugin.treeview.nodes.name}" type="nodes"
 					description="${labels.cwf.shell.plugin.treeview.nodes.description}" />

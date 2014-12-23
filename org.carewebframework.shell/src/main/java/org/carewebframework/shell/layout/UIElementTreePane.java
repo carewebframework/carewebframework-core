@@ -9,6 +9,7 @@
  */
 package org.carewebframework.shell.layout;
 
+import org.carewebframework.shell.themes.ThemeUtil;
 import org.carewebframework.ui.zk.ZKUtil;
 
 import org.zkoss.zk.ui.Component;
@@ -32,6 +33,10 @@ public class UIElementTreePane extends UIElementZKBase {
         registerAllowedChildClass(UIElementTreePane.class, UIElementBase.class);
     }
     
+    /**
+     * Handler for node click events. Click will either select the node or toggle its drop down
+     * state, depending on the click position and presence of child panes.
+     */
     private final EventListener<MouseEvent> clickListener = new EventListener<MouseEvent>() {
         
         @Override
@@ -57,6 +62,8 @@ public class UIElementTreePane extends UIElementZKBase {
     
     private UIElementTreeView treeView;
     
+    private boolean selected;
+    
     private boolean open = true;
     
     private boolean canOpen;
@@ -74,10 +81,33 @@ public class UIElementTreePane extends UIElementZKBase {
         associateComponent(anchor);
     }
     
+    /**
+     * Sets the selection state of the node.
+     * 
+     * @param selected The selection state.
+     */
     private void setSelected(boolean selected) {
-        ZKUtil.toggleSclass(anchor, "btn-primary", "btn-default", selected);
+        this.selected = selected;
+        ZKUtil.toggleSclass(anchor, treeView.getSelectionStyle().getThemeClass(), "btn-default", selected);
     }
     
+    /**
+     * Called by tree view when the selection style is changed.
+     * 
+     * @param oldStyle The old selection style.
+     * @param newStyle The new selection style.
+     */
+    /* package */void updateSelectionStyle(ThemeUtil.ButtonStyle oldStyle, ThemeUtil.ButtonStyle newStyle) {
+        if (selected) {
+            ZKUtil.toggleSclass(anchor, newStyle.getThemeClass(), oldStyle.getThemeClass(), true);
+        }
+    }
+    
+    /**
+     * Sets the drop down state of the node.
+     * 
+     * @param open If true, show child nodes. If false, hide child nodes.
+     */
     private void setOpen(boolean open) {
         this.open = open;
         
@@ -88,6 +118,9 @@ public class UIElementTreePane extends UIElementZKBase {
         }
     }
     
+    /**
+     * Determines canOpen state based on whether any visible child nodes are present.
+     */
     private void checkChildren() {
         UIElementBase child = getFirstVisibleChild();
         
@@ -106,7 +139,6 @@ public class UIElementTreePane extends UIElementZKBase {
     @Override
     public void bringToFront() {
         super.bringToFront();
-        setSelected(true);
         treeView.setActivePane(this);
     }
     
@@ -117,6 +149,9 @@ public class UIElementTreePane extends UIElementZKBase {
         node.setVisible(visible);
     }
     
+    /**
+     * Sets the enabled state of the node.
+     */
     @Override
     public void setEnabled(boolean enabled) {
         super.setEnabled(enabled);
@@ -211,6 +246,10 @@ public class UIElementTreePane extends UIElementZKBase {
                     ((UIElementTreePane) child).setTreeView(treeView);
                 }
             }
+            
+            if (selected && treeView != null) {
+                setSelected(selected);
+            }
         }
     }
     
@@ -231,16 +270,27 @@ public class UIElementTreePane extends UIElementZKBase {
         return getLabel();
     }
     
+    /**
+     * Only the node needs to be resequenced, since pane sequencing is arbitrary.
+     */
     @Override
     public void afterMoveTo(int index) {
         moveChild(node, index + 1);
     }
     
+    /**
+     * Apply the hint to the selector node.
+     */
     @Override
     protected void applyHint() {
         applyHint(node);
     }
     
+    /**
+     * Called by tree view to activate / inactivate this node.
+     * 
+     * @param active Desired activation state.
+     */
     /*package*/void makeActivePane(boolean active) {
         if (!active) {
             activate(false);
@@ -262,6 +312,12 @@ public class UIElementTreePane extends UIElementZKBase {
         setSelected(active);
     }
     
+    /**
+     * Check to be certain that child class is legit.
+     * 
+     * @param clazz Class of child to be considered.
+     * @return True if child may be added.
+     */
     private boolean checkChildClass(Class<? extends UIElementBase> clazz) {
         if (clazz != UIElementTreePane.class && mainChild != null) {
             setRejectReason("Tree pane can accept only one child of this type.");
@@ -278,4 +334,5 @@ public class UIElementTreePane extends UIElementZKBase {
     public void setLabel(String label) {
         anchor.setLabel(label);
     }
+    
 }

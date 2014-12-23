@@ -11,6 +11,7 @@ package org.carewebframework.shell.layout;
 
 import org.carewebframework.shell.designer.PropertyEditorTreeView;
 import org.carewebframework.shell.property.PropertyTypeRegistry;
+import org.carewebframework.shell.themes.ThemeUtil;
 
 import org.zkoss.zul.Div;
 import org.zkoss.zul.LayoutRegion;
@@ -35,6 +36,8 @@ public class UIElementTreeView extends UIElementZKBase {
     private LayoutRegion selectorPane;
     
     private UIElementTreePane activePane;
+    
+    private ThemeUtil.ButtonStyle selectionStyle = ThemeUtil.ButtonStyle.PRIMARY;
     
     public UIElementTreeView() throws Exception {
         super();
@@ -80,6 +83,28 @@ public class UIElementTreeView extends UIElementZKBase {
     }
     
     /**
+     * Returns the button style to use for selected nodes.
+     * 
+     * @return Button style for selected nodes.
+     */
+    public ThemeUtil.ButtonStyle getSelectionStyle() {
+        return selectionStyle;
+    }
+    
+    /**
+     * Sets the button style to use for selected nodes.
+     * 
+     * @param selectionStyle Button style for selected nodes.
+     */
+    public void setSelectionStyle(ThemeUtil.ButtonStyle selectionStyle) {
+        if (activePane != null) {
+            activePane.updateSelectionStyle(this.selectionStyle, selectionStyle);
+        }
+        
+        this.selectionStyle = selectionStyle;
+    }
+    
+    /**
      * Remove the associated tree node when a tree pane is removed.
      */
     @Override
@@ -90,14 +115,13 @@ public class UIElementTreeView extends UIElementZKBase {
         super.beforeRemoveChild(child);
     }
     
+    /**
+     * Returns the selector pane's container.
+     * 
+     * @return The selector pane container.
+     */
     /*package*/Div getSelector() {
         return selector;
-    }
-    
-    @Override
-    public void setDesignMode(boolean designMode) {
-        super.setDesignMode(designMode);
-        //TreeUtil.adjustVisibility(tree);
     }
     
     /**
