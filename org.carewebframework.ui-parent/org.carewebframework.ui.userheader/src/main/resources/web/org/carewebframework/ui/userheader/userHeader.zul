@@ -9,16 +9,14 @@
 			<label id="userHeader" />
 		</hlayout>
 		<hlayout sclass="cwf-header-row" hflex="1" vflex="1">
-			<div hflex="1">
-				<a id="password" label="${userheader.password.label}"
-					tooltiptext="${labels.userheader.password.hint}" visible="true" />
-			</div>
-			<div style="text-align:right">
-				<a id="lock" label="${labels.userheader.lock.label}"
-					tooltiptext="${labels.userheader.lock.hint}" />
-				<a id="logout" label="${labels.userheader.logout.label}"
-					tooltiptext="${labels.userheader.logout.hint}" />
-			</div>
+			<a id="password" label="${labels.userheader.password.label}"
+				tooltiptext="${labels.userheader.password.hint}" visible="true" />
+			<space hflex="1" />
+			<a id="lock" label="${labels.userheader.lock.label}"
+				tooltiptext="${labels.userheader.lock.hint}" />
+			<space />
+			<a id="logout" label="${labels.userheader.logout.label}"
+				tooltiptext="${labels.userheader.logout.hint}" />
 		</hlayout>
 	</vlayout>
 </zk>
