@@ -231,7 +231,7 @@ public class PromptDialog extends Window {
         String[] sclass = styles == null ? null : StrUtil.split(styles, "|", 3, false);
         args.put("iconClass", sclass == null ? null : sclass[0]);
         args.put("textClass", sclass == null ? null : sclass[1]);
-        args.put("panelClass", sclass == null || sclass[2].isEmpty() ? "panel-primary" : sclass[2]);
+        args.put("panelClass", sclass == null || sclass[2] == null ? "panel-primary" : sclass[2]);
         args.put("sclass", "panel-default");
         args.put("focus", StrUtil.formatMessage(defaultButton));
         args.put("responses", responseList);
