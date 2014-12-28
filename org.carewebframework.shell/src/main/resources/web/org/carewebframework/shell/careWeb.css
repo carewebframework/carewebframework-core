@@ -124,7 +124,13 @@
 
 .cwf-treeview-node > a {
 	background-image: none;
-}
+	width: 100%;
+	border: none;
+	text-align: left;
+	padding-top: 2px;
+	padding-bottom: 2px;
+	font-size: 90%;
+}	
 
 .cwf-treeview-node > a:before {
 	display: inline-block;
@@ -154,14 +160,6 @@
 	display: none;
 }
 		
-.cwf-treeview-node > a {
-	width: 100%;
-	border: none;
-	text-align: left;
-	padding-top: 2px;
-	padding-bottom: 2px;
-}	
-
 .cwf-header-cell * {
 	text-overflow: ellipsis;
 	white-space: nowrap;
