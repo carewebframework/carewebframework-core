@@ -1,23 +1,24 @@
-<zk xmlns="http://www.zkoss.org/2005/zul"
-	xmlns:h="http://www.w3.org/1999/xhtml" 
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+<zk>
+	<window closable="true" maximizable="true" sizable="true"
+		border="normal" sclass="panel-info cwf-popup" mold="bootstrap"
+		left="50%" top="50%" title="Popup Message"
+		contentSclass="bg-warning text-center" mode="highlighted"
+		style="position:absolute">
+		<label id="messagetext" value="message text" multiline="true" />
+	</window>
 
-<window closable="true" maximizable="true" minimizable="false" sizable="true" border="normal"
-	minheight="50" minwidth="200"
-	left="50%" top="50%"
-	title="Popup Message"
-	contentSclass="cwf-popup"
-	mode="highlighted"
-	style="position:absolute">
-		<label id="messagetext" value="message text" multiline="true"/>
-</window>
-
-<style>
-	.cwf-popup {
-		background:yellow;
-		text-align:center;
-	}
-</style>
-
+	<style>
+		.cwf-popup {
+			min-height: 50px;
+			min-width: 200px;
+		}
+		
+		.cwf-popup .panel-caption {
+			padding: 5px;
+		}	
+		
+		.cwf-popup .panel-title {
+			zoom: 80%;
+		}	
+	</style>
 </zk>
