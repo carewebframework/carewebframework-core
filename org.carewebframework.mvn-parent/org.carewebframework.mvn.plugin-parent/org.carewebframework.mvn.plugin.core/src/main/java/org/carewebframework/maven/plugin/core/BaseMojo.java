@@ -65,7 +65,7 @@ public abstract class BaseMojo extends AbstractMojo {
     protected String buildNumber;
     
     @Parameter(property = "archive", required = false)
-    protected MavenArchiveConfiguration archive = new MavenArchiveConfiguration();
+    protected MavenArchiveConfiguration archiveConfig = new MavenArchiveConfiguration();
     
     /**
      * Excluded files.
@@ -124,6 +124,7 @@ public abstract class BaseMojo extends AbstractMojo {
         stagingDirectory = new File(buildDirectory, classifier + "-staging");
         configTemplate = new ConfigTemplate(classifier + "-spring.xml");
         exclusionFilter = exclusions == null || exclusions.isEmpty() ? null : new WildcardFileFilter(exclusions);
+        archiveConfig.setAddMavenDescriptor(false);
     }
     
     public MavenProject getMavenProject() {
@@ -293,10 +294,11 @@ public abstract class BaseMojo extends AbstractMojo {
         jarArchiver.addDirectory(stagingDirectory);
         archiver.setArchiver(jarArchiver);
         archiver.setOutputFile(jarFile);
-        getLog().info(archive.getManifestEntries().toString());
-        archiver.createArchive(mavenSession, mavenProject, archive);
-        projectHelper.attachArtifact(mavenProject, "jar", classifier, jarFile);
+        getLog().info(archiveConfig.getManifestEntries().toString());
+        archiver.createArchive(mavenSession, mavenProject, archiveConfig);
+        projectHelper.attachArtifact(mavenProject, jarFile, classifier);
         FileUtils.deleteDirectory(stagingDirectory);
         return jarFile;
     }
+    
 }
