@@ -15,15 +15,15 @@
 		</west>
 		<center>
 			<div width="100%" height="100%">
-				<toolbar height="32px">
-					<button id="btnPrevious"
+				<toolbar>
+					<toolbarbutton id="btnPrevious" zclass="btn" sclass="btn-xs btn-default"
 						tooltiptext="${labels.cwf.help.viewer.btn.previous.hint}" />
-					<button id="btnNext"
+					<toolbarbutton id="btnNext" zclass="btn" sclass="btn-xs btn-default"
 						tooltiptext="${labels.cwf.help.viewer.btn.next.hint}" />
-					<separator orient="vertical" />
-					<button id="btnOpen"
+					<space />
+					<toolbarbutton id="btnOpen" zclass="btn" sclass="btn-xs btn-default"
 						tooltiptext="${labels.cwf.help.viewer.btn.open.hint}" />
-					<button id="btnPrint"
+					<toolbarbutton id="btnPrint" zclass="btn" sclass="btn-xs btn-default"
 						tooltiptext="${labels.cwf.help.viewer.btn.print.hint}" />
 				</toolbar>
 				<iframe id="iframe" name="help_frame" vflex="1"
