@@ -1,6 +1,6 @@
 <zk>
-	<window sclass="${arg.panelClass}" mold="bootstrap" closable="true"
-		title="${arg.title}"
+	<window sclass="${arg.panelClass}" contentSclass="cwf-promptdialog"
+		mold="bootstrap" closable="true" title="${arg.title}"
 		use="org.carewebframework.ui.zk.PromptDialog">
 		<div zclass="panel-body">
 			<span zclass="${arg.iconClass}"
@@ -18,7 +18,7 @@
 						value="${each.item}" selected="${each.name eq arg.selected}"
 						forward="onOK=promptDialog.onOK,onDoubleClick=promptDialog.onOK" />
 				</listbox>
-				<checkbox id="chkRemember" style="display:block;text-align:center"
+				<checkbox id="chkRemember"
 					label="${labels.cwf.prompt.chx.reminder.label}"
 					visible="${arg.remember}" />
 			</div>

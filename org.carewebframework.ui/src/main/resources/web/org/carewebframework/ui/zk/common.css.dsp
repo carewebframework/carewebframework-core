@@ -85,6 +85,11 @@
 	font-size: 2em;
 }
 
+.cwf-promptdialog .z-checkbox {
+	display: block;
+	text-align: center
+}
+
 .cwf-mask * {
     cursor: default;
 }
