@@ -78,25 +78,23 @@ public class PopupDialog extends Window {
         Window window = null;
         
         try {
-            final Page currentPage = ExecutionsCtrl.getCurrentCtrl().getCurrentPage();
-            parent.setPage(currentPage);
             Executions.getCurrent().createComponents(zulPageDefinition, parent, args);
             window = ZKUtil.findChild(parent, Window.class);
             
             if (window != null) { // If any top component is a window, discard temp parent
                 window.setParent(null);
-                window.setPage(currentPage);
                 
                 for (Component child : parent.getChildren()) {
                     child.setParent(window);
                 }
-                parent.detach();
             } else { // Otherwise, use the temp parent as the window
                 window = parent;
             }
             
+            Page currentPage = ExecutionsCtrl.getCurrentCtrl().getCurrentPage();
             window.setClosable(closable);
             window.setSizable(sizable);
+            window.setPage(currentPage);
             PopupManager.getInstance().registerPopup(window);
             
             if (show) {
