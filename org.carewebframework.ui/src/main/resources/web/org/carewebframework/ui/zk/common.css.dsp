@@ -223,6 +223,15 @@
 	opacity: 1;
 }
 
+.panel-mini .panel-content,
+.panel-mini .panel-caption {
+	padding: 2px;
+}
+
+.panel-mini .panel-title {
+	font-size: 90%;
+}
+
 /* ZK overrides */
 
 .z-window-modal-header {
