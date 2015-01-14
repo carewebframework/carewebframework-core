@@ -223,13 +223,22 @@
 	opacity: 1;
 }
 
-.panel-mini .panel-content,
-.panel-mini .panel-caption {
+.panel-sm .panel-content,
+.panel-sm .panel-caption {
 	padding: 2px;
 }
 
-.panel-mini .panel-title {
+.panel-sm .panel-title {
 	font-size: 90%;
+}
+
+.panel-xs .panel-content,
+.panel-xs .panel-caption {
+	padding: 1px;
+}
+
+.panel-xs .panel-title {
+	font-size: 80%;
 }
 
 /* ZK overrides */
