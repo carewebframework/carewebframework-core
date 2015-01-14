@@ -90,6 +90,8 @@ public class FrameworkController extends GenericForwardComposer<Component> {
         
         @Override
         public void onInit(Component object) {
+            eventManager.subscribe(Constants.REFRESH_EVENT, refreshListener);
+            appFramework.registerObject(FrameworkController.this);
         }
         
         @Override
@@ -159,9 +161,7 @@ public class FrameworkController extends GenericForwardComposer<Component> {
         appContext = SpringUtil.getAppContext();
         appFramework = FrameworkUtil.getAppFramework();
         eventManager = EventManager.getInstance();
-        appFramework.registerObject(this);
         LifecycleEventDispatcher.addComponentCallback(comp, lifecycleListener);
-        eventManager.subscribe(Constants.REFRESH_EVENT, refreshListener);
     }
     
     /**

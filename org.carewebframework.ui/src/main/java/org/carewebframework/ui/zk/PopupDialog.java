@@ -75,6 +75,8 @@ public class PopupDialog extends Window {
     public static Window popup(final PageDefinition zulPageDefinition, final Map<Object, Object> args,
                                final boolean closable, final boolean sizable, final boolean show) {
         Window parent = new Window(); // Temporary parent in case createComponents fails, so can cleanup.
+        Page currentPage = ExecutionsCtrl.getCurrentCtrl().getCurrentPage();
+        parent.setPage(currentPage);
         Window window = null;
         
         try {
@@ -87,14 +89,15 @@ public class PopupDialog extends Window {
                 for (Component child : parent.getChildren()) {
                     child.setParent(window);
                 }
+                
+                parent.detach();
+                window.setPage(currentPage);
             } else { // Otherwise, use the temp parent as the window
                 window = parent;
             }
             
-            Page currentPage = ExecutionsCtrl.getCurrentCtrl().getCurrentPage();
             window.setClosable(closable);
             window.setSizable(sizable);
-            window.setPage(currentPage);
             PopupManager.getInstance().registerPopup(window);
             
             if (show) {
