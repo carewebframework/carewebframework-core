@@ -241,6 +241,16 @@
 	font-size: 80%;
 }
 
+.glyphicon-chevron-left-double:before {
+ 	content: "\e079\e079";
+ 	letter-spacing: -4px;
+}
+
+.glyphicon-chevron-right-double:before {
+	content: "\e080\e080";
+ 	letter-spacing: -4px;
+}
+
 /* ZK overrides */
 
 .z-window-modal-header {
