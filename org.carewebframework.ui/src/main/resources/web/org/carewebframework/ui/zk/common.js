@@ -192,15 +192,17 @@ cwf.cancelNavigation = function(event) {
  */
 zAu.cmd0.cwf_addMask =
 cwf.addMask = function(uuid, msg, popid, hint) {
+	cwf.removeMask(uuid);
+	
 	if (uuid.uuid)
 		uuid = uuid.uuid;
 
-	zAu.cmd0.showBusy(uuid, msg);
-	var w = jq('#' + uuid + '-shby');
-	w.addClass('cwf-mask');
-	w.find('*').removeClass('z-apply-loading-icon');
-	var ctx;
+	var w = jq('<div />').attr('id', uuid + '-cwfMask').addClass('cwf-mask'),
+		ctx;
 
+	jq('<div />').text(msg).appendTo(w);
+	jq('#' + uuid).append(w);
+	
 	if (popid && (ctx = zk.Widget.$(popid))) {
 		w.bind('contextmenu', function(e) {
 			ctx.open(w, [e.pageX, e.pageY], null, {sendOnOpen:true});
@@ -222,7 +224,7 @@ cwf.removeMask = function(uuid) {
 	if (uuid.uuid)
 		uuid = uuid.uuid;
 
-	zAu.cmd0.clearBusy(uuid);
+	jq('#' + uuid + '-cwfMask').remove();
 };
 
 jq(document).ready(function() {

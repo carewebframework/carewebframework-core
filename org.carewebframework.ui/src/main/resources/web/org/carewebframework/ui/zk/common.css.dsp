@@ -87,15 +87,34 @@
 
 .cwf-promptdialog .z-checkbox {
 	display: block;
-	text-align: center
+	text-align: center;
 }
 
-.cwf-mask * {
+.cwf-mask {
     cursor: default;
+    position: absolute;
+    right: 0;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 99;
+    background: lightgray;
+    opacity: .7;
+    overflow: hidden;
+    text-align: center;
+    color: blue;
+    font-size: 12px;
 }
 
-.cwf-mask>div {
-    z-index: 99!important;
+.cwf-mask > div {
+	border: 1px solid;
+	background: white;
+	padding: 2px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);  
+    transform: translate(-50%, -50%);   
 }
 
 .cwf-xml-tag {
