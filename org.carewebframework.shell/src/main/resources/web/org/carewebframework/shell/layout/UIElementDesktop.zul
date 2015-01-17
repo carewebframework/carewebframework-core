@@ -11,24 +11,21 @@
 				<label id="title" zclass="panel-title"
 					value="${labels.cwf.shell.plugin._desktop.title.$}" />
 			</div>
-			<hlayout hflex="min" spacing="0"
-				sclass="cwf-desktop-menubar">
-				<menubar id="menubar1"
-					style="border:none;background:none" />
-				<menubar id="menubar2"
-					style="border:none;background:none">
-					<menu id="helpMenu" label="Help">
-						<menupopup id="helpMenuRoot">
-							<menuEx id="mnuAbout"
-								label="${labels.cwf.shell.plugin._desktop.menu.about.label}" />
-							<menuEx id="mnuTOC" visible="false"
-								label="${labels.cwf.shell.plugin._desktop.menu.toc.label}" />
-							<menuseparator id="helpSeparator"
-								visible="false" />
-						</menupopup>
-					</menu>
-				</menubar>
-			</hlayout>
+			<menubar id="menubar1"
+				style="border:none;background:none" />
+			<menubar id="menubar2"
+				style="border:none;background:none">
+				<menu id="helpMenu" label="Help">
+					<menupopup id="helpMenuRoot">
+						<menuEx id="mnuAbout"
+							label="${labels.cwf.shell.plugin._desktop.menu.about.label}" />
+						<menuEx id="mnuTOC" visible="false"
+							label="${labels.cwf.shell.plugin._desktop.menu.toc.label}" />
+						<menuseparator id="helpSeparator"
+							visible="false" />
+					</menupopup>
+				</menu>
+			</menubar>
 			<div hflex="1">
 				<toolbar sclass="cwf-desktop-toolbar btn-toolbar"
 					id="toolbar1" align="end" />
