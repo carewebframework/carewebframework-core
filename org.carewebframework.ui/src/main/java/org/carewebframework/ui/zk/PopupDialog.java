@@ -76,6 +76,7 @@ public class PopupDialog extends Window {
                                final boolean closable, final boolean sizable, final boolean show) {
         Window parent = new Window(); // Temporary parent in case createComponents fails, so can cleanup.
         Page currentPage = ExecutionsCtrl.getCurrentCtrl().getCurrentPage();
+        parent.setMold("bootstrap");
         parent.setPage(currentPage);
         Window window = null;
         
