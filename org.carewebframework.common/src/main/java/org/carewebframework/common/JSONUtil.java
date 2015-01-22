@@ -24,6 +24,7 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.BeanProperty;
+import com.fasterxml.jackson.databind.DatabindContext;
 import com.fasterxml.jackson.databind.DeserializationConfig;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -116,6 +117,15 @@ public class JSONUtil {
         public JavaType typeFromId(String id) {
             try {
                 return mapper.getTypeFactory().constructType(findClass(id));
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        
+        @Override
+        public JavaType typeFromId(DatabindContext context, String id) {
+            try {
+                return context.getTypeFactory().constructType(findClass(id));
             } catch (ClassNotFoundException e) {
                 throw new RuntimeException(e);
             }
