@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.carewebframework.common.DateUtil;
+import org.carewebframework.common.ISerializer;
 
 /**
  * Encapsulates a set of context items. Internally, these are stored in a hash map with a separate
@@ -197,7 +198,7 @@ public class ContextItems {
             return null;
         }
         
-        IContextSerializer<?> contextSerializer = ContextSerializerRegistry.getInstance().get(clazz);
+        ISerializer<?> contextSerializer = ContextSerializerRegistry.getInstance().get(clazz);
         
         if (contextSerializer == null) {
             throw new ContextException("No serializer found for type " + clazz.getName());
@@ -235,8 +236,8 @@ public class ContextItems {
             setItem(itemName, (String) null);
         } else {
             @SuppressWarnings("unchecked")
-            IContextSerializer<Object> contextSerializer = (IContextSerializer<Object>) ContextSerializerRegistry
-                    .getInstance().get(value.getClass());
+            ISerializer<Object> contextSerializer = (ISerializer<Object>) ContextSerializerRegistry.getInstance().get(
+                value.getClass());
             
             if (contextSerializer == null) {
                 throw new ContextException("No serializer found for type " + value.getClass().getName());

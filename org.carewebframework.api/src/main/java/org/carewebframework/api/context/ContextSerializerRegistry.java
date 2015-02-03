@@ -10,6 +10,7 @@
 package org.carewebframework.api.context;
 
 import org.carewebframework.common.AbstractRegistry;
+import org.carewebframework.common.ISerializer;
 import org.carewebframework.common.RegistryMap.DuplicateAction;
 
 import org.springframework.beans.BeansException;
@@ -18,7 +19,7 @@ import org.springframework.beans.factory.config.DestructionAwareBeanPostProcesso
 /**
  * Registry for context serializers indexed by the class type they support.
  */
-public class ContextSerializerRegistry extends AbstractRegistry<Class<?>, IContextSerializer<?>> implements DestructionAwareBeanPostProcessor {
+public class ContextSerializerRegistry extends AbstractRegistry<Class<?>, ISerializer<?>> implements DestructionAwareBeanPostProcessor {
     
     private static ContextSerializerRegistry instance = new ContextSerializerRegistry();
     
@@ -34,7 +35,7 @@ public class ContextSerializerRegistry extends AbstractRegistry<Class<?>, IConte
     }
     
     @Override
-    protected Class<?> getKey(IContextSerializer<?> item) {
+    protected Class<?> getKey(ISerializer<?> item) {
         return item.getType();
     }
     
@@ -45,14 +46,14 @@ public class ContextSerializerRegistry extends AbstractRegistry<Class<?>, IConte
      * @return The context serializer.
      */
     @Override
-    public IContextSerializer<?> get(Class<?> clazz) {
-        IContextSerializer<?> contextSerializer = super.get(clazz);
+    public ISerializer<?> get(Class<?> clazz) {
+        ISerializer<?> contextSerializer = super.get(clazz);
         
         if (contextSerializer != null) {
             return contextSerializer;
         }
         
-        for (IContextSerializer<?> item : this) {
+        for (ISerializer<?> item : this) {
             if (item.getType().isAssignableFrom(clazz)) {
                 return item;
             }
@@ -68,8 +69,8 @@ public class ContextSerializerRegistry extends AbstractRegistry<Class<?>, IConte
     
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-        if (bean instanceof IContextSerializer) {
-            register((IContextSerializer<?>) bean);
+        if (bean instanceof ISerializer) {
+            register((ISerializer<?>) bean);
         }
         
         return bean;
@@ -77,8 +78,8 @@ public class ContextSerializerRegistry extends AbstractRegistry<Class<?>, IConte
     
     @Override
     public void postProcessBeforeDestruction(Object bean, String beanName) throws BeansException {
-        if (bean instanceof IContextSerializer) {
-            unregister((IContextSerializer<?>) bean);
+        if (bean instanceof ISerializer) {
+            unregister((ISerializer<?>) bean);
         }
     }
     

@@ -7,19 +7,36 @@
  * Disclaimer of Warranty and Limitation of Liability available at
  * http://www.carewebframework.org/licensing/disclaimer.
  */
-package org.carewebframework.api.context;
+package org.carewebframework.common;
 
 /**
- * Methods for serializing / deserializing an object to / from a shared context.
+ * Methods for serializing / deserializing an object.
  * 
  * @param <T> Class of object being serialized or deserialized.
  */
-public interface IContextSerializer<T> {
+public interface ISerializer<T> {
     
+    /**
+     * Serialize an object to its string form.
+     * 
+     * @param object Object instance to serialize.
+     * @return Serialized form of object.
+     */
     String serialize(T object);
     
+    /**
+     * Deserialize an object from its string form.
+     * 
+     * @param value Serialized form of object.
+     * @return Deserialized object instance.
+     */
     T deserialize(String value);
     
+    /**
+     * Get class type of target object.
+     * 
+     * @return Class type of target object.
+     */
     Class<T> getType();
     
 }
