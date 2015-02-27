@@ -332,7 +332,14 @@ public abstract class ListViewForm<DAO> extends CaptionedForm {
      */
     protected void renderItem(Listitem item, DAO dao) {
         List<Object> columns = new ArrayList<Object>();
-        render(dao, columns);
+        
+        try {
+            render(dao, columns);
+        } catch (Exception e) {
+            columns.clear();
+            columns.add(ZKUtil.formatExceptionForDisplay(e));
+        }
+        
         item.setVisible(!columns.isEmpty());
         
         for (Object colData : columns) {
