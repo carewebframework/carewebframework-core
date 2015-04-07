@@ -99,6 +99,8 @@ public class LoginPaneController extends GenericForwardComposer<Component> {
     
     private boolean autoLogin;
     
+    private Component pane;
+    
     /**
      * Initialize the login form.
      *
@@ -107,6 +109,7 @@ public class LoginPaneController extends GenericForwardComposer<Component> {
     @Override
     public void doAfterCompose(Component comp) throws Exception {
         super.doAfterCompose(comp);
+        pane = comp;
         savedRequest = (SavedRequest) arg.get("savedRequest");
         AuthenticationException authError = (AuthenticationException) arg.get("authError");
         String loginFailureMessage = Labels.getLabel(Constants.LBL_LOGIN_ERROR);//reset back to default
@@ -276,6 +279,7 @@ public class LoginPaneController extends GenericForwardComposer<Component> {
             Events.sendEvent("onSubmit", loginRoot.getRoot(), null);
         } else {
             showMessage(Labels.getLabel(Constants.LBL_LOGIN_REQUIRED_FIELDS));
+            pane.setVisible(true);
         }
     }
     
