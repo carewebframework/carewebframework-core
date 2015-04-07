@@ -11,10 +11,16 @@
         http://www.springframework.org/schema/security
         http://www.springframework.org/schema/security/spring-security-3.2.xsd">
 
-	<!-- This registers the "auth" scope which is tied to the Spring Security
-		authentication context. It is currently experimental. -->
-	<beans profile="root,desktop">
+	<!-- These are the default configurations for Spring security. They may
+		be overridden if desired, but for most applications these will suffice. At
+		a minimum, you must provide implementations for the securityAuthenticationProvider
+		and securityService beans (typically in the security adapter package) and
+		configure the security filters (typically in the applicationContext.xml). -->
 
+	<beans profile="root">
+
+		<!-- This registers the "auth" scope which is tied to the Spring Security
+		authentication context. -->
 		<bean class="org.springframework.beans.factory.config.CustomScopeConfigurer">
 			<property name="scopes">
 				<map>
@@ -24,16 +30,6 @@
 				</map>
 			</property>
 		</bean>
-
-	</beans>
-
-	<!-- These are the default configurations for Spring security. They may
-		be overridden if desired, but for most applications these will suffice. At
-		a minimum, you must provide implementations for the securityAuthenticationProvider
-		and securityService beans (typically in the security adapter package) and
-		configure the security filters (typically in the applicationContext.xml). -->
-
-	<beans profile="root">
 
 		<bean
 			class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">

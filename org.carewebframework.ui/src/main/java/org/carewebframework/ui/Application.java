@@ -183,7 +183,7 @@ public class Application {
                     }
                     
                     if (desktops.isEmpty()) {
-                        session.setMaxInactiveInterval(10);
+                        session.setMaxInactiveInterval(30);
                         log.debug("Session marked for invalidation: " + session);
                     }
                 }
