@@ -25,12 +25,15 @@ public class MockUser implements IUser {
     
     private final String loginName;
     
+    private final String password;
+    
     private final ISecurityDomain securityDomain;
     
-    public MockUser(String logicalId, String fullName, String loginName, ISecurityDomain securityDomain) {
+    public MockUser(String logicalId, String fullName, String loginName, String password, ISecurityDomain securityDomain) {
         this.logicalId = logicalId;
         this.fullName = fullName;
         this.loginName = loginName;
+        this.password = password;
         this.securityDomain = securityDomain;
     }
     
@@ -47,6 +50,11 @@ public class MockUser implements IUser {
     @Override
     public String getLoginName() {
         return loginName;
+    }
+    
+    @Override
+    public String getPassword() {
+        return password;
     }
     
     @Override

@@ -33,6 +33,13 @@ public interface IUser extends Serializable {
     String getLoginName();
     
     /**
+     * Return the user's password.
+     * 
+     * @return User's password.
+     */
+    String getPassword();
+    
+    /**
      * Returns the user's security domain.
      * 
      * @return User's security domain.
