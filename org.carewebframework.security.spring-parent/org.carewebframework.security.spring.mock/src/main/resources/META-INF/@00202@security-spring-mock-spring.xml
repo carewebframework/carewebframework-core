@@ -15,16 +15,15 @@
 
 		<bean id="securityService" class="org.carewebframework.security.spring.mock.MockSecurityService">
 			<property name="logoutTarget" value="${org.carewebframework.security.logout.url}" />
-			<property name="securityDomains" value="${mock.domains}" />
+		</bean>
+		
+		<bean class="org.carewebframework.api.security.mock.MockSecurityDomainLoader">
+			<constructor-arg value="${mock.domains}" />
 		</bean>
 
-		<bean id="securityAuthenticationProvider" class="org.carewebframework.security.spring.mock.MockAuthenticationProvider">
-			<property name="mockAuthorities" value="${mock.authorities:}" />
-		</bean>
-	
 		<bean id="securityLoginPaneController" class="org.carewebframework.security.spring.controller.LoginPaneController"
 			scope="prototype" cwf:override="always">
-			<property name="securityService" ref="securityService" />
+			<property name="securityDomainRegistry" ref="securityDomainRegistry" />
 			<property name="defaultUsername" value="${mock.username}" />
 			<property name="defaultPassword" value="${mock.password}" />
 			<property name="autoLogin" value="${mock.autologin}" />

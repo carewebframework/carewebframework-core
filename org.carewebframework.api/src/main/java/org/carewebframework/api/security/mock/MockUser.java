@@ -29,6 +29,10 @@ public class MockUser implements IUser {
     
     private final ISecurityDomain securityDomain;
     
+    public MockUser() {
+        this("mockId", "User, Mock", "username", "password", new MockSecurityDomain());
+    }
+    
     public MockUser(String logicalId, String fullName, String loginName, String password, ISecurityDomain securityDomain) {
         this.logicalId = logicalId;
         this.fullName = fullName;

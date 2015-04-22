@@ -69,6 +69,9 @@
 			<property name="key" value="ANONYMOUS" />
 		</bean>
 
+		<bean id="securityAuthenticationProvider" 
+			class="org.carewebframework.security.spring.BaseAuthenticationProvider" />
+	
 		<bean id="securityContextRepository"
 			class="org.carewebframework.security.spring.DesktopSecurityContextRepository" />
 
@@ -166,7 +169,7 @@
 
 		<bean id="securityLoginPaneController" class="org.carewebframework.security.spring.controller.LoginPaneController"
 			scope="prototype">
-			<property name="securityService" ref="securityService" />
+			<property name="securityDomainRegistry" ref="securityDomainRegistry" />
 		</bean>
 
 		<bean id="securityPasswordChangeController" class="org.carewebframework.security.spring.controller.PasswordChangeController"

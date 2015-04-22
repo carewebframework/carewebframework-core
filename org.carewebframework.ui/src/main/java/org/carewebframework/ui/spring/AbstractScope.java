@@ -26,6 +26,19 @@ public abstract class AbstractScope<T> extends org.carewebframework.api.spring.A
     
     private static final Log log = LogFactory.getLog(AbstractScope.class);
     
+    private final ScopeContainer unscopedContainer;
+    
+    /**
+     * Create the custom scope.
+     * 
+     * @param allowUnscoped If false, an attempt to access the scope outside a session context will
+     *            fail. If true, an unscoped container is provided for access outside a session
+     *            context.
+     */
+    protected AbstractScope(boolean allowUnscoped) {
+        unscopedContainer = allowUnscoped ? new ScopeContainer() : null;
+    }
+    
     /**
      * Returns the container bound to the specified scope.
      * 
@@ -131,8 +144,14 @@ public abstract class AbstractScope<T> extends org.carewebframework.api.spring.A
      */
     private ScopeContainer getSessionContainer(HttpSession session, boolean autoCreate) {
         if (session == null) {
-            log.warn("Attempt to reference session-dependent scope (" + getKey() + ") outside a session context.");
-            return autoCreate ? new ScopeContainer() : null;
+            String message = "A session-dependent scope (" + getKey() + ") was referenced outside a session context.";
+            
+            if (unscopedContainer == null) {
+                throw new IllegalStateException(message);
+            }
+            
+            log.info(message);
+            return unscopedContainer;
         }
         
         ScopeContainer container = (ScopeContainer) session.getAttribute(getKey());

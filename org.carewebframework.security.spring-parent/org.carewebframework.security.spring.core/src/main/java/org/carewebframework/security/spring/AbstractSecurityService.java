@@ -11,10 +11,6 @@ package org.carewebframework.security.spring;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 import org.apache.commons.lang.CharEncoding;
 import org.apache.commons.lang.StringUtils;
@@ -27,7 +23,6 @@ import org.carewebframework.api.alias.AliasTypeRegistry;
 import org.carewebframework.api.context.ContextManager;
 import org.carewebframework.api.context.IContextManager;
 import org.carewebframework.api.domain.IUser;
-import org.carewebframework.api.security.ISecurityDomain;
 import org.carewebframework.api.security.ISecurityService;
 import org.carewebframework.api.security.SecurityUtil;
 import org.carewebframework.ui.Application;
@@ -55,10 +50,6 @@ public abstract class AbstractSecurityService implements ISecurityService {
     private String passwordChangeUrl;
     
     private final AliasType authorityAlias = AliasTypeRegistry.getType(ALIAS_TYPE_AUTHORITY);
-    
-    private final Map<String, ISecurityDomain> securityDomains = new LinkedHashMap<String, ISecurityDomain>();
-    
-    private volatile boolean initialized;
     
     /**
      * Returns Spring security Authentication object via
@@ -201,17 +192,6 @@ public abstract class AbstractSecurityService implements ISecurityService {
         Object details = authentication == null ? null : authentication.getDetails();
         return (details instanceof CWFAuthenticationDetails) ? (IUser) ((CWFAuthenticationDetails) details)
                 .getDetail("user") : null;
-    }
-    
-    /**
-     * Returns the security domain that authenticated the user.
-     * 
-     * @return The security domain.
-     */
-    @Override
-    public ISecurityDomain getAuthenticatingDomain() {
-        IUser user = getAuthenticatedUser();
-        return user == null ? null : user.getSecurityDomain();
     }
     
     /**
@@ -378,65 +358,6 @@ public abstract class AbstractSecurityService implements ISecurityService {
      */
     protected int getRandomPasswordLength() {
         return NumberUtils.toInt(Labels.getLabel(Constants.LBL_PASSWORD_RANDOM_LENGTH), 12);
-    }
-    
-    /**
-     * @see org.carewebframework.api.security.ISecurityService#getSecurityDomains()
-     */
-    @Override
-    public Collection<ISecurityDomain> getSecurityDomains() {
-        doInit();
-        return Collections.unmodifiableCollection(securityDomains.values());
-    }
-    
-    /**
-     * @see org.carewebframework.api.security.ISecurityService#getSecurityDomain
-     */
-    @Override
-    public ISecurityDomain getSecurityDomain(String logicalId) {
-        doInit();
-        return securityDomains.get(logicalId);
-    }
-    
-    /**
-     * Registers a security domain.
-     * 
-     * @param securityDomain Security domain to register.
-     */
-    protected void registerSecurityDomain(ISecurityDomain securityDomain) {
-        securityDomains.put(securityDomain.getLogicalId(), securityDomain);
-    }
-    
-    /**
-     * Registers a collection of security domains.
-     * 
-     * @param securityDomains Security domains to register.
-     */
-    protected void registerSecurityDomains(Collection<ISecurityDomain> securityDomains) {
-        for (ISecurityDomain securityDomain : securityDomains) {
-            registerSecurityDomain(securityDomain);
-        }
-    }
-    
-    /**
-     * Override to provide just-in-time loading of security domains.
-     */
-    protected void initSecurityDomains() {
-        
-    }
-    
-    /**
-     * Initialize domains.
-     */
-    private void doInit() {
-        if (!initialized) {
-            synchronized (securityDomains) {
-                if (!initialized) {
-                    initSecurityDomains();
-                    initialized = true;
-                }
-            }
-        }
     }
     
 }

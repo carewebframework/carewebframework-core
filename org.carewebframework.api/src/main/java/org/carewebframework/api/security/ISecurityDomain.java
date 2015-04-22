@@ -10,6 +10,9 @@
 package org.carewebframework.api.security;
 
 import java.io.Serializable;
+import java.util.List;
+
+import org.carewebframework.api.domain.IUser;
 
 /**
  * Interface for a security domain. A security domain is responsible for providing user
@@ -38,6 +41,23 @@ public interface ISecurityDomain extends Serializable {
      * @return The attribute value, or null if not found.
      */
     String getAttribute(String name);
+    
+    /**
+     * Authenticates a user.
+     * 
+     * @param username The username.
+     * @param password The password.
+     * @return The authenticated user, or null if authentication failed.
+     */
+    IUser authenticate(String username, String password);
+    
+    /**
+     * Returns a list of granted authorities for a user.
+     * 
+     * @param user User whose granted authorities are sought.
+     * @return A list of granted authorities (never null).
+     */
+    List<String> getGrantedAuthorities(IUser user);
     
     /**
      * Returns the native security domain object if this is a proxy.

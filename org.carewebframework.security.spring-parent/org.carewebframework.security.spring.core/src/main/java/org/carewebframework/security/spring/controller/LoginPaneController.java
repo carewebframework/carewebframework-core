@@ -9,14 +9,15 @@
  */
 package org.carewebframework.security.spring.controller;
 
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import org.carewebframework.api.security.ISecurityDomain;
-import org.carewebframework.api.security.ISecurityService;
+import org.carewebframework.api.security.SecurityDomainRegistry;
 import org.carewebframework.security.spring.Constants;
 import org.carewebframework.ui.FrameworkWebSupport;
 import org.carewebframework.ui.zk.ZKUtil;
@@ -48,8 +49,6 @@ public class LoginPaneController extends GenericForwardComposer<Component> {
     };
     
     private static final long serialVersionUID = 1L;
-    
-    private static final Log log = LogFactory.getLog(LoginPaneController.class);
     
     protected static final String DIALOG_LOGIN_PANE = ZKUtil.getResourcePath(LoginPaneController.class) + "loginPane.zul";
     
@@ -85,7 +84,7 @@ public class LoginPaneController extends GenericForwardComposer<Component> {
     
     private Component loginRoot;
     
-    private ISecurityService securityService;
+    private SecurityDomainRegistry securityDomainRegistry;
     
     private SavedRequest savedRequest;
     
@@ -132,8 +131,17 @@ public class LoginPaneController extends GenericForwardComposer<Component> {
             txtPassword.setFocus(true);
         }
         
-        Collection<ISecurityDomain> securityDomains = securityService.getSecurityDomains();
-        String securityDomainId = securityDomains.size() == 1 ? securityDomains.iterator().next().getLogicalId() : null;
+        List<ISecurityDomain> securityDomains = new ArrayList<ISecurityDomain>(securityDomainRegistry.getAll());
+        Collections.sort(securityDomains, new Comparator<ISecurityDomain>() {
+            
+            @Override
+            public int compare(ISecurityDomain sd1, ISecurityDomain sd2) {
+                return sd1.getName().compareToIgnoreCase(sd2.getName());
+            }
+            
+        });
+        
+        String securityDomainId = securityDomains.size() == 1 ? securityDomains.get(0).getLogicalId() : null;
         
         if (StringUtils.isEmpty(securityDomainId)) {
             securityDomainId = (String) session.getAttribute(Constants.DEFAULT_SECURITY_DOMAIN);
@@ -153,10 +161,6 @@ public class LoginPaneController extends GenericForwardComposer<Component> {
         
         if (StringUtils.isEmpty(securityDomainId)) {
             securityDomainId = defaultDomain;
-        }
-        
-        if (log.isDebugEnabled()) {
-            log.debug("Security domains:" + (securityDomains == null ? "null" : securityDomains.size()));
         }
         
         switch (securityDomains.size()) {
@@ -258,10 +262,10 @@ public class LoginPaneController extends GenericForwardComposer<Component> {
      */
     public void onSubmit() {
         showMessage("");
-        final ISecurityDomain securityDomain = getSelectedSecurityDomain();
+        ISecurityDomain securityDomain = getSelectedSecurityDomain();
         String securityDomainId = securityDomain == null ? null : securityDomain.getLogicalId();
         String username = txtUsername.getValue().trim();
-        final String password = txtPassword.getValue();
+        String password = txtPassword.getValue();
         
         if (username.contains("\\")) {
             String[] pcs = username.split("\\\\", 2);
@@ -344,12 +348,12 @@ public class LoginPaneController extends GenericForwardComposer<Component> {
     }
     
     /**
-     * Sets the security service.
+     * Sets the security domain registry.
      *
-     * @param securityService SecurityService implementation
+     * @param securityDomainRegistry SecurityDomainRegistry implementation
      */
-    public void setSecurityService(ISecurityService securityService) {
-        this.securityService = securityService;
+    public void setSecurityDomainRegistry(SecurityDomainRegistry securityDomainRegistry) {
+        this.securityDomainRegistry = securityDomainRegistry;
     }
     
     /**

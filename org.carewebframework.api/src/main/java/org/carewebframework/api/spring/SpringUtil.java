@@ -66,7 +66,7 @@ public class SpringUtil {
      * @return Returns the bean instance whose id matches the specified id, or null if none found or
      *         if the application context cannot be determined.
      */
-    public static Object getBean(final String id) {
+    public static Object getBean(String id) {
         final ApplicationContext appContext = getAppContext();
         return appContext == null ? null : appContext.containsBean(id) ? appContext.getBean(id) : null;
     }

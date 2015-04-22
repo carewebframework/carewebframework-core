@@ -9,8 +9,6 @@
  */
 package org.carewebframework.api.security;
 
-import java.util.Collection;
-
 import org.carewebframework.api.domain.IUser;
 
 /**
@@ -122,27 +120,5 @@ public interface ISecurityService {
      * @return Returns the login disabled message if logins are disabled; null otherwise.
      */
     public String loginDisabled();
-    
-    /**
-     * Returns a collection of security domains known to this service.
-     * 
-     * @return Collection of known security domains.
-     */
-    public Collection<ISecurityDomain> getSecurityDomains();
-    
-    /**
-     * Returns a security domain given its logical id.
-     * 
-     * @param logicalId Logical id of security domain.
-     * @return Security domain corresponding to specified logical id.
-     */
-    public ISecurityDomain getSecurityDomain(String logicalId);
-    
-    /**
-     * Returns the security domain that authenticated the user.
-     * 
-     * @return The security domain.
-     */
-    public ISecurityDomain getAuthenticatingDomain();
     
 }

@@ -19,6 +19,13 @@ import org.carewebframework.api.security.ISecurityDomain;
 public interface IUser extends Serializable {
     
     /**
+     * Returns the logical identifier for the user.
+     * 
+     * @return User logical identifier.
+     */
+    String getLogicalId();
+    
+    /**
      * Returns the user's full name.
      * 
      * @return User's full name.
@@ -45,13 +52,6 @@ public interface IUser extends Serializable {
      * @return User's security domain.
      */
     ISecurityDomain getSecurityDomain();
-    
-    /**
-     * Returns the logical identifier for the user.
-     * 
-     * @return User logical identifier.
-     */
-    String getLogicalId();
     
     /**
      * Returns the native user object if this is a proxy.

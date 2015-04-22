@@ -22,7 +22,7 @@ import org.zkoss.zk.ui.Desktop;
 public class DesktopScope extends AbstractScope<Desktop> implements ILifecycleCallback<Desktop> {
     
     public DesktopScope() {
-        super();
+        super(true);
         LifecycleEventDispatcher.addDesktopCallback(this);
     }
     

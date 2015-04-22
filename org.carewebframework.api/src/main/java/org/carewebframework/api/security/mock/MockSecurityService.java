@@ -9,11 +9,7 @@
  */
 package org.carewebframework.api.security.mock;
 
-import java.util.Collection;
-import java.util.Collections;
-
 import org.carewebframework.api.domain.IUser;
-import org.carewebframework.api.security.ISecurityDomain;
 import org.carewebframework.api.security.ISecurityService;
 
 /**
@@ -23,11 +19,8 @@ public class MockSecurityService implements ISecurityService {
     
     private final IUser mockUser;
     
-    private final ISecurityDomain securityDomain;
-    
     public MockSecurityService(IUser mockUser) {
         this.mockUser = mockUser;
-        securityDomain = mockUser == null ? null : mockUser.getSecurityDomain();
     }
     
     @Override
@@ -37,12 +30,12 @@ public class MockSecurityService implements ISecurityService {
     
     @Override
     public boolean validatePassword(String password) {
-        return true;
+        return password.equals(mockUser.getPassword());
     }
     
     @Override
     public String changePassword(String oldPassword, String newPassword) {
-        return null;
+        return "Operation not supported";
     }
     
     @Override
@@ -91,21 +84,6 @@ public class MockSecurityService implements ISecurityService {
     @Override
     public String loginDisabled() {
         return null;
-    }
-    
-    @Override
-    public Collection<ISecurityDomain> getSecurityDomains() {
-        return securityDomain == null ? Collections.<ISecurityDomain> emptyList() : Collections.singleton(securityDomain);
-    }
-    
-    @Override
-    public ISecurityDomain getSecurityDomain(String logicalId) {
-        return securityDomain != null && logicalId.equals(securityDomain.getLogicalId()) ? securityDomain : null;
-    }
-    
-    @Override
-    public ISecurityDomain getAuthenticatingDomain() {
-        return mockUser == null ? null : mockUser.getSecurityDomain();
     }
     
 }

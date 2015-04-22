@@ -9,9 +9,13 @@
  */
 package org.carewebframework.api.security.mock;
 
+import java.util.List;
 import java.util.Map;
 
+import org.carewebframework.api.domain.IUser;
 import org.carewebframework.api.security.ISecurityDomain;
+import org.carewebframework.api.spring.SpringUtil;
+import org.carewebframework.common.StrUtil;
 
 /**
  * Mock user for testing.
@@ -24,7 +28,13 @@ public class MockSecurityDomain implements ISecurityDomain {
     
     private final String name;
     
+    private String mockAuthorities;
+    
     private final Map<String, String> attributes;
+    
+    public MockSecurityDomain() {
+        this("mockId", "mockDomain");
+    }
     
     public MockSecurityDomain(String logicalId, String name) {
         this(logicalId, name, null);
@@ -57,8 +67,31 @@ public class MockSecurityDomain implements ISecurityDomain {
     }
     
     @Override
+    public IUser authenticate(String username, String password) {
+        if (!check("mock.username", username) || !check("mock.password", password)) {
+            throw new RuntimeException("Authentication failed.");
+        }
+        
+        return new MockUser(SpringUtil.getProperty("mock.userid"), SpringUtil.getProperty("mock.fullname"), username,
+                password, this);
+    }
+    
+    @Override
     public MockSecurityDomain getNativeSecurityDomain() {
         return this;
+    }
+    
+    @Override
+    public List<String> getGrantedAuthorities(IUser user) {
+        return StrUtil.toList(mockAuthorities, ",");
+    }
+    
+    public void setMockAuthorities(String mockAuthorities) {
+        this.mockAuthorities = mockAuthorities;
+    }
+    
+    protected boolean check(String property, String value) {
+        return value.equals(SpringUtil.getProperty(property));
     }
     
 }

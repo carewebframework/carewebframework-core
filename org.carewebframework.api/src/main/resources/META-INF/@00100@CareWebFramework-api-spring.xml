@@ -50,6 +50,11 @@
 			factory-method="getInstance">
 		</bean>
 
+		<!-- Maintains a registry of all security domains. -->
+		<bean id="securityDomainRegistry" class="org.carewebframework.api.security.SecurityDomainRegistry"
+			factory-method="getInstance">
+		</bean>
+
 		<task:annotation-driven executor="taskExecutor"
 			scheduler="taskScheduler" />
 
@@ -134,7 +139,6 @@
 			class="org.carewebframework.api.context.UserContext">
 			<constructor-arg value="#{securityService.authenticatedUser}" />
 		</bean>
-
 
 	</beans>
 </beans>

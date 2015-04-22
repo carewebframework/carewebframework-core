@@ -9,10 +9,6 @@
  */
 package org.carewebframework.security.spring.mock;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.carewebframework.api.security.mock.MockSecurityDomain;
 import org.carewebframework.api.spring.SpringUtil;
 import org.carewebframework.security.spring.AbstractSecurityService;
 
@@ -52,26 +48,4 @@ public class MockSecurityService extends AbstractSecurityService {
         return null;
     }
     
-    /**
-     * Set the mock security domains. The format is a comma-separated list of mock domains where
-     * each entry is of the form: [logicalId]^[name]^[key=value]...
-     * 
-     * @param domains Mock security domains.
-     */
-    public void setSecurityDomains(String domains) {
-        for (String domain : domains.split("\\,")) {
-            String[] pcs = domain.split("\\^");
-            Map<String, String> attrs = new HashMap<String, String>();
-            
-            for (int i = 2; i < pcs.length; i++) {
-                String[] nv = pcs[i].split("\\=", 2);
-                
-                if (nv.length == 2) {
-                    attrs.put(nv[0], nv[1]);
-                }
-            }
-            
-            registerSecurityDomain(new MockSecurityDomain(pcs[0], pcs[1], attrs));
-        }
-    }
 }

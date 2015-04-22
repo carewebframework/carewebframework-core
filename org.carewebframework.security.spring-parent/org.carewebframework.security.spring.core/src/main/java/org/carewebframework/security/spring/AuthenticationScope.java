@@ -16,9 +16,13 @@ import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 
 /**
- * Implements a custom Spring scope based on Spring Security authentication.
+ * Implements a custom Spring scope tied to Spring Security authentication.
  */
 public class AuthenticationScope extends AbstractScope<Authentication> {
+    
+    public AuthenticationScope() {
+        super(true);
+    }
     
     @Override
     protected ScopeContainer getScopeContainer(Authentication scope) {

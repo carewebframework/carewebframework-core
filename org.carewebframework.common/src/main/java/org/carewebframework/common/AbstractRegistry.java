@@ -9,6 +9,8 @@
  */
 package org.carewebframework.common;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -29,7 +31,11 @@ public abstract class AbstractRegistry<KEY, VALUE> implements Iterable<VALUE> {
     }
     
     protected AbstractRegistry(DuplicateAction duplicateAction) {
-        map = new RegistryMap<KEY, VALUE>(duplicateAction);
+        this(null, duplicateAction);
+    }
+    
+    protected AbstractRegistry(Map<KEY, VALUE> map, DuplicateAction duplicateAction) {
+        this.map = new RegistryMap<KEY, VALUE>(map, duplicateAction);
     }
     
     /**
@@ -48,6 +54,15 @@ public abstract class AbstractRegistry<KEY, VALUE> implements Iterable<VALUE> {
      */
     public VALUE get(KEY key) {
         return map.get(key);
+    }
+    
+    /**
+     * Returns a read-only collection of all registry entries.
+     * 
+     * @return Collection of registry entries.
+     */
+    public Collection<VALUE> getAll() {
+        return Collections.unmodifiableCollection(map.values());
     }
     
     /**
