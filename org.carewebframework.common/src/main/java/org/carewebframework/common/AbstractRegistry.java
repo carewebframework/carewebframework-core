@@ -89,6 +89,15 @@ public abstract class AbstractRegistry<KEY, VALUE> implements Iterable<VALUE> {
     }
     
     /**
+     * Return number of entries.
+     * 
+     * @return Number of entries.
+     */
+    public int size() {
+        return map.size();
+    }
+    
+    /**
      * Iterate over value set.
      */
     @Override

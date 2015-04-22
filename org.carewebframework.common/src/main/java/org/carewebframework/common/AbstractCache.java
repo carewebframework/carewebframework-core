@@ -89,4 +89,13 @@ public abstract class AbstractCache<KEY, VALUE> implements Iterable<VALUE> {
         return map.values().iterator();
     }
     
+    /**
+     * Return number of entries.
+     * 
+     * @return Number of entries.
+     */
+    public int size() {
+        return map.size();
+    }
+    
 }
