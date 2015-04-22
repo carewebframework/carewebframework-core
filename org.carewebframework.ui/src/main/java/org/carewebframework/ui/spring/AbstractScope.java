@@ -102,8 +102,10 @@ public abstract class AbstractScope<T> extends org.carewebframework.api.spring.A
                 container = getSessionContainer(session, false);
                 
                 if (container != null) {
-                    session.removeAttribute(getKey());
-                    bindContainer(scope, container);
+                    if (container != unscopedContainer) {
+                        session.removeAttribute(getKey());
+                        bindContainer(scope, container);
+                    }
                 } else if (autoCreate) {
                     container = getScopeContainer(scope, true);
                 }

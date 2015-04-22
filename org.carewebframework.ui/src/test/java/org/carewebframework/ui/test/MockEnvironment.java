@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -20,6 +20,8 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import org.zkoss.zk.au.out.AuEcho;
 import org.zkoss.zk.ui.Component;
@@ -91,7 +93,11 @@ public class MockEnvironment {
         // Create mock session
         request = init(new MockHttpServletRequest(servletContext));
         response = init(new MockHttpServletResponse());
-        session = SessionsCtrl.newSession(webApp, init(new MockHttpSession(servletContext, "mock")), request);
+        ServletRequestAttributes attribs = new ServletRequestAttributes(request, response);
+        RequestContextHolder.setRequestAttributes(attribs);
+        MockHttpSession nativeSession = init(new MockHttpSession(servletContext, "mock"));
+        session = SessionsCtrl.newSession(webApp, nativeSession, request);
+        request.setSession(nativeSession);
         SessionsCtrl.setCurrent(session);
         // Create the page
         PageImpl page = init(new PageImpl(LanguageDefinition.lookup(null), null, null, null));
@@ -117,6 +123,7 @@ public class MockEnvironment {
      * Cleans up all application contexts and invalidates the session.
      */
     public void close() {
+        RequestContextHolder.resetRequestAttributes();
         desktopContext.close();
         desktop.destroy();
         session.invalidate();
