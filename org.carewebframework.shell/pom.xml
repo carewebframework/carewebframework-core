@@ -12,44 +12,12 @@
 	
 	<dependencies>
 		<dependency>
-			<groupId>commons-lang</groupId>
-			<artifactId>commons-lang</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-beans</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>org.carewebframework</groupId>
 			<artifactId>org.carewebframework.ui</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.carewebframework</groupId>
 			<artifactId>org.carewebframework.help.core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.zkoss.zk</groupId>
-			<artifactId>zul</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.zkoss.zk</groupId>
-			<artifactId>zk</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.zkoss.common</groupId>
-			<artifactId>zcommon</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
 		</dependency>
 		<!-- Tests -->
 		<dependency>
