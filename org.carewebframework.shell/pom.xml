@@ -19,6 +19,10 @@
 			<groupId>org.carewebframework</groupId>
 			<artifactId>org.carewebframework.help.core</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+		</dependency>
 		<!-- Tests -->
 		<dependency>
 			<groupId>junit</groupId>

@@ -109,14 +109,5 @@
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-config</artifactId>
 		</dependency>
-		<!-- ZK Libraries -->
-		<dependency>
-			<groupId>org.zkoss.zk</groupId>
-			<artifactId>zhtml</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.zkoss.zk</groupId>
-			<artifactId>zkplus</artifactId>
-		</dependency>
 	</dependencies>
 </project>

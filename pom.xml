@@ -540,220 +540,159 @@
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-aop</artifactId>
 				<version>${org.springframework.version}</version>
-				<type>jar</type>
-				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-aspects</artifactId>
 				<version>${org.springframework.version}</version>
-				<type>jar</type>
-				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-beans</artifactId>
 				<version>${org.springframework.version}</version>
-				<type>jar</type>
-				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-context</artifactId>
 				<version>${org.springframework.version}</version>
-				<type>jar</type>
-				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-context-support</artifactId>
 				<version>${org.springframework.version}</version>
-				<type>jar</type>
-				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-core</artifactId>
 				<version>${org.springframework.version}</version>
-				<type>jar</type>
-				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-expression</artifactId>
 				<version>${org.springframework.version}</version>
-				<type>jar</type>
-				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-jdbc</artifactId>
 				<version>${org.springframework.version}</version>
-				<type>jar</type>
-				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-jms</artifactId>
 				<version>${org.springframework.version}</version>
-				<type>jar</type>
-				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-orm</artifactId>
 				<version>${org.springframework.version}</version>
-				<type>jar</type>
-				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-oxm</artifactId>
 				<version>${org.springframework.version}</version>
-				<type>jar</type>
-				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-test</artifactId>
 				<version>${org.springframework.version}</version>
-				<type>jar</type>
 				<scope>test</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-web</artifactId>
 				<version>${org.springframework.version}</version>
-				<type>jar</type>
-				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-tx</artifactId>
 				<version>${org.springframework.version}</version>
-				<type>jar</type>
-				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.amqp</groupId>
 				<artifactId>spring-amqp</artifactId>
 				<version>${org.springframework.amqp.version}</version>
-				<type>jar</type>
-				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.amqp</groupId>
 				<artifactId>spring-rabbit</artifactId>
 				<version>${org.springframework.amqp.version}</version>
-				<type>jar</type>
-				<scope>compile</scope>
 			</dependency>
 			<!-- Spring Security -->
 			<dependency>
 				<groupId>org.springframework.security</groupId>
 				<artifactId>spring-security-acl</artifactId>
 				<version>${org.springframework.security.version}</version>
-				<type>jar</type>
-				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.security</groupId>
 				<artifactId>spring-security-aspects</artifactId>
 				<version>${org.springframework.security.version}</version>
-				<type>jar</type>
-				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.security</groupId>
 				<artifactId>spring-security-cas</artifactId>
 				<version>${org.springframework.security.version}</version>
-				<type>jar</type>
-				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.security</groupId>
 				<artifactId>spring-security-config</artifactId>
 				<version>${org.springframework.security.version}</version>
-				<type>jar</type>
-				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.security</groupId>
 				<artifactId>spring-security-core</artifactId>
 				<version>${org.springframework.security.version}</version>
-				<type>jar</type>
-				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.security</groupId>
 				<artifactId>spring-security-crypto</artifactId>
 				<version>${org.springframework.security.version}</version>
-				<type>jar</type>
-				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.security</groupId>
 				<artifactId>spring-security-ldap</artifactId>
 				<version>${org.springframework.security.version}</version>
-				<type>jar</type>
-				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.security</groupId>
 				<artifactId>spring-security-openid</artifactId>
 				<version>${org.springframework.security.version}</version>
-				<type>jar</type>
-				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.security</groupId>
 				<artifactId>spring-security-taglibs</artifactId>
 				<version>${org.springframework.security.version}</version>
-				<type>jar</type>
-				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.security</groupId>
 				<artifactId>spring-security-web</artifactId>
 				<version>${org.springframework.security.version}</version>
-				<type>jar</type>
-				<scope>compile</scope>
 			</dependency>
 			<!-- Apache Libraries -->
 			<dependency>
 				<groupId>commons-beanutils</groupId>
 				<artifactId>commons-beanutils</artifactId>
 				<version>1.9.2</version>
-				<type>jar</type>
-				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>commons-codec</groupId>
 				<artifactId>commons-codec</artifactId>
 				<version>1.10</version>
-				<type>jar</type>
-				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>commons-collections</groupId>
 				<artifactId>commons-collections</artifactId>
 				<version>3.2.1</version>
-				<type>jar</type>
-				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>commons-io</groupId>
 				<artifactId>commons-io</artifactId>
 				<version>2.4</version>
-				<type>jar</type>
-				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>commons-lang</groupId>
 				<artifactId>commons-lang</artifactId>
 				<version>2.6</version>
-				<type>jar</type>
-				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>commons-digester</groupId>
@@ -764,152 +703,110 @@
 				<groupId>org.apache.xbean</groupId>
 				<artifactId>xbean-spring</artifactId>
 				<version>4.1</version>
-				<type>jar</type>
-				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.httpcomponents</groupId>
 				<artifactId>httpclient</artifactId>
 				<version>4.3.6</version>
-				<type>jar</type>
-				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.httpcomponents</groupId>
 				<artifactId>httpcore</artifactId>
 				<version>4.4</version>
-				<type>jar</type>
-				<scope>compile</scope>
 			</dependency>
 			<!-- Logging -->
 			<dependency>
 				<groupId>commons-logging</groupId>
 				<artifactId>commons-logging</artifactId>
 				<version>1.2</version>
-				<type>jar</type>
-				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>log4j</groupId>
 				<artifactId>log4j</artifactId>
 				<version>1.2.17</version>
-				<type>jar</type>
-				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.slf4j</groupId>
 				<artifactId>slf4j-jcl</artifactId>
 				<version>1.7.10</version>
-				<type>jar</type>
-				<scope>compile</scope>
 			</dependency>
 			<!-- ActiveMQ -->
 			<dependency>
 				<groupId>org.apache.activemq</groupId>
 				<artifactId>activemq-broker</artifactId>
 				<version>${org.apache.activemq.version}</version>
-				<type>jar</type>
-				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.activemq</groupId>
 				<artifactId>activemq-kahadb-store</artifactId>
 				<version>${org.apache.activemq.version}</version>
-				<type>jar</type>
-				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.activemq</groupId>
 				<artifactId>activemq-spring</artifactId>
 				<version>${org.apache.activemq.version}</version>
-				<type>jar</type>
-				<scope>compile</scope>
 			</dependency>
 			<!-- RabbitMQ -->
 			<dependency>
 				<groupId>com.rabbitmq</groupId>
 				<artifactId>amqp-client</artifactId>
 				<version>${com.rabbitmq.version}</version>
-				<type>jar</type>
-				<scope>compile</scope>
 			</dependency>
 			<!-- ZK -->
 			<dependency>
 				<groupId>org.zkoss.zk</groupId>
 				<artifactId>zk</artifactId>
 				<version>${org.zkoss.zk.version}</version>
-				<type>jar</type>
-				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.zkoss.zk</groupId>
 				<artifactId>zul</artifactId>
 				<version>${org.zkoss.zk.version}</version>
-				<type>jar</type>
-				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.zkoss.zk</groupId>
 				<artifactId>zkbind</artifactId>
 				<version>${org.zkoss.zk.version}</version>
-				<type>jar</type>
-				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.zkoss.common</groupId>
 				<artifactId>zcommon</artifactId>
 				<version>${org.zkoss.zk.version}</version>
-				<type>jar</type>
-				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.zkoss.common</groupId>
 				<artifactId>zel</artifactId>
 				<version>${org.zkoss.zk.version}</version>
-				<type>jar</type>
-				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.zkoss.zk</groupId>
 				<artifactId>zhtml</artifactId>
 				<version>${org.zkoss.zk.version}</version>
-				<type>jar</type>
-				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.zkoss.zk</groupId>
 				<artifactId>zkplus</artifactId>
 				<version>${org.zkoss.zk.version}</version>
-				<type>jar</type>
-				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.zkoss.common</groupId>
 				<artifactId>zweb</artifactId>
 				<version>${org.zkoss.zk.version}</version>
-				<type>jar</type>
-				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.zkoss.zk</groupId>
 				<artifactId>zkex</artifactId>
 				<version>${org.zkoss.zk.version}</version>
-				<type>jar</type>
-				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.zkoss.zk</groupId>
 				<artifactId>zkmax</artifactId>
 				<version>${org.zkoss.zk.version}</version>
-				<type>jar</type>
-				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.zkoss.zk</groupId>
 				<artifactId>zml</artifactId>
 				<version>${org.zkoss.zk.version}</version>
-				<type>jar</type>
-				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.zkoss.zats</groupId>
@@ -928,7 +825,6 @@
 				<groupId>junit</groupId>
 				<artifactId>junit</artifactId>
 				<version>4.12</version>
-				<type>jar</type>
 				<scope>test</scope>
 			</dependency>
 			<!-- Jackson JSON Parser -->
@@ -936,38 +832,30 @@
 				<groupId>com.fasterxml.jackson.core</groupId>
 				<artifactId>jackson-core</artifactId>
 				<version>${jackson.version}</version>
-				<type>jar</type>
-				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>com.fasterxml.jackson.core</groupId>
 				<artifactId>jackson-databind</artifactId>
 				<version>${jackson.version}</version>
-				<type>jar</type>
-				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>com.fasterxml.jackson.core</groupId>
 				<artifactId>jackson-annotations</artifactId>
 				<version>${jackson.version}</version>
-				<type>jar</type>
-				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>com.fasterxml.jackson.dataformat</groupId>
 				<artifactId>jackson-dataformat-xml</artifactId>
 				<version>${jackson.version}</version>
-				<type>jar</type>
-				<scope>compile</scope>
 			</dependency>
 			<!-- Servlet -->
 			<dependency>
 				<groupId>javax.servlet</groupId>
 				<artifactId>javax.servlet-api</artifactId>
 				<version>${servlet.api.version}</version>
-				<type>jar</type>
-				<scope>compile</scope>
+				<scope>provided</scope>
 			</dependency>
+			<!-- Java Messaging Service Specification -->
 			<dependency>
 				<groupId>org.apache.geronimo.specs</groupId>
 				<artifactId>geronimo-jms_1.1_spec</artifactId>
@@ -978,8 +866,6 @@
 				<groupId>org.carewebframework</groupId>
 				<artifactId>org.carewebframework.api</artifactId>
 				<version>${org.carewebframework.core.version}</version>
-				<type>jar</type>
-				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.carewebframework</groupId>
@@ -992,8 +878,6 @@
 				<groupId>org.carewebframework</groupId>
 				<artifactId>org.carewebframework.ui</artifactId>
 				<version>${org.carewebframework.core.version}</version>
-				<type>jar</type>
-				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.carewebframework</groupId>
@@ -1006,71 +890,51 @@
 				<groupId>org.carewebframework</groupId>
 				<artifactId>org.carewebframework.help.core</artifactId>
 				<version>${org.carewebframework.core.version}</version>
-				<type>jar</type>
-				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.carewebframework</groupId>
 				<artifactId>org.carewebframework.help.javahelp</artifactId>
 				<version>${org.carewebframework.core.version}</version>
-				<type>jar</type>
-				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.carewebframework</groupId>
 				<artifactId>org.carewebframework.testharness</artifactId>
 				<version>${org.carewebframework.core.version}</version>
-				<type>jar</type>
-				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.carewebframework</groupId>
 				<artifactId>org.carewebframework.ui.sharedforms</artifactId>
 				<version>${org.carewebframework.core.version}</version>
-				<type>jar</type>
-				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.carewebframework</groupId>
 				<artifactId>org.carewebframework.ui.wonderbar</artifactId>
 				<version>${org.carewebframework.core.version}</version>
-				<type>jar</type>
-				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.carewebframework</groupId>
 				<artifactId>org.carewebframework.shell</artifactId>
 				<version>${org.carewebframework.core.version}</version>
-				<type>jar</type>
-				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.carewebframework</groupId>
 				<artifactId>org.carewebframework.common</artifactId>
 				<version>${org.carewebframework.core.version}</version>
-				<type>jar</type>
-				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.carewebframework</groupId>
 				<artifactId>org.carewebframework.security.spring.core</artifactId>
 				<version>${org.carewebframework.core.version}</version>
-				<type>jar</type>
-				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.carewebframework</groupId>
 				<artifactId>org.carewebframework.jms.core</artifactId>
 				<version>${org.carewebframework.core.version}</version>
-				<type>jar</type>
-				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.carewebframework</groupId>
 				<artifactId>org.carewebframework.jms.activemq</artifactId>
 				<version>${org.carewebframework.core.version}</version>
-				<type>jar</type>
-				<scope>compile</scope>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

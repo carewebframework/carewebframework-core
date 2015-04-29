@@ -13,10 +13,27 @@
 	<name>CareWeb Framework UI</name>
 
 	<dependencies>
+		<!-- CareWeb Framework -->
+		<dependency>
+			<groupId>org.carewebframework</groupId>
+			<artifactId>org.carewebframework.api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.carewebframework</groupId>
+			<artifactId>org.carewebframework.common</artifactId>
+		</dependency>
+		<!-- Servlet API -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
+			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<!-- Apache Commons -->
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
@@ -30,16 +47,26 @@
 			<artifactId>commons-lang</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>commons-beanutils</groupId>
+			<artifactId>commons-beanutils</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+		</dependency>
+		<!-- Apache HTTP components -->
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpcore</artifactId>
+		</dependency>
+		<!-- Spring Framework -->
+		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-test</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.carewebframework</groupId>
-			<artifactId>org.carewebframework.api</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -56,29 +83,11 @@
 		<!-- ZK -->
 		<dependency>
 			<groupId>org.zkoss.zk</groupId>
-			<artifactId>zk</artifactId>
+			<artifactId>zkplus</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.zkoss.zk</groupId>
-			<artifactId>zul</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>commons-beanutils</groupId>
-			<artifactId>commons-beanutils</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>httpclient</artifactId>
-		</dependency>
-		<!-- Tests -->
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.carewebframework</groupId>
-			<artifactId>org.carewebframework.api</artifactId>
-			<type>test-jar</type>
+			<artifactId>zhtml</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.zkoss.common</groupId>
@@ -90,25 +99,19 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+		<!-- Tests -->
 		<dependency>
-			<groupId>org.zkoss.common</groupId>
-			<artifactId>zweb</artifactId>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.carewebframework</groupId>
-			<artifactId>org.carewebframework.common</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>httpcore</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.zkoss.common</groupId>
-			<artifactId>zel</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>commons-codec</groupId>
-			<artifactId>commons-codec</artifactId>
+			<artifactId>org.carewebframework.api</artifactId>
+			<type>test-jar</type>
 		</dependency>
 	</dependencies>
 </project>
