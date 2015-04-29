@@ -10,7 +10,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.carewebframework</groupId>
-			<artifactId>org.carewebframework.ui</artifactId>
+			<artifactId>org.carewebframework.ui.core</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>

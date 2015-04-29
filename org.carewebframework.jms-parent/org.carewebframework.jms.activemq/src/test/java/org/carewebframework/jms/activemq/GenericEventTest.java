@@ -14,7 +14,7 @@ import org.carewebframework.jms.GlobalEventDispatcher;
 /**
  * Perform remote event testing.
  */
-public class GenericEventTest extends org.carewebframework.api.event.GenericEventTest {
+public class GenericEventTest extends org.carewebframework.api.test.GenericEventTest {
     
     public GenericEventTest() {
         super();

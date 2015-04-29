@@ -83,8 +83,8 @@
 	<modules>
 		<module>org.carewebframework.common</module>
 		<module>org.carewebframework.mvn-parent</module>
-		<module>org.carewebframework.api</module>
-		<module>org.carewebframework.ui</module>
+		<module>org.carewebframework.api-parent</module>
+		<module>org.carewebframework.ui-parent</module>
 		<module>org.carewebframework.help-parent</module>
 		<module>org.carewebframework.shell</module>
 		<module>org.carewebframework.security.spring-parent</module>
@@ -92,7 +92,6 @@
 		<module>org.carewebframework.jms-parent</module>
 		<module>org.carewebframework.ext-parent</module>
 		<module>org.carewebframework.lib-parent</module>
-		<module>org.carewebframework.ui-parent</module>
 		<module>org.carewebframework.testharness</module>
 		<module>org.carewebframework.webapp.testharness</module>
 	</modules>
@@ -104,17 +103,17 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-archetype-plugin</artifactId>
-					<version>2.2</version>
+					<version>2.3</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-dependency-plugin</artifactId>
-					<version>2.8</version>
+					<version>2.10</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-clean-plugin</artifactId>
-					<version>2.5</version>
+					<version>2.6.1</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
@@ -129,7 +128,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-resources-plugin</artifactId>
-					<version>2.6</version>
+					<version>2.7</version>
 					<configuration>
 						<overwrite>true</overwrite>
 					</configuration>
@@ -142,7 +141,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-javadoc-plugin</artifactId>
-					<version>2.9.1</version>
+					<version>2.10.3</version>
 					<configuration>
 						<failOnError>false</failOnError>
 					</configuration>
@@ -158,22 +157,22 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-release-plugin</artifactId>
-					<version>2.5</version>
+					<version>2.5.2</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-plugin-plugin</artifactId>
-					<version>3.3</version>
+					<version>3.4</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-scm-plugin</artifactId>
-					<version>1.9.1</version>
+					<version>1.9.4</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-source-plugin</artifactId>
-					<version>2.3</version>
+					<version>2.4</version>
 					<executions>
 						<execution>
 							<id>attach-sources</id>
@@ -188,16 +187,16 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>
-					<version>3.1</version>
+					<version>3.3</version>
 					<configuration>
-						<source>1.6</source>
-						<target>1.6</target>
+						<source>1.7</source>
+						<target>1.7</target>
 					</configuration>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-surefire-plugin</artifactId>
-					<version>2.17</version>
+					<version>2.18.1</version>
 					<configuration>
 						<redirectTestOutputToFile>true</redirectTestOutputToFile>
 					</configuration>
@@ -205,7 +204,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-failsafe-plugin</artifactId>
-					<version>2.17</version>
+					<version>2.18.1</version>
 					<executions>
 						<execution>
 							<goals>
@@ -242,7 +241,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-war-plugin</artifactId>
-					<version>2.4</version>
+					<version>2.6</version>
 					<configuration>
 						<archive>
 							<manifestEntries>
@@ -260,7 +259,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-jar-plugin</artifactId>
-					<version>2.5</version>
+					<version>2.6</version>
 					<configuration>
 						<skipIfEmpty>true</skipIfEmpty>
 						<archive>
@@ -285,7 +284,7 @@
 				</plugin>
 				<plugin>
 					<artifactId>maven-assembly-plugin</artifactId>
-					<version>2.4.1</version>
+					<version>2.5.4</version>
 					<configuration>
 						<archive>
 							<!-- At this point, only the jar and war assembly formats support 
@@ -864,26 +863,24 @@
 			<!-- CareWeb Libraries -->
 			<dependency>
 				<groupId>org.carewebframework</groupId>
-				<artifactId>org.carewebframework.api</artifactId>
+				<artifactId>org.carewebframework.api.core</artifactId>
 				<version>${org.carewebframework.core.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.carewebframework</groupId>
-				<artifactId>org.carewebframework.api</artifactId>
+				<artifactId>org.carewebframework.api.test</artifactId>
 				<version>${org.carewebframework.core.version}</version>
-				<type>test-jar</type>
 				<scope>test</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.carewebframework</groupId>
-				<artifactId>org.carewebframework.ui</artifactId>
+				<artifactId>org.carewebframework.ui.core</artifactId>
 				<version>${org.carewebframework.core.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.carewebframework</groupId>
-				<artifactId>org.carewebframework.ui</artifactId>
+				<artifactId>org.carewebframework.ui.test</artifactId>
 				<version>${org.carewebframework.core.version}</version>
-				<type>test-jar</type>
 				<scope>test</scope>
 			</dependency>
 			<dependency>
