@@ -56,7 +56,7 @@ public class PromptDialog extends Window {
     
     private static final String LABEL_ID_CANCEL = "@cwf.btn.cancel.label";
     
-    private static final String LABEL_IDS_CANCEL_OK = LABEL_ID_CANCEL + "|" + LABEL_ID_OK;
+    private static final String LABEL_IDS_OK_CANCEL = LABEL_ID_OK + "|" + LABEL_ID_CANCEL;
     
     private static final String STYLES_INFO = Messagebox.INFORMATION + "||panel-info";
     
@@ -523,7 +523,7 @@ public class PromptDialog extends Window {
      * @return True if user clicked OK, false otherwise.
      */
     public static boolean confirm(String message, String title, String responseId) {
-        return 1 == show(message, title, LABEL_IDS_CANCEL_OK, STYLES_QUESTION, null, null, responseId, LABEL_ID_CANCEL);
+        return 0 == show(message, title, LABEL_IDS_OK_CANCEL, STYLES_QUESTION, null, null, responseId, LABEL_ID_CANCEL);
     }
     
     /**
@@ -685,7 +685,7 @@ public class PromptDialog extends Window {
      * @return Result of input, or null if canceled.
      */
     private static Object input(Map<Object, Object> args) {
-        List<Response> responseList = toResponseList(LABEL_IDS_CANCEL_OK, null, null);
+        List<Response> responseList = toResponseList(LABEL_IDS_OK_CANCEL, null, null);
         args.put("icon", null);
         args.put("focus", null);
         args.put("remember", false);
