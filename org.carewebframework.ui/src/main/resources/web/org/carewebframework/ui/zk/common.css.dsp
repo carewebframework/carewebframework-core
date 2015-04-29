@@ -324,9 +324,9 @@
 	margin: 0 2px 0 0;
 }
 
-.z-radio + .z-radio,
-.z-checkbox + .z-checkbox {
-	padding-left: 15px;
+.z-radio,
+.z-checkbox {
+	padding-right: 15px;
 }
 
 body {
