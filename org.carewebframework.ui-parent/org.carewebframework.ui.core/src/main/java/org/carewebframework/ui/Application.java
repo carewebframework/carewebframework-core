@@ -135,7 +135,7 @@ public class Application {
          * 
          * @param session The session.
          */
-        private SessionInfo(final Session session) {
+        private SessionInfo(Session session) {
             this.session = session;
             maxInactiveInterval = session.getMaxInactiveInterval();
         }
@@ -145,12 +145,12 @@ public class Application {
          * 
          * @param desktop The desktop to add.
          */
-        private void addDesktop(final Desktop desktop) {
+        private void addDesktop(Desktop desktop) {
             synchronized (activeDesktops) {
                 desktop.getSession().setMaxInactiveInterval(maxInactiveInterval);
                 activeDesktops.put(desktop.getId(), desktop);
                 this.desktops.add(desktop);
-                final DesktopInfo desktopInfo = new DesktopInfo(desktop);
+                DesktopInfo desktopInfo = new DesktopInfo(desktop);
                 desktop.setAttribute(DesktopInfo.class.getName(), desktopInfo);
                 desktop.addListener(desktopInfo);
                 desktop.addListener(uiLifeCycle);
@@ -171,7 +171,7 @@ public class Application {
          * 
          * @param desktop The desktop to remove.
          */
-        private void removeDesktop(final Desktop desktop) {
+        private void removeDesktop(Desktop desktop) {
             synchronized (activeDesktops) {
                 activeDesktops.remove(desktop.getId());
                 
@@ -199,6 +199,30 @@ public class Application {
             }
             
             session.invalidate();
+        }
+        
+        public int getMaxInactiveInterval() {
+            return maxInactiveInterval;
+        }
+        
+        public String getRemoteAddress() {
+            return remoteAddress;
+        }
+        
+        public String getLocalAddress() {
+            return localAddress;
+        }
+        
+        public String getLocalName() {
+            return localName;
+        }
+        
+        public String getRemoteHost() {
+            return remoteHost;
+        }
+        
+        public String getServerName() {
+            return serverName;
         }
         
         /**
@@ -236,24 +260,27 @@ public class Application {
          */
         @Override
         public String toString() {
-            final StringBuffer buffer = new StringBuffer();
+            StringBuffer buffer = new StringBuffer();
+            
             if (this.session != null) {
                 buffer.append("\nSessionInfo");
-                final HttpSession httpSession = getNativeSession();
+                HttpSession httpSession = getNativeSession();
+                
                 if (httpSession != null) {//precaution, shouldn't ever be null
                     buffer.append("\n\tSession ID: ").append(httpSession.getId());
                     buffer.append("\n\tCreationTime: ").append(String.valueOf(new Date(httpSession.getCreationTime())));
                     buffer.append("\n\tLastAccessedTime: ").append(
                         String.valueOf(new Date(httpSession.getLastAccessedTime())));
                 }
-                final String deviceType = this.session.getDeviceType();
-                final int maxInactiveInterval = this.session.getMaxInactiveInterval();
                 
-                final Map<?, ?> attributes = this.session.getAttributes();
+                String deviceType = this.session.getDeviceType();
+                int maxInactiveInterval = this.session.getMaxInactiveInterval();
+                Map<?, ?> attributes = this.session.getAttributes();
+                
                 if (attributes != null) {
-                    for (final Object key : attributes.keySet()) {
+                    for (Object key : attributes.keySet()) {
                         buffer.append("\n\tSession Attribute Key=").append(key);
-                        final Object attribute = attributes.get(key);
+                        Object attribute = attributes.get(key);
                         buffer.append(", Value=").append(attribute);
                         buffer.append(", Session Attribute Class=").append(attribute == null ? null : attribute.getClass());
                     }
@@ -264,8 +291,8 @@ public class Application {
                         .append(", RemotedAddress=").append(remoteAddress).append(", RemoteHost=").append(remoteHost)
                         .append(", ServerName=").append(serverName);
                 
-                for (final Desktop desktop : getDesktops()) {
-                    final DesktopInfo desktopInfo = Application.getDesktopInfo(desktop);
+                for (Desktop desktop : getDesktops()) {
+                    DesktopInfo desktopInfo = Application.getDesktopInfo(desktop);
                     buffer.append(desktopInfo);
                 }
             }
@@ -315,8 +342,8 @@ public class Application {
          * 
          * @param desktop The desktop.
          */
-        private DesktopInfo(final Desktop desktop) {
-            final Execution exec = desktop.getExecution();
+        private DesktopInfo(Desktop desktop) {
+            Execution exec = desktop.getExecution();
             
             if (exec == null) {
                 throw new FrameworkRuntimeException(EXC_ILLEGAL_STATE, null, DesktopInfo.this.toString());
@@ -486,9 +513,9 @@ public class Application {
          */
         @Override
         public String toString() {
-            final StringBuffer buffer = new StringBuffer();
-            final ClientInfoEvent clientInfo = getClientInformation();
-            final String screenDimensions = clientInfo == null ? "" : (clientInfo.getScreenWidth() + "x" + clientInfo
+            StringBuffer buffer = new StringBuffer();
+            ClientInfoEvent clientInfo = getClientInformation();
+            String screenDimensions = clientInfo == null ? "" : (clientInfo.getScreenWidth() + "x" + clientInfo
                     .getScreenHeight());
             Desktop desktop = getDesktop(id);
             buffer.append("\n\t\tDesktopInfo");
@@ -516,7 +543,7 @@ public class Application {
          * <p>
          */
         @Override
-        public boolean service(final AuRequest request, final boolean everError) {
+        public boolean service(AuRequest request, boolean everError) {
             if (Events.ON_CLIENT_INFO.equals(request.getCommand())) {
                 this.clientInformation = ClientInfoEvent.getClientInfoEvent(request);
                 request.getDesktop().removeListener(this);
@@ -653,7 +680,7 @@ public class Application {
      * @param desktop Desktop whose information is requested.
      * @return The DesktopInfo instance for the specified desktop.
      */
-    public static DesktopInfo getDesktopInfo(final Desktop desktop) {
+    public static DesktopInfo getDesktopInfo(Desktop desktop) {
         return (DesktopInfo) desktop.getAttribute(DesktopInfo.class.getName());
     }
     
@@ -663,7 +690,7 @@ public class Application {
      * @param desktop The desktop.
      * @return The time zone.
      */
-    public static TimeZone getTimeZone(final Desktop desktop) {
+    public static TimeZone getTimeZone(Desktop desktop) {
         DesktopInfo dti = desktop == null ? null : getDesktopInfo(desktop);
         return dti == null || dti.clientInformation == null ? null : dti.clientInformation.getTimeZone();
     }
@@ -688,7 +715,7 @@ public class Application {
      * @return A list of SessionInfo objects.
      */
     public List<SessionInfo> getActiveSessions() {
-        return new ArrayList<SessionInfo>(this.activeSessions.values());
+        return new ArrayList<SessionInfo>(activeSessions.values());
     }
     
     /**
@@ -696,13 +723,13 @@ public class Application {
      * 
      * @param session Session to add.
      */
-    private void addSession(final Session session) {
+    private void addSession(Session session) {
         synchronized (activeSessions) {
-            final String id = ((HttpSession) session.getNativeSession()).getId();
+            String id = ((HttpSession) session.getNativeSession()).getId();
             
-            if (!this.activeSessions.containsKey(id)) {
-                final SessionInfo sessionInfo = new SessionInfo(session);
-                this.activeSessions.put(id, sessionInfo);
+            if (!activeSessions.containsKey(id)) {
+                SessionInfo sessionInfo = new SessionInfo(session);
+                activeSessions.put(id, sessionInfo);
                 log.debug(sessionInfo);
             }
         }
@@ -713,7 +740,7 @@ public class Application {
      * 
      * @param session Session to remove.
      */
-    private void removeSession(final Session session) {
+    private void removeSession(Session session) {
         removeSessionInfo(getSessionInfo(session));
     }
     
@@ -722,12 +749,12 @@ public class Application {
      * 
      * @param sessionInfo Session info to remove.
      */
-    private void removeSessionInfo(final SessionInfo sessionInfo) {
+    private void removeSessionInfo(SessionInfo sessionInfo) {
         if (sessionInfo != null) {
             sessionInfo.destroy();
             
             synchronized (activeSessions) {
-                this.activeSessions.remove(sessionInfo.getNativeSession().getId());
+                activeSessions.remove(sessionInfo.getNativeSession().getId());
             }
         }
     }
@@ -742,7 +769,7 @@ public class Application {
      *            associated session's active desktop count is decremented by one and, if the count
      *            has reached zero, the session is invalidated.
      */
-    public void register(final Desktop desktop, final boolean doRegister) {
+    public void register(Desktop desktop, boolean doRegister) {
         if (doRegister) {
             addDesktop(desktop);
             
@@ -772,7 +799,7 @@ public class Application {
      * @return True if this is a managed desktop.
      */
     private boolean isManaged(Desktop desktop) {
-        final HttpServletRequest request = (HttpServletRequest) desktop.getExecution().getNativeRequest();
+        HttpServletRequest request = (HttpServletRequest) desktop.getExecution().getNativeRequest();
         String url = request.getRequestURI();
         return (url != null) && !url.contains("/zkau/");
     }
@@ -783,8 +810,8 @@ public class Application {
      * 
      * @param desktop Desktop to add.
      */
-    private void addDesktop(final Desktop desktop) {
-        final SessionInfo sessionInfo = getSessionInfo(desktop);
+    private void addDesktop(Desktop desktop) {
+        SessionInfo sessionInfo = getSessionInfo(desktop);
         
         if (sessionInfo != null) {
             sessionInfo.addDesktop(desktop);
@@ -797,8 +824,8 @@ public class Application {
      * 
      * @param desktop Desktop to remove.
      */
-    private void removeDesktop(final Desktop desktop) {
-        final SessionInfo sessionInfo = getSessionInfo(desktop);
+    private void removeDesktop(Desktop desktop) {
+        SessionInfo sessionInfo = getSessionInfo(desktop);
         
         if (sessionInfo != null) {
             sessionInfo.removeDesktop(desktop);
@@ -828,8 +855,8 @@ public class Application {
      * @param session Session whose desktop count is sought.
      * @return The number of active desktops for this session, or 0 if the session is not known.
      */
-    public int getDesktopCount(final HttpSession session) {
-        final SessionInfo sessionInfo = getSessionInfo(session);
+    public int getDesktopCount(HttpSession session) {
+        SessionInfo sessionInfo = getSessionInfo(session);
         return sessionInfo == null ? 0 : sessionInfo.desktops.size();
     }
     
@@ -840,7 +867,7 @@ public class Application {
      * @param desktop Desktop whose associated SessionInfo is sought.
      * @return A SessionInfo instance, or null if one was not found.
      */
-    public SessionInfo getSessionInfo(final Desktop desktop) {
+    public SessionInfo getSessionInfo(Desktop desktop) {
         return getSessionInfo(desktop.getSession());
     }
     
@@ -851,7 +878,7 @@ public class Application {
      * @param session Session whose associated SessionInfo is sought.
      * @return A SessionInfo instance, or null if one was not found.
      */
-    public SessionInfo getSessionInfo(final Session session) {
+    public SessionInfo getSessionInfo(Session session) {
         return session == null ? null : getSessionInfo((HttpSession) session.getNativeSession());
     }
     
@@ -862,7 +889,7 @@ public class Application {
      * @param session Session whose associated SessionInfo is sought.
      * @return A SessionInfo instance, or null if one was not found.
      */
-    public SessionInfo getSessionInfo(final HttpSession session) {
+    public SessionInfo getSessionInfo(HttpSession session) {
         return session == null ? null : this.activeSessions.get(session.getId());
     }
 }

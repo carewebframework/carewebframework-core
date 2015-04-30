@@ -27,7 +27,6 @@ import org.carewebframework.ui.zk.AbstractRowRenderer;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
-import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.event.ClientInfoEvent;
 import org.zkoss.zul.Detail;
 import org.zkoss.zul.Grid;
@@ -52,16 +51,15 @@ public class MainRowRenderer extends AbstractRowRenderer<SessionInfo, Object> {
      * @see AbstractRowRenderer#renderRow
      */
     @Override
-    protected Component renderRow(final Row row, final SessionInfo sInfo) {
-        final Session session = sInfo == null ? null : sInfo.getSession();
-        final HttpSession nativeSession = session == null ? null : (HttpSession) session.getNativeSession();
+    protected Component renderRow(Row row, SessionInfo sInfo) {
+        HttpSession nativeSession = sInfo.getNativeSession();
         //Because it's possible that the session could be invalidated but yet still in the list
         String sessionId = null;
         String institution = StrUtil.formatMessage("@cwf.sessiontracker.msg.unknown");
         Date creationTime = null;
         Date lastAccessedTime = null;
         int maxInactiveInterval = 0;
-        String clientAddress = null;
+        String clientAddress = sInfo.getRemoteAddress();
         
         try {
             if (nativeSession != null) {
@@ -69,10 +67,10 @@ public class MainRowRenderer extends AbstractRowRenderer<SessionInfo, Object> {
                 creationTime = new Date(nativeSession.getCreationTime());
                 lastAccessedTime = new Date(nativeSession.getLastAccessedTime());
                 maxInactiveInterval = nativeSession.getMaxInactiveInterval();
-                clientAddress = session.getRemoteAddr();
             }
-        } catch (final IllegalStateException e) {
-            log.warn("The following session was still in the list of activeSessions yet was invalidated: " + session);
+        } catch (IllegalStateException e) {
+            log.warn("The following session was still in the list of activeSessions yet was invalidated: "
+                    + sInfo.getSession());
             return null;
         }
         
@@ -82,7 +80,7 @@ public class MainRowRenderer extends AbstractRowRenderer<SessionInfo, Object> {
         createCell(row, creationTime);
         createCell(row, lastAccessedTime);
         createCell(row, String.valueOf(maxInactiveInterval));
-        return sInfo == null || sInfo.getDesktops().isEmpty() ? null : row;
+        return sInfo.getDesktops().isEmpty() ? null : row;
     }
     
     @Override
