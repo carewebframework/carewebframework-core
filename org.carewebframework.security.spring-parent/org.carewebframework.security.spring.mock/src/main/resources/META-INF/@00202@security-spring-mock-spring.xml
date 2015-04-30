@@ -16,6 +16,7 @@
 		
 		<bean class="org.carewebframework.api.security.mock.MockSecurityDomainLoader">
 			<constructor-arg value="${mock.domains}" />
+			<constructor-arg value="${mock.authorities}" />
 		</bean>
 
 		<bean id="securityLoginPaneController" class="org.carewebframework.security.spring.controller.LoginPaneController"

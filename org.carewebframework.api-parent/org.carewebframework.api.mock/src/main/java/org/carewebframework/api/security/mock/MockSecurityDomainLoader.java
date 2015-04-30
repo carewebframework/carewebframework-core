@@ -24,8 +24,9 @@ public class MockSecurityDomainLoader {
      * each entry is of the form: [logicalId]^[name]^[key=value]...
      * 
      * @param domains Mock security domains.
+     * @param authorities Comma-separated list of granted authorities.
      */
-    public MockSecurityDomainLoader(String domains) {
+    public MockSecurityDomainLoader(String domains, String authorities) {
         for (String domain : domains.split("\\,")) {
             String[] pcs = domain.split("\\^");
             Map<String, String> attrs = new HashMap<String, String>();
@@ -38,7 +39,9 @@ public class MockSecurityDomainLoader {
                 }
             }
             
-            SecurityDomainRegistry.registerSecurityDomain(new MockSecurityDomain(pcs[0], pcs[1], attrs));
+            MockSecurityDomain securityDomain = new MockSecurityDomain(pcs[0], pcs[1], attrs);
+            securityDomain.setMockAuthorities(authorities);
+            SecurityDomainRegistry.registerSecurityDomain(securityDomain);
         }
     }
 }
