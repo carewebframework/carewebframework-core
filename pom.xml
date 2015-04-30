@@ -868,6 +868,11 @@
 			</dependency>
 			<dependency>
 				<groupId>org.carewebframework</groupId>
+				<artifactId>org.carewebframework.api.mock</artifactId>
+				<version>${org.carewebframework.core.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.carewebframework</groupId>
 				<artifactId>org.carewebframework.api.test</artifactId>
 				<version>${org.carewebframework.core.version}</version>
 				<scope>test</scope>

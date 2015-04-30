@@ -16,8 +16,13 @@
 			<artifactId>org.carewebframework.security.spring.core</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>org.carewebframework</groupId>
+			<artifactId>org.carewebframework.api.mock</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 		</dependency>
 	</dependencies>
+	
 </project>

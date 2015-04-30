@@ -13,6 +13,7 @@
 	
 	<modules>
 		<module>org.carewebframework.api.core</module>
+		<module>org.carewebframework.api.mock</module>
 		<module>org.carewebframework.api.test</module>
 	</modules>
 </project>

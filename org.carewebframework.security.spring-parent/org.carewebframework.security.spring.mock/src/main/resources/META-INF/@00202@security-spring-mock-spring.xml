@@ -10,9 +10,6 @@
 
 	<beans profile="root">
 
-		<!-- Service for reading and writing persisted properties. -->
-		<bean id="propertyService" class="org.carewebframework.api.property.mock.MockPropertyService" />
-
 		<bean id="securityService" class="org.carewebframework.security.spring.mock.MockSecurityService">
 			<property name="logoutTarget" value="${org.carewebframework.security.logout.url}" />
 		</bean>
