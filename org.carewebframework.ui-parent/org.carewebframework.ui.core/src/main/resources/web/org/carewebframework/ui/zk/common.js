@@ -308,3 +308,14 @@ cwf.stopwatch.format = function(sw) {
 
 	return sw.tag + tm + ' ' + units;
 };
+
+/**
+ * onKeyPress event handler for constraining input.
+ */
+cwf.constrainInput = function(keyPressEvent, regex) {
+	var key = String.fromCharCode(keyPressEvent.which);
+	
+   	if (!regex.test(key)) {
+   		keyPressEvent.stop();
+   	}
+};
