@@ -247,8 +247,13 @@
 	padding: 2px;
 }
 
-.panel-sm .panel-title {
+.panel-sm .panel-title,
+.panel-sm .panel-icons {
 	font-size: 90%;
+}
+
+.panel-sm .panel-icons {
+	margin: -15px 0px;
 }
 
 .panel-xs .panel-content,
@@ -256,8 +261,13 @@
 	padding: 1px;
 }
 
-.panel-xs .panel-title {
+.panel-xs .panel-title,
+.panel-xs .panel-icons {
 	font-size: 80%;
+}
+
+.panel-xs .panel-icons {
+	margin: -15px 0px;
 }
 
 .glyphicon-chevron-left-double:before {
