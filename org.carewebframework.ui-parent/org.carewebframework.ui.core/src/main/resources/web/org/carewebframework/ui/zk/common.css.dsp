@@ -252,8 +252,9 @@
 	font-size: 90%;
 }
 
-.panel-sm .panel-icons {
-	margin: -15px 0px;
+.panel-sm .panel-icons,
+.panel-xs .panel-icons {
+	margin: 0;
 }
 
 .panel-xs .panel-content,
@@ -264,10 +265,6 @@
 .panel-xs .panel-title,
 .panel-xs .panel-icons {
 	font-size: 80%;
-}
-
-.panel-xs .panel-icons {
-	margin: -15px 0px;
 }
 
 .glyphicon-chevron-left-double:before {
