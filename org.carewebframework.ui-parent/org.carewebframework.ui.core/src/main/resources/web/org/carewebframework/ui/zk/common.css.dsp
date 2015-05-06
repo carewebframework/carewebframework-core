@@ -328,7 +328,7 @@
 
 .z-radio input[type=radio],
 .z-checkbox input[type=checkbox] {
-	margin: 0 2px 0 0;
+	margin: 0 2px 0 1px;
 }
 
 .z-radio,
