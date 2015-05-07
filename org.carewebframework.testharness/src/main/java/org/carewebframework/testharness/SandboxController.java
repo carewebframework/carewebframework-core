@@ -16,8 +16,12 @@ import org.carewebframework.ui.zk.ZKUtil;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zul.Idspace;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Textbox;
+import org.zkoss.zul.Window;
 
 /**
  * Plugin to facilitate testing of zul layouts.
@@ -30,15 +34,23 @@ public class SandboxController extends PluginController {
     
     private Component contentParent;
     
+    private Component contentBase;
+    
+    @Override
+    public void doAfterCompose(Component comp) throws Exception {
+        super.doAfterCompose(comp);
+        contentBase = ZKUtil.findChild(contentParent, Idspace.class);
+    }
+    
     @Override
     public void refresh() {
         super.refresh();
-        Component contentBase = contentParent.getFirstChild();
         ZKUtil.detachChildren(contentBase);
         String content = txtContent.getText();
         
         if (content != null && !content.isEmpty()) {
             try {
+                Events.echoEvent("onModalCheck", this.root, contentBase);
                 Executions.createComponentsDirectly(txtContent.getText(), null, contentBase, null);
             } catch (Exception e) {
                 ZKUtil.detachChildren(contentBase);
@@ -49,22 +61,45 @@ public class SandboxController extends PluginController {
         }
     }
     
-    public void clear() {
-        txtContent.setText(null);
-        refresh();
-    }
-    
     private void focus() {
         txtContent.setFocus(true);
     }
     
-    public void onClick$btnView() {
+    public void onModalCheck(Event event) {
+        modalCheck((Component) event.getData());
+    }
+    
+    private void modalCheck(Component comp) {
+        if (comp instanceof Window) {
+            Window win = (Window) comp;
+            
+            if ("modal".equals(win.getMode()) || "highlighted".equals(win.getMode())) {
+                win.setMode("overlapped");
+            }
+        }
+        
+        for (Component child : comp.getChildren()) {
+            modalCheck(child);
+        }
+    }
+    
+    public void onClick$btnViewContent() {
         refresh();
         focus();
     }
     
-    public void onClick$btnClear() {
-        clear();
+    public void onClick$btnClearContent() {
+        txtContent.setText(null);
+        focus();
+    }
+    
+    public void onClick$btnClearView() {
+        ZKUtil.detachChildren(contentBase);
+        focus();
+    }
+    
+    public void onClick$btnRefreshView() {
+        refresh();
         focus();
     }
     

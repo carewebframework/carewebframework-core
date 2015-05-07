@@ -1,17 +1,25 @@
 <borderlayout height="100%" width="100%" apply="${sandboxController}">
 	<west size="50%" splittable="true">
 		<div vflex="1">
-			<toolbar align="center">
-				<button id="btnClear" style="float:left"
+			<toolbar align="start">
+				<button id="btnClearContent" 
 					label="${labels.cwf.btn.clear.label}" />
-				<button id="btnView" style="float:right"
+				<button id="btnViewContent" 
 					label="${labels.cwf.btn.view.label}" />
 			</toolbar>
 			<textbox id="txtContent" vflex="1" width="100%"
 				multiline="true" tabbable="true" />
 		</div>
 	</west>
-	<center id="contentParent">
-		<idspace width="100%" height="100%" style="overflow:auto" />
+	<center>
+		<div id="contentParent" vflex="1">
+			<toolbar align="start">
+				<button id="btnClearView" 
+					label="${labels.cwf.btn.clear.label}" />
+				<button id="btnRefreshView"
+					label="${labels.cwf.btn.refresh.label}" />
+			</toolbar>
+			<idspace vflex="1" width="100%" style="overflow:auto" />
+		</div>
 	</center>
 </borderlayout>
