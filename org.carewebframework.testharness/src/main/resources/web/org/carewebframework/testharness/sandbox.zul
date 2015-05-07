@@ -1,25 +1,35 @@
 <borderlayout height="100%" width="100%" apply="${sandboxController}">
 	<west size="50%" splittable="true">
-		<div vflex="1">
-			<toolbar align="start">
-				<button id="btnClearContent" 
-					label="${labels.cwf.btn.clear.label}" />
-				<button id="btnViewContent" 
-					label="${labels.cwf.btn.view.label}" />
-			</toolbar>
-			<textbox id="txtContent" vflex="1" width="100%"
-				multiline="true" tabbable="true" />
-		</div>
+		<panel mold="bootstrap" vflex="1">
+			<caption label="${labels.cwf.sandbox.title.left}" width="100%">
+				<span style="float:right">
+					<button id="btnClearContent"
+						label="${labels.cwf.btn.clear.label}" />
+					<button id="btnRenderContent"
+						label="${labels.cwf.btn.view.label}" />
+				</span>
+			</caption>
+			<panelchildren style="padding:0">
+				<textbox xmlns:ca="client/attribute" id="txtContent"
+					vflex="1" width="100%" multiline="true" tabbable="true"
+					placeholder="${labels.cwf.sandbox.textbox.placeholder}"
+					ca:spellcheck="false" />
+			</panelchildren>
+		</panel>
 	</west>
 	<center>
-		<div id="contentParent" vflex="1">
-			<toolbar align="start">
-				<button id="btnClearView" 
-					label="${labels.cwf.btn.clear.label}" />
-				<button id="btnRefreshView"
-					label="${labels.cwf.btn.refresh.label}" />
-			</toolbar>
-			<idspace vflex="1" width="100%" style="overflow:auto" />
-		</div>
+		<panel mold="bootstrap" vflex="1">
+			<caption label="${labels.cwf.sandbox.title.right}" width="100%">
+				<span style="float:right">
+					<button id="btnClearView"
+						label="${labels.cwf.btn.clear.label}" />
+					<button id="btnRefreshView"
+						label="${labels.cwf.btn.refresh.label}" />
+				</span>
+			</caption>
+			<panelchildren id="contentParent" style="padding:0">
+				<idspace vflex="1" width="100%" style="overflow:auto" />
+			</panelchildren>
+		</panel>
 	</center>
 </borderlayout>

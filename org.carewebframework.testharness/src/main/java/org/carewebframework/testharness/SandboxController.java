@@ -17,7 +17,6 @@ import org.carewebframework.ui.zk.ZKUtil;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.Idspace;
 import org.zkoss.zul.Label;
@@ -39,12 +38,18 @@ public class SandboxController extends PluginController {
     
     private Component contentBase;
     
+    /**
+     * Find the content base component. We can't assign it an id because of potential id collisions.
+     */
     @Override
     public void doAfterCompose(Component comp) throws Exception {
         super.doAfterCompose(comp);
         contentBase = ZKUtil.findChild(contentParent, Idspace.class);
     }
     
+    /**
+     * Refreshes the view based on the current contents.
+     */
     @Override
     public void refresh() {
         super.refresh();
@@ -53,7 +58,7 @@ public class SandboxController extends PluginController {
         
         if (content != null && !content.isEmpty()) {
             try {
-                Events.echoEvent("onModeCheck", this.root, contentBase);
+                Events.echoEvent("onModeCheck", this.root, null);
                 Executions.createComponentsDirectly(txtContent.getText(), null, contentBase, null);
             } catch (Exception e) {
                 ZKUtil.detachChildren(contentBase);
@@ -64,18 +69,33 @@ public class SandboxController extends PluginController {
         }
     }
     
+    /**
+     * Process a focus request.
+     */
     public void onFocus() {
         txtContent.setFocus(true);
     }
     
+    /**
+     * Refocus the text box. This is deferred to prevent closure of any window with a popup mode.
+     */
     private void focus() {
         Events.echoEvent(Events.ON_FOCUS, this.root, null);
     }
     
-    public void onModeCheck(Event event) {
-        modeCheck((Component) event.getData());
+    /**
+     * Check for unsupported window modes. This is done asynchronously to allow modal windows to
+     * also be checked.
+     */
+    public void onModeCheck() {
+        modeCheck(contentBase);
     }
     
+    /**
+     * Check for any window components with mode settings that need to be changed.
+     * 
+     * @param comp Current component in search.
+     */
     private void modeCheck(Component comp) {
         if (comp instanceof Window) {
             Window win = (Window) comp;
@@ -90,26 +110,41 @@ public class SandboxController extends PluginController {
         }
     }
     
-    public void onClick$btnViewContent() {
+    /**
+     * Renders the zul content in the view pane.
+     */
+    public void onClick$btnRenderContent() {
         refresh();
         focus();
     }
     
+    /**
+     * Clears the zul content.
+     */
     public void onClick$btnClearContent() {
         txtContent.setText(null);
         focus();
     }
     
+    /**
+     * Clears the view pane.
+     */
     public void onClick$btnClearView() {
         ZKUtil.detachChildren(contentBase);
         focus();
     }
     
+    /**
+     * Re-renders content in the view pane.
+     */
     public void onClick$btnRefreshView() {
         refresh();
         focus();
     }
     
+    /**
+     * Set text box focus upon activation.
+     */
     @Override
     public void onActivate() {
         super.onActivate();
