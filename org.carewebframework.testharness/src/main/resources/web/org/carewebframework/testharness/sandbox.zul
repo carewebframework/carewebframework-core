@@ -1,31 +1,38 @@
 <borderlayout height="100%" width="100%" apply="${sandboxController}">
 	<west size="50%" splittable="true">
 		<panel mold="bootstrap" vflex="1">
-			<caption label="${labels.cwf.sandbox.title.left}" width="100%">
-				<span style="float:right">
-					<button id="btnClearContent"
+			<caption width="100%">
+				<label zclass="z-caption-content"
+					style="padding-top:4px" value="${labels.cwf.sandbox.title.left}" />
+				<div style="float:right;padding:0" zclass="btn">
+					<button id="btnClearContent" zclass="btn-danger"
 						label="${labels.cwf.btn.clear.label}" />
-					<button id="btnRenderContent"
+					<space />
+					<button id="btnRenderContent" zclass="btn-success"
 						label="${labels.cwf.btn.view.label}" />
-				</span>
+				</div>
 			</caption>
 			<panelchildren style="padding:0">
 				<textbox xmlns:ca="client/attribute" id="txtContent"
 					vflex="1" width="100%" multiline="true" tabbable="true"
 					placeholder="${labels.cwf.sandbox.textbox.placeholder}"
+					style="white-space:nowrap"
 					ca:spellcheck="false" />
 			</panelchildren>
 		</panel>
 	</west>
 	<center>
 		<panel mold="bootstrap" vflex="1">
-			<caption label="${labels.cwf.sandbox.title.right}" width="100%">
-				<span style="float:right">
-					<button id="btnClearView"
+			<caption width="100%">
+				<label zclass="z-caption-content"
+					style="padding-top:4px" value="${labels.cwf.sandbox.title.right}" />
+				<div style="float:right;padding:0" zclass="btn">
+					<button id="btnClearView" zclass="btn-danger"
 						label="${labels.cwf.btn.clear.label}" />
-					<button id="btnRefreshView"
+					<space />
+					<button id="btnRefreshView" zclass="btn-success"
 						label="${labels.cwf.btn.refresh.label}" />
-				</span>
+				</div>
 			</caption>
 			<panelchildren id="contentParent" style="padding:0">
 				<idspace vflex="1" width="100%" style="overflow:auto" />
