@@ -664,8 +664,13 @@ public class PluginContainer extends Idspace {
      */
     public Object getPropertyValue(PropertyInfo propInfo) throws Exception {
         Object obj = registeredProperties == null ? null : registeredProperties.get(propInfo.getId());
-        return obj == null ? null : obj instanceof PropertyProxy ? ((PropertyProxy) obj).value : propInfo
-                .getPropertyValue(obj);
+        
+        if (obj instanceof PropertyProxy) {
+            Object value = ((PropertyProxy) obj).value;
+            return value instanceof String ? propInfo.getPropertyType().getSerializer().deserialize((String) value) : value;
+        } else {
+            return obj == null ? null : propInfo.getPropertyValue(obj);
+        }
     }
     
     /**
