@@ -16,8 +16,7 @@
 				<textbox xmlns:ca="client/attribute" id="txtContent"
 					vflex="1" width="100%" multiline="true" tabbable="true"
 					placeholder="${labels.cwf.sandbox.textbox.placeholder}"
-					style="white-space:nowrap"
-					ca:spellcheck="false" />
+					ca:wrap="off" ca:spellcheck="false" />
 			</panelchildren>
 		</panel>
 	</west>
