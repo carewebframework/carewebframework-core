@@ -9,6 +9,7 @@
  */
 package org.carewebframework.testharness;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 
 import org.carewebframework.shell.plugins.PluginController;
@@ -30,6 +31,8 @@ public class SandboxController extends PluginController {
     
     private static final long serialVersionUID = 1L;
     
+    private static final String[] REPLACE_MODES = { "modal", "highlighted", "popup" };
+    
     private Textbox txtContent;
     
     private Component contentParent;
@@ -50,7 +53,7 @@ public class SandboxController extends PluginController {
         
         if (content != null && !content.isEmpty()) {
             try {
-                Events.echoEvent("onModalCheck", this.root, contentBase);
+                Events.echoEvent("onModeCheck", this.root, contentBase);
                 Executions.createComponentsDirectly(txtContent.getText(), null, contentBase, null);
             } catch (Exception e) {
                 ZKUtil.detachChildren(contentBase);
@@ -61,25 +64,29 @@ public class SandboxController extends PluginController {
         }
     }
     
-    private void focus() {
+    public void onFocus() {
         txtContent.setFocus(true);
     }
     
-    public void onModalCheck(Event event) {
-        modalCheck((Component) event.getData());
+    private void focus() {
+        Events.echoEvent(Events.ON_FOCUS, this.root, null);
     }
     
-    private void modalCheck(Component comp) {
+    public void onModeCheck(Event event) {
+        modeCheck((Component) event.getData());
+    }
+    
+    private void modeCheck(Component comp) {
         if (comp instanceof Window) {
             Window win = (Window) comp;
             
-            if ("modal".equals(win.getMode()) || "highlighted".equals(win.getMode())) {
+            if (win.isVisible() && ArrayUtils.contains(REPLACE_MODES, win.getMode())) {
                 win.setMode("overlapped");
             }
         }
         
         for (Component child : comp.getChildren()) {
-            modalCheck(child);
+            modeCheck(child);
         }
     }
     
