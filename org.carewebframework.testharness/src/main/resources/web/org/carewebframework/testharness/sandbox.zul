@@ -1,41 +1,57 @@
-<borderlayout height="100%" width="100%" apply="${sandboxController}">
-	<west size="50%" splittable="true" collapsible="true">
-		<panel mold="bootstrap" vflex="1">
-			<caption width="100%">
-				<label zclass="z-caption-content"
-					style="padding-top:4px" value="${labels.cwf.sandbox.title.left}" />
-				<div style="float:right;padding:0" zclass="btn">
-					<button id="btnClearContent" zclass="btn-danger"
-						label="${labels.cwf.btn.clear.label}" />
-					<space />
-					<button id="btnRenderContent" zclass="btn-success"
-						label="${labels.cwf.btn.view.label}" />
-				</div>
-			</caption>
-			<panelchildren style="padding:0">
-				<textbox xmlns:ca="client/attribute" id="txtContent"
-					vflex="1" width="100%" multiline="true" tabbable="true"
-					placeholder="${labels.cwf.sandbox.textbox.placeholder}"
-					ca:wrap="off" ca:spellcheck="false" />
-			</panelchildren>
-		</panel>
-	</west>
-	<center>
-		<panel mold="bootstrap" vflex="1">
-			<caption width="100%">
-				<label zclass="z-caption-content"
-					style="padding-top:4px;float:right" value="${labels.cwf.sandbox.title.right}" />
-				<div style="float:left;padding:0" zclass="btn">
-					<button id="btnClearView" zclass="btn-danger"
-						label="${labels.cwf.btn.clear.label}" />
-					<space />
-					<button id="btnRefreshView" zclass="btn-success"
-						label="${labels.cwf.btn.refresh.label}" />
-				</div>
-			</caption>
-			<panelchildren id="contentParent" style="padding:0">
-				<idspace vflex="1" width="100%" style="overflow:auto" />
-			</panelchildren>
-		</panel>
-	</center>
-</borderlayout>
+<zk xmlns:w="client">
+	<borderlayout height="100%" width="100%" sclass="cwf-sandbox"
+		apply="${sandboxController}">
+		<west size="50%" splittable="true" collapsible="true">
+			<panel mold="bootstrap" vflex="1">
+				<caption width="100%">
+					<label zclass="z-caption-content"
+						style="padding-top:4px" value="${labels.cwf.sandbox.title.left}" />
+					<div style="float:right;padding:0" zclass="btn">
+						<button id="btnClearContent" zclass="btn-danger"
+							w:onClick="this.$f('txtContent').cm.getDoc().setValue('');"
+							label="${labels.cwf.btn.clear.label}" />
+						<space />
+						<button id="btnRenderContent"
+							w:onClick="this.$f('txtContent').cm.save();"
+							zclass="btn-success" label="${labels.cwf.btn.view.label}" />
+					</div>
+				</caption>
+				<panelchildren style="padding:0">
+					<textbox id="txtContent" 
+						height="100%" width="100%" multiline="true" />
+					<script type="text/javascript" defer="true">
+						var txtContent = this.$f('txtContent');
+						var cm = CodeMirror.fromTextArea(txtContent.$n(), {
+							lineNumbers: true,
+							mode: 'xml'});
+						cm.setSize('100%', '100%');
+						cm.save = function() {txtContent.setValue(cm.getValue()); txtContent.fireOnChange({toServer:true});};
+						txtContent.cm = cm;
+						cm.refresh();
+					</script>
+				</panelchildren>
+			</panel>
+		</west>
+		<center>
+			<panel mold="bootstrap" vflex="1">
+				<caption width="100%">
+					<label zclass="z-caption-content"
+						style="padding-top:4px;float:right"
+						value="${labels.cwf.sandbox.title.right}" />
+					<div style="float:left;padding:0" zclass="btn">
+						<button id="btnClearView" zclass="btn-danger"
+							label="${labels.cwf.btn.clear.label}" />
+						<space />
+						<button id="btnRefreshView" zclass="btn-success"
+							w:onClick="this.$f('txtContent').cm.save();"
+							label="${labels.cwf.btn.refresh.label}" />
+					</div>
+				</caption>
+				<panelchildren id="contentParent" style="padding:0">
+					<idspace vflex="1" width="100%"
+						style="overflow:auto" />
+				</panelchildren>
+			</panel>
+		</center>
+	</borderlayout>
+</zk>

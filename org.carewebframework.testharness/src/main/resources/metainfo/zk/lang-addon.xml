@@ -1,0 +1,27 @@
+<language-addon>
+	<addon-name>cwf.sandbox</addon-name>
+	<depends>cwf.shell</depends>
+	<language-name>xul/html</language-name>
+
+	<javascript-module name="cwf.sandbox" version="4.0.0"/>
+
+	<javascript src="~./org/carewebframework/testharness/codemirror/codemirror.js" />
+	<javascript src="~./org/carewebframework/testharness/codemirror/xml.js" />
+
+	<stylesheet href="~./org/carewebframework/testharness/codemirror/codemirror.css"
+		type="text/css" />
+	<component>
+		<component-name>cwfShell</component-name>
+		<extends>div</extends>
+		<component-class>org.carewebframework.shell.CareWebShell
+		</component-class>
+	</component>
+		
+	<component>
+		<component-name>cwfShellEx</component-name>
+		<extends>cwfShell</extends>
+		<component-class>org.carewebframework.shell.CareWebShellEx
+		</component-class>
+	</component>
+		
+</language-addon>
