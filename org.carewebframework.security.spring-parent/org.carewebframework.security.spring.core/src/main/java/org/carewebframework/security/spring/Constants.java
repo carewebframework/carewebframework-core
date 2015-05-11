@@ -31,6 +31,8 @@ public class Constants {
     
     public static final String SAVED_REQUEST = "SPRING_SECURITY_SAVED_REQUEST";
     
+    public static final String SAVED_USER = "SPRING_SECURITY_SAVED_USER";
+    
     public static final String DEFAULT_SECURITY_DOMAIN = "@defaultDomain";
     
     public static final String DEFAULT_USERNAME = "@defaultUsername";

@@ -89,27 +89,34 @@ public class LoginWindowController extends GenericForwardComposer<Component> {
     /**
      * Initialize the login form.
      * 
-     * @param comp - The component
+     * @param comp The top level component.
      */
-    @SuppressWarnings("deprecation")
     @Override
     public void doAfterCompose(Component comp) throws Exception {
         super.doAfterCompose(comp);
         timer.setDelay(execution.getSession().getMaxInactiveInterval() * 500);
         savedRequest = (SavedRequest) session.removeAttribute(org.carewebframework.security.spring.Constants.SAVED_REQUEST);
-        final AuthenticationException authError = (AuthenticationException) session
+        AuthenticationException authError = (AuthenticationException) session
                 .removeAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
-        CredentialsExpiredException expired = getException(authError, CredentialsExpiredException.class);
-        IUser user = expired != null && SecurityUtil.getSecurityService().canChangePassword() ? (IUser) expired
-                .getExtraInformation() : null;
-        String form = user != null ? passwordPaneUrl : loginPaneUrl;
+        IUser user = (IUser) session.removeAttribute(org.carewebframework.security.spring.Constants.SAVED_USER);
         Map<Object, Object> args = new HashMap<Object, Object>();
         args.put("savedRequest", savedRequest);
         args.put("authError", authError);
-        args.put("user", user);
+        String form;
+        String title;
+        
+        if (user != null && authError instanceof CredentialsExpiredException
+                && SecurityUtil.getSecurityService().canChangePassword()) {
+            args.put("user", user);
+            form = passwordPaneUrl;
+            title = Constants.LBL_PASSWORD_CHANGE_PAGE_TITLE;
+        } else {
+            form = loginPaneUrl;
+            title = Constants.LBL_LOGIN_PAGE_TITLE;
+        }
+        
         wireListener(ZKUtil.loadZulPage(form, loginForm, args));
-        getPage().setTitle(
-            Labels.getLabel(user != null ? Constants.LBL_PASSWORD_CHANGE_PAGE_TITLE : Constants.LBL_LOGIN_PAGE_TITLE));
+        getPage().setTitle(Labels.getLabel(title));
         resetTimer();
     }
     

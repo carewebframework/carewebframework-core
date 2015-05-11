@@ -15,6 +15,7 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 
 import org.carewebframework.api.event.AbstractGlobalEventDispatcher;
+import org.carewebframework.api.event.IEventManager;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.ui.Application;
 import org.carewebframework.ui.Application.SessionInfo;
@@ -36,7 +37,11 @@ public class GlobalEventDispatcher extends AbstractGlobalEventDispatcher {
         
         @Override
         public void onEvent(Event event) throws Exception {
-            EventManager.getInstance().fireLocalEvent(event.getName(), event.getData());
+            IEventManager eventManager = EventManager.getInstance();
+            
+            if (eventManager != null) {
+                eventManager.fireLocalEvent(event.getName(), event.getData());
+            }
         }
         
     };
