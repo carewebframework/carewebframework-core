@@ -339,19 +339,6 @@
 	border-top: 1px solid gray;
 }
 
-.cwf-radio-list input[type=radio] {
-	display: none;		
-}
-
-.cwf-radio-list input[type=radio]:checked + label {
-	background: blue;
-	color: white;
-}
-
-.cwf-radio-list .z-radio > label {
-	padding: 0 90%  0 5px;
-}
-
 @media print {
 
 	/* used for print to ensure all data is on the page with 'shrink to fit' option */

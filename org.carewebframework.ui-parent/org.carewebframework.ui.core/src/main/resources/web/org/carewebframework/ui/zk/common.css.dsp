@@ -202,6 +202,19 @@
 	display: none!important;
 }
 
+.cwf-radio-list input[type=radio] {
+	display: none;		
+}
+
+.cwf-radio-list input[type=radio]:checked + label {
+	background: blue;
+	color: white;
+}
+
+.cwf-radio-list .z-radio > label {
+	padding: 0 90% 0 5px;
+}
+
 /* Bootstrap additions */
 
 .panel {
