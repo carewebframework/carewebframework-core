@@ -1,5 +1,5 @@
 <borderlayout height="100%" width="100%" apply="${sandboxController}">
-	<west size="50%" splittable="true">
+	<west size="50%" splittable="true" collapsible="true">
 		<panel mold="bootstrap" vflex="1">
 			<caption width="100%">
 				<label zclass="z-caption-content"
