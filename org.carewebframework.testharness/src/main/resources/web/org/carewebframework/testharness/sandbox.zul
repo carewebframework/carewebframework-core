@@ -20,14 +20,26 @@
 					<textbox id="txtContent" 
 						height="100%" width="100%" multiline="true" />
 					<script type="text/javascript" defer="true">
+						<![CDATA[
 						var txtContent = this.$f('txtContent');
 						var cm = CodeMirror.fromTextArea(txtContent.$n(), {
 							lineNumbers: true,
-							mode: 'xml'});
+							mode: 'xml',
+							extraKeys: {
+								'Alt-F': function() {
+						    		cm.operation(function() {
+				        				for (var i = cm.getCursor('from').line; i <= cm.getCursor('to').line; i++) {
+        									cm.indentLine(i);
+        							    }
+        							});
+        						}
+							}
+						});
 						cm.setSize('100%', '100%');
 						cm.save = function() {txtContent.setValue(cm.getValue()); txtContent.fireOnChange({toServer:true});};
 						txtContent.cm = cm;
 						cm.refresh();
+						]]>
 					</script>
 				</panelchildren>
 			</panel>
