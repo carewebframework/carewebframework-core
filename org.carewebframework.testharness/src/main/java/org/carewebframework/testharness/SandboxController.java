@@ -70,20 +70,6 @@ public class SandboxController extends PluginController {
     }
     
     /**
-     * Process a focus request.
-     */
-    public void onFocus() {
-        txtContent.setFocus(true);
-    }
-    
-    /**
-     * Refocus the text box. This is deferred to prevent closure of any window with a popup mode.
-     */
-    private void focus() {
-        Events.echoEvent(Events.ON_FOCUS, this.root, null);
-    }
-    
-    /**
      * Check for unsupported window modes. This is done asynchronously to allow modal windows to
      * also be checked.
      */
@@ -115,15 +101,6 @@ public class SandboxController extends PluginController {
      */
     public void onClick$btnRenderContent() {
         refresh();
-        focus();
-    }
-    
-    /**
-     * Clears the zul content.
-     */
-    public void onClick$btnClearContent() {
-        txtContent.setText(null);
-        focus();
     }
     
     /**
@@ -131,7 +108,6 @@ public class SandboxController extends PluginController {
      */
     public void onClick$btnClearView() {
         ZKUtil.detachChildren(contentBase);
-        focus();
     }
     
     /**
@@ -139,7 +115,6 @@ public class SandboxController extends PluginController {
      */
     public void onClick$btnRefreshView() {
         refresh();
-        focus();
     }
     
     /**
@@ -148,7 +123,7 @@ public class SandboxController extends PluginController {
     @Override
     public void onActivate() {
         super.onActivate();
-        focus();
+        txtContent.focus();
     }
     
 }

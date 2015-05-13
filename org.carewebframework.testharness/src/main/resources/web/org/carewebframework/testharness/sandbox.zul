@@ -8,17 +8,16 @@
 						style="padding-top:4px" value="${labels.cwf.sandbox.title.left}" />
 					<div style="float:right;padding:0" zclass="btn">
 						<button id="btnClearContent" zclass="btn-danger"
-							w:onClick="this.$f('txtContent').cm.getDoc().setValue('');"
+							w:onClick="this.$f('txtContent').clear();"
 							label="${labels.cwf.btn.clear.label}" />
 						<space />
 						<button id="btnRenderContent"
-							w:onClick="this.$f('txtContent').cm.save();"
+							onClick="txtContent.focus();"
 							zclass="btn-success" label="${labels.cwf.btn.view.label}" />
 					</div>
 				</caption>
 				<panelchildren style="padding:0">
-					<textbox id="txtContent" 
-						height="100%" width="100%" multiline="true" />
+					<textbox id="txtContent" multiline="true" />
 					<script type="text/javascript" defer="true">
 						<![CDATA[
 						var txtContent = this.$f('txtContent');
@@ -35,10 +34,21 @@
         						}
 							}
 						});
+						txtContent.focus = function() {
+							cm.focus();    
+						};
+						txtContent.clear = function() {
+						    cm.setValue('');
+						    cm.focus();
+						};
+						cm.on('changes', function() {
+						    txtContent.setValue(cm.getValue());
+						    txtContent.fireOnChange({toServer: true}); 
+						});
 						cm.setSize('100%', '100%');
-						cm.save = function() {txtContent.setValue(cm.getValue()); txtContent.fireOnChange({toServer:true});};
-						txtContent.cm = cm;
-						cm.refresh();
+						setTimeout(function() {
+						    cm.refresh();
+						}, 1);
 						]]>
 					</script>
 				</panelchildren>
@@ -52,10 +62,11 @@
 						value="${labels.cwf.sandbox.title.right}" />
 					<div style="float:left;padding:0" zclass="btn">
 						<button id="btnClearView" zclass="btn-danger"
+							onClick="txtContent.focus();"
 							label="${labels.cwf.btn.clear.label}" />
 						<space />
 						<button id="btnRefreshView" zclass="btn-success"
-							w:onClick="this.$f('txtContent').cm.save();"
+							onClick="txtContent.focus();"
 							label="${labels.cwf.btn.refresh.label}" />
 					</div>
 				</caption>
