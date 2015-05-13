@@ -24,6 +24,7 @@
 						var cm = CodeMirror.fromTextArea(txtContent.$n(), {
 							lineNumbers: true,
 							mode: 'xml',
+							placeholder: '${labels.cwf.sandbox.textbox.placeholder}',
 							extraKeys: {
 								'Alt-F': function() {
 						    		cm.operation(function() {
@@ -77,4 +78,9 @@
 			</panel>
 		</center>
 	</borderlayout>
+	<style>
+		.cwf-sandbox .CodeMirror-empty {
+		  opacity: .5;
+		}
+	</style>
 </zk>
