@@ -212,6 +212,7 @@
 }
 
 .cwf-radio-list .z-radio > label {
+	white-space: nowrap;
 	padding: 0 90% 0 5px;
 }
 
