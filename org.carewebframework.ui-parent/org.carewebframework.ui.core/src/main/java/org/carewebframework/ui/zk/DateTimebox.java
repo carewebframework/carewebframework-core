@@ -193,6 +193,6 @@ public class DateTimebox extends Bandbox implements IdSpace {
     
     @Override
     protected String coerceToString(Object value) {
-        return DateUtil.formatDate((Date) value);
+        return value == null ? null : value instanceof Date ? DateUtil.formatDate((Date) value) : value.toString();
     }
 }
