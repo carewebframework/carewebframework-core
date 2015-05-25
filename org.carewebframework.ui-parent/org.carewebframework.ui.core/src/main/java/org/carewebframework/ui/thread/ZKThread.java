@@ -137,7 +137,7 @@ public class ZKThread {
      * @param desktop The desktop to associate.
      * @param requestAttributes The Spring request attributes to associate.
      */
-    public static void associateThread(final Desktop desktop, final RequestAttributes requestAttributes) {
+    public static void associateThread(Desktop desktop, RequestAttributes requestAttributes) {
         RequestContextHolder.setRequestAttributes(requestAttributes, true);
         FrameworkWebSupport.associateDesktop(desktop);
         ThreadListenerRegistry.notifyListeners(true);
@@ -162,7 +162,7 @@ public class ZKThread {
      *            data associated with the event will be a reference to this instance and may be
      *            interrogated to determine the outcome of the operation.
      */
-    public ZKThread(final ZKRunnable target, final Component requester, final String eventName) {
+    public ZKThread(ZKRunnable target, Component requester, String eventName) {
         super();
         this.target = target;
         this.event = new Event(eventName, requester, this);
@@ -175,8 +175,9 @@ public class ZKThread {
      * Starts the background thread.
      */
     public void start() {
-        final String targetName = target.getClass().getName();
-        log.debug("Executing ZKThread [target=" + targetName + "]");
+        if (log.isDebugEnabled()) {
+            log.debug("Executing ZKThread [target=" + target.getClass().getName() + "]");
+        }
         ThreadUtil.startThread(this.thread);
     }
     
@@ -215,7 +216,7 @@ public class ZKThread {
      * @param name Name of the attribute.
      * @return Value of the attribute, or null if not found.
      */
-    public Object getAttribute(final String name) {
+    public Object getAttribute(String name) {
         synchronized (attribute) {
             return attribute.get(name);
         }
@@ -227,7 +228,7 @@ public class ZKThread {
      * @param name Name of the attribute.
      * @param value Value to associate with the attribute.
      */
-    public void setAttribute(final String name, final Object value) {
+    public void setAttribute(String name, Object value) {
         synchronized (attribute) {
             attribute.put(name, value);
         }
