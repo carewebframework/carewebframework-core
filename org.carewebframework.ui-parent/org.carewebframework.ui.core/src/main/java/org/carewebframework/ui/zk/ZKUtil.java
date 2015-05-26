@@ -958,15 +958,25 @@ public class ZKUtil {
     public static void fireEvent(Event event, EventListener<Event> listener) {
         Desktop dtp = event.getTarget() == null ? null : event.getTarget().getDesktop();
         
-        if (dtp == null || FrameworkWebSupport.getDesktop() == dtp) {
+        if (dtp != null && !inEventThread(dtp)) {
+            Executions.schedule(dtp, listener, event);
+        } else if (dtp == null) {
             try {
                 listener.onEvent(event);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-        } else {
-            Executions.schedule(dtp, listener, event);
         }
+    }
+    
+    /**
+     * Returns true if in the specified desktop's event thread.
+     * 
+     * @param dtp Desktop instance.
+     * @return True if the current event thread is the desktop's event thread.
+     */
+    public static boolean inEventThread(Desktop dtp) {
+        return dtp.getExecution() != null && dtp.getExecution() == Executions.getCurrent();
     }
     
     /**
