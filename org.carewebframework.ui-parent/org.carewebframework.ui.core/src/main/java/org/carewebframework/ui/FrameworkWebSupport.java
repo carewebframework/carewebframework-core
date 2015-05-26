@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -91,7 +91,8 @@ public class FrameworkWebSupport {
     }
     
     /**
-     * Returns the current desktop. Returns null if unable to determine current execution.
+     * Returns the current desktop. Returns null if the current thread has not been associated with
+     * a desktop..
      * 
      * @return Current desktop or null.
      */
