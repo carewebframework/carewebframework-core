@@ -40,8 +40,6 @@ public class FrameworkController extends GenericForwardComposer<Component> {
     
     private static final long serialVersionUID = 1L;
     
-    private static final String THREAD_COMPLETION_EVENT = "onThreadComplete";
-    
     private ApplicationContext appContext;
     
     private AppFramework appFramework;
@@ -64,7 +62,7 @@ public class FrameworkController extends GenericForwardComposer<Component> {
          */
         @Override
         public void onEvent(Event event) {
-            final ZKThread thread = (ZKThread) ZKUtil.getEventOrigin(event).getData();
+            ZKThread thread = (ZKThread) ZKUtil.getEventOrigin(event).getData();
             
             if (thread != null) {
                 if (removeThread(thread).isAborted()) {
@@ -157,11 +155,12 @@ public class FrameworkController extends GenericForwardComposer<Component> {
         root = comp;
         this.comp = comp;
         comp.setAttribute(Constants.ATTR_COMPOSER, this);
-        comp.addEventListener(THREAD_COMPLETION_EVENT, threadCompletionListener);
+        comp.addEventListener(ZKThread.ON_THREAD_COMPLETE, threadCompletionListener);
         appContext = SpringUtil.getAppContext();
         appFramework = FrameworkUtil.getAppFramework();
         eventManager = EventManager.getInstance();
         LifecycleEventDispatcher.addComponentCallback(comp, lifecycleListener);
+        lifecycleListener.onInit(comp);
     }
     
     /**
@@ -197,8 +196,18 @@ public class FrameworkController extends GenericForwardComposer<Component> {
     }
     
     /**
-     * Remove a thread from the active list. Clears the busy state if this was the last active
-     * thread.
+     * Add a thread to the active list.
+     * 
+     * @param thread Thread to add.
+     * @return The thread that was added.
+     */
+    protected ZKThread addThread(ZKThread thread) {
+        threads.add(thread);
+        return thread;
+    }
+    
+    /**
+     * Remove a thread from the active list.
      * 
      * @param thread Thread to remove.
      * @return The thread that was removed.
@@ -224,9 +233,8 @@ public class FrameworkController extends GenericForwardComposer<Component> {
      * @return The new thread.
      */
     protected ZKThread startBackgroundThread(ZKRunnable runnable) {
-        ZKThread thread = new ZKThread(runnable, comp, THREAD_COMPLETION_EVENT);
-        threads.add(thread);
-        thread.start();
+        ZKThread thread = new ZKThread(runnable, comp);
+        addThread(thread).start();
         return thread;
     }
     

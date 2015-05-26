@@ -42,6 +42,8 @@ public class ZKThread {
     
     private static final Log log = LogFactory.getLog(ZKThread.class);
     
+    public static final String ON_THREAD_COMPLETE = "onThreadComplete";
+    
     /**
      * Adds an abort method to the traditional Runnable interface. The target is responsible for
      * implementing this method so as to terminate its operation ASAP when this is called.
@@ -65,7 +67,7 @@ public class ZKThread {
     /**
      * Subclasses the Thread class, notifying the requester when the target operation completes.
      */
-    private class ThreadEx extends Thread implements EventListener<Event> {
+    private class ThreadEx extends Thread {
         
         /**
          * Executes the target operation with timings.
@@ -82,35 +84,25 @@ public class ZKThread {
             }
             watch.stop();
             disassociateThread();
-            done();
-        }
-        
-        /**
-         * This entry point receives the notification on the desktop's event thread that the
-         * background thread has completed. Posts an event (on the desktop's event thread) to the
-         * requester that the operation has completed. The data associated with the event is a
-         * reference to this ZKThread object and may be interrogated for the outcome of the
-         * operation.
-         */
-        @Override
-        public void onEvent(Event event) {
-            Events.postEvent(event);
-        }
-        
-        /**
-         * Invoked by the background thread when it has completed the target operation, even if
-         * aborted. This schedules a notification on the desktop's event thread where the requester
-         * is notified of the completion.
-         */
-        private void done() {
-            try {
-                Executions.schedule(desktop, this, event);
-            } catch (final Exception e) {
-                log.error(e);
-            }
+            ZKThread.this.done();
         }
         
     }
+    
+    /**
+     * The deferred event dispatcher receives the notification on the desktop's event thread that
+     * the background thread has completed. It then posts an event (on the desktop's event thread)
+     * to the requester that the operation has completed. The data associated with the event is a
+     * reference to this ZKThread object and may be interrogated for the outcome of the operation.
+     */
+    private static final EventListener<Event> deferredEventDispatcher = new EventListener<Event>() {
+        
+        @Override
+        public void onEvent(Event event) throws Exception {
+            Events.postEvent(event);
+        }
+        
+    };
     
     private boolean aborted;
     
@@ -124,7 +116,7 @@ public class ZKThread {
     
     private final Desktop desktop;
     
-    private final ThreadEx thread;
+    private final Thread thread;
     
     private final RequestAttributes requestAttributes;
     
@@ -154,6 +146,17 @@ public class ZKThread {
     }
     
     /**
+     * Creates a thread for executing a background operation, using the default event name for
+     * callback.
+     * 
+     * @param target Target operation.
+     * @param requester ZK component requesting the operation.
+     */
+    public ZKThread(ZKRunnable target, Component requester) {
+        this(target, requester, ON_THREAD_COMPLETE);
+    }
+    
+    /**
      * Creates a thread for executing a background operation.
      * 
      * @param target Target operation.
@@ -163,7 +166,6 @@ public class ZKThread {
      *            interrogated to determine the outcome of the operation.
      */
     public ZKThread(ZKRunnable target, Component requester, String eventName) {
-        super();
         this.target = target;
         this.event = new Event(eventName, requester, this);
         this.desktop = requester.getDesktop();
@@ -199,6 +201,19 @@ public class ZKThread {
      */
     public boolean isAborted() {
         return aborted;
+    }
+    
+    /**
+     * Invoked by the background thread when it has completed the target operation, even if aborted.
+     * This schedules a notification on the desktop's event thread where the requester is notified
+     * of the completion.
+     */
+    protected void done() {
+        try {
+            Executions.schedule(desktop, deferredEventDispatcher, event);
+        } catch (Exception e) {
+            log.error(e);
+        }
     }
     
     /**

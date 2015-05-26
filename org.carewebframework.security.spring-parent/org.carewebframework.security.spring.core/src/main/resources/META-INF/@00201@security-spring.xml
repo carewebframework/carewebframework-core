@@ -36,7 +36,7 @@
 			<property name="targetClass"
 				value="org.springframework.security.core.context.SecurityContextHolder" />
 			<property name="targetMethod" value="setStrategyName" />
-			<property name="arguments" value="MODE_THREADLOCAL" />
+			<property name="arguments" value="MODE_INHERITABLETHREADLOCAL" />
 		</bean>
 
 		<!-- This defines security requirements for specific URL patterns. -->
