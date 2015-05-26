@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -9,6 +9,7 @@
  */
 package org.carewebframework.ui.zk;
 
+import java.util.Collection;
 import java.util.Date;
 
 import org.apache.commons.lang.StringUtils;
@@ -135,10 +136,27 @@ public abstract class AbstractRenderer {
     }
     
     public String createLabelText(Object value, String prefix) {
-        String text = StringUtils.trimToEmpty(value == null ? null : value instanceof Date ? DateUtil
-                .formatDate((Date) value) : value instanceof String ? StrUtil.formatMessage((String) value) : value
-                .toString());
+        String text = StringUtils.trimToEmpty(value == null ? null
+                : value instanceof Collection ? createLabelText((Collection<?>) value) : value instanceof Date ? DateUtil
+                        .formatDate((Date) value) : value instanceof String ? StrUtil.formatMessage((String) value) : value
+                        .toString());
         return text.isEmpty() ? "" : StrUtil.formatMessage(StringUtils.defaultString(prefix)) + text;
+    }
+    
+    private String createLabelText(Collection<?> list) {
+        StringBuilder sb = new StringBuilder();
+        
+        for (Object object : list) {
+            String s = createLabelText(object, null);
+            
+            if (!s.isEmpty() && sb.length() > 0) {
+                sb.append(", ");
+            }
+            
+            sb.append(s);
+        }
+        
+        return sb.toString();
     }
     
 }
