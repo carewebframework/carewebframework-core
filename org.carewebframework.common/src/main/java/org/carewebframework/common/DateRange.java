@@ -251,7 +251,7 @@ public class DateRange {
     
     /**
      * Returns true if the reference date is within this range. The start date is included within
-     * the range, the end date is not.
+     * the interval, the end date is not.
      * 
      * @param refDate A reference date.
      * @return True if the reference date is within this range.
@@ -287,4 +287,29 @@ public class DateRange {
         
         return true;
     }
+    
+    /**
+     * Returns true if the reference range is wholly contained within this range. The start date of
+     * this range is included within the interval, the end date is not.
+     * 
+     * @param refRange A reference date range.
+     * @return True if the reference date ranged is wholly contained within this range.
+     */
+    public boolean inRange(DateRange refRange) {
+        return inRange(refRange, true, false);
+    }
+    
+    /**
+     * Returns true if the reference range is wholly contained within this range.
+     * 
+     * @param refRange A reference date range.
+     * @param inclusiveStart If true, the start date is included in the range.
+     * @param inclusiveEnd If true, the end date is included in the range.
+     * @return True if the reference date ranged is wholly contained within this range.
+     */
+    public boolean inRange(DateRange refRange, boolean inclusiveStart, boolean inclusiveEnd) {
+        return inRange(refRange.startDate, inclusiveStart, inclusiveEnd)
+                && inRange(refRange.endDate, inclusiveStart, inclusiveEnd);
+    }
+    
 }
