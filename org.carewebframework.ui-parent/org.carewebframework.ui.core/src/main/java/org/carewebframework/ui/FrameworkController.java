@@ -18,6 +18,7 @@ import org.carewebframework.api.event.EventManager;
 import org.carewebframework.api.event.IEventManager;
 import org.carewebframework.api.event.IGenericEvent;
 import org.carewebframework.api.spring.SpringUtil;
+import org.carewebframework.api.thread.IAbortable;
 import org.carewebframework.ui.LifecycleEventListener.ILifecycleCallback;
 import org.carewebframework.ui.thread.ZKThread;
 import org.carewebframework.ui.thread.ZKThread.ZKRunnable;
@@ -50,7 +51,7 @@ public class FrameworkController extends GenericForwardComposer<Component> {
     
     private Component comp;
     
-    private final List<ZKThread> threads = new ArrayList<ZKThread>();
+    private final List<IAbortable> threads = new ArrayList<>();
     
     private final EventListener<Event> threadCompletionListener = new EventListener<Event>() {
         
@@ -65,7 +66,9 @@ public class FrameworkController extends GenericForwardComposer<Component> {
             ZKThread thread = (ZKThread) ZKUtil.getEventOrigin(event).getData();
             
             if (thread != null) {
-                if (removeThread(thread).isAborted()) {
+                removeThread(thread);
+                
+                if (thread.isAborted()) {
                     threadAborted(thread);
                 } else {
                     threadFinished(thread);
@@ -191,7 +194,7 @@ public class FrameworkController extends GenericForwardComposer<Component> {
      * 
      * @param thread Thread to abort.
      */
-    protected void abortBackgroundThread(ZKThread thread) {
+    protected void abortBackgroundThread(IAbortable thread) {
         removeThread(thread).abort();
     }
     
@@ -201,7 +204,7 @@ public class FrameworkController extends GenericForwardComposer<Component> {
      * @param thread Thread to add.
      * @return The thread that was added.
      */
-    protected ZKThread addThread(ZKThread thread) {
+    protected IAbortable addThread(IAbortable thread) {
         threads.add(thread);
         return thread;
     }
@@ -212,7 +215,7 @@ public class FrameworkController extends GenericForwardComposer<Component> {
      * @param thread Thread to remove.
      * @return The thread that was removed.
      */
-    protected ZKThread removeThread(ZKThread thread) {
+    protected IAbortable removeThread(IAbortable thread) {
         threads.remove(thread);
         return thread;
     }
@@ -234,7 +237,8 @@ public class FrameworkController extends GenericForwardComposer<Component> {
      */
     protected ZKThread startBackgroundThread(ZKRunnable runnable) {
         ZKThread thread = new ZKThread(runnable, comp);
-        addThread(thread).start();
+        addThread(thread);
+        thread.start();
         return thread;
     }
     
@@ -244,6 +248,7 @@ public class FrameworkController extends GenericForwardComposer<Component> {
      * @param thread The background thread.
      */
     protected void threadFinished(ZKThread thread) {
+        removeThread(thread);
     }
     
     /**
@@ -252,7 +257,7 @@ public class FrameworkController extends GenericForwardComposer<Component> {
      * @param thread The background thread.
      */
     protected void threadAborted(ZKThread thread) {
-        
+        removeThread(thread);
     }
     
 }

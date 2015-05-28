@@ -9,8 +9,8 @@
  */
 package org.carewebframework.shell.plugins;
 
+import org.carewebframework.api.thread.IAbortable;
 import org.carewebframework.ui.FrameworkController;
-import org.carewebframework.ui.thread.ZKThread;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.util.Composer;
@@ -94,7 +94,7 @@ public class PluginController extends FrameworkController implements IPluginEven
      * @return The thread that was removed.
      */
     @Override
-    protected ZKThread removeThread(ZKThread thread) {
+    protected IAbortable removeThread(IAbortable thread) {
         super.removeThread(thread);
         
         if (!hasActiveThreads()) {

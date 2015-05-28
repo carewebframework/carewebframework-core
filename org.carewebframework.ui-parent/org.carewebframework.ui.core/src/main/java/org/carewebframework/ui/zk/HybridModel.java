@@ -34,7 +34,7 @@ import org.zkoss.zul.ext.GroupsSortableModel;
  * @param <G> The group class.
  */
 @SuppressWarnings("rawtypes")
-public class HybridModel<T, G> extends AbstractListModel<T> implements GroupsModel<T, GroupHeader, Object>, GroupsSortableModel<T>, Iterable<T> {
+public class HybridModel<T, G> extends AbstractListModel<T> implements Collection<T>, GroupsModel<T, GroupHeader, Object>, GroupsSortableModel<T>, Iterable<T> {
     
     private static final long serialVersionUID = 1L;
     
@@ -122,7 +122,7 @@ public class HybridModel<T, G> extends AbstractListModel<T> implements GroupsMod
         }
     }
     
-    private final List<T> data = new ArrayList<T>();
+    private final List<T> data = new ArrayList<>();
     
     private IGrouper<T, G> grouper;
     
@@ -135,7 +135,7 @@ public class HybridModel<T, G> extends AbstractListModel<T> implements GroupsMod
         
     };
     
-    private final SortedList<GroupHeader<T, G>> groupHeaders = new SortedList<GroupHeader<T, G>>(null);
+    private final SortedList<GroupHeader<T, G>> groupHeaders = new SortedList<>(null);
     
     @SuppressWarnings("unchecked")
     private final SimpleGroupsModel<T, GroupHeader, ?, ?> groupsModel = new SimpleGroupsModel(
@@ -181,75 +181,24 @@ public class HybridModel<T, G> extends AbstractListModel<T> implements GroupsMod
         return grouper != null;
     }
     
-    public void add(T element) {
-        int i = data.size();
-        addElement(element);
-        fireEvent(ListDataEvent.INTERVAL_ADDED, i, i);
-    }
-    
-    public void addAll(Collection<T> elements) {
-        int i = data.size();
+    private boolean addElement(T element) {
+        boolean result = data.add(element);
         
-        for (T element : elements) {
-            addElement(element);
-        }
-        
-        fireEvent(ListDataEvent.INTERVAL_ADDED, i, i + elements.size());
-    }
-    
-    private void addElement(T element) {
-        data.add(element);
-        
-        if (grouper != null) {
+        if (result && grouper != null) {
             addToGroup(element);
         }
-    }
-    
-    public void remove(T element) {
-        int i = data.size();
-        removeItem(element);
-        fireEvent(ListDataEvent.INTERVAL_REMOVED, i, i);
-    }
-    
-    public void removeAll(Collection<T> elements) {
-        int i = data.size();
         
-        for (T element : elements) {
-            removeItem(element);
-        }
-        
-        fireEvent(ListDataEvent.INTERVAL_REMOVED, i, i + elements.size());
+        return result;
     }
     
-    private void removeItem(T element) {
-        data.remove(element);
+    private boolean removeItem(T element) {
+        boolean result = data.remove(element);
         
         if (grouper != null) {
             removeFromGroup(element);
         }
-    }
-    
-    public void clear() {
-        int i = data.size() - 1;
         
-        if (i >= 0) {
-            clearSelection();
-            data.clear();
-            
-            if (groupHeaders != null) {
-                groupHeaders.clear();
-            }
-            
-            fireEvent(ListDataEvent.INTERVAL_REMOVED, 0, i);
-        }
-    }
-    
-    public boolean isEmpty() {
-        return data.isEmpty();
-    }
-    
-    public int size() {
-        return data.size();
+        return result;
     }
     
     private void addToGroup(T element) {
@@ -301,6 +250,125 @@ public class HybridModel<T, G> extends AbstractListModel<T> implements GroupsMod
             
             groupsModel.group(null, true, -1);
         }
+    }
+    
+    /******** List ********/
+    
+    @Override
+    public void clear() {
+        int i = data.size() - 1;
+        
+        if (i >= 0) {
+            clearSelection();
+            data.clear();
+            
+            if (groupHeaders != null) {
+                groupHeaders.clear();
+            }
+            
+            fireEvent(ListDataEvent.INTERVAL_REMOVED, 0, i);
+        }
+    }
+    
+    @Override
+    public boolean isEmpty() {
+        return data.isEmpty();
+    }
+    
+    @Override
+    public int size() {
+        return data.size();
+    }
+    
+    @Override
+    public boolean contains(Object o) {
+        return data.contains(o);
+    }
+    
+    @Override
+    public Object[] toArray() {
+        return data.toArray();
+    }
+    
+    @Override
+    public <E> E[] toArray(E[] a) {
+        return data.toArray(a);
+    }
+    
+    @Override
+    public boolean add(T element) {
+        return addAll(Collections.singleton(element));
+    }
+    
+    @Override
+    public boolean addAll(Collection<? extends T> elements) {
+        int i = data.size();
+        int count = 0;
+        
+        for (T element : elements) {
+            if (addElement(element)) {
+                count++;
+            }
+        }
+        
+        if (count > 0) {
+            fireEvent(ListDataEvent.INTERVAL_ADDED, i, i + count);
+        }
+        
+        return count > 0;
+    }
+    
+    @Override
+    public boolean containsAll(Collection<?> c) {
+        return data.containsAll(c);
+    }
+    
+    @SuppressWarnings("unchecked")
+    @Override
+    public boolean retainAll(Collection<?> elements) {
+        boolean result = false;
+        
+        for (Object element : data) {
+            if (!elements.contains(element)) {
+                result |= removeItem((T) element);
+            }
+        }
+        
+        if (result) {
+            fireEvent(ListDataEvent.CONTENTS_CHANGED, 0, 0);
+        }
+        return result;
+    }
+    
+    @SuppressWarnings("unchecked")
+    @Override
+    public boolean remove(Object element) {
+        int i = data.indexOf(element);
+        
+        if (i >= 0) {
+            removeItem((T) element);
+            fireEvent(ListDataEvent.INTERVAL_REMOVED, i, i);
+        }
+        
+        return i >= 0;
+    }
+    
+    @SuppressWarnings("unchecked")
+    @Override
+    public boolean removeAll(Collection<?> elements) {
+        int count = 0;
+        
+        for (Object element : elements) {
+            if (removeItem((T) element)) {
+                count++;
+            }
+        }
+        
+        if (count > 0) {
+            fireEvent(ListDataEvent.CONTENTS_CHANGED, 0, 0);
+        }
+        
+        return count > 0;
     }
     
     /******** ListModel ********/
