@@ -22,6 +22,21 @@ import org.carewebframework.api.thread.IAbortable;
  */
 public abstract class AbstractQueryService<T> implements IQueryService<T> {
     
+    /**
+     * A null asynchronous strategy invokes the service synchronously, performing callbacks just as
+     * a real asynchronous strategy would do, but returning null for the IAbortable instance.
+     */
+    private class NullAsyncQueryStrategy implements IAsyncQueryStrategy<T> {
+        
+        @Override
+        public IAbortable fetch(IQueryService<T> service, IQueryContext context, IQueryCallback<T> callback) {
+            callback.onQueryStart(null);
+            callback.onQueryFinish(null, service.fetch(context));
+            return null;
+        }
+        
+    };
+    
     private final IAsyncQueryStrategy<T> strategy;
     
     /**
@@ -38,25 +53,13 @@ public abstract class AbstractQueryService<T> implements IQueryService<T> {
      *            simulated using a synchronous fetch invocation.
      */
     public AbstractQueryService(IAsyncQueryStrategy<T> strategy) {
-        this.strategy = strategy;
+        this.strategy = strategy == null ? new NullAsyncQueryStrategy() : strategy;
     }
     
     @Override
     public IAbortable fetch(IQueryContext context, IQueryCallback<T> callback) {
         context.reset();
-        
-        if (strategy != null) {
-            return strategy.fetch(this, context, callback);
-        }
-        
-        /*
-         * A null asynchronous strategy invokes the service synchronously, performing callbacks
-         * just as a real asynchronous strategy would do, but returning null for the IAbortable
-         * instance.
-         */
-        callback.onQueryStart(null);
-        callback.onQueryFinish(null, fetch(context));
-        return null;
+        return strategy.fetch(this, context, callback);
     }
     
 }
