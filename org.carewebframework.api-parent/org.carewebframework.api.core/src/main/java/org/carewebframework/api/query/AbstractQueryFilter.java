@@ -21,15 +21,28 @@ public abstract class AbstractQueryFilter<T> implements IQueryFilter<T> {
     public AbstractQueryFilter() {
     }
     
+    /**
+     * Create an instance with its listener.
+     * 
+     * @param listener Listener for query filter change events.
+     */
     public AbstractQueryFilter(IQueryFilterChanged<T> listener) {
         setListener(listener);
     }
     
+    /**
+     * Sets the listener.
+     * 
+     * @param listener Listener for query filter change events.
+     */
     @Override
     public void setListener(IQueryFilterChanged<T> listener) {
         this.listener = listener;
     }
     
+    /**
+     * Convenience method for notifying a listener (if any) of a query filter change event.
+     */
     protected void notifyListener() {
         if (listener != null) {
             listener.onFilterChanged(this);

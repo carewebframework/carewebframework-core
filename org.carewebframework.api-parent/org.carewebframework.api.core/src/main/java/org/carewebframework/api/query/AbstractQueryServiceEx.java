@@ -10,7 +10,8 @@
 package org.carewebframework.api.query;
 
 /**
- * Abstract service wrapper for a data provider.
+ * A convenience extension to the AbstractQueryService for query services that use an underlying
+ * data provider service.
  *
  * @param <S> Native data provider service.
  * @param <T> Class of query result.

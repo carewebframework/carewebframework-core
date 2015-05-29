@@ -12,8 +12,8 @@ package org.carewebframework.api.query;
 import org.carewebframework.api.thread.IAbortable;
 
 /**
- * Data retrieval services may either directly implement this interface or be wrapped by a class
- * that implements the interface.
+ * Data query services may either directly implement this interface or be wrapped by a class that
+ * implements this interface. The fetch method has both synchronous and asynchronous signatures.
  *
  * @param <T> Query result class.
  */
@@ -28,7 +28,7 @@ public interface IQueryService<T> {
     boolean hasRequired(IQueryContext context);
     
     /**
-     * Returns data fetched by the data query service.
+     * Synchronously fetches data from the query service.
      *
      * @param context The query context that supplies the query parameters.
      * @return The result of the fetch operation.
@@ -36,7 +36,7 @@ public interface IQueryService<T> {
     IQueryResult<T> fetch(IQueryContext context);
     
     /**
-     * Asynchronously returns data fetched by the data query service.
+     * Asynchronously fetches data from the query service.
      *
      * @param context The service context that supplies the query parameters.
      * @param callback The callback to receive the query result.

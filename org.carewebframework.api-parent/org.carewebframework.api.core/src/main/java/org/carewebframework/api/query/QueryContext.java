@@ -12,6 +12,9 @@ package org.carewebframework.api.query;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * A simple implementation of a query context, suitable for most applications.
+ */
 public class QueryContext implements IQueryContext {
     
     private boolean changed = true;
