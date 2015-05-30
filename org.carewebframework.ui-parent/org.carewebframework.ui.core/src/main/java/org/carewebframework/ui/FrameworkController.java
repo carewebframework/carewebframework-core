@@ -116,7 +116,18 @@ public class FrameworkController extends GenericForwardComposer<Component> {
      * @return The associated controller, or null if none found.
      */
     public static Object getController(Component comp) {
-        return comp.getAttribute(Constants.ATTR_COMPOSER);
+        return getController(comp, false);
+    }
+    
+    /**
+     * Returns the controller associated with the specified component, if any.
+     * 
+     * @param comp The component whose controller is sought.
+     * @param recurse If true, search up the parent chain until a controller is found.
+     * @return The associated controller, or null if none found.
+     */
+    public static Object getController(Component comp, boolean recurse) {
+        return comp.getAttribute(Constants.ATTR_COMPOSER, recurse);
     }
     
     /**
