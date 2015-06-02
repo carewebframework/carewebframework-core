@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -10,11 +10,10 @@
 package org.carewebframework.ui.spring;
 
 import org.carewebframework.ui.LabelFinder;
+import org.carewebframework.ui.zk.ZKUtil;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.env.PropertySource;
-
-import org.zkoss.util.resource.Labels;
 
 /**
  * Allows ZK label names to be resolved within Spring.
@@ -36,7 +35,7 @@ public class LabelPropertySource extends PropertySource<Object> {
     @Override
     public String getProperty(String name) {
         initLabels();
-        return name.startsWith(LABEL_PREFIX) ? Labels.getLabel(name.substring(LABEL_PREFIX.length())) : null;
+        return name.startsWith(LABEL_PREFIX) ? ZKUtil.getLabel(name.substring(LABEL_PREFIX.length())) : null;
     }
     
     private void initLabels() {

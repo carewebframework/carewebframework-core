@@ -31,6 +31,7 @@ import org.carewebframework.ui.FrameworkWebSupport;
 
 import org.zkoss.json.JavaScriptValue;
 import org.zkoss.lang.Exceptions;
+import org.zkoss.text.MessageFormats;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.au.out.AuInvoke;
@@ -1012,14 +1013,17 @@ public class ZKUtil {
     }
     
     /**
-     * Provides a more convenient method signature for getting a ZK label with arguments.
+     * Provides a more convenient method signature for getting a ZK label with arguments. Also
+     * recognizes line continuation with backslash characters.
      * 
      * @param key Label key.
      * @param args Optional argument list.
      * @return The key value or null if not found.
      */
     public static String getLabel(String key, Object... args) {
-        return Labels.getLabel(key.startsWith("@") ? key.substring(1) : key, args);
+        String value = Labels.getLabel(key.startsWith("@") ? key.substring(1) : key);
+        value = value == null ? null : value.replace("\\\n", "");
+        return value == null ? null : MessageFormats.format(value, args, null);
     }
     
     /**
