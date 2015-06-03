@@ -17,11 +17,18 @@ package org.carewebframework.api.query;
 public interface IQueryFilter<T> {
     
     /**
-     * Sets the listener for change events.
+     * Adds a listener for change events.
      * 
      * @param listener The change event listener.
      */
-    void setListener(IQueryFilterChanged<T> listener);
+    void addListener(IQueryFilterChanged<T> listener);
+    
+    /**
+     * Removes a listener for change events.
+     * 
+     * @param listener The change event listener.
+     */
+    void removeListener(IQueryFilterChanged<T> listener);
     
     /**
      * Return true to include result in current model.

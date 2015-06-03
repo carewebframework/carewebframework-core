@@ -20,11 +20,9 @@ import java.util.Set;
  *
  * @param <T> Class of query result.
  */
-public class QueryFilterSet<T> implements IQueryFilter<T> {
+public class QueryFilterSet<T> extends AbstractQueryFilter<T> implements IQueryFilterChanged<T> {
     
     private final Set<IQueryFilter<T>> filters = new HashSet<>();
-    
-    private IQueryFilterChanged<T> listener;
     
     /**
      * Add a data filter.
@@ -33,7 +31,7 @@ public class QueryFilterSet<T> implements IQueryFilter<T> {
      * @return True if the operation was successful.
      */
     public boolean add(IQueryFilter<T> filter) {
-        filter.setListener(listener);
+        filter.addListener(this);
         return filters.add(filter);
     }
     
@@ -44,7 +42,7 @@ public class QueryFilterSet<T> implements IQueryFilter<T> {
      * @return True if the operation was successful.
      */
     public boolean remove(IQueryFilter<T> filter) {
-        filter.setListener(null);
+        filter.removeListener(this);
         return filters.remove(filter);
     }
     
@@ -85,20 +83,6 @@ public class QueryFilterSet<T> implements IQueryFilter<T> {
     }
     
     /**
-     * Applied across all filters in the set.
-     * <p>
-     * {@inheritDoc}
-     */
-    @Override
-    public void setListener(IQueryFilterChanged<T> listener) {
-        this.listener = listener;
-        
-        for (IQueryFilter<T> filter : filters) {
-            filter.setListener(listener);
-        }
-    }
-    
-    /**
      * Filters a list of results based on the member filters.
      * 
      * @param results Result list to filter.
@@ -119,6 +103,13 @@ public class QueryFilterSet<T> implements IQueryFilter<T> {
         }
         
         return results.size() == include.size() ? results : include;
+    }
+    
+    @Override
+    public void onFilterChanged(IQueryFilter<T> filter) {
+        if (filter != this) {
+            notifyListeners(filter);
+        }
     }
     
 }

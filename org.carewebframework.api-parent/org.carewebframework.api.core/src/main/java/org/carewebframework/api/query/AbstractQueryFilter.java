@@ -9,6 +9,9 @@
  */
 package org.carewebframework.api.query;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Abstract base class for implementing a data filter.
  *
@@ -16,7 +19,7 @@ package org.carewebframework.api.query;
  */
 public abstract class AbstractQueryFilter<T> implements IQueryFilter<T> {
     
-    private IQueryFilterChanged<T> listener;
+    private final Set<IQueryFilterChanged<T>> listeners = new HashSet<>();
     
     public AbstractQueryFilter() {
     }
@@ -27,25 +30,42 @@ public abstract class AbstractQueryFilter<T> implements IQueryFilter<T> {
      * @param listener Listener for query filter change events.
      */
     public AbstractQueryFilter(IQueryFilterChanged<T> listener) {
-        setListener(listener);
+        addListener(listener);
     }
     
     /**
-     * Sets the listener.
+     * Adds a listener.
      * 
      * @param listener Listener for query filter change events.
      */
     @Override
-    public void setListener(IQueryFilterChanged<T> listener) {
-        this.listener = listener;
+    public void addListener(IQueryFilterChanged<T> listener) {
+        listeners.add(listener);
+    }
+    
+    /**
+     * Removes a listener.
+     * 
+     * @param listener Listener for query filter change events.
+     */
+    @Override
+    public void removeListener(IQueryFilterChanged<T> listener) {
+        listeners.remove(listener);
     }
     
     /**
      * Convenience method for notifying a listener (if any) of a query filter change event.
      */
-    protected void notifyListener() {
-        if (listener != null) {
-            listener.onFilterChanged(this);
+    protected void notifyListeners() {
+        notifyListeners(this);
+    }
+    
+    /**
+     * Convenience method for notifying a listener (if any) of a query filter change event.
+     */
+    protected void notifyListeners(IQueryFilter<T> filter) {
+        for (IQueryFilterChanged<T> listener : listeners) {
+            listener.onFilterChanged(filter);
         }
     }
     
