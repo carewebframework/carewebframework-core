@@ -375,7 +375,7 @@ public class StrUtil {
      * @param list The list of strings to concatenate.
      * @return A string contains the list of elements separated by the newline character.
      */
-    public static String fromList(Iterable<String> list) {
+    public static String fromList(Iterable<?> list) {
         return fromList(list, "\n");
     }
     
@@ -386,7 +386,7 @@ public class StrUtil {
      * @param delimiter The delimiter to use to separate elements.
      * @return A string contains the list of elements separated by the specified delimiter.
      */
-    public static String fromList(Iterable<String> list, String delimiter) {
+    public static String fromList(Iterable<?> list, String delimiter) {
         return fromList(list, delimiter, "");
     }
     
@@ -398,10 +398,10 @@ public class StrUtil {
      * @param dflt The default value to use if a list entry is null.
      * @return A string contains the list of elements separated by the specified delimiter.
      */
-    public static String fromList(Iterable<String> list, String delimiter, String dflt) {
+    public static String fromList(Iterable<?> list, String delimiter, String dflt) {
         StringBuilder sb = new StringBuilder();
         
-        for (String ln : list) {
+        for (Object ln : list) {
             ln = ln == null ? dflt : ln;
             
             if (ln != null) {

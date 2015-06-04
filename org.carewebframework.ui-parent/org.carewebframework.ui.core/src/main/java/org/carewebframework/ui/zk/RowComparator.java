@@ -35,7 +35,7 @@ public class RowComparator implements Comparator<Object>, Serializable {
     
     private final boolean _asc;
     
-    private final String _beanProperty;
+    private final String _getter;
     
     private final Comparator<Object> _customComparator;
     
@@ -111,14 +111,15 @@ public class RowComparator implements Comparator<Object>, Serializable {
      * 
      * @param asc If true, an ascending comparator is created. If false, a descending comparator is
      *            created.
-     * @param beanProperty This is the name of the getter method that will be used to retrieve a
-     *            value from the underlying model object for comparison.
+     * @param getter This is the name of the getter method that will be used to retrieve a value
+     *            from the underlying model object for comparison.
      * @param customComparator Optional custom comparator.
      */
-    public RowComparator(boolean asc, String beanProperty, Comparator<Object> customComparator) {
+    @SuppressWarnings("unchecked")
+    public RowComparator(boolean asc, String getter, Comparator<?> customComparator) {
         _asc = asc;
-        _beanProperty = beanProperty;
-        _customComparator = customComparator;
+        _getter = getter;
+        _customComparator = (Comparator<Object>) customComparator;
     }
     
     /**
@@ -158,7 +159,7 @@ public class RowComparator implements Comparator<Object>, Serializable {
     private Object getValue(Object o) {
         try {
             Object[] params = null;
-            Method method = o.getClass().getMethod(_beanProperty, (Class<?>[]) params);
+            Method method = o.getClass().getMethod(_getter, (Class<?>[]) params);
             return method.invoke(o, params);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
