@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -20,6 +20,8 @@ import org.apache.commons.logging.LogFactory;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zul.Column;
+import org.zkoss.zul.Grid;
+import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listheader;
 
 /**
@@ -62,8 +64,32 @@ public class RowComparator implements Comparator<Object>, Serializable {
                     hdr.setSortAscending(new RowComparator(true, getter));
                     hdr.setSortDescending(new RowComparator(false, getter));
                 }
+            } else {
+                throw new IllegalArgumentException("Must be of type Column or Listheader");
             }
         }
+    }
+    
+    /**
+     * Convenience method for auto-wiring list box headers.
+     * <p>
+     * {@link #autowireColumnComparators(List)}
+     * 
+     * @param listbox List box whose headers are to be auto-wired.
+     */
+    public static void autowireColumnComparators(Listbox listbox) {
+        autowireColumnComparators(listbox.getListhead().getChildren());
+    }
+    
+    /**
+     * Convenience method for auto-wiring list box headers.
+     * <p>
+     * {@link #autowireColumnComparators(List)}
+     * 
+     * @param grid Grid whose columns are to be auto-wired.
+     */
+    public static void autowireColumnComparators(Grid grid) {
+        autowireColumnComparators(grid.getColumns().getChildren());
     }
     
     /**
