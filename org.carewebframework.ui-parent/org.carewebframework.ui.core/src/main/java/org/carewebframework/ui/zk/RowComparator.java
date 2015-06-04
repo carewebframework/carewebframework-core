@@ -49,6 +49,10 @@ public class RowComparator implements Comparator<Object>, Serializable {
      * method name as the getter when comparing values across rows under that header. If no id is
      * specified for a header, no comparator is generated for that header. ZK-generated id's are
      * excluded.
+     * <p>
+     * Custom comparators may be specified in a custom attribute named "comparator" on the header
+     * element. This attribute may be an object instance that implements the Comparator interface or
+     * the name of a class that implements the Comparator interface.
      * 
      * @param headers List of headers (of type Column, Listheader, or Treecol).
      */
