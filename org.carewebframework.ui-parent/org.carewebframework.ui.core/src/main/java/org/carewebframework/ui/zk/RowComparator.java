@@ -132,14 +132,14 @@ public class RowComparator implements Comparator<Object>, Serializable {
         Object v1 = getValue(o1), v2 = getValue(o2);
         int result;
         
-        if (_customComparator != null) {
-            result = _customComparator.compare(v1, v2);
-        } else if (v1 == null && v2 == null) {
+        if (v1 == null && v2 == null) {
             result = 0;
         } else if (v2 == null) {
             result = -1;
         } else if (v1 == null) {
             result = 1;
+        } else if (_customComparator != null) {
+            result = _customComparator.compare(v1, v2);
         } else if (v1 instanceof Comparable && !(v1 instanceof String)) {
             result = ((Comparable<Object>) v1).compareTo(v2);
         } else {
