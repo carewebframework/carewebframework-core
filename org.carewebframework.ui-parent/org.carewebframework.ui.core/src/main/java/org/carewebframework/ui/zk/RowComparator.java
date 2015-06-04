@@ -37,6 +37,8 @@ public class RowComparator implements Comparator<Object>, Serializable {
     
     private final String _beanProperty;
     
+    private final Comparator<Object> _customComparator;
+    
     /**
      * Automatically wires column or list headers to generic comparators. This is done by deriving
      * the getter method for each header element from the element's id. This is done by prepending
@@ -101,8 +103,22 @@ public class RowComparator implements Comparator<Object>, Serializable {
      *            value from the underlying model object for comparison.
      */
     public RowComparator(boolean asc, String beanProperty) {
+        this(asc, beanProperty, null);
+    }
+    
+    /**
+     * Constructs a row comparator.
+     * 
+     * @param asc If true, an ascending comparator is created. If false, a descending comparator is
+     *            created.
+     * @param beanProperty This is the name of the getter method that will be used to retrieve a
+     *            value from the underlying model object for comparison.
+     * @param customComparator Optional custom comparator.
+     */
+    public RowComparator(boolean asc, String beanProperty, Comparator<Object> customComparator) {
         _asc = asc;
         _beanProperty = beanProperty;
+        _customComparator = customComparator;
     }
     
     /**
@@ -116,7 +132,9 @@ public class RowComparator implements Comparator<Object>, Serializable {
         Object v1 = getValue(o1), v2 = getValue(o2);
         int result;
         
-        if (v1 == null && v2 == null) {
+        if (_customComparator != null) {
+            result = _customComparator.compare(v1, v2);
+        } else if (v1 == null && v2 == null) {
             result = 0;
         } else if (v2 == null) {
             result = -1;
