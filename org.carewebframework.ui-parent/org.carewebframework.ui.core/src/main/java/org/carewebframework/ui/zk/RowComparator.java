@@ -14,6 +14,7 @@ import java.lang.reflect.Method;
 import java.util.Comparator;
 import java.util.List;
 
+import org.apache.commons.lang.ClassUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -23,6 +24,9 @@ import org.zkoss.zul.Column;
 import org.zkoss.zul.Grid;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listheader;
+import org.zkoss.zul.Tree;
+import org.zkoss.zul.Treecol;
+import org.zkoss.zul.impl.HeaderElement;
 
 /**
  * Serves as a generic comparator for list and grid displays.
@@ -40,34 +44,39 @@ public class RowComparator implements Comparator<Object>, Serializable {
     private final Comparator<Object> _customComparator;
     
     /**
-     * Automatically wires column or list headers to generic comparators. This is done by deriving
-     * the getter method for each header element from the element's id. This is done by prepending
-     * "get" to the header id and using that method name as the getter when comparing values across
-     * rows under that header. If no id is specified for a header, no comparator is generated for
-     * that header. ZK-generated id's are excluded.
+     * Automatically wires column headers to generic comparators. The getter method for each header
+     * element is derived from the element's id by prepending "get" to the header id and using that
+     * method name as the getter when comparing values across rows under that header. If no id is
+     * specified for a header, no comparator is generated for that header. ZK-generated id's are
+     * excluded.
      * 
-     * @param headers List of headers (of type Column or Listheader).
+     * @param headers List of headers (of type Column, Listheader, or Treecol).
      */
     public static void autowireColumnComparators(List<Component> headers) {
         for (Component cmp : headers) {
-            if (cmp instanceof Column) {
-                Column col = (Column) cmp;
-                String getter = getterMethod(col);
+            if (cmp instanceof HeaderElement) {
+                String getter = getterMethod(cmp);
                 
-                if (getter != null) {
-                    col.setSortAscending(new RowComparator(true, getter));
-                    col.setSortDescending(new RowComparator(false, getter));
+                if (getter == null) {
+                    continue;
                 }
-            } else if (cmp instanceof Listheader) {
-                Listheader hdr = (Listheader) cmp;
-                String getter = getterMethod(hdr);
                 
-                if (getter != null) {
-                    hdr.setSortAscending(new RowComparator(true, getter));
-                    hdr.setSortDescending(new RowComparator(false, getter));
+                Comparator<?> comparator = getComparator(cmp);
+                RowComparator asc = new RowComparator(true, getter, comparator);
+                RowComparator dsc = new RowComparator(false, getter, comparator);
+                
+                if (cmp instanceof Column) {
+                    ((Column) cmp).setSortAscending(asc);
+                    ((Column) cmp).setSortDescending(dsc);
+                } else if (cmp instanceof Listheader) {
+                    ((Listheader) cmp).setSortAscending(asc);
+                    ((Listheader) cmp).setSortDescending(dsc);
+                } else if (cmp instanceof Treecol) {
+                    ((Treecol) cmp).setSortAscending(asc);
+                    ((Treecol) cmp).setSortDescending(dsc);
                 }
             } else {
-                throw new IllegalArgumentException("Must be of type Column or Listheader");
+                throw new IllegalArgumentException("Component not a supported type: " + cmp.getClass().getName());
             }
         }
     }
@@ -80,18 +89,40 @@ public class RowComparator implements Comparator<Object>, Serializable {
      * @param listbox List box whose headers are to be auto-wired.
      */
     public static void autowireColumnComparators(Listbox listbox) {
-        autowireColumnComparators(listbox.getListhead().getChildren());
+        autowireColumnComparators(listbox.getListhead());
     }
     
     /**
-     * Convenience method for auto-wiring list box headers.
+     * Convenience method for auto-wiring grid headers.
      * <p>
      * {@link #autowireColumnComparators(List)}
      * 
      * @param grid Grid whose columns are to be auto-wired.
      */
     public static void autowireColumnComparators(Grid grid) {
-        autowireColumnComparators(grid.getColumns().getChildren());
+        autowireColumnComparators(grid.getColumns());
+    }
+    
+    /**
+     * Convenience method for auto-wiring tree columns.
+     * <p>
+     * {@link #autowireColumnComparators(List)}
+     * 
+     * @param tree Tree whose columns are to be auto-wired.
+     */
+    public static void autowireColumnComparators(Tree tree) {
+        autowireColumnComparators(tree.getTreecols());
+    }
+    
+    /**
+     * Auto-wire all children of the parent (may be null).
+     * 
+     * @param parent The parent component.
+     */
+    private static void autowireColumnComparators(Component parent) {
+        if (parent != null) {
+            autowireColumnComparators(parent.getChildren());
+        }
     }
     
     /**
@@ -194,4 +225,29 @@ public class RowComparator implements Comparator<Object>, Serializable {
         return "get".concat(StringUtils.capitalize(id));//i.e. getOrderStatus, getTitle
     }
     
+    /**
+     * Returns an optional custom comparator from a component. A custom comparator is specific in
+     * the custom attribute named "comparator" and may be an instance of a Comparator or the name of
+     * a class implementing Comparator.
+     * 
+     * @param component Component whose custom comparator is sought.
+     * @return A custom comparator, if any.
+     */
+    private static Comparator<?> getComparator(Component component) {
+        Object cmpr = component.getAttribute("comparator");
+        
+        if (cmpr instanceof String) {
+            try {
+                Class<?> clazz = ClassUtils.getClass((String) cmpr);
+                
+                if (Comparator.class.isAssignableFrom(clazz)) {
+                    cmpr = clazz.newInstance();
+                }
+            } catch (Exception e) {
+                cmpr = null;
+            }
+        }
+        
+        return cmpr instanceof Comparator ? (Comparator<?>) cmpr : null;
+    }
 }
