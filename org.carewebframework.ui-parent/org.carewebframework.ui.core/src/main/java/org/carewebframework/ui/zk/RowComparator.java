@@ -44,11 +44,13 @@ public class RowComparator implements Comparator<Object>, Serializable {
     private final Comparator<Object> _customComparator;
     
     /**
-     * Automatically wires column headers to generic comparators. The getter method for each header
-     * element is derived from the element's id by prepending "get" to the header id and using that
-     * method name as the getter when comparing values across rows under that header. If no id is
-     * specified for a header, no comparator is generated for that header. ZK-generated id's are
-     * excluded.
+     * Automatically wires column headers to generic comparators.
+     * <p>
+     * The getter method for each header element is derived either from a custom attribute named
+     * "getter" or, absent that, from the element's id. This value may either be a property name or
+     * the name of the getter method itself. This method is used when comparing values across rows
+     * under that header. If getter is specified for a header, no comparator is generated for that
+     * header.
      * <p>
      * Custom comparators may be specified in a custom attribute named "comparator" on the header
      * element. This attribute may be an object instance that implements the Comparator interface or
@@ -203,18 +205,21 @@ public class RowComparator implements Comparator<Object>, Serializable {
     }
     
     /**
-     * Derives the name of the getter method from the component id, following "JavaBean"
-     * conventions. Supports traditional property "getters" as well as boolean getter methods (i.e.
-     * isActive(), hasChildren()). If the id is mapped to a boolean getter, then your id should
-     * begin with 'is' or 'has'.
+     * If the component has a custom attribute named "getter", that value is returned. Otherwise,
+     * the component's id is assumed to be either a property name or the getter method name. If the
+     * former, assumes the getter method is getXxxx.
      * 
      * @param component Component used to derive getter method.
-     * @return Null if the component has no id or has a ZK-generated id. Otherwise, if the id is
-     *         prefixed with a standard getter prefix ("get", "has", "is"), it is assumed to be the
-     *         name of the getter method. Lacking such a prefix, a prefix of "get" is prepended to
-     *         the case-adjusted id to obtain the getter method.
+     * @return Null if the component has no id and no getter attribute, or has a ZK-generated id.
+     *         Otherwise, if the id is prefixed with a standard getter prefix ("get", "has", "is"),
+     *         it is assumed to be the name of the getter method. Lacking such a prefix, a prefix of
+     *         "get" is prepended to the case-adjusted id to obtain the getter method.
      */
     private static String getterMethod(Component component) {
+        if (component.hasAttribute("getter")) {
+            return (String) component.getAttribute("getter");
+        }
+        
         String id = component.getId();
         
         if (id == null || id.isEmpty() || id.startsWith("z")) {
@@ -224,9 +229,9 @@ public class RowComparator implements Comparator<Object>, Serializable {
         String lc = id.toLowerCase();
         
         if (lc.startsWith("is") || lc.startsWith("has") || lc.startsWith("get")) {
-            return StringUtils.uncapitalize(id);//i.e. isActive, hasChildren
+            return StringUtils.uncapitalize(id); // is the getter name
         }
-        return "get".concat(StringUtils.capitalize(id));//i.e. getOrderStatus, getTitle
+        return "get".concat(StringUtils.capitalize(id)); // infer getter name
     }
     
     /**
