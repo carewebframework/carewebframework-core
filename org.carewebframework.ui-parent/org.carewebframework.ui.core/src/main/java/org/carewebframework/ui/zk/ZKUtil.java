@@ -96,6 +96,17 @@ public class ZKUtil {
     }
     
     /**
+     * Returns the ZK resource path for the specified class.
+     * 
+     * @param clazz Class to evaluate
+     * @param up Number of path levels to remove
+     * @return String representing resource path
+     */
+    public static final String getResourcePath(Class<?> clazz, int up) {
+        return getResourcePath(clazz.getPackage(), up);
+    }
+    
+    /**
      * Returns the ZK resource path for the specified package.
      * 
      * @param pkg Package to evaluate
@@ -106,13 +117,48 @@ public class ZKUtil {
     }
     
     /**
+     * Returns the ZK resource path for the specified package.
+     * 
+     * @param pkg Package to evaluate
+     * @param up Number of path levels to remove
+     * @return String representing resource path
+     */
+    public static final String getResourcePath(Package pkg, int up) {
+        return getResourcePath(pkg.getName(), up);
+    }
+    
+    /**
      * Returns the ZK resource path for the package name.
      * 
      * @param name Package name
      * @return String representing resource path
      */
     public static final String getResourcePath(String name) {
-        return "~./" + name.replace('.', '/') + "/";
+        return getResourcePath(name, 0);
+    }
+    
+    /**
+     * Returns the ZK resource path for the package name.
+     * 
+     * @param name Package name
+     * @param up Number of path levels to remove
+     * @return String representing resource path
+     */
+    public static final String getResourcePath(String name, int up) {
+        String path = StringUtils.chomp(name.replace('.', '/'), "/");
+        
+        while (up > 0) {
+            int i = path.lastIndexOf("/");
+            
+            if (i <= 0) {
+                break;
+            } else {
+                path = path.substring(0, i);
+                up--;
+            }
+        }
+        
+        return "~./" + path + "/";
     }
     
     /**

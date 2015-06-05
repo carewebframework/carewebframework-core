@@ -160,4 +160,15 @@ public class ZKUtilTest {
         cmp = ZKUtil.getTextComponent("http://url");
         assertTrue(cmp instanceof A);
     }
+    
+    @Test
+    public void getResourcePathTest() {
+        assertEquals("~./org/carewebframework/ui/zk/", ZKUtil.getResourcePath(ZKUtilTest.class));
+        assertEquals("~./org/carewebframework/ui/", ZKUtil.getResourcePath(ZKUtilTest.class, 1));
+        assertEquals("~./org/carewebframework/ui/zk/", ZKUtil.getResourcePath(ZKUtilTest.class.getPackage()));
+        assertEquals("~./org/carewebframework/", ZKUtil.getResourcePath(ZKUtilTest.class.getPackage(), 2));
+        assertEquals("~./org/carewebframework/ui/zk/", ZKUtil.getResourcePath("org.carewebframework.ui.zk"));
+        assertEquals("~./org/carewebframework/ui/zk/", ZKUtil.getResourcePath("org.carewebframework.ui.zk", -2));
+        assertEquals("~./org/carewebframework/ui/", ZKUtil.getResourcePath("org.carewebframework.ui.zk", 1));
+    }
 }
