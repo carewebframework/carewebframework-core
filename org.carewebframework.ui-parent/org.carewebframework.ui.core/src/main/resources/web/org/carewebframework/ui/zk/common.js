@@ -193,6 +193,7 @@ cwf.cancelNavigation = function(event) {
 zAu.cmd0.cwf_addMask =
 cwf.addMask = function(uuid, msg, popid, hint) {
 	cwf.removeMask(uuid);
+	cwf.zkMask_(uuid, true);
 	
 	if (uuid.uuid)
 		uuid = uuid.uuid;
@@ -221,10 +222,23 @@ cwf.addMask = function(uuid, msg, popid, hint) {
  */
 zAu.cmd0.cwf_removeMask =
 cwf.removeMask = function(uuid) {
+	cwf.zkMask_(uuid, false);
+	
 	if (uuid.uuid)
 		uuid = uuid.uuid;
 
 	jq('#' + uuid + '-cwfMask').remove();
+};
+
+/**
+ * Hide or show ZK mask, if any.
+ */
+cwf.zkMask_ = function(uuid, hide) {
+	var wgt = uuid.uuid ? uuid : zkWidget.$(uuid);
+
+	if (wgt.__mask) {
+		jq(wgt.__mask.mask).css('display', hide ? 'none' : 'block');
+	}
 };
 
 jq(document).ready(function() {
