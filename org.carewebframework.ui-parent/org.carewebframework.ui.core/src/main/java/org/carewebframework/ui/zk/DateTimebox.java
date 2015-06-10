@@ -322,7 +322,7 @@ public class DateTimebox extends Bandbox implements IdSpace {
      */
     public void onFocus() {
         open();
-        datebox.setFocus(true);
+        update(true);
     }
     
     /**
