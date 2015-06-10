@@ -21,7 +21,6 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.IdSpace;
 import org.zkoss.zk.ui.WrongValueException;
-import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.OpenEvent;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.ui.util.Clients;
@@ -313,17 +312,14 @@ public class DateTimebox extends Bandbox implements IdSpace {
         update(event.isOpen());
     }
     
-    public void onDeferredOpen(Event event) {
-        setOpen((boolean) event.getData());
-        update((boolean) event.getData());
-    }
-    
     /**
      * Automatic drop down when bandbox receives focus.
      */
     public void onFocus() {
-        open();
-        update(true);
+        if (!isOpen()) {
+            setOpen(true);
+            update(true);
+        }
     }
     
     /**
