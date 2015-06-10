@@ -274,6 +274,7 @@ public class DateTimebox extends Bandbox implements IdSpace {
     private void update(boolean open) {
         if (open) {
             datebox.setFocus(true);
+            datebox.select();
             Date date = getDate();
             updateDatebox(date);
             updateTimebox(DateUtil.hasTime(date) ? date : null);

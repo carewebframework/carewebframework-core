@@ -1,5 +1,5 @@
 <zk>
-	<grid id="grid" oddRowSclass="none" sizedByContent="true"
+	<grid id="grid" sclass="cwf-grid-nohover" oddRowSclass="none" sizedByContent="true"
 		width="350px" style="border-radius:6px">
 		<columns>
 			<column hflex="10" />

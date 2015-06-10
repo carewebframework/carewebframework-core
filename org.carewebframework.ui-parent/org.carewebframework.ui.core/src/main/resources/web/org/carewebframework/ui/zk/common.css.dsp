@@ -220,6 +220,11 @@
 	content: "\f073"
 }
 
+.cwf-grid-nohover .z-row:hover>.z-row-inner,
+.z-row:hover>.z-cell {
+	background: none;
+}
+
 /* Bootstrap additions */
 
 .panel {
