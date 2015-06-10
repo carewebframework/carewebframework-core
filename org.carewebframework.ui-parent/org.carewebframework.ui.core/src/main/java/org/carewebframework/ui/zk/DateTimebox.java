@@ -341,7 +341,7 @@ public class DateTimebox extends Bandbox implements IdSpace {
      */
     public void onClick$btnOK() {
         if (validate()) {
-            close();
+            setOpen(false);
         }
     }
     
@@ -350,7 +350,7 @@ public class DateTimebox extends Bandbox implements IdSpace {
      */
     public void onClick$btnCancel() {
         ok = false;
-        close();
+        setOpen(false);
     }
     
     /**
