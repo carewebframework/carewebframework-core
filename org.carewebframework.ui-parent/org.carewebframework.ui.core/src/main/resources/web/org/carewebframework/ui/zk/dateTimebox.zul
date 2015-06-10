@@ -21,15 +21,12 @@
 					<a id="btnNow"
 						label="${labels.cwf.datetime.btn.now.label}" />
 					<space hflex="1" />
-					<a id="btnClear"
+					<a id="btnTimeClear"
 						label="${labels.cwf.datetime.btn.clear.label}" />
 				</div>
 				<button id="btnCancel" hflex="1"
 					label="${labels.cwf.datetime.btn.cancel.label}"
 					zclass="btn" sclass="btn-sm btn-danger" />
-			</row>
-			<row spans="3" style="text-align:center">
-				<label id="error" zclass="text-danger" />
 			</row>
 		</rows>
 	</grid>

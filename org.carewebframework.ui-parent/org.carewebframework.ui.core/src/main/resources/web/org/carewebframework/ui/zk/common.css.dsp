@@ -216,6 +216,10 @@
 	padding: 0 90% 0 5px;
 }
 
+.cwf-datetimebox .z-bandbox-icon:before {
+	content: "\f073"
+}
+
 /* Bootstrap additions */
 
 .panel {

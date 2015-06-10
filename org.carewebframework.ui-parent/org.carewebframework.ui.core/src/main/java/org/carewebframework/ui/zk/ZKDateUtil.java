@@ -11,7 +11,6 @@ package org.carewebframework.ui.zk;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.TimeZone;
 
 import org.carewebframework.common.DateUtil;
 
@@ -36,9 +35,8 @@ public class ZKDateUtil {
             return DateUtil.stripTime(datebox.getValue());
         }
         
-        TimeZone timezone = DateUtil.getLocalTimeZone();
-        Calendar date = Calendar.getInstance(timezone);
-        Calendar time = Calendar.getInstance(timezone);
+        Calendar date = Calendar.getInstance();
+        Calendar time = Calendar.getInstance();
         date.setTime(datebox.getValue());
         time.setTime(timebox.getValue());
         time.set(date.get(Calendar.YEAR), date.get(Calendar.MONTH), date.get(Calendar.DAY_OF_MONTH));

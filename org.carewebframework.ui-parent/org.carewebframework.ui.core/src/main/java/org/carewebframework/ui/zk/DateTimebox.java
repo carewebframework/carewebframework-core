@@ -10,22 +10,28 @@
 package org.carewebframework.ui.zk;
 
 import java.util.Date;
+import java.util.TimeZone;
 
 import org.apache.commons.lang.time.DateUtils;
+import org.apache.commons.lang.time.FastDateFormat;
 
 import org.carewebframework.common.DateUtil;
 
-import org.zkoss.util.resource.Labels;
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.IdSpace;
 import org.zkoss.zk.ui.WrongValueException;
+import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.OpenEvent;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
+import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Bandbox;
 import org.zkoss.zul.Bandpopup;
+import org.zkoss.zul.Constraint;
 import org.zkoss.zul.Datebox;
-import org.zkoss.zul.Label;
+import org.zkoss.zul.SimpleDateConstraint;
 import org.zkoss.zul.Timebox;
+import org.zkoss.zul.impl.InputElement;
 import org.zkoss.zul.mesg.MZul;
 
 /**
@@ -39,42 +45,181 @@ public class DateTimebox extends Bandbox implements IdSpace {
     
     private Timebox timebox;
     
-    private Label error;
-    
     private boolean requireTime;
     
     private boolean ok;
     
-    private final String requireTimeError = Labels.getLabel("cwf.datetime.error.no.time");
+    private Constraint dateConstraint;
+    
+    private Constraint timeConstraint;
+    
+    private String dateFormat = "dd-MMM-yyyy";
+    
+    private String timeFormat = "HH:mm";
+    
+    private Component[] inputElements;
+    
+    private final TimeZone timezone = DateUtil.getLocalTimeZone();
+    
+    private final String requireTimeError = ZKUtil.getLabel("cwf.datetime.error.no.time");
+    
+    private final String requireDateError = ZKUtil.getLabel("cwf.datetime.error.no.date");
     
     /**
-     * Creates all required child components.
-     * 
-     * @throws Exception Unspecified exception.
+     * Sets default property values.
      */
-    public void onCreate() throws Exception {
-        Bandpopup bp = new Bandpopup();
-        appendChild(bp);
-        PageDefinition def = ZKUtil.loadCachedPageDefinition(Constants.RESOURCE_PREFIX + "dateTimebox.zul");
-        Executions.createComponents(def, bp, null);
-        ZKUtil.wireController(this);
-        datebox.setFormat("dd-MMM-yyyy");
-        timebox.setFormat("HH:mm");
+    public DateTimebox() {
+        super();
+        setReadonly(true);
+        setSclass("cwf-datetimebox");
     }
     
-    public void setRequireTime(boolean requireTime) {
-        this.requireTime = requireTime;
-    }
-    
+    /**
+     * Returns true if a time component is required.
+     * 
+     * @return True if a time component is required.
+     */
     public boolean getRequireTime() {
         return requireTime;
     }
     
+    /**
+     * Set to true to indicate a time component is required.
+     * 
+     * @param requireTime True if time component is required.
+     */
+    public void setRequireTime(boolean requireTime) {
+        this.requireTime = requireTime;
+    }
+    
+    /**
+     * Returns the constraint for the date component.
+     * 
+     * @return Date constraint.
+     */
+    public Constraint getDateConstraint() {
+        return dateConstraint;
+    }
+    
+    /**
+     * Sets the constraint for the date component.
+     * 
+     * @param constraint The date constraint.
+     */
+    public void setDateConstraint(Constraint constraint) {
+        dateConstraint = constraint;
+        
+        if (datebox != null) {
+            datebox.setConstraint(constraint);
+        }
+    }
+    
+    /**
+     * Sets the constraint for the date component.
+     * 
+     * @param constraint The date constraint.
+     */
+    public void setDateConstraint(String constraint) {
+        setDateConstraint(new SimpleDateConstraint(constraint));
+    }
+    
+    /**
+     * Returns the constraint for the time component.
+     * 
+     * @return Time constraint.
+     */
+    public Constraint getTimeConstraint() {
+        return timeConstraint;
+    }
+    
+    /**
+     * Sets the constraint for the time component.
+     * 
+     * @param constraint The time constraint.
+     */
+    public void setTimeConstraint(Constraint constraint) {
+        timeConstraint = constraint;
+        
+        if (timebox != null) {
+            timebox.setConstraint(constraint);
+        }
+    }
+    
+    /**
+     * Sets the constraint for the time component.
+     * 
+     * @param constraint The time constraint.
+     */
+    public void setTimeConstraint(String constraint) {
+        setTimeConstraint(new SimpleDateConstraint(constraint));
+    }
+    
+    /**
+     * Returns the display format for date values.
+     * 
+     * @return The date format.
+     */
+    public String getDateFormat() {
+        return dateFormat;
+    }
+    
+    /**
+     * Sets the display format for date values.
+     * 
+     * @param format The date format.
+     */
+    public void setDateFormat(String format) {
+        dateFormat = format;
+        
+        if (datebox != null) {
+            datebox.setFormat(format);
+        }
+    }
+    
+    /**
+     * Returns the display format for time values.
+     * 
+     * @return The time format.
+     */
+    public String getTimeFormat() {
+        return timeFormat;
+    }
+    
+    /**
+     * Sets the display format for time values.
+     * 
+     * @param format The time format.
+     */
+    public void setTimeFormat(String format) {
+        timeFormat = format;
+        
+        if (timebox != null) {
+            timebox.setFormat(format);
+        }
+    }
+    
+    /**
+     * Returns the current date value.
+     * 
+     * @return The current date value.
+     */
+    public Date getDate() {
+        return asDate(getRawValue());
+    }
+    
+    /**
+     * Sets the current date value.
+     * 
+     * @param date The date value.
+     */
     public void setDate(Date date) {
         validate(date);
         setRawValue(date);
     }
     
+    /**
+     * Validates that a time component exists if one is required.
+     */
     @Override
     public void validate(Object value) {
         super.validate(value);
@@ -84,36 +229,55 @@ public class DateTimebox extends Bandbox implements IdSpace {
         }
     }
     
-    public Date getDate() {
-        return (Date) getRawValue();
+    /**
+     * Displays (or clears) a validation error.
+     * 
+     * @param message The error text. If null, any existing validation errors will be cleared.
+     * @param inputElement The input element that caused the validation error.
+     */
+    private void showError(String message, InputElement inputElement) {
+        Clients.clearWrongValue(inputElements);
+        ok = message == null;
+        
+        if (!ok) {
+            Clients.wrongValue(inputElement, message);
+            inputElement.setFocus(true);
+        }
     }
     
-    private void showError(String message) {
-        error.setValue(message);
-        ok = message == null;
+    /**
+     * Clears all validation errors.
+     */
+    private void clearError() {
+        showError(null, null);
     }
     
     private boolean validate() {
         ok = true;
+        boolean hasTime = timebox.getValue() != null;
         
-        if (requireTime && timebox.getValue() == null) {
-            showError(requireTimeError);
+        if (datebox.getValue() == null && hasTime) {
+            showError(requireDateError, datebox);
+        } else if (requireTime && !hasTime) {
+            showError(requireTimeError, timebox);
         }
         
         return ok;
     }
     
-    public void onOpen(OpenEvent event) {
-        update(event.isOpen());
-    }
-    
+    /**
+     * Transfers input state between the bandbox and the drop down dialog. If drop down is true, the
+     * date value from the bandbox is copied to the drop down. If false, the reverse is done.
+     * 
+     * @param open The state of the drop down dialog.
+     */
     private void update(boolean open) {
         if (open) {
-            datebox.setConstraint(getConstraint());
+            datebox.setFocus(true);
             Date date = getDate();
             updateDatebox(date);
             updateTimebox(DateUtil.hasTime(date) ? date : null);
-            showError(null);
+            clearError();
         } else if (ok) {
             Date date = ZKDateUtil.getTime(datebox, timebox);
             date = timebox.getValue() != null ? DateUtils.setMilliseconds(date, 1) : date;
@@ -121,48 +285,126 @@ public class DateTimebox extends Bandbox implements IdSpace {
         }
     }
     
+    /**
+     * Creates and wires all child components.
+     */
+    public void onCreate() {
+        Bandpopup bp = new Bandpopup();
+        appendChild(bp);
+        PageDefinition def = ZKUtil.loadCachedPageDefinition(Constants.RESOURCE_PREFIX + "dateTimebox.zul");
+        Executions.createComponents(def, bp, null);
+        ZKUtil.wireController(this);
+        datebox.setTimeZone(timezone);
+        datebox.setFormat(getDateFormat());
+        datebox.setConstraint(dateConstraint);
+        timebox.setFormat(timeFormat);
+        timebox.setTimeZone(timezone);
+        timebox.setConstraint(timeConstraint);
+        inputElements = new Component[] { datebox, timebox };
+    }
+    
+    /**
+     * Update input elements when drop down dialog opens or closes.
+     * 
+     * @param event The open event.
+     */
+    public void onOpen(OpenEvent event) {
+        update(event.isOpen());
+    }
+    
+    public void onDeferredOpen(Event event) {
+        setOpen((boolean) event.getData());
+        update((boolean) event.getData());
+    }
+    
+    /**
+     * Automatic drop down when bandbox receives focus.
+     */
+    public void onFocus() {
+        open();
+        datebox.setFocus(true);
+    }
+    
+    /**
+     * Clear any validation error upon changing date entry.
+     */
+    public void onChanging$datebox() {
+        clearError();
+    }
+    
+    /**
+     * Clear any validation error upon changing time entry.
+     */
+    public void onChanging$timebox() {
+        clearError();
+    }
+    
+    /**
+     * Close drop down and update bandbox if validation successful
+     */
     public void onClick$btnOK() {
         if (validate()) {
             close();
         }
     }
     
+    /**
+     * Close drop down, ignoring all changes.
+     */
     public void onClick$btnCancel() {
         ok = false;
         close();
     }
     
+    /**
+     * Populate datebox with today's date while clearing timebox.
+     */
+    public void onClick$btnToday() {
+        updateDatebox(DateUtil.today());
+        updateTimebox(null);
+    }
+    
+    /**
+     * Populate datebox and timebox with current date and time.
+     */
+    public void onClick$btnNow() {
+        Date now = DateUtil.now();
+        updateDatebox(now);
+        updateTimebox(now);
+    }
+    
+    /**
+     * Clear the time box.
+     */
+    public void onClick$btnTimeClear() {
+        updateTimebox(null);
+    }
+    
+    /**
+     * Close the bandbox.
+     */
     @Override
     public void close() {
         super.close();
         update(false);
     }
     
-    private Date now() {
-        return new Date();
+    /**
+     * Update the datebox with the new value.
+     * 
+     * @param date New date value.
+     */
+    private void updateDatebox(Date date) {
+        datebox.setValue(DateUtil.stripTime(date));
     }
     
-    private void updateDatebox(Date value) {
-        datebox.setValue(DateUtil.stripTime(value));
-    }
-    
-    private void updateTimebox(Date value) {
-        timebox.setValue(value);
-    }
-    
-    public void onClick$btnToday() {
-        updateDatebox(now());
-        updateTimebox(null);
-    }
-    
-    public void onClick$btnNow() {
-        Date now = now();
-        updateDatebox(now);
-        updateTimebox(now);
-    }
-    
-    public void onClick$btnClear() {
-        updateTimebox(null);
+    /**
+     * Update the timebox with the new time.
+     * 
+     * @param time The new time value.
+     */
+    private void updateTimebox(Date time) {
+        timebox.setValue(time);
     }
     
     @Override
@@ -172,11 +414,11 @@ public class DateTimebox extends Bandbox implements IdSpace {
     
     @Override
     protected Object unmarshall(Object value) {
-        return value instanceof String ? coerceFromString((String) value) : super.unmarshall(value);
+        return value instanceof String ? asDate(value) : super.unmarshall(value);
     }
     
     @Override
-    protected Object coerceFromString(String value) throws WrongValueException {
+    protected Date coerceFromString(String value) throws WrongValueException {
         if (value == null || value.isEmpty()) {
             return null;
         }
@@ -193,6 +435,27 @@ public class DateTimebox extends Bandbox implements IdSpace {
     
     @Override
     protected String coerceToString(Object value) {
-        return value == null ? null : value instanceof Date ? DateUtil.formatDate((Date) value) : value.toString();
+        return value == null ? null : value instanceof Date ? formatDate((Date) value) : value.toString();
+    }
+    
+    /**
+     * Formats the date using the date and time format settings.
+     * 
+     * @param date Date to format.
+     * @return Formatted date.
+     */
+    private String formatDate(Date date) {
+        String format = dateFormat + (DateUtil.hasTime(date) ? " " + timeFormat : "");
+        return date == null ? null : FastDateFormat.getInstance(format).format(date);
+    }
+    
+    /**
+     * Coerce the value to a Date.
+     * 
+     * @param value The object value.
+     * @return The coerced date value.
+     */
+    private Date asDate(Object value) {
+        return value == null ? null : value instanceof Date ? (Date) value : DateUtil.parseDate(value.toString());
     }
 }
