@@ -17,6 +17,8 @@ import java.util.Locale;
 import org.apache.commons.lang.CharEncoding;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import org.springframework.context.MessageSource;
 import org.springframework.context.NoSuchMessageException;
@@ -25,6 +27,8 @@ import org.springframework.context.NoSuchMessageException;
  * Utility methods for managing strings.
  */
 public class StrUtil {
+    
+    private static final Log log = LogFactory.getLog(StrUtil.class);
     
     public static final String U = "^";
     
@@ -508,6 +512,7 @@ public class StrUtil {
             }
         }
         // Failing resolution, just return the label identifier.
+        log.warn("Label not found for identifier: " + id);
         return id;
     }
     

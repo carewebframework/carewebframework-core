@@ -27,9 +27,6 @@
 		<bean id="appContextFinder" class="org.carewebframework.ui.spring.AppContextFinder"
 			cwf:override="always" />
 
-		<!-- Finds and registers label property files. -->
-		<bean class="org.carewebframework.ui.LabelFinder" />
-		
 		<!-- Registry for thread listeners. -->
 		<bean class="org.carewebframework.ui.thread.ThreadListenerRegistry"
 			factory-method="getInstance" />

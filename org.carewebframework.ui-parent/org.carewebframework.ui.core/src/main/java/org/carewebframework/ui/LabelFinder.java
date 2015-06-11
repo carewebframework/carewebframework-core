@@ -24,9 +24,7 @@ import org.apache.commons.logging.LogFactory;
 
 import org.carewebframework.common.StrUtil;
 
-import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.io.Resource;
 
 import org.zkoss.util.Maps;
@@ -39,7 +37,7 @@ import org.zkoss.zel.impl.util.Validation;
  * or below the "web" folder. For each unique path, creates and registers a label locator for that
  * path.
  */
-public class LabelFinder implements ApplicationContextAware {
+public class LabelFinder {
     
     /**
      * Class that encapsulates the label locator logic for a specific path.
@@ -96,14 +94,14 @@ public class LabelFinder implements ApplicationContextAware {
     
     private static final Log log = LogFactory.getLog(LabelFinder.class);
     
-    private final boolean validate;
-    
     /**
      * Sets the resolver to be used to resolve label references.
+     * 
+     * @param appContext The application context.
      */
-    public LabelFinder() {
-        this.validate = log.isWarnEnabled();
+    public LabelFinder(ApplicationContext appContext) {
         StrUtil.registerMessageSource(new LabelResolver());
+        init(appContext);
     };
     
     /**
@@ -154,7 +152,7 @@ public class LabelFinder implements ApplicationContextAware {
                 
                 labelLocator.addUrl(url);
                 
-                if (validate) {
+                if (log.isWarnEnabled()) {
                     validate(resource);
                 }
             }
@@ -190,11 +188,6 @@ public class LabelFinder implements ApplicationContextAware {
         } finally {
             IOUtils.closeQuietly(is);
         }
-    }
-    
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        init(applicationContext);
     }
     
 }

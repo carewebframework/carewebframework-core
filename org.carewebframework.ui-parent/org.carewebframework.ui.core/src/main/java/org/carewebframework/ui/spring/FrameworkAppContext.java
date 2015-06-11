@@ -24,6 +24,7 @@ import org.carewebframework.api.spring.DomainPropertySource;
 import org.carewebframework.api.spring.FrameworkBeanFactory;
 import org.carewebframework.api.spring.LabelPropertySource;
 import org.carewebframework.api.spring.ResourceCache;
+import org.carewebframework.ui.LabelFinder;
 import org.carewebframework.ui.util.MemoryLeakPreventionUtil;
 
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
@@ -229,6 +230,15 @@ public class FrameworkAppContext extends XmlWebApplicationContext implements Res
         if (getParent() == null) {
             //final root context cleanup
             MemoryLeakPreventionUtil.clean();
+        }
+    }
+    
+    @Override
+    protected void initPropertySources() {
+        super.initPropertySources();
+        
+        if (isRoot()) {
+            new LabelFinder(this);
         }
     }
 }
