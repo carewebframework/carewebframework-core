@@ -15,7 +15,6 @@ import org.carewebframework.api.domain.IUser;
 import org.carewebframework.api.security.ISecurityService;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.ui.zk.PromptDialog;
-import org.carewebframework.ui.zk.ZKUtil;
 
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
@@ -53,7 +52,7 @@ public class PasswordChangeController extends GenericForwardComposer<Component> 
     
     private ISecurityService securityService;
     
-    private final String MESSAGE_PASSWORD_RULES = Labels.getLabel("password.change.rules.label");
+    private final String MESSAGE_PASSWORD_RULES = StrUtil.getLabel("password.change.rules.label");
     
     @Override
     public void doAfterCompose(Component comp) throws Exception {
@@ -76,8 +75,8 @@ public class PasswordChangeController extends GenericForwardComposer<Component> 
         if (user == null) {
             doCancel();
         } else {
-            lblTitle.setValue(Labels.getLabel(title) + " - " + user.getFullName());
-            lblInfo.setValue(ZKUtil.getLabel(label, MESSAGE_PASSWORD_RULES));
+            lblTitle.setValue(StrUtil.getLabel(title) + " - " + user.getFullName());
+            lblInfo.setValue(StrUtil.getLabel(label, MESSAGE_PASSWORD_RULES));
         }
     }
     

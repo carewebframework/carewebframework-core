@@ -16,6 +16,7 @@ import org.apache.commons.lang.time.DateUtils;
 import org.apache.commons.lang.time.FastDateFormat;
 
 import org.carewebframework.common.DateUtil;
+import org.carewebframework.common.StrUtil;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
@@ -60,9 +61,9 @@ public class DateTimebox extends Bandbox implements IdSpace {
     
     private final TimeZone timezone = DateUtil.getLocalTimeZone();
     
-    private final String requireTimeError = ZKUtil.getLabel("cwf.datetime.error.no.time");
+    private final String requireTimeError = StrUtil.getLabel("cwf.datetime.error.no.time");
     
-    private final String requireDateError = ZKUtil.getLabel("cwf.datetime.error.no.date");
+    private final String requireDateError = StrUtil.getLabel("cwf.datetime.error.no.date");
     
     /**
      * Sets default property values.
