@@ -46,6 +46,7 @@ public class FrameworkAppContext extends ClassPathXmlApplicationContext implemen
         setConfigLocations(locations == null || locations.length == 0 ? null : locations);
         ConfigurableEnvironment env = getEnvironment();
         env.setActiveProfiles(testConfig ? Constants.PROFILES_TEST : Constants.PROFILES_PROD);
+        env.getPropertySources().addLast(new LabelPropertySource());
         env.getPropertySources().addLast(new DomainPropertySource(this));
     }
     
