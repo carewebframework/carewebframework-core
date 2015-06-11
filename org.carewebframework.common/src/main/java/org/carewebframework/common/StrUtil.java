@@ -19,6 +19,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 
 import org.springframework.context.MessageSource;
+import org.springframework.context.NoSuchMessageException;
 
 /**
  * Utility methods for managing strings.
@@ -35,7 +36,7 @@ public class StrUtil {
     
     public static final String CHARSET = CharEncoding.UTF_8;
     
-    private static MessageSource messageSource;
+    private static final List<MessageSource> messageSources = new ArrayList<>();
     
     /**
      * Splits a string using the specified delimiter.
@@ -431,21 +432,12 @@ public class StrUtil {
     }
     
     /**
-     * Returns the message source for resolving messages.
-     * 
-     * @return messageSource
-     */
-    public static MessageSource getMessageSource() {
-        return messageSource;
-    }
-    
-    /**
-     * Sets a message source for resolving messages.
+     * Registers a message source for resolving messages.
      * 
      * @param messageSource The message source.
      */
-    public static void setMessageSource(MessageSource messageSource) {
-        StrUtil.messageSource = messageSource;
+    public static void registerMessageSource(MessageSource messageSource) {
+        messageSources.add(messageSource);
     }
     
     /**
@@ -462,20 +454,18 @@ public class StrUtil {
             return msg;
         }
         
-        if (messageSource != null && msg.startsWith("@")) {
-            return messageSource.getMessage(msg.substring(1), args, locale);
+        String message = msg.startsWith("@") ? getLabel(msg, locale, args) : null;
+        
+        if (message == null && args != null && args.length > 0) {
+            message = String.format(locale, msg, args);
         }
         
-        if (args != null && args.length > 0) {
-            return String.format(locale, msg, args);
-        }
-        
-        return msg;
+        return message == null ? msg : message;
     }
     
     /**
      * Formats a message. If the message begins with "@", the remainder is assumed to be a label
-     * name that is resolved.
+     * identifier that is resolved.
      * 
      * @param msg Message to format or, if starts with "@", a label reference.
      * @param args Optional replaceable parameters.
@@ -483,6 +473,42 @@ public class StrUtil {
      */
     public static String formatMessage(String msg, Object... args) {
         return formatMessage(msg, Locale.getDefault(), args);
+    }
+    
+    /**
+     * Returns a formatted message given a label identifier.
+     * 
+     * @param id A label identifier.
+     * @param args Optional replaceable parameters.
+     * @return The formatted label.
+     */
+    public static String getLabel(String id, Object... args) {
+        return getLabel(id, Locale.getDefault(), args);
+    }
+    
+    /**
+     * Returns a formatted message given a label identifier. Recognizes line continuation with
+     * backslash characters.
+     * 
+     * @param id A label identifier.
+     * @param locale The locale.
+     * @param args Optional replaceable parameters.
+     * @return The formatted label.
+     */
+    public static String getLabel(String id, Locale locale, Object... args) {
+        if (id.startsWith("@")) {
+            id = id.substring(1);
+        }
+        
+        for (MessageSource messageSource : messageSources) {
+            try {
+                return messageSource.getMessage(id, args, locale).replace("\\\n", "");
+            } catch (NoSuchMessageException e) {
+                // Ignore and try next message source.
+            }
+        }
+        // Failing resolution, just return the label identifier.
+        return id;
     }
     
     /**

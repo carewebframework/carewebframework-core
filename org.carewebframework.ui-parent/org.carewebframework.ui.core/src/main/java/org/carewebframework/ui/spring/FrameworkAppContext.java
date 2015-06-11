@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -22,6 +22,7 @@ import org.apache.commons.lang.ArrayUtils;
 import org.carewebframework.api.spring.Constants;
 import org.carewebframework.api.spring.DomainPropertySource;
 import org.carewebframework.api.spring.FrameworkBeanFactory;
+import org.carewebframework.api.spring.LabelPropertySource;
 import org.carewebframework.api.spring.ResourceCache;
 import org.carewebframework.ui.util.MemoryLeakPreventionUtil;
 
@@ -133,7 +134,7 @@ public class FrameworkAppContext extends XmlWebApplicationContext implements Res
         } else {
             AppContextFinder.rootContext = this;
             Collections.addAll(aps, testConfig ? Constants.PROFILES_ROOT_TEST : Constants.PROFILES_ROOT_PROD);
-            env.getPropertySources().addLast(new LabelPropertySource(this));
+            env.getPropertySources().addLast(new LabelPropertySource());
             env.getPropertySources().addLast(new DomainPropertySource(this));
         }
         

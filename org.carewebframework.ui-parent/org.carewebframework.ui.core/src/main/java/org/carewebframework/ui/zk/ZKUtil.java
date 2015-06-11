@@ -27,12 +27,11 @@ import org.apache.commons.lang.Validate;
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.lang.reflect.FieldUtils;
 
+import org.carewebframework.common.StrUtil;
 import org.carewebframework.ui.FrameworkWebSupport;
 
 import org.zkoss.json.JavaScriptValue;
 import org.zkoss.lang.Exceptions;
-import org.zkoss.text.MessageFormats;
-import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.au.AuResponse;
 import org.zkoss.zk.au.out.AuInvoke;
 import org.zkoss.zk.ui.Component;
@@ -1065,11 +1064,11 @@ public class ZKUtil {
      * @param key Label key.
      * @param args Optional argument list.
      * @return The key value or null if not found.
+     * @deprecated Use StrUtil.getLabel
      */
+    @Deprecated
     public static String getLabel(String key, Object... args) {
-        String value = Labels.getLabel(key.startsWith("@") ? key.substring(1) : key);
-        value = value == null ? null : value.replace("\\\n", "");
-        return value == null ? null : MessageFormats.format(value, args, null);
+        return StrUtil.getLabel(key, args);
     }
     
     /**
