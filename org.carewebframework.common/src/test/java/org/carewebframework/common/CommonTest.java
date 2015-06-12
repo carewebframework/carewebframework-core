@@ -46,6 +46,15 @@ public class CommonTest {
         assertEquals("0", NumUtil.toString(0.0));
         assertEquals("1.25", NumUtil.toString(1.25));
         assertEquals("125", NumUtil.toString(125.0));
+        assertTrue(NumUtil.compare(1, 2) < 0);
+        assertTrue(NumUtil.compare(5, 5) == 0);
+        assertTrue(NumUtil.compare(6, 3) > 0);
+        assertTrue(NumUtil.compare(1.34, 2.5) < 0);
+        assertTrue(NumUtil.compare(3.54, 3.54) == 0);
+        assertTrue(NumUtil.compare(5.45, 5.31) > 0);
+        assertEquals(5, NumUtil.enforceRange(10, 1, 5));
+        assertEquals(10, NumUtil.enforceRange(10, 1, 20));
+        assertEquals(5, NumUtil.enforceRange(1, 5, 20));
     }
     
     @Test

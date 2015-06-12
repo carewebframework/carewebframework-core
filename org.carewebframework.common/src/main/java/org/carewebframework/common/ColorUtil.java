@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -18,7 +18,7 @@ import java.util.Map;
  */
 public class ColorUtil {
     
-    public static final String[][] NAMED_COLORS = { { "none", "" }, { "Black", "#000000" }, { "Navy", "#000080" },
+    private static final String[][] NAMED_COLORS = { { "none", "" }, { "Black", "#000000" }, { "Navy", "#000080" },
             { "DarkBlue", "#00008B" }, { "MediumBlue", "#0000CD" }, { "Blue", "#0000FF" }, { "DarkGreen", "#006400" },
             { "Green", "#008000" }, { "Teal", "#008080" }, { "DarkCyan", "#008B8B" }, { "DeepSkyBlue", "#00BFFF" },
             { "DarkTurquoise", "#00CED1" }, { "MediumSpringGreen", "#00FA9A" }, { "Lime", "#00FF00" },

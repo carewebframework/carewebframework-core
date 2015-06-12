@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -24,7 +24,7 @@ public class NumUtil {
      * @return -1 if val1 < val2; 0 if val1 == val2; 1 if val1 > val2
      */
     public static int compare(int val1, int val2) {
-        return val1 == val2 ? 0 : val1 < val2 ? -1 : 1;
+        return val1 - val2;
     }
     
     /**
@@ -32,7 +32,7 @@ public class NumUtil {
      * 
      * @param val1 First value.
      * @param val2 Second value.
-     * @return -1 if val1 < val2; 0 if val1 == val2; 1 if val1 > val2
+     * @return <0 if val1 < val2; 0 if val1 == val2; >0 if val1 > val2
      */
     public static int compare(double val1, double val2) {
         return Double.compare(val1, val2);

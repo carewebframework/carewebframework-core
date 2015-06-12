@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -40,7 +40,7 @@ public class MiscUtil {
     
     /**
      * Performs a lookup for the exact instance of an object in the list and returns its index, or
-     * -1 if not found. This is different from the usual implementation of a list search the uses
+     * -1 if not found. This is different from the usual implementation of a list search that uses
      * the object's equals implementation.
      * 
      * @param list List to search.
