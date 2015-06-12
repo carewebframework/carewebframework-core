@@ -11,9 +11,8 @@ package org.carewebframework.ui.spring;
 
 import static org.junit.Assert.assertEquals;
 
+import org.carewebframework.common.StrUtil;
 import org.carewebframework.ui.test.CommonTest;
-
-import org.zkoss.util.resource.Labels;
 
 import org.junit.Test;
 
@@ -23,7 +22,7 @@ public class SpringTest extends CommonTest {
     public void test() {
         TestBean bean = desktopContext.getBean(TestBean.class);
         //Test ZK LabelPropertySource and DomainPropertySource
-        assertEquals("Label injection failed.", Labels.getLabel("cwf.ui.test.label"), bean.getLabel());
+        assertEquals("Label injection failed.", StrUtil.getLabel("cwf.ui.test.label"), bean.getLabel());
         assertEquals("Property injection failed.", "Default property1", bean.getProperty1());
         assertEquals("Property override failed.", "Overridden property2", bean.getProperty2());
         assertEquals("Domain property injection failed.", "Default property3", bean.getProperty3());

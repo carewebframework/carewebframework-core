@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -14,6 +14,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import org.carewebframework.common.StrUtil;
 import org.carewebframework.shell.CareWebShell;
 import org.carewebframework.shell.plugins.PluginContainer;
 import org.carewebframework.shell.plugins.PluginDefinition;
@@ -22,7 +23,6 @@ import org.carewebframework.shell.property.PropertyInfo;
 import org.carewebframework.ui.FrameworkController;
 import org.carewebframework.ui.test.CommonTest;
 
-import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.event.Events;
 
 import org.junit.Test;
@@ -53,7 +53,7 @@ public class LayoutParserTest extends CommonTest {
         testProperty("path", "Pane 2");
         PluginDefinition def = PluginDefinition.getDefinition("treeview");
         assertNotNull(def);
-        assertEquals(def.getDescription(), Labels.getLabel("cwf.shell.plugin.treeview.description"));
+        assertEquals(def.getDescription(), StrUtil.getLabel("cwf.shell.plugin.treeview.description"));
         UIElementBase ele = def.createElement(null, null);
         assertTrue(ele instanceof UIElementTreeView);
         CareWebShell shell = new CareWebShell();

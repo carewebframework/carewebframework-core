@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -9,9 +9,9 @@
  */
 package org.carewebframework.shell.plugins;
 
+import org.carewebframework.common.StrUtil;
 import org.carewebframework.ui.action.ActionListener;
 
-import org.zkoss.util.resource.Labels;
 import org.zkoss.zul.Button;
 
 /**
@@ -40,7 +40,7 @@ public class PluginResourceButton implements IPluginResource {
      * @return The button's caption text.
      */
     public String getCaption() {
-        return caption != null && caption.toLowerCase().startsWith("label:") ? Labels.getLabel(caption.substring(6))
+        return caption != null && caption.toLowerCase().startsWith("label:") ? StrUtil.getLabel(caption.substring(6))
                 : caption;
     }
     

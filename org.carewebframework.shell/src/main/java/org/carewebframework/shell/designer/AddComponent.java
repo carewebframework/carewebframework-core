@@ -25,7 +25,6 @@ import org.carewebframework.ui.zk.PopupDialog;
 import org.carewebframework.ui.zk.TreeUtil;
 import org.carewebframework.ui.zk.ZKUtil;
 
-import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.event.Event;
@@ -64,13 +63,13 @@ public class AddComponent extends Window {
     
     private boolean favoritesChanged;
     
-    private final String favoritesCategory = Labels.getLabel("cwf.shell.plugin.category.favorite");
+    private final String favoritesCategory = StrUtil.getLabel("cwf.shell.plugin.category.favorite");
     
-    private final String favoritesAddHint = Labels.getLabel("cwf.shell.designer.add.component.favorite.add.hint");
+    private final String favoritesAddHint = StrUtil.getLabel("cwf.shell.designer.add.component.favorite.add.hint");
     
-    private final String favoritesRemoveHint = Labels.getLabel("cwf.shell.designer.add.component.favorite.remove.hint");
+    private final String favoritesRemoveHint = StrUtil.getLabel("cwf.shell.designer.add.component.favorite.remove.hint");
     
-    private final String noDescriptionHint = Labels.getLabel("cwf.shell.designer.add.component.description.missing.hint");
+    private final String noDescriptionHint = StrUtil.getLabel("cwf.shell.designer.add.component.description.missing.hint");
     
     /**
      * Handles click on item not under favorites category.
@@ -235,7 +234,7 @@ public class AddComponent extends Window {
         
         if (StringUtils.isEmpty(category)) {
             if (UIElementPlugin.class.isAssignableFrom(def.getClazz())) {
-                category = Labels.getLabel("cwf.shell.plugin.category._default");
+                category = StrUtil.getLabel("cwf.shell.plugin.category._default");
             } else {
                 return null;
             }

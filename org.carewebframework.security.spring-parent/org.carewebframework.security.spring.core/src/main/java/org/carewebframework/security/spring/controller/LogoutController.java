@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -9,11 +9,11 @@
  */
 package org.carewebframework.security.spring.controller;
 
+import org.carewebframework.common.StrUtil;
 import org.carewebframework.security.spring.AbstractSecurityService;
 import org.carewebframework.security.spring.Constants;
 import org.carewebframework.ui.Application;
 
-import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.util.GenericAutowireComposer;
 import org.zkoss.zul.Button;
@@ -37,7 +37,7 @@ public class LogoutController extends GenericAutowireComposer<HtmlBasedComponent
     public void doAfterCompose(final HtmlBasedComponent comp) throws Exception {
         super.doAfterCompose(comp);
         lblMessage.setValue(AbstractSecurityService.getLogoutAttribute(Constants.LOGOUT_WARNING_ATTR,
-            Labels.getLabel(Constants.LBL_LOGOUT_MESSAGE_DEFAULT)));
+            StrUtil.getLabel(Constants.LBL_LOGOUT_MESSAGE_DEFAULT)));
         btnLogin.setHref(AbstractSecurityService.getLogoutAttribute(Constants.LOGOUT_TARGET_ATTR, "/"));
         // Unregister this desktop to allow session to auto-invalidate if appropriate.
         Application.getInstance().register(desktop, false);

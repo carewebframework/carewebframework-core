@@ -17,6 +17,7 @@ import org.apache.commons.logging.LogFactory;
 
 import org.carewebframework.api.IThrowableContext;
 import org.carewebframework.api.security.SecurityUtil;
+import org.carewebframework.common.StrUtil;
 import org.carewebframework.ui.Application.SessionInfo;
 import org.carewebframework.ui.zk.ZKUtil;
 
@@ -25,7 +26,6 @@ import org.springframework.core.NestedCheckedException;
 import org.springframework.core.NestedRuntimeException;
 import org.springframework.web.util.WebUtils;
 
-import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.util.Clients;
@@ -127,7 +127,7 @@ public class ExceptionController extends GenericForwardComposer<Component> {
         this.lblMessage.setValue(errMsg);
         this.lblStatusCode.setValue(String.valueOf(errStatusCode));
         
-        if (SecurityUtil.isGrantedAny(Labels.getLabel("cwf.error.dialog.expanded"))) {
+        if (SecurityUtil.isGrantedAny(StrUtil.getLabel("cwf.error.dialog.expanded"))) {
             Events.echoEvent(Events.ON_CLICK, this.btnDetail, null);
         }
     }

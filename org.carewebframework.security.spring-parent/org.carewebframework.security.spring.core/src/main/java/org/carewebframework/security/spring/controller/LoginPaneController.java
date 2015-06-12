@@ -18,6 +18,7 @@ import org.apache.commons.lang.StringUtils;
 
 import org.carewebframework.api.security.ISecurityDomain;
 import org.carewebframework.api.security.SecurityDomainRegistry;
+import org.carewebframework.common.StrUtil;
 import org.carewebframework.security.spring.Constants;
 import org.carewebframework.ui.FrameworkWebSupport;
 import org.carewebframework.ui.zk.ZKUtil;
@@ -27,7 +28,6 @@ import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.savedrequest.SavedRequest;
 
-import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.util.GenericForwardComposer;
@@ -111,10 +111,10 @@ public class LoginPaneController extends GenericForwardComposer<Component> {
         pane = comp;
         savedRequest = (SavedRequest) arg.get("savedRequest");
         AuthenticationException authError = (AuthenticationException) arg.get("authError");
-        String loginFailureMessage = Labels.getLabel(Constants.LBL_LOGIN_ERROR);//reset back to default
+        String loginFailureMessage = StrUtil.getLabel(Constants.LBL_LOGIN_ERROR);//reset back to default
         
         if (LoginWindowController.getException(authError, CredentialsExpiredException.class) != null) {
-            loginFailureMessage = Labels.getLabel(Constants.LBL_LOGIN_ERROR_EXPIRED_USER);//override generic UserLoginException default
+            loginFailureMessage = StrUtil.getLabel(Constants.LBL_LOGIN_ERROR_EXPIRED_USER);//override generic UserLoginException default
         } else if (LoginWindowController.getException(authError, DisabledException.class) != null) {
             loginFailureMessage = authError.getMessage();//override generic UserLoginException default
         }
@@ -165,7 +165,7 @@ public class LoginPaneController extends GenericForwardComposer<Component> {
         
         switch (securityDomains.size()) {
             case 0:
-                showStatus(Labels.getLabel(Constants.LBL_LOGIN_NO_VALID_DOMAINS));
+                showStatus(StrUtil.getLabel(Constants.LBL_LOGIN_NO_VALID_DOMAINS));
                 return;
                 
             case 1:
@@ -278,11 +278,11 @@ public class LoginPaneController extends GenericForwardComposer<Component> {
             FrameworkWebSupport.setCookie(Constants.DEFAULT_SECURITY_DOMAIN, securityDomainId);
             session.setAttribute(Constants.DEFAULT_USERNAME, username);
             txtUsername.setValue(securityDomainId + "\\" + username);
-            showStatus(Labels.getLabel(Constants.LBL_LOGIN_PROGRESS));
+            showStatus(StrUtil.getLabel(Constants.LBL_LOGIN_PROGRESS));
             session.setAttribute(org.carewebframework.security.spring.Constants.SAVED_REQUEST, savedRequest);
             Events.sendEvent("onSubmit", loginRoot.getRoot(), null);
         } else {
-            showMessage(Labels.getLabel(Constants.LBL_LOGIN_REQUIRED_FIELDS));
+            showMessage(StrUtil.getLabel(Constants.LBL_LOGIN_REQUIRED_FIELDS));
             pane.setVisible(true);
         }
     }

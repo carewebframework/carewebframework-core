@@ -9,10 +9,10 @@
  */
 package org.carewebframework.shell.designer;
 
+import org.carewebframework.common.StrUtil;
 import org.carewebframework.ui.zk.PopupDialog;
 import org.carewebframework.ui.zk.ZKUtil;
 
-import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.ui.util.Clients;
@@ -40,7 +40,7 @@ public class ClipboardViewer extends Window {
     
     private boolean modified;
     
-    private final String MSG_EMPTY = Labels.getLabel("cwf.shell.clipboard.viewer.message.empty");
+    private final String MSG_EMPTY = StrUtil.getLabel("cwf.shell.clipboard.viewer.message.empty");
     
     /**
      * Show viewer.

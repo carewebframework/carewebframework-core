@@ -14,6 +14,7 @@ import java.util.Map;
 
 import org.carewebframework.api.domain.IUser;
 import org.carewebframework.api.security.SecurityUtil;
+import org.carewebframework.common.StrUtil;
 import org.carewebframework.security.spring.Constants;
 import org.carewebframework.ui.zk.ZKUtil;
 
@@ -22,7 +23,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.WebAttributes;
 import org.springframework.security.web.savedrequest.SavedRequest;
 
-import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
@@ -116,7 +116,7 @@ public class LoginWindowController extends GenericForwardComposer<Component> {
         }
         
         wireListener(ZKUtil.loadZulPage(form, loginForm, args));
-        getPage().setTitle(Labels.getLabel(title));
+        getPage().setTitle(StrUtil.getLabel(title));
         resetTimer();
     }
     
@@ -153,7 +153,7 @@ public class LoginWindowController extends GenericForwardComposer<Component> {
      * Invoked when inactivity timeout has occurred.
      */
     public void onTimer$timer() {
-        close(Labels.getLabel(Constants.LBL_LOGIN_FORM_TIMEOUT_MESSAGE));
+        close(StrUtil.getLabel(Constants.LBL_LOGIN_FORM_TIMEOUT_MESSAGE));
     }
     
     /**

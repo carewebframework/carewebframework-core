@@ -15,6 +15,7 @@ import java.util.jar.Manifest;
 
 import org.apache.commons.lang.StringUtils;
 
+import org.carewebframework.common.StrUtil;
 import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.plugins.PluginDefinition;
 import org.carewebframework.ui.FrameworkController;
@@ -23,7 +24,6 @@ import org.carewebframework.ui.zk.PopupDialog;
 import org.carewebframework.ui.zk.PromptDialog;
 import org.carewebframework.ui.zk.ZKUtil;
 
-import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.metainfo.PageDefinition;
@@ -128,7 +128,7 @@ public class AboutDialog extends FrameworkController {
          * @return The label value, or the original key value if no label value found.
          */
         private String getLabel(String key) {
-            String label = Labels.getLabel("cwf.shell.about." + key.toString());
+            String label = StrUtil.getLabel("cwf.shell.about." + key.toString());
             return label == null ? key : label;
         }
     }

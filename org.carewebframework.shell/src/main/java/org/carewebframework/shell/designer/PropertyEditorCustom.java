@@ -9,11 +9,11 @@
  */
 package org.carewebframework.shell.designer;
 
+import org.carewebframework.common.StrUtil;
 import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.property.PropertyInfo;
 import org.carewebframework.ui.zk.ZKUtil;
 
-import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
@@ -35,7 +35,7 @@ public class PropertyEditorCustom extends PropertyEditorBase implements EventLis
         bandbox = (Bandbox) component;
         bandbox.setAutodrop(false);
         bandbox.setReadonly(true);
-        bandbox.setText(Labels.getLabel("cwf.shell.designer.propedit.custom.bandbox.prompt"));
+        bandbox.setText(StrUtil.getLabel("cwf.shell.designer.propedit.custom.bandbox.prompt"));
         bandbox.addEventListener(Events.ON_OPEN, this);
         bandpopup = new Bandpopup();
         bandbox.appendChild(bandpopup);

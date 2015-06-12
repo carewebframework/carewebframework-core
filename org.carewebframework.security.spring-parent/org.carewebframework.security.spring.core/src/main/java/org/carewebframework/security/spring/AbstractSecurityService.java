@@ -25,6 +25,7 @@ import org.carewebframework.api.context.IContextManager;
 import org.carewebframework.api.domain.IUser;
 import org.carewebframework.api.security.ISecurityService;
 import org.carewebframework.api.security.SecurityUtil;
+import org.carewebframework.common.StrUtil;
 import org.carewebframework.ui.Application;
 import org.carewebframework.ui.FrameworkWebSupport;
 import org.carewebframework.ui.zk.PopupDialog;
@@ -35,7 +36,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.ObjectUtils;
 
-import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Desktop;
 
 /**
@@ -321,11 +321,11 @@ public abstract class AbstractSecurityService implements ISecurityService {
     public void changePassword() {
         if (canChangePassword()) {
             if (PopupDialog.popup(passwordChangeUrl, false, false) == null) {
-                PromptDialog.showError(Labels.getLabel("password.change.dialog.unavailable"));
+                PromptDialog.showError(StrUtil.getLabel("password.change.dialog.unavailable"));
             }
             
         } else {
-            PromptDialog.showWarning(Labels.getLabel(Constants.LBL_PASSWORD_CHANGE_UNAVAILABLE));
+            PromptDialog.showWarning(StrUtil.getLabel(Constants.LBL_PASSWORD_CHANGE_UNAVAILABLE));
         }
     }
     
@@ -347,7 +347,7 @@ public abstract class AbstractSecurityService implements ISecurityService {
     @Override
     public String generateRandomPassword() {
         int len = getRandomPasswordLength();
-        return SecurityUtil.generateRandomPassword(len, len, Labels.getLabel(Constants.LBL_PASSWORD_RANDOM_CONSTRAINTS)
+        return SecurityUtil.generateRandomPassword(len, len, StrUtil.getLabel(Constants.LBL_PASSWORD_RANDOM_CONSTRAINTS)
                 .split("\n"));
     }
     
@@ -357,7 +357,7 @@ public abstract class AbstractSecurityService implements ISecurityService {
      * @return Minimum length for random password.
      */
     protected int getRandomPasswordLength() {
-        return NumberUtils.toInt(Labels.getLabel(Constants.LBL_PASSWORD_RANDOM_LENGTH), 12);
+        return NumberUtils.toInt(StrUtil.getLabel(Constants.LBL_PASSWORD_RANDOM_LENGTH), 12);
     }
     
 }

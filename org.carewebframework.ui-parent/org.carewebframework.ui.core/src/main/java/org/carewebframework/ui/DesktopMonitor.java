@@ -34,7 +34,6 @@ import org.carewebframework.ui.Application.Command;
 import org.carewebframework.ui.zk.MessageWindow;
 import org.carewebframework.ui.zk.ZKUtil;
 
-import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuService;
 import org.zkoss.zk.ui.Component;
@@ -105,7 +104,7 @@ public class DesktopMonitor extends Thread {
          * @return Fully formatted label value.
          */
         public String getLabel(String label, Object... params) {
-            return Labels.getLabel(format(label), params);
+            return StrUtil.getLabel(format(label), params);
         }
         
         /**
@@ -386,7 +385,7 @@ public class DesktopMonitor extends Thread {
         if (mode == Mode.SHUTDOWN) {
             updateShutdown(0);
             eventManager.fireLocalEvent(MessageWindow.EVENT_SHOW,
-                StringUtils.isEmpty(message) ? Labels.getLabel("cwf.timeout.shutdown.abort.message") : message);
+                StringUtils.isEmpty(message) ? StrUtil.getLabel("cwf.timeout.shutdown.abort.message") : message);
         }
     }
     
@@ -532,7 +531,7 @@ public class DesktopMonitor extends Thread {
             if (securityService.validatePassword(s)) {
                 setMode(Mode.BASELINE);
             } else {
-                lblInfo.setValue(Labels.getLabel("cwf.timeout.lock.badpassword.message"));
+                lblInfo.setValue(StrUtil.getLabel("cwf.timeout.lock.badpassword.message"));
             }
         }
     }

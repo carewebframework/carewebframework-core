@@ -511,9 +511,9 @@ public class StrUtil {
                 // Ignore and try next message source.
             }
         }
-        // Failing resolution, just return the label identifier.
+        // Failing resolution, just return null.
         log.warn("Label not found for identifier: " + id);
-        return id;
+        return null;
     }
     
     /**

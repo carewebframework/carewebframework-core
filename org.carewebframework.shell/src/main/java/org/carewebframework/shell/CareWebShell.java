@@ -26,6 +26,7 @@ import org.carewebframework.api.event.IEventManager;
 import org.carewebframework.api.property.PropertyUtil;
 import org.carewebframework.api.security.SecurityUtil;
 import org.carewebframework.api.spring.SpringUtil;
+import org.carewebframework.common.StrUtil;
 import org.carewebframework.help.IHelpSet;
 import org.carewebframework.shell.help.HelpDefinition;
 import org.carewebframework.shell.help.HelpUtil;
@@ -45,7 +46,6 @@ import org.carewebframework.ui.zk.MessageWindow.MessageInfo;
 import org.carewebframework.ui.zk.PromptDialog;
 import org.carewebframework.ui.zk.ZKUtil;
 
-import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.event.ClientInfoEvent;
@@ -68,15 +68,15 @@ public class CareWebShell extends Div implements AfterCompose {
     
     protected static final Log log = LogFactory.getLog(CareWebShell.class);
     
-    public final String LBL_CONFIRM_CLOSE = Labels.getLabel("cwf.shell.confirmclose.message");
+    public final String LBL_CONFIRM_CLOSE = StrUtil.getLabel("cwf.shell.confirmclose.message");
     
-    public final String LBL_NO_LAYOUT = Labels.getLabel("cwf.shell.nolayout.message");
+    public final String LBL_NO_LAYOUT = StrUtil.getLabel("cwf.shell.nolayout.message");
     
-    public final String LBL_LOGOUT_CONFIRMATION = Labels.getLabel("cwf.shell.logout.confirmation.message");
+    public final String LBL_LOGOUT_CONFIRMATION = StrUtil.getLabel("cwf.shell.logout.confirmation.message");
     
-    public final String LBL_LOGOUT_CONFIRMATION_CAPTION = Labels.getLabel("cwf.shell.logout.confirmation.caption");
+    public final String LBL_LOGOUT_CONFIRMATION_CAPTION = StrUtil.getLabel("cwf.shell.logout.confirmation.caption");
     
-    public final String LBL_LOGOUT_CANCEL = Labels.getLabel("cwf.shell.logout.cancel.message");
+    public final String LBL_LOGOUT_CANCEL = StrUtil.getLabel("cwf.shell.logout.cancel.message");
     
     private final AppFramework appFramework = FrameworkUtil.getAppFramework();
     

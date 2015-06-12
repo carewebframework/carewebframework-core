@@ -18,7 +18,6 @@ import org.carewebframework.common.StrUtil;
 import org.carewebframework.help.HelpSearcher.IHelpSearchListener;
 
 import org.zkoss.image.AImage;
-import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
@@ -157,7 +156,7 @@ public class HelpSearchTab extends HelpTab implements ListitemRenderer<HelpSearc
      * @param message Message to display.
      */
     private void showMessage(String message) {
-        message = message == null ? null : Labels.getLabel(message);
+        message = message == null ? null : StrUtil.getLabel(message);
         lblNoResultsFound.setValue(message);
         lblNoResultsFound.setVisible(!StringUtils.isEmpty(message));
         lstSrchResults.setVisible(!lblNoResultsFound.isVisible());

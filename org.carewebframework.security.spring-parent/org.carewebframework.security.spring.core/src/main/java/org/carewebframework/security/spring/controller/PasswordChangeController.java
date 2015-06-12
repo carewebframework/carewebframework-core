@@ -16,7 +16,6 @@ import org.carewebframework.api.security.ISecurityService;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.ui.zk.PromptDialog;
 
-import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.util.GenericForwardComposer;
@@ -125,7 +124,7 @@ public class PasswordChangeController extends GenericForwardComposer<Component> 
             panel.getRoot().detach();
         } else {
             Events.sendEvent(Events.ON_CLOSE, panel.getRoot(),
-                Labels.getLabel("password.change.dialog.password.change.canceled"));
+                StrUtil.getLabel("password.change.dialog.password.change.canceled"));
         }
     }
     

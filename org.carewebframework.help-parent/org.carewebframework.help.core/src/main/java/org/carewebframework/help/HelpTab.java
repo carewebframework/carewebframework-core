@@ -11,10 +11,10 @@ package org.carewebframework.help;
 
 import java.util.List;
 
+import org.carewebframework.common.StrUtil;
 import org.carewebframework.help.HelpHistory.ITopicListener;
 import org.carewebframework.ui.zk.ZKUtil;
 
-import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.IdSpace;
@@ -73,7 +73,7 @@ public abstract class HelpTab extends Tabpanel implements IdSpace, ITopicListene
         this.viewType = viewType;
         setStyle("overflow:auto");
         addToTabbox();
-        String label = Labels.getLabel("cwf.help.tab." + viewType.name().toLowerCase() + ".label");
+        String label = StrUtil.getLabel("cwf.help.tab." + viewType.name().toLowerCase() + ".label");
         tab.setLabel(label == null ? viewType.name() : label);
         tab.addForward(Events.ON_SELECT, this, null);
         
