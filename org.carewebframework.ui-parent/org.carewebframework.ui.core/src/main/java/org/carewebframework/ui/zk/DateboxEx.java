@@ -23,6 +23,11 @@ public class DateboxEx extends Datebox {
     
     private static final long serialVersionUID = 1L;
     
+    public DateboxEx() {
+        super();
+        setFormat(DateUtil.Format.WITHOUT_TIME.getPattern());
+    }
+    
     /**
      * Parses the input value using enhanced date parsing.
      * 
