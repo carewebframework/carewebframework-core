@@ -177,15 +177,20 @@ public class LoginPaneController extends GenericForwardComposer<Component> {
                 break;
         }
         
+        boolean defaultSet = false;
+        
         for (ISecurityDomain securityDomain : securityDomains) {
             Listitem li = new Listitem();
             li.setValue(securityDomain);
             lstDomain.appendChild(li);
             li.appendChild(new Listcell(securityDomain.getName()));
             
-            if (securityDomainId != null && securityDomainId.equals(securityDomain.getLogicalId())) {
-                li.setSelected(true);
-                securityDomainId = null;
+            if (!defaultSet) {
+                if ((securityDomainId != null && securityDomainId.equals(securityDomain.getLogicalId()))
+                        || (securityDomainId == null && securityDomain.getAttribute("default") != null)) {
+                    li.setSelected(true);
+                    defaultSet = true;
+                }
             }
         }
         
