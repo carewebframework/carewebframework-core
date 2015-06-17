@@ -275,7 +275,7 @@ public class UIElementTreePane extends UIElementZKBase {
      */
     @Override
     public void afterMoveTo(int index) {
-        moveChild(node, index + 1);
+        moveChild(node, index);
     }
     
     /**
