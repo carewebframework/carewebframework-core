@@ -226,9 +226,15 @@ public class UIElementTreePane extends UIElementZKBase {
     public void bind() {
         setTreeView(getAncestor(UIElementTreeView.class));
         treeView.getInnerComponent().appendChild(pane);
+        getNodeParent().appendChild(node);
+    }
+    
+    /**
+     * Returns the parent component for this node.
+     */
+    private Component getNodeParent() {
         UIElementBase parent = getParent();
-        Component root = parent == treeView ? treeView.getSelector() : ((UIElementTreePane) parent).node;
-        root.appendChild(node);
+        return parent == treeView ? treeView.getSelector() : ((UIElementTreePane) parent).node;
     }
     
     /**
@@ -275,7 +281,7 @@ public class UIElementTreePane extends UIElementZKBase {
      */
     @Override
     public void afterMoveTo(int index) {
-        moveChild(node, index);
+        moveChild(node, getParent() == treeView ? index : index + 1);
     }
     
     /**
