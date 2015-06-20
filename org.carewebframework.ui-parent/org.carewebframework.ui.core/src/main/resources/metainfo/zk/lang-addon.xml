@@ -3,7 +3,7 @@
 	<addon-name>cwf.ui</addon-name>
 	<language-name>xul/html</language-name>
 
-	<javascript-module name="cwf" version="4.0.9" />
+	<javascript-module name="cwf" version="4.0.10" />
 
 	<javascript src="~./org/carewebframework/ui/zk/common.js"
 		merge="true" />
@@ -12,7 +12,7 @@
 	<javascript src="~./org/carewebframework/ui/ext/swf/swfobject.js"
 		merge="true" />
 	<javascript
-		src="~./org/carewebframework/ui/ext/jquery/ui/1.11.2/jquery-ui.min.js"
+		src="~./org/carewebframework/ui/ext/jquery/ui/jquery-ui.min.js"
 		merge="true" />
 	<javascript
 		src="~./org/carewebframework/ui/ext/jquery/uploadify/jquery.uploadify-3.2.1.min.js"
@@ -28,13 +28,13 @@
 		merge="true" />
 
 	<stylesheet
-		href="~./org/carewebframework/ui/ext/jquery/ui/1.11.2/jquery-ui.min.css"
+		href="~./org/carewebframework/ui/ext/jquery/ui/jquery-ui.min.css"
 		type="text/css" />
 	<stylesheet
-		href="~./org/carewebframework/ui/ext/jquery/ui/1.11.2/jquery-ui.structure.min.css"
+		href="~./org/carewebframework/ui/ext/jquery/ui/jquery-ui.structure.min.css"
 		type="text/css" />
 	<stylesheet
-		href="~./org/carewebframework/ui/ext/jquery/ui/1.11.2/jquery-ui.theme.min.css"
+		href="~./org/carewebframework/ui/ext/jquery/ui/jquery-ui.theme.min.css"
 		type="text/css" />
 	<stylesheet
 		href="~./org/carewebframework/ui/ext/bootstrap/css/bootstrap.min.css"
