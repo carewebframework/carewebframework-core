@@ -51,6 +51,7 @@ import org.zkoss.zul.A;
 import org.zkoss.zul.Html;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Popup;
+import org.zkoss.zul.impl.InputElement;
 import org.zkoss.zul.impl.XulElement;
 
 /**
@@ -537,6 +538,37 @@ public class ZKUtil {
                 if (comp != null) {
                     return comp;
                 }
+            }
+        }
+        
+        return null;
+    }
+    
+    /**
+     * Sets focus to first input element under the parent that is capable of receiving focus.
+     * 
+     * @param parent Parent component.
+     * @param select If true, select contents after setting focus.
+     * @return The input element that received focus, or null if focus was not set.
+     */
+    public static InputElement focusFirst(Component parent, boolean select) {
+        for (Component child : parent.getChildren()) {
+            InputElement ele;
+            
+            if (child instanceof InputElement) {
+                ele = (InputElement) child;
+                
+                if (ele.isVisible() && !ele.isDisabled() && !ele.isReadonly()) {
+                    ele.focus();
+                    
+                    if (select) {
+                        ele.select();
+                    }
+                    
+                    return ele;
+                }
+            } else if ((ele = focusFirst(child, select)) != null) {
+                return ele;
             }
         }
         
