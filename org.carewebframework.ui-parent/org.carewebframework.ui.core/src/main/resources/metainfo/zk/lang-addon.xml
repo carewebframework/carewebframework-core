@@ -3,7 +3,7 @@
 	<addon-name>cwf.ui</addon-name>
 	<language-name>xul/html</language-name>
 
-	<javascript-module name="cwf" version="4.0.10" />
+	<javascript-module name="cwf" version="4.0.11" />
 
 	<javascript src="~./org/carewebframework/ui/zk/common.js"
 		merge="true" />
@@ -62,10 +62,6 @@
 		</component-class>
 		<widget-class>cwf.ext.Datebox
 		</widget-class>
-		<property>
-			<property-name>constraint</property-name>
-			<property-value>no future,no empty</property-value>
-		</property>
 		<property>
 			<property-name>lenient</property-name>
 			<property-value>true</property-value>
