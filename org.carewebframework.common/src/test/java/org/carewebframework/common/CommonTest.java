@@ -264,4 +264,14 @@ public class CommonTest {
         System.out.println(object);
     }
     
+    @Test
+    public void testListMethods() {
+        String original = "1,2,3,4,5";
+        List<String> list = StrUtil.toList(original, ",");
+        assertEquals(5, list.size());
+        String str = StrUtil.fromList(list, ",");
+        assertEquals(original, str);
+        list = StrUtil.toList(",,3,4,5,", ",");
+        assertEquals(5, list.size());
+    }
 }
