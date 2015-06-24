@@ -405,13 +405,16 @@ public class StrUtil {
      */
     public static String fromList(Iterable<?> list, String delimiter, String dflt) {
         StringBuilder sb = new StringBuilder();
+        boolean addDelimiter = false;
         
         for (Object ln : list) {
             ln = ln == null ? dflt : ln;
             
             if (ln != null) {
-                if (sb.length() > 0) {
+                if (addDelimiter) {
                     sb.append(delimiter);
+                } else {
+                    addDelimiter = true;
                 }
                 
                 sb.append(ln);
