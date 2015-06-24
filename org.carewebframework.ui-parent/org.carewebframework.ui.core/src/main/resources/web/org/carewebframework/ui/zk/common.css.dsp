@@ -300,6 +300,12 @@
  	letter-spacing: -4px;
 }
 
+.btn-toolbar .btn,
+.btn-toolbar .btn-group,
+.btn-toolbar .input-group {
+  float: none;
+}
+
 /* ZK overrides */
 
 .z-window-modal-header {
