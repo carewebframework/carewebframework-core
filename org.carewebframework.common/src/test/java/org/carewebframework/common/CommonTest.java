@@ -16,6 +16,7 @@ import static org.junit.Assert.assertTrue;
 import java.awt.Color;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
@@ -260,18 +261,33 @@ public class CommonTest {
         assertTrue(sb.toString().isEmpty());
     }
     
+    @Test
+    public void testListMethods() {
+        String original = "1,2,3,4,5";
+        // Basic conversion to and from list
+        List<String> strList = StrUtil.toList(original, ",");
+        assertEquals(5, strList.size());
+        String str = StrUtil.fromList(strList, ",");
+        assertEquals(original, str);
+        // Behavior with empty elements and trailing delimiter
+        strList = StrUtil.toList(",,3,4,5,", ",");
+        assertEquals(5, strList.size());
+        // Behavior with non-string list
+        List<Integer> intList = Arrays.asList(new Integer[] { 1, 2, 3, 4, 5 });
+        str = StrUtil.fromList(intList, ",");
+        assertEquals(original, str);
+        // Behavior with null list entry, with and without default value
+        intList = Arrays.asList(new Integer[] { 1, 2, null, 4, 5 });
+        str = StrUtil.fromList(intList, ",");
+        assertEquals("1,2,,4,5", str);
+        str = StrUtil.fromList(intList, ",", null);
+        assertEquals("1,2,4,5", str);
+        str = StrUtil.fromList(intList, ",", "3");
+        assertEquals(original, str);
+    }
+    
     private void print(Object object) {
         System.out.println(object);
     }
     
-    @Test
-    public void testListMethods() {
-        String original = "1,2,3,4,5";
-        List<String> list = StrUtil.toList(original, ",");
-        assertEquals(5, list.size());
-        String str = StrUtil.fromList(list, ",");
-        assertEquals(original, str);
-        list = StrUtil.toList(",,3,4,5,", ",");
-        assertEquals(5, list.size());
-    }
 }
