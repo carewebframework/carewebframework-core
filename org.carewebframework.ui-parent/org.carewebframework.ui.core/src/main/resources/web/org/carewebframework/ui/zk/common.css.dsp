@@ -183,7 +183,8 @@
 	display: none!important;
 }
 
-.cwf-menupopup-noimages .z-menu-image {
+.cwf-menupopup-noimages .z-menu-image,
+.cwf-menupopup-noimages .z-menuitem-image {
 	display: none;	
 }
 
