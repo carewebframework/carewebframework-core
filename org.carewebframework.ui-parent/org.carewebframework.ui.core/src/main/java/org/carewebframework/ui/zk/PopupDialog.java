@@ -86,8 +86,9 @@ public class PopupDialog extends Window {
             
             if (window != null) { // If any top component is a window, discard temp parent
                 window.setParent(null);
+                Component child;
                 
-                for (Component child : parent.getChildren()) {
+                while ((child = parent.getFirstChild()) != null) {
                     child.setParent(window);
                 }
                 

@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -16,7 +16,7 @@ import org.zkoss.zul.Listitem;
 import org.zkoss.zul.ListitemRenderer;
 
 /**
- * Base row renderer.
+ * Base list item renderer.
  * 
  * @param <T> Data type of list item-associated object.
  * @param <G> Data type of group-associated object.
@@ -40,7 +40,7 @@ public abstract class AbstractListitemRenderer<T, G> extends AbstractRenderer im
     
     @SuppressWarnings("unchecked")
     @Override
-    public final void render(final Listitem item, final Object object, int index) throws Exception {
+    public final void render(Listitem item, Object object, int index) throws Exception {
         item.setValue(object);
         
         if (item instanceof Listgroup) {

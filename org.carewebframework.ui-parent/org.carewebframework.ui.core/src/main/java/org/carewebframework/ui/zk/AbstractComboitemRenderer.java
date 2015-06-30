@@ -27,7 +27,7 @@ public abstract class AbstractComboitemRenderer<T> extends AbstractRenderer impl
     }
     
     @Override
-    public final void render(final Comboitem item, final T object, int index) throws Exception {
+    public final void render(Comboitem item, T object, int index) throws Exception {
         item.setValue(object);
         renderItem(item, object);
     }
