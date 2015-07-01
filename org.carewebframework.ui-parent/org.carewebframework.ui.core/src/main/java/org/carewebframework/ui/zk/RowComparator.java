@@ -327,12 +327,17 @@ public class RowComparator implements Comparator<Object>, Serializable {
     }
     
     /**
-     * Gets a value from the model object using the getter method specified in _beanProperty.
+     * Gets a value from the model object using the getter method.
      * 
      * @param o The model object.
      * @return Value returned by the getter method.
      */
     private Object getValue(Object o) {
+        // Special case that returns the model object itself, not a property of the object.
+        if ("this".equals(_getter)) {
+            return o;
+        }
+        // Otherwise, use getter to retrieve a property value from the model object.
         try {
             Object[] params = null;
             Method method = o.getClass().getMethod(_getter, (Class<?>[]) params);
