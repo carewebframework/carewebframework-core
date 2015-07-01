@@ -34,45 +34,55 @@ public abstract class AbstractRowRenderer<T, G> extends AbstractRenderer impleme
     
     private static final String ATTR_DETAIL = AbstractRowRenderer.class.getName() + ".detail";
     
-    private static final String ATTR_EXPAND = AbstractRowRenderer.class.getName() + ".expand";
+    private static final String ATTR_DETAIL_EXPAND = ATTR_DETAIL + ".expand";
+    
+    private static final String ATTR_GROUP_EXPAND = AbstractRowRenderer.class.getName() + ".group.expand";
     
     /**
-     * Associates the detail view with the specified component. This allows better performance when
+     * Associates the detail view with the specified row. This allows better performance when
      * changing the expand detail state by avoiding iterating over the component tree to find the
      * detail component.
      * 
-     * @param comp Component with which to associate the detail.
+     * @param row Row with which to associate the detail.
      * @param detail The detail.
      */
-    private static void associateDetail(Component comp, Detail detail) {
-        comp.setAttribute(ATTR_DETAIL, detail);
+    private static void associateDetail(Row row, Detail detail) {
+        row.setAttribute(ATTR_DETAIL, detail);
     }
     
     /**
-     * Returns the detail associated with the component.
+     * Returns the detail associated with the row.
      * 
-     * @param comp The component whose associated detail is sought.
+     * @param row The row whose associated detail is sought.
      * @return The associated detail, or null if none.
      */
-    private static Detail getDetail(Component comp) {
-        return (Detail) comp.getAttribute(ATTR_DETAIL);
+    private static Detail getDetail(Row row) {
+        return row.hasAttribute(ATTR_DETAIL) ? (Detail) row.getAttribute(ATTR_DETAIL) : row.getDetailChild();
     }
     
     /**
      * Updates the detail open state for all detail views in the grid.
      * 
      * @param grid The grid.
-     * @param open The open state.
+     * @param detailOpen The open state for detail views. If null, the open state for detail views
+     *            is unaffected.
+     * @param groupOpen The open state for groups. If null, the open state for groups is unaffected.
      */
-    private static void setDetailState(Grid grid, boolean open) {
+    public static void expandAll(Grid grid, Boolean detailOpen, Boolean groupOpen) {
         Rows rows = grid.getRows();
         
         if (rows != null) {
-            for (Component comp : rows.getChildren()) {
-                Detail detail = getDetail(comp);
+            for (Row row : rows.<Row> getChildren()) {
+                if (groupOpen != null && row instanceof Group) {
+                    ((Group) row).setOpen(groupOpen);
+                }
                 
-                if (detail != null) {
-                    detail.setOpen(open);
+                if (detailOpen != null) {
+                    Detail detail = getDetail(row);
+                    
+                    if (detail != null) {
+                        detail.setOpen(detailOpen);
+                    }
                 }
             }
         }
@@ -85,13 +95,13 @@ public abstract class AbstractRowRenderer<T, G> extends AbstractRenderer impleme
      * @return The default detail expansion state.
      */
     public static boolean getExpandDetail(Grid grid) {
-        Boolean expandDetail = (Boolean) grid.getAttribute(ATTR_EXPAND);
+        Boolean expandDetail = (Boolean) grid.getAttribute(ATTR_DETAIL_EXPAND);
         return expandDetail != null && expandDetail;
     }
     
     /**
-     * Sets the detail expansion state for the grid and for any existing detail views within the
-     * grid.
+     * Sets the default detail expansion state for the grid and for any existing detail views within
+     * the grid.
      * 
      * @param grid The grid.
      * @param value The default detail expansion state.
@@ -100,8 +110,34 @@ public abstract class AbstractRowRenderer<T, G> extends AbstractRenderer impleme
         boolean oldValue = getExpandDetail(grid);
         
         if (oldValue != value) {
-            grid.setAttribute(ATTR_EXPAND, value);
-            setDetailState(grid, value);
+            grid.setAttribute(ATTR_DETAIL_EXPAND, value);
+            expandAll(grid, value, null);
+        }
+    }
+    
+    /**
+     * Returns the default group expansion state for the grid.
+     * 
+     * @param grid The grid.
+     * @return The default group expansion state.
+     */
+    public static boolean getExpandGroup(Grid grid) {
+        Boolean expandGroup = (Boolean) grid.getAttribute(ATTR_GROUP_EXPAND);
+        return expandGroup == null || expandGroup;
+    }
+    
+    /**
+     * Sets the default group expansion state for all groups within the grid.
+     * 
+     * @param grid The grid.
+     * @param value The default group expansion state.
+     */
+    public static void setExpandGroup(Grid grid, boolean value) {
+        boolean oldValue = getExpandGroup(grid);
+        
+        if (oldValue != value) {
+            grid.setAttribute(ATTR_GROUP_EXPAND, value);
+            expandAll(grid, null, value);
         }
     }
     
@@ -153,11 +189,13 @@ public abstract class AbstractRowRenderer<T, G> extends AbstractRenderer impleme
      */
     @SuppressWarnings("unchecked")
     @Override
-    public final void render(final Row row, final Object object, int index) throws Exception {
+    public final void render(Row row, Object object, int index) throws Exception {
         row.setValue(object);
         
         if (row instanceof Group) {
-            renderGroup((Group) row, (G) object);
+            Group group = (Group) row;
+            group.setOpen(getExpandGroup(row.getGrid()));
+            renderGroup(group, (G) object);
             return;
         }
         
@@ -172,6 +210,8 @@ public abstract class AbstractRowRenderer<T, G> extends AbstractRenderer impleme
             if (detail.getFirstChild() == null) {
                 detail.setVisible(false);
             }
+        } else {
+            associateDetail(row, null);
         }
     }
     
@@ -296,11 +336,11 @@ public abstract class AbstractRowRenderer<T, G> extends AbstractRenderer impleme
      * @return The detail grid.
      */
     public Grid createDetailGrid(Component parent, String[] colWidths, String[] colLabels) {
-        final Grid detailGrid = new Grid();
+        Grid detailGrid = new Grid();
         detailGrid.setOddRowSclass("none");
         detailGrid.setWidth("100%");
         detailGrid.setParent(parent);
-        final Columns detailColumns = new Columns();
+        Columns detailColumns = new Columns();
         detailColumns.setSizable(true);
         detailColumns.setParent(detailGrid);
         int cols = Math.max(colWidths == null ? 0 : colWidths.length, colLabels == null ? 0 : colLabels.length);
