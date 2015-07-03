@@ -48,10 +48,13 @@ import org.zkoss.zk.ui.metainfo.PageDefinition;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zk.ui.util.ConventionWires;
 import org.zkoss.zul.A;
+import org.zkoss.zul.Checkbox;
+import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Html;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Popup;
 import org.zkoss.zul.impl.InputElement;
+import org.zkoss.zul.impl.MeshElement;
 import org.zkoss.zul.impl.XulElement;
 
 /**
@@ -1140,8 +1143,7 @@ public class ZKUtil {
      * @return The node corresponding to the specified path, or null if not found.
      */
     @SuppressWarnings("unchecked")
-    public static <ANCHOR extends Component, NODE extends Component> NODE findNode(Component root,
-                                                                                   Class<ANCHOR> anchorClass,
+    public static <ANCHOR extends Component, NODE extends Component> NODE findNode(Component root, Class<ANCHOR> anchorClass,
                                                                                    Class<NODE> nodeClass, String path,
                                                                                    boolean create, MatchMode matchMode) {
         String[] pcs = path.split("\\\\");
@@ -1164,8 +1166,8 @@ public class ZKUtil {
                 
                 node = null;
                 int index = matchMode == MatchMode.INDEX || matchMode == MatchMode.AUTO ? NumberUtils.toInt(pc, -1) : -1;
-                MatchMode mode = matchMode != MatchMode.AUTO ? matchMode : index >= 0 ? MatchMode.INDEX
-                        : MatchMode.CASE_INSENSITIVE;
+                MatchMode mode = matchMode != MatchMode.AUTO ? matchMode
+                        : index >= 0 ? MatchMode.INDEX : MatchMode.CASE_INSENSITIVE;
                 List<Component> children = parent.getChildren();
                 int size = children.size();
                 
@@ -1225,8 +1227,8 @@ public class ZKUtil {
      * @return A JavaScriptValue object or null if the input was null.
      */
     public static JavaScriptValue toJavaScriptValue(String snippet) {
-        return snippet == null ? null : new JavaScriptValue(snippet.startsWith("function") ? snippet : "function() {"
-                + snippet + "}");
+        return snippet == null ? null
+                : new JavaScriptValue(snippet.startsWith("function") ? snippet : "function() {" + snippet + "}");
     }
     
     /**
@@ -1255,6 +1257,38 @@ public class ZKUtil {
     public static void setCustomColorLogic(HtmlBasedComponent comp, String snippet) {
         snippet = snippet == null ? null : snippet.startsWith("function") ? snippet : "function(value) {" + snippet + "}";
         comp.setWidgetOverride(CUSTOM_COLOR_OVERRIDE, snippet);
+    }
+    
+    /**
+     * Recursively wires input elements to a common event handler for the detection of changes.
+     * 
+     * @param parent The parent component.
+     * @param targetComponent The component to receive the change events.
+     * @param targetEvent The name of the event to send to the target component.
+     */
+    public static void wireChangeEvents(Component parent, Component targetComponent, String targetEvent) {
+        for (Component child : parent.getChildren()) {
+            String sourceEvents = null;
+            
+            if (child instanceof Combobox) {
+                sourceEvents = Events.ON_CHANGING + "," + Events.ON_SELECT;
+            } else if (child instanceof InputElement) {
+                sourceEvents = Events.ON_CHANGING + "," + Events.ON_CHANGE;
+            } else if (child instanceof Checkbox) {
+                sourceEvents = Events.ON_CHECK;
+            } else if (child instanceof MeshElement) {
+                sourceEvents = Events.ON_SELECT;
+            }
+            
+            if (sourceEvents != null) {
+                for (String eventName : sourceEvents.split("\\,")) {
+                    child.addForward(eventName, targetComponent, targetEvent);
+                }
+            }
+            
+            wireChangeEvents(child, targetComponent, targetEvent);
+        }
+        
     }
     
     /**
