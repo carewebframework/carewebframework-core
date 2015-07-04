@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -94,12 +94,14 @@ public class ListUtil {
      * @return The index of the matching item, or -1 if no match found.
      */
     public static int findComboboxItem(Combobox cbo, Object object, boolean useLabel) {
-        for (int i = 0; i < cbo.getItemCount(); i++) {
-            Comboitem item = cbo.getItemAtIndex(i);
-            Object value = useLabel ? item.getLabel().toLowerCase() : item.getValue();
-            
-            if (object == value || object.equals(value)) {
-                return i;
+        if (object != null) {
+            for (int i = 0; i < cbo.getItemCount(); i++) {
+                Comboitem item = cbo.getItemAtIndex(i);
+                Object value = useLabel ? item.getLabel().toLowerCase() : item.getValue();
+                
+                if (object == value || object.equals(value)) {
+                    return i;
+                }
             }
         }
         
@@ -164,13 +166,15 @@ public class ListUtil {
      * @return The index of the matching item, or -1 if no match found.
      */
     public static int findListboxItem(Listbox lb, Object object, boolean useLabel) {
-        for (int i = 0; i < lb.getItemCount(); i++) {
-            Listitem item = lb.getItemAtIndex(i);
-            lb.renderItem(item);
-            Object value = useLabel ? item.getLabel().toLowerCase() : item.getValue();
-            
-            if (object == value || object.equals(value)) {
-                return i;
+        if (object != null) {
+            for (int i = 0; i < lb.getItemCount(); i++) {
+                Listitem item = lb.getItemAtIndex(i);
+                lb.renderItem(item);
+                Object value = useLabel ? item.getLabel().toLowerCase() : item.getValue();
+                
+                if (object == value || object.equals(value)) {
+                    return i;
+                }
             }
         }
         
