@@ -9,4 +9,5 @@
 	<widget name="MenuEx"/>
 	<widget name="Window"/>
 	<widget name="Panel"/>
+	<widget name="LabeledElement"/>
 </package>

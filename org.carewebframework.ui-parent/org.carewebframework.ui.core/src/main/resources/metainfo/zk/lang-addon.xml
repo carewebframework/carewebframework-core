@@ -3,7 +3,7 @@
 	<addon-name>cwf.ui</addon-name>
 	<language-name>xul/html</language-name>
 
-	<javascript-module name="cwf" version="4.0.11" />
+	<javascript-module name="cwf" version="4.0.12" />
 
 	<javascript src="~./org/carewebframework/ui/zk/common.js"
 		merge="true" />
@@ -142,6 +142,17 @@
 		<component-class>org.carewebframework.ui.zk.CapsLockLabel
 		</component-class>
 		<widget-class>cwf.ext.CapsLockLabel</widget-class>
+	</component>
+	<component>
+		<component-name>labeledelement</component-name>
+		<component-class>org.carewebframework.ui.zk.LabeledElement
+		</component-class>
+		<widget-class>cwf.ext.LabeledElement</widget-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>mold/LabeledElement.js</mold-uri>
+			<css-uri>css/LabeledElement.css.dsp</css-uri>
+		</mold>
 	</component>
 	<component>
 		<component-name>messagewindow</component-name>
