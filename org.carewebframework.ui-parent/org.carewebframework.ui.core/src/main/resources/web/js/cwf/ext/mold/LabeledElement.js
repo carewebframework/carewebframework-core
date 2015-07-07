@@ -1,5 +1,5 @@
 function (out) {
-	function outSpan() {
+	function outChildren() {
 		out.push('<span>');
 		for (var w = this.firstChild; w; w = w.nextSibling)
 			w.redraw(out);
@@ -8,20 +8,21 @@ function (out) {
 	
 	function outLabel() {
 		var label = this.encodedLabel_();
-		var class1 = this.getZclass() + "-" + this._position;
-		var class2 = this.getZclass() + "-" + this._align;
-		out.push('<div class="' + class1 + ' ' + class2 +'">', label, '</div>');
+		out.push('<div>', label, '</div>');
 	}
 	
 	out.push('<div', this.domAttrs_(), '>');
+	var cls = this.getZclass() + "-" + this._position + ' ';
+	cls += this.getZclass() + "-" + this._align;
+	out.push('<span class="' + cls + '">')
 	
 	if (this._position == 'top' || this._position == 'left') {
-		outLabel.apply(this);
-		outSpan.apply(this);
+		outLabel.call(this);
+		outChildren.call(this);
 	} else {
-		outSpan.apply(this);
-		outLabel.apply(this);
+		outChildren.call(this);
+		outLabel.call(this);
 	}
 	
-	out.push('</div>');
+	out.push('</span></div>');
 }
