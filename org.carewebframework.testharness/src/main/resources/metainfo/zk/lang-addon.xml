@@ -3,7 +3,7 @@
 	<depends>cwf.shell</depends>
 	<language-name>xul/html</language-name>
 
-	<javascript-module name="cwf.sandbox" version="4.0.0"/>
+	<javascript-module name="cwf.sandbox" version="4.0.1"/>
 
 	<javascript src="~./org/carewebframework/testharness/codemirror/codemirror.js" />
 	<javascript src="~./org/carewebframework/testharness/codemirror/xml.js" />
