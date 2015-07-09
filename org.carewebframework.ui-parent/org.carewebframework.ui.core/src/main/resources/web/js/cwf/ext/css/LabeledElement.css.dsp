@@ -4,6 +4,10 @@ div.cwf-labeledelement {
 	display: inline-block;
 }
 
+div.cwf-labeledelement>span>* {
+	width: 100%;
+}
+
 .cwf-labeledelement-top,
 .cwf-labeledelement-bottom {
 	display: block;
@@ -19,33 +23,33 @@ div.cwf-labeledelement {
 	display: table-cell;
 }
 
-.cwf-labeledelement-left>div {
+.cwf-labeledelement-left>.cwf-labeledelement-lbl {
 	padding-right: 5px;
 }
 
-.cwf-labeledelement-right>div {
+.cwf-labeledelement-right>.cwf-labeledelement-lbl {
 	padding-left: 5px;
 }
 
-.cwf-labeledelement-top>div {
+.cwf-labeledelement-top>.cwf-labeledelement-lbl {
 	padding-bottom: 2px;
 }
 
-.cwf-labeledelement-bottom>div {
+.cwf-labeledelement-bottom>.cwf-labeledelement-lbl {
 	padding-top: 2px;
 }
 
-.cwf-labeledelement-start>div {
+.cwf-labeledelement-start>.cwf-labeledelement-lbl {
 	vertical-align: top;
 	text-align: left;
 }
 
-.cwf-labeledelement-center>div {
+.cwf-labeledelement-center>.cwf-labeledelement-lbl {
 	vertical-align: middle;
 	text-align: center; 
 }
 
-.cwf-labeledelement-end>div {
+.cwf-labeledelement-end>.cwf-labeledelement-lbl {
 	vertical-align: bottom;
 	text-align: right; 
 }
