@@ -8,7 +8,8 @@ function (out) {
 	
 	function outLabel() {
 		var label = this.encodedLabel_();
-		out.push('<div>', label, '</div>');
+		var style = this._labelStyle ? ' style="' + this._labelStyle + '"' : '';
+		out.push('<div id="', this.uuid, '-lbl', '"', style, '>', label, '</div>');
 	}
 	
 	out.push('<div', this.domAttrs_(), '>');

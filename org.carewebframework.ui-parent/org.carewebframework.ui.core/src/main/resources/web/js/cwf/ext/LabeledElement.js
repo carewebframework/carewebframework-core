@@ -9,6 +9,8 @@ cwf.ext.LabeledElement = zk.$extends(zul.Widget, {
 	_position: 'top',
 	
 	_align: 'start',
+	
+	_labelStyle: null,
 
 	$define: {
 		label: _zkf = function () {
@@ -18,7 +20,12 @@ cwf.ext.LabeledElement = zk.$extends(zul.Widget, {
 		
 		position: _zkf,
 		
-		align: _zkf
+		align: _zkf,
+		
+		labelStyle: function(v) {
+			if (this.desktop)
+				jq(this.$n('lbl')).attr('style', v);
+		}
 	},
 
 	getZclass: function() {
