@@ -25,6 +25,11 @@ cwf.ext.LabeledElement = zk.$extends(zul.Widget, {
 		labelStyle: function(v) {
 			if (this.desktop)
 				jq(this.$n('lbl')).attr('style', v);
+		},
+		
+		labelSclass: function(v) {
+			if (this.desktop)
+				jq(this.$n('lbl')).attr('class', v);
 		}
 	},
 

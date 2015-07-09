@@ -25,12 +25,15 @@ public class LabeledElement extends LabelElement {
     
     private String _labelStyle;
     
+    private String _labelSclass;
+    
     @Override
     protected void renderProperties(org.zkoss.zk.ui.sys.ContentRenderer renderer) throws java.io.IOException {
         super.renderProperties(renderer);
         render(renderer, "align", _align);
         render(renderer, "position", _position);
         render(renderer, "labelStyle", _labelStyle);
+        render(renderer, "labelSclass", _labelSclass);
     }
     
     @Override
@@ -105,6 +108,25 @@ public class LabeledElement extends LabelElement {
     public void setLabelStyle(String labelStyle) {
         _labelStyle = labelStyle;
         smartUpdate("labelStyle", _labelStyle);
+    }
+    
+    /**
+     * Returns the sclass(es) associated with the label.
+     * 
+     * @return The label sclass(es).
+     */
+    public String getLabelSclass() {
+        return _labelSclass;
+    }
+    
+    /**
+     * Sets the sclass(es) of the label.
+     * 
+     * @param labelSclass The label sclass(es).
+     */
+    public void setLabelSclass(String labelSclass) {
+        _labelSclass = labelSclass;
+        smartUpdate("labelSclass", _labelSclass);
     }
     
 }

@@ -9,13 +9,14 @@ function (out) {
 	function outLabel() {
 		var label = this.encodedLabel_();
 		var style = this._labelStyle ? ' style="' + this._labelStyle + '"' : '';
-		out.push('<div id="', this.uuid, '-lbl', '"', style, '>', label, '</div>');
+		var clazz = this._labelSclass ? ' class="' + this._labelSclass + '"' : '';
+		out.push('<div id="', this.uuid, '-lbl', '"', clazz, style, '>', label, '</div>');
 	}
 	
 	out.push('<div', this.domAttrs_(), '>');
-	var cls = this.getZclass() + "-" + this._position + ' ';
-	cls += this.getZclass() + "-" + this._align;
-	out.push('<span class="' + cls + '">')
+	var clazz = this.getZclass() + "-" + this._position + ' ';
+	clazz += this.getZclass() + "-" + this._align;
+	out.push('<span class="', clazz, '">')
 	
 	if (this._position == 'top' || this._position == 'left') {
 		outLabel.call(this);
