@@ -4,10 +4,6 @@ div.cwf-labeledelement {
 	display: inline-block;
 }
 
-div.cwf-labeledelement>span>* {
-	width: 100%;
-}
-
 .cwf-labeledelement-top,
 .cwf-labeledelement-bottom {
 	display: block;
