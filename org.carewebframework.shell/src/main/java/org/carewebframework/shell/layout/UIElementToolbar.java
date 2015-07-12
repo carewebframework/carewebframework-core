@@ -15,6 +15,7 @@ import org.carewebframework.ui.action.ActionListener;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.HtmlBasedComponent;
+import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Toolbar;
 
 /**
@@ -83,8 +84,9 @@ public class UIElementToolbar extends UIElementZKBase {
     }
     
     @Override
-    protected void beforeRemoveChild(UIElementBase child) {
-        super.beforeRemoveChild(child);
+    protected void afterAddChild(UIElementBase child) {
+        super.afterAddChild(child);
+        Clients.resize(toolbar);
     }
     
 }
