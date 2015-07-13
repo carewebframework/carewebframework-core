@@ -178,17 +178,24 @@ public class FrameworkController extends GenericForwardComposer<Component> {
     }
     
     /**
+     * Process a refresh event.
+     */
+    public void onRefresh() {
+        refresh();
+    }
+    
+    /**
      * Override to respond to a refresh request.
      */
     public void refresh() {
-        
+    
     }
     
     /**
      * Override to perform any special cleanup.
      */
     public void cleanup() {
-        
+    
     }
     
     /**
