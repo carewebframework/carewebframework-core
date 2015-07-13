@@ -34,7 +34,7 @@ import org.zkoss.zul.ext.GroupsSortableModel;
  * @param <G> The group class.
  */
 @SuppressWarnings("rawtypes")
-public class HybridModel<T, G> extends AbstractListModel<T> implements Collection<T>, GroupsModel<T, GroupHeader, Object>, GroupsSortableModel<T>, Iterable<T> {
+public class HybridModel<T, G> extends AbstractListModel<T>implements Collection<T>, GroupsModel<T, GroupHeader, Object>, GroupsSortableModel<T>, Iterable<T> {
     
     private static final long serialVersionUID = 1L;
     
@@ -80,7 +80,7 @@ public class HybridModel<T, G> extends AbstractListModel<T> implements Collectio
         }
     }
     
-    public static class GroupHeader<T, G> extends SortedList<T> implements Comparable<GroupHeader> {
+    public static class GroupHeader<T, G> extends SortedList<T>implements Comparable<GroupHeader> {
         
         private static final long serialVersionUID = 1L;
         
@@ -138,8 +138,7 @@ public class HybridModel<T, G> extends AbstractListModel<T> implements Collectio
     private final SortedList<GroupHeader<T, G>> groupHeaders = new SortedList<>(null);
     
     @SuppressWarnings("unchecked")
-    private final SimpleGroupsModel<T, GroupHeader, ?, ?> groupsModel = new SimpleGroupsModel(
-                                                                                              groupHeaders) {
+    private final SimpleGroupsModel<T, GroupHeader, ?, ?> groupsModel = new SimpleGroupsModel(groupHeaders) {
         
         @Override
         public void group(Comparator cmpr, boolean ascending, int colIndex) {
@@ -179,6 +178,10 @@ public class HybridModel<T, G> extends AbstractListModel<T> implements Collectio
     
     public boolean isGrouped() {
         return grouper != null;
+    }
+    
+    public void refresh() {
+        fireEvent(ListDataEvent.CONTENTS_CHANGED, 0, data.size());
     }
     
     private boolean addElement(T element) {
