@@ -84,8 +84,8 @@ public class StrUtil {
      * @return A string array containing the split values.
      */
     public static String[] split(String text, String delimiter, int count, boolean nonull) {
-        String[] pcs = text == null ? new String[count] : StringUtils
-                .splitByWholeSeparatorPreserveAllTokens(text, delimiter);
+        String[] pcs = text == null ? new String[count]
+                : StringUtils.splitByWholeSeparatorPreserveAllTokens(text, delimiter);
         pcs = pcs.length >= count ? pcs : Arrays.copyOf(pcs, count);
         
         if (nonull) {
@@ -140,6 +140,34 @@ public class StrUtil {
         }
         
         return text + (text.isEmpty() ? "" : separator) + value;
+    }
+    
+    /**
+     * Converts a parameter list into a delimited string
+     * 
+     * @param delimiter Delimiter to use.
+     * @param params The parameter list.
+     * @return Parameters as a delimited string.
+     */
+    public static String toDelimitedStr(String delimiter, Object... params) {
+        StringBuilder sb = new StringBuilder();
+        boolean first = true;
+        
+        if (params != null) {
+            for (Object param : params) {
+                if (!first) {
+                    sb.append(delimiter);
+                } else {
+                    first = false;
+                }
+                
+                if (param != null) {
+                    sb.append(param);
+                }
+            }
+        }
+        
+        return sb.toString();
     }
     
     /**
