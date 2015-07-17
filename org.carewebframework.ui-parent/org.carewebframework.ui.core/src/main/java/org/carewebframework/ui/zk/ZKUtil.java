@@ -1273,7 +1273,11 @@ public class ZKUtil {
             if (child instanceof Combobox) {
                 sourceEvents = Events.ON_CHANGING + "," + Events.ON_SELECT;
             } else if (child instanceof InputElement) {
-                sourceEvents = Events.ON_CHANGING + "," + Events.ON_CHANGE;
+                if (((InputElement) child).getInstant()) {
+                    sourceEvents = Events.ON_CHANGE;
+                } else {
+                    sourceEvents = Events.ON_CHANGE + "," + Events.ON_CHANGING;
+                }
             } else if (child instanceof Checkbox) {
                 sourceEvents = Events.ON_CHECK;
             } else if (child instanceof MeshElement) {
