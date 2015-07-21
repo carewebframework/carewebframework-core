@@ -13,8 +13,11 @@ import java.util.Date;
 
 import org.carewebframework.common.DateUtil;
 
+import org.zkoss.util.Dates;
+import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zul.Datebox;
+import org.zkoss.zul.SimpleConstraint;
 
 /**
  * Extends the ZK datebox by enhancing date parsing.
@@ -23,9 +26,77 @@ public class DateboxEx extends Datebox {
     
     private static final long serialVersionUID = 1L;
     
+    /**
+     * Uses DateUtil.parseDate for date parsing.
+     */
+    private static class SimpleDateConstraint extends SimpleConstraint {
+        
+        private static final long serialVersionUID = 1L;
+        
+        private Date _beg, _end;
+        
+        public SimpleDateConstraint(String constraint) {
+            super(constraint);
+            fixConstraint();
+        }
+        
+        @Override
+        protected int parseConstraint(String constraint) throws UiException {
+            if (constraint.startsWith("between")) {
+                int j = constraint.indexOf("and", 7);
+                
+                if (j < 0) {
+                    throw new UiException("Constraint syntax error: " + constraint);
+                }
+                
+                _beg = parseDate(constraint.substring(7, j));
+                _end = parseDate(constraint.substring(j + 3));
+                
+                if (_beg.compareTo(_end) > 0) {
+                    Date d = _beg;
+                    _beg = _end;
+                    _end = d;
+                }
+            } else if (constraint.startsWith("before") && !constraint.startsWith("before_")) {
+                _end = parseDate(constraint.substring(6));
+            } else if (constraint.startsWith("after") && !constraint.startsWith("after_")) {
+                _beg = parseDate(constraint.substring(5));
+            } else {
+                return super.parseConstraint(constraint);
+            }
+            
+            return 0;
+        }
+        
+        private Date parseDate(String val) throws UiException {
+            Date date = DateUtil.parseDate(val.trim());
+            
+            if (date == null) {
+                throw new UiException("Not a recognized date: " + val);
+            }
+            
+            return date;
+        }
+        
+        private void fixConstraint() {
+            if ((_flags & NO_FUTURE) != 0 && _end == null) {
+                _end = Dates.today();
+            }
+            if ((_flags & NO_PAST) != 0 && _beg == null) {
+                _beg = Dates.today();
+            }
+        }
+        
+    }
+    
     public DateboxEx() {
         super();
         setFormat(DateUtil.Format.WITHOUT_TIME.getPattern());
+    }
+    
+    @Override
+    public void setConstraint(String constr) {
+        setConstraint(constr != null ? new SimpleDateConstraint(constr) : null); // Bug 2564298
     }
     
     /**

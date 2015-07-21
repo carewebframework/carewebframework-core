@@ -3,7 +3,7 @@
 	<addon-name>cwf.ui</addon-name>
 	<language-name>xul/html</language-name>
 
-	<javascript-module name="cwf" version="4.0.12" />
+	<javascript-module name="cwf" version="4.0.13" />
 
 	<javascript src="~./org/carewebframework/ui/zk/common.js"
 		merge="true" />
