@@ -14,6 +14,7 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 
 import org.carewebframework.api.property.PropertyUtil;
+import org.carewebframework.common.MiscUtil;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.shell.layout.LayoutUtil;
 import org.carewebframework.shell.layout.UIElementBase;
@@ -151,7 +152,7 @@ public class AddComponent extends Window {
             dlg.init(parentElement, createChild);
             dlg.doModal();
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw MiscUtil.toUnchecked(e);
         }
         
         return dlg;

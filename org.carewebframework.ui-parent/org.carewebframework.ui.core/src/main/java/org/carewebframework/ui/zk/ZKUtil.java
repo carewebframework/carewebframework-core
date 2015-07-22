@@ -27,6 +27,7 @@ import org.apache.commons.lang.Validate;
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.lang.reflect.FieldUtils;
 
+import org.carewebframework.common.MiscUtil;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.ui.FrameworkWebSupport;
 
@@ -211,7 +212,7 @@ public class ZKUtil {
         } catch (Exception e) {
             IOUtils.closeQuietly(reader);
             IOUtils.closeQuietly(is);
-            throw new RuntimeException(e);
+            throw MiscUtil.toUnchecked(e);
         }
     }
     
@@ -252,7 +253,7 @@ public class ZKUtil {
         try {
             pageDefinition = loadZulPageDefinition(filename, args);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw MiscUtil.toUnchecked(e);
         }
         return Executions.getCurrent().createComponents(pageDefinition, parent, args);
     }
@@ -1045,7 +1046,7 @@ public class ZKUtil {
             try {
                 listener.onEvent(event);
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                throw MiscUtil.toUnchecked(e);
             }
         }
     }
@@ -1213,7 +1214,7 @@ public class ZKUtil {
                 }
             }
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw MiscUtil.toUnchecked(e);
         }
         
         return (NODE) node;

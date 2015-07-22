@@ -14,6 +14,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import org.carewebframework.api.property.PropertyUtil;
+import org.carewebframework.common.MiscUtil;
 import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.layout.UIElementMenuItem;
 import org.carewebframework.shell.layout.UIElementPlugin;
@@ -61,8 +62,7 @@ public class CareWebShellEx extends CareWebShell {
          * @param childClass This is the class that will hold the plugin.
          */
         public PathResolver(Class<? extends UIElementBase> rootClass, Class<? extends UIElementBase> childClass) {
-            if (!UIElementBase.canAcceptChild(rootClass, childClass)
-                    || !UIElementBase.canAcceptParent(childClass, rootClass)
+            if (!UIElementBase.canAcceptChild(rootClass, childClass) || !UIElementBase.canAcceptParent(childClass, rootClass)
                     || !UIElementBase.canAcceptParent(childClass, childClass)
                     || !UIElementBase.canAcceptChild(childClass, UIElementPlugin.class)) {
                 throw new UIException("Root and child classes are not compatible.");
@@ -97,7 +97,7 @@ public class CareWebShellEx extends CareWebShell {
                     root = rootClass.newInstance();
                     root.setParent(tabPane);
                 } catch (Exception e) {
-                    throw new RuntimeException(e);
+                    throw MiscUtil.toUnchecked(e);
                 }
             }
             
@@ -232,7 +232,7 @@ public class CareWebShellEx extends CareWebShell {
                 parent = ele;
             }
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw MiscUtil.toUnchecked(e);
         }
         
         return ele;

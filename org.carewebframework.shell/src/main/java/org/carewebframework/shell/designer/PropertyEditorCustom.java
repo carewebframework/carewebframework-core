@@ -9,6 +9,7 @@
  */
 package org.carewebframework.shell.designer;
 
+import org.carewebframework.common.MiscUtil;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.property.PropertyInfo;
@@ -73,7 +74,7 @@ public class PropertyEditorCustom extends PropertyEditorBase implements EventLis
                 target = (UIElementBase) propInfo.getPropertyValue(target);
                 propInfo.setSetter(null);
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                throw MiscUtil.toUnchecked(e);
             }
         }
         

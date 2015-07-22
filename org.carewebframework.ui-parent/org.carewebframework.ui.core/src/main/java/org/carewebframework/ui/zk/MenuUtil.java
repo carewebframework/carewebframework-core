@@ -11,6 +11,7 @@ package org.carewebframework.ui.zk;
 
 import java.util.List;
 
+import org.carewebframework.common.MiscUtil;
 import org.carewebframework.ui.zk.ZKUtil.MatchMode;
 
 import org.zkoss.zk.ui.Component;
@@ -81,7 +82,7 @@ public class MenuUtil {
             try {
                 ele = clazz.newInstance();
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                throw MiscUtil.toUnchecked(e);
             }
         }
         
@@ -223,9 +224,8 @@ public class MenuUtil {
             Object item1 = items.get(i++);
             Object item2 = items.get(i);
             
-            if (item1 instanceof LabelImageElement
-                    && item2 instanceof LabelImageElement
-                    && ((LabelImageElement) item1).getLabel().compareToIgnoreCase(((LabelImageElement) item2).getLabel()) > 0) {
+            if (item1 instanceof LabelImageElement && item2 instanceof LabelImageElement && ((LabelImageElement) item1)
+                    .getLabel().compareToIgnoreCase(((LabelImageElement) item2).getLabel()) > 0) {
                 parent.insertBefore((LabelImageElement) item2, (LabelImageElement) item1);
                 
                 if (i > bottom) {

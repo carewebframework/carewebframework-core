@@ -11,6 +11,7 @@ package org.carewebframework.ui.zk;
 
 import java.util.Iterator;
 
+import org.carewebframework.common.MiscUtil;
 import org.carewebframework.ui.zk.ZKUtil.MatchMode;
 
 import org.zkoss.zk.ui.Component;
@@ -149,7 +150,7 @@ public class TreeUtil {
                 parent.appendChild(item);
                 return item;
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                throw MiscUtil.toUnchecked(e);
             }
         }
         

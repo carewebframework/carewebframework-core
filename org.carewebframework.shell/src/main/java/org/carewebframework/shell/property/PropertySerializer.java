@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.Iterator;
 
 import org.carewebframework.api.spring.SpringUtil;
+import org.carewebframework.common.MiscUtil;
 
 /**
  * Base class for property serialization support. Contains a number of preconfigured serializers.
@@ -117,7 +118,7 @@ public abstract class PropertySerializer<T> {
      * Serializer class for enumerations.
      */
     @SuppressWarnings("rawtypes")
-    public static class EnumSerializer extends PropertySerializer<Enum> implements Iterable {
+    public static class EnumSerializer extends PropertySerializer<Enum>implements Iterable {
         
         private final Class<Enum> enumClass;
         
@@ -147,7 +148,7 @@ public abstract class PropertySerializer<T> {
      * Serializer class for iterables.
      */
     @SuppressWarnings("rawtypes")
-    public static class IterableSerializer extends PropertySerializer<Iterable> implements Iterable {
+    public static class IterableSerializer extends PropertySerializer<Iterable>implements Iterable {
         
         private final Class<Iterable> iterClass;
         
@@ -176,10 +177,10 @@ public abstract class PropertySerializer<T> {
         
         public Iterable getIterator() {
             try {
-                return iterClass != null ? iterClass.newInstance() : SpringUtil.getAppContext().getBean(beanId,
-                    Iterable.class);
+                return iterClass != null ? iterClass.newInstance()
+                        : SpringUtil.getAppContext().getBean(beanId, Iterable.class);
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                throw MiscUtil.toUnchecked(e);
             }
         }
         

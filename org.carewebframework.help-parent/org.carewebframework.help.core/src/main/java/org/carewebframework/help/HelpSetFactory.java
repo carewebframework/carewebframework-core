@@ -15,6 +15,7 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import org.carewebframework.common.MiscUtil;
 import org.carewebframework.common.RegistryMap;
 import org.carewebframework.common.RegistryMap.DuplicateAction;
 
@@ -29,7 +30,7 @@ public class HelpSetFactory {
     
     private final Map<String, Class<? extends IHelpSet>> map = new RegistryMap<String, Class<? extends IHelpSet>>(
             DuplicateAction.ERROR);
-    
+            
     public static HelpSetFactory getInstance() {
         return instance;
     }
@@ -68,7 +69,7 @@ public class HelpSetFactory {
             return ctor.newInstance(url);
         } catch (Exception e) {
             log.error("Error creating help set for " + url, e);
-            throw new RuntimeException(e);
+            throw MiscUtil.toUnchecked(e);
         }
     }
     

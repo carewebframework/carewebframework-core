@@ -72,17 +72,18 @@ public class MiscUtil {
     }
     
     /**
-     * Re-throws a checked exception as unchecked. If the original exception is already unchecked,
-     * it is simply re-thrown.
+     * Converts a checked exception to unchecked. If the original exception is already unchecked, it
+     * is simply returned.
      * 
      * @param e The original exception.
+     * @return The returned unchecked exception.
      */
-    public static void throwAsUnchecked(Throwable e) {
+    public static RuntimeException toUnchecked(Throwable e) {
         if (e instanceof RuntimeException) {
-            throw (RuntimeException) e;
+            return (RuntimeException) e;
         }
         
-        throw new UnhandledException(e);
+        return new UnhandledException(e);
     }
     
     /**

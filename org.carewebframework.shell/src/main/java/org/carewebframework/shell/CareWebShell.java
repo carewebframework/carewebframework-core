@@ -26,6 +26,7 @@ import org.carewebframework.api.event.IEventManager;
 import org.carewebframework.api.property.PropertyUtil;
 import org.carewebframework.api.security.SecurityUtil;
 import org.carewebframework.api.spring.SpringUtil;
+import org.carewebframework.common.MiscUtil;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.help.IHelpSet;
 import org.carewebframework.shell.help.HelpDefinition;
@@ -173,16 +174,16 @@ public class CareWebShell extends Div implements AfterCompose {
                 Clients.confirmClose(LBL_CONFIRM_CLOSE);
             }
             
-            String layout = defaultLayoutName != null ? defaultLayoutName : FrameworkWebSupport.getFrameworkProperty(
-                "layout", "CAREWEB.LAYOUT.DEFAULT");
-            
+            String layout = defaultLayoutName != null ? defaultLayoutName
+                    : FrameworkWebSupport.getFrameworkProperty("layout", "CAREWEB.LAYOUT.DEFAULT");
+                    
             if (!StringUtils.isEmpty(layout)) {
                 loadLayoutFromResource(layout);
             }
             
         } catch (Exception e) {
             log.error("Error initializing the shell.", e);
-            throw new RuntimeException(e);
+            throw MiscUtil.toUnchecked(e);
         }
     }
     
