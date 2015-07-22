@@ -77,15 +77,17 @@ public class RequestUtil {
     
     /**
      * Logs at trace level the request headers
-     * 
-     * @throws IllegalStateException if called outside scope of an HttpServletRequest
      */
-    public static void logHeaderNames() throws IllegalStateException {
-        final HttpServletRequest request = assertRequest();
-        final Enumeration<?> enumeration = request.getHeaderNames();
-        while (enumeration.hasMoreElements()) {
-            final String headerName = (String) enumeration.nextElement();
-            log.trace(String.format("HeaderName: %s", headerName));
+    public static void logHeaderNames() {
+        final HttpServletRequest request = getRequest();
+        if (request == null) {
+            log.debug("logHeaderNames() invoked outside the scope of an Execution/ServletRequest"); 
+        } else {
+            final Enumeration<?> enumeration = request.getHeaderNames();
+            while (enumeration.hasMoreElements()) {
+                final String headerName = (String) enumeration.nextElement();
+                log.trace(String.format("HeaderName: %s", headerName));
+            }
         }
     }
     
@@ -120,47 +122,52 @@ public class RequestUtil {
     }
     
     /**
-     * Return client's ip address.
+     * Return client's ip address.  Returns null if invoked outside scope of Execution/ServletRequest
      * <p>
-     * Must be called in the scope of an Execution/ServletRequest. This considers header
+     * This considers header
      * X-FORWARDED-FOR (i.e. useful if behind a proxy)
      * 
      * @return the client's IP
-     * @throws IllegalStateException if called outside scope of an Execution/ServletRequest
      */
     public static String getRemoteAddress() {
-        //final Execution execution = assertExecution();
-        final HttpServletRequest request = assertRequest();
-        String ipAddress = request.getHeader("x-forwarded-for");
-        boolean ipFromHeader = true;
-        if (isEmpty(ipAddress)) {
-            ipAddress = request.getHeader("X_FORWARDED_FOR");
+        final HttpServletRequest request = getRequest();
+        String ipAddress = null;
+        if (request != null) {
+            ipAddress = request.getHeader("x-forwarded-for");
+            boolean ipFromHeader = true;
             if (isEmpty(ipAddress)) {
-                ipFromHeader = false;
-                ipAddress = request.getRemoteAddr();
+                ipAddress = request.getHeader("X_FORWARDED_FOR");
+                if (isEmpty(ipAddress)) {
+                    ipFromHeader = false;
+                    ipAddress = request.getRemoteAddr();
+                }
+                logHeaderNames();
             }
-            logHeaderNames();
-        }
-        //log headers in case we find a case where above logic doesn't return correct ip
-        if (log.isTraceEnabled()) {
-            logHeaderNames();
-            log.trace(String.format("Remote address: %s , obtained from X-FORWARDED_FOR header?", ipAddress, ipFromHeader));
+            //log headers in case we find a case where above logic doesn't return correct ip
+            if (log.isTraceEnabled()) {
+                logHeaderNames();
+                log.trace(String.format("Remote address: %s , obtained from X-FORWARDED_FOR header?", ipAddress, ipFromHeader));
+            }
         }
         return ipAddress;
     }
     
     /**
-     * Get current request's session id or null if session has not yet been created.
-     * 
-     * @throws IllegalStateException if called outside scope of an Execution/ServletRequest
+     * Get current request's session id or null if session has not yet been created or if invoked outside the scope of an Execution/ServletRequest.
      * @return String representing session id or null if session has not yet been created
      */
     public static String getSessionId() {
-        HttpSession session = assertRequest().getSession(false);
+        HttpSession session = getSession(getRequest());
         return session == null ? null : session.getId();
     }
     
-    private static HttpServletRequest assertRequest() {
+    /**
+     * Return request, throwing IllegalStateException if invoked outside the scope of an Execution/ServletRequest
+     * 
+     * @return HttpServletRequest
+     * @throws IllegalStateException if called outside scope of an HttpServletRequest
+     */
+    public static HttpServletRequest assertRequest() {
         final HttpServletRequest request = getRequest();
         Assert.state(request != null, "Method must be invoked within the scope of an Execution/ServletRequest");
         return request;
