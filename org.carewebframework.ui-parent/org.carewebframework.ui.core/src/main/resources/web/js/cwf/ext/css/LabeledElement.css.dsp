@@ -12,6 +12,7 @@ div.cwf-labeledelement {
 .cwf-labeledelement-left,
 .cwf-labeledelement-right {
 	display: table;
+	width: 100%;
 }
 
 .cwf-labeledelement-left>*,
