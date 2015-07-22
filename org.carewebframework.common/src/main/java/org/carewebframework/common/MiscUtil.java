@@ -12,6 +12,8 @@ package org.carewebframework.common;
 import java.io.File;
 import java.util.List;
 
+import org.apache.commons.lang.UnhandledException;
+
 /**
  * Miscellaneous utility methods.
  */
@@ -67,6 +69,20 @@ public class MiscUtil {
     @SuppressWarnings("unchecked")
     public static <T, E extends T> List<E> castList(List<T> list, Class<E> clazz) {
         return (List<E>) list;
+    }
+    
+    /**
+     * Re-throws a checked exception as unchecked. If the original exception is already unchecked,
+     * it is simply re-thrown.
+     * 
+     * @param e The original exception.
+     */
+    public static void throwAsUnchecked(Throwable e) {
+        if (e instanceof RuntimeException) {
+            throw (RuntimeException) e;
+        }
+        
+        throw new UnhandledException(e);
     }
     
     /**
