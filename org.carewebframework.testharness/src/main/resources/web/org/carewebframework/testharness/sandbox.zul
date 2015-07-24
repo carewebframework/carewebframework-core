@@ -99,7 +99,12 @@
 	</borderlayout>
 	<style>
 		.cwf-sandbox .CodeMirror-empty {
-		  opacity: .5;
+			opacity: .5;
+		}
+		
+		.cwf-sandbox .CodeMirror-matchingtag {
+  			background: rgba(255, 250, 0, .3); 
+  			text-decoration: underline;
 		}
 	</style>
 </zk>
