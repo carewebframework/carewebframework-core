@@ -3,11 +3,15 @@
 	<depends>cwf.shell</depends>
 	<language-name>xul/html</language-name>
 
-	<javascript-module name="cwf.sandbox" version="4.0.1"/>
+	<javascript-module name="cwf.sandbox" version="4.0.2"/>
 
+	<!-- CodeMirror 5.5 -->
 	<javascript src="~./org/carewebframework/testharness/codemirror/codemirror.js" />
 	<javascript src="~./org/carewebframework/testharness/codemirror/xml.js" />
 	<javascript src="~./org/carewebframework/testharness/codemirror/placeholder.js" />
+	<javascript src="~./org/carewebframework/testharness/codemirror/xml-fold.js" />
+	<javascript src="~./org/carewebframework/testharness/codemirror/closetag.js" />
+	<javascript src="~./org/carewebframework/testharness/codemirror/matchtags.js" />
 
 	<stylesheet href="~./org/carewebframework/testharness/codemirror/codemirror.css"
 		type="text/css" />

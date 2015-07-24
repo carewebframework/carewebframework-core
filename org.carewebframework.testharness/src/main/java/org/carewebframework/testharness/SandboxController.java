@@ -38,6 +38,8 @@ public class SandboxController extends PluginController {
     
     private Component contentBase;
     
+    private String content;
+    
     /**
      * Find the content base component. We can't assign it an id because of potential id collisions.
      */
@@ -54,12 +56,11 @@ public class SandboxController extends PluginController {
     public void refresh() {
         super.refresh();
         ZKUtil.detachChildren(contentBase);
-        String content = txtContent.getText();
         
         if (content != null && !content.isEmpty()) {
             try {
                 Events.echoEvent("onModeCheck", this.root, null);
-                Executions.createComponentsDirectly(txtContent.getText(), null, contentBase, null);
+                Executions.createComponentsDirectly(content, null, contentBase, null);
             } catch (Exception e) {
                 ZKUtil.detachChildren(contentBase);
                 Label label = new Label(ExceptionUtils.getStackTrace(e));
@@ -97,9 +98,10 @@ public class SandboxController extends PluginController {
     }
     
     /**
-     * Renders the zul content in the view pane.
+     * Renders the updated zul content in the view pane.
      */
     public void onClick$btnRenderContent() {
+        content = txtContent.getText();
         refresh();
     }
     

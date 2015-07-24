@@ -7,6 +7,10 @@
 					<label zclass="z-caption-content"
 						style="padding-top:4px" value="${labels.cwf.sandbox.title.left}" />
 					<div style="float:right;padding:0" zclass="btn">
+						<button id="btnFormatContent" zclass="btn-info"
+							w:onClick="this.$f('txtContent').format();"
+							label="${labels.cwf.sandbox.btn.format.label}" />
+						<space width="50px" />
 						<button id="btnClearContent" zclass="btn-danger"
 							w:onClick="this.$f('txtContent').clear();"
 							label="${labels.cwf.btn.clear.label}" />
@@ -25,16 +29,28 @@
 							lineNumbers: true,
 							mode: 'xml',
 							placeholder: '${labels.cwf.sandbox.textbox.placeholder}',
+							autoCloseTags: true,
+							matchTags: {bothTags: true},
 							extraKeys: {
-								'Alt-F': function() {
-						    		cm.operation(function() {
-				        				for (var i = cm.getCursor('from').line; i <= cm.getCursor('to').line; i++) {
-        									cm.indentLine(i);
-        							    }
-        							});
-        						}
+								'Alt-F': function() {txtContent.format()},
+								'Alt-J': 'toMatchingTag'
 							}
 						});
+						txtContent.format = function() {
+						    var from = cm.getCursor('from');
+						    var to = cm.getCursor('to');
+						    
+						    if (from.line == to.line && from.ch == to.ch) {
+						    	from.line = 0;
+						    	to.line = cm.lastLine();
+						    }
+						        
+				    		cm.operation(function() {
+		        				for (var i = from.line; i <= to.line; i++) {
+									cm.indentLine(i);
+							    }
+							});
+						};
 						txtContent.focus = function() {
 							cm.focus();    
 						};
@@ -67,7 +83,6 @@
 							label="${labels.cwf.btn.clear.label}" />
 						<space />
 						<button id="btnRefreshView" zclass="btn-success"
-							onClick="txtContent.focus();"
 							label="${labels.cwf.btn.refresh.label}" />
 					</div>
 				</caption>
