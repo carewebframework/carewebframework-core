@@ -50,6 +50,10 @@
 									cm.indentLine(i);
 							    }
 							});
+				    		
+				    		from.ch = 0;
+				    		cm.setSelection(from, from);
+				    		cm.focus();
 						};
 						txtContent.focus = function() {
 							cm.focus();    
