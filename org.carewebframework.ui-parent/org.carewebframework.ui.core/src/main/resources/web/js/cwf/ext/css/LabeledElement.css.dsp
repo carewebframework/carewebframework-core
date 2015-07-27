@@ -18,8 +18,13 @@ div.cwf-labeledelement {
 .cwf-labeledelement-left>*,
 .cwf-labeledelement-right>* {
 	display: table-cell;
+	white-space: nowrap
 }
 
+.cwf-labeledelement-left>*:nth-child(2),
+.cwf-labeledelement-right>*:nth-child(1) {
+	width: 100%;
+}
 .cwf-labeledelement-left>.cwf-labeledelement-lbl {
 	padding-right: 5px;
 }
