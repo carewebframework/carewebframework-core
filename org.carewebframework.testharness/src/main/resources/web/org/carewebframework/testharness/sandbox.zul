@@ -7,6 +7,9 @@
 					<label zclass="z-caption-content"
 						style="padding-top:4px" value="${labels.cwf.sandbox.title.left}" />
 					<div style="float:right;padding:0" zclass="btn">
+						<combobox id="cboZul" readonly="true" width="200px" 
+							placeholder="${labels.cwf.sandbox.combobox.placeholder}"/>
+						<space width="50px" />
 						<button id="btnFormatContent" zclass="btn-info"
 							w:onClick="this.$f('txtContent').format();"
 							label="${labels.cwf.sandbox.btn.format.label}" />
@@ -54,6 +57,9 @@
 				    		from.ch = 0;
 				    		cm.setSelection(from, from);
 				    		cm.focus();
+						};
+						txtContent.resync = function() {
+						 	cm.setValue(txtContent.getValue());   
 						};
 						txtContent.focus = function() {
 							cm.focus();    

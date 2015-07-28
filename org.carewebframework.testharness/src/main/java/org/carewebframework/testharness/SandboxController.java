@@ -9,36 +9,69 @@
  */
 package org.carewebframework.testharness;
 
+import java.io.IOException;
+
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 
+import org.carewebframework.common.MiscUtil;
 import org.carewebframework.shell.plugins.PluginController;
 import org.carewebframework.ui.zk.ZKUtil;
 
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.core.io.Resource;
+
+import org.zkoss.zk.au.out.AuInvoke;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zul.Combobox;
+import org.zkoss.zul.Comboitem;
+import org.zkoss.zul.ComboitemRenderer;
 import org.zkoss.zul.Idspace;
 import org.zkoss.zul.Label;
+import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
 
 /**
  * Plugin to facilitate testing of zul layouts.
  */
-public class SandboxController extends PluginController {
+public class SandboxController extends PluginController implements ApplicationContextAware {
     
     private static final long serialVersionUID = 1L;
     
     private static final String[] REPLACE_MODES = { "modal", "highlighted", "popup" };
     
+    private static ComboitemRenderer<Resource> zulRenderer = new ComboitemRenderer<Resource>() {
+        
+        @Override
+        public void render(Comboitem item, Resource resource, int index) throws Exception {
+            item.setValue(resource);
+            item.setLabel(resource.getFilename());
+            String[] pcs = resource.getURL().toString().split("!/web/", 2);
+            item.setTooltiptext(pcs.length == 1 ? pcs[0] : "~./" + pcs[1]);
+        }
+        
+    };
+    
+    // Start of auto-wired section
+    
     private Textbox txtContent;
     
+    private Combobox cboZul;
+    
     private Component contentParent;
+    
+    // End of auto-wired section
     
     private Component contentBase;
     
     private String content;
+    
+    private final ListModelList<Resource> model = new ListModelList<>();
     
     /**
      * Find the content base component. We can't assign it an id because of potential id collisions.
@@ -46,6 +79,9 @@ public class SandboxController extends PluginController {
     @Override
     public void doAfterCompose(Component comp) throws Exception {
         super.doAfterCompose(comp);
+        cboZul.setItemRenderer(zulRenderer);
+        cboZul.setModel(model);
+        cboZul.setVisible(model.size() > 0);
         contentBase = ZKUtil.findChild(contentParent, Idspace.class);
     }
     
@@ -106,6 +142,14 @@ public class SandboxController extends PluginController {
     }
     
     /**
+     * Clears combo box selection when content is cleared.
+     */
+    public void onClick$btnClearContent() {
+        txtContent.setText(null);
+        cboZul.setSelectedItem(null);
+    }
+    
+    /**
      * Clears the view pane.
      */
     public void onClick$btnClearView() {
@@ -120,12 +164,43 @@ public class SandboxController extends PluginController {
     }
     
     /**
+     * Load contents of newly selected zul document.
+     * 
+     * @throws IOException Exception on reading zul document.
+     */
+    public void onSelect$cboZul() throws IOException {
+        Comboitem item = cboZul.getSelectedItem();
+        Resource resource = item == null ? null : (Resource) item.getValue();
+        
+        if (resource != null) {
+            content = IOUtils.toString(resource.getInputStream());
+            txtContent.setText(content);
+            txtContent.setFocus(true);
+            execution.addAuResponse(new AuInvoke(txtContent, "resync"));
+        }
+    }
+    
+    /**
      * Set text box focus upon activation.
      */
     @Override
     public void onActivate() {
         super.onActivate();
         txtContent.focus();
+    }
+    
+    /**
+     * Populate combo box model with all zul documents on class path.
+     */
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) {
+        try {
+            for (Resource resource : applicationContext.getResources("classpath*:**/*.zul")) {
+                model.add(resource);
+            }
+        } catch (Exception e) {
+            throw MiscUtil.toUnchecked(e);
+        }
     }
     
 }
