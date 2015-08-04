@@ -1,7 +1,7 @@
 <%@ taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" %>
 
 div.cwf-labeledelement {
-	display: inline-block;
+	display: inline-table;
 }
 
 .cwf-labeledelement-top,
