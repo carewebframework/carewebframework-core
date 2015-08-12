@@ -24,28 +24,28 @@ public class SourceLoader {
     
     private String formatSpecifier;
     
-    private String loaderClass;
+    private String iteratorClass;
     
     private String helpSetPattern;
     
     private FileFilter helpSetFilter;
     
     public SourceLoader() {
-        
+    
     }
     
-    public SourceLoader(String formatSpecifier, String helpSetPattern, String loaderClass) {
+    public SourceLoader(String formatSpecifier, String helpSetPattern, String iteratorClass) {
         this.formatSpecifier = formatSpecifier;
         this.helpSetPattern = helpSetPattern;
-        this.loaderClass = loaderClass;
+        this.iteratorClass = iteratorClass;
     }
     
-    public String getLoaderClass() {
-        return loaderClass;
+    public String getIteratorClass() {
+        return iteratorClass;
     }
     
-    public void setLoaderClass(String loaderClass) {
-        this.loaderClass = loaderClass;
+    public void setIteratorClass(String iteratorClass) {
+        this.iteratorClass = iteratorClass;
     }
     
     public String getHelpSetPattern() {
@@ -87,7 +87,7 @@ public class SourceLoader {
         }
         
         @SuppressWarnings("unchecked")
-        Class<? extends IResourceIterator> clazz = (Class<? extends IResourceIterator>) Class.forName(loaderClass);
+        Class<? extends IResourceIterator> clazz = (Class<? extends IResourceIterator>) Class.forName(iteratorClass);
         return clazz.getConstructor(String.class).newInstance(archiveName);
         
     }
