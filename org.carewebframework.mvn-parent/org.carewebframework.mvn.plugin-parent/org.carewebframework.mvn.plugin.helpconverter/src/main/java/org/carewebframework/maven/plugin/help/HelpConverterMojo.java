@@ -79,7 +79,7 @@ public class HelpConverterMojo extends BaseMojo {
      * Additional archive loader classes.
      */
     @Parameter(property = "maven.carewebframework.help.archiveLoaders")
-    private List<SourceLoader> archiveLoaders;
+    private List<String> archiveLoaders;
     
     // Maps help format specifier to the associated source archive loader.
     private final Map<String, SourceLoader> sourceLoaders = new HashMap<String, SourceLoader>();
@@ -99,6 +99,7 @@ public class HelpConverterMojo extends BaseMojo {
     public void execute() throws MojoExecutionException {
         
         if (StringUtils.isEmpty(moduleSource) && ignoreMissingSource) {
+            getLog().info("No help module source specified.");
             return;
         }
         
@@ -125,11 +126,18 @@ public class HelpConverterMojo extends BaseMojo {
     
     /**
      * Adds any additional source loaders specified in configuration.
+     * 
+     * @throws MojoExecutionException Error registering external loader.
      */
-    private void registerExternalLoaders() {
+    private void registerExternalLoaders() throws MojoExecutionException {
         if (archiveLoaders != null) {
-            for (SourceLoader loader : archiveLoaders) {
-                registerLoader(loader);
+            for (String entry : archiveLoaders) {
+                try {
+                    SourceLoader loader = (SourceLoader) Class.forName(entry).newInstance();
+                    registerLoader(loader);
+                } catch (Exception e) {
+                    throw new MojoExecutionException("Error registering archive loader for class: " + entry, e);
+                }
             }
         }
     }

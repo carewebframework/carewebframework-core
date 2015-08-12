@@ -64,7 +64,7 @@ public abstract class BaseMojo extends AbstractMojo {
     @Parameter(property = "buildNumber", required = false)
     protected String buildNumber;
     
-    @Parameter(property = "archive", required = false)
+    @Parameter(property = "archive", alias = "archive", required = false)
     protected MavenArchiveConfiguration archiveConfig = new MavenArchiveConfiguration();
     
     /**
@@ -92,13 +92,13 @@ public abstract class BaseMojo extends AbstractMojo {
      * <b>Note: phase must remain as prepare-package</b>
      * </p>
      */
-    @Parameter(property = "maven.careweb.theme.warInclusion", defaultValue = "true", required = true)
+    @Parameter(property = "maven.carewebframework.mojo.warInclusion", defaultValue = "true", required = true)
     private boolean warInclusion;
     
     /**
      * Whether to fail build on error
      */
-    @Parameter(property = "maven.careweb.theme.failOnError", defaultValue = "true", required = false)
+    @Parameter(property = "maven.carewebframework.mojo.failOnError", defaultValue = "true", required = false)
     private boolean failOnError;
     
     private FileFilter exclusionFilter;
@@ -260,8 +260,8 @@ public abstract class BaseMojo extends AbstractMojo {
         
         if (configTemplate != null) {
             getLog().info("Creating config file.");
-            configTemplate
-                    .addEntry("info", pluginDescriptor.getName(), pluginDescriptor.getVersion(), new Date().toString());
+            configTemplate.addEntry("info", pluginDescriptor.getName(), pluginDescriptor.getVersion(),
+                new Date().toString());
             configTemplate.createFile(stagingDirectory);
         }
         
@@ -274,7 +274,7 @@ public abstract class BaseMojo extends AbstractMojo {
                 Files.copy(archive, webappLibArchive);
             }
         } catch (Exception e) {
-            throw new RuntimeException("Exception occurred assembling theme archive.", e);
+            throw new RuntimeException("Exception occurred assembling archive.", e);
         }
         
     }
@@ -294,7 +294,6 @@ public abstract class BaseMojo extends AbstractMojo {
         jarArchiver.addDirectory(stagingDirectory);
         archiver.setArchiver(jarArchiver);
         archiver.setOutputFile(jarFile);
-        getLog().info(archiveConfig.getManifestEntries().toString());
         archiver.createArchive(mavenSession, mavenProject, archiveConfig);
         projectHelper.attachArtifact(mavenProject, jarFile, classifier);
         FileUtils.deleteDirectory(stagingDirectory);

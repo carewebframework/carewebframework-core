@@ -345,7 +345,7 @@
 						</execution>
 					</executions>
 					<configuration>
-						<ignoreMissingSource>false</ignoreMissingSource>
+						<ignoreMissingSource>true</ignoreMissingSource>
 						<archive>
 							<manifestEntries>
 								<Implementation-Version>${project.version}.${buildNumber}

@@ -113,16 +113,16 @@ public abstract class AbstractProcessor<T extends BaseMojo> {
     }
     
     /**
-     * Finds and executes the transform appropriate for the theme resource.
+     * Finds and executes the transform appropriate for the file resource.
      * 
-     * @param resource The theme resource.
+     * @param resource The file resource.
      * @return True if a processor was found for the jar entry.
      * @throws Exception Unspecified exception.
      */
     protected boolean transform(IResource resource) throws Exception {
         String name = StringUtils.trimToEmpty(resource.getRelativePath());
         
-        if (mojo.isExcluded(name)) {
+        if (resource.isDirectory() || mojo.isExcluded(name)) {
             return false;
         }
         

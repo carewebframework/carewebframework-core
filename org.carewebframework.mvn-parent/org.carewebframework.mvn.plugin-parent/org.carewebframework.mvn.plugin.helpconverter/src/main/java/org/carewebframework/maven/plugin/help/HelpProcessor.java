@@ -26,7 +26,7 @@ public class HelpProcessor extends AbstractProcessor<HelpConverterMojo> {
         super(mojo);
         this.loader = loader;
         this.resourceIterator = loader.load(archiveName);
-        registerTransform("*.*", new CopyTransform(mojo));
+        registerTransform("*", new CopyTransform(mojo));
     }
     
     @Override
