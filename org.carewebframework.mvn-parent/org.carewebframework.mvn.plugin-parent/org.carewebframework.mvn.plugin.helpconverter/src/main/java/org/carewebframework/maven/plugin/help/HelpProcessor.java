@@ -31,7 +31,7 @@ public class HelpProcessor extends AbstractProcessor<HelpConverterMojo> {
     
     @Override
     public String relocateResource(String resourceName) {
-        return "web/" + getResourceBase() + resourceName;
+        return "web/" + getResourceBase() + loader.transformFileName(resourceName);
     }
     
     @Override

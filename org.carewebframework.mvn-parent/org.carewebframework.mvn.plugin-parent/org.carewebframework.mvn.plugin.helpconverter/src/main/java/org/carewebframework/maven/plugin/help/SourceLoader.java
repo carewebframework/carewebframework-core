@@ -92,4 +92,13 @@ public class SourceLoader {
         
     }
     
+    /**
+     * Override to provide custom renaming of copied files.
+     * 
+     * @param fileName Original file name.
+     * @return Transformed file name.
+     */
+    public String transformFileName(String fileName) {
+        return fileName;
+    }
 }
