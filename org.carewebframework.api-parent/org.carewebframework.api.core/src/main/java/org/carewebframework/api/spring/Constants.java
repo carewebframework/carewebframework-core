@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -33,6 +33,12 @@ public class Constants {
     public static final String PROFILE_ROOT_TEST = "root-test";
     
     /**
+     * Constant for beans profile which specifies the default profile for a root Spring application
+     * context if none is specified.
+     */
+    public static final String PROFILE_ROOT_DEFAULT = PROFILE_ROOT;
+    
+    /**
      * Constant for beans profile which identifies beans to be processed by a child Spring
      * application context.
      */
@@ -49,6 +55,14 @@ public class Constants {
      * application context, in a test setting.
      */
     public static final String PROFILE_DESKTOP_TEST = "desktop-test";
+    
+    /**
+     * Constant for beans profile which specifies the default profile for a child Spring application
+     * context if none is specified. This is set to a non-existent profile to suppress processing a
+     * bean in an unspecified profile in a child context (it should only be processed in the root
+     * context).
+     */
+    public static final String PROFILE_DESKTOP_DEFAULT = "dummy";
     
     /**
      * All root profiles.
@@ -95,7 +109,7 @@ public class Constants {
      */
     public static final String[] DEFAULT_LOCATIONS = { "classpath*:/META-INF/*-spring.xml",
             "classpath*:/META-INF/spring/*.xml" };
-    
+            
     /**
      * Enforce static class.
      */

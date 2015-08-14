@@ -132,11 +132,13 @@ public class FrameworkAppContext extends XmlWebApplicationContext implements Res
             // Set up profiles (remove root profiles merged from parent)
             aps.removeAll(Arrays.asList(Constants.PROFILES_ROOT));
             Collections.addAll(aps, testConfig ? Constants.PROFILES_DESKTOP_TEST : Constants.PROFILES_DESKTOP_PROD);
+            env.setDefaultProfiles(Constants.PROFILE_DESKTOP_DEFAULT);
         } else {
             AppContextFinder.rootContext = this;
             Collections.addAll(aps, testConfig ? Constants.PROFILES_ROOT_TEST : Constants.PROFILES_ROOT_PROD);
             env.getPropertySources().addLast(new LabelPropertySource());
             env.getPropertySources().addLast(new DomainPropertySource(this));
+            env.setDefaultProfiles(Constants.PROFILE_ROOT_DEFAULT);
         }
         
         env.setActiveProfiles(aps.toArray(new String[aps.size()]));
@@ -180,8 +182,8 @@ public class FrameworkAppContext extends XmlWebApplicationContext implements Res
      */
     @Override
     protected String[] getDefaultConfigLocations() {
-        return desktop == null ? (String[]) ArrayUtils
-                .addAll(Constants.DEFAULT_LOCATIONS, super.getDefaultConfigLocations()) : Constants.DEFAULT_LOCATIONS;
+        return desktop == null ? (String[]) ArrayUtils.addAll(Constants.DEFAULT_LOCATIONS, super.getDefaultConfigLocations())
+                : Constants.DEFAULT_LOCATIONS;
     }
     
     /**
