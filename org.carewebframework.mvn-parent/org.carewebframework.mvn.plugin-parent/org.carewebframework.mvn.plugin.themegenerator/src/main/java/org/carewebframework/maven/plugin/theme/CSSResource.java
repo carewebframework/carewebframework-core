@@ -44,8 +44,13 @@ public class CSSResource implements IResource {
     }
     
     @Override
-    public String getRelativePath() {
+    public String getSourcePath() {
         return file.getName();
+    }
+    
+    @Override
+    public String getTargetPath() {
+        return getSourcePath();
     }
     
     @Override

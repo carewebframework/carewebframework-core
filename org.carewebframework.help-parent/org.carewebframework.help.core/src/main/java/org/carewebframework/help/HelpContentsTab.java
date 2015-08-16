@@ -58,7 +58,7 @@ public class HelpContentsTab extends HelpTab {
     @Override
     public void init() {
         super.init();
-        TreeUtil.sort(tree);
+        TreeUtil.sort(tree.getTreechildren(), false);
     }
     
     /**

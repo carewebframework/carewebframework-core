@@ -38,7 +38,7 @@ public class FileResource implements IResource {
     }
     
     @Override
-    public String getRelativePath() {
+    public String getSourcePath() {
         String path = file.getAbsolutePath();
         
         if (root != null && path.startsWith(root)) {
@@ -46,6 +46,11 @@ public class FileResource implements IResource {
         }
         
         return path + (isDirectory() ? "/" : "");
+    }
+    
+    @Override
+    public String getTargetPath() {
+        return getSourcePath();
     }
     
     @Override

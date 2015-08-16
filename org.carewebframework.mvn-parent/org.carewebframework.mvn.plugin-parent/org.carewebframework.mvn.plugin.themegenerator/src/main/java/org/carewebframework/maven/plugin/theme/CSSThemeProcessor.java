@@ -54,7 +54,7 @@ public class CSSThemeProcessor extends AbstractThemeProcessor {
         File file = new File(mavenProject.getBasedir(), theme.getThemeUri());
         File map = mapper == null ? null : new File(mavenProject.getBasedir(), mapper);
         IResource resource = new CSSResource(file, map);
-        addConfigEntry("css", resource.getRelativePath());
+        addConfigEntry("css", resource.getSourcePath());
         transform(resource);
     }
     

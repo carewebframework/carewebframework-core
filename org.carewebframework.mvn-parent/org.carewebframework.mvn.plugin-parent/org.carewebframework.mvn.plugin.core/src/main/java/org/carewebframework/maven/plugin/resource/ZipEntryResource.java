@@ -34,8 +34,13 @@ public class ZipEntryResource implements IResource {
     }
     
     @Override
-    public String getRelativePath() {
+    public String getSourcePath() {
         return zipEntry.getName();
+    }
+    
+    @Override
+    public String getTargetPath() {
+        return getSourcePath();
     }
     
     @Override

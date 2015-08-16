@@ -26,11 +26,19 @@ public interface IResource {
     InputStream getInputStream() throws IOException;
     
     /**
-     * Returns the relative path of the resource.
+     * Returns the relative path to the source file of this resource.
      * 
-     * @return The relative path.
+     * @return The relative path to the source file.
      */
-    String getRelativePath();
+    String getSourcePath();
+    
+    /**
+     * Returns the relative path to the target file of this resource. This is often the same as the
+     * source path.
+     * 
+     * @return The relative path to the target file.
+     */
+    String getTargetPath();
     
     /**
      * Returns the timestamp of the resource.

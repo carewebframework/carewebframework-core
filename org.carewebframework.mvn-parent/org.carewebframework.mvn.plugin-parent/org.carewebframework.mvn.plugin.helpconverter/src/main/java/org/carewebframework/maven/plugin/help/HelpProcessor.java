@@ -30,8 +30,8 @@ public class HelpProcessor extends AbstractProcessor<HelpConverterMojo> {
     }
     
     @Override
-    public String relocateResource(String resourceName) {
-        return "web/" + getResourceBase() + loader.transformFileName(resourceName);
+    public String relocateResource(String resourcePath) {
+        return "web/" + getResourceBase() + resourcePath;
     }
     
     @Override
@@ -50,7 +50,7 @@ public class HelpProcessor extends AbstractProcessor<HelpConverterMojo> {
     
     @Override
     public boolean transform(IResource resource) throws Exception {
-        String path = resource.getRelativePath();
+        String path = resource.getSourcePath();
         
         if (path.startsWith("META-INF/")) {
             return false;

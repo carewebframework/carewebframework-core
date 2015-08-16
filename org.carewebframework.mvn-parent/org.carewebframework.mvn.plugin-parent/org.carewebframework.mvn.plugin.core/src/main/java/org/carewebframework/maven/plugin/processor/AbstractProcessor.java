@@ -120,7 +120,7 @@ public abstract class AbstractProcessor<T extends BaseMojo> {
      * @throws Exception Unspecified exception.
      */
     protected boolean transform(IResource resource) throws Exception {
-        String name = StringUtils.trimToEmpty(resource.getRelativePath());
+        String name = StringUtils.trimToEmpty(resource.getSourcePath());
         
         if (resource.isDirectory() || mojo.isExcluded(name)) {
             return false;
@@ -129,7 +129,7 @@ public abstract class AbstractProcessor<T extends BaseMojo> {
         AbstractTransform processor = getTransform(name);
         
         if (processor != null) {
-            File out = mojo.newStagingFile(relocateResource(resource.getRelativePath()), resource.getTime());
+            File out = mojo.newStagingFile(relocateResource(resource.getTargetPath()), resource.getTime());
             processor.process(resource, new FileOutputStream(out));
             return true;
         }
