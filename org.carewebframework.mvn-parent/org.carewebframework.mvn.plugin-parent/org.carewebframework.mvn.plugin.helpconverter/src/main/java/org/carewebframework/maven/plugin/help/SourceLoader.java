@@ -22,46 +22,30 @@ import org.carewebframework.maven.plugin.iterator.IResourceIterator;
  */
 public class SourceLoader {
     
-    private String formatSpecifier;
+    private final String formatSpecifier;
     
-    private String iteratorClass;
+    private final Class<? extends IResourceIterator> iteratorClass;
     
-    private String helpSetPattern;
+    private final String helpSetPattern;
     
     private FileFilter helpSetFilter;
     
-    public SourceLoader() {
-    
-    }
-    
-    public SourceLoader(String formatSpecifier, String helpSetPattern, String iteratorClass) {
+    public SourceLoader(String formatSpecifier, String helpSetPattern, Class<? extends IResourceIterator> iteratorClass) {
         this.formatSpecifier = formatSpecifier;
         this.helpSetPattern = helpSetPattern;
         this.iteratorClass = iteratorClass;
     }
     
-    public String getIteratorClass() {
+    public Class<? extends IResourceIterator> getIteratorClass() {
         return iteratorClass;
-    }
-    
-    public void setIteratorClass(String iteratorClass) {
-        this.iteratorClass = iteratorClass;
     }
     
     public String getHelpSetPattern() {
         return helpSetPattern;
     }
     
-    public void setHelpSetPattern(String helpSetPattern) {
-        this.helpSetPattern = helpSetPattern;
-    }
-    
     public String getFormatSpecifier() {
         return formatSpecifier;
-    }
-    
-    public void setFormatSpecifier(String formatSpecifier) {
-        this.formatSpecifier = formatSpecifier;
     }
     
     public boolean isHelpSetFile(String fileName) {
@@ -86,10 +70,7 @@ public class SourceLoader {
             return new DirectoryIterator(file);
         }
         
-        @SuppressWarnings("unchecked")
-        Class<? extends IResourceIterator> clazz = (Class<? extends IResourceIterator>) Class.forName(iteratorClass);
-        return clazz.getConstructor(String.class).newInstance(archiveName);
-        
+        return iteratorClass.getConstructor(String.class).newInstance(archiveName);
     }
     
 }

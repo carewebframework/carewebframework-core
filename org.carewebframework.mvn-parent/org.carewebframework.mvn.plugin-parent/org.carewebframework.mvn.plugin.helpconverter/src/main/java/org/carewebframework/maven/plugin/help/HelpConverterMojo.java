@@ -104,8 +104,8 @@ public class HelpConverterMojo extends BaseMojo {
         }
         
         init("help", moduleBase);
-        registerLoader(new SourceLoader("javahelp", "*.hs", ZipIterator.class.getName()));
-        registerLoader(new SourceLoader("ohj", "*.hs", ZipIterator.class.getName()));
+        registerLoader(new SourceLoader("javahelp", "*.hs", ZipIterator.class));
+        registerLoader(new SourceLoader("ohj", "*.hs", ZipIterator.class));
         registerExternalLoaders();
         SourceLoader loader = sourceLoaders.get(moduleFormat);
         
