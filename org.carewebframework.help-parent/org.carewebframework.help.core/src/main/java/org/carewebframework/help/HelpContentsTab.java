@@ -85,7 +85,7 @@ public class HelpContentsTab extends HelpTab {
         HelpTopicNode topNode = view.getTopicTree();
         
         for (HelpTopicNode node : topNode.getChildren()) {
-            addNode(tree.getTreechildren(), node);
+            addNode(tree.getTreechildren(), node).getTreerow().setSclass("cwf-help-toc-top");
         }
     }
     
@@ -94,8 +94,9 @@ public class HelpContentsTab extends HelpTab {
      * 
      * @param tc The treechildren component to receive newly created tree items.
      * @param node A topic tree node.
+     * @return Newly created tree item.
      */
-    private void addNode(Treechildren tc, HelpTopicNode node) {
+    private Treeitem addNode(Treechildren tc, HelpTopicNode node) {
         HelpTopic topic = node.getTopic();
         Treeitem parent = new Treeitem(topic.getLabel(), topic);
         topics.put(topic, parent);
@@ -112,6 +113,7 @@ public class HelpContentsTab extends HelpTab {
         }
         
         parent.setOpen(true);
+        return parent;
     }
     
 }

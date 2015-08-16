@@ -1,3 +1,18 @@
-<tree id="tree" vflex="true" hflex="1" style="text-overflow:ellipsis;white-space:nowrap;overflow:auto;border:none">
-	<treechildren/>
-</tree>
+<zk>
+	<tree id="tree" vflex="true" hflex="1" sclass="cwf-help-toc-tree">
+		<treechildren />
+	</tree>
+	
+	<style>
+		.cwf-help-toc-tree {
+			text-overflow: ellipsis;
+			white-space: nowrap;
+			overflow: auto;
+			border: none
+		}
+		
+		.cwf-help-toc-top .z-treecell-text {
+			font-weight: bold;
+		}
+	</style>
+</zk>
