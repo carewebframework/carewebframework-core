@@ -80,15 +80,14 @@ public class HelpHistory {
      * @param topic HelpTopic to add.
      */
     public void add(HelpTopic topic) {
-        if (topic == null || sameTopic(topic, getCurrentItem())) {
-            return;
+        if (topic != null && topic.getURL() != null && !sameTopic(topic, getCurrentItem())) {
+            history.removeRange(position + 1, history.size());
+            history.removeRange(0, history.size() - maxsize);
+            position = history.size();
+            history.add(topic);
         }
         
-        history.removeRange(position + 1, history.size());
-        history.removeRange(0, history.size() - maxsize);
-        position = history.size();
-        history.add(topic);
-        notifyListeners();
+        notifyListeners(topic);
     }
     
     /**
@@ -167,7 +166,7 @@ public class HelpHistory {
     public void setPosition(int newPosition) {
         if (newPosition != position) {
             position = newPosition;
-            notifyListeners();
+            notifyListeners(getCurrentItem());
         }
     }
     
@@ -193,9 +192,7 @@ public class HelpHistory {
     /**
      * Notifies all registered listeners of a topic selection change.
      */
-    private void notifyListeners() {
-        HelpTopic topic = getCurrentItem();
-        
+    private void notifyListeners(HelpTopic topic) {
         for (ITopicListener listener : topicListeners) {
             listener.onTopicSelected(topic);
         }

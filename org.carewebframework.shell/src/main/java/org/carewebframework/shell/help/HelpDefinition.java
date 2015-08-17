@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -9,19 +9,14 @@
  */
 package org.carewebframework.shell.help;
 
-import org.carewebframework.help.HelpSetCache;
-import org.carewebframework.help.IHelpSet;
+import org.carewebframework.help.HelpSetDescriptor;
 
 /**
  * Each instance of this class defines a complete definition of a CareWeb help module.
  */
-public class HelpDefinition {
+public class HelpDefinition extends HelpSetDescriptor {
     
     private HelpRegistry helpRegistry;
-    
-    private String title;
-    
-    private String url;
     
     private String id;
     
@@ -35,16 +30,12 @@ public class HelpDefinition {
     
     private String released;
     
-    private String format;
-    
-    private IHelpSet helpSet;
-    
     public static HelpDefinition getDefinition(String tag) {
         return HelpRegistry.getInstance().get(tag);
     }
     
     public HelpDefinition() {
-        
+    
     }
     
     /**
@@ -67,28 +58,24 @@ public class HelpDefinition {
         }
     }
     
+    public void setTitle(String title) {
+        this.title = title;
+    }
+    
+    public void setUrl(String url) {
+        this.url = url;
+    }
+    
+    public void setFormat(String format) {
+        this.format = format;
+    }
+    
     public String getId() {
         return id;
     }
     
     public void setId(String id) {
         this.id = id;
-    }
-    
-    public String getTitle() {
-        return title;
-    }
-    
-    public void setTitle(String title) {
-        this.title = title;
-    }
-    
-    public String getUrl() {
-        return url;
-    }
-    
-    public void setUrl(String url) {
-        this.url = url;
     }
     
     public String getDescription() {
@@ -131,14 +118,6 @@ public class HelpDefinition {
         this.released = released;
     }
     
-    public String getFormat() {
-        return format;
-    }
-    
-    public void setFormat(String format) {
-        this.format = format;
-    }
-    
     public void setHelpRegistry(HelpRegistry helpRegistry) {
         this.helpRegistry = helpRegistry;
     }
@@ -147,11 +126,4 @@ public class HelpDefinition {
         return helpRegistry;
     }
     
-    public IHelpSet getHelpSet() {
-        if (helpSet == null) {
-            helpSet = HelpSetCache.getInstance().get("~./" + url, format);
-        }
-        
-        return helpSet;
-    }
 }

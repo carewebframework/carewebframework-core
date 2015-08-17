@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -26,6 +26,7 @@ import javax.help.NavigatorView;
 import javax.help.SearchView;
 import javax.help.TOCView;
 
+import org.carewebframework.help.HelpSetDescriptor;
 import org.carewebframework.help.HelpTopic;
 import org.carewebframework.help.HelpViewType;
 import org.carewebframework.help.IHelpView;
@@ -45,9 +46,10 @@ public class HelpSet_JavaHelp implements org.carewebframework.help.IHelpSet {
     
     private final List<IHelpView> helpViews = new ArrayList<IHelpView>();
     
-    public HelpSet_JavaHelp(String url) throws MalformedURLException, HelpSetException {
-        helpSet = new HelpSet(HelpSet_JavaHelp.class.getClassLoader(), url.startsWith("/web/") ? getClass().getResource(url)
-                : new URL(url));
+    public HelpSet_JavaHelp(HelpSetDescriptor descriptor) throws MalformedURLException, HelpSetException {
+        String url = descriptor.getUrl();
+        helpSet = new HelpSet(HelpSet_JavaHelp.class.getClassLoader(),
+                url.startsWith("/web/") ? getClass().getResource(url) : new URL(url));
         initViews();
     }
     

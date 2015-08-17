@@ -53,22 +53,21 @@ public class HelpSetFactory {
     /**
      * Creates a help set.
      * 
-     * @param format Format of the help set.
-     * @param url Location of the help set.
+     * @param dx A help set descriptor.
      * @return An instantiation of the requested help set.
      */
-    public static IHelpSet create(String format, String url) {
+    public static IHelpSet create(HelpSetDescriptor dx) {
         try {
-            Class<? extends IHelpSet> clazz = instance.map.get(format);
+            Class<? extends IHelpSet> clazz = instance.map.get(dx.getFormat());
             
             if (clazz == null) {
-                throw new Exception("Unsupported help format: " + format);
+                throw new Exception("Unsupported help format: " + dx.getFormat());
             }
             
-            Constructor<? extends IHelpSet> ctor = clazz.getConstructor(String.class);
-            return ctor.newInstance(url);
+            Constructor<? extends IHelpSet> ctor = clazz.getConstructor(HelpSetDescriptor.class);
+            return ctor.newInstance(dx);
         } catch (Exception e) {
-            log.error("Error creating help set for " + url, e);
+            log.error("Error creating help set for " + dx.getUrl(), e);
             throw MiscUtil.toUnchecked(e);
         }
     }

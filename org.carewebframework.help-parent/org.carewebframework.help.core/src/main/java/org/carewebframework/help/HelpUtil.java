@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -66,8 +66,8 @@ public class HelpUtil {
             return viewer;
         }
         
-        viewer = useViewerProxy ? new HelpViewerProxy(desktop) : (IHelpViewer) Executions.createComponents(VIEWER_URL, null,
-            null);
+        viewer = useViewerProxy ? new HelpViewerProxy(desktop)
+                : (IHelpViewer) Executions.createComponents(VIEWER_URL, null, null);
         desktop.setAttribute(VIEWER_ATTRIB, viewer);
         return viewer;
     }
@@ -87,17 +87,7 @@ public class HelpUtil {
      */
     public static String getBaseUrl() {
         Execution e = Executions.getCurrent();
-        return getRootUrl() + e.getContextPath();
-    }
-    
-    /**
-     * Returns the full url root path up to, but not including, the context path.
-     * 
-     * @return The root url.
-     */
-    public static String getRootUrl() {
-        Execution e = Executions.getCurrent();
-        return e.getScheme() + "://" + e.getServerName() + ":" + e.getServerPort();
+        return e.getScheme() + "://" + e.getServerName() + ":" + e.getServerPort() + e.getContextPath();
     }
     
     /**

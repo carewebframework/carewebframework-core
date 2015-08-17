@@ -28,6 +28,7 @@ import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.SizeEvent;
+import org.zkoss.zk.ui.event.URIEvent;
 import org.zkoss.zk.ui.ext.AfterCompose;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Iframe;
@@ -323,6 +324,11 @@ public class HelpViewer extends Window implements IHelpViewer, AfterCompose, ITo
         Executions.getCurrent().sendRedirect(iframe.getSrc(), "_blank");
     }
     
+    public void onURIChange$iframe(URIEvent event) {
+        String x = event.getURI();
+        System.out.println(x);
+    }
+    
     /**
      * Returns a reference to the tab box.
      * 
@@ -378,8 +384,8 @@ public class HelpViewer extends Window implements IHelpViewer, AfterCompose, ITo
                 return;
             }
             
-            proxyQueue.sendRequest("setRemoteQueue", new InvocationRequestQueue(this, HelpUtil.HELP_QUEUE_PREFIX,
-                    HelpUtil.closeRequest));
+            proxyQueue.sendRequest("setRemoteQueue",
+                new InvocationRequestQueue(this, HelpUtil.HELP_QUEUE_PREFIX, HelpUtil.closeRequest));
         }
         
     }

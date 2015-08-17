@@ -44,7 +44,7 @@ public class HelpIndexTab extends HelpTab implements ListitemRenderer<HelpTopic>
     
     private final Map<String, List<HelpTopic>> topicIndex = new TreeMap<String, List<HelpTopic>>(
             String.CASE_INSENSITIVE_ORDER);
-    
+            
     private ListModelList<String> keywordList;
     
     /**
@@ -96,8 +96,12 @@ public class HelpIndexTab extends HelpTab implements ListitemRenderer<HelpTopic>
             lstTopics.selectItem(item);
         }
         
-        keywordItem.setAttribute("last", lstTopics.getSelectedIndex());
-        setTopic((HelpTopic) item.getValue());
+        if (item != null) {
+            keywordItem.setAttribute("last", lstTopics.getSelectedIndex());
+            setTopic((HelpTopic) item.getValue());
+        } else {
+            setTopic(null);
+        }
     }
     
     /**
