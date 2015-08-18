@@ -16,7 +16,6 @@ import org.carewebframework.ui.event.InvocationRequest;
 import org.carewebframework.ui.event.InvocationRequestQueue;
 
 import org.zkoss.zk.ui.Desktop;
-import org.zkoss.zk.ui.Executions;
 
 /**
  * Acts as a proxy for a help viewer instance residing in another browser window. Uses event queues
@@ -54,7 +53,7 @@ public class HelpViewerProxy implements IHelpViewer {
      * Requests the creation of the remote viewer window, passing it the owner's desktop id.
      */
     private void startRemoteViewer() {
-        Executions.getCurrent().sendRedirect(HelpUtil.VIEWER_URL + "?proxy=" + ownerId, remoteWindowName);
+        HelpUtil.openWindow(HelpUtil.VIEWER_URL + "?proxy=" + ownerId, remoteWindowName);
     }
     
     /**

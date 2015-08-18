@@ -26,9 +26,7 @@ import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.SizeEvent;
-import org.zkoss.zk.ui.event.URIEvent;
 import org.zkoss.zk.ui.ext.AfterCompose;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Iframe;
@@ -321,12 +319,7 @@ public class HelpViewer extends Window implements IHelpViewer, AfterCompose, ITo
      * Opens the iFrame contents in a separate window.
      */
     public void onClick$btnOpen() {
-        Executions.getCurrent().sendRedirect(iframe.getSrc(), "_blank");
-    }
-    
-    public void onURIChange$iframe(URIEvent event) {
-        String x = event.getURI();
-        System.out.println(x);
+        HelpUtil.openWindow(iframe.getSrc(), "_blank");
     }
     
     /**
@@ -365,11 +358,6 @@ public class HelpViewer extends Window implements IHelpViewer, AfterCompose, ITo
         setTitle(proxied ? null : "Help");
         setVisible(proxied);
         ZKUtil.wireController(this);
-        btnNext.setImageContent(HelpUtil.getImageContent("forward.png"));
-        btnPrevious.setImageContent(HelpUtil.getImageContent("back.png"));
-        btnPrint.setImageContent(HelpUtil.getImageContent("print.png"));
-        btnOpen.setImageContent(HelpUtil.getImageContent("newwin.png"));
-        btnPrint.setWidgetListener(Events.ON_CLICK, "cwf.printIframe('" + iframe.getName() + "');");
         setWidgetOverride("_cwf_focus", "function() {window.focus();}");
         setWidgetOverride("_cwf_close", "function() {window.close();}");
         history.addTopicListener(this);

@@ -19,6 +19,7 @@ import org.zkoss.image.AImage;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.util.Clients;
 
 /**
  * Utility class containing helper methods in support of online help infrastructure.
@@ -78,6 +79,16 @@ public class HelpUtil {
         if (desktop.getAttribute(VIEWER_ATTRIB) == viewer) {
             desktop.removeAttribute(VIEWER_ATTRIB);
         }
+    }
+    
+    /**
+     * Forces url to open in new browser window.
+     * 
+     * @param url Url of web resource.
+     * @param windowName Name of browser window.
+     */
+    protected static void openWindow(String url, String windowName) {
+        Clients.evalJavaScript("window.open('" + url.replace("~./", "zkau/web/") + "', '" + windowName + "', 'dummy=1')");
     }
     
     /**

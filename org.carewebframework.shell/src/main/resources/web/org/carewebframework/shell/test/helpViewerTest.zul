@@ -1,0 +1,49 @@
+<!-- Layout for testing help sets and help viewer. -->
+<borderlayout height="100%" width="100%">
+	<center id="helpTestFrame" hflex="1">
+		<zscript>
+			<![CDATA[
+				import org.carewebframework.shell.help.HelpRegistry;
+				import org.carewebframework.shell.help.HelpDefinition;
+				import org.carewebframework.help.HelpSetCache;
+				import org.carewebframework.help.HelpUtil;
+				import org.carewebframework.help.IHelpViewer;
+				import org.carewebframework.help.IHelpSet;
+				
+				HelpUtil.embeddedMode(true);
+				IHelpViewer viewer = HelpUtil.getViewer();
+				Window win = (Window) viewer;
+				win.setParent(helpTestFrame);
+				win.setVisible(true);
+				win.setClosable(false);
+				win.setMaximizable(false);
+				win.setMinimizable(false);
+				win.setWidth("100%");
+				win.setHeight("100%");
+				win.setTitle("Help Set Test");
+				HelpRegistry definitions = HelpRegistry.getInstance();
+				HelpSetCache cache = HelpSetCache.getInstance();
+			]]>
+		</zscript>
+	</center>
+	<south splittable="true">
+		<listbox multiple="true" checkmark="true">
+			<listhead>
+				<listheader label="Discovered Help Sets" />
+			</listhead>
+			<listitem checkable="true" forEach="${definitions.all}" 
+				label="${each.title}" value="${each}" />
+			<attribute name="onSelect">
+			<![CDATA[
+					List sets = new ArrayList();
+					for (Listitem item: self.getSelectedItems()) {
+						HelpDefinition def = (HelpDefinition) item.value;
+						IHelpSet hs = cache.get(def);
+						sets.add(hs);
+					}
+					viewer.load(sets);
+			]]>
+			</attribute>
+		</listbox>
+	</south>
+</borderlayout>

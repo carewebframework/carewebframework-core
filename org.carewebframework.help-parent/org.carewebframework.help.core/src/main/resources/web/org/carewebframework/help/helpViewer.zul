@@ -1,5 +1,5 @@
-<window id="win" border="none" height="200px"
-	use="org.carewebframework.help.HelpViewer">
+<window xmlns:c="client" id="win" border="none" height="80%"
+	mold="bootstrap" use="org.carewebframework.help.HelpViewer">
 	<borderlayout>
 		<west size="33%" splittable="true">
 			<div height="100%" width="100%">
@@ -8,27 +8,47 @@
 					<tabs id="tbViews" />
 					<tabpanels id="tpViews" />
 				</tabbox>
-				<label id="lblLoading" sclass="z-toolbar"
-					style="font-size:1.25em;padding-top:40px;height:100%;text-align:center"
-					value="Loading..." />
+				<label id="lblLoading"
+					sclass="z-toolbar cwf-help-viewer-loading" value="Loading..." />
 			</div>
 		</west>
 		<center>
 			<div width="100%" height="100%">
-				<toolbar>
-					<toolbarbutton id="btnPrevious" zclass="btn" sclass="btn-xs btn-default"
+				<toolbar sclass="cwf-help-viewer-navbar">
+					<toolbarbutton id="btnPrevious" zclass="btn"
+						sclass="btn-sm btn-default"
+						iconSclass="glyphicon glyphicon-chevron-left"
 						tooltiptext="${labels.cwf.help.viewer.btn.previous.hint}" />
-					<toolbarbutton id="btnNext" zclass="btn" sclass="btn-xs btn-default"
+					<toolbarbutton id="btnNext" zclass="btn"
+						sclass="btn-sm btn-default"
+						iconSclass="glyphicon glyphicon-chevron-right"
 						tooltiptext="${labels.cwf.help.viewer.btn.next.hint}" />
 					<space />
-					<toolbarbutton id="btnOpen" zclass="btn" sclass="btn-xs btn-default"
+					<toolbarbutton id="btnOpen" zclass="btn"
+						sclass="btn-sm btn-default"
+						iconSclass="glyphicon glyphicon-new-window"
 						tooltiptext="${labels.cwf.help.viewer.btn.open.hint}" />
-					<toolbarbutton id="btnPrint" zclass="btn" sclass="btn-xs btn-default"
-						tooltiptext="${labels.cwf.help.viewer.btn.print.hint}" />
+					<toolbarbutton id="btnPrint" zclass="btn"
+						sclass="btn-sm btn-default" iconSclass="glyphicon glyphicon-print"
+						tooltiptext="${labels.cwf.help.viewer.btn.print.hint}"
+						c:onClick="jq(this.$f('iframe')).get(0).contentWindow.print();" />
 				</toolbar>
 				<iframe id="iframe" name="help_frame" vflex="1"
 					width="100%" />
 			</div>
 		</center>
 	</borderlayout>
+
+	<style>
+		.cwf-help-viewer-loading {
+			font-size: 1.25em;
+			padding-top: 40px;
+			height: 100%;
+			text-align: center		}
+		
+		.cwf-help-viewer-navbar .glyphicon {
+			font-size: large;
+			color: green;
+		}
+	</style>
 </window>
