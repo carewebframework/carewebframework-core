@@ -3,7 +3,7 @@
 		<hbox width="100%">
 			<textbox id="txtSearch" hflex="1" />
 			<toolbarbutton id="btnSearch" width="16px"
-				image="~./org/carewebframework/help/images/search.png" />
+				iconSclass="glyphicon glyphicon-search" />
 		</hbox>
 	</toolbar>
 	<label id="lblNoResultsFound" visible="false"

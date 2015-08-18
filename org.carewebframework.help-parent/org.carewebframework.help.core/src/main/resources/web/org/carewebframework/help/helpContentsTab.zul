@@ -13,6 +13,7 @@
 		
 		.cwf-help-toc-top .z-treecell-text {
 			font-weight: bold;
+			text-decoration: underline;
 		}
 	</style>
 </zk>
