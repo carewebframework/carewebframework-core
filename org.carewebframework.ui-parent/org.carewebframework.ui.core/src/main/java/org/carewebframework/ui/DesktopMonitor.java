@@ -85,11 +85,11 @@ public class DesktopMonitor extends Thread {
                 case BASELINE:
                     monitor.setMode(Mode.LOCK);
                     break;
-                
+                    
                 case LOCK:
                     monitor.requestLogout();
                     break;
-                
+                    
                 case SHUTDOWN:
                     monitor.requestLogout();
                     break;
@@ -123,7 +123,7 @@ public class DesktopMonitor extends Thread {
      */
     private static final String DESKTOP_TIMEOUT_ZUL = org.carewebframework.ui.zk.Constants.RESOURCE_PREFIX
             + "desktopTimeoutWarning.zul";
-    
+            
     /**
      * Events that will not reset keepalive timer.
      */
@@ -203,13 +203,13 @@ public class DesktopMonitor extends Thread {
          *      org.zkoss.zk.ui.Desktop)
          */
         @Override
-        public void afterPageAttached(final Page page, final Desktop desktop) {
+        public void afterPageAttached(Page page, Desktop desktop) {
             desktop.removeListener(this);
             timeoutWindow = (Window) desktop.getExecution().createComponents(DESKTOP_TIMEOUT_ZUL, null, null);
             ZKUtil.wireController(timeoutWindow, DesktopMonitor.this);
             IUser user = securityService.getAuthenticatedUser();
-            lblLocked.setValue(Mode.BASELINE.getLabel(TIMEOUT_EXPIRATION, user.getFullName() + "@"
-                    + user.getSecurityDomain().getName()));
+            lblLocked.setValue(
+                Mode.BASELINE.getLabel(TIMEOUT_EXPIRATION, user.getFullName() + "@" + user.getSecurityDomain().getName()));
             desktop.enableServerPush(true);
             desktop.addListener(desktopActivityMonitor);
             ThreadUtil.startThread(DesktopMonitor.this);
@@ -219,28 +219,28 @@ public class DesktopMonitor extends Thread {
          * Not used.
          */
         @Override
-        public void afterComponentAttached(final Component cmp, final Page page) {
+        public void afterComponentAttached(Component cmp, Page page) {
         }
         
         /*
          * Not used.
          */
         @Override
-        public void afterComponentDetached(final Component cmp, final Page page) {
+        public void afterComponentDetached(Component cmp, Page page) {
         }
         
         /*
          * Not used.
          */
         @Override
-        public void afterComponentMoved(final Component cmp1, final Component cmp2, final Component cmp3) {
+        public void afterComponentMoved(Component cmp1, Component cmp2, Component cmp3) {
         }
         
         /*
          * Not used.
          */
         @Override
-        public void afterPageDetached(final Page page, final Desktop desktop) {
+        public void afterPageDetached(Page page, Desktop desktop) {
         }
         
     };
@@ -258,7 +258,7 @@ public class DesktopMonitor extends Thread {
          * @return whether the process has completed (always returns false)
          */
         @Override
-        public boolean service(final AuRequest request, final boolean everError) {
+        public boolean service(AuRequest request, boolean everError) {
             resetActivity(isKeepAliveRequest(request));
             return false;
         }
@@ -274,7 +274,7 @@ public class DesktopMonitor extends Thread {
          * @param request The inbound request.
          * @return keepAlive True if request should reset inactivity timeout.
          */
-        private boolean isKeepAliveRequest(final AuRequest request) {
+        private boolean isKeepAliveRequest(AuRequest request) {
             return !ArrayUtils.contains(ignore, request.getCommand());
         }
     };
@@ -290,8 +290,8 @@ public class DesktopMonitor extends Thread {
             trace(action.name());
             
             //appName is not set by afterPageAttached so, checking each event
-            final String appName = StringUtils.trimToEmpty(FrameworkUtil.getAppName());
-            final boolean isDesktopLockingDisabled = DesktopMonitor.this.desktopMonitorLockingExclusions.contains(appName);
+            String appName = StringUtils.trimToEmpty(FrameworkUtil.getAppName());
+            boolean isDesktopLockingDisabled = DesktopMonitor.this.desktopMonitorLockingExclusions.contains(appName);
             
             switch (action) {
                 case UPDATE_COUNTDOWN:
@@ -303,7 +303,7 @@ public class DesktopMonitor extends Thread {
                     }
                     resetActivity(false);
                     break;
-                
+                    
                 case UPDATE_MODE:
                     if (!isDesktopLockingDisabled) {
                         setSclass(SCLASS_IDLE);
@@ -312,7 +312,7 @@ public class DesktopMonitor extends Thread {
                         Application.getDesktopInfo(desktop).sendToSpawned(mode == Mode.LOCK ? Command.LOCK : Command.UNLOCK);
                     }
                     break;
-                
+                    
                 case LOGOUT:
                     if (isDesktopLockingDisabled) {
                         log.info(String.format("App[%s] Desktop[%s] was excluded from pre-invalidation locking", appName,
@@ -366,7 +366,7 @@ public class DesktopMonitor extends Thread {
      * 
      * @param desktop Desktop with which this thread will be associated.
      */
-    public DesktopMonitor(final Desktop desktop) {
+    public DesktopMonitor(Desktop desktop) {
         this.desktop = desktop;
         setName("DesktopMonitor-" + desktop.getId());
         inactivityDuration.put(Mode.BASELINE, 900000L);
@@ -415,7 +415,7 @@ public class DesktopMonitor extends Thread {
      * 
      * @param resetKeepAlive If true, the keepalive timer is reset.
      */
-    private synchronized void resetActivity(final boolean resetKeepAlive) {
+    private synchronized void resetActivity(boolean resetKeepAlive) {
         lastActivity = System.currentTimeMillis();
         ((SessionCtrl) desktop.getSession()).notifyClientRequest(true);
         
@@ -435,8 +435,8 @@ public class DesktopMonitor extends Thread {
         long interval = now - lastKeepAlive;
         State oldState = state;
         long delta = inactivityDuration.get(mode) - interval;
-        state = silence >= maximumInactivityInterval ? State.DEAD : delta > 0 ? State.INITIAL
-                : countdown <= 0 ? State.TIMEDOUT : State.COUNTDOWN;
+        state = silence >= maximumInactivityInterval ? State.DEAD
+                : delta > 0 ? State.INITIAL : countdown <= 0 ? State.TIMEDOUT : State.COUNTDOWN;
         boolean stateChanged = oldState != state;
         
         switch (state) {
@@ -450,7 +450,7 @@ public class DesktopMonitor extends Thread {
                 }
                 
                 break;
-            
+                
             case COUNTDOWN:
                 if (stateChanged) {
                     pollingInterval = countdownInterval;
@@ -468,7 +468,7 @@ public class DesktopMonitor extends Thread {
             case TIMEDOUT:
                 mode.onTimeout(this);
                 break;
-            
+                
             case DEAD:
                 this.terminate = true;
                 this.desktopDead = true;
@@ -541,7 +541,7 @@ public class DesktopMonitor extends Thread {
      * 
      * @param message The text message to log.
      */
-    private void trace(final String message) {
+    private void trace(String message) {
         trace(message, null);
     }
     
@@ -551,7 +551,7 @@ public class DesktopMonitor extends Thread {
      * @param label Text to precede the displayed value.
      * @param value The value to display (may be null).
      */
-    private void trace(final String label, final Object value) {
+    private void trace(String label, Object value) {
         if (log.isTraceEnabled()) {
             log.trace(this.desktop + " " + label + (value == null ? "" : " = " + value));
         }
@@ -576,13 +576,13 @@ public class DesktopMonitor extends Thread {
                 try {
                     process();
                     monitor.wait(pollingInterval);
-                } catch (final DesktopUnavailableException e) {
+                } catch (DesktopUnavailableException e) {
                     log.warn(desktop + " DesktopUnavailableException: " + e.getMessage());
-                } catch (final InterruptedException e) {
+                } catch (InterruptedException e) {
                     log.warn(String.format("%s interrupted. Terminating.", this.getClass().getName()));
                     terminate = true;
                     Thread.currentThread().interrupt();
-                } catch (final Exception e) {
+                } catch (Exception e) {
                     log.error(desktop + " : " + e.getMessage(), e);
                     throw UiException.Aide.wrap(e);
                 }
@@ -656,9 +656,9 @@ public class DesktopMonitor extends Thread {
      * Note: setting this too short will result in a desktop whose event thread is busy in a
      * prolonged operation being prematurely discarded.
      * 
-     * @param maximumInactivityInterval - maximum inactivity
+     * @param maximumInactivityInterval Maximum inactivity interval in ms.
      */
-    public void setMaximumInactivityInterval(final long maximumInactivityInterval) {
+    public void setMaximumInactivityInterval(long maximumInactivityInterval) {
         this.maximumInactivityInterval = maximumInactivityInterval;
     }
     
@@ -674,9 +674,9 @@ public class DesktopMonitor extends Thread {
     /**
      * Set how often to update the displayed count down timer (in ms).
      * 
-     * @param countdownInterval - The countdown interval
+     * @param countdownInterval The countdown interval in ms.
      */
-    public void setCountdownInterval(final long countdownInterval) {
+    public void setCountdownInterval(long countdownInterval) {
         this.countdownInterval = countdownInterval;
     }
     
