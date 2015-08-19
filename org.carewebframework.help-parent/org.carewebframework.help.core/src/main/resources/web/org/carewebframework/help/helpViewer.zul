@@ -33,12 +33,12 @@
 						tooltiptext="${labels.cwf.help.viewer.btn.print.hint}"
 						c:onClick="jq(this.$f('iframe')).get(0).contentWindow.print();" />
 				</toolbar>
-				<iframe id="iframe" name="help_frame" vflex="1"
-					width="100%" />
+				<iframe xmlns:ca="client/attribute" id="iframe" name="help_frame" 
+					vflex="1" width="100%" ca:onload="zk.Widget.$(event.target.id).fire('onURLChange', this.src, {toServer:true})">
+				</iframe>
 			</div>
 		</center>
 	</borderlayout>
-
 	<style>
 		.cwf-help-viewer-loading {
 			font-size: 1.25em;

@@ -61,6 +61,8 @@ public class HelpViewer extends Window implements IHelpViewer, AfterCompose, ITo
     
     private boolean proxied;
     
+    private String lastURL;
+    
     private String lastHeight = "400px";
     
     private String lastWidth = "1000px";
@@ -323,6 +325,49 @@ public class HelpViewer extends Window implements IHelpViewer, AfterCompose, ITo
     }
     
     /**
+     * Fired when the iFrame's URL changes.
+     * 
+     * @param event The change event.
+     */
+    public void onURLChange$iframe(Event event) {
+        event = ZKUtil.getEventOrigin(event);
+        String url = (String) event.getData();
+        
+        if (url.equals(lastURL)) {
+            return;
+        }
+        
+        lastURL = url;
+        HelpTopic topic = findTopic(url);
+        
+        if (topic != null) {
+            setTopic(topic);
+        }
+    }
+    
+    /**
+     * Returns a topic matching the specified URL.
+     * 
+     * @param url The URL.
+     * @return The topic matching the URL, or null if not found.
+     */
+    private HelpTopic findTopic(String url) {
+        int i = url.indexOf("/zkau/");
+        url = i == -1 ? url : url.substring(i + 6);
+        System.out.println(url);
+        
+        for (IHelpSet hs : helpSets) {
+            HelpTopic topic = hs.getTopic(url);
+            
+            if (topic != null) {
+                return topic;
+            }
+        }
+        
+        return null;
+    }
+    
+    /**
      * Returns a reference to the tab box.
      * 
      * @return The tab box.
@@ -425,12 +470,12 @@ public class HelpViewer extends Window implements IHelpViewer, AfterCompose, ITo
                 int i = src.indexOf("!");
                 src = i < 0 ? null : HelpUtil.getBaseUrl() + "/zkau" + src.substring(++i);
             }
-            
             iframe.setSrc(src);
         } catch (Exception e) {
             iframe.setSrc("about:" + e);
         }
         
+        lastURL = iframe.getSrc();
         btnPrevious.setDisabled(!history.hasPrevious());
         btnNext.setDisabled(!history.hasNext());
         btnPrint.setDisabled(url == null);

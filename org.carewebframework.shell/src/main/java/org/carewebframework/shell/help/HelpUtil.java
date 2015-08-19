@@ -9,6 +9,7 @@
  */
 package org.carewebframework.shell.help;
 
+import org.carewebframework.help.HelpSetCache;
 import org.carewebframework.help.HelpViewType;
 import org.carewebframework.help.IHelpSet;
 import org.carewebframework.help.IHelpViewer;
@@ -46,7 +47,7 @@ public class HelpUtil {
      */
     public static void show(HelpTarget target) {
         HelpDefinition def = HelpRegistry.getInstance().get(target.module);
-        IHelpSet hs = def == null ? null : def.getHelpSet();
+        IHelpSet hs = def == null ? null : HelpSetCache.getInstance().get(def);
         
         if (hs != null) {
             String label = target.label == null && target.topic == null ? def.getTitle() : target.label;

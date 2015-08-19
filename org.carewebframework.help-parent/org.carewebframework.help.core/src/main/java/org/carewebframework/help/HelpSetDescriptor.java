@@ -20,10 +20,7 @@ public class HelpSetDescriptor {
     
     protected String title;
     
-    private IHelpSet helpSet;
-    
-    public HelpSetDescriptor() {
-    
+    protected HelpSetDescriptor() {
     }
     
     public HelpSetDescriptor(String url, String format, String title) {
@@ -42,14 +39,6 @@ public class HelpSetDescriptor {
     
     public String getTitle() {
         return title;
-    }
-    
-    public IHelpSet getHelpSet() {
-        if (helpSet == null) {
-            helpSet = HelpSetCache.getInstance().get(this);
-        }
-        
-        return helpSet;
     }
     
     @Override

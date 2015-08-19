@@ -10,6 +10,7 @@
 				import org.carewebframework.help.IHelpViewer;
 				import org.carewebframework.help.IHelpSet;
 				
+				helpTestFrame.getDesktop().enableServerPush(true);
 				HelpUtil.embeddedMode(true);
 				IHelpViewer viewer = HelpUtil.getViewer();
 				Window win = (Window) viewer;
@@ -27,7 +28,7 @@
 		</zscript>
 	</center>
 	<south splittable="true">
-		<listbox multiple="true" checkmark="true">
+		<listbox multiple="true" checkmark="true" rows="4">
 			<listhead>
 				<listheader label="Discovered Help Sets" />
 			</listhead>

@@ -30,12 +30,11 @@ public class HelpDefinition extends HelpSetDescriptor {
     
     private String released;
     
-    public static HelpDefinition getDefinition(String tag) {
-        return HelpRegistry.getInstance().get(tag);
+    public static HelpDefinition getDefinition(String id) {
+        return HelpRegistry.getInstance().get(id);
     }
     
     public HelpDefinition() {
-    
     }
     
     /**

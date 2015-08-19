@@ -28,6 +28,7 @@ import org.carewebframework.api.security.SecurityUtil;
 import org.carewebframework.api.spring.SpringUtil;
 import org.carewebframework.common.MiscUtil;
 import org.carewebframework.common.StrUtil;
+import org.carewebframework.help.HelpSetCache;
 import org.carewebframework.help.IHelpSet;
 import org.carewebframework.shell.help.HelpDefinition;
 import org.carewebframework.shell.help.HelpUtil;
@@ -434,7 +435,7 @@ public class CareWebShell extends Div implements AfterCompose {
                 return;
             }
             
-            IHelpSet hs = def.getHelpSet();
+            IHelpSet hs = HelpSetCache.getInstance().get(def);
             
             if (hs == null) {
                 return;
