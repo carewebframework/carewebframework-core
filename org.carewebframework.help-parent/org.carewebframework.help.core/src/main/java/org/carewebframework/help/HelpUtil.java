@@ -11,6 +11,7 @@ package org.carewebframework.help;
 
 import java.io.IOException;
 
+import org.carewebframework.ui.FrameworkWebSupport;
 import org.carewebframework.ui.event.InvocationRequest;
 import org.carewebframework.ui.event.InvocationRequestQueue;
 import org.carewebframework.ui.zk.ZKUtil;
@@ -41,6 +42,15 @@ public class HelpUtil {
     /*package*/static final InvocationRequest closeRequest = InvocationRequestQueue.createRequest("close");
     
     /**
+     * Returns the desktop for the current execution.
+     * 
+     * @return The current desktop.
+     */
+    protected static Desktop getDesktop() {
+        return FrameworkWebSupport.getDesktop();
+    }
+    
+    /**
      * Determines whether the help viewer is displayed as an embedded popup dialog in the same
      * browser viewport, or in a separate browser window.
      * 
@@ -49,7 +59,12 @@ public class HelpUtil {
      */
     public static boolean embeddedMode(boolean value) {
         boolean oldValue = !useViewerProxy;
-        useViewerProxy = !value;
+        
+        if (value != oldValue) {
+            useViewerProxy = !value;
+            getDesktop().removeAttribute(VIEWER_ATTRIB);
+        }
+        
         return oldValue;
     }
     
@@ -60,7 +75,7 @@ public class HelpUtil {
      * @return The help viewer.
      */
     public static IHelpViewer getViewer() {
-        Desktop desktop = Executions.getCurrent().getDesktop();
+        Desktop desktop = getDesktop();
         IHelpViewer viewer = (IHelpViewer) desktop.getAttribute(VIEWER_ATTRIB);
         
         if (viewer != null) {
@@ -74,7 +89,7 @@ public class HelpUtil {
     }
     
     protected static void removeViewer(IHelpViewer viewer) {
-        Desktop desktop = Executions.getCurrent().getDesktop();
+        Desktop desktop = getDesktop();
         
         if (desktop.getAttribute(VIEWER_ATTRIB) == viewer) {
             desktop.removeAttribute(VIEWER_ATTRIB);
