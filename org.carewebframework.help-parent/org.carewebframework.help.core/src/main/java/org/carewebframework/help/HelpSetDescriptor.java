@@ -62,7 +62,8 @@ public class HelpSetDescriptor {
      * @return The encoded URL.
      */
     private String encodeURL(String url) {
-        return url.startsWith("~./") ? "/web" + url.substring(2) : url.startsWith("/web/") ? url : "/web/" + url;
+        return url.startsWith("/") || url.startsWith(".") ? url
+                : url.startsWith("~./") ? "/web" + url.substring(2) : "/web/" + url;
     }
     
 }
