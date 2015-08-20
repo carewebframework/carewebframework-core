@@ -21,23 +21,25 @@ import org.carewebframework.maven.plugin.resource.IResource;
  */
 public abstract class AbstractTransform {
     
-    protected InputStream inputStream;
-    
-    protected OutputStream outputStream;
-    
-    protected BaseMojo mojo;
+    protected final BaseMojo mojo;
     
     public AbstractTransform(BaseMojo mojo) {
         this.mojo = mojo;
     }
     
-    public void process(IResource resource, OutputStream outputStream) throws Exception {
-        this.inputStream = resource.getInputStream();
-        this.outputStream = outputStream;
-        process();
-        this.inputStream.close();
-        this.outputStream.close();
+    public void transform(IResource resource, OutputStream outputStream) throws Exception {
+        try (InputStream inputStream = resource.getInputStream()) {
+            transform(inputStream, outputStream);
+        }
     }
     
-    public abstract void process() throws Exception;
+    /**
+     * Transforms data from an input stream, writing it to an output stream.
+     * 
+     * @param inputStream Input stream containing data to be transformed.
+     * @param outputStream Output stream to receive transformed data.
+     * @throws Exception Unspecified exception.
+     */
+    public abstract void transform(InputStream inputStream, OutputStream outputStream) throws Exception;
+    
 }

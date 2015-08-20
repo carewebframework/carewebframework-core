@@ -12,7 +12,6 @@ package org.carewebframework.maven.plugin.help;
 import org.carewebframework.maven.plugin.iterator.IResourceIterator;
 import org.carewebframework.maven.plugin.processor.AbstractProcessor;
 import org.carewebframework.maven.plugin.resource.IResource;
-import org.carewebframework.maven.plugin.transform.CopyTransform;
 
 public class HelpProcessor extends AbstractProcessor<HelpConverterMojo> {
     
@@ -26,7 +25,7 @@ public class HelpProcessor extends AbstractProcessor<HelpConverterMojo> {
         super(mojo);
         this.loader = loader;
         this.resourceIterator = loader.load(archiveName);
-        registerTransform("*", new CopyTransform(mojo));
+        loader.registerTransforms(this);
     }
     
     @Override

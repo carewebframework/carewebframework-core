@@ -18,6 +18,8 @@ import java.awt.image.BufferedImage;
 import java.awt.image.FilteredImageSource;
 import java.io.File;
 import java.io.FileFilter;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -60,14 +62,14 @@ public class ZKThemeProcessor extends AbstractThemeProcessor {
         protected int height;
         
         @Override
-        public void process() throws Exception {
-            final BufferedImage orig = ImageIO.read(this.inputStream);
+        public void transform(InputStream inputStream, OutputStream outputStream) throws Exception {
+            final BufferedImage orig = ImageIO.read(inputStream);
             this.width = orig.getWidth();
             this.height = orig.getHeight();
             
-            this.resultImg = Toolkit.getDefaultToolkit().createImage(
-                new FilteredImageSource(orig.getSource(), ZKThemeProcessor.this.hueFilter));
-            
+            this.resultImg = Toolkit.getDefaultToolkit()
+                    .createImage(new FilteredImageSource(orig.getSource(), ZKThemeProcessor.this.hueFilter));
+                    
             this.result = new BufferedImage(this.width, this.height, BufferedImage.TYPE_INT_ARGB);
             this.g = this.result.createGraphics();
         }
@@ -83,8 +85,8 @@ public class ZKThemeProcessor extends AbstractThemeProcessor {
         }
         
         @Override
-        public void process() throws Exception {
-            super.process();
+        public void transform(InputStream inputStream, OutputStream outputStream) throws Exception {
+            super.transform(inputStream, outputStream);
             g.drawImage(resultImg, 0, 0, null);
             ImageIO.write(result, "png", outputStream);
             g.dispose();
@@ -101,8 +103,8 @@ public class ZKThemeProcessor extends AbstractThemeProcessor {
         }
         
         @Override
-        public void process() throws Exception {
-            super.process();
+        public void transform(InputStream inputStream, OutputStream outputStream) throws Exception {
+            super.transform(inputStream, outputStream);
             g.setColor(java.awt.Color.white);
             g.setComposite(AlphaComposite.Clear);
             g.fillRect(0, 0, width, height);
@@ -124,7 +126,7 @@ public class ZKThemeProcessor extends AbstractThemeProcessor {
         }
         
         @Override
-        public void process() throws Exception {
+        public void transform(InputStream inputStream, OutputStream outputStream) throws Exception {
             LineIterator iter = IOUtils.lineIterator(inputStream, "UTF-8");
             PrintStream ps = new PrintStream(outputStream);
             

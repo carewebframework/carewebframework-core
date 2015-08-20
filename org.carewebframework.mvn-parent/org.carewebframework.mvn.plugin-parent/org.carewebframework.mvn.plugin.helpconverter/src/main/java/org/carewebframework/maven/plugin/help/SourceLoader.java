@@ -16,6 +16,7 @@ import org.apache.commons.io.filefilter.WildcardFileFilter;
 
 import org.carewebframework.maven.plugin.iterator.DirectoryIterator;
 import org.carewebframework.maven.plugin.iterator.IResourceIterator;
+import org.carewebframework.maven.plugin.transform.CopyTransform;
 
 /**
  * Definition file for a source archive loader.
@@ -34,6 +35,10 @@ public class SourceLoader {
         this.formatSpecifier = formatSpecifier;
         this.helpSetPattern = helpSetPattern;
         this.iteratorClass = iteratorClass;
+    }
+    
+    public void registerTransforms(HelpProcessor processor) {
+        processor.registerTransform("*", new CopyTransform(processor.getMojo()));
     }
     
     public Class<? extends IResourceIterator> getIteratorClass() {

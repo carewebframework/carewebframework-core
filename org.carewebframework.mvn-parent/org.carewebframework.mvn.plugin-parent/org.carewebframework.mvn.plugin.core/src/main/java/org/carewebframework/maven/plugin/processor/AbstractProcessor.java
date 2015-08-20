@@ -12,6 +12,7 @@ package org.carewebframework.maven.plugin.processor;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -67,6 +68,10 @@ public abstract class AbstractProcessor<T extends BaseMojo> {
     
     public abstract void transform() throws Exception;
     
+    public T getMojo() {
+        return mojo;
+    }
+    
     public void transform(IResourceIterator resourceIterator) throws Exception {
         try {
             while (resourceIterator.hasNext()) {
@@ -80,11 +85,11 @@ public abstract class AbstractProcessor<T extends BaseMojo> {
     /**
      * Registers a file transform.
      * 
-     * @param pattern The file pattern.
+     * @param pattern One or more file patterns separated by commas.
      * @param transform The transform.
      */
     public void registerTransform(String pattern, AbstractTransform transform) {
-        transforms.add(new Transform(new WildcardFileFilter(pattern), transform));
+        transforms.add(new Transform(new WildcardFileFilter(pattern.split("\\,")), transform));
     }
     
     /**
@@ -126,12 +131,14 @@ public abstract class AbstractProcessor<T extends BaseMojo> {
             return false;
         }
         
-        AbstractTransform processor = getTransform(name);
+        AbstractTransform transform = getTransform(name);
         
-        if (processor != null) {
+        if (transform != null) {
             File out = mojo.newStagingFile(relocateResource(resource.getTargetPath()), resource.getTime());
-            processor.process(resource, new FileOutputStream(out));
-            return true;
+            try (OutputStream outputStream = new FileOutputStream(out);) {
+                transform.transform(resource, outputStream);
+                return true;
+            }
         }
         
         return false;

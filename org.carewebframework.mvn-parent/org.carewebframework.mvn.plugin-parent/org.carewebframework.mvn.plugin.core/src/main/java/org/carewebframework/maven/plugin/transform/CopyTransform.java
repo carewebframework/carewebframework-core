@@ -9,6 +9,9 @@
  */
 package org.carewebframework.maven.plugin.transform;
 
+import java.io.InputStream;
+import java.io.OutputStream;
+
 import org.apache.commons.io.IOUtils;
 
 import org.carewebframework.maven.plugin.core.BaseMojo;
@@ -23,7 +26,7 @@ public class CopyTransform extends AbstractTransform {
     }
     
     @Override
-    public void process() throws Exception {
+    public void transform(InputStream inputStream, OutputStream outputStream) throws Exception {
         IOUtils.copy(inputStream, outputStream);
     }
 }

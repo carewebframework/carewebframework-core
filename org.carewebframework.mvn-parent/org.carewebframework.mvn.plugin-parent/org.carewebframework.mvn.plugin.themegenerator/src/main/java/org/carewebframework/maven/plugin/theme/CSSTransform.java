@@ -46,32 +46,34 @@ public class CSSTransform extends AbstractTransform {
     private final Map<String, String> defMap = new LinkedHashMap<String, String>();
     
     @Override
-    public void process(IResource resource, OutputStream outputStream) throws Exception {
+    public void transform(IResource resource, OutputStream outputStream) throws Exception {
         CSSResource css = (CSSResource) resource;
         File mapper = css.getMapper();
         
         if (mapper == null) {
-            super.process(resource, outputStream);
+            super.transform(resource, outputStream);
             return;
         }
-        InputStream in = new FileInputStream(mapper);
-        LineIterator lines = IOUtils.lineIterator(in, "UTF-8");
-        String line = "";
         
-        while (lines.hasNext()) {
-            line += lines.nextLine();
+        try (InputStream in = new FileInputStream(mapper)) {
+            LineIterator lines = IOUtils.lineIterator(in, "UTF-8");
+            String line = "";
             
-            if (line.endsWith("\\")) {
-                line = StringUtils.left(line, line.length() - 1);
-            } else {
-                addMapEntry(line);
-                line = "";
+            while (lines.hasNext()) {
+                line += lines.nextLine();
+                
+                if (line.endsWith("\\")) {
+                    line = StringUtils.left(line, line.length() - 1);
+                } else {
+                    addMapEntry(line);
+                    line = "";
+                }
             }
+            
+            addMapEntry(line);
         }
         
-        addMapEntry(line);
-        IOUtils.closeQuietly(in);
-        super.process(resource, outputStream);
+        super.transform(resource, outputStream);
     }
     
     /**
@@ -123,7 +125,7 @@ public class CSSTransform extends AbstractTransform {
      * @param map Map to write.
      * @throws IOException IO exception.
      */
-    private void writeMap(Map<String, String> map) throws IOException {
+    private void writeMap(Map<String, String> map, OutputStream outputStream) throws IOException {
         for (String entry : map.values()) {
             if (entry.contains(DELIM)) {
                 mojo.getLog().warn("Output contains unresolved reference: " + entry);
@@ -134,7 +136,7 @@ public class CSSTransform extends AbstractTransform {
     }
     
     @Override
-    public void process() throws Exception {
+    public void transform(InputStream inputStream, OutputStream outputStream) throws Exception {
         int c = 0;
         int state = 0;
         StringBuilder sb = new StringBuilder();
@@ -185,18 +187,18 @@ public class CSSTransform extends AbstractTransform {
                         case '/': // Possible comment start
                             state = 1;
                             break;
-                        
+                            
                         case '<': // Directive start
                             state = 10;
                             break;
-                        
+                            
                         case '{': // Declaration block
                             state = 20;
                             break;
-                        
+                            
                         case ',': // Selector separator
                             break;
-                        
+                            
                         case '}': // Don't know why these occur, but ignore them.
                             continue;
                             
@@ -208,41 +210,41 @@ public class CSSTransform extends AbstractTransform {
                     checkForMatch(sb.toString(), matches, refMap);
                     sb.setLength(0);
                     break;
-                
+                    
                 case 1: // Possible comment
                     state = c == '*' ? 2 : 0;
                     break;
-                
+                    
                 case 2: // Possible comment end
                     state = c == '*' ? 3 : state;
                     break;
-                
+                    
                 case 3: // Comment end
                     state = c == '/' ? 0 : c == '*' ? state : 2;
                     break;
-                
+                    
                 case 10: // Directive end
                     state = c == '>' ? 0 : state;
                     break;
-                
+                    
                 case 20: // Declaration block
                     switch (c) {
                         case '}': // End block
                             state = -1;
                             break;
-                        
+                            
                         case ':': // Start of property value
                             prop = sb.toString().trim();
                             sb.setLength(0);
                             state = 30;
                             break;
-                        
+                            
                         default: // Build property name
                             sb.append((char) c);
                             break;
                     }
                     break;
-                
+                    
                 case 30: // Property value
                     switch (c) {
                         case ';': // Property separator
@@ -251,7 +253,7 @@ public class CSSTransform extends AbstractTransform {
                             sb.setLength(0);
                             state = c == ';' ? 20 : -1;
                             break;
-                        
+                            
                         default: // Build property value
                             sb.append((char) c);
                             break;
@@ -262,8 +264,8 @@ public class CSSTransform extends AbstractTransform {
         }
         
         checkForMatch("@after@", matches, defMap);
-        writeMap(refMap);
-        writeMap(defMap);
+        writeMap(refMap, outputStream);
+        writeMap(defMap, outputStream);
         
         if (!srcMap.isEmpty()) {
             mojo.getLog().warn("The following entries failed to match and were ignored:");
