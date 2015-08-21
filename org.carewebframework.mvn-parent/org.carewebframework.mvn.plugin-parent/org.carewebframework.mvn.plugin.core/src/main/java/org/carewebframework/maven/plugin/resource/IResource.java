@@ -34,7 +34,7 @@ public interface IResource {
     
     /**
      * Returns the relative path to the target file of this resource. This is often the same as the
-     * source path.
+     * source path. If null is returned, the resource is ignored during processing.
      * 
      * @return The relative path to the target file.
      */

@@ -155,10 +155,7 @@ public class ZKThemeProcessor extends AbstractThemeProcessor {
         addConfigEntry("zk");
         registerTransform("*.gif", new GifTransform(mojo));
         registerTransform("*.png", new PngTransform(mojo));
-        CssTransform cssTransform = new CssTransform(mojo);
-        registerTransform("*.css", cssTransform);
-        registerTransform("*.css.dsp", cssTransform);
-        registerTransform("*.wcs", cssTransform);
+        registerTransform("*.css,*.css.dsp,*.wcs", new CssTransform(mojo));
     }
     
     /**
