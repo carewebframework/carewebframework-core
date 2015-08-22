@@ -48,6 +48,15 @@ public class HelpTopic implements Comparable<HelpTopic> {
     }
     
     /**
+     * Copy constructor
+     * 
+     * @param topic Help topic to copy.
+     */
+    public HelpTopic(HelpTopic topic) {
+        this(topic.url, topic.label, topic.source);
+    }
+    
+    /**
      * Returns the source of the topic.
      * 
      * @return A displayable source.
