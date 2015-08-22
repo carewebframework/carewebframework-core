@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -19,6 +19,8 @@ public class HelpTopicNode {
     
     private final HelpTopic topic;
     
+    private final String nodeId;
+    
     private final LinkedList<HelpTopicNode> children = new LinkedList<HelpTopicNode>();
     
     private HelpTopicNode parent;
@@ -29,7 +31,18 @@ public class HelpTopicNode {
      * @param topic A help topic.
      */
     public HelpTopicNode(HelpTopic topic) {
+        this(topic, null);
+    }
+    
+    /**
+     * Create a topic node with its associated help topic.
+     * 
+     * @param topic A help topic.
+     * @param nodeId Optional node id.
+     */
+    public HelpTopicNode(HelpTopic topic, String nodeId) {
         this.topic = topic;
+        this.nodeId = nodeId;
     }
     
     /**
@@ -39,6 +52,15 @@ public class HelpTopicNode {
      */
     public List<HelpTopicNode> getChildren() {
         return children;
+    }
+    
+    /**
+     * Returns the node's id value, if any.
+     * 
+     * @return The node id.
+     */
+    public String getNodeId() {
+        return nodeId;
     }
     
     /**

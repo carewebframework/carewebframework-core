@@ -88,6 +88,10 @@ public class HelpConverterMojo extends BaseMojo {
         return moduleBase;
     }
     
+    public String getModuleName() {
+        return moduleName;
+    }
+    
     public String getModuleId() {
         return moduleId;
     }
