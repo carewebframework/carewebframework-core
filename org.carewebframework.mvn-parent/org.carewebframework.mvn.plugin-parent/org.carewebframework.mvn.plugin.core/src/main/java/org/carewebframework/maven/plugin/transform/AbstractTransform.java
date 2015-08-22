@@ -27,6 +27,17 @@ public abstract class AbstractTransform {
         this.mojo = mojo;
     }
     
+    /**
+     * Override to allow transform to control naming of target path. By default simply returns the
+     * target path specified by the resource.
+     * 
+     * @param resource The resource being processed.
+     * @return The resource's target path.
+     */
+    public String getTargetPath(IResource resource) {
+        return resource.getTargetPath();
+    }
+    
     public void transform(IResource resource, OutputStream outputStream) throws Exception {
         try (InputStream inputStream = resource.getInputStream()) {
             transform(inputStream, outputStream);
