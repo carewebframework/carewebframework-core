@@ -44,7 +44,17 @@ public abstract class AbstractCache<KEY, VALUE> implements Iterable<VALUE> {
      * @return The associated value.
      */
     public VALUE get(KEY key) {
-        return map.containsKey(key) ? map.get(key) : internalGet(key);
+        return isCached(key) ? map.get(key) : internalGet(key);
+    }
+    
+    /**
+     * Returns true if the item associated with the specified key is in the cache.
+     * 
+     * @param key The key.
+     * @return True if associated item has been cached.
+     */
+    public boolean isCached(KEY key) {
+        return map.containsKey(key);
     }
     
     /**
