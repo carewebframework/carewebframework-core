@@ -26,7 +26,7 @@ import javax.help.NavigatorView;
 import javax.help.SearchView;
 import javax.help.TOCView;
 
-import org.carewebframework.help.HelpSetDescriptor;
+import org.carewebframework.help.HelpModule;
 import org.carewebframework.help.HelpTopic;
 import org.carewebframework.help.HelpViewType;
 import org.carewebframework.help.IHelpView;
@@ -46,7 +46,7 @@ public class HelpSet_JavaHelp implements org.carewebframework.help.IHelpSet {
     
     private final List<IHelpView> helpViews = new ArrayList<IHelpView>();
     
-    public HelpSet_JavaHelp(HelpSetDescriptor descriptor) throws MalformedURLException, HelpSetException {
+    public HelpSet_JavaHelp(HelpModule descriptor) throws MalformedURLException, HelpSetException {
         String url = descriptor.getUrl();
         helpSet = new HelpSet(HelpSet_JavaHelp.class.getClassLoader(),
                 url.startsWith("/web/") ? getClass().getResource(url) : new URL(url));

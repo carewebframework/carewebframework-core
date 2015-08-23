@@ -7,7 +7,7 @@
  * Disclaimer of Warranty and Limitation of Liability available at
  * http://www.carewebframework.org/licensing/disclaimer.
  */
-package org.carewebframework.shell.themes;
+package org.carewebframework.ui.themes;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -48,24 +48,8 @@ public class ThemeDefinition implements ApplicationContextAware {
     
     private Set<String> files;
     
-    private ThemeRegistry themeRegistry;
-    
     public ThemeDefinition() {
-        
-    }
     
-    /**
-     * Remove the theme definition from the registry when it is destroyed.
-     */
-    public void destroy() {
-        themeRegistry.unregister(this);
-    }
-    
-    /**
-     * Called when the definition is fully instantiated.
-     */
-    public void init() {
-        themeRegistry.register(this);
     }
     
     public String getId() {
@@ -178,14 +162,6 @@ public class ThemeDefinition implements ApplicationContextAware {
             
         } catch (Exception e) {}
         
-    }
-    
-    public void setThemeRegistry(ThemeRegistry themeRegistry) {
-        this.themeRegistry = themeRegistry;
-    }
-    
-    public ThemeRegistry getThemeRegistry() {
-        return themeRegistry;
     }
     
 }

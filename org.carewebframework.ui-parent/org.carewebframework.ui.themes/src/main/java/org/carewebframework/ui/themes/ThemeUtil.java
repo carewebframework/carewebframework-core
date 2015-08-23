@@ -1,4 +1,4 @@
-package org.carewebframework.shell.themes;
+package org.carewebframework.ui.themes;
 
 import org.zkoss.zk.ui.HtmlBasedComponent;
 

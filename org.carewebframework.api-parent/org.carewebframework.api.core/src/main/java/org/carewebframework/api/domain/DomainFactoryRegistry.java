@@ -17,7 +17,7 @@ import org.carewebframework.api.spring.BeanRegistry;
  * Tracks all domain factory implementations.
  */
 @SuppressWarnings("rawtypes")
-public class DomainFactoryRegistry extends BeanRegistry<IDomainFactory> {
+public class DomainFactoryRegistry extends BeanRegistry<String, IDomainFactory> {
     
     private static DomainFactoryRegistry instance = new DomainFactoryRegistry();
     
@@ -72,6 +72,11 @@ public class DomainFactoryRegistry extends BeanRegistry<IDomainFactory> {
     
     private DomainFactoryRegistry() {
         super(IDomainFactory.class);
+    }
+    
+    @Override
+    protected String getKey(IDomainFactory item) {
+        return item.getClass().getName();
     }
     
 }

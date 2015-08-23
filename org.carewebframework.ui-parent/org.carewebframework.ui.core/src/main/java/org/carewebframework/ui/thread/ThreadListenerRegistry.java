@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -19,7 +19,7 @@ import org.carewebframework.api.spring.BeanRegistry;
  * beans will be notified when a new event thread or worker thread has been created or will be
  * destroyed.
  */
-public class ThreadListenerRegistry extends BeanRegistry<ThreadListenerRegistry.IThreadListener> {
+public class ThreadListenerRegistry extends BeanRegistry<String, ThreadListenerRegistry.IThreadListener> {
     
     private static final ThreadListenerRegistry instance = new ThreadListenerRegistry();
     
@@ -51,7 +51,7 @@ public class ThreadListenerRegistry extends BeanRegistry<ThreadListenerRegistry.
      * @param init If true, is thread initiation; otherwise is thread termination.
      */
     public static void notifyListeners(boolean init) {
-        for (IThreadListener subscriber : getInstance().getMembers()) {
+        for (IThreadListener subscriber : getInstance().getAll()) {
             try {
                 if (init) {
                     subscriber.onThreadInit();
@@ -69,6 +69,11 @@ public class ThreadListenerRegistry extends BeanRegistry<ThreadListenerRegistry.
      */
     private ThreadListenerRegistry() {
         super(IThreadListener.class);
+    }
+    
+    @Override
+    protected String getKey(IThreadListener item) {
+        return getClass().getName();
     }
     
 }

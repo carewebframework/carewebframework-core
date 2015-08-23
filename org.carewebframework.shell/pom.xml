@@ -17,11 +17,11 @@
 		</dependency>
 		<dependency>
 			<groupId>org.carewebframework</groupId>
-			<artifactId>org.carewebframework.help.core</artifactId>
+			<artifactId>org.carewebframework.ui.themes</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
+			<groupId>org.carewebframework</groupId>
+			<artifactId>org.carewebframework.help.core</artifactId>
 		</dependency>
 		<!-- Tests -->
 		<dependency>

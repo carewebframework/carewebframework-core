@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -9,11 +9,8 @@
  */
 package org.carewebframework.shell.plugins;
 
-import org.apache.commons.lang.StringUtils;
-
-import org.carewebframework.shell.help.HelpDefinition;
-import org.carewebframework.shell.help.HelpRegistry;
-import org.carewebframework.shell.help.HelpUtil;
+import org.carewebframework.help.HelpCSH;
+import org.carewebframework.help.HelpModule;
 
 /**
  * Resource for declaring items to appear under the help menu.
@@ -41,8 +38,8 @@ public class PluginResourceHelp implements IPluginResource {
     // An optional topic within the help module.  If not specified, the default topic is displayed.
     private String topic;
     
-    // The name of the help module if using the embedded help system.
-    private String module;
+    // The unique id of the help module.
+    private String id;
     
     /**
      * Returns the path that determines where the associated menu item will appear under the help
@@ -55,8 +52,8 @@ public class PluginResourceHelp implements IPluginResource {
      */
     public String getPath() {
         if (path == null) {
-            HelpDefinition def = getHelpDefinition();
-            path = def == null ? "" : def.getTitle();
+            HelpModule module = HelpModule.getModule(id);
+            path = module == null ? "" : module.getTitle();
         }
         
         return path;
@@ -84,9 +81,10 @@ public class PluginResourceHelp implements IPluginResource {
      */
     public String getAction() {
         if (action == null) {
-            HelpDefinition def = getHelpDefinition();
-            action = def == null ? "" : "zscript:" + HelpUtil.class.getName() + ".show(\"" + module + "\",\""
-                    + (topic == null ? "" : topic) + "\",\"" + def.getTitle() + "\");";
+            HelpModule module = HelpModule.getModule(id);
+            action = module == null ? ""
+                    : "zscript:" + HelpCSH.class.getName() + ".show(\"" + id + "\",\"" + (topic == null ? "" : topic)
+                            + "\",\"" + module.getTitle() + "\");";
         }
         
         return action;
@@ -134,7 +132,7 @@ public class PluginResourceHelp implements IPluginResource {
      * @return The id of the associated help module.
      */
     public String getModule() {
-        return module;
+        return id;
     }
     
     /**
@@ -144,17 +142,7 @@ public class PluginResourceHelp implements IPluginResource {
      * @param module The id of the associated help module.
      */
     public void setModule(String module) {
-        this.module = module;
-    }
-    
-    /**
-     * Returns the help definition of the associated help module, if one has been specified.
-     * 
-     * @return The help definition of the associated help module. It will be null if a module has
-     *         not been specified, or the module has not been registered.
-     */
-    public HelpDefinition getHelpDefinition() {
-        return StringUtils.isEmpty(module) ? null : HelpRegistry.getInstance().get(module);
+        this.id = module;
     }
     
     /**

@@ -28,10 +28,11 @@ import org.carewebframework.api.security.SecurityUtil;
 import org.carewebframework.api.spring.SpringUtil;
 import org.carewebframework.common.MiscUtil;
 import org.carewebframework.common.StrUtil;
+import org.carewebframework.help.HelpCSH;
+import org.carewebframework.help.HelpModule;
 import org.carewebframework.help.HelpSetCache;
+import org.carewebframework.help.HelpUtil;
 import org.carewebframework.help.IHelpSet;
-import org.carewebframework.shell.help.HelpDefinition;
-import org.carewebframework.shell.help.HelpUtil;
 import org.carewebframework.shell.layout.UIElementDesktop;
 import org.carewebframework.shell.layout.UIElementZKBase;
 import org.carewebframework.shell.layout.UILayout;
@@ -88,7 +89,7 @@ public class CareWebShell extends Div implements AfterCompose {
     
     private final List<PluginContainer> plugins = new ArrayList<PluginContainer>();
     
-    private final List<HelpDefinition> helpModules = new ArrayList<HelpDefinition>();
+    private final List<HelpModule> helpModules = new ArrayList<HelpModule>();
     
     private final List<String> propertyGroups = new ArrayList<String>();
     
@@ -196,7 +197,7 @@ public class CareWebShell extends Div implements AfterCompose {
     public void onCommand(CommandEvent event) {
         if ("help".equals(event.getCommandName())) {
             Component ref = event.getReference();
-            HelpUtil.showCSH(ref == null ? event.getTarget() : ref);
+            HelpCSH.showCSH(ref == null ? event.getTarget() : ref);
         }
     }
     
@@ -428,7 +429,7 @@ public class CareWebShell extends Div implements AfterCompose {
      * @param resource Resource defining the help menu item to be added.
      */
     public void registerHelpResource(PluginResourceHelp resource) {
-        HelpDefinition def = resource.getHelpDefinition();
+        HelpModule def = HelpModule.getModule(resource.getModule());
         
         if (def != null) {
             if (helpModules.contains(def)) {

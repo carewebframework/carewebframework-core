@@ -7,7 +7,7 @@
  * Disclaimer of Warranty and Limitation of Liability available at
  * http://www.carewebframework.org/licensing/disclaimer.
  */
-package org.carewebframework.shell.themes;
+package org.carewebframework.ui.themes;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -15,7 +15,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.carewebframework.shell.themes.ThemeDefinition.ThemeType;
+import org.carewebframework.ui.themes.ThemeDefinition.ThemeType;
 
 import org.zkoss.zk.ui.Execution;
 

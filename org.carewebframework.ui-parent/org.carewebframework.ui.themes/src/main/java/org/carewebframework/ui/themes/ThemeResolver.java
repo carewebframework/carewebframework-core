@@ -7,7 +7,7 @@
  * Disclaimer of Warranty and Limitation of Liability available at
  * http://www.carewebframework.org/licensing/disclaimer.
  */
-package org.carewebframework.shell.themes;
+package org.carewebframework.ui.themes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -60,11 +60,11 @@ public class ThemeResolver implements org.zkoss.web.theme.ThemeResolver {
                 case 1: // Theme from servlet request.
                     themeName = (String) request.getAttribute(THEME_PROPERTY);
                     break;
-                
+                    
                 case 2: // Theme from query parameter.
                     themeName = request.getParameter("theme");
                     break;
-                
+                    
                 case 3: // Theme from session.
                     Desktop dt = FrameworkWebSupport.getDesktop();
                     HttpSession session = request.getSession(false);
@@ -76,11 +76,11 @@ public class ThemeResolver implements org.zkoss.web.theme.ThemeResolver {
                     }
                     
                     break;
-                
+                    
                 case 4: // Theme from property.
                     themeName = !PropertyUtil.isAvailable() ? null : PropertyUtil.getValue(THEME_PROPERTY, null);
                     break;
-                
+                    
                 case 5: // Default theme when all else fails.
                     themeName = "theme-default";
                     break;

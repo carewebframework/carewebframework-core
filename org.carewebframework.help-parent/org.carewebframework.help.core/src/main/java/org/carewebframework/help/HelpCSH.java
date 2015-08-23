@@ -7,24 +7,19 @@
  * Disclaimer of Warranty and Limitation of Liability available at
  * http://www.carewebframework.org/licensing/disclaimer.
  */
-package org.carewebframework.shell.help;
+package org.carewebframework.help;
 
-import org.carewebframework.help.HelpSetCache;
-import org.carewebframework.help.HelpViewType;
-import org.carewebframework.help.IHelpSet;
-import org.carewebframework.help.IHelpViewer;
-import org.carewebframework.shell.CareWebUtil;
 import org.carewebframework.ui.command.CommandUtil;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zul.impl.XulElement;
 
 /**
- * Utility methods for help subsystem.
+ * Utility methods supporting context sensitive help.
  */
-public class HelpUtil {
+public class HelpCSH {
     
-    private static final String HELP_PREFIX = HelpUtil.class.getPackage().getName() + ".";
+    private static final String HELP_PREFIX = HelpCSH.class.getPackage().getName() + ".";
     
     private static final String CSH_TARGET = HELP_PREFIX + "target";
     
@@ -37,7 +32,7 @@ public class HelpUtil {
      *            label.
      */
     public static void show(String module, String topic, String label) {
-        show(new HelpTarget(module, topic, label));
+        show(new HelpContext(module, topic, label));
     }
     
     /**
@@ -45,32 +40,23 @@ public class HelpUtil {
      * 
      * @param target The help target.
      */
-    public static void show(HelpTarget target) {
-        HelpDefinition def = HelpRegistry.getInstance().get(target.module);
-        IHelpSet hs = def == null ? null : HelpSetCache.getInstance().get(def);
+    public static void show(HelpContext target) {
+        HelpModule dx = HelpModuleRegistry.getInstance().get(target.module);
+        IHelpSet hs = dx == null ? null : HelpSetCache.getInstance().get(dx);
         
         if (hs != null) {
-            String label = target.label == null && target.topic == null ? def.getTitle() : target.label;
-            IHelpViewer viewer = getViewer();
+            String label = target.label == null && target.topic == null ? dx.getTitle() : target.label;
+            IHelpViewer viewer = HelpUtil.getViewer();
             viewer.mergeHelpSet(hs);
             viewer.show(hs, target.topic, label);
         }
     }
     
     /**
-     * Returns a reference to the help viewer or its proxy.
-     * 
-     * @return The viewer or its proxy.
-     */
-    public static IHelpViewer getViewer() {
-        return org.carewebframework.help.HelpUtil.getViewer();
-    }
-    
-    /**
      * Displays the help viewer's table of contents.
      */
     public static void showTOC() {
-        getViewer().show(HelpViewType.TOC);
+        HelpUtil.getViewer().show(HelpViewType.TOC);
     }
     
     /**
@@ -82,7 +68,7 @@ public class HelpUtil {
      */
     public static void showCSH(Component component) {
         while (component != null) {
-            HelpTarget target = (HelpTarget) component.getAttribute(CSH_TARGET);
+            HelpContext target = (HelpContext) component.getAttribute(CSH_TARGET);
             
             if (target != null) {
                 show(target);
@@ -97,25 +83,13 @@ public class HelpUtil {
      * replaced.
      * 
      * @param component Component to be associated.
-     * @param module Module id of the help set.
-     * @param topic Topic id of the topic.
-     * @param label Label to be associated with the topic (may be null).
+     * @param helpContext The help target.
+     * @param commandTarget The command target.
      */
-    public static void associateCSH(XulElement component, String module, String topic, String label) {
-        associateCSH(component, new HelpTarget(module, topic, label));
-    }
-    
-    /**
-     * Associates context-sensitive help topic with a component. Any existing association is
-     * replaced.
-     * 
-     * @param component Component to be associated.
-     * @param target The help target.
-     */
-    public static void associateCSH(XulElement component, HelpTarget target) {
+    public static void associateCSH(XulElement component, HelpContext helpContext, Component commandTarget) {
         if (component != null) {
-            component.setAttribute(CSH_TARGET, target);
-            CommandUtil.associateCommand("help", component, CareWebUtil.getShell());
+            component.setAttribute(CSH_TARGET, helpContext);
+            CommandUtil.associateCommand("help", component, commandTarget);
         }
     }
     
@@ -134,6 +108,6 @@ public class HelpUtil {
     /**
      * Enforces static class.
      */
-    private HelpUtil() {
+    private HelpCSH() {
     };
 }

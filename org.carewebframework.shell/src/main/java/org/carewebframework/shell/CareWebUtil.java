@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -11,8 +11,12 @@ package org.carewebframework.shell;
 
 import org.carewebframework.api.FrameworkUtil;
 import org.carewebframework.api.ManifestIterator;
+import org.carewebframework.help.HelpCSH;
+import org.carewebframework.help.HelpContext;
 import org.carewebframework.ui.action.ActionRegistry;
 import org.carewebframework.ui.zk.MessageWindow.MessageInfo;
+
+import org.zkoss.zul.impl.XulElement;
 
 /**
  * Static utility methods.
@@ -82,6 +86,29 @@ public class CareWebUtil {
      */
     public static void showMessage(String message) {
         showMessage(message, null);
+    }
+    
+    /**
+     * Associates help context with a component.
+     * 
+     * @param component The component.
+     * @param module The help module identifier.
+     * @param topic The topic id.
+     * @param label The topic label.
+     */
+    public static void associateCSH(XulElement component, String module, String topic, String label) {
+        HelpContext context = new HelpContext(module, topic, label);
+        HelpCSH.associateCSH(component, context, getShell());
+    }
+    
+    /**
+     * Associates help context with a component.
+     * 
+     * @param component The component.
+     * @param context The help context.
+     */
+    public static void associateCSH(XulElement component, HelpContext context) {
+        HelpCSH.associateCSH(component, context, getShell());
     }
     
     /**

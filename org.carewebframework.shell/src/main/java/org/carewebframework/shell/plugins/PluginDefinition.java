@@ -52,8 +52,6 @@ public class PluginDefinition {
         }
     }
     
-    private PluginRegistry pluginRegistry;
-    
     private String name;
     
     private String source;
@@ -116,7 +114,7 @@ public class PluginDefinition {
      * The basic constructor.
      */
     public PluginDefinition() {
-        
+    
     }
     
     /**
@@ -130,8 +128,6 @@ public class PluginDefinition {
         super();
         this.name = name;
         this.clazz = clazz;
-        init();
-        
     }
     
     /**
@@ -141,26 +137,6 @@ public class PluginDefinition {
      */
     public PluginDefinition(PluginDefinition def) {
         BeanUtils.copyProperties(def, this);
-    }
-    
-    /**
-     * Remove the plugin definition from the registry when it is destroyed.
-     */
-    public void destroy() {
-        if (pluginRegistry != null) {
-            pluginRegistry.unregister(this);
-        }
-    }
-    
-    /**
-     * Called when the plugin definition is fully instantiated.
-     */
-    public void init() {
-        if (name != null && !name.isEmpty()) {
-            if (pluginRegistry != null) {
-                pluginRegistry.register(this);
-            }
-        }
     }
     
     /**
@@ -353,24 +329,6 @@ public class PluginDefinition {
      */
     public void setProperties(List<PropertyInfo> properties) {
         this.properties.addAll(properties);
-    }
-    
-    /**
-     * Sets a reference to the plugin registry.
-     * 
-     * @param pluginRegistry The plugin registry.
-     */
-    public void setPluginRegistry(PluginRegistry pluginRegistry) {
-        this.pluginRegistry = pluginRegistry;
-    }
-    
-    /**
-     * Returns a reference to the plugin registry.
-     * 
-     * @return Plugin registry instance.
-     */
-    public PluginRegistry getPluginRegistry() {
-        return pluginRegistry;
     }
     
     /**

@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -10,6 +10,7 @@
 package org.carewebframework.shell.themes;
 
 import org.carewebframework.shell.BaseXmlParser;
+import org.carewebframework.ui.themes.ThemeDefinition;
 
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 
@@ -29,10 +30,6 @@ public class ThemeXmlParser extends BaseXmlParser {
     
     @Override
     protected void doParse(Element element, BeanDefinitionBuilder builder) {
-        builder.setInitMethodName("init");
-        builder.setDestroyMethodName("destroy");
-        builder.addDependsOn("themeRegistry");
-        builder.addPropertyReference("themeRegistry", "themeRegistry");
         addProperties(element, builder);
     }
     

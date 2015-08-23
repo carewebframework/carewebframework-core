@@ -3,8 +3,8 @@
 	<center id="helpTestFrame" hflex="1">
 		<zscript>
 			<![CDATA[
-				import org.carewebframework.shell.help.HelpRegistry;
-				import org.carewebframework.shell.help.HelpDefinition;
+				import org.carewebframework.help.HelpModuleRegistry;
+				import org.carewebframework.help.HelpModule;;
 				import org.carewebframework.help.HelpSetCache;
 				import org.carewebframework.help.HelpUtil;
 				import org.carewebframework.help.IHelpViewer;
@@ -22,7 +22,7 @@
 				win.setWidth("100%");
 				win.setHeight("100%");
 				win.setTitle("Help Set Test");
-				HelpRegistry definitions = HelpRegistry.getInstance();
+				HelpModuleRegistry definitions = HelpModuleRegistry.getInstance();
 				HelpSetCache cache = HelpSetCache.getInstance();
 			]]>
 		</zscript>
@@ -38,8 +38,8 @@
 			<![CDATA[
 					List sets = new ArrayList();
 					for (Listitem item: self.getSelectedItems()) {
-						HelpDefinition def = (HelpDefinition) item.value;
-						IHelpSet hs = cache.get(def);
+						HelpModule module = (HelpModule) item.value;
+						IHelpSet hs = cache.get(module);
 						sets.add(hs);
 					}
 					viewer.load(sets);

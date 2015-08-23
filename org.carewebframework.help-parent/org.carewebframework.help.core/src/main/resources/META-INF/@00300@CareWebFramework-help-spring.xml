@@ -10,6 +10,10 @@
 		 http://www.carewebframework.org/schema/plugin/plugin-extensions.xsd">
 
 	<beans profile="root">
+		<!-- Represents a registry of all known help modules. -->
+		<bean id="helpRegistry" class="org.carewebframework.help.HelpModuleRegistry"
+			factory-method="getInstance" />
+
 		<!-- Set Help Subsystem Properties -->
 		<bean class="org.carewebframework.help.HelpUtil"
 			factory-method="embeddedMode">

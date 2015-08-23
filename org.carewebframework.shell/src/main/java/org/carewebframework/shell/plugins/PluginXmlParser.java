@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -46,11 +46,7 @@ public class PluginXmlParser extends BaseXmlParser {
     
     @Override
     protected void doParse(Element element, ParserContext parserContext, BeanDefinitionBuilder builder) {
-        builder.setInitMethodName("init");
-        builder.setDestroyMethodName("destroy");
-        builder.addDependsOn("pluginRegistry");
         builder.addDependsOn("manifestIterator");
-        builder.addPropertyReference("pluginRegistry", "pluginRegistry");
         builder.addPropertyValue("path", getResourcePath(parserContext));
         addProperties(element, builder);
         
@@ -121,31 +117,31 @@ public class PluginXmlParser extends BaseXmlParser {
                 case button:
                     resourceClass = PluginResourceButton.class;
                     break;
-                
+                    
                 case help:
                     resourceClass = PluginResourceHelp.class;
                     break;
-                
+                    
                 case menu:
                     resourceClass = PluginResourceMenu.class;
                     break;
-                
+                    
                 case property:
                     resourceClass = PluginResourcePropertyGroup.class;
                     break;
-                
+                    
                 case css:
                     resourceClass = PluginResourceCSS.class;
                     break;
-                
+                    
                 case bean:
                     resourceClass = PluginResourceBean.class;
                     break;
-                
+                    
                 case command:
                     resourceClass = PluginResourceCommand.class;
                     break;
-                
+                    
                 case action:
                     resourceClass = PluginResourceAction.class;
                     break;

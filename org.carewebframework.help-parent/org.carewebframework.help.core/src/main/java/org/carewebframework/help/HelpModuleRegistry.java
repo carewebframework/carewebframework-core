@@ -9,32 +9,28 @@
  */
 package org.carewebframework.help;
 
-import org.carewebframework.common.AbstractCache;
+import org.carewebframework.api.spring.BeanRegistry;
 
 /**
- * Maintains a cache of all known help sets. This is a singleton class.
+ * Registry of all known help modules.
  */
-public class HelpSetCache extends AbstractCache<HelpModule, IHelpSet> {
+public class HelpModuleRegistry extends BeanRegistry<String, HelpModule> {
     
-    private static final HelpSetCache instance = new HelpSetCache();
+    private static final HelpModuleRegistry instance = new HelpModuleRegistry();
     
-    public static HelpSetCache getInstance() {
+    public static HelpModuleRegistry getInstance() {
         return instance;
     }
     
     /**
      * Enforce singleton instance.
      */
-    private HelpSetCache() {
-        super();
+    private HelpModuleRegistry() {
+        super(HelpModule.class);
     }
     
     @Override
-    protected IHelpSet fetch(HelpModule descriptor) {
-        return HelpSetFactory.create(descriptor);
-    }
-    
-    public IHelpSet getIfCached(HelpModule descriptor) {
-        return isCached(descriptor) ? get(descriptor) : null;
+    protected String getKey(HelpModule item) {
+        return item.getId();
     }
 }

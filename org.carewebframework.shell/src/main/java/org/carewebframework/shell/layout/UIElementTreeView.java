@@ -11,7 +11,7 @@ package org.carewebframework.shell.layout;
 
 import org.carewebframework.shell.designer.PropertyEditorTreeView;
 import org.carewebframework.shell.property.PropertyTypeRegistry;
-import org.carewebframework.shell.themes.ThemeUtil;
+import org.carewebframework.ui.themes.ThemeUtil;
 
 import org.zkoss.zul.Div;
 import org.zkoss.zul.LayoutRegion;

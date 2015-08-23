@@ -7,18 +7,20 @@
  * Disclaimer of Warranty and Limitation of Liability available at
  * http://www.carewebframework.org/licensing/disclaimer.
  */
-package org.carewebframework.shell.help;
-
-import org.carewebframework.help.HelpSetDescriptor;
+package org.carewebframework.help;
 
 /**
  * Each instance of this class defines a complete definition of a CareWeb help module.
  */
-public class HelpDefinition extends HelpSetDescriptor {
-    
-    private HelpRegistry helpRegistry;
+public class HelpModule {
     
     private String id;
+    
+    private String url;
+    
+    private String format;
+    
+    private String title;
     
     private String description;
     
@@ -30,43 +32,11 @@ public class HelpDefinition extends HelpSetDescriptor {
     
     private String released;
     
-    public static HelpDefinition getDefinition(String id) {
-        return HelpRegistry.getInstance().get(id);
+    public static HelpModule getModule(String id) {
+        return HelpModuleRegistry.getInstance().get(id);
     }
     
-    public HelpDefinition() {
-    }
-    
-    /**
-     * Remove the help definition from the registry when it is destroyed.
-     */
-    public void destroy() {
-        if (helpRegistry != null) {
-            helpRegistry.unregister(this);
-        }
-    }
-    
-    /**
-     * Called when the definition is fully instantiated.
-     */
-    public void init() {
-        if (title != null && !title.isEmpty()) {
-            if (helpRegistry != null) {
-                helpRegistry.register(this);
-            }
-        }
-    }
-    
-    public void setTitle(String title) {
-        this.title = title;
-    }
-    
-    public void setUrl(String url) {
-        this.url = url;
-    }
-    
-    public void setFormat(String format) {
-        this.format = format;
+    public HelpModule() {
     }
     
     public String getId() {
@@ -75,6 +45,30 @@ public class HelpDefinition extends HelpSetDescriptor {
     
     public void setId(String id) {
         this.id = id;
+    }
+    
+    public String getUrl() {
+        return encodeURL(url);
+    }
+    
+    public void setUrl(String url) {
+        this.url = url;
+    }
+    
+    public String getFormat() {
+        return format;
+    }
+    
+    public void setFormat(String format) {
+        this.format = format;
+    }
+    
+    public String getTitle() {
+        return title;
+    }
+    
+    public void setTitle(String title) {
+        this.title = title;
     }
     
     public String getDescription() {
@@ -117,12 +111,19 @@ public class HelpDefinition extends HelpSetDescriptor {
         this.released = released;
     }
     
-    public void setHelpRegistry(HelpRegistry helpRegistry) {
-        this.helpRegistry = helpRegistry;
-    }
-    
-    public HelpRegistry getHelpRegistry() {
-        return helpRegistry;
+    /**
+     * Encodes the specified URL path, which may be absolute or relative.
+     * <p>
+     * For compressed help sets, use the ~./ prefix. When using this syntax, ZK requires that the
+     * root folder in the jar file be named "web" with the specified path being relative to that
+     * folder.
+     * 
+     * @param url URL to encode.
+     * @return The encoded URL.
+     */
+    private String encodeURL(String url) {
+        return url.startsWith("/") || url.startsWith(".") ? url
+                : url.startsWith("~./") ? "/web" + url.substring(2) : "/web/" + url;
     }
     
 }

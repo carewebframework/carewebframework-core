@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -9,13 +9,13 @@
  */
 package org.carewebframework.shell.plugins;
 
+import org.carewebframework.api.spring.BeanRegistry;
 import org.carewebframework.common.AbstractRegistry;
-import org.carewebframework.common.RegistryMap.DuplicateAction;
 
 /**
  * Registry of all known plugins.
  */
-public class PluginRegistry extends AbstractRegistry<String, PluginDefinition> {
+public class PluginRegistry extends BeanRegistry<String, PluginDefinition> {
     
     private final AbstractRegistry<Class<?>, PluginDefinition> classRegistry = new AbstractRegistry<Class<?>, PluginDefinition>() {
         
@@ -35,7 +35,7 @@ public class PluginRegistry extends AbstractRegistry<String, PluginDefinition> {
      * Enforce singleton instance.
      */
     private PluginRegistry() {
-        super(DuplicateAction.ERROR);
+        super(PluginDefinition.class);
     }
     
     @Override

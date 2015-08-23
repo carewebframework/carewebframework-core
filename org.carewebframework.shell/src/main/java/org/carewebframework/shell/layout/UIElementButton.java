@@ -9,7 +9,7 @@
  */
 package org.carewebframework.shell.layout;
 
-import org.carewebframework.shell.themes.ThemeUtil;
+import org.carewebframework.ui.themes.ThemeUtil;
 import org.carewebframework.ui.zk.ZKUtil;
 
 import org.zkoss.zul.A;

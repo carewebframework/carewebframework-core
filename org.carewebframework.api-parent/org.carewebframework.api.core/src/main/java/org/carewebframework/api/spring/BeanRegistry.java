@@ -9,9 +9,8 @@
  */
 package org.carewebframework.api.spring;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import org.carewebframework.common.AbstractRegistry;
+import org.carewebframework.common.RegistryMap.DuplicateAction;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.DestructionAwareBeanPostProcessor;
@@ -19,20 +18,20 @@ import org.springframework.beans.factory.config.DestructionAwareBeanPostProcesso
 /**
  * Base class for deriving registries that track managed beans of a given class or interface type.
  * 
- * @param <T> The class or interface being tracked.
+ * @param <K> A unique key.
+ * @param <V> The class or interface being tracked.
  */
-public class BeanRegistry<T> implements DestructionAwareBeanPostProcessor, Iterable<T> {
+public abstract class BeanRegistry<K, V> extends AbstractRegistry<K, V>implements DestructionAwareBeanPostProcessor, Iterable<V> {
     
-    private final List<T> members = new ArrayList<T>();
-    
-    private final Class<T> clazz;
+    private final Class<V> clazz;
     
     /**
      * Create a registry that tracks beans of the given class.
      * 
      * @param clazz Class of beans to track.
      */
-    protected BeanRegistry(Class<T> clazz) {
+    protected BeanRegistry(Class<V> clazz) {
+        super(DuplicateAction.ERROR);
         this.clazz = clazz;
     }
     
@@ -48,7 +47,7 @@ public class BeanRegistry<T> implements DestructionAwareBeanPostProcessor, Itera
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
         if (clazz.isInstance(bean)) {
-            members.add((T) bean);
+            register((V) bean);
         }
         
         return bean;
@@ -57,25 +56,12 @@ public class BeanRegistry<T> implements DestructionAwareBeanPostProcessor, Itera
     /**
      * If the managed bean is of the desired type, remove it from the registry.
      */
+    @SuppressWarnings("unchecked")
     @Override
     public void postProcessBeforeDestruction(Object bean, String beanName) throws BeansException {
         if (clazz.isInstance(bean)) {
-            members.remove(bean);
+            unregister((V) bean);
         }
-    }
-    
-    /**
-     * Returns a list of registered beans.
-     * 
-     * @return List of registered beans.
-     */
-    protected List<T> getMembers() {
-        return new ArrayList<T>(members);
-    }
-    
-    @Override
-    public Iterator<T> iterator() {
-        return members.iterator();
     }
     
 }

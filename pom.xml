@@ -905,6 +905,11 @@
 			</dependency>
 			<dependency>
 				<groupId>org.carewebframework</groupId>
+				<artifactId>org.carewebframework.ui.themes</artifactId>
+				<version>${org.carewebframework.core.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.carewebframework</groupId>
 				<artifactId>org.carewebframework.ui.sharedforms</artifactId>
 				<version>${org.carewebframework.core.version}</version>
 			</dependency>

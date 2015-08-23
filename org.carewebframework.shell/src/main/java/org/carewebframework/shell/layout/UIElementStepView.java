@@ -11,7 +11,7 @@ package org.carewebframework.shell.layout;
 
 import org.carewebframework.shell.designer.PropertyEditorStepView;
 import org.carewebframework.shell.property.PropertyTypeRegistry;
-import org.carewebframework.shell.themes.ThemeUtil;
+import org.carewebframework.ui.themes.ThemeUtil;
 import org.carewebframework.ui.zk.ZKUtil;
 
 import org.zkoss.zk.ui.Component;
