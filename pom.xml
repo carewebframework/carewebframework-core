@@ -78,6 +78,18 @@
 	</scm>
 
 	<distributionManagement>
+		<repository>
+			<id>sonatype</id>
+			<name>Sonatype Releases</name>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+			<layout>default</layout>
+		</repository>
+		<snapshotRepository>
+			<id>sonatype</id>
+			<name>Sonatype Snapshots</name>
+			<url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+			<layout>default</layout>
+		</snapshotRepository>
 	</distributionManagement>
 
 	<modules>
