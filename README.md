@@ -1,83 +1,84 @@
 #Getting Started
 
 ## CareWeb Framework
-A modular, extensible framework for building clinical applications in a collaborative fashion, the CareWeb Framework is
+A modular, extensible, composable framework for building clinical applications in a collaborative fashion, the CareWeb Framework is
 built upon established open source technologies.
 
-The framework serves as the foundation for the rest of the CareWeb Framework projects. Browse the
-repositories under the [CareWebFramework organization][] on GitHub for a full list.
+The <b>carewebframework-core</b> project serves as the foundation for all other CareWeb Framework projects. Browse the
+repositories under the [CareWeb Framework main page](https://github.com/carewebframework) on GitHub for a full list.
 
 ## Documentation
-TODO artifact repository or continuous integration server published javadoc, etc?
+Documentation and presentation materials may be downloaded 
+[here](https://github.com/carewebframework/carewebframework.github.io/tree/master/documentation).
 
 ## Getting support
-TODO
+Support questions may be directed to [support@carewebframework.org](mailto:support@carewebframework.org).
 
-## Issue Tracking
-TODO
+## Issue tracking
+Each project has its own issue tracker.  For example, issue tracking for the <b>carewebframework-core</b> project may be found
+[here](https://github.com/carewebframework/carewebframework-core/issues).  If in doubt as to where a particular issue should
+be logged, you may log it at that location.
 
 ## Downloading artifacts
-See [downloading CareWeb Framework artifacts][] for Maven repository information. Unable to
-use Maven or other transitive dependency management tools? See [building a
-distribution with dependencies][].
-### Transitive Dependencies
-The following dependencies are core to the CareWeb Framework
-* ZK Framework - Please see the following [ZK][] page for references and guidelines for using and obtaining ZK artifacts.
-* Spring Framework
+CareWeb Framework artifacts for release and snapshot versions are available from [Maven Central][] and do not require any special configuration. 
+
+### Transitive dependencies
+The CareWeb Framework leverages many open source technologies.  Except where otherwise indicated, the vast majority of these requisite
+dependencies may be retrieved from [Maven Central][] without any special configuration.  One major exception is the ZK Framework itself.
+ZK artifacts are not reliably deployed to the [Maven Central][] repository (and then, only the Community Edition components are).  ZK
+does maintain its own Maven repositories and ZK artifacts are most reliably retrieved from one of these. 
+For information on configuring your Maven environment to retrieve these artifacts from one of ZK's repositories, please see the following 
+[ZK page](http://books.zkoss.org/wiki/ZK_Installation_Guide/Setting_up_IDE/Maven/Resolving_ZK_Framework_Artifacts_via_Maven) 
+for configuration guidelines. 
+
+**Contrary to the recommendation that the repository information be placed directly into the <i>pom.xml</i> file, we strongly recommend instead that it be placed in your Maven <i>settings.xml</i> file.  This makes your project more resilient to possible changes in the Maven repositories upon which it depends.**
 
 ## Building from source
-The CareWeb Framework uses a Maven-based build system. In the instructions
-below, pom.xml is invoked from the root of the source tree and serves as
-a cross-platform, self-contained bootstrap mechanism for the build.
+The CareWeb Framework uses a Maven-based build system. In the instructions below, Maven commands must be invoked from the root of the project directory tree where the project's <b>pom.xml</b> Maven configuration file is located.
 
 ### Prerequisites
 
-[Git][] and Java 6, Maven
+<li>[Git](http://help.github.com/set-up-git-redirect)</li>
+<li>[Java 7](http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html)</li>
+<li>[Maven](https://maven.apache.org/download.cgi)</li>
 
-Be sure that your `JAVA_HOME` environment variable points to the `jdk1.6.x` folder
-extracted from the JDK download.
+**Note:** Be sure that your `JAVA_HOME` environment variable points to the `jdk1.7.x` folder extracted from the JDK download.
 
 ### Check out sources
 
 `git clone https://github.com/carewebframework/carewebframework-core.git`
-
-Note: Problem checking out?  Windows has a file path length limit of 260 characters.  If you run into errors suggesting that a file cannot be created, try cloning from a shorter root path (e.g., `C:\git`).
+<br /><br />
+**Note:** Problem checking out?  Windows (yes, sadly, even Windows 10) has a file path length limit of 260 characters.  As
+Maven uses an often deeply nested directory structure with long directory names, this can become a problem.  
+If you run into errors suggesting that a file cannot be created, try cloning from a shorter root path (e.g., `C:\git`).
 
 ### Install all CareWeb Framework jars into your local Maven repository/cache
-Make sure to cd into the carewebframework-core directory and then execute
-`mvn clean install`
-
-### Compile and test, build all jars, distribution zips and docs
-From root dir, execute
-`mvn clean package`
+Make sure to make the carewebframework-core directory your default and then execute
+<br />`mvn clean install`<br />  
+This will build all core artifacts and deploy them to your local Maven repository.
 
 ### Run TestHarness (Mock Webapp)
-Pre-requisite is to install all CareWeb Framework jars into local Maven repository/cache.
-From root dir, cd in the org.carewebframework.testharness.webapp module directory and execute the following.
-`mvn tomcat:run-war`
+Pre-requisite is to install all CareWeb Framework jars into local Maven repository/cache as directed above.
+Then, change to the org.carewebframework.webapp.testharness module directory and execute the following.
+<br />`mvn tomcat:run-war`<br />
 
 Once tomcat has started, open browser and enter following URL
-`http://localhost:8080/org.carewebframework.testharness.webapp-3.0.0-SNAPSHOT`
+<br />`http://localhost:8080/org.carewebframework.webapp.testharness-4.0.0-SNAPSHOT`
 
 ## Contributing
-[Pull requests][] are welcome; see the [contributor guidelines][] for details.
+[Pull requests](http://help.github.com/send-pull-requests) are welcome.
 
 ## License
-The CareWeb Framework is released under version 2.0 of the [Mozilla Public License][] as amended by the
-[Health-Related Additional Disclaimer of Warranty and Limitation of Liability][].
+The CareWeb Framework is released under version 2.0 of the 
+[Mozilla Public License](https://github.com/carewebframework/carewebframework-core/blob/master/LICENSE.md) 
+as amended by the
+[Health-Related Additional Disclaimer of Warranty and Limitation of Liability](https://github.com/carewebframework/carewebframework-core/blob/master/DISCLAIMER.md).
 
-Use of the Enterprise Edition of the ZK Framework (recommended) requires a valid [ZK Open Source License Agreement][], available
-on request from [ZK][] at no charge.
+While the core framework requires only the Community Edition of the ZK Framework, many add-ons will use the
+more advanced features of ZK.  Inclusion of artifacts from the Enterprise Edition of the ZK Framework is, 
+therefore, highly recommended and requires a valid 
+[ZK Open Source License](http:/www.carewebframework.com/licensing/zk/zol.pdf), 
+available on request from [ZK](http://www.zkoss.org/license/#zol) at no charge.
 
-[CareWebFramework organization]: https://github.com/carewebframework
-[downloading CareWeb Framework artifacts]: https://github.com/carewebframework/carewebframework-core/wiki/Downloading-CWF-artifacts
-[Javadoc]: #
-[Git]: http://help.github.com/set-up-git-redirect
-[Pull requests]: http://help.github.com/send-pull-requests
-[contributor guidelines]: #
-[ZK]: #
-[Mozilla Public License]: https://github.com/carewebframework/carewebframework-core/blob/master/LICENSE.md
-[Health-Related Additional Disclaimer of Warranty and Limitation of Liability]: https://github.com/carewebframework/carewebframework-core/blob/master/DISCLAIMER.md
-[ZK Open Source License Agreement]: http:/www.carewebframework.com/licensing/zk/zol.pdf
-[ZK]: http://www.zkoss.org/license/#zol
+[Maven Central]: http://search.maven.org
 [![githalytics.com alpha](https://cruel-carlota.pagodabox.com/089df57f5244ce596d7d069013f85bdf "githalytics.com")](http://githalytics.com/carewebframework/carewebframework-core)
