@@ -34,7 +34,7 @@ for configuration guidelines.
 **Contrary to the recommendation that the repository information be placed directly into the <i>pom.xml</i> file, we strongly recommend instead that it be placed in your Maven <i>settings.xml</i> file.  This makes your project more resilient to possible changes in the Maven repositories upon which it depends.**
 
 ## Building from source
-The CareWeb Framework uses a Maven-based build system. In the instructions below, Maven commands must be invoked from the root of the project directory tree where the project's <b>pom.xml</b> Maven configuration file is located.
+The CareWeb Framework uses a Maven-based build system. In the instructions that follow, Maven commands must be invoked from the root of the project directory tree where the project's Maven configuration file (<i>pom.xml</i>) is located.
 
 ### Prerequisites
 
@@ -59,10 +59,10 @@ This will build all core artifacts and deploy them to your local Maven repositor
 
 ### Run TestHarness (Mock Webapp)
 Pre-requisite is to install all CareWeb Framework jars into local Maven repository/cache as directed above.
-Then, change to the org.carewebframework.webapp.testharness module directory and execute the following.
+Then, change to the org.carewebframework.webapp.testharness module directory and execute the following:
 <br />`mvn tomcat:run-war`<br />
 
-Once tomcat has started, open browser and enter following URL
+Once tomcat has started, open your browser and enter following URL
 <br />`http://localhost:8080/org.carewebframework.webapp.testharness-4.0.0-SNAPSHOT`
 
 ## Contributing
