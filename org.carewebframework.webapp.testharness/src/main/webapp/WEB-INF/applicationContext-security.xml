@@ -8,7 +8,7 @@
    		http://www.springframework.org/schema/beans
 		http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/security
-		http://www.springframework.org/schema/security/spring-security-3.2.xsd">
+		http://www.springframework.org/schema/security/spring-security-4.0.xsd">
 
 	<!-- ******************** Security Management Layer ********************* -->
 	<!-- Filter chain proxy determines which filter chain applies for a given 
@@ -32,7 +32,7 @@
 	<!-- This defines security requirements for specific URL patterns. -->
 	<bean id="securityFilterSecurityInterceptor" parent="securityFilterSecurityInterceptorBase">
 		<property name="securityMetadataSource">
-			<security:filter-security-metadata-source>
+			<security:filter-security-metadata-source use-expressions="false">
 				<security:intercept-url pattern="/admin/**"
 					access="ROLE_ADMINISTRATOR" />
 				<security:intercept-url pattern="/secure/**"

@@ -9,7 +9,7 @@
         http://www.springframework.org/schema/util
         http://www.springframework.org/schema/util/spring-util.xsd
         http://www.springframework.org/schema/security
-        http://www.springframework.org/schema/security/spring-security-3.2.xsd">
+        http://www.springframework.org/schema/security/spring-security-4.0.xsd">
 
 	<!-- These are the default configurations for Spring security. They may
 		be overridden if desired, but for most applications these will suffice. At
@@ -49,24 +49,30 @@
 
 		<bean id="securityAccessDecisionManager"
 			class="org.springframework.security.access.vote.AffirmativeBased">
-			<property name="decisionVoters">
+			<constructor-arg>
 				<list>
 					<bean class="org.springframework.security.access.vote.RoleVoter" />
 					<bean class="org.springframework.security.access.vote.AuthenticatedVoter" />
 				</list>
-			</property>
+			</constructor-arg>
 		</bean>
 
 		<bean id="securityAnonymousAuthenticationFilter"
 			class="org.springframework.security.web.authentication.AnonymousAuthenticationFilter">
-			<property name="key" value="ANONYMOUS" />
-			<property name="userAttribute" value="ANONYMOUS_USER,ROLE_ANONYMOUS" />
+			<constructor-arg value="ANONYMOUS" />
+			<constructor-arg value="ANONYMOUS_USER" />
+			<constructor-arg>
+				<bean class="org.springframework.security.core.authority.AuthorityUtils" 
+					factory-method="createAuthorityList">
+					<constructor-arg value="ROLE_ANONYMOUS" />
+				</bean>
+			</constructor-arg>
 			<property name="authenticationDetailsSource" ref="securityAuthenticationDetailsSource" />
 		</bean>
 
 		<bean id="securityAnonymousAuthenticationProvider"
 			class="org.springframework.security.authentication.AnonymousAuthenticationProvider">
-			<property name="key" value="ANONYMOUS" />
+			<constructor-arg value="ANONYMOUS" />
 		</bean>
 
 		<bean id="securityAuthenticationProvider" 
@@ -77,7 +83,7 @@
 
 		<bean id="securityContextPersistenceFilter"
 			class="org.springframework.security.web.context.SecurityContextPersistenceFilter">
-			<property name="securityContextRepository" ref="securityContextRepository" />
+			<constructor-arg ref="securityContextRepository" />
 		</bean>
 
 		<bean id="securityAccessDeniedHandler"
@@ -88,7 +94,7 @@
 
 		<bean id="securityExceptionTranslationFilter"
 			class="org.springframework.security.web.access.ExceptionTranslationFilter">
-			<property name="authenticationEntryPoint" ref="securityAuthenticationEntryPoint" />
+			<constructor-arg ref="securityAuthenticationEntryPoint" />
 			<property name="accessDeniedHandler" ref="securityAccessDeniedHandler" />
 		</bean>
 
@@ -148,8 +154,7 @@
 			redirection. -->
 		<bean id="securityAuthenticationEntryPoint"
 			class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
-			<property name="loginFormUrl"
-				value="${org.carewebframework.security.login.url}" />
+			<constructor-arg value="${org.carewebframework.security.login.url}" />
 			<property name="forceHttps" value="false" />
 		</bean>
 

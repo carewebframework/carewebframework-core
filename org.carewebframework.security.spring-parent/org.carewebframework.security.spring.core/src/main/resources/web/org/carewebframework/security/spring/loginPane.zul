@@ -25,7 +25,7 @@
 					<div hflex="1" align="right">
 						${labels.login.form.domain.label}
 					</div>
-					<listbox id="lstDomain" name="j_domain" hflex="2"
+					<listbox id="lstDomain" name="domain" hflex="2"
 						mold="select" />
 					<div hflex="1" />
 				</hlayout>
@@ -33,7 +33,7 @@
 					<div hflex="1" align="right">
 						${labels.login.form.username.label}
 					</div>
-					<textbox id="txtUsername" name="j_username"
+					<textbox id="txtUsername" name="username"
 						focus="true" hflex="2" />
 					<div hflex="1" />
 				</hlayout>
@@ -41,7 +41,7 @@
 					<div hflex="1" align="right">
 						${labels.login.form.password.label}
 					</div>
-					<textbox id="txtPassword" name="j_password"
+					<textbox id="txtPassword" name="password"
 						type="password" hflex="2" />
 					<div hflex="1">
 						<button id="btnLogin" zclass="btn"
