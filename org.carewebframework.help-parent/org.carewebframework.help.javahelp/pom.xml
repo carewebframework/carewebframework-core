@@ -8,8 +8,8 @@
 	</parent>
 
 	<artifactId>org.carewebframework.help.javahelp</artifactId>
-	<name>CareWeb Framework JavaHelp Adaptor</name>
-	<description>Help Adaptor for JavaHelp</description>
+	<name>CareWeb Framework JavaHelp Adapter</name>
+	<description>Help Adapter for JavaHelp</description>
 	
 	<dependencies>
 		<dependency>
