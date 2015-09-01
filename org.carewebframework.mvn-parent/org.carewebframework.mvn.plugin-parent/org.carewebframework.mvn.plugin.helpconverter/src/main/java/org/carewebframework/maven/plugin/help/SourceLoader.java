@@ -19,7 +19,8 @@ import org.carewebframework.maven.plugin.iterator.IResourceIterator;
 import org.carewebframework.maven.plugin.transform.CopyTransform;
 
 /**
- * Definition file for a source archive loader.
+ * Generic source loader. Used for JavaHelp and OHJ formats. May be extended to support other
+ * formats.
  */
 public class SourceLoader {
     
@@ -31,16 +32,35 @@ public class SourceLoader {
     
     private FileFilter helpSetFilter;
     
+    /**
+     * Create a source loader.
+     * 
+     * @param formatSpecifier The unique help format specifier (e.g., "JavaHelp").
+     * @param helpSetPattern The pattern that will be used to identify the main help set file.
+     * @param iteratorClass The class that will be used to iterate over files in the source archive.
+     */
     public SourceLoader(String formatSpecifier, String helpSetPattern, Class<? extends IResourceIterator> iteratorClass) {
         this.formatSpecifier = formatSpecifier;
         this.helpSetPattern = helpSetPattern;
         this.iteratorClass = iteratorClass;
     }
     
+    /**
+     * Register all file transforms with the main processor. This is called by the main processor to
+     * allow each source loader to register its file transforms. By default, all files are simply
+     * copied from the source to the target. Override if additional transforms are needed.
+     * 
+     * @param processor The main help processor.
+     */
     public void registerTransforms(HelpProcessor processor) {
         processor.registerTransform("*", new CopyTransform(processor.getMojo()));
     }
     
+    /**
+     * Returns the class that will be used to iterate over the contents of a source archive.
+     * 
+     * @return A resource iterator.
+     */
     public Class<? extends IResourceIterator> getIteratorClass() {
         return iteratorClass;
     }
@@ -53,6 +73,12 @@ public class SourceLoader {
         return formatSpecifier;
     }
     
+    /**
+     * Returns true if the file name matches the pattern specified for the main help set file.
+     * 
+     * @param fileName File name to check.
+     * @return True if this is the main help set file.
+     */
     public boolean isHelpSetFile(String fileName) {
         if (helpSetFilter == null) {
             helpSetFilter = new WildcardFileFilter(helpSetPattern);
@@ -62,10 +88,10 @@ public class SourceLoader {
     }
     
     /**
-     * Returns an ISourceArchive implementation for the given archive name.
+     * Returns a resource iterator instance for the given archive name.
      * 
      * @param archiveName Name of the archive file.
-     * @return An ISourceArchive instance.
+     * @return A resource iterator instance.
      * @throws Exception Unspecified exception.
      */
     public IResourceIterator load(String archiveName) throws Exception {
