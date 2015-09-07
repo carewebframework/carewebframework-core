@@ -39,6 +39,10 @@ import org.zkoss.zul.Window;
  */
 public class HelpViewer extends Window implements IHelpViewer, AfterCompose, ITopicListener, EventListener<Event> {
     
+    public enum HelpViewerMode {
+        EMBEDDED, PROXIED
+    };
+    
     private static final long serialVersionUID = 1L;
     
     private Tabbox tbxNavigator;
@@ -59,7 +63,7 @@ public class HelpViewer extends Window implements IHelpViewer, AfterCompose, ITo
     
     private final HelpHistory history = new HelpHistory();
     
-    private boolean proxied;
+    private HelpViewerMode mode;
     
     private String lastURL;
     
@@ -83,7 +87,7 @@ public class HelpViewer extends Window implements IHelpViewer, AfterCompose, ITo
     @Override
     public void show() {
         try {
-            if (!proxied) {
+            if (mode == HelpViewerMode.EMBEDDED) {
                 doModal();
                 setHeight(lastHeight);
                 setWidth(lastWidth);
@@ -164,7 +168,7 @@ public class HelpViewer extends Window implements IHelpViewer, AfterCompose, ITo
      */
     @Override
     public void close() {
-        if (!proxied) {
+        if (mode == HelpViewerMode.EMBEDDED) {
             setVisible(false);
         } else {
             response(auCloseWindow);
@@ -393,7 +397,8 @@ public class HelpViewer extends Window implements IHelpViewer, AfterCompose, ITo
     @Override
     public void afterCompose() {
         String proxyId = Executions.getCurrent().getParameter("proxy");
-        proxied = proxyId != null;
+        boolean proxied = proxyId != null;
+        mode = proxied ? HelpViewerMode.PROXIED : HelpViewerMode.EMBEDDED;
         setWidth(proxied ? "100%" : lastWidth);
         setHeight(proxied ? "100%" : lastHeight);
         setSizable(!proxied);

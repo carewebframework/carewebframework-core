@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-	xmlns:cwp="http://www.carewebframework.org/schema/plugin"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="
 		http://www.springframework.org/schema/beans
-		 http://www.springframework.org/schema/beans/spring-beans.xsd
-		 http://www.carewebframework.org/schema/plugin
-		 http://www.carewebframework.org/schema/plugin/plugin-extensions.xsd">
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.carewebframework.org/schema/plugin
+		http://www.carewebframework.org/schema/plugin/plugin-extensions.xsd">
 
 	<beans profile="root">
 		<!-- Represents a registry of all known help modules. -->
@@ -15,10 +14,10 @@
 			factory-method="getInstance" />
 
 		<!-- Set Help Subsystem Properties -->
-		<bean class="org.carewebframework.help.HelpUtil"
-			factory-method="embeddedMode">
-			<constructor-arg value="${org.carewebframework.help.viewer.embedded:false}" />
+		<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+			<property name="staticMethod" value="org.carewebframework.help.HelpUtil.setEmbeddedMode" />
+			<property name="arguments" value="${org.carewebframework.help.viewer.embedded:false}" />
 		</bean>
-
+		
 	</beans>
 </beans>

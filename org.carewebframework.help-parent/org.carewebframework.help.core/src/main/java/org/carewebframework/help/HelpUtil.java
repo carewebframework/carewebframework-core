@@ -11,6 +11,7 @@ package org.carewebframework.help;
 
 import java.io.IOException;
 
+import org.carewebframework.help.HelpViewer.HelpViewerMode;
 import org.carewebframework.ui.FrameworkWebSupport;
 import org.carewebframework.ui.event.InvocationRequest;
 import org.carewebframework.ui.event.InvocationRequestQueue;
@@ -27,7 +28,7 @@ import org.zkoss.zk.ui.util.Clients;
  */
 public class HelpUtil {
     
-    private static boolean useViewerProxy = true;
+    private static HelpViewerMode defaultMode = HelpViewerMode.PROXIED;
     
     protected static final String RESOURCE_PREFIX = ZKUtil.getResourcePath(HelpUtil.class);
     
@@ -36,6 +37,8 @@ public class HelpUtil {
     protected static final String VIEWER_URL = HelpUtil.RESOURCE_PREFIX + "helpViewer.zul";
     
     protected static final String VIEWER_ATTRIB = VIEWER_URL;
+    
+    protected static final String EMBEDDED_ATTRIB = RESOURCE_PREFIX + "embedded";
     
     /*package*/static final String HELP_QUEUE_PREFIX = "Help_Message_Queue";
     
@@ -51,21 +54,39 @@ public class HelpUtil {
     }
     
     /**
-     * Determines whether the help viewer is displayed as an embedded popup dialog in the same
-     * browser viewport, or in a separate browser window.
+     * Sets the default help viewer mode.
      * 
-     * @param value If true, displays the viewer in embedded mode.
-     * @return Previous setting.
+     * @param embedded If true, set the viewer mode to embedded; if false, to proxied.
      */
-    public static boolean embeddedMode(boolean value) {
-        boolean oldValue = !useViewerProxy;
-        
-        if (value != oldValue) {
-            useViewerProxy = !value;
-            getDesktop().removeAttribute(VIEWER_ATTRIB);
+    public static void setEmbeddedMode(boolean embedded) {
+        defaultMode = embedded ? HelpViewerMode.EMBEDDED : HelpViewerMode.PROXIED;
+    }
+    
+    /**
+     * Returns the help viewer mode for the specified desktop.
+     * 
+     * @param desktop The desktop to check. If null, the global setting is returned.
+     * @return The help viewer mode.
+     */
+    public static HelpViewerMode getViewerMode(Desktop desktop) {
+        return desktop == null || !desktop.hasAttribute(EMBEDDED_ATTRIB) ? defaultMode
+                : (HelpViewerMode) desktop.getAttribute(EMBEDDED_ATTRIB);
+    }
+    
+    /**
+     * Sets the help viewer mode for the specified desktop. If different from the previous mode and
+     * a viewer for this desktop exists, the viewer will be removed and recreated on the next
+     * request.
+     * 
+     * @param desktop The target desktop.
+     * @param mode The help viewer mode.
+     */
+    public static void setViewerMode(Desktop desktop, HelpViewerMode mode) {
+        if (getViewerMode(desktop) != mode) {
+            desktop.removeAttribute(VIEWER_ATTRIB);
         }
         
-        return oldValue;
+        desktop.setAttribute(EMBEDDED_ATTRIB, mode);
     }
     
     /**
@@ -82,7 +103,7 @@ public class HelpUtil {
             return viewer;
         }
         
-        viewer = useViewerProxy ? new HelpViewerProxy(desktop)
+        viewer = getViewerMode(desktop) == HelpViewerMode.PROXIED ? new HelpViewerProxy(desktop)
                 : (IHelpViewer) Executions.createComponents(VIEWER_URL, null, null);
         desktop.setAttribute(VIEWER_ATTRIB, viewer);
         return viewer;

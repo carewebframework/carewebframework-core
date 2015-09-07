@@ -9,9 +9,11 @@
 				import org.carewebframework.help.HelpUtil;
 				import org.carewebframework.help.IHelpViewer;
 				import org.carewebframework.help.IHelpSet;
+				import org.carewebframework.help.HelpViewer.HelpViewerMode;
 				
-				helpTestFrame.getDesktop().enableServerPush(true);
-				HelpUtil.embeddedMode(true);
+				Desktop dtp = helpTestFrame.getDesktop();
+				dtp.enableServerPush(true);
+				HelpUtil.setViewerMode(dtp, HelpViewerMode.EMBEDDED);
 				IHelpViewer viewer = HelpUtil.getViewer();
 				Window win = (Window) viewer;
 				win.setParent(helpTestFrame);
@@ -38,7 +40,7 @@
 			<![CDATA[
 					List sets = new ArrayList();
 					for (Listitem item: self.getSelectedItems()) {
-						HelpModule module = (HelpModule) item.value;
+						HelpModule module = (HelpModule) item.getValue();
 						IHelpSet hs = cache.get(module);
 						sets.add(hs);
 					}
