@@ -11,8 +11,8 @@
 	<listbox id="lstSrchResults" visible="false" vflex="1">
 		<listhead sizable="true">
 			<listheader label="" width="30px" sort="auto(confidence)"/>
-			<listheader label="Term" sort="auto(topic)" />
-			<listheader label="Source" sort="auto(source)" />
+			<listheader label="${labels.cwf.help.tab.search.topic.header}" sort="auto(topic)" />
+			<listheader label="${labels.cwf.help.tab.search.source.header}" sort="auto(source)" />
 		</listhead>
 	</listbox>
 </zk>
