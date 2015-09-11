@@ -23,6 +23,8 @@ import org.zkoss.zk.ui.Desktop;
  */
 public class HelpViewerProxy implements IHelpViewer {
     
+    private static final String SHOW_METHOD = "show";
+    
     private final String ownerId;
     
     private final String remoteWindowName;
@@ -145,7 +147,7 @@ public class HelpViewerProxy implements IHelpViewer {
      */
     @Override
     public void show() {
-        sendRequest("show");
+        sendRequest(SHOW_METHOD);
     }
     
     /**
@@ -153,7 +155,7 @@ public class HelpViewerProxy implements IHelpViewer {
      */
     @Override
     public void show(IHelpSet helpSet) {
-        sendRequest("show", helpSet);
+        sendRequest(SHOW_METHOD, helpSet);
     }
     
     /**
@@ -161,7 +163,7 @@ public class HelpViewerProxy implements IHelpViewer {
      */
     @Override
     public void show(IHelpSet helpSet, String topicId) {
-        sendRequest("show", helpSet, topicId);
+        sendRequest(SHOW_METHOD, helpSet, topicId);
     }
     
     /**
@@ -169,7 +171,7 @@ public class HelpViewerProxy implements IHelpViewer {
      */
     @Override
     public void show(IHelpSet helpSet, String topicId, String topicLabel) {
-        sendRequest("show", helpSet, topicId, topicLabel);
+        sendRequest(SHOW_METHOD, helpSet, topicId, topicLabel);
     }
     
     /**
@@ -177,7 +179,7 @@ public class HelpViewerProxy implements IHelpViewer {
      */
     @Override
     public void show(HelpViewType viewType) {
-        sendRequest("show", viewType);
+        sendRequest(SHOW_METHOD, viewType);
     }
     
     /**
@@ -185,7 +187,7 @@ public class HelpViewerProxy implements IHelpViewer {
      */
     @Override
     public void show(String homeId) {
-        sendRequest("show", homeId);
+        sendRequest(SHOW_METHOD, homeId);
     }
     
     /**
@@ -193,7 +195,7 @@ public class HelpViewerProxy implements IHelpViewer {
      */
     @Override
     public void show(String homeId, String topicId) {
-        sendRequest("show", homeId, topicId);
+        sendRequest(SHOW_METHOD, homeId, topicId);
     }
     
     /**
