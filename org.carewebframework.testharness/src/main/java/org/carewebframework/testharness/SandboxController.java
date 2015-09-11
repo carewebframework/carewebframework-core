@@ -10,6 +10,7 @@
 package org.carewebframework.testharness;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ArrayUtils;
@@ -51,8 +52,18 @@ public class SandboxController extends PluginController implements ApplicationCo
         public void render(Comboitem item, Resource resource, int index) throws Exception {
             item.setValue(resource);
             item.setLabel(resource.getFilename());
-            String[] pcs = resource.getURL().toString().split("!/web/", 2);
-            item.setTooltiptext(pcs.length == 1 ? pcs[0] : "~./" + pcs[1]);
+            item.setTooltiptext(getPath(resource));
+        }
+        
+        private String getPath(Resource resource) throws IOException {
+            String[] pcs = resource.getURL().toString().split("!", 2);
+            
+            if (pcs.length == 1) {
+                return pcs[0];
+            }
+            
+            int i = pcs[0].lastIndexOf('/') + 1;
+            return pcs[0].substring(i) + ":\n\n" + pcs[1];
         }
         
     };
@@ -147,6 +158,7 @@ public class SandboxController extends PluginController implements ApplicationCo
     public void onClick$btnClearContent() {
         txtContent.setText(null);
         cboZul.setSelectedItem(null);
+        cboZul.setTooltiptext(null);
     }
     
     /**
@@ -170,13 +182,17 @@ public class SandboxController extends PluginController implements ApplicationCo
      */
     public void onSelect$cboZul() throws IOException {
         Comboitem item = cboZul.getSelectedItem();
+        cboZul.setTooltiptext(null);
         Resource resource = item == null ? null : (Resource) item.getValue();
         
         if (resource != null) {
-            content = IOUtils.toString(resource.getInputStream());
-            txtContent.setText(content);
-            txtContent.setFocus(true);
-            execution.addAuResponse(new AuInvoke(txtContent, "resync"));
+            try (InputStream is = resource.getInputStream()) {
+                content = IOUtils.toString(is);
+                cboZul.setTooltiptext(item.getTooltiptext());
+                txtContent.setText(content);
+                txtContent.setFocus(true);
+                execution.addAuResponse(new AuInvoke(txtContent, "resync"));
+            }
         }
     }
     

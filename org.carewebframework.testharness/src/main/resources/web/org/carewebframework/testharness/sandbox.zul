@@ -3,26 +3,25 @@
 		apply="${sandboxController}">
 		<west size="50%" splittable="true" collapsible="true">
 			<panel mold="bootstrap" vflex="1">
-				<caption width="100%">
-					<label zclass="z-caption-content"
-						style="padding-top:4px" value="${labels.cwf.sandbox.title.left}" />
-					<div style="float:right;padding:0" zclass="btn">
-						<combobox id="cboZul" readonly="true" width="200px" 
-							placeholder="${labels.cwf.sandbox.combobox.placeholder}"/>
-						<space width="50px" />
-						<button id="btnFormatContent" zclass="btn-info"
-							w:onClick="this.$f('txtContent').format();"
-							label="${labels.cwf.sandbox.btn.format.label}" />
-						<space width="50px" />
-						<button id="btnClearContent" zclass="btn-danger"
-							w:onClick="this.$f('txtContent').clear();"
-							label="${labels.cwf.btn.clear.label}" />
-						<space />
-						<button id="btnRenderContent"
-							onClick="txtContent.focus();"
-							zclass="btn-success" label="${labels.cwf.btn.view.label}" />
-					</div>
-				</caption>
+		        <caption hflex="1" >
+		          <label zclass="z-caption-content"
+		                 value="${labels.cwf.sandbox.title.left}" />
+		          <space hflex="10" />
+		          <combobox id="cboZul" readonly="true" width="200px" 
+		                    placeholder="${labels.cwf.sandbox.combobox.placeholder}"/>
+		          <space hflex="10" />
+		          <button id="btnFormatContent" zclass="btn btn-xs btn-info"
+		                  w:onClick="this.$f('txtContent').format();"
+		                  label="${labels.cwf.sandbox.btn.format.label}" />
+		          <space hflex="10" />
+		          <button id="btnClearContent" zclass="btn btn-xs btn-danger"
+		                  w:onClick="this.$f('txtContent').clear();"
+		                  label="${labels.cwf.btn.clear.label}" />
+		          <space hflex="1" />
+		          <button id="btnRenderContent"
+		                  onClick="txtContent.focus();"
+		                  zclass="btn btn-xs btn-success" label="${labels.cwf.btn.view.label}" />
+		        </caption>
 				<panelchildren style="padding:0">
 					<textbox id="txtContent" multiline="true" />
 					<script type="text/javascript" defer="true">
@@ -83,19 +82,17 @@
 		</west>
 		<center>
 			<panel mold="bootstrap" vflex="1">
-				<caption width="100%">
-					<label zclass="z-caption-content"
-						style="padding-top:4px;float:right"
-						value="${labels.cwf.sandbox.title.right}" />
-					<div style="float:left;padding:0" zclass="btn">
-						<button id="btnClearView" zclass="btn-danger"
-							onClick="txtContent.focus();"
-							label="${labels.cwf.btn.clear.label}" />
-						<space />
-						<button id="btnRefreshView" zclass="btn-success"
-							label="${labels.cwf.btn.refresh.label}" />
-					</div>
-				</caption>
+		        <caption hflex="1">
+		          <button id="btnClearView" zclass="btn btn-xs btn-danger"
+		                  onClick="txtContent.focus();"
+		                  label="${labels.cwf.btn.clear.label}" />
+		          <space hflex="1" />
+		          <button id="btnRefreshView" zclass="btn btn-xs btn-success"
+		                  label="${labels.cwf.btn.refresh.label}" />
+		          <space hflex="10" />
+		          <label zclass="z-caption-content" style="float:right"
+		                 value="${labels.cwf.sandbox.title.right}" />
+		        </caption>
 				<panelchildren id="contentParent" style="padding:0">
 					<idspace vflex="1" width="100%"
 						style="overflow:auto" />
