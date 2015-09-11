@@ -40,7 +40,12 @@ import org.zkoss.zul.Window;
 public class HelpViewer extends Window implements IHelpViewer, AfterCompose, ITopicListener, EventListener<Event> {
     
     public enum HelpViewerMode {
-        EMBEDDED, PROXIED
+        EMBEDDED, POPUP;
+        
+        @Override
+        public String toString() {
+            return name().toLowerCase();
+        }
     };
     
     private static final long serialVersionUID = 1L;
@@ -398,7 +403,7 @@ public class HelpViewer extends Window implements IHelpViewer, AfterCompose, ITo
     public void afterCompose() {
         String proxyId = Executions.getCurrent().getParameter("proxy");
         boolean proxied = proxyId != null;
-        mode = proxied ? HelpViewerMode.PROXIED : HelpViewerMode.EMBEDDED;
+        mode = proxied ? HelpViewerMode.POPUP : HelpViewerMode.EMBEDDED;
         setWidth(proxied ? "100%" : lastWidth);
         setHeight(proxied ? "100%" : lastHeight);
         setSizable(!proxied);

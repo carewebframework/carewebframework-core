@@ -28,7 +28,7 @@ import org.zkoss.zk.ui.util.Clients;
  */
 public class HelpUtil {
     
-    private static HelpViewerMode defaultMode = HelpViewerMode.PROXIED;
+    private static HelpViewerMode defaultMode = HelpViewerMode.POPUP;
     
     protected static final String RESOURCE_PREFIX = ZKUtil.getResourcePath(HelpUtil.class);
     
@@ -59,7 +59,7 @@ public class HelpUtil {
      * @param embedded If true, set the viewer mode to embedded; if false, to proxied.
      */
     public static void setEmbeddedMode(boolean embedded) {
-        defaultMode = embedded ? HelpViewerMode.EMBEDDED : HelpViewerMode.PROXIED;
+        defaultMode = embedded ? HelpViewerMode.EMBEDDED : HelpViewerMode.POPUP;
     }
     
     /**
@@ -103,7 +103,7 @@ public class HelpUtil {
             return viewer;
         }
         
-        viewer = getViewerMode(desktop) == HelpViewerMode.PROXIED ? new HelpViewerProxy(desktop)
+        viewer = getViewerMode(desktop) == HelpViewerMode.POPUP ? new HelpViewerProxy(desktop)
                 : (IHelpViewer) Executions.createComponents(VIEWER_URL, null, null);
         desktop.setAttribute(VIEWER_ATTRIB, viewer);
         return viewer;

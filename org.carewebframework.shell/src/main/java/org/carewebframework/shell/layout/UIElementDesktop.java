@@ -12,12 +12,14 @@ package org.carewebframework.shell.layout;
 import org.apache.commons.lang.StringUtils;
 
 import org.carewebframework.api.security.SecurityUtil;
+import org.carewebframework.help.HelpUtil;
+import org.carewebframework.help.HelpViewer.HelpViewerMode;
 import org.carewebframework.shell.CareWebShell;
 import org.carewebframework.shell.designer.DesignConstants;
 import org.carewebframework.shell.designer.DesignMenu;
 import org.carewebframework.shell.plugins.PluginResourceHelp;
-import org.carewebframework.ui.themes.ThemeUtil;
 import org.carewebframework.ui.action.ActionListener;
+import org.carewebframework.ui.themes.ThemeUtil;
 import org.carewebframework.ui.zk.MenuEx;
 import org.carewebframework.ui.zk.MenuUtil;
 import org.carewebframework.ui.zk.ZKUtil;
@@ -306,8 +308,8 @@ public class UIElementDesktop extends UIElementZKBase {
      * @return The newly created menu item.
      */
     public Menu addHelpMenu(String namedPath, String action) {
-        Menu menu = !StringUtils.isEmpty(namedPath) && !StringUtils.isEmpty(action) ? addMenu(helpMenu.getLabel() + "\\"
-                + namedPath, action, true) : null;
+        Menu menu = !StringUtils.isEmpty(namedPath) && !StringUtils.isEmpty(action)
+                ? addMenu(helpMenu.getLabel() + "\\" + namedPath, action, true) : null;
         sortHelpMenu |= menu != null;
         helpSeparator.setVisible(menu != null || helpSeparator.isVisible());
         return menu;
@@ -335,6 +337,24 @@ public class UIElementDesktop extends UIElementZKBase {
         
         mnuTOC.setVisible(false);
         helpSeparator.setVisible(false);
+    }
+    
+    /**
+     * Returns the help viewer display mode for this desktop.
+     * 
+     * @return The help viewer display mode.
+     */
+    public HelpViewerMode getHelpViewerMode() {
+        return HelpUtil.getViewerMode(desktopOuter.getDesktop());
+    }
+    
+    /**
+     * Sets the help viewer display mode for this desktop.
+     * 
+     * @param mode The new help viewer display mode.
+     */
+    public void setHelpViewerMode(HelpViewerMode mode) {
+        HelpUtil.setViewerMode(desktopOuter.getDesktop(), mode);
     }
     
 }

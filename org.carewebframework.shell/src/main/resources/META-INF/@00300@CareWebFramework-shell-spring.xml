@@ -45,8 +45,8 @@
 			class="org.carewebframework.shell.layout.UIElementDesktop" name="${labels.cwf.shell.plugin._desktop.name}"
 			description="${labels.cwf.shell.plugin._desktop.description}">
 			<cwp:serialization>
-				<cwp:property id="style"
-					name="${labels.cwf.shell.plugin._desktop.style.name}" description="${labels.cwf.shell.plugin._desktop.style.description}" type="enum">
+				<cwp:property id="style" type="enum"
+					name="${labels.cwf.shell.plugin._desktop.style.name}" description="${labels.cwf.shell.plugin._desktop.style.description}">
 					<cwp:config>
 						<cwp:entry key="class">org.carewebframework.ui.themes.ThemeUtil$PanelStyle</cwp:entry>
 					</cwp:config>
@@ -55,6 +55,12 @@
 					name="${labels.cwf.shell.plugin._desktop.icon.name}" description="${labels.cwf.shell.plugin._desktop.icon.description}" />
 				<cwp:property id="title"
 					name="${labels.cwf.shell.plugin._desktop.title.name}" description="${labels.cwf.shell.plugin._desktop.title.description}" />
+				<cwp:property id="helpViewerMode" type="enum"
+					name="${labels.cwf.shell.plugin._desktop.helpviewermode.name}" description="${labels.cwf.shell.plugin._desktop.helpviewermode.description}">
+					<cwp:config>
+						<cwp:entry key="class">org.carewebframework.help.HelpViewer$HelpViewerMode</cwp:entry>
+					</cwp:config>
+				</cwp:property>
 				<cwp:property id="menubar" type="menuitems"
 					name="${labels.cwf.shell.plugin._desktop.menubar.name}" description="${labels.cwf.shell.plugin._desktop.menubar.description}" />
 				<cwp:property id="toolbar" type="children"
@@ -124,25 +130,25 @@
 			<cwp:serialization>
 				<cwp:property id="caption"
 					name="${labels.cwf.shell.plugin.treeview.caption.name}" description="${labels.cwf.shell.plugin.treeview.caption.description}" />
-				<cwp:property id="color"
-					name="${labels.cwf.shell.plugin.treeview.color.name}" type="color"
+				<cwp:property id="color" type="color"
+					name="${labels.cwf.shell.plugin.treeview.color.name}"
 					description="${labels.cwf.shell.plugin.treeview.color.description}" />
-				<cwp:property id="open"
-					name="${labels.cwf.shell.plugin.treeview.open.name}" type="boolean"
+				<cwp:property id="open" type="boolean"
+					name="${labels.cwf.shell.plugin.treeview.open.name}"
 					getter="isOpen" description="${labels.cwf.shell.plugin.treeview.open.description}">
 					<cwp:config>
 						<cwp:entry key="true">expanded</cwp:entry>
 						<cwp:entry key="false">collapsed</cwp:entry>
 					</cwp:config>
 				</cwp:property>
-				<cwp:property id="selectionStyle"
-					name="${labels.cwf.shell.plugin.treeview.selection.style.name}" description="${labels.cwf.shell.plugin.treeview.selection.style.description}" type="enum">
+				<cwp:property id="selectionStyle" type="enum"
+					name="${labels.cwf.shell.plugin.treeview.selection.style.name}" description="${labels.cwf.shell.plugin.treeview.selection.style.description}">
 					<cwp:config>
 						<cwp:entry key="class">org.carewebframework.ui.themes.ThemeUtil$ButtonStyle</cwp:entry>
 					</cwp:config>
 				</cwp:property>
-				<cwp:property id=""
-					name="${labels.cwf.shell.plugin.treeview.nodes.name}" type="nodes"
+				<cwp:property id="" type="nodes"
+					name="${labels.cwf.shell.plugin.treeview.nodes.name}"
 					description="${labels.cwf.shell.plugin.treeview.nodes.description}" />
 			</cwp:serialization>
 		</cwp:plugin>
@@ -156,8 +162,8 @@
 					description="${labels.cwf.shell.plugin.treepane.label.description}" />
 				<cwp:property id="hint"
 					name="${labels.cwf.shell.plugin.treepane.hint.name}" description="${labels.cwf.shell.plugin.treepane.hint.description}" />
-				<cwp:property id="color"
-					name="${labels.cwf.shell.plugin.treepane.color.name}" type="color"
+				<cwp:property id="color" type="color"
+					name="${labels.cwf.shell.plugin.treepane.color.name}"
 					description="${labels.cwf.shell.plugin.treepane.color.description}" />
 			</cwp:serialization>
 		</cwp:plugin>
@@ -206,8 +212,8 @@
 			<cwp:serialization>
 				<cwp:property id="caption"
 					name="${labels.cwf.shell.plugin.stepview.caption.name}" description="${labels.cwf.shell.plugin.stepview.caption.description}" />
-				<cwp:property id="style"
-					name="${labels.cwf.shell.plugin.stepview.style.name}" description="${labels.cwf.shell.plugin._desktop.style.description}" type="enum">
+				<cwp:property id="style" type="enum"
+					name="${labels.cwf.shell.plugin.stepview.style.name}" description="${labels.cwf.shell.plugin._desktop.style.description}">
 					<cwp:config>
 						<cwp:entry key="class">org.carewebframework.ui.themes.ThemeUtil$PanelStyle</cwp:entry>
 					</cwp:config>
@@ -250,8 +256,8 @@
 			class="org.carewebframework.shell.layout.UIElementToolbar" name="${labels.cwf.shell.plugin.toolbar.name}"
 			description="${labels.cwf.shell.plugin.toolbar.description}">
 			<cwp:serialization>
-				<cwp:property id=""
-					name="${labels.cwf.shell.plugin.toolbar.children.name}" type="children"
+				<cwp:property id="" type="children"
+					name="${labels.cwf.shell.plugin.toolbar.children.name}"
 					description="${labels.cwf.shell.plugin.toolbar.children.description}" />
 			</cwp:serialization>
 		</cwp:plugin>
@@ -269,8 +275,8 @@
 			class="org.carewebframework.shell.layout.UIElementMenubar" name="${labels.cwf.shell.plugin.menubar.name}"
 			description="${labels.cwf.shell.plugin.menubar.description}">
 			<cwp:serialization>
-				<cwp:property id=""
-					name="${labels.cwf.shell.plugin.menubar.menuitems.name}" type="menuitems"
+				<cwp:property id="" type="menuitems"
+					name="${labels.cwf.shell.plugin.menubar.menuitems.name}"
 					description="${labels.cwf.shell.plugin.menubar.menuitems.description}" />
 			</cwp:serialization>
 		</cwp:plugin>
@@ -320,14 +326,14 @@
 					name="${labels.cwf.shell.plugin.button.icon.name}" description="${labels.cwf.shell.plugin.button.icon.description}" />
 				<cwp:property id="hint"
 					name="${labels.cwf.shell.plugin.button.hint.name}" description="${labels.cwf.shell.plugin.button.hint.description}" />
-				<cwp:property id="size"
-					name="${labels.cwf.shell.plugin.button.size.name}" description="${labels.cwf.shell.plugin.button.size.description}" type="enum">
+				<cwp:property id="size" type="enum"
+					name="${labels.cwf.shell.plugin.button.size.name}" description="${labels.cwf.shell.plugin.button.size.description}">
 					<cwp:config>
 						<cwp:entry key="class">org.carewebframework.ui.themes.ThemeUtil$ButtonSize</cwp:entry>
 					</cwp:config>
 				</cwp:property>
-				<cwp:property id="style"
-					name="${labels.cwf.shell.plugin.button.style.name}" description="${labels.cwf.shell.plugin.button.style.description}" type="enum">
+				<cwp:property id="style" type="enum"
+					name="${labels.cwf.shell.plugin.button.style.name}" description="${labels.cwf.shell.plugin.button.style.description}">
 					<cwp:config>
 						<cwp:entry key="class">org.carewebframework.ui.themes.ThemeUtil$ButtonStyle</cwp:entry>
 					</cwp:config>
@@ -351,8 +357,8 @@
 					name="${labels.cwf.shell.plugin.link.icon.name}" description="${labels.cwf.shell.plugin.link.icon.description}" />
 				<cwp:property id="hint" name="${labels.cwf.shell.plugin.link.hint.name}"
 					description="${labels.cwf.shell.plugin.link.hint.description}" />
-				<cwp:property id="size"
-					name="${labels.cwf.shell.plugin.link.size.name}" description="${labels.cwf.shell.plugin.link.size.description}" type="enum">
+				<cwp:property id="size" type="enum"
+					name="${labels.cwf.shell.plugin.link.size.name}" description="${labels.cwf.shell.plugin.link.size.description}">
 					<cwp:config>
 						<cwp:entry key="class">org.carewebframework.ui.themes.ThemeUtil$ButtonSize</cwp:entry>
 					</cwp:config>
