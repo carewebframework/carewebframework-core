@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.TimeZone;
 
 import org.carewebframework.common.DateUtil.TimeUnit;
+import org.carewebframework.common.Version.VersionPart;
 
 import org.junit.Test;
 
@@ -284,6 +285,31 @@ public class CommonTest {
         assertEquals("1,2,4,5", str);
         str = StrUtil.fromList(intList, ",", "3");
         assertEquals(original, str);
+    }
+    
+    @Test
+    public void testVersion() {
+        Version v1 = new Version(1, 2, 3, 4);
+        Version v2 = new Version("1.2.3.4");
+        assertEquals(v1, v2);
+        v1 = new Version("1.2.3");
+        assertTrue(v1.compareTo(v2) < 0);
+        assertEquals("1.2.3", v1.toString());
+        assertEquals("1.2.3", v1.toString(VersionPart.RELEASE));
+        assertEquals("1.2.3.0", v1.toString(VersionPart.BUILD));
+        v1 = new Version("1.0.3");
+        assertEquals("1.0.3", v1.toString());
+        assertEquals("1.0.3.0", v1.toString(VersionPart.BUILD));
+        assertEquals("1.0.3", v1.toString(VersionPart.MINOR));
+        assertEquals("1.0.3", v1.toString(VersionPart.RELEASE));
+        v2 = new Version("1.0.3b");
+        assertEquals(v1, v2);
+        v1 = new Version(".5");
+        assertEquals("0.5", v1.toString());
+        v1 = new Version("");
+        assertEquals("", v1.toString());
+        v2 = new Version(null);
+        assertEquals(v1, v2);
     }
     
     private void print(Object object) {
