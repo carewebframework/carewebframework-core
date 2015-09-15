@@ -9,9 +9,17 @@
 		http://www.carewebframework.org/schema/plugin/plugin-extensions.xsd">
 
 	<beans profile="root">
+		<!-- Builds a lucene index for searching help content. -->
+		<bean id="helpSearchService" class="org.carewebframework.help.HelpSearchService"
+			factory-method="getInstance" init-method="init" destroy-method="destroy">
+			<property name="indexDirectory" value="${org.carewebframework.help.index.dir:}" />
+		</bean>
+		
 		<!-- Represents a registry of all known help modules. -->
 		<bean id="helpRegistry" class="org.carewebframework.help.HelpModuleRegistry"
-			factory-method="getInstance" />
+			factory-method="getInstance">
+			<property name="service" ref="helpSearchService" />
+		</bean>
 
 		<!-- Set Help Subsystem Properties -->
 		<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">

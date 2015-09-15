@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -15,6 +15,13 @@ import java.util.Collection;
  * Interface to be implemented by a help set provider.
  */
 public interface IHelpSet {
+    
+    /**
+     * Return the unique id of the help set.
+     * 
+     * @return The help set unique id.
+     */
+    String getId();
     
     /**
      * Returns the name (title) of the help set.

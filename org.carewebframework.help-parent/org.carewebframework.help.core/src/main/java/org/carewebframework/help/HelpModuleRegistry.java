@@ -22,6 +22,8 @@ public class HelpModuleRegistry extends BeanRegistry<String, HelpModule> {
         return instance;
     }
     
+    private HelpSearchService service;
+    
     /**
      * Enforce singleton instance.
      */
@@ -32,5 +34,18 @@ public class HelpModuleRegistry extends BeanRegistry<String, HelpModule> {
     @Override
     protected String getKey(HelpModule item) {
         return item.getId();
+    }
+    
+    @Override
+    public void register(HelpModule helpModule) {
+        super.register(helpModule);
+        
+        if (service != null) {
+            service.indexHelpModule(helpModule);
+        }
+    }
+    
+    public void setService(HelpSearchService service) {
+        this.service = service;
     }
 }

@@ -177,7 +177,7 @@ public abstract class HelpTab extends Tabpanel implements IdSpace, ITopicListene
      */
     @Override
     public void onTopicSelected(HelpTopic topic) {
-        
+    
     }
     
     /**

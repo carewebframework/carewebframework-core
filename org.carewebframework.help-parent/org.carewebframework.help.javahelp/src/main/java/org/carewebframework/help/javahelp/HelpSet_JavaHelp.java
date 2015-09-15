@@ -27,11 +27,12 @@ import javax.help.SearchView;
 import javax.help.TOCView;
 
 import org.carewebframework.help.HelpModule;
+import org.carewebframework.help.HelpSetBase;
 import org.carewebframework.help.HelpTopic;
 import org.carewebframework.help.HelpViewType;
 import org.carewebframework.help.IHelpView;
 
-public class HelpSet_JavaHelp implements org.carewebframework.help.IHelpSet {
+public class HelpSet_JavaHelp extends HelpSetBase {
     
     private static final Map<Class<? extends NavigatorView>, HelpViewType> viewMap = new HashMap<Class<? extends NavigatorView>, HelpViewType>();
     
@@ -47,6 +48,7 @@ public class HelpSet_JavaHelp implements org.carewebframework.help.IHelpSet {
     private final List<IHelpView> helpViews = new ArrayList<IHelpView>();
     
     public HelpSet_JavaHelp(HelpModule descriptor) throws MalformedURLException, HelpSetException {
+        super(descriptor);
         String url = descriptor.getUrl();
         helpSet = new HelpSet(HelpSet_JavaHelp.class.getClassLoader(),
                 url.startsWith("/web/") ? getClass().getResource(url) : new URL(url));
@@ -57,9 +59,7 @@ public class HelpSet_JavaHelp implements org.carewebframework.help.IHelpSet {
         for (NavigatorView view : helpSet.getNavigatorViews()) {
             HelpViewType viewType = viewMap.get(view.getClass());
             
-            if (viewType == HelpViewType.Search) {
-                helpViews.add(new HelpViewSearch(view));
-            } else if (viewType != null) {
+            if (viewType != null && viewType != HelpViewType.Search) {
                 helpViews.add(new HelpView(view, viewType));
             }
             

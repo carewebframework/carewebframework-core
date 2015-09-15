@@ -9,13 +9,14 @@
  */
 package org.carewebframework.help;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
 import org.carewebframework.common.StrUtil;
-import org.carewebframework.help.HelpSearcher.IHelpSearchListener;
+import org.carewebframework.help.HelpSearchService.IHelpSearchListener;
 
 import org.zkoss.image.AImage;
 import org.zkoss.zk.ui.Executions;
@@ -44,9 +45,9 @@ public class HelpSearchTab extends HelpTab implements ListitemRenderer<HelpSearc
     
     private Label lblNoResultsFound;
     
-    private final HelpSearcher searcher = new HelpSearcher();
-    
     private final AImage[] icons = new AImage[3];
+    
+    private final List<IHelpSet> helpSets = new ArrayList<>();
     
     private double tertile1;
     
@@ -124,7 +125,7 @@ public class HelpSearchTab extends HelpTab implements ListitemRenderer<HelpSearc
         showMessage(null);
         
         if (query != null && query.trim().length() > 0) {
-            searcher.search(query, this);
+            HelpSearchService.getInstance().search(query, helpSets, this);
         } else {
             showMessage("cwf.help.tab.search.noentry");
         }
@@ -163,17 +164,6 @@ public class HelpSearchTab extends HelpTab implements ListitemRenderer<HelpSearc
     }
     
     /**
-     * Adds the query handler from the specified view to the list of registered handlers.
-     * 
-     * @see org.carewebframework.help.HelpTab#addView(IHelpView)
-     */
-    @Override
-    public void addView(IHelpView view) {
-        super.addView(view);
-        searcher.addView(view);
-    }
-    
-    /**
      * Renders the list box contents.
      * 
      * @see org.zkoss.zul.ListitemRenderer#render
@@ -196,5 +186,9 @@ public class HelpSearchTab extends HelpTab implements ListitemRenderer<HelpSearc
     @Override
     public void onSearchComplete(List<HelpSearchHit> results) {
         Executions.schedule(getDesktop(), searchListener, new Event("onSearchComplete", this, results));
+    }
+    
+    public void mergeHelpSet(IHelpSet helpSet) {
+        helpSets.add(helpSet);
     }
 }

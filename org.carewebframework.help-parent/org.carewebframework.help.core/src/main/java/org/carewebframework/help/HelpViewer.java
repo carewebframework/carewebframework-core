@@ -232,11 +232,13 @@ public class HelpViewer extends Window implements IHelpViewer, AfterCompose, ITo
             return;
         }
         
+        HelpSearchTab searchTab = (HelpSearchTab) findTab(HelpViewType.Search, true);
+        searchTab.mergeHelpSet(helpSet);
+        
         // Each supported view type will result in a dedicated tab
         
         for (IHelpView view : helpSet.getAllViews()) {
-            HelpViewType viewType = view.getViewType();
-            HelpTab helpTab = findTab(viewType, true);
+            HelpTab helpTab = findTab(view.getViewType(), true);
             
             if (helpTab != null) {
                 helpTab.addView(view);
