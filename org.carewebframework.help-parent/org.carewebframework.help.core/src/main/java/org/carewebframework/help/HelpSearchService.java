@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -24,6 +25,7 @@ import java.util.Properties;
 
 import com.google.common.io.Files;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -46,6 +48,7 @@ import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.QueryBuilder;
+import org.apache.lucene.util.Version;
 import org.apache.tika.Tika;
 import org.apache.tika.parser.html.HtmlParser;
 
@@ -88,18 +91,42 @@ public class HelpSearchService implements ApplicationContextAware {
         private boolean changed;
         
         /**
-         * Initialize the index tracker from persistent storage.
+         * Load the index tracker from persistent storage.
          * 
          * @param indexDirectoryPath The index directory path. The tracker properties file will be
          *            located here.
+         * @throws IOException IO error when attempting to delete index.
          */
-        IndexTracker(File indexDirectoryPath) {
+        IndexTracker(File indexDirectoryPath) throws IOException {
             this.propertyFile = new File(indexDirectoryPath, "tracker.properties");
             
             try (InputStream is = new FileInputStream(propertyFile);) {
                 properties.load(is);
             } catch (Exception e) {
                 // Just ignore since we can recreate the property file.
+            }
+            
+            if (!isCompatible(properties.getProperty("lucene_version"))) {
+                log.info("Initializing help search index");
+                changed = true;
+                properties.clear();
+                properties.setProperty("lucene_version", Version.LATEST.toString());
+                FileUtils.cleanDirectory(indexDirectoryPath);
+            }
+            
+        }
+        
+        /**
+         * Returns true if the index version is compatible with the running Lucene version.
+         * 
+         * @param indexVersion The index version.
+         * @return True if the current index is compatible with the running Lucene version.
+         */
+        boolean isCompatible(String indexVersion) {
+            try {
+                return indexVersion != null && Version.parse(indexVersion).equals(Version.LATEST);
+            } catch (ParseException e) {
+                return false;
             }
         }
         
@@ -160,6 +187,8 @@ public class HelpSearchService implements ApplicationContextAware {
     
     private IndexWriter writer;
     
+    private String indexDirectoryPath;
+    
     private Directory indexDirectory;
     
     private IndexTracker indexTracker;
@@ -188,26 +217,24 @@ public class HelpSearchService implements ApplicationContextAware {
      * Setter for index directory path (injected by IOC container).
      * 
      * @param path The index directory path (may be null or empty).
-     * @throws IOException Unspecified IO exception.
      */
-    public void setIndexDirectory(String path) throws IOException {
-        File indexDirectoryPath = resolveIndexDirectoryPath(path);
-        indexDirectory = FSDirectory.open(indexDirectoryPath);
-        indexTracker = new IndexTracker(indexDirectoryPath);
+    public void setIndexDirectoryPath(String path) {
+        indexDirectoryPath = path;
     }
     
     /**
      * Resolves the index directory path. If a path is not specified, one is created within
      * temporary storage.
      * 
-     * @param path The index directory path (may be null or empty).
      * @return The resolved index directory path.
      * @throws IOException Unspecified IO exception.
      */
-    private File resolveIndexDirectoryPath(String path) throws IOException {
-        path = StringUtils.isEmpty(path) ? System.getProperty("java.io.tmpdir") + "/" + HelpUtil.class.getPackage().getName()
-                : path;
-        File dir = new File(path);
+    private File resolveIndexDirectoryPath() throws IOException {
+        if (StringUtils.isEmpty(indexDirectoryPath)) {
+            indexDirectoryPath = System.getProperty("java.io.tmpdir") + appContext.getApplicationName();
+        }
+        
+        File dir = new File(indexDirectoryPath, HelpUtil.class.getPackage().getName());
         Files.createParentDirs(dir);
         return dir;
     }
@@ -353,9 +380,12 @@ public class HelpSearchService implements ApplicationContextAware {
      * @throws IOException Unspecified IO exception.
      */
     public void init() throws IOException {
+        File path = resolveIndexDirectoryPath();
+        indexTracker = new IndexTracker(path);
+        indexDirectory = FSDirectory.open(path);
         tika = new Tika(null, new HtmlParser());
         Analyzer analyzer = new StandardAnalyzer();
-        IndexWriterConfig config = new IndexWriterConfig(org.apache.lucene.util.Version.LATEST, analyzer);
+        IndexWriterConfig config = new IndexWriterConfig(Version.LATEST, analyzer);
         writer = new IndexWriter(indexDirectory, config);
     }
     

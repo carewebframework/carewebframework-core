@@ -12,7 +12,7 @@
 		<!-- Builds a lucene index for searching help content. -->
 		<bean id="helpSearchService" class="org.carewebframework.help.HelpSearchService"
 			factory-method="getInstance" init-method="init" destroy-method="destroy">
-			<property name="indexDirectory" value="${org.carewebframework.help.index.dir:}" />
+			<property name="indexDirectoryPath" value="${org.carewebframework.help.index.dir:}" />
 		</bean>
 		
 		<!-- Represents a registry of all known help modules. -->
