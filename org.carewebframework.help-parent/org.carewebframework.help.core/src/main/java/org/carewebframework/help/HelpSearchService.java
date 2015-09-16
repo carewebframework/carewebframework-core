@@ -138,7 +138,7 @@ public class HelpSearchService implements ApplicationContextAware {
                 try (OutputStream os = new FileOutputStream(propertyFile)) {
                     properties.store(os, "Indexed help modules.");
                 } catch (Exception e) {
-                    log.error("Failed to save index tracking information.", e);
+                    log.error("Failed to save index tracking information", e);
                 }
                 
                 changed = false;
@@ -236,6 +236,7 @@ public class HelpSearchService implements ApplicationContextAware {
         
         File dir = new File(indexDirectoryPath, HelpUtil.class.getPackage().getName());
         Files.createParentDirs(dir);
+        log.info("Help search index located at " + dir);
         return dir;
     }
     
