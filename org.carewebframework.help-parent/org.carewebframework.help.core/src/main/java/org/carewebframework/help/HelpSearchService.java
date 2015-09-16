@@ -51,7 +51,6 @@ import org.apache.tika.parser.html.HtmlParser;
 
 import org.carewebframework.common.MiscUtil;
 import org.carewebframework.common.StrUtil;
-import org.carewebframework.common.Version;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
@@ -141,19 +140,19 @@ public class HelpSearchService implements ApplicationContextAware {
         }
         
         /**
-         * Returns true if the tracked module is the same as the loaded one.
+         * Returns true if the indexed module is the same as the loaded one.
          * 
          * @param module The loaded help module.
-         * @return Try if the tracked module is current.
+         * @return True if the indexed module version is the same as the loaded one.
          */
-        boolean isCurrent(HelpModule module) {
+        boolean isSame(HelpModule module) {
             String v = properties.getProperty(module.getId());
             
             if (v == null) {
                 return false;
             }
             
-            return new Version(v).equals(new Version(module.getVersion()));
+            return v.equals(module.getVersion());
         }
     }
     
@@ -220,7 +219,7 @@ public class HelpSearchService implements ApplicationContextAware {
      */
     public void indexHelpModule(HelpModule helpModule) {
         try {
-            if (indexTracker.isCurrent(helpModule)) {
+            if (indexTracker.isSame(helpModule)) {
                 return;
             }
             
