@@ -23,8 +23,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
-import com.google.common.io.Files;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
@@ -235,7 +233,11 @@ public class HelpSearchService implements ApplicationContextAware {
         }
         
         File dir = new File(indexDirectoryPath, HelpUtil.class.getPackage().getName());
-        Files.createParentDirs(dir);
+        
+        if (!dir.mkdirs()) {
+            throw new IOException("Failed to create help search index directory.");
+        }
+        
         log.info("Help search index located at " + dir);
         return dir;
     }
