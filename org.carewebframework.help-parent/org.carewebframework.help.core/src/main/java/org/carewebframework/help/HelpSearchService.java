@@ -234,7 +234,7 @@ public class HelpSearchService implements ApplicationContextAware {
         
         File dir = new File(indexDirectoryPath, HelpUtil.class.getPackage().getName());
         
-        if (!dir.mkdirs()) {
+        if (!dir.exists() && !dir.mkdirs()) {
             throw new IOException("Failed to create help search index directory.");
         }
         
