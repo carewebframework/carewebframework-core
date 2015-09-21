@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -20,13 +20,6 @@ public interface IHelpView {
      * @return The root node of the associated topic tree, or null if none.
      */
     HelpTopicNode getTopicTree();
-    
-    /**
-     * The display name of the view.
-     * 
-     * @return View display name.
-     */
-    String getName();
     
     /**
      * The type of this view.

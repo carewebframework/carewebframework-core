@@ -123,14 +123,6 @@ public class HelpView implements IHelpView {
     }
     
     /**
-     * Returns the view name.
-     */
-    @Override
-    public String getName() {
-        return view.getName();
-    }
-    
-    /**
      * Returns the view type.
      */
     @Override
