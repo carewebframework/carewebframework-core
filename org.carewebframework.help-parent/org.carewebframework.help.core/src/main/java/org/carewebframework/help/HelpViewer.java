@@ -365,14 +365,15 @@ public class HelpViewer extends Window implements IHelpViewer, AfterCompose, ITo
     private HelpTopic findTopic(String url) {
         int i = url.indexOf("/zkau/");
         url = i == -1 ? url : url.substring(i + 6);
-        System.out.println(url);
         
         for (IHelpSet hs : helpSets) {
-            HelpTopic topic = hs.getTopic(url);
-            
-            if (topic != null) {
-                return topic;
-            }
+            try {
+                HelpTopic topic = hs.getTopic(url);
+                
+                if (topic != null) {
+                    return topic;
+                }
+            } catch (Exception e) {}
         }
         
         return null;

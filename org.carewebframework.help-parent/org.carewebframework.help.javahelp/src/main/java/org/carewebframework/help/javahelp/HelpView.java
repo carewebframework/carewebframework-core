@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -89,7 +89,7 @@ public class HelpView implements IHelpView {
             DefaultMutableTreeNode nd = (DefaultMutableTreeNode) node;
             TreeItem item = (TreeItem) nd.getUserObject();
             ID id = item.getID();
-            HelpTopic topic = new HelpTopic(id == null ? null : id.getURL(), item.getName(), item.getHelpSet().getTitle());
+            HelpTopic topic = new HelpTopic(id == null ? null : id.getURL(), item.getName(), view.getHelpSet().getTitle());
             
             if (id != null && view.getHelpSet().getKeyData("topics", id.id) == null) {
                 view.getHelpSet().setKeyData("topics", id.id, topic);

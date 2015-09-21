@@ -23,7 +23,6 @@ import javax.help.HelpSetException;
 import javax.help.IndexView;
 import javax.help.Map.ID;
 import javax.help.NavigatorView;
-import javax.help.SearchView;
 import javax.help.TOCView;
 
 import org.carewebframework.help.HelpModule;
@@ -40,7 +39,6 @@ public class HelpSet_JavaHelp extends HelpSetBase {
         viewMap.put(TOCView.class, HelpViewType.TOC);
         viewMap.put(GlossaryView.class, HelpViewType.Glossary);
         viewMap.put(IndexView.class, HelpViewType.Index);
-        viewMap.put(SearchView.class, HelpViewType.Search);
     }
     
     private final HelpSet helpSet;
@@ -59,7 +57,7 @@ public class HelpSet_JavaHelp extends HelpSetBase {
         for (NavigatorView view : helpSet.getNavigatorViews()) {
             HelpViewType viewType = viewMap.get(view.getClass());
             
-            if (viewType != null && viewType != HelpViewType.Search) {
+            if (viewType != null) {
                 helpViews.add(new HelpView(view, viewType));
             }
             
