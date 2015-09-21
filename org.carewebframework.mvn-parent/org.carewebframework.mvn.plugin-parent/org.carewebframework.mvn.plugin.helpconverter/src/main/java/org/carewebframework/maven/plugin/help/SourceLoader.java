@@ -35,7 +35,7 @@ public class SourceLoader {
     /**
      * Create a source loader.
      * 
-     * @param formatSpecifier The unique help format specifier (e.g., "JavaHelp").
+     * @param formatSpecifier The unique help format specifier (e.g., "javahelp").
      * @param helpSetPattern The pattern that will be used to identify the main help set file.
      * @param iteratorClass The class that will be used to iterate over files in the source archive.
      */

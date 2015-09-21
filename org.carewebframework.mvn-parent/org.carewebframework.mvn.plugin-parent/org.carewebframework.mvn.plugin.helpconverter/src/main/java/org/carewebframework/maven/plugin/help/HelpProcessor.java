@@ -56,7 +56,7 @@ public class HelpProcessor extends AbstractProcessor<HelpConverterMojo> {
         }
         
         if (hsFile == null && loader.isHelpSetFile(path)) {
-            hsFile = getResourceBase() + path;
+            hsFile = getResourceBase() + resource.getTargetPath();
         }
         
         return super.transform(resource);

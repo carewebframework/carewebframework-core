@@ -256,7 +256,7 @@ public class HelpSearchService implements ApplicationContextAware {
             unindexHelpModule(helpModule);
             log.info("Indexing help module " + helpModule.getId());
             int i = helpModule.getUrl().lastIndexOf('/');
-            String pattern = "classpath:" + helpModule.getUrl().substring(0, i + 1) + "*.htm";
+            String pattern = "classpath:" + helpModule.getUrl().substring(0, i + 1) + "*.htm*";
             
             for (Resource resource : appContext.getResources(pattern)) {
                 indexDocument(helpModule, resource);
