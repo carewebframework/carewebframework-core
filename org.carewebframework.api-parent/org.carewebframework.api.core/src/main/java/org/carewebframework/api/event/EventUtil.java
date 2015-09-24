@@ -21,6 +21,8 @@ public class EventUtil {
     
     private static final Log log = LogFactory.getLog(EventUtil.class);
     
+    public static final String STATUS_EVENT = "STATUS";
+    
     /**
      * Returns the event manager for this application context.
      * 
@@ -45,7 +47,7 @@ public class EventUtil {
      */
     public static void status(final String statusText) {
         try {
-            getEventManager().fireLocalEvent("STATUS", statusText == null ? "" : statusText);
+            getEventManager().fireLocalEvent(STATUS_EVENT, statusText == null ? "" : statusText);
         } catch (final Throwable e) {
             log.error(e);
         }

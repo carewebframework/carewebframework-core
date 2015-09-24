@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -9,6 +9,7 @@
  */
 package org.carewebframework.ui.statuspanel;
 
+import org.carewebframework.api.event.EventUtil;
 import org.carewebframework.api.event.IGenericEvent;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.ui.FrameworkController;
@@ -25,19 +26,14 @@ public class StatusPanel extends FrameworkController implements IGenericEvent<Ob
     
     private static final long serialVersionUID = 1L;
     
-    private static final String STATUS_EVENT = "STATUS";
-    
-    private Component root;
-    
     /**
      * Creates the default pane.
      */
     @Override
     public void doAfterCompose(Component comp) throws Exception {
         super.doAfterCompose(comp);
-        root = comp;
         createLabel("default");
-        getEventManager().subscribe(STATUS_EVENT, this);
+        getEventManager().subscribe(EventUtil.STATUS_EVENT, this);
     }
     
     /**
