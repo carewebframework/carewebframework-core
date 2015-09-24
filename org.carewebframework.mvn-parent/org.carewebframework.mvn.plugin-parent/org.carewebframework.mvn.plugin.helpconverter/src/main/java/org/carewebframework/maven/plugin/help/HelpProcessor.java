@@ -13,6 +13,9 @@ import org.carewebframework.maven.plugin.iterator.IResourceIterator;
 import org.carewebframework.maven.plugin.processor.AbstractProcessor;
 import org.carewebframework.maven.plugin.resource.IResource;
 
+/**
+ * Processor for help content.
+ */
 public class HelpProcessor extends AbstractProcessor<HelpConverterMojo> {
     
     private String hsFile;
@@ -47,6 +50,10 @@ public class HelpProcessor extends AbstractProcessor<HelpConverterMojo> {
         }
     }
     
+    /**
+     * Excludes resources under the META-INF folder and checks the resource against the help set
+     * pattern, saving a path reference if it matches.
+     */
     @Override
     public boolean transform(IResource resource) throws Exception {
         String path = resource.getSourcePath();
@@ -62,6 +69,11 @@ public class HelpProcessor extends AbstractProcessor<HelpConverterMojo> {
         return super.transform(resource);
     }
     
+    /**
+     * Returns the path to the main help set file, or null if one was not found during processing.
+     * 
+     * @return The path to the main help set file, or null if none was found.
+     */
     public String getHelpSetFile() {
         return hsFile;
     }
