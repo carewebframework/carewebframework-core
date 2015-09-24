@@ -67,7 +67,7 @@ public abstract class AbstractSecurityService implements ISecurityService {
      * @param target Target url after successful login.
      * @param message Message to display in logout dialog.
      */
-    protected static void setLogoutAttributes(final String target, final String message) {
+    protected static void setLogoutAttributes(String target, String message) {
         setCookie(Constants.LOGOUT_WARNING_ATTR, message, "Application logged out.");
         setCookie(Constants.LOGOUT_TARGET_ATTR, target, "/");
     }
@@ -79,7 +79,7 @@ public abstract class AbstractSecurityService implements ISecurityService {
      * @param value Value of the cookie which will be base64-encoded.
      * @param deflt Default value if value is null.
      */
-    private static void setCookie(final String cookieName, final String value, final String deflt) {
+    private static void setCookie(String cookieName, String value, String deflt) {
         FrameworkWebSupport.setCookie(cookieName, (value == null ? deflt : value));
     }
     
@@ -91,8 +91,8 @@ public abstract class AbstractSecurityService implements ISecurityService {
      * @param deflt Default value to return if none found.
      * @return Value of the attribute, which is automatically converted from its base64 encoding.
      */
-    public static String getLogoutAttribute(final String attributeName, final String deflt) {
-        final String value = FrameworkWebSupport.getCookieValue(attributeName);
+    public static String getLogoutAttribute(String attributeName, String deflt) {
+        String value = FrameworkWebSupport.getCookieValue(attributeName);
         //delete cookie
         FrameworkWebSupport.setCookie(attributeName, null);
         return StringUtils.isEmpty(value) ? deflt : value;
@@ -107,21 +107,21 @@ public abstract class AbstractSecurityService implements ISecurityService {
      * @return True if operation was successful.
      */
     @Override
-    public boolean logout(final boolean force, String target, final String message) {
+    public boolean logout(boolean force, String target, String message) {
         log.trace("Logging Out");
-        final IContextManager contextManager = ContextManager.getInstance();
-        final boolean result = contextManager == null || contextManager.reset(force) || force;
+        IContextManager contextManager = ContextManager.getInstance();
+        boolean result = contextManager == null || contextManager.reset(force) || force;
         
         if (result) {
             if (target == null) {
                 try {
                     target = FrameworkWebSupport.addQueryString(FrameworkWebSupport.getRequestUrl(),
                         FrameworkWebSupport.getRequestParams());
-                } catch (final Exception e) {}
+                } catch (Exception e) {}
             }
             
             setLogoutAttributes(target, message);
-            final Desktop contextDesktop = FrameworkWebSupport.getDesktop();
+            Desktop contextDesktop = FrameworkWebSupport.getDesktop();
             log.debug("Redirecting Desktop to logout filter URI: " + contextDesktop);
             String queryParam = replaceParam(replaceParam(logoutTarget, "%target%", target), "%message%", message);
             contextDesktop.getExecution().sendRedirect(Constants.LOGOUT_URI + queryParam);

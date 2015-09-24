@@ -49,25 +49,25 @@ public class RequestProcessingServlet extends HttpServlet {
     private static final String EXC_REC_PROC = "@cwf.error.ui.req.proc";
     
     @Override
-    protected final void doGet(final HttpServletRequest req, final HttpServletResponse res) throws ServletException,
+    protected final void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException,
                                                                                            IOException {
         processRequest(req, res);
     }
     
     @Override
-    protected final void doDelete(final HttpServletRequest req, final HttpServletResponse res) throws ServletException,
+    protected final void doDelete(HttpServletRequest req, HttpServletResponse res) throws ServletException,
                                                                                               IOException {
         processRequest(req, res);
     }
     
     @Override
-    protected final void doPut(final HttpServletRequest req, final HttpServletResponse res) throws ServletException,
+    protected final void doPut(HttpServletRequest req, HttpServletResponse res) throws ServletException,
                                                                                            IOException {
         processRequest(req, res);
     }
     
     @Override
-    protected final void doPost(final HttpServletRequest req, final HttpServletResponse res) throws ServletException,
+    protected final void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException,
                                                                                             IOException {
         processRequest(req, res);
     }
@@ -87,13 +87,13 @@ public class RequestProcessingServlet extends HttpServlet {
      * @throws BeanNotOfRequiredTypeException If bean found is not a RequestProcessor implementation
      * @throws RequestProcessingException Request processing exception.
      */
-    protected final void processRequest(final HttpServletRequest req, final HttpServletResponse res)
+    protected final void processRequest(HttpServletRequest req, HttpServletResponse res)
                                                                                                     throws ServletException,
                                                                                                     IOException,
                                                                                                     NoSuchBeanDefinitionException,
                                                                                                     BeanNotOfRequiredTypeException,
                                                                                                     RequestProcessingException {
-        final String processorBeanName = req.getParameter(REQUEST_PROCESSOR_BEAN);
+        String processorBeanName = req.getParameter(REQUEST_PROCESSOR_BEAN);
         if (processorBeanName == null) {
             throw new IllegalArgumentException(getClass() + " expects the parameter " + REQUEST_PROCESSOR_BEAN
                     + ", which is an instance of org.carewebframework.ui.RequestProcessor");
@@ -104,11 +104,11 @@ public class RequestProcessingServlet extends HttpServlet {
             log.debug("Attempting to lookup the following bean in the registry: " + processorBeanName);
         }
         
-        final IRequestProcessor processor = WebApplicationContextUtils.getWebApplicationContext(this.getServletContext())
+        IRequestProcessor processor = WebApplicationContextUtils.getWebApplicationContext(this.getServletContext())
                 .getBean(processorBeanName, IRequestProcessor.class);
         try {
             processor.process(req, res);
-        } catch (final Exception e) {
+        } catch (Exception e) {
             throw new RequestProcessingException(EXC_REC_PROC, e, processor.getClass().getName());
         }
     }

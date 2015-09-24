@@ -192,7 +192,7 @@ public class ThemeGeneratorMojo extends BaseMojo {
             getLog().info("Default theme source based on dependencies overridden by configuration");
         }
         
-        final Set<?> deps = (excludeTransitiveDependencies ? mavenProject.getDependencyArtifacts() : mavenProject
+        Set<?> deps = (excludeTransitiveDependencies ? mavenProject.getDependencyArtifacts() : mavenProject
                 .getArtifacts());
         
         for (Object o : deps) {

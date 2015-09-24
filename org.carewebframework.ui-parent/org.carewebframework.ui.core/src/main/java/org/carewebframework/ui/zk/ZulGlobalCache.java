@@ -46,10 +46,10 @@ public class ZulGlobalCache extends AbstractCache<String, PageDefinition> {
      * @see org.carewebframework.common.AbstractCache#fetch(java.lang.Object)
      */
     @Override
-    protected PageDefinition fetch(final String filename) {
+    protected PageDefinition fetch(String filename) {
         try {
             return ZKUtil.loadZulPageDefinition(filename);
-        } catch (final Exception e) {
+        } catch (Exception e) {
             log.warn("Exception occurred loading zul page definition from filename [" + StringUtils.trimToEmpty(filename)
                     + "], returning null PageDefinition.", e);
             return null;

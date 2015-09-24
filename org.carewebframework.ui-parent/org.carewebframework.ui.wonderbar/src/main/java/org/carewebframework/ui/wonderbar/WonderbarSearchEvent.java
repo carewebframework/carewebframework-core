@@ -27,7 +27,7 @@ public class WonderbarSearchEvent extends Event {
     private final String term;
     
     public static final WonderbarSearchEvent getSearchEvent(AuRequest request) {
-        final Map<String, Object> data = request.getData();
+        Map<String, Object> data = request.getData();
         return new WonderbarSearchEvent(request.getComponent(), (String) data.get("term"));
     }
     

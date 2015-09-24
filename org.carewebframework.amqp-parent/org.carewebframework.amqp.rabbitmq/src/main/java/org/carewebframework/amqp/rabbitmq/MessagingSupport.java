@@ -37,7 +37,7 @@ public class MessagingSupport {
      * @param eventName The destination.
      * @param messageData The message data.
      */
-    public void produceLocalMessage(final String eventName, final Object messageData) {
+    public void produceLocalMessage(String eventName, Object messageData) {
         EventManager.getInstance().fireLocalEvent(eventName, messageData);
     }
     
@@ -54,7 +54,7 @@ public class MessagingSupport {
             @ManagedOperationParameter(name = "eventName", description = "The event name from which the destination (Topic) is derived."),
             @ManagedOperationParameter(name = "eventData", description = "The event data"),
             @ManagedOperationParameter(name = "recipients", description = "Comma delimited list of recipient ids") })
-    public void produceMessage(final String eventName, final String eventData, final String recipients) {
+    public void produceMessage(String eventName, String eventData, String recipients) {
         broker.sendEvent(eventName, eventData, "anonymous", recipients);
     }
     

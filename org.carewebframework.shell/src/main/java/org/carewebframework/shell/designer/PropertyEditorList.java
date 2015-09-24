@@ -118,8 +118,8 @@ public class PropertyEditorList extends PropertyEditorBase {
      */
     protected Comboitem appendItem(String label) {
         int i = delimiter == null || label == null ? -1 : label.indexOf(delimiter);
-        return i == -1 ? appendItem(label, label) : appendItem(label.substring(0, i),
-            label.substring(i + delimiter.length()));
+        return i == -1 ? appendItem(label, label)
+                : appendItem(label.substring(0, i), label.substring(i + delimiter.length()));
     }
     
     /**

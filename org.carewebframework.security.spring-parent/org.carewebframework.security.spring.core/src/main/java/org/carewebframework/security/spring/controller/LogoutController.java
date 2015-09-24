@@ -34,7 +34,7 @@ public class LogoutController extends GenericAutowireComposer<HtmlBasedComponent
      * @see org.zkoss.zk.ui.util.GenericAutowireComposer#doAfterCompose(org.zkoss.zk.ui.Component)
      */
     @Override
-    public void doAfterCompose(final HtmlBasedComponent comp) throws Exception {
+    public void doAfterCompose(HtmlBasedComponent comp) throws Exception {
         super.doAfterCompose(comp);
         lblMessage.setValue(AbstractSecurityService.getLogoutAttribute(Constants.LOGOUT_WARNING_ATTR,
             StrUtil.getLabel(Constants.LBL_LOGOUT_MESSAGE_DEFAULT)));

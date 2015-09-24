@@ -74,7 +74,7 @@ public class InvocationRequestQueue implements EventListener<InvocationRequest> 
      * @param queueName The queue name.
      * @return The requested message queue, or null if not found.
      */
-    public static InvocationRequestQueue getQueue(final String ownerId, final String queueName) {
+    public static InvocationRequestQueue getQueue(String ownerId, String queueName) {
         synchronized (messageQueues) {
             return messageQueues.get(getQualifiedQueueName(ownerId, queueName));
         }
@@ -87,7 +87,7 @@ public class InvocationRequestQueue implements EventListener<InvocationRequest> 
      * @param queueName The queue name.
      * @return The qualified queue name.
      */
-    public static String getQualifiedQueueName(final String ownerId, final String queueName) {
+    public static String getQualifiedQueueName(String ownerId, String queueName) {
         return ownerId + "_" + queueName;
     }
     

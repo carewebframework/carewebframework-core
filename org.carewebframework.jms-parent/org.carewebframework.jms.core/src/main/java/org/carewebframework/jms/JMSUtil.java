@@ -68,8 +68,8 @@ public final class JMSUtil {
      * @param eventName Event name.
      * @return Topic name (highest level of event hierarchy).
      */
-    public static String getTopicName(final String eventName) {
-        final int i = eventName.indexOf('.');
+    public static String getTopicName(String eventName) {
+        int i = eventName.indexOf('.');
         return i < 0 ? eventName : eventName.substring(0, i);
     }
     
@@ -96,7 +96,7 @@ public final class JMSUtil {
      * @param publisherInfo Info on the publisher. If null, then no recipients properties are added.
      * @return The message selector.
      */
-    public static String getMessageSelector(final String eventName, final IPublisherInfo publisherInfo) {
+    public static String getMessageSelector(String eventName, IPublisherInfo publisherInfo) {
         StringBuilder sb = new StringBuilder("(JMSType='" + eventName + "' OR JMSType LIKE '" + eventName
                 + ".%') AND (Recipients IS NULL");
         
@@ -116,7 +116,7 @@ public final class JMSUtil {
      * @param value Recipient value.
      * @param sb String builder to receive value.
      */
-    private static void addRecipientSelector(final String value, final StringBuilder sb) {
+    private static void addRecipientSelector(String value, StringBuilder sb) {
         if (value != null) {
             sb.append(" OR Recipients LIKE '%,").append(value).append(",%'");
         }
@@ -134,8 +134,8 @@ public final class JMSUtil {
      * @return MessageThe newly created message.
      * @throws JMSException if error thrown from creation of object message
      */
-    public static Message createObjectMessage(final Session session, final String jmsType, final Serializable messageData,
-                                              final String sender, final String recipients) throws JMSException {
+    public static Message createObjectMessage(Session session, String jmsType, Serializable messageData,
+                                              String sender, String recipients) throws JMSException {
         return decorateMessage(session.createObjectMessage(messageData), jmsType, sender, recipients);
     }
     
@@ -151,8 +151,8 @@ public final class JMSUtil {
      * @return Message
      * @throws JMSException if error thrown from creation of object message
      */
-    public static Message createTextMessage(final Session session, final String jmsType, final String text,
-                                            final String sender, final String recipients) throws JMSException {
+    public static Message createTextMessage(Session session, String jmsType, String text,
+                                            String sender, String recipients) throws JMSException {
         return decorateMessage(session.createTextMessage(text), jmsType, sender, recipients);
     }
     
@@ -167,8 +167,8 @@ public final class JMSUtil {
      * @return The decorated Message
      * @throws JMSException if error thrown setting properties
      */
-    public static Message decorateMessage(final Message message, final String jmsType, final String sender,
-                                          final String recipients) throws JMSException {
+    public static Message decorateMessage(Message message, String jmsType, String sender,
+                                          String recipients) throws JMSException {
         message.setJMSType(jmsType);
         message.setStringProperty(EVENT_SENDER_PROPERTY, sender);
         message.setStringProperty(EVENT_RECIPIENTS_PROPERTY, StringUtils.isEmpty(recipients) ? null : "," + recipients + ",");

@@ -78,7 +78,7 @@ public class MainController extends PluginController {
     private final LogFileTailerListener tailListener = new LogFileTailerListener() {
         
         @Override
-        public void newFileLine(final String line) {
+        public void newFileLine(String line) {
             logFileBuffer.add(line.concat("\n"));
         }
         
@@ -101,9 +101,9 @@ public class MainController extends PluginController {
         
         //Populate LogFilePaths Combobox
         if (logManager != null) {
-            final List<String> logFilePaths = logManager.getAllPathsToLogFiles();
+            List<String> logFilePaths = logManager.getAllPathsToLogFiles();
             
-            for (final String pathToLogFile : logFilePaths) {
+            for (String pathToLogFile : logFilePaths) {
                 logFiles.put(pathToLogFile, new File(pathToLogFile));
                 cboLogFiles.appendChild(new Comboitem(pathToLogFile));
             }
@@ -121,10 +121,10 @@ public class MainController extends PluginController {
     public void onTimer$timer() {
         log.trace("onTimer event");
         
-        final StringBuffer lines = new StringBuffer();
+        StringBuffer lines = new StringBuffer();
         
         synchronized (logFileBuffer) {
-            for (final String line : logFileBuffer) {
+            for (String line : logFileBuffer) {
                 lines.append(line);
             }
         }
@@ -135,7 +135,7 @@ public class MainController extends PluginController {
         //check for state change of Tailer
         if (isTailerTerminated) {
             isTailerTerminated = false;
-            final String msg = "Tailer was terminated, stopping client timer";
+            String msg = "Tailer was terminated, stopping client timer";
             txtOutput.setValue(txtOutput.getValue().concat(msg).concat("\n"));
             log.trace(msg);
             stopTailer();
@@ -177,15 +177,15 @@ public class MainController extends PluginController {
     private void startTailer() {
         if (!isTailerStarted) {
             log.trace("Starting file tailer");
-            final Comboitem selectedItem = cboLogFiles.getSelectedItem();
-            final String logFilePath = selectedItem == null ? null : selectedItem.getLabel();
+            Comboitem selectedItem = cboLogFiles.getSelectedItem();
+            String logFilePath = selectedItem == null ? null : selectedItem.getLabel();
             
             if (tailer == null) {
                 log.trace("Creating LogFileTailer with " + logFilePath);
                 try {
                     tailer = new LogFileTailer(logFiles.get(logFilePath), TAIL_INTERVAL, false);
                     tailer.addFileTailerListener(tailListener);
-                } catch (final FileNotFoundException e) {
+                } catch (FileNotFoundException e) {
                     log.error(e.getMessage(), e);
                     showMessage("@cwf.filetailer.error.notfound", logFilePath);
                     return;
@@ -193,11 +193,11 @@ public class MainController extends PluginController {
             } else {
                 try {
                     tailer.changeFile(logFiles.get(logFilePath));
-                } catch (final IllegalStateException ise) {
+                } catch (IllegalStateException ise) {
                     log.error(ise.getMessage(), ise);
                     showMessage("@cwf.filetailer.error.illegalstate", logFilePath);
                     return;
-                } catch (final FileNotFoundException e) {
+                } catch (FileNotFoundException e) {
                     log.error(e.getMessage(), e);
                     showMessage("@cwf.filetailer.error.notfound", logFilePath);
                     return;
@@ -234,7 +234,7 @@ public class MainController extends PluginController {
      * @param message Message to display to client.
      * @param params Message parameters.
      */
-    private void showMessage(final String message, Object... params) {
+    private void showMessage(String message, Object... params) {
         if (message == null) {
             lblMessage.setVisible(false);
         } else {

@@ -45,10 +45,10 @@ public class EventUtil {
      * 
      * @param statusText Text associated with the status change.
      */
-    public static void status(final String statusText) {
+    public static void status(String statusText) {
         try {
             getEventManager().fireLocalEvent(STATUS_EVENT, statusText == null ? "" : statusText);
-        } catch (final Throwable e) {
+        } catch (Throwable e) {
             log.error(e);
         }
     }

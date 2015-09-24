@@ -661,26 +661,26 @@ public class ZKUtil {
      * @return The previous value for the style. Returns null if the style did not previously exist.
      */
     public static String updateStyle(HtmlBasedComponent component, String styleName, String styleValue) {
-        final String style = component.getStyle();
+        String style = component.getStyle();
         
         if (StringUtils.isEmpty(style) && StringUtils.isEmpty(styleValue)) {
             return null;
         }
         
-        final String[] styles = style == null ? null : style.split("\\;");
-        final StringBuilder sb = new StringBuilder();
+        String[] styles = style == null ? null : style.split("\\;");
+        StringBuilder sb = new StringBuilder();
         String oldValue = null;
         boolean found = false;
         
         if (styles != null) {
             for (String aStyle : styles) {
-                final String[] nvp = aStyle.split("\\:", 2);
+                String[] nvp = aStyle.split("\\:", 2);
                 
                 if (nvp.length == 0) {
                     continue;
                 }
                 
-                final String name = nvp[0].trim();
+                String name = nvp[0].trim();
                 String val = nvp.length < 2 ? "" : nvp[1];
                 
                 if (name.equals(styleName)) {

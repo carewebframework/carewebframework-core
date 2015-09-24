@@ -46,7 +46,7 @@ public class Log4JLogManager implements ILogManager {
     @ManagedOperation(description = "Enables INFO level for logger")
     @ManagedOperationParameters({ @ManagedOperationParameter(name = "target", description = "Name of logger") })
     @Override
-    public void enableInfo(final String target) {
+    public void enableInfo(String target) {
         LogManager.getLogger(target).setLevel(Level.INFO);
     }
     
@@ -56,7 +56,7 @@ public class Log4JLogManager implements ILogManager {
     @ManagedOperation(description = "Enables WARN level for logger")
     @ManagedOperationParameters({ @ManagedOperationParameter(name = "target", description = "Name of logger") })
     @Override
-    public void enableWarn(final String target) {
+    public void enableWarn(String target) {
         LogManager.getLogger(target).setLevel(Level.WARN);
     }
     
@@ -66,7 +66,7 @@ public class Log4JLogManager implements ILogManager {
     @ManagedOperation(description = "Enables ERROR level for logger")
     @ManagedOperationParameters({ @ManagedOperationParameter(name = "target", description = "Name of logger") })
     @Override
-    public void enableError(final String target) {
+    public void enableError(String target) {
         LogManager.getLogger(target).setLevel(Level.ERROR);
     }
     
@@ -76,7 +76,7 @@ public class Log4JLogManager implements ILogManager {
     @ManagedOperation(description = "Enables DEBUG level for logger")
     @ManagedOperationParameters({ @ManagedOperationParameter(name = "target", description = "Name of logger") })
     @Override
-    public void enableDebug(final String target) {
+    public void enableDebug(String target) {
         LogManager.getLogger(target).setLevel(Level.DEBUG);
     }
     
@@ -86,7 +86,7 @@ public class Log4JLogManager implements ILogManager {
     @ManagedOperation(description = "Enables TRACE level for logger")
     @ManagedOperationParameters({ @ManagedOperationParameter(name = "target", description = "Name of logger") })
     @Override
-    public void enableTrace(final String target) {
+    public void enableTrace(String target) {
         LogManager.getLogger(target).setLevel(Level.TRACE);
     }
     
@@ -97,9 +97,9 @@ public class Log4JLogManager implements ILogManager {
     @Override
     public List<String> getAllPathsToLogFiles() {
         
-        final List<String> filePaths = new ArrayList<String>();
+        List<String> filePaths = new ArrayList<String>();
         
-        for (final String loggerName : getLoggerNames()) {
+        for (String loggerName : getLoggerNames()) {
             if (log.isTraceEnabled()) {
                 log.trace("Looking up appenders for Logger:" + loggerName);
             }
@@ -114,9 +114,9 @@ public class Log4JLogManager implements ILogManager {
                     log.warn("Could not find logger with name: " + loggerName);
                 }
             } else {
-                final Enumeration<?> appenders = logger.getAllAppenders();
+                Enumeration<?> appenders = logger.getAllAppenders();
                 while (appenders.hasMoreElements()) {
-                    final Appender appender = (Appender) appenders.nextElement();
+                    Appender appender = (Appender) appenders.nextElement();
                     if (log.isTraceEnabled()) {
                         log.trace("Appender found: " + appender.getName());
                     }
@@ -145,7 +145,7 @@ public class Log4JLogManager implements ILogManager {
      * 
      * @param loggerNames List of String objects
      */
-    public void setLoggerNames(final Set<String> loggerNames) {
+    public void setLoggerNames(Set<String> loggerNames) {
         this.loggerNames = loggerNames;
     }
     

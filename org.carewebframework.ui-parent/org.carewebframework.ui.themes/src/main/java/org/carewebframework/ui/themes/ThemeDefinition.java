@@ -128,7 +128,7 @@ public class ThemeDefinition implements ApplicationContextAware {
             return uri;
         }
         
-        final String mappedUri = uri.substring(URI_PREFIX.length());
+        String mappedUri = uri.substring(URI_PREFIX.length());
         return files.contains(mappedUri) ? expandURI(mappedUri) : uri;
     }
     
@@ -145,15 +145,15 @@ public class ThemeDefinition implements ApplicationContextAware {
     @Override
     public void setApplicationContext(ApplicationContext appContext) throws BeansException {
         try {
-            final String root = "web/" + url;
-            final int rootLength = root.length();
-            final String wc = "classpath*:" + root + "**";
-            final Resource[] resources = appContext.getResources(wc);
+            String root = "web/" + url;
+            int rootLength = root.length();
+            String wc = "classpath*:" + root + "**";
+            Resource[] resources = appContext.getResources(wc);
             files = new HashSet<String>(resources.length);
             
             for (Resource resource : resources) {
-                final String path = resource.getURL().getPath();
-                final int i = path.indexOf(root);
+                String path = resource.getURL().getPath();
+                int i = path.indexOf(root);
                 
                 if (i > -1) {
                     files.add(path.substring(i + rootLength));

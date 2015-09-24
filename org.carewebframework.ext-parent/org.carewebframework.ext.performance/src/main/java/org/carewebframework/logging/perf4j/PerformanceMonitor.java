@@ -90,7 +90,7 @@ public class PerformanceMonitor implements PerformanceMeter, IPerformanceMonitor
      * @param scheduledExecutorService The ScheduledExecutorService used to schedule expiration
      *            timer task
      */
-    public PerformanceMonitor(final MBeanExporter mbeanExporter, final ScheduledExecutorService scheduledExecutorService) {
+    public PerformanceMonitor(MBeanExporter mbeanExporter, ScheduledExecutorService scheduledExecutorService) {
         this.mbeanExporter = mbeanExporter;
         this.scheduledExecutorService = scheduledExecutorService;
         startExpirationTimer();
@@ -123,7 +123,7 @@ public class PerformanceMonitor implements PerformanceMeter, IPerformanceMonitor
             log.warn("PerformanceMonitorExpirationTimer already stopped");
         } else {
             if (this.expirationTimerTaskFuture != null) {
-                final boolean isCancelled = this.expirationTimerTaskFuture.cancel(false);
+                boolean isCancelled = this.expirationTimerTaskFuture.cancel(false);
                 if (!isCancelled) {
                     log.warn("Unable to cancel ExpirationTimerTask Future");
                 }
@@ -157,7 +157,7 @@ public class PerformanceMonitor implements PerformanceMeter, IPerformanceMonitor
      * @param logRequestPerformance log request performance flag.
      */
     @Override
-    public void setLogRequestPerformance(final boolean logRequestPerformance) {
+    public void setLogRequestPerformance(boolean logRequestPerformance) {
         this.logRequestPerformance = logRequestPerformance;
     }
     
@@ -178,7 +178,7 @@ public class PerformanceMonitor implements PerformanceMeter, IPerformanceMonitor
      * @param threshold the logging threshold.
      */
     @Override
-    public void setThreshold(final long threshold) {
+    public void setThreshold(long threshold) {
         this.threshold = threshold;
     }
     
@@ -198,7 +198,7 @@ public class PerformanceMonitor implements PerformanceMeter, IPerformanceMonitor
      * @param removePerformanceData the remove performance data after request completion flag to set
      */
     @Override
-    public void setRemovePerformanceData(final boolean removePerformanceData) {
+    public void setRemovePerformanceData(boolean removePerformanceData) {
         this.removePerformanceData = removePerformanceData;
     }
     
@@ -218,7 +218,7 @@ public class PerformanceMonitor implements PerformanceMeter, IPerformanceMonitor
      * @param performanceDataLimit performance data limit.
      */
     @Override
-    public void setPerformanceDataLimit(final int performanceDataLimit) {
+    public void setPerformanceDataLimit(int performanceDataLimit) {
         if (performanceDataLimit <= MAX_PERFORMANCE_DATA_LIMIT) {
             this.performanceDataLimit = performanceDataLimit;
         }
@@ -240,7 +240,7 @@ public class PerformanceMonitor implements PerformanceMeter, IPerformanceMonitor
      * @param expirationTimeMinutes expiration time in minutes.
      */
     @Override
-    public void setExpirationTimeMinutes(final long expirationTimeMinutes) {
+    public void setExpirationTimeMinutes(long expirationTimeMinutes) {
         this.expirationTimeMs = TimeUnit.MINUTES.toMillis(expirationTimeMinutes);
     }
     
@@ -251,7 +251,7 @@ public class PerformanceMonitor implements PerformanceMeter, IPerformanceMonitor
      */
     @Override
     public List<PerformanceData> getAllPerformanceData() {
-        final List<PerformanceData> pds = new ArrayList<PerformanceData>(this.performanceDataMap.values());
+        List<PerformanceData> pds = new ArrayList<PerformanceData>(this.performanceDataMap.values());
         Collections.sort(pds);
         return pds;
     }
@@ -263,8 +263,8 @@ public class PerformanceMonitor implements PerformanceMeter, IPerformanceMonitor
      */
     @Override
     public List<PerformanceData> getCompletedPerformanceData() {
-        final List<PerformanceData> pds = new ArrayList<PerformanceData>(this.performanceDataMap.size());
-        for (final PerformanceData pd : this.performanceDataMap.values()) {
+        List<PerformanceData> pds = new ArrayList<PerformanceData>(this.performanceDataMap.size());
+        for (PerformanceData pd : this.performanceDataMap.values()) {
             if (pd.isComplete()) {
                 pds.add(pd);
             }
@@ -289,9 +289,9 @@ public class PerformanceMonitor implements PerformanceMeter, IPerformanceMonitor
      * @param tag The tag to be included in the log entry.
      * @param displayElapsed If true, the performance information will be sent to the display.
      */
-    public static void monitorEvent(final Component target, final String eventName, final String tag,
-                                    final boolean displayElapsed) {
-        final Desktop dt = target.getDesktop();
+    public static void monitorEvent(Component target, String eventName, String tag,
+                                    boolean displayElapsed) {
+        Desktop dt = target.getDesktop();
         PerformanceData pd = (PerformanceData) dt.getAttribute(PerformanceData.ATTR_PERF_DATA);
         if (pd == null) {
             pd = new PerformanceData(dt);
@@ -308,7 +308,7 @@ public class PerformanceMonitor implements PerformanceMeter, IPerformanceMonitor
      * @param tag The tag to be included in the log entry.
      * @param displayElapsed If true, the performance information will be sent to the display.
      */
-    public static void timeEcho(final Component target, final String tag, final boolean displayElapsed) {
+    public static void timeEcho(Component target, String tag, boolean displayElapsed) {
         timeEcho(target, tag, displayElapsed, RequestTime.TOTAL);
     }
     
@@ -320,9 +320,9 @@ public class PerformanceMonitor implements PerformanceMeter, IPerformanceMonitor
      * @param displayElapsed If true, the performance information will be sent to the display.
      * @param rt The time segment to be logged.
      */
-    public static void timeEcho(final Component target, final String tag, final boolean displayElapsed, final RequestTime rt) {
+    public static void timeEcho(Component target, String tag, boolean displayElapsed, RequestTime rt) {
         monitorEvent(target, EVENT_TIME_ECHO, tag, displayElapsed);
-        final Event event = new Event(EVENT_TIME_ECHO, target, rt);
+        Event event = new Event(EVENT_TIME_ECHO, target, rt);
         Events.echoEvent(event);
     }
     
@@ -337,9 +337,9 @@ public class PerformanceMonitor implements PerformanceMeter, IPerformanceMonitor
      * @param time The time being updated.
      * @param index The index of the time element being updated.
      */
-    private void logTime(final String requestId, final Execution exec, final long time, final int index) {
-        final Desktop desktop = exec.getDesktop();
-        final String command = exec.getParameter("cmd_0");
+    private void logTime(String requestId, Execution exec, long time, int index) {
+        Desktop desktop = exec.getDesktop();
+        String command = exec.getParameter("cmd_0");
         if ("dummy".equals(command)) {
             return;
         }
@@ -360,7 +360,7 @@ public class PerformanceMonitor implements PerformanceMeter, IPerformanceMonitor
         pd.setTime(index, time);
         // The request is complete at the client, so log the time
         if (index == 4) {
-            final boolean exceededThreshold = pd.logStatistics();
+            boolean exceededThreshold = pd.logStatistics();
             if (this.removePerformanceData || !exceededThreshold) {
                 this.performanceDataMap.remove(requestId);
             }
@@ -374,7 +374,7 @@ public class PerformanceMonitor implements PerformanceMeter, IPerformanceMonitor
      *      org.zkoss.zk.ui.Execution, long)
      */
     @Override
-    public void requestStartAtClient(final String requestId, final Execution exec, final long time) {
+    public void requestStartAtClient(String requestId, Execution exec, long time) {
         logTime(requestId, exec, time, 0);
     }
     
@@ -383,7 +383,7 @@ public class PerformanceMonitor implements PerformanceMeter, IPerformanceMonitor
      *      org.zkoss.zk.ui.Execution, long)
      */
     @Override
-    public void requestStartAtServer(final String requestId, final Execution exec, final long time) {
+    public void requestStartAtServer(String requestId, Execution exec, long time) {
         logTime(requestId, exec, time, 1);
     }
     
@@ -392,7 +392,7 @@ public class PerformanceMonitor implements PerformanceMeter, IPerformanceMonitor
      *      org.zkoss.zk.ui.Execution, long)
      */
     @Override
-    public void requestCompleteAtServer(final String requestId, final Execution exec, final long time) {
+    public void requestCompleteAtServer(String requestId, Execution exec, long time) {
         logTime(requestId, exec, time, 2);
     }
     
@@ -401,7 +401,7 @@ public class PerformanceMonitor implements PerformanceMeter, IPerformanceMonitor
      *      org.zkoss.zk.ui.Execution, long)
      */
     @Override
-    public void requestReceiveAtClient(final String requestId, final Execution exec, final long time) {
+    public void requestReceiveAtClient(String requestId, Execution exec, long time) {
         logTime(requestId, exec, time, 3);
     }
     
@@ -410,7 +410,7 @@ public class PerformanceMonitor implements PerformanceMeter, IPerformanceMonitor
      *      org.zkoss.zk.ui.Execution, long)
      */
     @Override
-    public void requestCompleteAtClient(final String requestId, final Execution exec, final long time) {
+    public void requestCompleteAtClient(String requestId, Execution exec, long time) {
         logTime(requestId, exec, time, 4);
     }
     
@@ -428,15 +428,15 @@ public class PerformanceMonitor implements PerformanceMeter, IPerformanceMonitor
      */
     private class LRUMap<K, V> extends LinkedHashMap<K, V> {
         
-        private static final long serialVersionUID = 881357492944465717L;
+        private static final long serialVersionUID = 1L;
         
         public LRUMap() {
             super(PerformanceMonitor.this.performanceDataLimit, 0.75f, true);
         }
         
         @Override
-        protected boolean removeEldestEntry(final Map.Entry<K, V> eldest) {
-            final boolean b = !PerformanceMonitor.this.removePerformanceData
+        protected boolean removeEldestEntry(Map.Entry<K, V> eldest) {
+            boolean b = !PerformanceMonitor.this.removePerformanceData
                     && (PerformanceMonitor.this.performanceDataLimit > 0)
                     && (PerformanceMonitor.this.performanceDataLimit < size());
             if (b && log.isTraceEnabled()) {
@@ -458,9 +458,9 @@ public class PerformanceMonitor implements PerformanceMeter, IPerformanceMonitor
         @Override
         public void run() {
             try {
-                for (final Iterator<PerformanceData> iter = PerformanceMonitor.this.performanceDataMap.values().iterator(); iter
+                for (Iterator<PerformanceData> iter = PerformanceMonitor.this.performanceDataMap.values().iterator(); iter
                         .hasNext();) {
-                    final PerformanceData pd = iter.next();
+                    PerformanceData pd = iter.next();
                     if (isExpired(pd)) {
                         log.warn(String.format(
                             "Removing PerformanceData for request id %s after %d milliseconds of inactivity",
@@ -468,7 +468,7 @@ public class PerformanceMonitor implements PerformanceMeter, IPerformanceMonitor
                         iter.remove();
                     }
                 }
-            } catch (final Exception e) {
+            } catch (Exception e) {
                 log.error(e.getMessage(), e);
             }
         }
@@ -479,7 +479,7 @@ public class PerformanceMonitor implements PerformanceMeter, IPerformanceMonitor
          * @param pd performance data.
          * @return true if expired, false otherwise.
          */
-        private boolean isExpired(final PerformanceData pd) {
+        private boolean isExpired(PerformanceData pd) {
             return pd.getStartTime(RequestTime.TOTAL) < (System.currentTimeMillis() - PerformanceMonitor.this.expirationTimeMs);
         }
     }

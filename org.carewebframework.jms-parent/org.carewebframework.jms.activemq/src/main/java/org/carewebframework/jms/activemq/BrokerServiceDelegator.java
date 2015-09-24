@@ -52,7 +52,7 @@ public class BrokerServiceDelegator {
     /**
      * @param brokerService the brokerService to set
      */
-    public void setBrokerService(final BrokerService brokerService) {
+    public void setBrokerService(BrokerService brokerService) {
         this.brokerService = brokerService;
     }
     

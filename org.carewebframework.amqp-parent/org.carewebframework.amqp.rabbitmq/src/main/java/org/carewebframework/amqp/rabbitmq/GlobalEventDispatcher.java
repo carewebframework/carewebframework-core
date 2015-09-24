@@ -63,10 +63,10 @@ public class GlobalEventDispatcher extends AbstractGlobalEventDispatcher impleme
      * Remove all remote subscriptions.
      */
     private void removeSubscriptions() {
-        for (final SimpleMessageListenerContainer subscriber : this.subscribers.values()) {
+        for (SimpleMessageListenerContainer subscriber : this.subscribers.values()) {
             try {
                 subscriber.stop();
-            } catch (final Throwable e) {
+            } catch (Throwable e) {
                 log.debug("Error closing subscriber", e);//is level appropriate - previously hidden exception -afranken
             }
         }
@@ -81,14 +81,14 @@ public class GlobalEventDispatcher extends AbstractGlobalEventDispatcher impleme
      *      boolean)
      */
     @Override
-    public void subscribeRemoteEvent(final String eventName, final boolean subscribe) {
+    public void subscribeRemoteEvent(String eventName, boolean subscribe) {
         try {
             if (subscribe) {
                 doHostSubscribe(eventName);
             } else {
                 doHostUnsubscribe(eventName);
             }
-        } catch (final AmqpException e) {
+        } catch (AmqpException e) {
             log.error(e);
         }
     }
@@ -103,7 +103,7 @@ public class GlobalEventDispatcher extends AbstractGlobalEventDispatcher impleme
      * @param eventName Name of event.
      * @throws AmqpException RabbitMQ exception.
      */
-    private void doHostSubscribe(final String eventName) throws AmqpException {
+    private void doHostSubscribe(String eventName) throws AmqpException {
         
         if (this.subscribers.get(eventName) != null) {
             if (log.isDebugEnabled()) {
@@ -130,8 +130,8 @@ public class GlobalEventDispatcher extends AbstractGlobalEventDispatcher impleme
      * @param eventName Name of event
      * @throws AmqpException RabbitMQ exception.
      */
-    private void doHostUnsubscribe(final String eventName) throws AmqpException {
-        final Subscriber subscriber = this.subscribers.remove(eventName);
+    private void doHostUnsubscribe(String eventName) throws AmqpException {
+        Subscriber subscriber = this.subscribers.remove(eventName);
         
         if (subscriber != null) {
             log.debug(String.format("Unsubscribing Subscriber[%s] for Topic [%s].", subscriber, eventName));
@@ -144,10 +144,10 @@ public class GlobalEventDispatcher extends AbstractGlobalEventDispatcher impleme
      *      java.io.Serializable, java.lang.String)
      */
     @Override
-    public void fireRemoteEvent(final String eventName, final Serializable eventData, final String recipients) {
+    public void fireRemoteEvent(String eventName, Serializable eventData, String recipients) {
         try {
             doFireRemoteEvent(eventName, eventData, recipients);
-        } catch (final AmqpException e) {
+        } catch (AmqpException e) {
             log.error("Error firing remote event.", e);
         }
     }
@@ -161,7 +161,7 @@ public class GlobalEventDispatcher extends AbstractGlobalEventDispatcher impleme
      *            subscribers).
      * @throws AmqpException RabbitMQ exception.
      */
-    private void doFireRemoteEvent(final String eventName, final Object eventData, final String recipients)
+    private void doFireRemoteEvent(String eventName, Object eventData, String recipients)
                                                                                                            throws AmqpException {
         broker.sendEvent(eventName, eventData, publisherInfo.getEndpointId(), recipients);
     }
@@ -172,7 +172,7 @@ public class GlobalEventDispatcher extends AbstractGlobalEventDispatcher impleme
      * @param message Message received from the AMQP server.
      */
     @Override
-    public void onMessage(final Message message) {
+    public void onMessage(Message message) {
         if (log.isDebugEnabled()) {
             log.debug("Message received: " + message);
         }
@@ -186,12 +186,12 @@ public class GlobalEventDispatcher extends AbstractGlobalEventDispatcher impleme
      * 
      * @param message Message to process.
      */
-    protected void processMessage(final Message message) {
+    protected void processMessage(Message message) {
         try {
             String eventName = message.getMessageProperties().getReceivedRoutingKey();
             Object eventData = broker.getRabbitTemplate().getMessageConverter().fromMessage(message);
             localEventDelivery(eventName, eventData);
-        } catch (final Exception e) {
+        } catch (Exception e) {
             log.error("Error during local dispatch of global event.", e);
         }
     }

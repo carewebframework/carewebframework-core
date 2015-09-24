@@ -50,19 +50,19 @@ public class MainController extends PluginController {
     
     private void doDelegationToModel() {
         log.trace("Delegating work to model");
-        final IUser user = UserContext.getActiveUser();
+        IUser user = UserContext.getActiveUser();
         showMessage(null);
         
         if (user != null) {
             log.trace("Establishing ListModelList for Grid");
             //TODO: service to getActiveSessions and return DTO.  To store a serializable listModel
-            final List<SessionInfo> sessions = Application.getInstance().getActiveSessions();
+            List<SessionInfo> sessions = Application.getInstance().getActiveSessions();
             
             if (!sessions.isEmpty()) {
                 grid.setModel(new ListModelList<SessionInfo>(sessions));
                 grid.setRowRenderer(sessionTrackerRowRenderer);
                 lblSessionSummary.setVisible(true);
-                final int size = sessions.size();
+                int size = sessions.size();
                 lblSessionSummary.setValue(StrUtil.formatMessage("@cwf.sessiontracker.msg.sessions.total", size));
                 
             } else { //shouldn't happen
@@ -79,7 +79,7 @@ public class MainController extends PluginController {
      * 
      * @param event Event
      */
-    public void onClick$btnRefreshSessionView(final Event event) {
+    public void onClick$btnRefreshSessionView(Event event) {
         log.trace("Refreshing active Session/Desktop view");
         doDelegationToModel();
     }
@@ -90,7 +90,7 @@ public class MainController extends PluginController {
      * @param message Message to display to client.
      * @param params Message parameters.
      */
-    private void showMessage(final String message, Object... params) {
+    private void showMessage(String message, Object... params) {
         if (message == null) {
             lblMessage.setVisible(false);
         } else {
@@ -103,7 +103,7 @@ public class MainController extends PluginController {
      * @see org.carewebframework.shell.plugins.IPluginEvent#onLoad(org.carewebframework.shell.plugins.PluginContainer)
      */
     @Override
-    public void onLoad(final PluginContainer container) {
+    public void onLoad(PluginContainer container) {
         log.trace("onLoad");
         super.onLoad(container);
         isDelegationToModelDeferred = true;// onLoad happens prior to activation, defer until activated
@@ -128,7 +128,7 @@ public class MainController extends PluginController {
      * 
      * @param sessionTrackerRowRenderer RowRenderer
      */
-    public void setSessionTrackerRowRenderer(final RowRenderer<SessionInfo> sessionTrackerRowRenderer) {
+    public void setSessionTrackerRowRenderer(RowRenderer<SessionInfo> sessionTrackerRowRenderer) {
         this.sessionTrackerRowRenderer = sessionTrackerRowRenderer;
     }
     

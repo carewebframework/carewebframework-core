@@ -302,7 +302,7 @@ public class PerformanceData implements Serializable, Comparable<PerformanceData
      */
     public boolean logStatistics() {
         if (isComplete() && log.isDebugEnabled()) {
-            final long totalElapsedTime = getElapsedTime(RequestTime.TOTAL);
+            long totalElapsedTime = getElapsedTime(RequestTime.TOTAL);
             if (totalElapsedTime > threshold) {
                 logRequestStatistics();
                 return true;

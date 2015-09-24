@@ -55,13 +55,13 @@ public class GenericEventTest extends CommonTest {
     private final IGenericEvent<TestPacket> subscriber = new IGenericEvent<TestPacket>() {
         
         @Override
-        public void eventCallback(final String eventName, final TestPacket testPacket) {
+        public void eventCallback(String eventName, TestPacket testPacket) {
             try {
                 log.info("Received: " + testPacket);
                 assertTrue(testPacket + ": unexpected test packet", GenericEventTest.this.tests.remove(testPacket));
                 assertTrue(testPacket + ": name does not match.", testPacket.getEventName().equals(eventName));
                 assertTrue(testPacket + ": should not have been received.", testPacket.isShouldReceive());
-            } catch (final AssertionError e) {
+            } catch (AssertionError e) {
                 if (GenericEventTest.this.assertionError == null) {
                     GenericEventTest.this.assertionError = e;
                 }
@@ -85,8 +85,8 @@ public class GenericEventTest extends CommonTest {
      * @param eventName Name of the event to fire.
      * @param shouldReceive Indicates whether or not the event should be received.
      */
-    private void fireEvent(final String eventName, final boolean shouldReceive) {
-        final TestPacket testPacket = new TestPacket(++this.eventCount, eventName, shouldReceive, this.remote);
+    private void fireEvent(String eventName, boolean shouldReceive) {
+        TestPacket testPacket = new TestPacket(++this.eventCount, eventName, shouldReceive, this.remote);
         this.tests.add(testPacket);
         
         if (!shouldReceive) {
@@ -185,7 +185,7 @@ public class GenericEventTest extends CommonTest {
         }
     }
     
-    private void subscribe(final String eventName, final boolean subscribe) {
+    private void subscribe(String eventName, boolean subscribe) {
         if (this.remote) {
             doWait(30);
         }
@@ -201,7 +201,7 @@ public class GenericEventTest extends CommonTest {
         while ((count-- > 0) && (this.tests.size() > this.expectedUndelivered)) {
             try {
                 Thread.sleep(pollingInterval);
-            } catch (final InterruptedException e) {
+            } catch (InterruptedException e) {
                 continue;
             }
         }
@@ -214,12 +214,12 @@ public class GenericEventTest extends CommonTest {
      * 
      * @param wait If true, wait before verifying.
      */
-    private void undeliveredEvents(final boolean wait) {
+    private void undeliveredEvents(boolean wait) {
         if (wait) {
             doWait(20);
         }
         
-        for (final TestPacket testPacket : this.tests) {
+        for (TestPacket testPacket : this.tests) {
             assertFalse(testPacket + ": was not received.", testPacket.isShouldReceive());
         }
         

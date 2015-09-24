@@ -29,7 +29,7 @@ public class EventThreadListener implements EventThreadInit, EventThreadCleanup 
      *      org.zkoss.zk.ui.event.Event)
      */
     @Override
-    public boolean init(final Component comp, final Event event) throws Exception {
+    public boolean init(Component comp, Event event) throws Exception {
         ThreadListenerRegistry.notifyListeners(true);
         return true;
     }
@@ -39,7 +39,7 @@ public class EventThreadListener implements EventThreadInit, EventThreadCleanup 
      *      org.zkoss.zk.ui.event.Event, java.util.List)
      */
     @Override
-    public void cleanup(final Component comp, final Event evt, @SuppressWarnings("rawtypes") final List errs) {
+    public void cleanup(Component comp, Event evt, @SuppressWarnings("rawtypes") List errs) {
         ThreadListenerRegistry.notifyListeners(false);
     }
     
@@ -48,7 +48,7 @@ public class EventThreadListener implements EventThreadInit, EventThreadCleanup 
      *      org.zkoss.zk.ui.event.Event)
      */
     @Override
-    public void complete(final Component comp, final Event evt) throws Exception {
+    public void complete(Component comp, Event evt) throws Exception {
     }
     
     /**
@@ -56,7 +56,7 @@ public class EventThreadListener implements EventThreadInit, EventThreadCleanup 
      *      org.zkoss.zk.ui.event.Event)
      */
     @Override
-    public void prepare(final Component comp, final Event event) throws Exception {
+    public void prepare(Component comp, Event event) throws Exception {
     }
     
 }

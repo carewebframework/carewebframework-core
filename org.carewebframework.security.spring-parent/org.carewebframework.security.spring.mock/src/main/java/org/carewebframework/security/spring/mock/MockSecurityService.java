@@ -24,7 +24,7 @@ public class MockSecurityService extends AbstractSecurityService {
      * @return True if the password is valid.
      */
     @Override
-    public boolean validatePassword(final String password) {
+    public boolean validatePassword(String password) {
         return password.equals(SpringUtil.getProperty("mock.password"));
     }
     
@@ -36,7 +36,7 @@ public class MockSecurityService extends AbstractSecurityService {
      * @return Null or empty if succeeded. Otherwise, displayable reason why change failed.
      */
     @Override
-    public String changePassword(final String oldPassword, final String newPassword) {
+    public String changePassword(String oldPassword, String newPassword) {
         return "Operation not supported";
     }
     

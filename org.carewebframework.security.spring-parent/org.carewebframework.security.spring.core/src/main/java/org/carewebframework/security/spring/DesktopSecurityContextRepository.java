@@ -63,7 +63,7 @@ public class DesktopSecurityContextRepository implements SecurityContextReposito
      * @throws IllegalStateException if session is invalidated
      */
     public static SecurityContext getSecurityContext(HttpServletRequest request) {
-        final HttpSession session = request.getSession(false);
+        HttpSession session = request.getSession(false);
         boolean ignore = "rmDesktop".equals(request.getParameter("cmd_0"));
         return ignore || session == null ? SecurityContextHolder.createEmptyContext() : getSecurityContext(session,
             request.getParameter("dtid"));
@@ -76,7 +76,7 @@ public class DesktopSecurityContextRepository implements SecurityContextReposito
      * @return SecurityContext The Spring security context.
      */
     public static SecurityContext getSecurityContext(Desktop desktop) {
-        final String key = getDesktopContextKey(desktop.getId());
+        String key = getDesktopContextKey(desktop.getId());
         HttpSession session = (HttpSession) desktop.getSession().getNativeSession();
         return (SecurityContext) session.getAttribute(key);
     }
@@ -94,7 +94,7 @@ public class DesktopSecurityContextRepository implements SecurityContextReposito
      * @throws IllegalStateException if session is invalidated
      */
     private static SecurityContext getSecurityContext(HttpSession session, String dtid) {
-        final String key = getDesktopContextKey(dtid);
+        String key = getDesktopContextKey(dtid);
         
         if (key == null) {
             return getSecurityContext(session, false);

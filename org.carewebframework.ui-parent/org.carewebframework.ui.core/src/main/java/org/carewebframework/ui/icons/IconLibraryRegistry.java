@@ -102,7 +102,7 @@ public class IconLibraryRegistry extends AbstractRegistry<String, IIconLibrary> 
      * @param dimensions Dimensions of the requested icon (e.g., "16x*").
      * @return The icon path.
      */
-    public List<String> getMatching(String library, final String iconName, String dimensions) {
+    public List<String> getMatching(String library, String iconName, String dimensions) {
         SimpleRegexMatcher matcher = new SimpleRegexMatcher();
         dimensions = dimensions == null ? defaultDimensions : dimensions;
         

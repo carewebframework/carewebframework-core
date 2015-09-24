@@ -55,7 +55,7 @@ public class FrameworkWebSupport {
      * @return A map containing the parameters from the query string. This may return null if the
      *         queryString is empty. Multiple values for a parameter are separated by commas.
      */
-    public static Map<String, String> queryStringToMap(final String queryString) {
+    public static Map<String, String> queryStringToMap(String queryString) {
         return queryStringToMap(queryString, ",");
     }
     
@@ -67,7 +67,7 @@ public class FrameworkWebSupport {
      * @return A map containing the arguments from the query string. This may return null if the
      *         queryString is empty.
      */
-    public static Map<String, String> queryStringToMap(final String queryString, String valueDelimiter) {
+    public static Map<String, String> queryStringToMap(String queryString, String valueDelimiter) {
         if (queryString == null || queryString.isEmpty()) {
             return null;
         }
@@ -77,7 +77,7 @@ public class FrameworkWebSupport {
             URI uri = new URI(queryString.startsWith("?") ? queryString : ("?" + queryString));
             List<NameValuePair> params = URLEncodedUtils.parse(uri, StrUtil.CHARSET);
             
-            final Map<String, String> result = new HashMap<String, String>();
+            Map<String, String> result = new HashMap<String, String>();
             
             for (NameValuePair nvp : params) {
                 String value = result.get(nvp.getName());
@@ -97,7 +97,7 @@ public class FrameworkWebSupport {
      * @return Current desktop or null.
      */
     public static Desktop getDesktop() {
-        final Execution exec = Executions.getCurrent();
+        Execution exec = Executions.getCurrent();
         return exec == null ? _desktops.get() : exec.getDesktop();
     }
     
@@ -134,7 +134,7 @@ public class FrameworkWebSupport {
      * @return The updated url.
      * @throws IllegalArgumentException if url is null
      */
-    public static String addQueryString(String url, final String queryString) {
+    public static String addQueryString(String url, String queryString) {
         Validate.notNull(url, "The url must not be null");
         
         if (!StringUtils.isEmpty(queryString)) {
@@ -164,7 +164,7 @@ public class FrameworkWebSupport {
      * 
      * @param value String value to set for key represented by constant {@link #REQUEST_PARAMS}.
      */
-    public static void setRequestParams(final String value) {
+    public static void setRequestParams(String value) {
         FrameworkUtil.setAttribute(REQUEST_PARAMS, value);
     }
     
@@ -182,7 +182,7 @@ public class FrameworkWebSupport {
      * 
      * @param value String value to set for key represented by constant {@link #REQUEST_URL}.
      */
-    public static void setRequestUrl(final String value) {
+    public static void setRequestUrl(String value) {
         FrameworkUtil.setAttribute(REQUEST_URL, value);
     }
     
@@ -201,7 +201,7 @@ public class FrameworkWebSupport {
      * @return the HttpServletResponse
      */
     public static HttpServletResponse getHttpServletResponse() {
-        final Execution exec = Executions.getCurrent();
+        Execution exec = Executions.getCurrent();
         return exec == null ? null : (HttpServletResponse) exec.getNativeResponse();
     }
     
@@ -214,7 +214,7 @@ public class FrameworkWebSupport {
      * @throws IllegalArgumentException if argument is null or {@link #getHttpServletRequest()}
      *             returns null
      */
-    public static Cookie getCookie(final String cookieName) {
+    public static Cookie getCookie(String cookieName) {
         return getCookie(cookieName, getHttpServletRequest());
     }
     
@@ -228,13 +228,13 @@ public class FrameworkWebSupport {
      * @return A cookie, or null if not found.
      * @throws IllegalArgumentException if arguments are null
      */
-    public static Cookie getCookie(final String cookieName, final HttpServletRequest httpRequest) {
+    public static Cookie getCookie(String cookieName, HttpServletRequest httpRequest) {
         Validate.notNull(cookieName, "The cookieName must not be null");
         Validate.notNull(httpRequest, "The httpRequest must not be null");
-        final Cookie[] cookies = httpRequest.getCookies();
+        Cookie[] cookies = httpRequest.getCookies();
         
         if (cookies != null) {
-            for (final Cookie cookie : httpRequest.getCookies()) {
+            for (Cookie cookie : httpRequest.getCookies()) {
                 if (cookieName.equals(cookie.getName())) {
                     return cookie;
                 }
@@ -256,8 +256,8 @@ public class FrameworkWebSupport {
      * @return A cookie value, or null if not found.
      * @throws IllegalArgumentException if arguments are null
      */
-    public static String getCookieValue(final String cookieName, final HttpServletRequest httpRequest) {
-        final Cookie cookie = getCookie(cookieName, httpRequest);
+    public static String getCookieValue(String cookieName, HttpServletRequest httpRequest) {
+        Cookie cookie = getCookie(cookieName, httpRequest);
         return cookie == null ? null : decodeCookieValue(cookie.getValue());
     }
     
@@ -274,11 +274,11 @@ public class FrameworkWebSupport {
      * @return encoded cookie value
      * @throws IllegalArgumentException If the argument is null
      */
-    public static String encodeCookieValue(final String cookieValuePlainText) {
+    public static String encodeCookieValue(String cookieValuePlainText) {
         Validate.notNull(cookieValuePlainText, "The cookieValuePlainText must not be null");
         try {
             return URLEncoder.encode(Base64.encodeBase64String(cookieValuePlainText.getBytes()), StrUtil.CHARSET);
-        } catch (final Exception e) {
+        } catch (Exception e) {
             throw new RuntimeException("Unexpected exception occurred encoding cookie value", e);
         }
     }
@@ -296,11 +296,11 @@ public class FrameworkWebSupport {
      * @return decoded cookie value
      * @throws IllegalArgumentException If the argument is null
      */
-    public static String decodeCookieValue(final String encodedCookieValue) {
+    public static String decodeCookieValue(String encodedCookieValue) {
         Validate.notNull(encodedCookieValue, "The encodedCookieValue must not be null");
         try {
             return new String(Base64.decodeBase64(URLDecoder.decode(encodedCookieValue, StrUtil.CHARSET)));
-        } catch (final Exception e) {
+        } catch (Exception e) {
             throw new RuntimeException("Unexpected exception occurred decoding cookie value", e);
         }
     }
@@ -314,7 +314,7 @@ public class FrameworkWebSupport {
      * @throws IllegalArgumentException if argument is null or if underlying HttpServletRequest is
      *             null
      */
-    public static String getCookieValue(final String cookieName) {
+    public static String getCookieValue(String cookieName) {
         return getCookieValue(cookieName, getHttpServletRequest());
     }
     
@@ -327,7 +327,7 @@ public class FrameworkWebSupport {
      * @return Newly created cookie.
      * @throws IllegalArgumentException if {@link #getHttpServletResponse()} is null
      */
-    public static Cookie setCookie(final String cookieName, final String value) {
+    public static Cookie setCookie(String cookieName, String value) {
         return setCookie(cookieName, value, getHttpServletResponse(), getHttpServletRequest());
     }
     
@@ -343,8 +343,8 @@ public class FrameworkWebSupport {
      * @throws IllegalArgumentException if cookieName, httpResponse, or httpRequest arguments are
      *             null
      */
-    public static Cookie setCookie(final String cookieName, String value, final HttpServletResponse httpResponse,
-                                   final HttpServletRequest httpRequest) {
+    public static Cookie setCookie(String cookieName, String value, HttpServletResponse httpResponse,
+                                   HttpServletRequest httpRequest) {
         Validate.notNull(httpResponse, "The httpResponse must not be null");
         Cookie cookie = getCookie(cookieName, httpRequest);
         if (value != null) {
@@ -377,7 +377,7 @@ public class FrameworkWebSupport {
      * @param name Name of attribute to retrieve.
      * @return Value of attribute or null if it does not exist.
      */
-    public static Object extractSessionAttribute(final Session session, final String name) {
+    public static Object extractSessionAttribute(Session session, String name) {
         return extractSessionAttribute(session, name, null);
     }
     
@@ -389,8 +389,8 @@ public class FrameworkWebSupport {
      * @param dflt Default value if none exists.
      * @return Value of attribute.
      */
-    public static Object extractSessionAttribute(final Session session, final String name, final Object dflt) {
-        final Object value = session.removeAttribute(name);
+    public static Object extractSessionAttribute(Session session, String name, Object dflt) {
+        Object value = session.removeAttribute(name);
         return value == null ? dflt : value;
     }
     
@@ -401,7 +401,7 @@ public class FrameworkWebSupport {
      * @param propertyName Property name.
      * @return Property value.
      */
-    public static String getFrameworkProperty(final String propertyName) {
+    public static String getFrameworkProperty(String propertyName) {
         return getFrameworkProperty(propertyName, propertyName);
     }
     
@@ -413,7 +413,7 @@ public class FrameworkWebSupport {
      * @param propertyName Name of property in property store.
      * @return Property value.
      */
-    public static String getFrameworkProperty(final String parameterName, final String propertyName) {
+    public static String getFrameworkProperty(String parameterName, String propertyName) {
         Execution exec = Executions.getCurrent();
         String value = exec == null ? null : exec.getParameter(parameterName);
         return value == null ? PropertyUtil.getValue(propertyName, null) : value;

@@ -54,12 +54,13 @@ public final class MemoryLeakPreventionUtil {
     @SuppressWarnings("restriction")
     protected static void clearReferencesHttpClientKeepAliveThread() {
         try {
-            final Field kac = sun.net.www.http.HttpClient.class.getDeclaredField("kac");
+            Field kac = sun.net.www.http.HttpClient.class.getDeclaredField("kac");
             kac.setAccessible(true);
-            final Field keepAliveTimer = sun.net.www.http.KeepAliveCache.class.getDeclaredField("keepAliveTimer");
+            Field keepAliveTimer = sun.net.www.http.KeepAliveCache.class.getDeclaredField("keepAliveTimer");
             keepAliveTimer.setAccessible(true);
             
-            final Thread t = (Thread) keepAliveTimer.get(kac.get(null));//kac is a static field, hence null argument
+            Thread t = (Thread) keepAliveTimer.get(kac.get(null));//kac is a static field, hence null argument
+
             if (t != null) {//May not actually be running
                 log.debug("KeepAliveTimer contextClassLoader: " + t.getContextClassLoader());
                 if (t.getContextClassLoader() == Thread.currentThread().getContextClassLoader()) {
@@ -67,7 +68,7 @@ public final class MemoryLeakPreventionUtil {
                     log.info("Changed KeepAliveTimer classloader to system to prevent leak.");
                 }
             }
-        } catch (final Exception e) {
+        } catch (Exception e) {
             log.warn(
                 "Exception occurred attempting to prevent sun.net.www.http.HttpClient keepAliveTimer memory leak. Note: this code should not be necessary w/ java7",
                 e);

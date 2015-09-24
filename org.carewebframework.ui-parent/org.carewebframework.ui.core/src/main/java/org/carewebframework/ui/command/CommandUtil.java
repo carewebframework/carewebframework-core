@@ -112,7 +112,7 @@ public class CommandUtil {
      * @param remove If true, the specified shortcuts are removed from the component's ctrlKeys
      *            property. If false, they are added.
      */
-    /*package*/static void updateShortcuts(final XulElement component, final Set<String> shortcuts, final boolean remove) {
+    /*package*/static void updateShortcuts(XulElement component, Set<String> shortcuts, boolean remove) {
         Set<String> currentShortcuts = CommandUtil.parseShortcuts(component.getCtrlKeys(), null);
         
         if (remove) {

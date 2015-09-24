@@ -33,7 +33,7 @@ public class PropertyEditorBoolean extends PropertyEditorBase {
     }
     
     @Override
-    protected void init(UIElementBase target, PropertyInfo propInfo, final PropertyGrid propGrid) {
+    protected void init(UIElementBase target, PropertyInfo propInfo, PropertyGrid propGrid) {
         super.init(target, propInfo, propGrid);
         radiogroup.addForward(Events.ON_CHECK, propGrid, Events.ON_CHANGE);
         radiogroup.addForward(Events.ON_CLICK, propGrid, Events.ON_SELECT);

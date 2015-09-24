@@ -39,10 +39,10 @@ public class AppContextFinder implements IAppContextFinder {
      * @param desktop Desktop for which application context is being created.
      * @return New application context
      */
-    public static ApplicationContext createAppContext(final Desktop desktop) {
-        final HttpServletRequest httpRequest = FrameworkWebSupport.getHttpServletRequest();
-        final String qs = httpRequest.getQueryString();
-        final FrameworkAppContext appContext = new FrameworkAppContext(desktop);
+    public static ApplicationContext createAppContext(Desktop desktop) {
+        HttpServletRequest httpRequest = FrameworkWebSupport.getHttpServletRequest();
+        String qs = httpRequest.getQueryString();
+        FrameworkAppContext appContext = new FrameworkAppContext(desktop);
         appContext.refresh();
         FrameworkWebSupport.setRequestParams(qs);
         FrameworkWebSupport.setRequestUrl(desktop.getRequestPath());
@@ -61,8 +61,8 @@ public class AppContextFinder implements IAppContextFinder {
      * 
      * @param desktop Desktop instance
      */
-    public static void destroyAppContext(final Desktop desktop) {
-        final FrameworkAppContext appContext = FrameworkAppContext.getAppContext(desktop);
+    public static void destroyAppContext(Desktop desktop) {
+        FrameworkAppContext appContext = FrameworkAppContext.getAppContext(desktop);
         
         if (appContext != null) {
             appContext.close();

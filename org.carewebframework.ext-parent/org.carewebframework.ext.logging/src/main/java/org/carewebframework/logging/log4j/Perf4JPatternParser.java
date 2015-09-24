@@ -91,11 +91,11 @@ public class Perf4JPatternParser extends PatternParser {
         }
         
         private Map<String, Object> fromMessage(String message) {
-            final Map<String, Object> messageValues = new TreeMap<String, Object>();
+            Map<String, Object> messageValues = new TreeMap<String, Object>();
             
             if (message != null && message.matches("\\{.*\\}")) {
-                final int len = message.length();
-                final String[] entries = message.substring(1, len - 1).split(",");
+                int len = message.length();
+                String[] entries = message.substring(1, len - 1).split(",");
                 
                 for (String entry : entries) {
                     String[] kv = entry.trim().split("=");

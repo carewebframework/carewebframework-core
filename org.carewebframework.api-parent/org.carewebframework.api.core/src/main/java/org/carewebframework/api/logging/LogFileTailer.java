@@ -80,7 +80,7 @@ public class LogFileTailer implements Runnable {
      * 
      * @param file File
      */
-    public LogFileTailer(final File file) {
+    public LogFileTailer(File file) {
         this.file = file;
     }
     
@@ -93,7 +93,7 @@ public class LogFileTailer implements Runnable {
      *            and continue tailing (true) or simply start tailing from the end of the file
      * @throws FileNotFoundException When no file found
      */
-    public LogFileTailer(final File file, final long interval, final boolean startAtBeginning) throws FileNotFoundException {
+    public LogFileTailer(File file, long interval, boolean startAtBeginning) throws FileNotFoundException {
         if (file == null) {
             throw new NullPointerException("File argument cannot be null");
         } else if (!file.exists()) {
@@ -109,7 +109,7 @@ public class LogFileTailer implements Runnable {
      * 
      * @param l FileTailerListener
      */
-    public void addFileTailerListener(final LogFileTailerListener l) {
+    public void addFileTailerListener(LogFileTailerListener l) {
         this.listeners.add(l);
     }
     
@@ -118,23 +118,23 @@ public class LogFileTailer implements Runnable {
      * 
      * @param l FileTailListener
      */
-    public void removeFileTailerListener(final LogFileTailerListener l) {
+    public void removeFileTailerListener(LogFileTailerListener l) {
         this.listeners.remove(l);
     }
     
     /**
      * @param line Data read from the <code>file</code>
      */
-    protected void fireNewFileLine(final String line) {
-        for (final LogFileTailerListener fileTailerListener : this.listeners) {
-            final LogFileTailerListener l = fileTailerListener;
+    protected void fireNewFileLine(String line) {
+        for (LogFileTailerListener fileTailerListener : this.listeners) {
+            LogFileTailerListener l = fileTailerListener;
             l.newFileLine(line);
         }
     }
     
     protected void fireMaxActiveIntervalExceeded() {
-        for (final LogFileTailerListener fileTailerListener : this.listeners) {
-            final LogFileTailerListener l = fileTailerListener;
+        for (LogFileTailerListener fileTailerListener : this.listeners) {
+            LogFileTailerListener l = fileTailerListener;
             l.tailerTerminated();
         }
     }
@@ -156,7 +156,7 @@ public class LogFileTailer implements Runnable {
      *             tailing)
      * @throws FileNotFoundException Thrown when <code>file</code> argument does not exist
      */
-    public void changeFile(final File file) throws FileNotFoundException {
+    public void changeFile(File file) throws FileNotFoundException {
         if (isTailing()) {
             throw new IllegalStateException("Cannot Change FileTailer.file while current instance is tailing");
         } else {
@@ -185,7 +185,7 @@ public class LogFileTailer implements Runnable {
     public void run() {
         // The file pointer keeps track of where we are in the file
         long filePointer = 0;
-        final long startTime = new Date().getTime();
+        long startTime = new Date().getTime();
         
         // Determine start point
         if (this.startAtBeginning) {
@@ -209,7 +209,7 @@ public class LogFileTailer implements Runnable {
                 }
                 try {
                     // Compare the length of the file to the file pointer
-                    final long fileLength = this.file.length();
+                    long fileLength = this.file.length();
                     if (fileLength < filePointer) {
                         // file must have been rotated or deleted;
                         // reopen the file and reset the file pointer
@@ -230,14 +230,14 @@ public class LogFileTailer implements Runnable {
                     
                     // Sleep for the specified interval
                     Thread.sleep(this.interval);
-                } catch (final Exception e) {
+                } catch (Exception e) {
                     log.error(e.getMessage(), e);
                 }
             }
             
             // Close the file that we are tailing
             file.close();
-        } catch (final Exception e) {
+        } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
     }
@@ -256,7 +256,7 @@ public class LogFileTailer implements Runnable {
      * 
      * @param maxActiveInterval amount of time tailer is running (in seconds)
      */
-    public void setMaxActiveInterval(final long maxActiveInterval) {
+    public void setMaxActiveInterval(long maxActiveInterval) {
         this.maxActiveInterval = maxActiveInterval;
     }
     

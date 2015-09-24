@@ -32,8 +32,8 @@ public class CommonTest {
     
     @Test
     public void testPiece() {
-        final String text = "pc1^pc2^pc3^^pc5^pc6^^^";
-        final String delm = "^";
+        String text = "pc1^pc2^pc3^^pc5^pc6^^^";
+        String delm = "^";
         assertEquals("pc1", StrUtil.piece(text, delm));
         assertEquals("pc2", StrUtil.piece(text, delm, 2));
         assertEquals("pc3^^pc5", StrUtil.piece(text, delm, 3, 5));

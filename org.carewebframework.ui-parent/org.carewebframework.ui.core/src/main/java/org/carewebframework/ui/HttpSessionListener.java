@@ -27,7 +27,7 @@ public class HttpSessionListener extends org.zkoss.zk.ui.http.HttpSessionListene
      * @see org.zkoss.zk.ui.http.HttpSessionListener23#sessionCreated(javax.servlet.http.HttpSessionEvent)
      */
     @Override
-    public void sessionCreated(final HttpSessionEvent event) {
+    public void sessionCreated(HttpSessionEvent event) {
         log.info(String.format("Native HttpSession Creation Event : %s : %s",event.getSession().getId(), event));
         super.sessionCreated(event);
     }
@@ -36,7 +36,7 @@ public class HttpSessionListener extends org.zkoss.zk.ui.http.HttpSessionListene
      * @see org.zkoss.zk.ui.http.HttpSessionListener23#sessionDestroyed(javax.servlet.http.HttpSessionEvent)
      */
     @Override
-    public void sessionDestroyed(final HttpSessionEvent event) {
+    public void sessionDestroyed(HttpSessionEvent event) {
         log.info(String.format("Native HttpSession Destruction Event : %s : %s", event.getSession().getId(), event));
         super.sessionDestroyed(event);
     }
@@ -45,7 +45,7 @@ public class HttpSessionListener extends org.zkoss.zk.ui.http.HttpSessionListene
      * @see org.zkoss.zk.ui.http.HttpSessionListener23#contextInitialized(javax.servlet.ServletContextEvent)
      */
     @Override
-    public void contextInitialized(final ServletContextEvent event) {
+    public void contextInitialized(ServletContextEvent event) {
         log.info("Native ServletContext Creation Event : " + event);
         super.contextInitialized(event);
     }
@@ -54,7 +54,7 @@ public class HttpSessionListener extends org.zkoss.zk.ui.http.HttpSessionListene
      * @see org.zkoss.zk.ui.http.HttpSessionListener23#contextDestroyed(javax.servlet.ServletContextEvent)
      */
     @Override
-    public void contextDestroyed(final ServletContextEvent event) {
+    public void contextDestroyed(ServletContextEvent event) {
         log.info("Native ServletContext Destruction Event : " + event);
         super.contextDestroyed(event);
     }

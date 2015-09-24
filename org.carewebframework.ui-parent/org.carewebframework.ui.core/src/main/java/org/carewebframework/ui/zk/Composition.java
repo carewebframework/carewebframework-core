@@ -48,7 +48,7 @@ public class Composition implements Initiator, InitiatorExt {
     @Override
     public void doInit(Page page, Map<String, Object> args) throws Exception {
         //first called doInit, last called doAfterCompose
-        final Execution exec = Executions.getCurrent();
+        Execution exec = Executions.getCurrent();
         
         if (!exec.hasAttribute(COMPOSITION)) {
             exec.setAttribute(COMPOSITION, this);
@@ -64,7 +64,7 @@ public class Composition implements Initiator, InitiatorExt {
     
     @Override
     public void doAfterCompose(Page page, Component[] comps) throws Exception {
-        final Execution exec = Executions.getCurrent();
+        Execution exec = Executions.getCurrent();
         @SuppressWarnings("unchecked")
         List<Component> roots = (List<Component>) exec.getAttribute(ROOTS);
         roots.addAll(Arrays.asList(comps));

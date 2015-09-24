@@ -131,7 +131,7 @@ public class LifecycleEventDispatcher implements DesktopInit, DesktopCleanup, Se
      * @param request The active request object.
      */
     @Override
-    public void init(final Desktop desktop, final Object request) throws Exception {
+    public void init(Desktop desktop, Object request) throws Exception {
         desktopListener.executeCallbacks(desktop, true);
     }
     
@@ -142,7 +142,7 @@ public class LifecycleEventDispatcher implements DesktopInit, DesktopCleanup, Se
      * @param desktop The desktop being destroyed.
      */
     @Override
-    public void cleanup(final Desktop desktop) throws Exception {
+    public void cleanup(Desktop desktop) throws Exception {
         desktopListener.executeCallbacks(desktop, false);
     }
     

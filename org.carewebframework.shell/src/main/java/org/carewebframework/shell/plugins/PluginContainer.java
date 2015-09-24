@@ -272,7 +272,7 @@ public class PluginContainer extends Idspace {
      * 
      * @param event The plugin event containing the action.
      */
-    public void onAction(final PluginEvent event) {
+    public void onAction(PluginEvent event) {
         PluginLifecycleEventException exception = null;
         PluginAction action = event.getAction();
         boolean debug = log.isDebugEnabled();
@@ -362,8 +362,8 @@ public class PluginContainer extends Idspace {
      * @param previousException Previous exception (may be null).
      * @return Top level exception in chain.
      */
-    private PluginLifecycleEventException createChainedException(final String action, final Throwable newException,
-                                                                 final PluginLifecycleEventException previousException) {
+    private PluginLifecycleEventException createChainedException(String action, Throwable newException,
+                                                                 PluginLifecycleEventException previousException) {
         String msg = action + " event generated an error.";
         log.error(msg, newException);
         PluginLifecycleEventException wrapper = new PluginLifecycleEventException(Executions.getCurrent(), msg,

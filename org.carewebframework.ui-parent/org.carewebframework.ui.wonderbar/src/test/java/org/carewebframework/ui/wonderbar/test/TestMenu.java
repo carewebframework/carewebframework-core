@@ -46,7 +46,7 @@ class TestMenu extends Vlayout {
     
     private WonderbarItem currentSelectedItem;
     
-    public TestMenu(final Map<String, WonderbarItem> items, final boolean useNumbers) {
+    public TestMenu(Map<String, WonderbarItem> items, boolean useNumbers) {
         this.listboxItems = items;
         this.useNumbers = false;
         
@@ -66,9 +66,9 @@ class TestMenu extends Vlayout {
             for (Map.Entry<String, ?> entry : this.listboxItems.entrySet()) {
                 if (entry.getKey().startsWith("!") || entry.getValue() == null) {
                     /*if (!StringUtils.isBlank(entry.getKey())) {
-                        final String groupLabel = (entry.getKey().startsWith("!")) ?
+                        String groupLabel = (entry.getKey().startsWith("!")) ?
                                 entry.getKey().substring(1) : entry.getKey();
-                        final Listgroup group = new Listgroup(groupLabel);
+                        Listgroup group = new Listgroup(groupLabel);
                         group.setParent(this);
                         group.setStyle("background: #E9F2FB");
                     }*/
@@ -103,7 +103,7 @@ class TestMenu extends Vlayout {
                     
                     //item.addForward(Events.ON_CLICK, this, WonderbarBandboxComponent.ON_SELECT_FROM_BANDBOX_EVENT);
                     
-                    /*final Listcell cell = new Listcell();
+                    /*Listcell cell = new Listcell();
                     cell.setLabel((useNumbers ? (keyNum + ") ") : "") + entry.getKey());
 
                     cell.setParent(item);

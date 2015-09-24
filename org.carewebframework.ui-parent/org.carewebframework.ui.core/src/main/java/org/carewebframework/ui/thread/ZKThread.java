@@ -80,7 +80,7 @@ public class ZKThread implements IAbortable {
             
             try {
                 target.run(ZKThread.this);
-            } catch (final Throwable e) {
+            } catch (Throwable e) {
                 exception = e;
             }
             watch.stop();

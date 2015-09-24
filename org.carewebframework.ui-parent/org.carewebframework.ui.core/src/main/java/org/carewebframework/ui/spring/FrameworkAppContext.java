@@ -64,7 +64,7 @@ public class FrameworkAppContext extends XmlWebApplicationContext implements Res
      * @param desktop Desktop instance.
      * @return Application context associated with the desktop.
      */
-    public static FrameworkAppContext getAppContext(final Desktop desktop) {
+    public static FrameworkAppContext getAppContext(Desktop desktop) {
         return desktop == null ? null : (FrameworkAppContext) desktop.getAttribute(APP_CONTEXT_ATTRIB);
     }
     
@@ -74,7 +74,7 @@ public class FrameworkAppContext extends XmlWebApplicationContext implements Res
          * @see org.springframework.context.ApplicationListener#onApplicationEvent(org.springframework.context.ApplicationEvent)
          */
         @Override
-        public void onApplicationEvent(final ContextClosedEvent event) {
+        public void onApplicationEvent(ContextClosedEvent event) {
             if (event.getSource().equals(getParent())) { //root context is closed
                 close();
             } else if (event.getSource().equals(FrameworkAppContext.this)) {
@@ -120,9 +120,9 @@ public class FrameworkAppContext extends XmlWebApplicationContext implements Res
         
         if (desktop != null) {
             desktop.setAttribute(APP_CONTEXT_ATTRIB, this);
-            final Session session = desktop.getSession();
-            final ServletContext sc = session.getWebApp().getServletContext();
-            final WebApplicationContext rootContext = WebApplicationContextUtils.getRequiredWebApplicationContext(sc);
+            Session session = desktop.getSession();
+            ServletContext sc = session.getWebApp().getServletContext();
+            WebApplicationContext rootContext = WebApplicationContextUtils.getRequiredWebApplicationContext(sc);
             setDisplayName("Child XmlWebApplicationContext " + desktop);
             setParent(rootContext);
             setServletContext(sc);

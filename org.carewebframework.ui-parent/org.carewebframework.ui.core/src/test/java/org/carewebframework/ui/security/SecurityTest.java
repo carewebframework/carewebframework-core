@@ -49,13 +49,12 @@ public class SecurityTest {
         applyAlgorithm("ILLEGAL[$]=,\"//?@: Version0  ; COOKIE Chars====");
     }
     
-    private void applyAlgorithm(final String plainText) throws Exception {
-        final String base64Encoded = Base64.encodeBase64String(plainText.getBytes());
-        final String urlEncoded = URLEncoder.encode(base64Encoded, StrUtil.CHARSET);
-        final String decoded = new String(Base64.decodeBase64(URLDecoder.decode(urlEncoded, StrUtil.CHARSET)));
+    private void applyAlgorithm(String plainText) throws Exception {
+        String base64Encoded = Base64.encodeBase64String(plainText.getBytes());
+        String urlEncoded = URLEncoder.encode(base64Encoded, StrUtil.CHARSET);
+        String decoded = new String(Base64.decodeBase64(URLDecoder.decode(urlEncoded, StrUtil.CHARSET)));
         Assert.assertEquals(plainText, decoded);
-        
-        final String encodedByAPI = FrameworkWebSupport.encodeCookieValue(plainText);
+        String encodedByAPI = FrameworkWebSupport.encodeCookieValue(plainText);
         Assert.assertEquals(plainText, FrameworkWebSupport.decodeCookieValue(encodedByAPI));
     }
 }

@@ -235,7 +235,7 @@ public class Wonderbar<T> extends InputElement {
             invoke("search", term);
             focus();
         } else {
-            final IWonderbarServerSearchProvider<T> provider = (IWonderbarServerSearchProvider<T>) getSearchProvider();
+            IWonderbarServerSearchProvider<T> provider = (IWonderbarServerSearchProvider<T>) getSearchProvider();
             
             if (provider != null) {
                 List<T> hits = new ArrayList<T>();
@@ -493,7 +493,7 @@ public class Wonderbar<T> extends InputElement {
         return getText();
     }
     
-    public void setValue(final String value) throws WrongValueException {
+    public void setValue(String value) throws WrongValueException {
         setText(value);
     }
     
@@ -588,7 +588,7 @@ public class Wonderbar<T> extends InputElement {
      * 
      * @param searchProvider The search provider.
      */
-    public void setSearchProvider(final IWonderbarSearchProvider<T> searchProvider) {
+    public void setSearchProvider(IWonderbarSearchProvider<T> searchProvider) {
         this.searchProvider = searchProvider;
         init(true);
     }

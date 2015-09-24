@@ -134,18 +134,18 @@ public class MainController extends PluginController {
         }
     }
     
-    public void onClick$btnProduceLocalMessage(final Event event) {
+    public void onClick$btnProduceLocalMessage(Event event) {
         //TODO clear local vars, constraints
-        final String destName = StringUtils.trimToNull(this.txtDestinationName.getValue());
-        final String messageData = StringUtils.trimToNull(this.txtMessageData.getValue());
+        String destName = StringUtils.trimToNull(this.txtDestinationName.getValue());
+        String messageData = StringUtils.trimToNull(this.txtMessageData.getValue());
         this.messagingSupport.produceLocalMessage(destName, messageData);
         showMessage("@cwf.jmstesting.msg.local.complete");
     }
     
-    public void onClick$btnProduceTopicMessage(final Event event) {
-        final String destName = StringUtils.trimToNull(this.txtDestinationName.getValue());
-        final String messageData = StringUtils.trimToNull(this.txtMessageData.getValue());
-        final String recipients = StringUtils.trimToNull(getSelectedRecipients());
+    public void onClick$btnProduceTopicMessage(Event event) {
+        String destName = StringUtils.trimToNull(this.txtDestinationName.getValue());
+        String messageData = StringUtils.trimToNull(this.txtMessageData.getValue());
+        String recipients = StringUtils.trimToNull(getSelectedRecipients());
         this.messagingSupport.produceTopicMessage(destName, messageData, recipients);
         showMessage("@cwf.jmstesting.msg.topic.complete");
     }
@@ -164,9 +164,9 @@ public class MainController extends PluginController {
         return sb.toString();
     }
     
-    public void onClick$btnProduceQueueMessage(final Event event) {
-        final String destName = StringUtils.trimToNull(this.txtDestinationName.getValue());
-        final String messageData = StringUtils.trimToNull(this.txtMessageData.getValue());
+    public void onClick$btnProduceQueueMessage(Event event) {
+        String destName = StringUtils.trimToNull(this.txtDestinationName.getValue());
+        String messageData = StringUtils.trimToNull(this.txtMessageData.getValue());
         this.messagingSupport.produceQueueMessage(destName, messageData);
         showMessage("@cwf.jmstesting.msg.queue.complete");
     }
@@ -181,7 +181,7 @@ public class MainController extends PluginController {
      * @param message Message to display to client.
      * @param params Message parameters.
      */
-    private void showMessage(final String message, Object... params) {
+    private void showMessage(String message, Object... params) {
         if (message == null) {
             lblMessage.setVisible(false);
         } else {
@@ -193,14 +193,14 @@ public class MainController extends PluginController {
     /**
      * @param messagingSupport The messaging support service.
      */
-    public void setMessagingSupport(final MessagingSupport messagingSupport) {
+    public void setMessagingSupport(MessagingSupport messagingSupport) {
         this.messagingSupport = messagingSupport;
     }
     
     /**
      * @param eventManager The event manager.
      */
-    public void setEventManager(final IEventManager eventManager) {
+    public void setEventManager(IEventManager eventManager) {
         this.eventManager = eventManager;
     }
     

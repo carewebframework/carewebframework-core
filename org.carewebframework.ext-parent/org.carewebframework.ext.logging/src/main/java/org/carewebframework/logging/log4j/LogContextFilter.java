@@ -28,7 +28,7 @@ public class LogContextFilter extends GenericFilterBean {
      *      javax.servlet.ServletResponse, javax.servlet.FilterChain)
      */
     @Override
-    public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain)
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
                                                                                                                throws IOException,
                                                                                                                ServletException {
         

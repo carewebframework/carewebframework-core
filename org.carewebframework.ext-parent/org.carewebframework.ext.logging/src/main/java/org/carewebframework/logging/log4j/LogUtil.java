@@ -37,7 +37,7 @@ public final class LogUtil {
     static {
         try {
             Class.forName(LOG4J_SPECIFIC_CLASS);
-        } catch (final Exception e) {
+        } catch (Exception e) {
             log.warn("Not considering log4j diagnostic context due to missing log4j on classpath.");//Consider changing to debug
             log4jAware = false;
         }
@@ -89,9 +89,9 @@ public final class LogUtil {
      * 
      * @param values - ordered list of strings to add as diagnostic context
      */
-    public static void addDiagnosticContextToCurrentThread(final List<String> values) {
+    public static void addDiagnosticContextToCurrentThread(List<String> values) {
         if (log4jAware) {
-            for (final String dc : values) {
+            for (String dc : values) {
                 NDC.push(dc);
             }
         }

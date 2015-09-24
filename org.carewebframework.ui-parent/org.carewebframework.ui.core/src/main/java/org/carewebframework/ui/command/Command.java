@@ -80,7 +80,7 @@ public class Command {
      * 
      * @param name The command name.
      */
-    /*package*/Command(final String name) {
+    /*package*/Command(String name) {
         this.name = name;
     }
     
@@ -100,7 +100,7 @@ public class Command {
      * @param commandTarget Optional component that will be the target of the onCommand event. If
      *            null, the bound component will be the target.
      */
-    /*package*/void bind(final XulElement component, final Component commandTarget) {
+    /*package*/void bind(XulElement component, Component commandTarget) {
         if (componentBindings.add(component)) {
             setCommandTarget(component, commandTarget);
             CommandUtil.updateShortcuts(component, shortcutBindings, false);
@@ -114,7 +114,7 @@ public class Command {
      * @param component The component to be bound.
      * @param action The action to be executed when the command is invoked.
      */
-    /*package*/void bind(final XulElement component, final IAction action) {
+    /*package*/void bind(XulElement component, IAction action) {
         Component dummy = new Div();
         dummy.setAttribute(ATTR_DUMMY, true);
         dummy.setVisible(false);
@@ -128,7 +128,7 @@ public class Command {
      * 
      * @param shortcut Shortcut specifier in ZK format.
      */
-    /*package*/void bind(final String shortcut) {
+    /*package*/void bind(String shortcut) {
         if (!CommandUtil.validateShortcut(shortcut)) {
             throw new IllegalArgumentException("Invalid shortcut specifier: " + shortcut);
         }
@@ -143,7 +143,7 @@ public class Command {
      * 
      * @param component The component to unbind.
      */
-    public void unbind(final XulElement component) {
+    public void unbind(XulElement component) {
         if (componentBindings.remove(component)) {
             keyEventListener.registerComponent(component, false);
             CommandUtil.updateShortcuts(component, shortcutBindings, true);
@@ -156,7 +156,7 @@ public class Command {
      * 
      * @param shortcut Shortcut specifier in ZK format.
      */
-    /*package*/void unbind(final String shortcut) {
+    /*package*/void unbind(String shortcut) {
         if (shortcutBindings.remove(shortcut)) {
             shortcutChanged(shortcut, true);
         }
@@ -168,7 +168,7 @@ public class Command {
      * @param shortcut The shortcut that has been bound or unbound.
      * @param unbind If true, the shortcut is being unbound.
      */
-    private void shortcutChanged(final String shortcut, final boolean unbind) {
+    private void shortcutChanged(String shortcut, boolean unbind) {
         Set<String> bindings = new HashSet<String>();
         bindings.add(shortcut);
         
@@ -183,7 +183,7 @@ public class Command {
      * @param component The component of interest.
      * @return True if the component is bound to this command.
      */
-    public boolean isBound(final XulElement component) {
+    public boolean isBound(XulElement component) {
         return componentBindings.contains(component);
     }
     
@@ -193,7 +193,7 @@ public class Command {
      * @param shortcut The shortcut of interest.
      * @return True if the shortcut is bound to this command.
      */
-    public boolean isBound(final String shortcut) {
+    public boolean isBound(String shortcut) {
         return shortcutBindings.contains(shortcut);
     }
     

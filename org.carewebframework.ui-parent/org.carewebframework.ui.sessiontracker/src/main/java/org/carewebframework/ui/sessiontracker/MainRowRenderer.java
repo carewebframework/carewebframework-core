@@ -44,7 +44,7 @@ public class MainRowRenderer extends AbstractRowRenderer<SessionInfo, Object> {
             "@cwf.sessiontracker.detail.col2.label", "@cwf.sessiontracker.detail.col3.label",
             "@cwf.sessiontracker.detail.col4.label", "@cwf.sessiontracker.detail.col5.label",
             "@cwf.sessiontracker.detail.col6.label" };
-    
+            
     private static final Log log = LogFactory.getLog(MainRowRenderer.class);
     
     /**
@@ -69,8 +69,8 @@ public class MainRowRenderer extends AbstractRowRenderer<SessionInfo, Object> {
                 maxInactiveInterval = nativeSession.getMaxInactiveInterval();
             }
         } catch (IllegalStateException e) {
-            log.warn("The following session was still in the list of activeSessions yet was invalidated: "
-                    + sInfo.getSession());
+            log.warn(
+                "The following session was still in the list of activeSessions yet was invalidated: " + sInfo.getSession());
             return null;
         }
         
@@ -90,13 +90,13 @@ public class MainRowRenderer extends AbstractRowRenderer<SessionInfo, Object> {
         Rows detailRows = detailGrid.getRows();
         
         for (Desktop desktop : sInfo.getDesktops()) {
-            final DesktopInfo desktopInfo = Application.getDesktopInfo(desktop);
-            final ClientInfoEvent clientInfo = desktopInfo == null ? null : desktopInfo.getClientInformation();
-            final String screenDimensions = clientInfo == null ? "" : (clientInfo.getScreenWidth() + "x" + clientInfo
-                    .getScreenHeight());
-            final IUser user = getUser(desktop);
+            DesktopInfo desktopInfo = Application.getDesktopInfo(desktop);
+            ClientInfoEvent clientInfo = desktopInfo == null ? null : desktopInfo.getClientInformation();
+            String screenDimensions = clientInfo == null ? ""
+                    : (clientInfo.getScreenWidth() + "x" + clientInfo.getScreenHeight());
+            IUser user = getUser(desktop);
             String usr = user == null ? StrUtil.formatMessage("@cwf.sessiontracker.msg.unknown") : (user.toString());
-            final Row detailRow = new Row();
+            Row detailRow = new Row();
             detailRow.setParent(detailRows);
             createCell(detailRow, desktop.getId());
             createCell(detailRow, desktop.getDeviceType());
@@ -109,8 +109,8 @@ public class MainRowRenderer extends AbstractRowRenderer<SessionInfo, Object> {
     
     private IUser getUser(Desktop desktop) {
         try {
-            final FrameworkAppContext ctx = FrameworkAppContext.getAppContext(desktop);
-            final UserContext uctx = ctx == null ? null : ctx.getBean("userContext", UserContext.class);
+            FrameworkAppContext ctx = FrameworkAppContext.getAppContext(desktop);
+            UserContext uctx = ctx == null ? null : ctx.getBean("userContext", UserContext.class);
             return uctx == null ? null : uctx.getContextObject(false);
         } catch (Exception e) {
             return null;

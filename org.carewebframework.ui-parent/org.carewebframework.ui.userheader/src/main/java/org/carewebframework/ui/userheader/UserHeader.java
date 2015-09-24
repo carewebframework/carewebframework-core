@@ -51,8 +51,6 @@ public class UserHeader extends PluginController implements IUserContextEvent {
     
     private String dbRegion;
     
-    private Component root;
-    
     //
     
     /**
@@ -82,7 +80,6 @@ public class UserHeader extends PluginController implements IUserContextEvent {
     @Override
     public void doAfterCompose(Component comp) throws Exception {
         super.doAfterCompose(comp);
-        root = comp;
         dbRegion = StringUtils.trimToEmpty(getPropertyValue(DATABASE_DISPLAY_NAME_PROPERTY));
         committed();
     }
@@ -129,7 +126,7 @@ public class UserHeader extends PluginController implements IUserContextEvent {
      * @param propertyName The property name.
      * @return The property value.
      */
-    private String getPropertyValue(final String propertyName) {
+    private String getPropertyValue(String propertyName) {
         try {
             return PropertyUtil.getValue(propertyName);
         } catch (Exception e) {

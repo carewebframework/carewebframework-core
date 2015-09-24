@@ -67,7 +67,7 @@ public class SpringUtil {
      *         if the application context cannot be determined.
      */
     public static Object getBean(String id) {
-        final ApplicationContext appContext = getAppContext();
+        ApplicationContext appContext = getAppContext();
         return appContext == null ? null : appContext.containsBean(id) ? appContext.getBean(id) : null;
     }
     

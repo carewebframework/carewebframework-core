@@ -37,7 +37,7 @@ public class AlertContainer extends Row implements IdSpace, IActionTarget {
      * @return The created container.
      */
     public static AlertContainer render(Component parent, Component child) {
-        final AlertContainer container = new AlertContainer(child);
+        AlertContainer container = new AlertContainer(child);
         parent.insertBefore(container, parent.getFirstChild());
         return container;
     }

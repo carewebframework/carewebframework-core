@@ -66,7 +66,7 @@ public class GlobalEventDispatcher extends AbstractGlobalEventDispatcher impleme
     
     private final Map<String, TopicSubscriber> subscribers = Collections
             .synchronizedMap(new HashMap<String, TopicSubscriber>());
-    
+            
     private ConnectionFactory factory;
     
     private Connection connection;
@@ -112,7 +112,7 @@ public class GlobalEventDispatcher extends AbstractGlobalEventDispatcher impleme
             updateConnectionStatus(true);
             assertSubscriptions();
             return true;
-        } catch (final Exception e) {
+        } catch (Exception e) {
             log.error("Error communicating with JMS server: " + e.getMessage());
             disconnect(false);
             return false;
@@ -124,7 +124,7 @@ public class GlobalEventDispatcher extends AbstractGlobalEventDispatcher impleme
      * 
      * @param updateStatus If true, update the connection status.
      */
-    private void disconnect(final boolean updateStatus) {
+    private void disconnect(boolean updateStatus) {
         if (updateStatus) {
             updateConnectionStatus(false);
         }
@@ -132,7 +132,7 @@ public class GlobalEventDispatcher extends AbstractGlobalEventDispatcher impleme
         if (this.session != null) {
             try {
                 this.session.close();
-            } catch (final Exception e) {
+            } catch (Exception e) {
                 log.error("Error closing JMS topic session.", e);
             }
         }
@@ -141,7 +141,7 @@ public class GlobalEventDispatcher extends AbstractGlobalEventDispatcher impleme
             try {
                 this.connection.stop();
                 this.connection.close();
-            } catch (final Exception e) {
+            } catch (Exception e) {
                 log.error("Error closing JMS topic connection.", e);
             }
         }
@@ -185,7 +185,7 @@ public class GlobalEventDispatcher extends AbstractGlobalEventDispatcher impleme
      * 
      * @param factory The ConnectionFactory
      */
-    public void setFactory(final ConnectionFactory factory) {
+    public void setFactory(ConnectionFactory factory) {
         this.factory = factory;
     }
     
@@ -193,11 +193,11 @@ public class GlobalEventDispatcher extends AbstractGlobalEventDispatcher impleme
      * Reassert subscriptions.
      */
     private void assertSubscriptions() {
-        for (final String eventName : this.subscribers.keySet()) {
+        for (String eventName : this.subscribers.keySet()) {
             try {
                 this.subscribers.put(eventName, null);
                 doHostSubscribe(eventName);
-            } catch (final Throwable e) {
+            } catch (Throwable e) {
                 break;
             }
         }
@@ -207,10 +207,10 @@ public class GlobalEventDispatcher extends AbstractGlobalEventDispatcher impleme
      * Remove all remote subscriptions.
      */
     private void removeSubscriptions() {
-        for (final TopicSubscriber subscriber : this.subscribers.values()) {
+        for (TopicSubscriber subscriber : this.subscribers.values()) {
             try {
                 subscriber.close();
-            } catch (final Throwable e) {
+            } catch (Throwable e) {
                 log.debug("Error closing subscriber", e);//is level appropriate - previously hidden exception -afranken
             }
         }
@@ -225,7 +225,7 @@ public class GlobalEventDispatcher extends AbstractGlobalEventDispatcher impleme
      *      boolean)
      */
     @Override
-    public void subscribeRemoteEvent(final String eventName, final boolean subscribe) {
+    public void subscribeRemoteEvent(String eventName, boolean subscribe) {
         if (!isConnected()) {
             //AbstractGlobalEventDispatcher.init calls subscribe before subclass has a chance to initialize/connect
             connect();
@@ -236,7 +236,7 @@ public class GlobalEventDispatcher extends AbstractGlobalEventDispatcher impleme
             } else {
                 doHostUnsubscribe(eventName);
             }
-        } catch (final JMSException e) {
+        } catch (JMSException e) {
             log.error(e);
         }
     }
@@ -251,7 +251,7 @@ public class GlobalEventDispatcher extends AbstractGlobalEventDispatcher impleme
      * @param eventName Name of event.
      * @throws JMSException JMS exception.
      */
-    private void doHostSubscribe(final String eventName) throws JMSException {
+    private void doHostSubscribe(String eventName) throws JMSException {
         
         if (this.subscribers.get(eventName) != null) {
             if (log.isDebugEnabled()) {
@@ -262,14 +262,14 @@ public class GlobalEventDispatcher extends AbstractGlobalEventDispatcher impleme
         if (log.isDebugEnabled()) {
             log.debug(String.format("Subscribing to Topic[%s]", eventName));
         }
-        final String topicName = JMSUtil.getTopicName(eventName);
-        final String selector = JMSUtil.getMessageSelector(eventName, getPublisherInfo());
+        String topicName = JMSUtil.getTopicName(eventName);
+        String selector = JMSUtil.getMessageSelector(eventName, getPublisherInfo());
         
         // This doesn't actually create a physical topic.  In ActiveMQ, a topic is created on-demand when someone with the
         // authority to create topics submits something to a topic.  By default, everyone has the authority to create topics.  See
         // http://markmail.org/message/us7v5ocnb65m4fdp#query:createtopic%20activemq%20jms+page:1+mid:tce6soq5g7rdkqnw+state:results --lrc
-        final Topic topic = this.session.createTopic(topicName);
-        final TopicSubscriber subscriber = this.session.createSubscriber(topic, selector, false);
+        Topic topic = this.session.createTopic(topicName);
+        TopicSubscriber subscriber = this.session.createSubscriber(topic, selector, false);
         this.subscribers.put(eventName, subscriber);
         subscriber.setMessageListener(this);
     }
@@ -280,8 +280,8 @@ public class GlobalEventDispatcher extends AbstractGlobalEventDispatcher impleme
      * @param eventName Name of event
      * @throws JMSException JMS exception.
      */
-    private void doHostUnsubscribe(final String eventName) throws JMSException {
-        final TopicSubscriber subscriber = this.subscribers.remove(eventName);
+    private void doHostUnsubscribe(String eventName) throws JMSException {
+        TopicSubscriber subscriber = this.subscribers.remove(eventName);
         if (subscriber == null) {
             return;
         }
@@ -294,10 +294,10 @@ public class GlobalEventDispatcher extends AbstractGlobalEventDispatcher impleme
      *      java.io.Serializable, java.lang.String)
      */
     @Override
-    public void fireRemoteEvent(final String eventName, final Serializable eventData, final String recipients) {
+    public void fireRemoteEvent(String eventName, Serializable eventData, String recipients) {
         try {
             doFireRemoteEvent(eventName, eventData, recipients);
-        } catch (final JMSException e) {
+        } catch (JMSException e) {
             log.error("Error firing remote event.", e);
         }
     }
@@ -311,14 +311,14 @@ public class GlobalEventDispatcher extends AbstractGlobalEventDispatcher impleme
      *            subscribers).
      * @throws JMSException JMS exception.
      */
-    private void doFireRemoteEvent(final String eventName, final Object eventData, final String recipients)
-                                                                                                           throws JMSException {
+    private void doFireRemoteEvent(final String eventName, final Object eventData,
+                                   final String recipients) throws JMSException {
         this.topicTemplate.send(JMSUtil.getTopicName(eventName), new MessageCreator() {
             
             @Override
-            public Message createMessage(final Session session) throws JMSException {
-                return JMSUtil
-                        .createObjectMessage(session, eventName, (Serializable) eventData, getEndpointId(), recipients);
+            public Message createMessage(Session session) throws JMSException {
+                return JMSUtil.createObjectMessage(session, eventName, (Serializable) eventData, getEndpointId(),
+                    recipients);
             }
         });
     }
@@ -329,7 +329,7 @@ public class GlobalEventDispatcher extends AbstractGlobalEventDispatcher impleme
      * @param message Message received from the JMS server.
      */
     @Override
-    public void onMessage(final Message message) {
+    public void onMessage(Message message) {
         if (log.isDebugEnabled()) {
             log.debug("Message received: " + message);
         }
@@ -343,9 +343,9 @@ public class GlobalEventDispatcher extends AbstractGlobalEventDispatcher impleme
      * 
      * @param message Message to process.
      */
-    protected void processMessage(final Message message) {
+    protected void processMessage(Message message) {
         try {
-            final String eventName = message.getJMSType();
+            String eventName = message.getJMSType();
             Object eventData;
             
             if (message instanceof ObjectMessage) {
@@ -353,11 +353,12 @@ public class GlobalEventDispatcher extends AbstractGlobalEventDispatcher impleme
             } else if (message instanceof TextMessage) {
                 eventData = ((TextMessage) message).getText();
             } else {
-                log.warn(String.format("Ignoring unsupported message: type [%s], message [%s]", message.getClass(), message));
+                log.warn(
+                    String.format("Ignoring unsupported message: type [%s], message [%s]", message.getClass(), message));
                 return;
             }
             localEventDelivery(eventName, eventData);
-        } catch (final Exception e) {
+        } catch (Exception e) {
             log.error("Error during local dispatch of global event.", e);
         }
     }
@@ -377,13 +378,13 @@ public class GlobalEventDispatcher extends AbstractGlobalEventDispatcher impleme
      */
     @Override
     protected void endMessageProcessing() {
-        
+    
     }
     
     /**
      * @param topicTemplate the jmsTemplate to set with pub sub config
      */
-    public void setTopicTemplate(final JmsTemplate topicTemplate) {
+    public void setTopicTemplate(JmsTemplate topicTemplate) {
         this.topicTemplate = topicTemplate;
     }
     

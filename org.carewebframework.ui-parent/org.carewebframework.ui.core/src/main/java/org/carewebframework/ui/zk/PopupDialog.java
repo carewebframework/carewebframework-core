@@ -56,8 +56,8 @@ public class PopupDialog extends Window {
      * @param sizable If true, window sizing grips appear.
      * @return Reference to the opened window, if successful.
      */
-    public static Window popup(final PageDefinition zulPageDefinition, final Map<Object, Object> args,
-                               final boolean closable, final boolean sizable) {
+    public static Window popup(PageDefinition zulPageDefinition, Map<Object, Object> args,
+                               boolean closable, boolean sizable) {
         return popup(zulPageDefinition, args, closable, sizable, true);
     }
     
@@ -72,8 +72,8 @@ public class PopupDialog extends Window {
      *            displayed.
      * @return Reference to the opened window, if successful.
      */
-    public static Window popup(final PageDefinition zulPageDefinition, final Map<Object, Object> args,
-                               final boolean closable, final boolean sizable, final boolean show) {
+    public static Window popup(PageDefinition zulPageDefinition, Map<Object, Object> args,
+                               boolean closable, boolean sizable, boolean show) {
         Window parent = new Window(); // Temporary parent in case createComponents fails, so can cleanup.
         Page currentPage = ExecutionsCtrl.getCurrentCtrl().getCurrentPage();
         parent.setMold("bootstrap");
@@ -127,7 +127,7 @@ public class PopupDialog extends Window {
      * @param zulPageDefinition Page definition used to construct the dialog.
      * @return Reference to the opened window, if successful.
      */
-    public static Window popup(final PageDefinition zulPageDefinition) {
+    public static Window popup(PageDefinition zulPageDefinition) {
         return popup(zulPageDefinition, null, true, true);
     }
     
@@ -139,7 +139,7 @@ public class PopupDialog extends Window {
      * @param sizable If true, window sizing grips appear.
      * @return Reference to the opened window, if successful.
      */
-    public static Window popup(final String zulPage, final boolean closable, final boolean sizable) {
+    public static Window popup(String zulPage, boolean closable, boolean sizable) {
         return popup(zulPage, closable, sizable, true);
     }
     
@@ -153,7 +153,7 @@ public class PopupDialog extends Window {
      *            displayed.
      * @return Reference to the opened window, if successful.
      */
-    public static Window popup(final String zulPage, final boolean closable, final boolean sizable, final boolean show) {
+    public static Window popup(String zulPage, boolean closable, boolean sizable, boolean show) {
         return popup(zulPage, null, closable, sizable, show);
     }
     
@@ -168,8 +168,8 @@ public class PopupDialog extends Window {
      *            displayed.
      * @return Reference to the opened window, if successful.
      */
-    public static Window popup(final String zulPage, Map<Object, Object> args, final boolean closable,
-                               final boolean sizable, final boolean show) {
+    public static Window popup(String zulPage, Map<Object, Object> args, boolean closable,
+                               boolean sizable, boolean show) {
         if (args == null) {
             args = new Hashtable<Object, Object>();
         }
@@ -177,7 +177,7 @@ public class PopupDialog extends Window {
         try {
             PageDefinition pageDefinition = ZKUtil.loadZulPageDefinition(zulPage, args);
             return popup(pageDefinition, args, closable, sizable, show);
-        } catch (final Exception e) {
+        } catch (Exception e) {
             log.error(e);
             return null;
         }
@@ -189,7 +189,7 @@ public class PopupDialog extends Window {
      * @param zulPage Url of zul page.
      * @return Reference to the opened window, if successful.
      */
-    public static Window popup(final String zulPage) {
+    public static Window popup(String zulPage) {
         return popup(zulPage, true, true);
     }
     
@@ -200,7 +200,7 @@ public class PopupDialog extends Window {
      * @param owner Component that requested creation (may be null)
      * @param title Window title
      */
-    public PopupDialog(final Component owner, final String title) {
+    public PopupDialog(Component owner, String title) {
         super();
         loadDefaults();
         setTitle(title);
@@ -253,7 +253,7 @@ public class PopupDialog extends Window {
             }
             
             doModal();
-        } catch (final Exception e) {}
+        } catch (Exception e) {}
     }
     
     /**
@@ -279,7 +279,7 @@ public class PopupDialog extends Window {
      * 
      * @param canceled Cancel status for the closed window.
      */
-    public void close(final boolean canceled) {
+    public void close(boolean canceled) {
         this.cancelled = canceled;
         onClose();
         detach();

@@ -49,7 +49,8 @@ public class RequestUtil {
      *         Execution/ServletRequest
      */
     public static HttpServletRequest getRequest() {
-        final ServletRequestAttributes requestAttrs = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        ServletRequestAttributes requestAttrs = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+
         if (requestAttrs == null) {
             return null;
         }
@@ -71,7 +72,7 @@ public class RequestUtil {
      * @param request Http servlet request object.
      * @return HttpSession, null when invoked outside the scope of an Execution/ServletRequest
      */
-    public static HttpSession getSession(final HttpServletRequest request) {
+    public static HttpSession getSession(HttpServletRequest request) {
         return request == null ? null : request.getSession(false);
     }
     
@@ -79,13 +80,13 @@ public class RequestUtil {
      * Logs at trace level the request headers
      */
     public static void logHeaderNames() {
-        final HttpServletRequest request = getRequest();
+        HttpServletRequest request = getRequest();
         if (request == null) {
             log.debug("logHeaderNames() invoked outside the scope of an Execution/ServletRequest"); 
         } else {
-            final Enumeration<?> enumeration = request.getHeaderNames();
+            Enumeration<?> enumeration = request.getHeaderNames();
             while (enumeration.hasMoreElements()) {
-                final String headerName = (String) enumeration.nextElement();
+                String headerName = (String) enumeration.nextElement();
                 log.trace(String.format("HeaderName: %s", headerName));
             }
         }
@@ -98,7 +99,7 @@ public class RequestUtil {
      * @return server name
      */
     public static String getServerName() {
-        final HttpServletRequest request = getRequest();
+        HttpServletRequest request = getRequest();
         if (request == null) {
             return null;
         }
@@ -115,7 +116,7 @@ public class RequestUtil {
     public static String getLocalHostAddress() {
         try {
             return InetAddress.getLocalHost().getHostAddress();
-        } catch (final Exception e) {
+        } catch (Exception e) {
             log.debug("Exception occurred obtaining localhost IP address", e);
             return null;
         }
@@ -130,7 +131,7 @@ public class RequestUtil {
      * @return the client's IP
      */
     public static String getRemoteAddress() {
-        final HttpServletRequest request = getRequest();
+        HttpServletRequest request = getRequest();
         String ipAddress = null;
         if (request != null) {
             ipAddress = request.getHeader("x-forwarded-for");
@@ -168,12 +169,12 @@ public class RequestUtil {
      * @throws IllegalStateException if called outside scope of an HttpServletRequest
      */
     public static HttpServletRequest assertRequest() {
-        final HttpServletRequest request = getRequest();
+        HttpServletRequest request = getRequest();
         Assert.state(request != null, "Method must be invoked within the scope of an Execution/ServletRequest");
         return request;
     }
     
-    private static boolean isEmpty(final String s) {
+    private static boolean isEmpty(String s) {
         return StringUtils.isEmpty(s) || "unknown".equalsIgnoreCase(s);
     }
     
@@ -193,7 +194,7 @@ public class RequestUtil {
      */
     public static List<String> getStandardDiagnosticContext() {
         IUser user = SecurityUtil.getAuthenticatedUser();
-        final List<String> dc = new ArrayList<String>();
+        List<String> dc = new ArrayList<String>();
         dc.add(getSessionId());
         dc.add(user == null ? "Unknown user" : user.getFullName());
         dc.add(FrameworkWebSupport.getDesktopId());

@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -36,7 +36,7 @@ public class MessagingSupport {
      * @param jmsTopicTemplate - Template for Topic usage
      * @param jmsQueueTemplate - Template for Queue usage
      */
-    public MessagingSupport(final JmsTemplate jmsTopicTemplate, final JmsTemplate jmsQueueTemplate) {
+    public MessagingSupport(JmsTemplate jmsTopicTemplate, JmsTemplate jmsQueueTemplate) {
         this.jmsTopicTemplate = jmsTopicTemplate;
         this.jmsQueueTemplate = jmsQueueTemplate;
     }
@@ -47,7 +47,7 @@ public class MessagingSupport {
      * @param eventName The destination.
      * @param messageData The message data.
      */
-    public void produceLocalMessage(final String eventName, final Object messageData) {
+    public void produceLocalMessage(String eventName, Object messageData) {
         EventManager.getInstance().fireLocalEvent(eventName, messageData);
     }
     
@@ -68,7 +68,7 @@ public class MessagingSupport {
         jmsTopicTemplate.send(JMSUtil.getTopicName(eventName), new MessageCreator() {
             
             @Override
-            public Message createMessage(final Session session) throws JMSException {
+            public Message createMessage(Session session) throws JMSException {
                 return JMSUtil.createObjectMessage(session, eventName, messageData, "anonymous", recipients);
             }
         });
@@ -89,7 +89,7 @@ public class MessagingSupport {
         jmsQueueTemplate.send(destinationName, new MessageCreator() {
             
             @Override
-            public Message createMessage(final Session session) throws JMSException {
+            public Message createMessage(Session session) throws JMSException {
                 return JMSUtil.createObjectMessage(session, destinationName, messageData, "anonymous", null);
             }
         });

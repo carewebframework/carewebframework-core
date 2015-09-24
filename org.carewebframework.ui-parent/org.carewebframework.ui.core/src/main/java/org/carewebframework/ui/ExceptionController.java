@@ -69,19 +69,19 @@ public class ExceptionController extends GenericForwardComposer<Component> {
      * @see org.zkoss.zk.ui.util.GenericAutowireComposer#doAfterCompose(org.zkoss.zk.ui.Component)
      */
     @Override
-    public void doAfterCompose(final Component comp) throws Exception {
+    public void doAfterCompose(Component comp) throws Exception {
         super.doAfterCompose(comp);
         Clients.clearBusy();
         this.root = ZKUtil.findAncestor(comp, Window.class);
-        final HttpServletRequest req = (HttpServletRequest) this.execution.getNativeRequest();
+        HttpServletRequest req = (HttpServletRequest) this.execution.getNativeRequest();
         
         Class<?> errClass = (Class<?>) req.getAttribute(WebUtils.ERROR_EXCEPTION_TYPE_ATTRIBUTE);
         String errMsg = (String) req.getAttribute(WebUtils.ERROR_MESSAGE_ATTRIBUTE);
         Throwable err = (Throwable) req.getAttribute(WebUtils.ERROR_EXCEPTION_ATTRIBUTE);
         
-        final String errReqURI = (String) req.getAttribute(WebUtils.ERROR_REQUEST_URI_ATTRIBUTE);
-        final String errServletName = (String) req.getAttribute(WebUtils.ERROR_SERVLET_NAME_ATTRIBUTE);
-        final Integer errStatusCode = (Integer) req.getAttribute(WebUtils.ERROR_STATUS_CODE_ATTRIBUTE);
+        String errReqURI = (String) req.getAttribute(WebUtils.ERROR_REQUEST_URI_ATTRIBUTE);
+        String errServletName = (String) req.getAttribute(WebUtils.ERROR_SERVLET_NAME_ATTRIBUTE);
+        Integer errStatusCode = (Integer) req.getAttribute(WebUtils.ERROR_STATUS_CODE_ATTRIBUTE);
         
         String throwableContext = null;
         
@@ -102,12 +102,12 @@ public class ExceptionController extends GenericForwardComposer<Component> {
             errMsg = StringUtils.trimToNull(errMsg) == null ? err.getMessage() : errMsg;
         }
         
-        final StringBuffer buffer = new StringBuffer();
+        StringBuffer buffer = new StringBuffer();
         //generic exception info
         buffer.append("\nException class: ").append(errClass);
         buffer.append("\nMessage: ").append(errMsg);
         if (err instanceof ErrorCoded) {
-            final String errorCode = ((ErrorCoded) err).getErrorCode();
+            String errorCode = ((ErrorCoded) err).getErrorCode();
             buffer.append("\nErrorCode: ").append(errorCode);
             this.lblCode.setValue(errorCode);
         }
@@ -115,7 +115,7 @@ public class ExceptionController extends GenericForwardComposer<Component> {
         buffer.append("\nServletName: ").append(errServletName);
         buffer.append("\nReqURI: ").append(errReqURI);
         
-        final SessionInfo sessionInfo = Application.getInstance().getSessionInfo(this.desktop);
+        SessionInfo sessionInfo = Application.getInstance().getSessionInfo(this.desktop);
         buffer.append(sessionInfo);
         
         buffer.append("\nThrowableContext: " + throwableContext);
@@ -137,16 +137,16 @@ public class ExceptionController extends GenericForwardComposer<Component> {
      * 
      * @param err Exception whose stack trace will be appended.
      */
-    private void appendStackTrace(final Throwable err) {
+    private void appendStackTrace(Throwable err) {
         if (err != null) {
-            final Class<?> clazz = err.getClass();
-            final String msg = err.getMessage();
-            //final Throwable cause = err.getCause();//should be null
+            Class<?> clazz = err.getClass();
+            String msg = err.getMessage();
+            //Throwable cause = err.getCause();//should be null
             
             this.txtStackTrace.setValue(StringUtils.defaultString(this.txtStackTrace.getValue())
                     + StringUtils.trimToEmpty(clazz.getCanonicalName()) + ": " + StringUtils.trimToEmpty(msg) + "\n");
             
-            for (final StackTraceElement element : err.getStackTrace()) {
+            for (StackTraceElement element : err.getStackTrace()) {
                 this.txtStackTrace.setValue(StringUtils.defaultString(this.txtStackTrace.getValue())
                         + String.valueOf(element) + "\n");
             }
@@ -158,7 +158,7 @@ public class ExceptionController extends GenericForwardComposer<Component> {
      * 
      * @param doOpen The detail open state.
      */
-    private void setDetail(final boolean doOpen) {
+    private void setDetail(boolean doOpen) {
         this.detail.setVisible(doOpen);
         this.btnDetail.setLabel(doOpen ? "Hide Detail" : "Show Detail");
     }

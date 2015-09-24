@@ -37,8 +37,8 @@ public class WonderbarSelectEvent extends Event {
      * @return The select event.
      */
     public static final WonderbarSelectEvent getSelectEvent(AuRequest request) {
-        final Map<String, Object> data = request.getData();
-        final Desktop desktop = request.getDesktop();
+        Map<String, Object> data = request.getData();
+        Desktop desktop = request.getDesktop();
         return new WonderbarSelectEvent(request.getComponent(),
                 (WonderbarItem) desktop.getComponentByUuidIfAny((String) data.get("reference")), null,
                 AuRequests.parseKeys(data));

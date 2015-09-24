@@ -276,7 +276,7 @@ public class DateUtil {
      * @return If the parsing was successful, returns the date value represented by the input value.
      *         Otherwise, returns null.
      */
-    private static Date tryParse(final String value) {
+    private static Date tryParse(String value) {
         for (Format format : Format.values()) {
             try {
                 return format.parse(value);

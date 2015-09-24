@@ -55,7 +55,7 @@ public class FrameworkUtil {
      * @param value Attribute value. If null, value is removed from cache.
      * @throws IllegalStateException if AppFramework is not initialized
      */
-    public static void setAttribute(final String key, final Object value) {
+    public static void setAttribute(String key, Object value) {
         assertInitialized();
         getAppFramework().setAttribute(key, value);
     }
@@ -67,7 +67,7 @@ public class FrameworkUtil {
      * @return Attribute value.
      * @throws IllegalStateException if AppFramework is not initialized
      */
-    public static Object getAttribute(final String key) {
+    public static Object getAttribute(String key) {
         assertInitialized();
         return getAppFramework().getAttribute(key);
     }

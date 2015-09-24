@@ -25,13 +25,13 @@ public class LabelResolver implements MessageSource {
     
     @Override
     public String getMessage(String code, Object[] args, String defaultMessage, Locale locale) {
-        final String msg = Labels.getLabel(code, defaultMessage);
+        String msg = Labels.getLabel(code, defaultMessage);
         return msg == null ? null : args == null ? msg : MessageFormats.format(msg, args, locale);
     }
     
     @Override
     public String getMessage(String code, Object[] args, Locale locale) throws NoSuchMessageException {
-        final String msg = getMessage(code, args, null, locale);
+        String msg = getMessage(code, args, null, locale);
         
         if (msg == null) {
             throw new NoSuchMessageException(code);
@@ -42,13 +42,13 @@ public class LabelResolver implements MessageSource {
     
     @Override
     public String getMessage(MessageSourceResolvable resolvable, Locale locale) throws NoSuchMessageException {
-        final String defaultMessage = resolvable.getDefaultMessage();
-        final Object[] args = resolvable.getArguments();
+        String defaultMessage = resolvable.getDefaultMessage();
+        Object[] args = resolvable.getArguments();
         String lastCode = "no code specified";
         
         for (String code : resolvable.getCodes()) {
             lastCode = code;
-            final String msg = getMessage(code, args, defaultMessage, locale);
+            String msg = getMessage(code, args, defaultMessage, locale);
             
             if (msg != null) {
                 return msg;

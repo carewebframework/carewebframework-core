@@ -140,15 +140,14 @@ public class HybridModel<T, G> extends AbstractListModel<T>implements Collection
     @SuppressWarnings("unchecked")
     private final SimpleGroupsModel<T, GroupHeader, ?, ?> groupsModel = new SimpleGroupsModel(groupHeaders) {
         
+        private static final long serialVersionUID = 1L;
+        
         @Override
         public void group(Comparator cmpr, boolean ascending, int colIndex) {
             if (colIndex == -1) {
                 fireEvent(GroupsDataEvent.STRUCTURE_CHANGED, -1, -1, -1);
             }
         }
-        
-        private static final long serialVersionUID = 1L;
-        
     };
     
     public HybridModel() {

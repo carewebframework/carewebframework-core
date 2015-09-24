@@ -63,7 +63,7 @@ public class ZKThemeProcessor extends AbstractThemeProcessor {
         
         @Override
         public void transform(InputStream inputStream, OutputStream outputStream) throws Exception {
-            final BufferedImage orig = ImageIO.read(inputStream);
+            BufferedImage orig = ImageIO.read(inputStream);
             this.width = orig.getWidth();
             this.height = orig.getHeight();
             
