@@ -263,7 +263,7 @@ wonderbar.ext.Wonderbar = zk.$extends(zul.inp.InputWidget, {
     },
 
     _selectItem: function (item, fire) {
-    	var v = item.value || item.label;
+    	var v = item ? item.value || item.label : null;
     	this.setText(v);
     	this._close();
 
