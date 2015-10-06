@@ -210,6 +210,9 @@ public class Wonderbar<T> extends InputElement {
     public void clear() {
         setText("");
         initItems(null, false, false);
+        
+        //if this isn't called, the text is left on the client for some reason
+        invalidate();
     }
     
     /**
@@ -537,10 +540,14 @@ public class Wonderbar<T> extends InputElement {
             }
             
             this.selectedItem = selectedItem;
-            invoke("_selectItem", selectedItem);
+            
+            //for some reason, "selectedItem" ends up as null in the client side java script
+            //setting the text here will do the same thing as what the client is doing anyway
+            //invoke("_selectItem", selectedItem);
+            setText(selectedItem == null ? "" : selectedItem.getLabel());
             
             if (fireEvent) {
-                Events.postEvent(WonderbarSelectEvent.ON_WONDERBAR_SELECT, this, null);
+                Events.postEvent(WonderbarSelectEvent.ON_WONDERBAR_SELECT, this, selectedItem);
             }
         }
     }
@@ -591,6 +598,10 @@ public class Wonderbar<T> extends InputElement {
     public void setSearchProvider(IWonderbarSearchProvider<T> searchProvider) {
         this.searchProvider = searchProvider;
         init(true);
+
+        //without this, the new default items don't show up after initial creation of the wonderbar 
+        //since the only way to update the default items is to set the search provider again 
+        invalidate();
     }
     
     /**
