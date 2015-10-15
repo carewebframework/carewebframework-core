@@ -214,12 +214,14 @@ wonderbar.ext.Wonderbar = zk.$extends(zul.inp.InputWidget, {
     },
 
     _getFirstSelectable: function(hits) {
-    	for (var i = 0; i < hits.length; i++) {
-    		var item = hits[i];
-
-    		if (item.selectable) {
-    			return item;
-    		}
+    	if (hits != null) {
+	    	for (var i = 0; i < hits.length; i++) {
+	    		var item = hits[i];
+	
+	    		if (item.selectable) {
+	    			return item;
+	    		}
+	    	}
     	}
 
     	return null;
