@@ -89,6 +89,10 @@ public class UIElementTabView extends UIElementZKBase {
      * @param pane The pane to become active.
      */
     protected void setActivePane(UIElementTabPane pane) {
+        if (pane == activePane) {
+            return;
+        }
+        
         if (activePane != null) {
             activePane.activate(false);
         }

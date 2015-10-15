@@ -131,6 +131,10 @@ public class UIElementStepView extends UIElementZKBase {
      * @param pane Step pane to activate.
      */
     public void setActivePane(UIElementStepPane pane) {
+        if (pane == activePane) {
+            return;
+        }
+        
         if (activePane != null) {
             activePane.activate(false);
         }

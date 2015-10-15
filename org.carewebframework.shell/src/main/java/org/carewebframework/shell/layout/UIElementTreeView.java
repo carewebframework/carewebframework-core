@@ -145,6 +145,10 @@ public class UIElementTreeView extends UIElementZKBase {
      * @param pane Pane to make active.
      */
     protected void setActivePane(UIElementTreePane pane) {
+        if (pane == activePane) {
+            return;
+        }
+        
         if (activePane != null) {
             activePane.makeActivePane(false);
         }
