@@ -80,5 +80,5 @@ therefore, highly recommended and requires a valid
 [ZK Open Source License](http:/www.carewebframework.com/licensing/zk/zol.pdf), 
 available on request from [ZK](http://www.zkoss.org/license/#zol) at no charge.
 
-[Maven Central]: http://search.maven.org
-[![githalytics.com alpha](https://cruel-carlota.gopagoda.com/089df57f5244ce596d7d069013f85bdf "githalytics.com")](http://githalytics.com/carewebframework/carewebframework-core)
+[Maven Central]: http://search.maven.org/#search%7Cga%7C1%7Ccarewebframework
+
