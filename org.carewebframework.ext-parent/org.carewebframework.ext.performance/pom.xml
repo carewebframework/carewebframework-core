@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>org.carewebframework</groupId>
 		<artifactId>org.carewebframework.ext-parent</artifactId>
-		<version>4.0.0</version>
+		<version>4.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>org.carewebframework.ext.performance</artifactId>
 	<name>CareWeb Framework Performance Monitoring Extensions</name>
