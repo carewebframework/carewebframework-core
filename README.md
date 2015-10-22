@@ -81,4 +81,4 @@ therefore, highly recommended and requires a valid
 available on request from [ZK](http://www.zkoss.org/license/#zol) at no charge.
 
 [Maven Central]: http://search.maven.org
-[![githalytics.com alpha](https://cruel-carlota.pagodabox.com/089df57f5244ce596d7d069013f85bdf "githalytics.com")](http://githalytics.com/carewebframework/carewebframework-core)
+[![githalytics.com alpha](https://cruel-carlota.gopagoda.com/089df57f5244ce596d7d069013f85bdf "githalytics.com")](http://githalytics.com/carewebframework/carewebframework-core)
