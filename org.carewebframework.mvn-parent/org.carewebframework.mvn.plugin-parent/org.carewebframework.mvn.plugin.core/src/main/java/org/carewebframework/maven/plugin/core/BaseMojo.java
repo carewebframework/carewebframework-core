@@ -64,6 +64,9 @@ public abstract class BaseMojo extends AbstractMojo {
     @Parameter(property = "buildNumber", required = false)
     protected String buildNumber;
     
+    @Parameter(property = "noclassifier", required = false)
+    protected boolean noclassifier;
+    
     @Parameter(property = "archive", alias = "archive", required = false)
     protected MavenArchiveConfiguration archiveConfig = new MavenArchiveConfiguration();
     
@@ -288,7 +291,8 @@ public abstract class BaseMojo extends AbstractMojo {
     private File createArchive() throws Exception {
         getLog().info("Creating archive.");
         Artifact artifact = mavenProject.getArtifact();
-        String archiveName = artifact.getArtifactId() + "-" + artifact.getVersion() + "-" + classifier + ".jar";
+        String clsfr = noclassifier ? "" : ("-" + classifier);
+        String archiveName = artifact.getArtifactId() + "-" + artifact.getVersion() + clsfr + ".jar";
         File jarFile = new File(mavenProject.getBuild().getDirectory(), archiveName);
         MavenArchiver archiver = new MavenArchiver();
         jarArchiver.addDirectory(stagingDirectory);
