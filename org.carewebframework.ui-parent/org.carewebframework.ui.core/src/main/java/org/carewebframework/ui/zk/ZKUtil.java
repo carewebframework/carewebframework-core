@@ -725,7 +725,7 @@ public class ZKUtil {
      * @param component Component whose zclass will be modified.
      * @param className The class name to add or remove.
      * @param remove If true, the class is removed; otherwise, it is appended.
-     * @return Returns the original sclass property value.
+     * @return Returns the original zclass property value.
      */
     public static String updateZclass(HtmlBasedComponent component, String className, boolean remove) {
         String oclass = component.getZclass();
