@@ -58,8 +58,9 @@ public class JSONUtil {
         @Override
         public TypeDeserializer buildTypeDeserializer(DeserializationConfig config, JavaType baseType,
                                                       Collection<NamedType> subtypes) {
-            return noTypeInfo(baseType) ? null : new AsPropertyTypeDeserializer(baseType, _customIdResolver, _typeProperty,
-                    _typeIdVisible, baseType.getRawClass());
+            return noTypeInfo(baseType) ? null
+                    : new AsPropertyTypeDeserializer(baseType, _customIdResolver, _typeProperty, _typeIdVisible,
+                            baseType.getRawClass());
         }
         
         @Override
@@ -139,7 +140,7 @@ public class JSONUtil {
     }
     
     /**
-     * Required to suppress writing of type information exception for top-level objects.
+     * Required to suppress writing of type information except for top-level objects.
      */
     public final static class AsPropertyTypeSerializerEx extends AsPropertyTypeSerializer {
         
