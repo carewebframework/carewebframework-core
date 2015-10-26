@@ -21,7 +21,7 @@ public class NumUtil {
      * 
      * @param val1 First value.
      * @param val2 Second value.
-     * @return -1 if val1 < val2; 0 if val1 == val2; 1 if val1 > val2
+     * @return <0 if val1 < val2; 0 if val1 == val2; >0 if val1 > val2
      */
     public static int compare(int val1, int val2) {
         return val1 - val2;
@@ -52,7 +52,8 @@ public class NumUtil {
     }
     
     /**
-     * Converts a double to a string without the trailing fractional zero.
+     * Converts a double to a string without the trailing fractional zero. For example, 1.0 becomes
+     * 1.
      * 
      * @param value Double value.
      * @return String equivalent.
@@ -65,6 +66,6 @@ public class NumUtil {
      * Enforce static class.
      */
     private NumUtil() {
-    };
+    }
     
 }
