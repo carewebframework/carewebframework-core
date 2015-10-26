@@ -121,5 +121,5 @@ public class LayoutUtil {
      * Enforce static class.
      */
     private LayoutUtil() {
-    };
+    }
 }
