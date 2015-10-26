@@ -98,7 +98,7 @@ public class HelpCSH {
      * 
      * @param component Component to dissociate.
      */
-    public static void dissociate(XulElement component) {
+    public static void dissociateCSH(XulElement component) {
         if (component != null && component.hasAttribute(CSH_TARGET)) {
             CommandUtil.dissociateCommand("help", component);
             component.removeAttribute(CSH_TARGET);
@@ -109,5 +109,5 @@ public class HelpCSH {
      * Enforces static class.
      */
     private HelpCSH() {
-    };
+    }
 }
