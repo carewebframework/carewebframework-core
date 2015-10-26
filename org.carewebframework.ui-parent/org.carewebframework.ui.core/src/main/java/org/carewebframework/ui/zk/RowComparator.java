@@ -94,12 +94,12 @@ public class RowComparator implements Comparator<Object>, Serializable {
      * element. This attribute may be an object instance that implements the Comparator interface or
      * the name of a class that implements the Comparator interface.
      * <p>
-     * Finally, if a column has been marked with the custom attribute named "natural", that column
-     * will be used to establish the "natural" ordering of the model. The value of the attribute may
-     * be either "ascending" or "descending" (default is "ascending" if any other value is
-     * specified) to indicate the direction of the natural ordering. When this attribute is present,
-     * the sort toggle becomes tri-state, toggling from "ascending" to "descending" to "natural" in
-     * that order.
+     * Finally, if a header element has been marked with the custom attribute named "natural", that
+     * header element will be used to establish the "natural" ordering of the model. The value of
+     * the attribute may be either "ascending" or "descending" (default is "ascending" if any other
+     * value is specified) to indicate the direction of the natural ordering. When this attribute is
+     * present, the sort toggle becomes tri-state, toggling from "ascending" to "descending" to
+     * "natural" in that order.
      * 
      * @param headers List of headers (of type Column, Listheader, or Treecol).
      */
