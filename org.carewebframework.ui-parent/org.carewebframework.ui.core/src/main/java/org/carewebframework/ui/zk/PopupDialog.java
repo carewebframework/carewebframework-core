@@ -56,8 +56,8 @@ public class PopupDialog extends Window {
      * @param sizable If true, window sizing grips appear.
      * @return Reference to the opened window, if successful.
      */
-    public static Window popup(PageDefinition zulPageDefinition, Map<Object, Object> args,
-                               boolean closable, boolean sizable) {
+    public static Window popup(PageDefinition zulPageDefinition, Map<Object, Object> args, boolean closable,
+                               boolean sizable) {
         return popup(zulPageDefinition, args, closable, sizable, true);
     }
     
@@ -72,8 +72,8 @@ public class PopupDialog extends Window {
      *            displayed.
      * @return Reference to the opened window, if successful.
      */
-    public static Window popup(PageDefinition zulPageDefinition, Map<Object, Object> args,
-                               boolean closable, boolean sizable, boolean show) {
+    public static Window popup(PageDefinition zulPageDefinition, Map<Object, Object> args, boolean closable, boolean sizable,
+                               boolean show) {
         Window parent = new Window(); // Temporary parent in case createComponents fails, so can cleanup.
         Page currentPage = ExecutionsCtrl.getCurrentCtrl().getCurrentPage();
         parent.setMold("bootstrap");
@@ -168,8 +168,7 @@ public class PopupDialog extends Window {
      *            displayed.
      * @return Reference to the opened window, if successful.
      */
-    public static Window popup(String zulPage, Map<Object, Object> args, boolean closable,
-                               boolean sizable, boolean show) {
+    public static Window popup(String zulPage, Map<Object, Object> args, boolean closable, boolean sizable, boolean show) {
         if (args == null) {
             args = new Hashtable<Object, Object>();
         }
@@ -275,7 +274,7 @@ public class PopupDialog extends Window {
     }
     
     /**
-     * Closes the window with the specify cancel status.
+     * Closes the window with the specified cancel status.
      * 
      * @param canceled Cancel status for the closed window.
      */
