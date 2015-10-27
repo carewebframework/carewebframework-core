@@ -209,7 +209,11 @@ wonderbar.ext.Wonderbar = zk.$extends(zul.inp.InputWidget, {
 		var menu = this._getMenu();
 
 		setTimeout(function() {
-			menu.menu('focus', null, menu.find('#' + item.uuid));
+			var comp = menu.find('#' + item.uuid);
+			
+			if (comp && comp.offset()) {
+				menu.menu('focus', null, comp);
+			}
 		}, timeout);
     },
 
