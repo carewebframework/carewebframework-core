@@ -49,7 +49,7 @@ public class ZKThread implements IAbortable {
      * Adds an abort method to the traditional Runnable interface. The target is responsible for
      * implementing this method so as to terminate its operation ASAP when this is called.
      */
-    public interface ZKRunnable {
+    public interface ZKRunnable extends IAbortable {
         
         /**
          * Run method
@@ -60,8 +60,9 @@ public class ZKThread implements IAbortable {
         void run(ZKThread thread) throws Exception;
         
         /**
-         * Auto generated method comment
+         * Abort the running thread.
          */
+        @Override
         void abort();
     }
     
