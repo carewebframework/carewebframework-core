@@ -183,6 +183,16 @@ public class ActionListener implements EventListener<Event> {
     }
     
     /**
+     * Returns the listener associated with the given component and the default onClick event.
+     * 
+     * @param component The component.
+     * @return A DeferredEventListener, or null if not found.
+     */
+    public static ActionListener getListener(Component component) {
+        return getListener(component, Events.ON_CLICK);
+    }
+    
+    /**
      * Returns the listener associated with the given component and event.
      * 
      * @param component The component.
@@ -261,11 +271,11 @@ public class ActionListener implements EventListener<Event> {
                 case URL:
                     Executions.getCurrent().sendRedirect((String) target, "_blank");
                     break;
-                
+                    
                 case JSCRIPT:
                     Executions.getCurrent().addAuResponse((AuScript) target);
                     break;
-                
+                    
                 case ZUL:
                 case ZSCRIPT:
                     ZScript zscript = (ZScript) target;
@@ -298,15 +308,15 @@ public class ActionListener implements EventListener<Event> {
                 case ZSCRIPT:
                     target = ZScript.parseContent(stripPrefix(script));
                     break;
-                
+                    
                 case JSCRIPT:
                     target = new AuScript(stripPrefix(script));
                     break;
-                
+                    
                 case URL:
                     target = script;
                     break;
-                
+                    
                 case ZUL:
                     PageDefinition pd = ZKUtil.loadZulPageDefinition(script);
                     
@@ -317,7 +327,7 @@ public class ActionListener implements EventListener<Event> {
                         }
                     }
                     break;
-                
+                    
                 default:
                     target = null;
             }
