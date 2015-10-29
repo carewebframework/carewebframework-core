@@ -150,7 +150,9 @@ public class MenuUtil {
      *            is appended.
      * @return The menu corresponding to the specified path. All missing menu nodes are created
      *         automatically.
+     * @deprecated Use FindMenu instead
      */
+    @Deprecated
     public static Menu createMenu(Menubar menubar, String path, Component insertBefore) {
         String[] pcs = path.split(Constants.PATH_DELIMITER_REGEX);
         Menu menu = null;
