@@ -3,7 +3,7 @@
 
 	<groupId>org.carewebframework</groupId>
 	<artifactId>org.carewebframework-parent</artifactId>
-	<version>4.0.1-SNAPSHOT</version>
+	<version>4.0.1</version>
 	<packaging>pom</packaging>
 	<name>CareWeb Framework Root POM</name>
 	<description>CareWeb Framework Root POM</description>
@@ -44,7 +44,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<org.carewebframework.core.version>4.0.1-SNAPSHOT</org.carewebframework.core.version>
+		<org.carewebframework.core.version>4.0.1</org.carewebframework.core.version>
 		<org.springframework.version>4.2.1.RELEASE</org.springframework.version>
 		<org.springframework.security.version>4.0.2.RELEASE</org.springframework.security.version>
 		<org.springframework.amqp.version>1.4.2.RELEASE</org.springframework.amqp.version>
@@ -74,7 +74,7 @@
 		<connection>${scm.scm}:${scm.base}</connection>
 		<developerConnection>${scm.scm}:${scm.base}</developerConnection>
 		<url>${scm.base}</url>
-		<tag>HEAD</tag>
+		<tag>4.0.1</tag>
 	</scm>
 
 	<distributionManagement>
