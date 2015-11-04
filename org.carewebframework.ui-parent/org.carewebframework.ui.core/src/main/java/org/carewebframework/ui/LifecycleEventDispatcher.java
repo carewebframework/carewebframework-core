@@ -15,6 +15,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Session;
+import org.zkoss.zk.ui.ShadowElement;
 import org.zkoss.zk.ui.util.DesktopCleanup;
 import org.zkoss.zk.ui.util.DesktopInit;
 import org.zkoss.zk.ui.util.SessionCleanup;
@@ -114,7 +115,7 @@ public class LifecycleEventDispatcher implements DesktopInit, DesktopCleanup, Se
         @SuppressWarnings("unchecked")
         LifecycleEventListener<Component> listener = (LifecycleEventListener<Component>) comp
                 .getAttribute(ATTR_COMP_LISTENER);
-        
+                
         if (listener == null && autoCreate) {
             listener = new LifecycleEventListener<Component>();
             comp.setAttribute(ATTR_COMP_LISTENER, listener);
@@ -223,6 +224,16 @@ public class LifecycleEventDispatcher implements DesktopInit, DesktopCleanup, Se
     
     @Override
     public void afterPageDetached(Page page, Desktop prevdesktop) {
+        // ignored
+    }
+    
+    @Override
+    public void afterShadowAttached(ShadowElement shadow, Component host) {
+        // ignored
+    }
+    
+    @Override
+    public void afterShadowDetached(ShadowElement shadow, Component prevhost) {
         // ignored
     }
 }

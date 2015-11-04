@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -48,7 +48,7 @@ public class ParticipantRenderer extends AbstractListitemRenderer<IPublisherInfo
         createCell(item, participant.getUserName());
         
         if (exclusions != null && exclusions.contains(participant)) {
-            item.setCheckable(false);
+            item.setSelectable(false);
             item.setDisabled(true);
             item.setSclass("chat-participant-active");
             item.setVisible(!hideExclusions);

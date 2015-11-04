@@ -23,6 +23,7 @@ import org.zkoss.zk.au.out.AuInvoke;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.ShadowElement;
 import org.zkoss.zk.ui.event.DropEvent;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
@@ -114,6 +115,14 @@ public class LayoutDesigner extends Window implements AfterCompose {
             refreshIfNeeded(parent);
             refreshIfNeeded(child);
             refreshIfNeeded(prevparent);
+        }
+        
+        @Override
+        public void afterShadowAttached(ShadowElement shadow, Component host) {
+        }
+        
+        @Override
+        public void afterShadowDetached(ShadowElement shadow, Component prevhost) {
         }
         
         @Override
@@ -604,13 +613,13 @@ public class LayoutDesigner extends Window implements AfterCompose {
                 eleDragged.setIndex(eleTarget.getIndex());
                 target.getParent().insertBefore(dragged, target);
                 break;
-            
+                
             case FIRST:
                 eleDragged.setIndex(0);
                 Treechildren tc = target.getTreechildren();
                 tc.insertBefore(dragged, tc.getFirstChild());
                 break;
-            
+                
             case RELOCATE:
                 eleDragged.setParent(eleTarget);
                 getTreechildren(target).appendChild(dragged);

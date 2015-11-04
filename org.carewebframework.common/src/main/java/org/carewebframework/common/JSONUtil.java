@@ -37,7 +37,7 @@ import com.fasterxml.jackson.databind.jsontype.TypeSerializer;
 import com.fasterxml.jackson.databind.jsontype.impl.AsPropertyTypeDeserializer;
 import com.fasterxml.jackson.databind.jsontype.impl.AsPropertyTypeSerializer;
 import com.fasterxml.jackson.databind.jsontype.impl.StdTypeResolverBuilder;
-import com.fasterxml.jackson.databind.util.ClassUtil;
+import com.fasterxml.jackson.databind.type.TypeFactory;
 
 /**
  * A set of static methods supporting serialization and deserialization of objects using the JSON
@@ -116,19 +116,28 @@ public class JSONUtil {
         
         @Override
         public JavaType typeFromId(String id) {
-            try {
-                return mapper.getTypeFactory().constructType(findClass(id));
-            } catch (ClassNotFoundException e) {
-                throw new RuntimeException(e);
-            }
+            return typeFromId(mapper.getTypeFactory(), id);
         }
         
         @Override
         public JavaType typeFromId(DatabindContext context, String id) {
+            return typeFromId(context.getTypeFactory(), id);
+        }
+        
+        /**
+         * Returns a type token given its alias or class name.
+         * 
+         * @param typeFactory The type factory.
+         * @param id Alias or class name.
+         * @return A type token.
+         */
+        private JavaType typeFromId(TypeFactory typeFactory, String id) {
             try {
-                return context.getTypeFactory().constructType(findClass(id));
+                Class<?> clazz = aliasToClass.get(id);
+                clazz = clazz == null ? typeFactory.findClass(id) : clazz;
+                return typeFactory.constructType(clazz);
             } catch (ClassNotFoundException e) {
-                throw new RuntimeException(e);
+                throw MiscUtil.toUnchecked(e);
             }
         }
         
@@ -136,7 +145,6 @@ public class JSONUtil {
         public Id getMechanism() {
             return Id.CUSTOM;
         }
-        
     }
     
     /**
@@ -245,18 +253,6 @@ public class JSONUtil {
      */
     public static final String getAlias(Class<?> clazz) {
         return classToAlias.get(clazz);
-    }
-    
-    /**
-     * Returns a class given its alias or class name.
-     * 
-     * @param id Alias or class name.
-     * @return The associated class.
-     * @throws ClassNotFoundException If class not found.
-     */
-    private static Class<?> findClass(String id) throws ClassNotFoundException {
-        Class<?> clazz = aliasToClass.get(id);
-        return clazz == null ? ClassUtil.findClass(id) : clazz;
     }
     
     /**

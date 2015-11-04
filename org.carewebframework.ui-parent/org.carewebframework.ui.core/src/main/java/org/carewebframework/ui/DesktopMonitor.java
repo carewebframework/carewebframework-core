@@ -42,6 +42,7 @@ import org.zkoss.zk.ui.DesktopUnavailableException;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.Page;
+import org.zkoss.zk.ui.ShadowElement;
 import org.zkoss.zk.ui.UiException;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
@@ -241,6 +242,14 @@ public class DesktopMonitor extends Thread {
          */
         @Override
         public void afterPageDetached(Page page, Desktop desktop) {
+        }
+        
+        @Override
+        public void afterShadowAttached(ShadowElement shadow, Component host) {
+        }
+        
+        @Override
+        public void afterShadowDetached(ShadowElement shadow, Component prevhost) {
         }
         
     };

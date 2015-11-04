@@ -40,6 +40,7 @@ import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.Session;
+import org.zkoss.zk.ui.ShadowElement;
 import org.zkoss.zk.ui.event.ClientInfoEvent;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
@@ -73,11 +74,11 @@ public class Application {
                 case CLOSE:
                     Clients.evalJavaScript("window.close();");
                     break;
-                
+                    
                 case LOCK:
                     lock(true);
                     break;
-                
+                    
                 case UNLOCK:
                     lock(false);
                     break;
@@ -269,8 +270,8 @@ public class Application {
                 if (httpSession != null) {//precaution, shouldn't ever be null
                     buffer.append("\n\tSession ID: ").append(httpSession.getId());
                     buffer.append("\n\tCreationTime: ").append(String.valueOf(new Date(httpSession.getCreationTime())));
-                    buffer.append("\n\tLastAccessedTime: ").append(
-                        String.valueOf(new Date(httpSession.getLastAccessedTime())));
+                    buffer.append("\n\tLastAccessedTime: ")
+                            .append(String.valueOf(new Date(httpSession.getLastAccessedTime())));
                 }
                 
                 String deviceType = this.session.getDeviceType();
@@ -290,7 +291,7 @@ public class Application {
                         .append(", DeviceType=").append(deviceType).append(", LocalAddresss=").append(localAddress)
                         .append(", RemotedAddress=").append(remoteAddress).append(", RemoteHost=").append(remoteHost)
                         .append(", ServerName=").append(serverName);
-                
+                        
                 for (Desktop desktop : getDesktops()) {
                     DesktopInfo desktopInfo = Application.getDesktopInfo(desktop);
                     buffer.append(desktopInfo);
@@ -515,15 +516,15 @@ public class Application {
         public String toString() {
             StringBuffer buffer = new StringBuffer();
             ClientInfoEvent clientInfo = getClientInformation();
-            String screenDimensions = clientInfo == null ? "" : (clientInfo.getScreenWidth() + "x" + clientInfo
-                    .getScreenHeight());
+            String screenDimensions = clientInfo == null ? ""
+                    : (clientInfo.getScreenWidth() + "x" + clientInfo.getScreenHeight());
             Desktop desktop = getDesktop(id);
             buffer.append("\n\t\tDesktopInfo");
             buffer.append("\n\t\t\tDesktop: ").append(desktop);//includes Id
             buffer.append("\n\t\t\tOwner: ").append(owner == null ? "none" : owner);
             buffer.append("\n\t\t\tisAlive: ").append(desktop == null || !desktop.isAlive() ? false : true);
-            buffer.append("\n\t\t\tisServerPushEnabled: ").append(
-                desktop == null || !desktop.isServerPushEnabled() ? false : true);
+            buffer.append("\n\t\t\tisServerPushEnabled: ")
+                    .append(desktop == null || !desktop.isServerPushEnabled() ? false : true);
             buffer.append("\n\t\t\tUserAgent: ").append(getUserAgent());
             buffer.append("\n\t\t\tUserAgent (According to ZK) ").append(
                 isGecko() ? "is Gecko based (i.e. Firefox)" : (isExplorer() ? "is IE based" : " may not be IE or Firefox"));
@@ -599,6 +600,14 @@ public class Application {
         
         @Override
         public void afterComponentMoved(Component parent, Component child, Component prevparent) {
+        }
+        
+        @Override
+        public void afterShadowAttached(ShadowElement shadow, Component host) {
+        }
+        
+        @Override
+        public void afterShadowDetached(ShadowElement shadow, Component prevhost) {
         }
         
     };
