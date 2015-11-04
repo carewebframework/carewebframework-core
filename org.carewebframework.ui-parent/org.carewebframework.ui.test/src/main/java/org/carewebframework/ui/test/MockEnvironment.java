@@ -36,6 +36,7 @@ import org.zkoss.zk.ui.impl.DesktopImpl;
 import org.zkoss.zk.ui.impl.EventProcessor;
 import org.zkoss.zk.ui.impl.PageImpl;
 import org.zkoss.zk.ui.metainfo.LanguageDefinition;
+import org.zkoss.zk.ui.sys.ConfigParser;
 import org.zkoss.zk.ui.sys.ExecutionsCtrl;
 import org.zkoss.zk.ui.sys.SessionsCtrl;
 import org.zkoss.zk.ui.util.Configuration;
@@ -162,6 +163,7 @@ public class MockEnvironment {
      * @throws Exception Unspecified exception.
      */
     protected Configuration init(Configuration configuration) throws Exception {
+        new ConfigParser().parseConfigXml(configuration);
         configuration.addListener(LifecycleEventDispatcher.class);
         return configuration;
     }
