@@ -99,7 +99,7 @@ public class LoginWindowController extends GenericForwardComposer<Component> {
         AuthenticationException authError = (AuthenticationException) session
                 .removeAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
         IUser user = (IUser) session.removeAttribute(org.carewebframework.security.spring.Constants.SAVED_USER);
-        Map<Object, Object> args = new HashMap<Object, Object>();
+        Map<Object, Object> args = new HashMap<>();
         args.put("savedRequest", savedRequest);
         args.put("authError", authError);
         String form;

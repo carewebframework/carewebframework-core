@@ -25,7 +25,7 @@ public class CareWebStartup implements IRegisterEvent {
     
     private static final Log log = LogFactory.getLog(CareWebStartup.class);
     
-    private final List<ICareWebStartup> startupRoutines = new ArrayList<ICareWebStartup>();
+    private final List<ICareWebStartup> startupRoutines = new ArrayList<>();
     
     /**
      * Register a startup routine.
@@ -51,7 +51,7 @@ public class CareWebStartup implements IRegisterEvent {
      * Execute registered startup routines.
      */
     public void execute() {
-        List<ICareWebStartup> temp = new ArrayList<ICareWebStartup>(startupRoutines);
+        List<ICareWebStartup> temp = new ArrayList<>(startupRoutines);
         
         for (ICareWebStartup startupRoutine : temp) {
             try {

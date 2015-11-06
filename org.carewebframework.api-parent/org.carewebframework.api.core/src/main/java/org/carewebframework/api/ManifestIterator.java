@@ -94,7 +94,7 @@ public class ManifestIterator implements ApplicationContextAware, Iterable<Manif
      */
     public void init() {
         if (manifests == null) {
-            manifests = new ArrayList<Manifest>();
+            manifests = new ArrayList<>();
             try {
                 primaryManifest = addToList(appContext.getResource(MANIFEST_PATH));
                 Resource[] resources = appContext.getResources("classpath*:/" + MANIFEST_PATH);

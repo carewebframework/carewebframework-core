@@ -29,7 +29,7 @@ public class MockSecurityDomainLoader {
     public MockSecurityDomainLoader(String domains, String authorities) {
         for (String domain : domains.split("\\,")) {
             String[] pcs = domain.split("\\^");
-            Map<String, String> attrs = new HashMap<String, String>();
+            Map<String, String> attrs = new HashMap<>();
             
             for (int i = 2; i < pcs.length; i++) {
                 String[] nv = pcs[i].split("\\=", 2);

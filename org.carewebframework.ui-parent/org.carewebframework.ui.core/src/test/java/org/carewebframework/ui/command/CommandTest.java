@@ -42,7 +42,7 @@ public class CommandTest {
     }
     
     private void testShortcutParsing(String[] shortcuts, boolean areValid) {
-        Set<String> sc1 = new HashSet<String>();
+        Set<String> sc1 = new HashSet<>();
         sc1.addAll(Arrays.asList(shortcuts));
         String concat_sc1 = CommandUtil.concatShortcuts(sc1);
         Set<String> sc2 = CommandUtil.parseShortcuts(concat_sc1, null);

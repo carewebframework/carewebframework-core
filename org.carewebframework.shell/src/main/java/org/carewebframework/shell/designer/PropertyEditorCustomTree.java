@@ -195,7 +195,7 @@ public abstract class PropertyEditorCustomTree<T extends UIElementBase> extends 
     
     private PropertyEditorBase labelEditor;
     
-    private final List<Proxy> proxies = new ArrayList<Proxy>();
+    private final List<Proxy> proxies = new ArrayList<>();
     
     private final Class<T> childClass;
     

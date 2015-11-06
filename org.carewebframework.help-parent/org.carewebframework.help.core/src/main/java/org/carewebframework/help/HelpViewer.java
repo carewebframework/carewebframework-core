@@ -64,7 +64,7 @@ public class HelpViewer extends Window implements IHelpViewer, AfterCompose, ITo
     
     private Label lblLoading;
     
-    private final List<IHelpSet> helpSets = new ArrayList<IHelpSet>();
+    private final List<IHelpSet> helpSets = new ArrayList<>();
     
     private final HelpHistory history = new HelpHistory();
     

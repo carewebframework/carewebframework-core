@@ -22,9 +22,9 @@ import org.carewebframework.ui.wonderbar.WonderbarUtil;
  */
 public class TestSearchProvider implements IWonderbarServerSearchProvider<TestSearchItem>, IWonderbarClientSearchProvider<TestSearchItem> {
     
-    private final List<TestSearchItem> items = new ArrayList<TestSearchItem>();
+    private final List<TestSearchItem> items = new ArrayList<>();
     
-    private final List<TestSearchItem> defaults = new ArrayList<TestSearchItem>();
+    private final List<TestSearchItem> defaults = new ArrayList<>();
     
     private final MatchMode matchMode;
     

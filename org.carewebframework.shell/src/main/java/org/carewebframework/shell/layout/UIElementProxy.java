@@ -22,7 +22,7 @@ import org.carewebframework.shell.property.PropertyInfo;
  */
 public class UIElementProxy extends UIElementBase implements IPropertyAccessor {
     
-    private final HashMap<String, Object> properties = new HashMap<String, Object>();
+    private final HashMap<String, Object> properties = new HashMap<>();
     
     private UIElementBase target;
     

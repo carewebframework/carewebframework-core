@@ -54,9 +54,9 @@ public class SessionController extends FrameworkController implements ISessionUp
     
     private Button btnSendMessage;
     
-    private final ListModelSet<IPublisherInfo> model = new ListModelSet<IPublisherInfo>();
+    private final ListModelSet<IPublisherInfo> model = new ListModelSet<>();
     
-    private final Set<IPublisherInfo> outstandingInvitations = new HashSet<IPublisherInfo>();
+    private final Set<IPublisherInfo> outstandingInvitations = new HashSet<>();
     
     private SessionService sessionService;
     
@@ -68,7 +68,7 @@ public class SessionController extends FrameworkController implements ISessionUp
      * @return The controller for the chat session.
      */
     protected static SessionController create(String sessionId, boolean originator) {
-        Map<Object, Object> args = new HashMap<Object, Object>();
+        Map<Object, Object> args = new HashMap<>();
         args.put("id", sessionId);
         args.put("title", StrUtil.formatMessage("@chat.session.title", sessionId));
         args.put("originator", originator ? true : null);

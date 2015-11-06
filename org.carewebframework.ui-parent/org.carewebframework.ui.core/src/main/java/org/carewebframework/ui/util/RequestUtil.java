@@ -194,7 +194,7 @@ public class RequestUtil {
      */
     public static List<String> getStandardDiagnosticContext() {
         IUser user = SecurityUtil.getAuthenticatedUser();
-        List<String> dc = new ArrayList<String>();
+        List<String> dc = new ArrayList<>();
         dc.add(getSessionId());
         dc.add(user == null ? "Unknown user" : user.getFullName());
         dc.add(FrameworkWebSupport.getDesktopId());

@@ -62,7 +62,7 @@ public class IconLibraryBase implements IIconLibrary, ApplicationContextAware {
     
     @Override
     public List<String> getMatching(String iconName, String dimensions) {
-        List<String> urls = new ArrayList<String>();
+        List<String> urls = new ArrayList<>();
         
         try {
             for (Resource resource : applicationContext.getResources(formatURL(iconName, dimensions, "classpath:web"))) {

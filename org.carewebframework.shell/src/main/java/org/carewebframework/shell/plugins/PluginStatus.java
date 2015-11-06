@@ -20,7 +20,7 @@ import org.carewebframework.api.FrameworkUtil;
  */
 public abstract class PluginStatus implements IPluginEventListener {
     
-    private final List<PluginContainer> containers = new ArrayList<PluginContainer>();
+    private final List<PluginContainer> containers = new ArrayList<>();
     
     private boolean disabled;
     

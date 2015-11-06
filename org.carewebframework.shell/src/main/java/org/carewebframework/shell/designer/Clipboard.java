@@ -80,7 +80,7 @@ public class Clipboard {
     }
     
     private void fireChange() {
-        for (Component comp : new ArrayList<Component>(listeners)) {
+        for (Component comp : new ArrayList<>(listeners)) {
             ZKUtil.fireEvent(new Event(ON_CLIPBOARD_CHANGE, comp, data));
         }
     }

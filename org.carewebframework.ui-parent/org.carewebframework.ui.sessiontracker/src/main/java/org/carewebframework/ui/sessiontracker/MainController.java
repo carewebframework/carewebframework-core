@@ -59,7 +59,7 @@ public class MainController extends PluginController {
             List<SessionInfo> sessions = Application.getInstance().getActiveSessions();
             
             if (!sessions.isEmpty()) {
-                grid.setModel(new ListModelList<SessionInfo>(sessions));
+                grid.setModel(new ListModelList<>(sessions));
                 grid.setRowRenderer(sessionTrackerRowRenderer);
                 lblSessionSummary.setVisible(true);
                 int size = sessions.size();

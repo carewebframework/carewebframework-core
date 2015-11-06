@@ -248,7 +248,7 @@ public class ZKUtil {
      * @return The top level component of the created zul page.
      */
     public static Component loadZulPage(String filename, Component parent) {
-        Map<Object, Object> args = new HashMap<Object, Object>();
+        Map<Object, Object> args = new HashMap<>();
         PageDefinition pageDefinition;
         try {
             pageDefinition = loadZulPageDefinition(filename, args);
@@ -445,7 +445,7 @@ public class ZKUtil {
      * @param elClass Class of the event listener to be removed (null to ignore).
      */
     public static void removeEventListeners(Component component, String evtnm, Class<?> elClass) {
-        List<EventListener<?>> list = new ArrayList<EventListener<?>>();
+        List<EventListener<?>> list = new ArrayList<>();
         
         for (EventListener<?> el : component.getEventListeners(evtnm)) {
             if (elClass == null || elClass.equals(el.getClass())) {

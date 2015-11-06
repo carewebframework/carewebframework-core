@@ -193,7 +193,7 @@ public class ListUtil {
             return lb.getItems();
         }
         
-        List<Listitem> items = new ArrayList<Listitem>(lb.getSelectedItems());
+        List<Listitem> items = new ArrayList<>(lb.getSelectedItems());
         Collections.sort(items, listItemComparator);
         return items;
     }

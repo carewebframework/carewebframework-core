@@ -115,7 +115,7 @@ public class Application {
      */
     public class SessionInfo {
         
-        private final List<Desktop> desktops = new ArrayList<Desktop>();
+        private final List<Desktop> desktops = new ArrayList<>();
         
         private final Session session;
         
@@ -251,7 +251,7 @@ public class Application {
          * @return List of Desktops
          */
         public synchronized List<Desktop> getDesktops() {
-            return new ArrayList<Desktop>(this.desktops);
+            return new ArrayList<>(this.desktops);
         }
         
         /**
@@ -381,7 +381,7 @@ public class Application {
         
         public void sendToSpawned(Command command) {
             if (spawned != null && !spawned.isEmpty()) {
-                for (String dtid : new ArrayList<String>(spawned)) {
+                for (String dtid : new ArrayList<>(spawned)) {
                     Desktop dtp = getDesktop(dtid);
                     
                     if (dtp != null) {
@@ -492,7 +492,7 @@ public class Application {
          */
         private void registerSpawned(String id) {
             if (spawned == null) {
-                spawned = new ArrayList<String>();
+                spawned = new ArrayList<>();
             }
             
             spawned.add(id);
@@ -670,9 +670,9 @@ public class Application {
         }
     };
     
-    private final Map<String, SessionInfo> activeSessions = new ConcurrentHashMap<String, SessionInfo>();
+    private final Map<String, SessionInfo> activeSessions = new ConcurrentHashMap<>();
     
-    private final Map<String, Desktop> activeDesktops = new ConcurrentHashMap<String, Desktop>();
+    private final Map<String, Desktop> activeDesktops = new ConcurrentHashMap<>();
     
     /**
      * Returns the singleton instance of the Application object.
@@ -724,7 +724,7 @@ public class Application {
      * @return A list of SessionInfo objects.
      */
     public List<SessionInfo> getActiveSessions() {
-        return new ArrayList<SessionInfo>(activeSessions.values());
+        return new ArrayList<>(activeSessions.values());
     }
     
     /**

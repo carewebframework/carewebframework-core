@@ -131,7 +131,7 @@ public class LoginPaneController extends GenericForwardComposer<Component> {
             txtPassword.setFocus(true);
         }
         
-        List<ISecurityDomain> securityDomains = new ArrayList<ISecurityDomain>(securityDomainRegistry.getAll());
+        List<ISecurityDomain> securityDomains = new ArrayList<>(securityDomainRegistry.getAll());
         Collections.sort(securityDomains, new Comparator<ISecurityDomain>() {
             
             @Override

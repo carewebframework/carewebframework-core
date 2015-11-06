@@ -41,7 +41,7 @@ public abstract class UIElementBase {
      */
     private static class RelatedClassMap {
         
-        private final Map<Class<? extends UIElementBase>, Set<Class<? extends UIElementBase>>> map = new HashMap<Class<? extends UIElementBase>, Set<Class<? extends UIElementBase>>>();
+        private final Map<Class<? extends UIElementBase>, Set<Class<? extends UIElementBase>>> map = new HashMap<>();
         
         /**
          * Returns the set of related classes for the specified class. If no set yet exists, one is
@@ -54,7 +54,7 @@ public abstract class UIElementBase {
             Set<Class<? extends UIElementBase>> set = map.get(clazz);
             
             if (set == null) {
-                set = new HashSet<Class<? extends UIElementBase>>();
+                set = new HashSet<>();
                 map.put(clazz, set);
             }
             
@@ -115,7 +115,7 @@ public abstract class UIElementBase {
     
     protected boolean autoEnable = true;
     
-    private final List<UIElementBase> children = new ArrayList<UIElementBase>();
+    private final List<UIElementBase> children = new ArrayList<>();
     
     private UIElementBase parent;
     

@@ -47,7 +47,7 @@ public class InvocationRequestQueue implements EventListener<InvocationRequest> 
         
     }
     
-    private static final Map<String, InvocationRequestQueue> messageQueues = new HashMap<String, InvocationRequestQueue>();
+    private static final Map<String, InvocationRequestQueue> messageQueues = new HashMap<>();
     
     private static final int TIMEOUT_INTERVAL = 10000; // Timeout interval in milliseconds
     

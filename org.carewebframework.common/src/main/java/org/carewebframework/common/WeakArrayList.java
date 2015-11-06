@@ -23,9 +23,9 @@ import java.util.List;
  */
 public class WeakArrayList<E> extends AbstractList<E> {
     
-    private transient final ReferenceQueue<E> referenceQueue = new ReferenceQueue<E>();
+    private transient final ReferenceQueue<E> referenceQueue = new ReferenceQueue<>();
     
-    private final List<WeakReference<E>> referenceList = new ArrayList<WeakReference<E>>();
+    private final List<WeakReference<E>> referenceList = new ArrayList<>();
     
     public WeakArrayList() {
         super();
@@ -65,7 +65,7 @@ public class WeakArrayList<E> extends AbstractList<E> {
      * @return Weak reference for the element.
      */
     private WeakReference<E> createWeakReference(E element) {
-        return new WeakReference<E>(element, referenceQueue);
+        return new WeakReference<>(element, referenceQueue);
     }
     
     /**

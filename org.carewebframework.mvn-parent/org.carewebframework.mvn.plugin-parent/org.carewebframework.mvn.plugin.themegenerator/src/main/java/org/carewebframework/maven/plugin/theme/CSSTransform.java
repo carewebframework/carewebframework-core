@@ -41,9 +41,9 @@ public class CSSTransform extends AbstractTransform {
     
     private static final String DELIM = "|";
     
-    private final Map<String, String> srcMap = new LinkedHashMap<String, String>();
+    private final Map<String, String> srcMap = new LinkedHashMap<>();
     
-    private final Map<String, String> defMap = new LinkedHashMap<String, String>();
+    private final Map<String, String> defMap = new LinkedHashMap<>();
     
     @Override
     public void transform(IResource resource, OutputStream outputStream) throws Exception {
@@ -140,9 +140,9 @@ public class CSSTransform extends AbstractTransform {
         int c = 0;
         int state = 0;
         StringBuilder sb = new StringBuilder();
-        Set<String> matches = new HashSet<String>();
-        Map<String, String> refMap = new LinkedHashMap<String, String>();
-        Map<String, String> styles = new HashMap<String, String>();
+        Set<String> matches = new HashSet<>();
+        Map<String, String> refMap = new LinkedHashMap<>();
+        Map<String, String> styles = new HashMap<>();
         String prop = null;
         checkForMatch("@before@", matches, refMap);
         

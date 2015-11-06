@@ -79,7 +79,7 @@ public class Composition implements Initiator, InitiatorExt {
         
         if (!roots.isEmpty()) {
             // resolve insert components
-            Map<String, Component> insertionPoints = new HashMap<String, Component>(); //(insert name, insert component)
+            Map<String, Component> insertionPoints = new HashMap<>(); //(insert name, insert component)
             resolveInsertionPoints(roots, insertionPoints);
             Component root = roots.get(0);
             

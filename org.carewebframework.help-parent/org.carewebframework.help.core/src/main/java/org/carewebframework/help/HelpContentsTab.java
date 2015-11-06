@@ -29,7 +29,7 @@ public class HelpContentsTab extends HelpTab {
     
     private HelpTopic selectedTopic;
     
-    private final Map<HelpTopic, Treeitem> topics = new HashMap<HelpTopic, Treeitem>();
+    private final Map<HelpTopic, Treeitem> topics = new HashMap<>();
     
     /**
      * Create the help tab for the specified viewer and viewType.

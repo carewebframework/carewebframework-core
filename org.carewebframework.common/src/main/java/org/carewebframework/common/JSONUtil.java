@@ -48,7 +48,7 @@ public class JSONUtil {
     
     private static final String DEFAULT_TYPE_PROPERTY = "@class";
     
-    private static final Map<String, ObjectMapper> mappers = new ConcurrentHashMap<String, ObjectMapper>();
+    private static final Map<String, ObjectMapper> mappers = new ConcurrentHashMap<>();
     
     /**
      * Identifies properties that require type metadata (via property specified in typeProperty).
@@ -168,9 +168,9 @@ public class JSONUtil {
         
     }
     
-    private static final Map<String, Class<?>> aliasToClass = new HashMap<String, Class<?>>();
+    private static final Map<String, Class<?>> aliasToClass = new HashMap<>();
     
-    private static final Map<Class<?>, String> classToAlias = new HashMap<Class<?>, String>();
+    private static final Map<Class<?>, String> classToAlias = new HashMap<>();
     
     /**
      * Returns an instance of the mapper for the default type property.

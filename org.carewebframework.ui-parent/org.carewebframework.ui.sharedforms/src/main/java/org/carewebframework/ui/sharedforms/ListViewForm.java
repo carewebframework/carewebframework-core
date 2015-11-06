@@ -79,7 +79,7 @@ public abstract class ListViewForm<DAO> extends CaptionedForm {
     
     private boolean sortAscending;
     
-    protected final ListModelList<DAO> model = new ListModelList<DAO>();
+    protected final ListModelList<DAO> model = new ListModelList<>();
     
     private final AbstractListitemRenderer<DAO, Object> renderer = new AbstractListitemRenderer<DAO, Object>() {
         
@@ -331,7 +331,7 @@ public abstract class ListViewForm<DAO> extends CaptionedForm {
      * @param dao DAO object
      */
     protected void renderItem(Listitem item, DAO dao) {
-        List<Object> columns = new ArrayList<Object>();
+        List<Object> columns = new ArrayList<>();
         
         try {
             render(dao, columns);

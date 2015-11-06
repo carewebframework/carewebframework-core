@@ -32,7 +32,7 @@ public class LoggingTest {
     @Test
     public void testLayout() {
         StopWatchFactory.createFactory(StopWatch.class);
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         map.put("task", "Task name");
         map.put("other", "Other value");
         IStopWatch sw = StopWatchFactory.create("test", map);

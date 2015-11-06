@@ -375,7 +375,7 @@ public class StrUtil {
      */
     public static List<String> toList(String text, List<String> list, String delimiter) {
         if (list == null) {
-            list = new ArrayList<String>();
+            list = new ArrayList<>();
         } else {
             list.clear();
         }

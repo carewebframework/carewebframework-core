@@ -230,7 +230,7 @@ public class HybridModel<T, G> extends AbstractListModel<T>implements Collection
             return null;
         }
         
-        GroupHeader<T, G> grp = new GroupHeader<T, G>(group, elementComparator, grouper);
+        GroupHeader<T, G> grp = new GroupHeader<>(group, elementComparator, grouper);
         groupHeaders.add(grp);
         return grp;
     }

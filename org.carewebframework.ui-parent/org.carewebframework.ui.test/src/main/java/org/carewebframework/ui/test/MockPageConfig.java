@@ -32,7 +32,7 @@ public class MockPageConfig implements org.zkoss.zk.ui.sys.PageConfig {
     
     private String afterHeadTags;
     
-    private final List<Object[]> responseHeaders = new ArrayList<Object[]>();
+    private final List<Object[]> responseHeaders = new ArrayList<>();
     
     @Override
     public String getId() {

@@ -82,11 +82,11 @@ public class PluginDefinition {
     
     private Class<? extends UIElementBase> clazz = UIElementPlugin.class;
     
-    private final List<IPluginResource> resources = new ArrayList<IPluginResource>();
+    private final List<IPluginResource> resources = new ArrayList<>();
     
-    private final List<Authority> authorities = new ArrayList<Authority>();
+    private final List<Authority> authorities = new ArrayList<>();
     
-    private final List<PropertyInfo> properties = new ArrayList<PropertyInfo>();
+    private final List<PropertyInfo> properties = new ArrayList<>();
     
     private Manifest manifest;
     
@@ -275,7 +275,7 @@ public class PluginDefinition {
      */
     @SuppressWarnings("unchecked")
     public <E extends IPluginResource> List<E> getResources(Class<E> clazz) {
-        List<E> list = new ArrayList<E>();
+        List<E> list = new ArrayList<>();
         
         for (IPluginResource resource : resources) {
             if (clazz.isInstance(resource)) {

@@ -46,7 +46,7 @@ public class FrameworkWebSupport {
     
     private static final String REQUEST_URL = "_CWFRequestUrl";
     
-    private static final ThreadLocal<Desktop> _desktops = new ThreadLocal<Desktop>();
+    private static final ThreadLocal<Desktop> _desktops = new ThreadLocal<>();
     
     /**
      * Converts the queryString to a map.
@@ -77,7 +77,7 @@ public class FrameworkWebSupport {
             URI uri = new URI(queryString.startsWith("?") ? queryString : ("?" + queryString));
             List<NameValuePair> params = URLEncodedUtils.parse(uri, StrUtil.CHARSET);
             
-            Map<String, String> result = new HashMap<String, String>();
+            Map<String, String> result = new HashMap<>();
             
             for (NameValuePair nvp : params) {
                 String value = result.get(nvp.getName());

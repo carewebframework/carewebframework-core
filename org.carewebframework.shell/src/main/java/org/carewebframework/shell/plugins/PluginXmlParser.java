@@ -53,7 +53,7 @@ public class PluginXmlParser extends BaseXmlParser {
         Element resourceTag = findTag("resource", element);
         
         if (resourceTag != null) {
-            ManagedList<AbstractBeanDefinition> resourceList = new ManagedList<AbstractBeanDefinition>();
+            ManagedList<AbstractBeanDefinition> resourceList = new ManagedList<>();
             NodeList resources = getTagChildren("resource", element);
             
             for (int i = 0; i < resources.getLength(); i++) {
@@ -67,7 +67,7 @@ public class PluginXmlParser extends BaseXmlParser {
         
         if (securityTag != null) {
             addProperties(securityTag, builder);
-            ManagedList<AbstractBeanDefinition> authorityList = new ManagedList<AbstractBeanDefinition>();
+            ManagedList<AbstractBeanDefinition> authorityList = new ManagedList<>();
             NodeList authorities = getTagChildren("security", element);
             
             for (int i = 0; i < authorities.getLength(); i++) {
@@ -81,7 +81,7 @@ public class PluginXmlParser extends BaseXmlParser {
         
         if (serializationTag != null) {
             addProperties(serializationTag, builder);
-            ManagedList<AbstractBeanDefinition> propertyList = new ManagedList<AbstractBeanDefinition>();
+            ManagedList<AbstractBeanDefinition> propertyList = new ManagedList<>();
             NodeList properties = getTagChildren("serialization", element);
             
             for (int i = 0; i < properties.getLength(); i++) {

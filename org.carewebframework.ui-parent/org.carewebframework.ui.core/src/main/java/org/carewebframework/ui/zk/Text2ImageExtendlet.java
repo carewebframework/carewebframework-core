@@ -92,7 +92,7 @@ public class Text2ImageExtendlet implements Extendlet, WebAppInit {
     @Override
     public void init(ExtendletConfig config) {
         ImageLoader loader = new ImageLoader();
-        _cache = new ResourceCache<Object, Object>(loader, 131);
+        _cache = new ResourceCache<>(loader, 131);
         _cache.setMaxSize(256);
         _cache.setLifetime(60 * 60 * 1000); //1hr
         _cache.setCheckPeriod(60 * 60 * 1000); //1hr

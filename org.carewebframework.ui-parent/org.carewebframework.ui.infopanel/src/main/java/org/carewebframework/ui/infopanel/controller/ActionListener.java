@@ -30,7 +30,7 @@ public class ActionListener implements IGenericEvent<Object> {
     
     private IEventManager eventManager;
     
-    private final List<IActionTarget> targets = new ArrayList<IActionTarget>();
+    private final List<IActionTarget> targets = new ArrayList<>();
     
     /**
      * Binds the action listeners to the specified target.
@@ -71,7 +71,7 @@ public class ActionListener implements IGenericEvent<Object> {
      */
     @Override
     public void eventCallback(String eventName, Object eventData) {
-        for (IActionTarget target : new ArrayList<IActionTarget>(targets)) {
+        for (IActionTarget target : new ArrayList<>(targets)) {
             try {
                 target.doAction(action);
             } catch (Throwable t) {

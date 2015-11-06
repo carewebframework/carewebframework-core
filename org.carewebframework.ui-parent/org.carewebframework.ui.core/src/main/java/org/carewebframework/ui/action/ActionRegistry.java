@@ -85,7 +85,7 @@ public class ActionRegistry extends AbstractRegistry<String, ActionEntry> {
      * @return Actions associated with specified scope.
      */
     public static Collection<ActionEntry> getRegisteredActions(ActionScope scope) {
-        Map<String, ActionEntry> actions = new HashMap<String, ActionEntry>();
+        Map<String, ActionEntry> actions = new HashMap<>();
         
         if (scope == ActionScope.BOTH || scope == ActionScope.GLOBAL) {
             actions.putAll(getRegistry(true).map);

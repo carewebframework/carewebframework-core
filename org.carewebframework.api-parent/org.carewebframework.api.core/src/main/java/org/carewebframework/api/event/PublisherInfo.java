@@ -26,7 +26,7 @@ public class PublisherInfo implements IPublisherInfo, Serializable {
     
     private String userName;
     
-    private final Map<String, String> attributes = new HashMap<String, String>();
+    private final Map<String, String> attributes = new HashMap<>();
     
     public PublisherInfo() {
         

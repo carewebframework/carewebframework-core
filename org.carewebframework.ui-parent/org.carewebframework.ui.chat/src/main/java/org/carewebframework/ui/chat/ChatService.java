@@ -49,9 +49,9 @@ public class ChatService implements IParticipantUpdate {
     
     private final IEventManager eventManager;
     
-    private final Map<String, SessionController> sessions = new HashMap<String, SessionController>();
+    private final Map<String, SessionController> sessions = new HashMap<>();
     
-    private final Set<IPublisherInfo> participants = new HashSet<IPublisherInfo>();
+    private final Set<IPublisherInfo> participants = new HashSet<>();
     
     private boolean active;
     
@@ -131,7 +131,7 @@ public class ChatService implements IParticipantUpdate {
     public void destroy() {
         setActive(false);
         
-        for (SessionController session : new ArrayList<SessionController>(sessions.values())) {
+        for (SessionController session : new ArrayList<>(sessions.values())) {
             session.close();
         }
     }

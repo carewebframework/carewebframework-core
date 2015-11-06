@@ -61,7 +61,7 @@ public class MockupTypeEnumerator implements Iterable<String> {
      */
     @Override
     public Iterator<String> iterator() {
-        List<String> list = new ArrayList<String>(mockupTypes.stringPropertyNames());
+        List<String> list = new ArrayList<>(mockupTypes.stringPropertyNames());
         Collections.sort(list, String.CASE_INSENSITIVE_ORDER);
         return list.iterator();
     }

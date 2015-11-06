@@ -33,7 +33,7 @@ import org.carewebframework.help.IHelpView;
 
 public class HelpSet_JavaHelp extends HelpSetBase {
     
-    private static final Map<Class<? extends NavigatorView>, HelpViewType> viewMap = new HashMap<Class<? extends NavigatorView>, HelpViewType>();
+    private static final Map<Class<? extends NavigatorView>, HelpViewType> viewMap = new HashMap<>();
     
     static {
         viewMap.put(TOCView.class, HelpViewType.TOC);
@@ -43,7 +43,7 @@ public class HelpSet_JavaHelp extends HelpSetBase {
     
     private final HelpSet helpSet;
     
-    private final List<IHelpView> helpViews = new ArrayList<IHelpView>();
+    private final List<IHelpView> helpViews = new ArrayList<>();
     
     public HelpSet_JavaHelp(HelpModule descriptor) throws MalformedURLException, HelpSetException {
         super(descriptor);

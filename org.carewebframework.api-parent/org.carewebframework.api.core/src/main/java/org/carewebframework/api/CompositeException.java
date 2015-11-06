@@ -21,7 +21,7 @@ public class CompositeException extends RuntimeException {
     
     private static final long serialVersionUID = 1L;
     
-    private final List<Throwable> exceptions = new ArrayList<Throwable>();
+    private final List<Throwable> exceptions = new ArrayList<>();
     
     public CompositeException(String msg) {
         super(msg);
@@ -100,7 +100,7 @@ public class CompositeException extends RuntimeException {
      */
     @Override
     public StackTraceElement[] getStackTrace() {
-        ArrayList<StackTraceElement> stackTrace = new ArrayList<StackTraceElement>();
+        ArrayList<StackTraceElement> stackTrace = new ArrayList<>();
         
         for (Throwable exception : exceptions) {
             stackTrace.addAll(Arrays.asList(exception.getStackTrace()));

@@ -38,7 +38,7 @@ public class BaseAuthenticationProvider implements AuthenticationProvider {
     
     private static final Log log = LogFactory.getLog(BaseAuthenticationProvider.class);
     
-    private final List<String> systemGrantedAuthorities = new ArrayList<String>();
+    private final List<String> systemGrantedAuthorities = new ArrayList<>();
     
     public BaseAuthenticationProvider() {
         this(false);
@@ -97,7 +97,7 @@ public class BaseAuthenticationProvider implements AuthenticationProvider {
         details.setDetail("user", user);
         Set<String> mergedAuthorities = mergeAuthorities(securityDomain.getGrantedAuthorities(user),
             systemGrantedAuthorities);
-        List<GrantedAuthority> userAuthorities = new ArrayList<GrantedAuthority>();
+        List<GrantedAuthority> userAuthorities = new ArrayList<>();
         
         for (String authority : mergedAuthorities) {
             if (!authority.isEmpty()) {

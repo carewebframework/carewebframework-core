@@ -20,7 +20,7 @@ import org.apache.log4j.spi.LoggingEvent;
  */
 public class TestAppender extends AppenderSkeleton {
     
-    private static List<String> messages = new ArrayList<String>();
+    private static List<String> messages = new ArrayList<>();
     
     @Override
     protected void append(LoggingEvent event) {

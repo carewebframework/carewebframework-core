@@ -20,7 +20,7 @@ public class UtilTest {
     
     @Test
     public void test() {
-        Map<String, Object> map = new TreeMap<String, Object>();
+        Map<String, Object> map = new TreeMap<>();
         map.put("item1", "item1.value");
         map.put("item2", 2222);
         String s = Util.formatForLogging("tagname", 1234, 5678, map);

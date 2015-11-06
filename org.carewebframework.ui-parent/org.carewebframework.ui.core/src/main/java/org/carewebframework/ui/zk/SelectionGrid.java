@@ -43,7 +43,7 @@ public class SelectionGrid extends Grid {
     
     private static final String DISABLED_ATTR = "_disabled";
     
-    private final Set<Row> selectedRows = new HashSet<Row>();
+    private final Set<Row> selectedRows = new HashSet<>();
     
     private Checkbox chkHeader;
     
@@ -423,7 +423,7 @@ public class SelectionGrid extends Grid {
      * @return List of rows matching the selection state.
      */
     private List<Row> getRows(List<Row> rows, Filter filter, boolean testing) {
-        List<Row> list = new ArrayList<Row>();
+        List<Row> list = new ArrayList<>();
         
         for (Row row : rows) {
             if (filter.matches(row)) {

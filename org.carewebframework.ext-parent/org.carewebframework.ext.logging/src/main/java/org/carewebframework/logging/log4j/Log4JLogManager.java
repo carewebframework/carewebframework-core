@@ -97,7 +97,7 @@ public class Log4JLogManager implements ILogManager {
     @Override
     public List<String> getAllPathsToLogFiles() {
         
-        List<String> filePaths = new ArrayList<String>();
+        List<String> filePaths = new ArrayList<>();
         
         for (String loggerName : getLoggerNames()) {
             if (log.isTraceEnabled()) {

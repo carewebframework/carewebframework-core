@@ -31,11 +31,11 @@ public class AppFramework implements ApplicationContextAware, DestructionAwareBe
     
     private ApplicationContext appContext;
     
-    private final List<Object> registeredObjects = new WeakArrayList<Object>();
+    private final List<Object> registeredObjects = new WeakArrayList<>();
     
-    private final List<IRegisterEvent> onRegisterList = new WeakArrayList<IRegisterEvent>();
+    private final List<IRegisterEvent> onRegisterList = new WeakArrayList<>();
     
-    private final Map<String, Object> attributes = new HashMap<String, Object>();
+    private final Map<String, Object> attributes = new HashMap<>();
     
     /**
      * Returns the active application context.

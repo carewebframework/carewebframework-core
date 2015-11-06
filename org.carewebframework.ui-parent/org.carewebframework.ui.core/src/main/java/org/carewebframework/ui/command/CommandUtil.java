@@ -27,7 +27,7 @@ import org.zkoss.zul.impl.XulElement;
  */
 public class CommandUtil {
     
-    private static final Map<Integer, String> specialKeys = new HashMap<Integer, String>();
+    private static final Map<Integer, String> specialKeys = new HashMap<>();
     
     /*
      * Initializes map for converting key code to symbolic form.
@@ -182,7 +182,7 @@ public class CommandUtil {
      */
     /*package*/static Set<String> parseShortcuts(String shortcuts, Set<String> result) {
         if (result == null) {
-            result = new HashSet<String>();
+            result = new HashSet<>();
         }
         
         if (shortcuts == null || shortcuts.isEmpty()) {

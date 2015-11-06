@@ -21,7 +21,7 @@ public class HelpTopicNode {
     
     private final String nodeId;
     
-    private final LinkedList<HelpTopicNode> children = new LinkedList<HelpTopicNode>();
+    private final LinkedList<HelpTopicNode> children = new LinkedList<>();
     
     private HelpTopicNode parent;
     

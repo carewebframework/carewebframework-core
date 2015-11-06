@@ -44,7 +44,7 @@ public class LabelFinder {
      */
     private static class LabelLocator implements org.zkoss.util.resource.LabelLocator {
         
-        private final List<URL> labelFiles = new ArrayList<URL>();
+        private final List<URL> labelFiles = new ArrayList<>();
         
         /**
          * Creates a label locator.
@@ -115,7 +115,7 @@ public class LabelFinder {
             log.info("Searching for label resources in class path...");
         }
         
-        Map<String, LabelLocator> labelLocators = new HashMap<String, LabelLocator>();
+        Map<String, LabelLocator> labelLocators = new HashMap<>();
         findLabelResources(appContext, "i3", labelLocators);
         findLabelResources(appContext, "zk", labelLocators);
         
@@ -171,15 +171,15 @@ public class LabelFinder {
         InputStream is = null;
         
         try {
-            Map<String, String> map = new HashMap<String, String>();
+            Map<String, String> map = new HashMap<>();
             is = resource.getInputStream();
             Maps.load(map, is);
             
             for (String key : map.keySet()) {
                 for (String pc : key.split("\\.")) {
                     if (!Validation.isIdentifier(pc)) {
-                        throw new RuntimeException("Label resource " + resource + " contains an invalid identifier: " + pc
-                                + " in " + key);
+                        throw new RuntimeException(
+                                "Label resource " + resource + " contains an invalid identifier: " + pc + " in " + key);
                     }
                 }
             }

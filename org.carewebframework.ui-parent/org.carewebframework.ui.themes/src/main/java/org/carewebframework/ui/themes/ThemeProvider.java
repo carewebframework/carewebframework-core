@@ -81,7 +81,7 @@ public class ThemeProvider implements org.zkoss.zk.ui.util.ThemeProvider {
             return uris;
         }
         
-        List<Object> newUris = new ArrayList<Object>();
+        List<Object> newUris = new ArrayList<>();
         
         for (Object uri : uris) {
             if (uri instanceof String) {

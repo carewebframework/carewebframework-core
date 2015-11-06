@@ -412,7 +412,7 @@ public class LayoutDesigner extends Window implements AfterCompose {
      * Updates the drop ids for all tree items.
      */
     private void updateDroppable() {
-        Collection<Treeitem> items = new ArrayList<Treeitem>(tree.getItems());
+        Collection<Treeitem> items = new ArrayList<>(tree.getItems());
         
         for (Treeitem item : items) {
             updateDroppable(item, items);

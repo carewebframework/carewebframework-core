@@ -278,7 +278,7 @@ public class PluginContainer extends Idspace {
         boolean debug = log.isDebugEnabled();
         
         if (pluginEventListeners1 != null) {
-            for (IPluginEvent listener : new ArrayList<IPluginEvent>(pluginEventListeners1)) {
+            for (IPluginEvent listener : new ArrayList<>(pluginEventListeners1)) {
                 try {
                     if (debug) {
                         log.debug("Invoking IPluginEvent.on" + WordUtils.capitalizeFully(action.name()) + " for listener "
@@ -309,7 +309,7 @@ public class PluginContainer extends Idspace {
         }
         
         if (pluginEventListeners2 != null) {
-            for (IPluginEventListener listener : new ArrayList<IPluginEventListener>(pluginEventListeners2)) {
+            for (IPluginEventListener listener : new ArrayList<>(pluginEventListeners2)) {
                 try {
                     if (debug) {
                         log.debug("Delivering " + action.name() + " event to IPluginEventListener listener " + listener);
@@ -432,7 +432,7 @@ public class PluginContainer extends Idspace {
      */
     public void registerComponent(Component component) {
         if (registeredComponents == null) {
-            registeredComponents = new ArrayList<Component>();
+            registeredComponents = new ArrayList<>();
         }
         
         registeredComponents.add(component);
@@ -461,7 +461,7 @@ public class PluginContainer extends Idspace {
      */
     public void registerAction(Disable actionElement) {
         if (registeredActions == null) {
-            registeredActions = new ArrayList<Disable>();
+            registeredActions = new ArrayList<>();
         }
         
         registeredActions.add(actionElement);
@@ -476,7 +476,7 @@ public class PluginContainer extends Idspace {
      */
     public void registerListener(IPluginEvent listener) {
         if (pluginEventListeners1 == null) {
-            pluginEventListeners1 = new ArrayList<IPluginEvent>();
+            pluginEventListeners1 = new ArrayList<>();
         }
         
         if (!pluginEventListeners1.contains(listener)) {
@@ -492,7 +492,7 @@ public class PluginContainer extends Idspace {
      */
     public void registerListener(IPluginEventListener listener) {
         if (pluginEventListeners2 == null) {
-            pluginEventListeners2 = new ArrayList<IPluginEventListener>();
+            pluginEventListeners2 = new ArrayList<>();
         }
         
         if (!pluginEventListeners2.contains(listener)) {
@@ -582,7 +582,7 @@ public class PluginContainer extends Idspace {
      */
     public void registerProperty(Object instance, String propertyName, boolean override) {
         if (registeredProperties == null) {
-            registeredProperties = new HashMap<String, Object>();
+            registeredProperties = new HashMap<>();
         }
         
         if (instance == null) {
@@ -632,7 +632,7 @@ public class PluginContainer extends Idspace {
         }
         
         if (registeredBeans == null) {
-            registeredBeans = new HashMap<String, Object>();
+            registeredBeans = new HashMap<>();
         }
         
         tryRegisterListener(oldBean, false);

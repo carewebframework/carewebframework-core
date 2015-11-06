@@ -170,7 +170,7 @@ public class PopupDialog extends Window {
      */
     public static Window popup(String zulPage, Map<Object, Object> args, boolean closable, boolean sizable, boolean show) {
         if (args == null) {
-            args = new Hashtable<Object, Object>();
+            args = new Hashtable<>();
         }
         
         try {

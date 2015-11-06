@@ -167,7 +167,7 @@ public class CommonTest {
         print(s);
         TestPerson obj2 = (TestPerson) JSONUtil.deserialize(typeProperty, s);
         assertTrue(obj.equals(obj2));
-        List<TestPerson> list = new ArrayList<TestPerson>();
+        List<TestPerson> list = new ArrayList<>();
         list.add(obj);
         list.add(obj);
         s = JSONUtil.serialize(typeProperty, list);
@@ -248,7 +248,7 @@ public class CommonTest {
         QueryStringBuilder sb = new QueryStringBuilder();
         assertEquals(0, sb.length());
         sb.append("q1", "value 1", "value 2");
-        List<String> list = new ArrayList<String>();
+        List<String> list = new ArrayList<>();
         list.add("value 1");
         list.add("value 2");
         list.add("value 3");

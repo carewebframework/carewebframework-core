@@ -35,7 +35,7 @@ public class ConfigTemplate {
         
         int placeholder;
         
-        List<String> buffer = new ArrayList<String>();
+        List<String> buffer = new ArrayList<>();
         
         ConfigEntry(String template, int placeholder) {
             this.template = template;
@@ -43,9 +43,9 @@ public class ConfigTemplate {
         }
     }
     
-    private final List<String> buffer = new ArrayList<String>();
+    private final List<String> buffer = new ArrayList<>();
     
-    private final Map<String, ConfigEntry> entries = new LinkedHashMap<String, ConfigEntry>();
+    private final Map<String, ConfigEntry> entries = new LinkedHashMap<>();
     
     private final String filename;
     

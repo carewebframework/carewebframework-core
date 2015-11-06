@@ -52,7 +52,7 @@ public abstract class AbstractProcessor<T extends BaseMojo> {
     
     protected final T mojo;
     
-    private final List<Transform> transforms = new ArrayList<Transform>();
+    private final List<Transform> transforms = new ArrayList<>();
     
     /**
      * @param mojo The Maven base mojo.

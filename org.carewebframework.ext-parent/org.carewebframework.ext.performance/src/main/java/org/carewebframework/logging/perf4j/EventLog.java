@@ -36,7 +36,7 @@ public class EventLog implements Serializable {
     
     private EventInfo maxElapsedEventInfo;
     
-    private final Map<String, EventInfo> events = new LinkedHashMap<String, EventInfo>();
+    private final Map<String, EventInfo> events = new LinkedHashMap<>();
     
     /**
      * Create an event log for the specified tag and logger.

@@ -374,7 +374,7 @@ public class PromptDialog extends Window {
      * @return Initialized map of control parameters.
      */
     private static Map<Object, Object> initArgs(String message, String title) {
-        Map<Object, Object> args = new HashMap<Object, Object>();
+        Map<Object, Object> args = new HashMap<>();
         args.put("message", StrUtil.formatMessage(message));
         args.put("title", StrUtil.formatMessage(title));
         return args;
@@ -598,7 +598,7 @@ public class PromptDialog extends Window {
     private static List<Response> toResponseList(String responses, String exclusions, String dflt) {
         List<String> excList = StrUtil.toList(exclusions, "|");
         List<String> rspList = StrUtil.toList(responses, "|");
-        List<Response> list = new ArrayList<Response>();
+        List<Response> list = new ArrayList<>();
         boolean forceDefault = dflt == null && rspList.size() == 1;
         
         for (int i = 0; i < rspList.size(); i++) {
@@ -665,7 +665,7 @@ public class PromptDialog extends Window {
             return null;
         }
         
-        List<InputItem> inputItems = new ArrayList<InputItem>(count);
+        List<InputItem> inputItems = new ArrayList<>(count);
         
         for (int i = 0; i < count; i++) {
             inputItems.add(new InputItem(i >= nameCount ? null : itemNames.get(i), i >= itemCount ? null : items.get(i)));

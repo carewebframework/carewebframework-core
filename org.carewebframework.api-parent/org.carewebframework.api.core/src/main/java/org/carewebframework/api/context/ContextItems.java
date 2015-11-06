@@ -23,9 +23,9 @@ import org.carewebframework.common.ISerializer;
  */
 public class ContextItems {
     
-    private final Map<String, String> items = new HashMap<String, String>();
+    private final Map<String, String> items = new HashMap<>();
     
-    private final Map<String, String> index = new HashMap<String, String>();
+    private final Map<String, String> index = new HashMap<>();
     
     /**
      * Serializes the context item set to a string.
@@ -122,7 +122,7 @@ public class ContextItems {
      *         is the value of the original context item.
      */
     private Map<String, String> getSuffixes(String prefix, Boolean firstOnly) {
-        HashMap<String, String> matches = new HashMap<String, String>();
+        HashMap<String, String> matches = new HashMap<>();
         prefix = normalizePrefix(prefix);
         int i = prefix.length();
         

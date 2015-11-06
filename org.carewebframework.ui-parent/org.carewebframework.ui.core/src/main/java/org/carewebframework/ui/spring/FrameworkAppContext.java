@@ -115,7 +115,7 @@ public class FrameworkAppContext extends XmlWebApplicationContext implements Res
         setAllowBeanDefinitionOverriding(false);
         this.desktop = desktop;
         ConfigurableEnvironment env = getEnvironment();
-        Set<String> aps = new LinkedHashSet<String>();
+        Set<String> aps = new LinkedHashSet<>();
         Collections.addAll(aps, env.getActiveProfiles());
         
         if (desktop != null) {

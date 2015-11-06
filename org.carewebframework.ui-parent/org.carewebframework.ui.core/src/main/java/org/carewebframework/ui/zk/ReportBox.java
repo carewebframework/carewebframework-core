@@ -101,7 +101,7 @@ public class ReportBox {
      * @return The created window.
      */
     private static Window show(String text, String title, boolean allowPrint, int mode) {
-        Map<Object, Object> args = new HashMap<Object, Object>();
+        Map<Object, Object> args = new HashMap<>();
         
         if (text.startsWith("<html>")) {
             args.put("html", text);

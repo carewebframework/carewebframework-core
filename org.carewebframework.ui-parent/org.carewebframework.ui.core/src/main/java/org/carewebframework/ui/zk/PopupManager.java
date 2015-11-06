@@ -59,7 +59,7 @@ public class PopupManager {
         }
     }
     
-    private final List<Window> active = new ArrayList<Window>();
+    private final List<Window> active = new ArrayList<>();
     
     /*
      * Set the offset size to 22 pixels so that the text of the title bars of nested

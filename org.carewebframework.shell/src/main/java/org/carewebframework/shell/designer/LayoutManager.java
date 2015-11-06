@@ -181,7 +181,7 @@ public class LayoutManager extends Window {
      * @param deflt The layout to select initially.
      */
     private void refresh(String deflt) {
-        lstLayouts.setModel(new ListModelList<String>(LayoutUtil.getLayouts(shared)));
+        lstLayouts.setModel(new ListModelList<>(LayoutUtil.getLayouts(shared)));
         lstLayouts.setSelectedIndex(deflt == null ? -1 : ListUtil.findListboxItem(lstLayouts, deflt));
         updateControls();
     }

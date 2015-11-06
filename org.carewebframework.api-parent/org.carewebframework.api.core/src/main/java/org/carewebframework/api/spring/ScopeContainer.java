@@ -26,9 +26,9 @@ public class ScopeContainer implements Scope {
     
     private static final Log log = LogFactory.getLog(ScopeContainer.class);
     
-    private final Map<String, Object> beans = new HashMap<String, Object>();
+    private final Map<String, Object> beans = new HashMap<>();
     
-    private final Map<String, Runnable> destructionCallbacks = new HashMap<String, Runnable>();
+    private final Map<String, Runnable> destructionCallbacks = new HashMap<>();
     
     private String conversationId;
     

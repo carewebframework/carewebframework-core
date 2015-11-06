@@ -27,7 +27,7 @@ import org.zkoss.zk.ui.http.ExecutionImpl;
  */
 public class MockExecution extends ExecutionImpl {
     
-    private final List<AuEcho> echoedEvents = new ArrayList<AuEcho>();
+    private final List<AuEcho> echoedEvents = new ArrayList<>();
     
     public MockExecution(ServletContext ctx, HttpServletRequest request, HttpServletResponse response, Desktop desktop,
         Page creating) {

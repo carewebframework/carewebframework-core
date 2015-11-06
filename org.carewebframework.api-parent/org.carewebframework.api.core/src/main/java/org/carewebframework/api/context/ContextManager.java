@@ -38,11 +38,11 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
     
     private static final Log log = LogFactory.getLog(ContextManager.class);
     
-    private final Set<IManagedContext<?>> managedContexts = new TreeSet<IManagedContext<?>>();
+    private final Set<IManagedContext<?>> managedContexts = new TreeSet<>();
     
-    private final Stack<IManagedContext<?>> pendingStack = new Stack<IManagedContext<?>>();
+    private final Stack<IManagedContext<?>> pendingStack = new Stack<>();
     
-    private Stack<IManagedContext<?>> commitStack = new Stack<IManagedContext<?>>();
+    private Stack<IManagedContext<?>> commitStack = new Stack<>();
     
     private CCOWContextManager ccowContextManager;
     
@@ -374,8 +374,8 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
     // ***********************************************************************************************/
     
     /**
-     * Register an object with the context manager if it implements the IManagedContext<?>
-     * interface.
+     * Register an object with the context manager if it implements the IManagedContext
+     * <?> interface.
      * 
      * @param object Object to register.
      */
@@ -437,9 +437,9 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
      * @return The response(s) returned by subscribers.
      * @throws ContextException during illegal context change nesting
      */
-    public String localChangeEnd(IManagedContext<?> managedContext, boolean silent, boolean deferCommit)
-                                                                                                        throws ContextException {
-        
+    public String localChangeEnd(IManagedContext<?> managedContext, boolean silent,
+                                 boolean deferCommit) throws ContextException {
+                                 
         if (pendingStack.isEmpty() || pendingStack.peek() != managedContext) {
             throw new ContextException("Illegal context change nesting.");
         }
@@ -502,7 +502,8 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
     @Override
     public ContextMarshaller getContextMarshaller(String keyStoreName) throws ContextException {
         try {
-            return new ContextMarshaller(appFramework.getApplicationContext().getBean(keyStoreName, IDigitalSignature.class));
+            return new ContextMarshaller(
+                    appFramework.getApplicationContext().getBean(keyStoreName, IDigitalSignature.class));
         } catch (Exception e) {
             throw new ContextException(
                     "An exception occurred while trying to access a context marshaller for the specified key store.", e);

@@ -54,7 +54,7 @@ public class HelpHistory {
     
     private final HistoryList history = new HistoryList();
     
-    private final List<ITopicListener> topicListeners = new ArrayList<ITopicListener>();
+    private final List<ITopicListener> topicListeners = new ArrayList<>();
     
     private final int maxsize = 50;
     

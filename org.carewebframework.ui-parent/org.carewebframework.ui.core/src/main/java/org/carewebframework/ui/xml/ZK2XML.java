@@ -37,7 +37,7 @@ import org.w3c.dom.Node;
  */
 public class ZK2XML {
     
-    private final Set<String> exclude = new HashSet<String>();
+    private final Set<String> exclude = new HashSet<>();
     
     private final Document doc;
     
@@ -108,7 +108,7 @@ public class ZK2XML {
      * @param parent The parent XML node.
      */
     private void toXML(Component root, Node parent) {
-        TreeMap<String, String> properties = new TreeMap<String, String>(String.CASE_INSENSITIVE_ORDER);
+        TreeMap<String, String> properties = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
         Class<?> clazz = root.getClass();
         ComponentDefinition def = root.getDefinition();
         String cmpname = def.getName();

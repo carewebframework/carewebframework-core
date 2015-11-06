@@ -49,7 +49,7 @@ public class PerformanceData implements Serializable, Comparable<PerformanceData
     
     private byte complete;
     
-    private final Map<String, EventLog> eventLogs = new HashMap<String, EventLog>();
+    private final Map<String, EventLog> eventLogs = new HashMap<>();
     
     private long threshold;
     
@@ -329,7 +329,7 @@ public class PerformanceData implements Serializable, Comparable<PerformanceData
     private void logRequestStatistics() {
         if (logRequestPerformance) {
             for (RequestTime rt : RequestTime.values()) {
-                Map<String, Object> map = new LinkedHashMap<String, Object>();
+                Map<String, Object> map = new LinkedHashMap<>();
                 map.put("dtid", desktopId);
                 map.put("reqid", requestId);
                 map.put("cmd_0", command);
@@ -375,7 +375,7 @@ public class PerformanceData implements Serializable, Comparable<PerformanceData
      */
     @Override
     public String toString() {
-        Map<String, Object> map = new LinkedHashMap<String, Object>();
+        Map<String, Object> map = new LinkedHashMap<>();
         map.put("dtid", desktopId);
         map.put("reqid", requestId);
         map.put("cmd_0", command);

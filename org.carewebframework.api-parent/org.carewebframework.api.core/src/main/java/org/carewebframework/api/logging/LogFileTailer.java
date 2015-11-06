@@ -72,7 +72,7 @@ public class LogFileTailer implements Runnable {
     /**
      * Set of listeners
      */
-    private final Set<LogFileTailerListener> listeners = new HashSet<LogFileTailerListener>();
+    private final Set<LogFileTailerListener> listeners = new HashSet<>();
     
     /**
      * Creates a new file tailer that tails an existing file and checks the file for updates every

@@ -40,7 +40,7 @@ public class MockServerPush implements ServerPush {
         }
     }
     
-    private final Queue<ScheduledEvent<?>> queue = new LinkedList<ScheduledEvent<?>>();
+    private final Queue<ScheduledEvent<?>> queue = new LinkedList<>();
     
     @Override
     public boolean isActive() {

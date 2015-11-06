@@ -69,9 +69,9 @@ public class Command {
     
     private final String name;
     
-    private final Set<String> shortcutBindings = new HashSet<String>();
+    private final Set<String> shortcutBindings = new HashSet<>();
     
-    private final Set<XulElement> componentBindings = new HashSet<XulElement>();
+    private final Set<XulElement> componentBindings = new HashSet<>();
     
     private final CtrlKeyListener keyEventListener = new CtrlKeyListener();
     
@@ -169,7 +169,7 @@ public class Command {
      * @param unbind If true, the shortcut is being unbound.
      */
     private void shortcutChanged(String shortcut, boolean unbind) {
-        Set<String> bindings = new HashSet<String>();
+        Set<String> bindings = new HashSet<>();
         bindings.add(shortcut);
         
         for (XulElement component : componentBindings) {

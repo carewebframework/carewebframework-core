@@ -23,7 +23,7 @@ public class EventManager implements ILocalEventDispatcher, IEventManager {
     
     private static final Log log = LogFactory.getLog(EventManager.class);
     
-    private final EventSubscriptions<Object> subscriptions = new EventSubscriptions<Object>();
+    private final EventSubscriptions<Object> subscriptions = new EventSubscriptions<>();
     
     private IGlobalEventDispatcher globalEventDispatcher;
     

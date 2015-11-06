@@ -42,7 +42,7 @@ public class HelpIndexTab extends HelpTab implements ListitemRenderer<HelpTopic>
     
     private Textbox txtFind;
     
-    private final Map<String, List<HelpTopic>> topicIndex = new TreeMap<String, List<HelpTopic>>(
+    private final Map<String, List<HelpTopic>> topicIndex = new TreeMap<>(
             String.CASE_INSENSITIVE_ORDER);
             
     private ListModelList<String> keywordList;
@@ -78,7 +78,7 @@ public class HelpIndexTab extends HelpTab implements ListitemRenderer<HelpTopic>
             Collections.sort(topics);
         }
         
-        lstTopics.setModel(new ListModelList<HelpTopic>(topics));
+        lstTopics.setModel(new ListModelList<>(topics));
         lstTopics.renderAll();
         onSelect$lstTopics();
     }
@@ -142,7 +142,7 @@ public class HelpIndexTab extends HelpTab implements ListitemRenderer<HelpTopic>
     @Override
     protected void init() {
         super.init();
-        keywordList = new ListModelList<String>(topicIndex.keySet());
+        keywordList = new ListModelList<>(topicIndex.keySet());
         lstKeywords.setModel(keywordList);
     }
     
@@ -205,7 +205,7 @@ public class HelpIndexTab extends HelpTab implements ListitemRenderer<HelpTopic>
         List<HelpTopic> topics = topicIndex.get(keyword);
         
         if (topics == null) {
-            topics = new ArrayList<HelpTopic>();
+            topics = new ArrayList<>();
             topicIndex.put(keyword, topics);
         }
         

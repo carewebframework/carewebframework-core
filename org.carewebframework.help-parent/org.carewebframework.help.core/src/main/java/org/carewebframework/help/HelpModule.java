@@ -9,14 +9,18 @@
  */
 package org.carewebframework.help;
 
+import java.util.Locale;
+
 /**
- * Each instance of this class defines a complete definition of a CareWeb help module.
+ * Each instance of this class represents a complete definition of a CareWeb help module.
  */
 public class HelpModule {
     
     private String id;
     
     private String url;
+    
+    private Locale locale;
     
     private String format;
     
@@ -53,6 +57,14 @@ public class HelpModule {
     
     public void setUrl(String url) {
         this.url = url;
+    }
+    
+    public Locale getLocale() {
+        return locale;
+    }
+    
+    public void setLocale(String locale) {
+        this.locale = locale == null ? null : new Locale(locale);
     }
     
     public String getFormat() {

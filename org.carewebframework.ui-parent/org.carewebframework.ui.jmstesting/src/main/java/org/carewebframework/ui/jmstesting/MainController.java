@@ -96,7 +96,7 @@ public class MainController extends PluginController {
         
     };
     
-    private final ListModelList<IPublisherInfo> model = new ListModelList<IPublisherInfo>();
+    private final ListModelList<IPublisherInfo> model = new ListModelList<>();
     
     private final IGenericEvent<IPublisherInfo> eventListener = new IGenericEvent<IPublisherInfo>() {
         

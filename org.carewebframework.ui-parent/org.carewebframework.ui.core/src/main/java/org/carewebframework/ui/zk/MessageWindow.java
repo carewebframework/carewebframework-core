@@ -57,7 +57,7 @@ public class MessageWindow extends XulElement {
      */
     public static class MessageInfo {
         
-        private final HashMap<String, Object> map = new HashMap<String, Object>();
+        private final HashMap<String, Object> map = new HashMap<>();
         
         public MessageInfo(String message, String caption, String color, Integer duration, String tag, String action) {
             map.put("message", StrUtil.formatMessage(message));

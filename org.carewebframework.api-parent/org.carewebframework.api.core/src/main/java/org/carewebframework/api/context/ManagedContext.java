@@ -49,9 +49,9 @@ public class ManagedContext<DomainClass> implements Comparable<IManagedContext<D
     
     private boolean isPending;
     
-    private final List<IContextEvent> subscribers = new ArrayList<IContextEvent>();
+    private final List<IContextEvent> subscribers = new ArrayList<>();
     
-    private final List<IContextEvent> surveyed = new ArrayList<IContextEvent>();
+    private final List<IContextEvent> surveyed = new ArrayList<>();
     
     protected IContextManager contextManager;
     
@@ -304,7 +304,7 @@ public class ManagedContext<DomainClass> implements Comparable<IManagedContext<D
         Map<String, Object> map = null;
         
         if (log.isDebugEnabled()) {
-            map = new HashMap<String, Object>();
+            map = new HashMap<>();
             map.put("action", accept ? "committed" : "canceled");
             map.put("context", getContextName());
         }
@@ -357,7 +357,7 @@ public class ManagedContext<DomainClass> implements Comparable<IManagedContext<D
      * @return Callback list.
      */
     private Iterable<IContextEvent> getIterable(boolean all) {
-        return new ArrayList<IContextEvent>(all ? subscribers : surveyed);
+        return new ArrayList<>(all ? subscribers : surveyed);
     }
     
     /**

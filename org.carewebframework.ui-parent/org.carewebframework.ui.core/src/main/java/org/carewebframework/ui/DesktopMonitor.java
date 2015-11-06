@@ -140,9 +140,9 @@ public class DesktopMonitor extends Thread {
     
     private static final String SCLASS_IDLE = "cwf-timeout-%-idle";
     
-    private final Map<Mode, Long> countdownDuration = new HashMap<Mode, Long>();
+    private final Map<Mode, Long> countdownDuration = new HashMap<>();
     
-    private final Map<Mode, Long> inactivityDuration = new HashMap<Mode, Long>();
+    private final Map<Mode, Long> inactivityDuration = new HashMap<>();
     
     /**
      * Maximum interval of inactivity after which a desktop is assumed to be dead (in ms).
@@ -190,7 +190,7 @@ public class DesktopMonitor extends Thread {
     
     private IEventManager eventManager;
     
-    private Set<String> desktopMonitorLockingExclusions = new TreeSet<String>();
+    private Set<String> desktopMonitorLockingExclusions = new TreeSet<>();
     
     private final Object monitor = new Object();
     

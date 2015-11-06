@@ -71,7 +71,7 @@ public class HelpSearchTab extends HelpTab implements ListitemRenderer<HelpSearc
             double interval = (highscore - lowscore) / 3;
             tertile1 = lowscore + interval;
             tertile2 = tertile1 + interval;
-            lstSrchResults.setModel(new ListModelList<HelpSearchHit>(searchResults));
+            lstSrchResults.setModel(new ListModelList<>(searchResults));
         }
         
     };

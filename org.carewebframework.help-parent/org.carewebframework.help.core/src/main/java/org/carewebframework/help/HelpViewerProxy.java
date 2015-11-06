@@ -33,7 +33,7 @@ public class HelpViewerProxy implements IHelpViewer {
     
     private InvocationRequest helpRequest;
     
-    private final List<IHelpSet> helpSets = new ArrayList<IHelpSet>();
+    private final List<IHelpSet> helpSets = new ArrayList<>();
     
     private final InvocationRequest loadRequest = InvocationRequestQueue.createRequest("load", helpSets);
     

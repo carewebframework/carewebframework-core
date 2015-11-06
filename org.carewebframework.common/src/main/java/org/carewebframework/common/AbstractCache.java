@@ -24,7 +24,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public abstract class AbstractCache<KEY, VALUE> implements Iterable<VALUE> {
     
-    private final Map<KEY, VALUE> map = new ConcurrentHashMap<KEY, VALUE>();
+    private final Map<KEY, VALUE> map = new ConcurrentHashMap<>();
     
     /**
      * Logic to retrieve the data item from its primary store based on the provided key. The
@@ -82,7 +82,7 @@ public abstract class AbstractCache<KEY, VALUE> implements Iterable<VALUE> {
      */
     public void refresh() {
         synchronized (map) {
-            Set<KEY> contents = new HashSet<KEY>(map.keySet());
+            Set<KEY> contents = new HashSet<>(map.keySet());
             map.clear();
             
             for (KEY key : contents) {

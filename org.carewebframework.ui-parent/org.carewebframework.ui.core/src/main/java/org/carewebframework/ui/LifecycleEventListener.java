@@ -54,7 +54,7 @@ public class LifecycleEventListener<T extends Object> {
     
     private final List<ILifecycleCallback<T>> callbacks = Collections
             .synchronizedList(new ArrayList<ILifecycleCallback<T>>());
-    
+            
     private boolean needsSorting;
     
     public void addCallback(ILifecycleCallback<T> callback) {
@@ -89,7 +89,7 @@ public class LifecycleEventListener<T extends Object> {
                 Collections.sort(callbacks, comparator);
             }
             
-            list = new ArrayList<ILifecycleCallback<T>>(callbacks);
+            list = new ArrayList<>(callbacks);
         }
         
         int last = list.size() - 1;

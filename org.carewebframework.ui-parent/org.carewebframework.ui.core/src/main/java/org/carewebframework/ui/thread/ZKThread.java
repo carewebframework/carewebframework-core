@@ -122,7 +122,7 @@ public class ZKThread implements IAbortable {
     
     private final RequestAttributes requestAttributes;
     
-    private final Map<String, Object> attribute = new HashMap<String, Object>();
+    private final Map<String, Object> attribute = new HashMap<>();
     
     /**
      * Associates a desktop and request attributes with a background thread and notifies any thread

@@ -82,7 +82,7 @@ public class HelpConverterMojo extends BaseMojo {
     private List<String> archiveLoaders;
     
     // Maps help format specifier to the associated source archive loader.
-    private final Map<String, SourceLoader> sourceLoaders = new HashMap<String, SourceLoader>();
+    private final Map<String, SourceLoader> sourceLoaders = new HashMap<>();
     
     public String getModuleBase() {
         return moduleBase;

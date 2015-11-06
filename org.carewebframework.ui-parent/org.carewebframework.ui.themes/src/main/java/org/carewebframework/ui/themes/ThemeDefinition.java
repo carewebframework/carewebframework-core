@@ -149,7 +149,7 @@ public class ThemeDefinition implements ApplicationContextAware {
             int rootLength = root.length();
             String wc = "classpath*:" + root + "**";
             Resource[] resources = appContext.getResources(wc);
-            files = new HashSet<String>(resources.length);
+            files = new HashSet<>(resources.length);
             
             for (Resource resource : resources) {
                 String path = resource.getURL().getPath();

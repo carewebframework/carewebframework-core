@@ -24,7 +24,7 @@ import org.zkoss.zul.impl.XulElement;
  */
 public class CommandRegistry implements Iterable<Command> {
     
-    private final Map<String, Command> commands = new HashMap<String, Command>();
+    private final Map<String, Command> commands = new HashMap<>();
     
     /**
      * Returns the singleton instance of the registry.

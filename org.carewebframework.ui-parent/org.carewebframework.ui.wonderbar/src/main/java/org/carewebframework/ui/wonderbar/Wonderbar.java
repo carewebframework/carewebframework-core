@@ -238,7 +238,7 @@ public class Wonderbar<T> extends InputElement {
             IWonderbarServerSearchProvider<T> provider = (IWonderbarServerSearchProvider<T>) getSearchProvider();
             
             if (provider != null) {
-                List<T> hits = new ArrayList<T>();
+                List<T> hits = new ArrayList<>();
                 boolean tooMany = !provider.getSearchResults(term, maxSearchResults, hits);
                 initItems(hits, tooMany, false);
                 invoke("_serverResponse", term);

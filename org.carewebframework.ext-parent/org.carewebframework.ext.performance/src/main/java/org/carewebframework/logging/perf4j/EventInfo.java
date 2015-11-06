@@ -122,7 +122,7 @@ public class EventInfo implements Serializable {
      */
     @Override
     public String toString() {
-        Map<String, Object> map = new LinkedHashMap<String, Object>();
+        Map<String, Object> map = new LinkedHashMap<>();
         map.put("dtid", desktopId);
         map.put("reqid", requestId);
         map.put("target", target);

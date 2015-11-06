@@ -91,7 +91,7 @@ public class Perf4JPatternParser extends PatternParser {
         }
         
         private Map<String, Object> fromMessage(String message) {
-            Map<String, Object> messageValues = new TreeMap<String, Object>();
+            Map<String, Object> messageValues = new TreeMap<>();
             
             if (message != null && message.matches("\\{.*\\}")) {
                 int len = message.length();

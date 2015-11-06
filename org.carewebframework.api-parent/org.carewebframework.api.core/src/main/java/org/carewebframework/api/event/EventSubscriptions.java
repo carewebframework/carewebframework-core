@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -28,7 +28,7 @@ import org.apache.commons.logging.LogFactory;
     
     private static final Log log = LogFactory.getLog(EventSubscriptions.class);
     
-    private final Map<String, List<IGenericEvent<T>>> subscriptions = new HashMap<String, List<IGenericEvent<T>>>();
+    private final Map<String, List<IGenericEvent<T>>> subscriptions = new HashMap<>();
     
     /**
      * Adds a subscriber to the specified event.
@@ -106,7 +106,7 @@ import org.apache.commons.logging.LogFactory;
      */
     public synchronized Iterable<IGenericEvent<T>> getSubscribers(String eventName) {
         List<IGenericEvent<T>> subscribers = getSubscribers(eventName, false);
-        return subscribers == null ? null : new ArrayList<IGenericEvent<T>>(subscribers);
+        return subscribers == null ? null : new ArrayList<>(subscribers);
     }
     
     /**
@@ -115,7 +115,7 @@ import org.apache.commons.logging.LogFactory;
      * @return List of events.
      */
     public synchronized Iterable<String> getEvents() {
-        return new ArrayList<String>(subscriptions.keySet());
+        return new ArrayList<>(subscriptions.keySet());
     }
     
     /**
@@ -140,8 +140,8 @@ import org.apache.commons.logging.LogFactory;
             if (subscribers != null) {
                 for (IGenericEvent<T> subscriber : subscribers) {
                     try {
-                        if(log.isDebugEnabled()){
-                            log.debug(String.format("Firing local Event[name=%s,data=%s]",eventName, eventData));
+                        if (log.isDebugEnabled()) {
+                            log.debug(String.format("Firing local Event[name=%s,data=%s]", eventName, eventData));
                         }
                         subscriber.eventCallback(eventName, eventData);
                     } catch (Throwable e) {
@@ -165,7 +165,7 @@ import org.apache.commons.logging.LogFactory;
         List<IGenericEvent<T>> subscribers = subscriptions.get(eventName);
         
         if (subscribers == null && canCreate) {
-            subscribers = new LinkedList<IGenericEvent<T>>();
+            subscribers = new LinkedList<>();
             subscriptions.put(eventName, subscribers);
         }
         

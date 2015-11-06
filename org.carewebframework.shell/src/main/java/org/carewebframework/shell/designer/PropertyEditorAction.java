@@ -32,7 +32,7 @@ public class PropertyEditorAction extends PropertyEditorList {
     protected void init(UIElementBase target, PropertyInfo propInfo, PropertyGrid propGrid) {
         propInfo.getConfig().setProperty("readonly", Boolean.toString(!SecurityUtil.hasDebugRole()));
         super.init(target, propInfo, propGrid);
-        List<ActionEntry> actions = new ArrayList<ActionEntry>(ActionRegistry.getRegisteredActions(ActionScope.BOTH));
+        List<ActionEntry> actions = new ArrayList<>(ActionRegistry.getRegisteredActions(ActionScope.BOTH));
         Collections.sort(actions);
         
         for (ActionEntry action : actions) {

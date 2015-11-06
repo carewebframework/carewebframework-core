@@ -31,7 +31,7 @@ public class CWFAuthenticationDetails extends WebAuthenticationDetails {
     
     public static final String ATTR_USER = "user";
     
-    private final Map<String, Object> details = new HashMap<String, Object>();
+    private final Map<String, Object> details = new HashMap<>();
     
     public CWFAuthenticationDetails(HttpServletRequest request) {
         super(request);

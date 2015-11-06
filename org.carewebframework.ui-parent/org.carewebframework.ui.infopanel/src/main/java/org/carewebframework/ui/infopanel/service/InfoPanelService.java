@@ -165,7 +165,7 @@ public class InfoPanelService {
         List<ActionListener> ActionListeners = (List<ActionListener>) component.getAttribute(EVENT_LISTENER_ATTR);
         
         if (ActionListeners == null && forceCreate) {
-            ActionListeners = new ArrayList<ActionListener>();
+            ActionListeners = new ArrayList<>();
             component.setAttribute(EVENT_LISTENER_ATTR, ActionListeners);
         }
         

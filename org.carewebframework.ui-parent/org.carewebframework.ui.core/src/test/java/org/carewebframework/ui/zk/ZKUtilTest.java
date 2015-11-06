@@ -101,7 +101,7 @@ public class ZKUtilTest {
         assertEquals(ATTR_TEST, ZKUtil.getAttributeString(cmpt, ATTR_TEST));
         assertTrue("".equals(ZKUtil.getAttributeString(cmpt, ATTR_DUMMY)));
         assertTrue("".equals(ZKUtil.getAttributeString(cmpt, ATTR_NULL)));
-        List<Boolean> list = new ArrayList<Boolean>();
+        List<Boolean> list = new ArrayList<>();
         cmpt.setAttribute(ATTR_TEST, list);
         assertSame(list, ZKUtil.getAttributeList(cmpt, ATTR_TEST));
         assertNull(ZKUtil.getAttributeList(cmpt, ATTR_DUMMY));
@@ -123,7 +123,7 @@ public class ZKUtilTest {
     
     @Test
     public void wireArgumentMapTest() {
-        Map<Object, Object> map = new HashMap<Object, Object>();
+        Map<Object, Object> map = new HashMap<>();
         map.put("test1Variable", 123);
         map.put("test2Variable", "testing");
         ArgumentMapTest controller = new ArgumentMapTest() {

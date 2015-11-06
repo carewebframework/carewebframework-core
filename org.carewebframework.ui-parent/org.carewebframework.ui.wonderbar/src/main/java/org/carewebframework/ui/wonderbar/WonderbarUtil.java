@@ -96,7 +96,7 @@ public class WonderbarUtil {
      */
     public static List<String> tokenize(String text) {
         String[] pcs = text.toLowerCase().trim().split("\\W");
-        List<String> list = new ArrayList<String>(pcs.length);
+        List<String> list = new ArrayList<>(pcs.length);
         
         for (String pc : pcs) {
             pc = pc.trim();

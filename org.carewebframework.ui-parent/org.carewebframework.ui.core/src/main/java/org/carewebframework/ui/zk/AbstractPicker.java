@@ -47,7 +47,7 @@ public abstract class AbstractPicker<T extends Component> extends Bandbox {
     
     private final T itemNoChoice;
     
-    private final List<T> items = new ArrayList<T>();
+    private final List<T> items = new ArrayList<>();
     
     /**
      * Click event listener for each item. Causes item to be selected when it is clicked.

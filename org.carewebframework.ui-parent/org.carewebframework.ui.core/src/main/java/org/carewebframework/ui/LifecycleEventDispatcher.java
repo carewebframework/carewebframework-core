@@ -36,9 +36,9 @@ public class LifecycleEventDispatcher implements DesktopInit, DesktopCleanup, Se
     
     private static final String ATTR_COMP_LISTENER = "@component_listener";
     
-    private static final LifecycleEventListener<Desktop> desktopListener = new LifecycleEventListener<Desktop>();
+    private static final LifecycleEventListener<Desktop> desktopListener = new LifecycleEventListener<>();
     
-    private static final LifecycleEventListener<Session> sessionListener = new LifecycleEventListener<Session>();
+    private static final LifecycleEventListener<Session> sessionListener = new LifecycleEventListener<>();
     
     /**
      * Add a desktop lifecycle callback.
@@ -117,7 +117,7 @@ public class LifecycleEventDispatcher implements DesktopInit, DesktopCleanup, Se
                 .getAttribute(ATTR_COMP_LISTENER);
                 
         if (listener == null && autoCreate) {
-            listener = new LifecycleEventListener<Component>();
+            listener = new LifecycleEventListener<>();
             comp.setAttribute(ATTR_COMP_LISTENER, listener);
         }
         

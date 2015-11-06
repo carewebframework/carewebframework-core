@@ -268,9 +268,9 @@ public class ManifestViewer extends FrameworkController {
     
     private SortEvent sortEvent;
     
-    private final List<Matchable<?>> items = new ArrayList<Matchable<?>>();
+    private final List<Matchable<?>> items = new ArrayList<>();
     
-    private final ListModelList<Matchable<?>> model = new ListModelList<Matchable<?>>();
+    private final ListModelList<Matchable<?>> model = new ListModelList<>();
     
     /**
      * Display a summary dialog of all known manifests.
@@ -285,7 +285,7 @@ public class ManifestViewer extends FrameworkController {
      * @param manifestItem The item to display. If null, all manifests are displayed.
      */
     private static void execute(ManifestItem manifestItem) {
-        Map<Object, Object> args = new HashMap<Object, Object>();
+        Map<Object, Object> args = new HashMap<>();
         args.put("manifestItem", manifestItem);
         PopupDialog.popup(Constants.RESOURCE_PREFIX + "manifestViewer.zul", args, true, false, true);
     }

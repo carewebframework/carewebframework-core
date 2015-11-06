@@ -28,7 +28,7 @@ public class HelpSetFactory {
     
     private static final HelpSetFactory instance = new HelpSetFactory();
     
-    private final Map<String, Class<? extends IHelpSet>> map = new RegistryMap<String, Class<? extends IHelpSet>>(
+    private final Map<String, Class<? extends IHelpSet>> map = new RegistryMap<>(
             DuplicateAction.ERROR);
             
     public static HelpSetFactory getInstance() {

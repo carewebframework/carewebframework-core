@@ -59,11 +59,11 @@ public class MainController extends PluginController {
     
     private Label lblMessage;
     
-    private final Deque<String> logFileBuffer = new ArrayDeque<String>();
+    private final Deque<String> logFileBuffer = new ArrayDeque<>();
     
     private LogFileTailer tailer;
     
-    private final Map<String, File> logFiles = new HashMap<String, File>();
+    private final Map<String, File> logFiles = new HashMap<>();
     
     private boolean isTailerStarted;
     

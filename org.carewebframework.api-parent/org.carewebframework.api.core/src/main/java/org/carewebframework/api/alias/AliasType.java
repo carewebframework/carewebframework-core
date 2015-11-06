@@ -32,9 +32,9 @@ public class AliasType {
     
     private final String name;
     
-    private final Map<String, String> aliasMap = new ConcurrentHashMap<String, String>();
+    private final Map<String, String> aliasMap = new ConcurrentHashMap<>();
     
-    private final Map<String, String> wildcardMap = new ConcurrentHashMap<String, String>();
+    private final Map<String, String> wildcardMap = new ConcurrentHashMap<>();
     
     protected AliasType(String name) {
         this.name = name;

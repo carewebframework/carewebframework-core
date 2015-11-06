@@ -35,7 +35,7 @@ public abstract class AbstractRegistry<KEY, VALUE> implements Iterable<VALUE> {
     }
     
     protected AbstractRegistry(Map<KEY, VALUE> map, DuplicateAction duplicateAction) {
-        this.map = new RegistryMap<KEY, VALUE>(map, duplicateAction);
+        this.map = new RegistryMap<>(map, duplicateAction);
     }
     
     /**

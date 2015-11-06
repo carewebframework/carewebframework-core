@@ -59,7 +59,7 @@ public class PerformanceMonitor implements PerformanceMeter, IPerformanceMonitor
     /** The limit must be defined before the map for the constructor to work properly. */
     private int performanceDataLimit = MAX_PERFORMANCE_DATA_LIMIT;
     
-    private final Map<String, PerformanceData> performanceDataMap = new LRUMap<String, PerformanceData>();
+    private final Map<String, PerformanceData> performanceDataMap = new LRUMap<>();
     
     private boolean logRequestPerformance = true;
     
@@ -251,7 +251,7 @@ public class PerformanceMonitor implements PerformanceMeter, IPerformanceMonitor
      */
     @Override
     public List<PerformanceData> getAllPerformanceData() {
-        List<PerformanceData> pds = new ArrayList<PerformanceData>(this.performanceDataMap.values());
+        List<PerformanceData> pds = new ArrayList<>(this.performanceDataMap.values());
         Collections.sort(pds);
         return pds;
     }
@@ -263,7 +263,7 @@ public class PerformanceMonitor implements PerformanceMeter, IPerformanceMonitor
      */
     @Override
     public List<PerformanceData> getCompletedPerformanceData() {
-        List<PerformanceData> pds = new ArrayList<PerformanceData>(this.performanceDataMap.size());
+        List<PerformanceData> pds = new ArrayList<>(this.performanceDataMap.size());
         for (PerformanceData pd : this.performanceDataMap.values()) {
             if (pd.isComplete()) {
                 pds.add(pd);

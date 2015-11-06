@@ -57,7 +57,7 @@ public class TestRenderer {
     public void testRenderRowListMap() {
         TestGridRowRendererImpl renderer = new TestGridRowRendererImpl();
         List<String> list = Arrays.asList(new String[] { "item1", "item2" });
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         map.put("value1", "value");
         Row row = renderer.render(null, 54L, list, map);
         assertNotNull(row);

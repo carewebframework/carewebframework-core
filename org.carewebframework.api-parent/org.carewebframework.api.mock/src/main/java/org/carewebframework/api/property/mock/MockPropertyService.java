@@ -32,9 +32,9 @@ public class MockPropertyService implements IPropertyService {
     
     private static final String delim = "\\";
     
-    private final Map<String, String> global_map = new HashMap<String, String>();
+    private final Map<String, String> global_map = new HashMap<>();
     
-    private final Map<String, String> local_map = new HashMap<String, String>();
+    private final Map<String, String> local_map = new HashMap<>();
     
     public MockPropertyService() {
     }
@@ -143,7 +143,7 @@ public class MockPropertyService implements IPropertyService {
     
     @Override
     public List<String> getInstances(String propertyName, boolean asGlobal) {
-        List<String> list = new ArrayList<String>();
+        List<String> list = new ArrayList<>();
         propertyName += delim;
         Map<String, String> map = asGlobal ? global_map : local_map;
         

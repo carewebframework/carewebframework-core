@@ -46,7 +46,7 @@ public class InviteController extends FrameworkController {
     
     private Checkbox chkHideActive;
     
-    private final ListModelSet<IPublisherInfo> model = new ListModelSet<IPublisherInfo>();
+    private final ListModelSet<IPublisherInfo> model = new ListModelSet<>();
     
     private String sessionId;
     
@@ -63,7 +63,7 @@ public class InviteController extends FrameworkController {
      */
     @SuppressWarnings("unchecked")
     public static Collection<IPublisherInfo> show(String sessionId, Collection<IPublisherInfo> exclusions) {
-        Map<Object, Object> args = new HashMap<Object, Object>();
+        Map<Object, Object> args = new HashMap<>();
         args.put("sessionId", sessionId);
         args.put("exclusions", exclusions);
         return (Collection<IPublisherInfo>) PopupDialog.popup(DIALOG, args, true, true, true).getAttribute("invitees");

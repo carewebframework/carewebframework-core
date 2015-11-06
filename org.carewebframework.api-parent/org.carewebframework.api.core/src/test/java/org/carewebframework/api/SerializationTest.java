@@ -26,7 +26,7 @@ public class SerializationTest {
     
     @Test
     public void testSerialization() {
-        List<PingFilter> filters = new ArrayList<PingFilter>();
+        List<PingFilter> filters = new ArrayList<>();
         filters.add(new PingFilter(PingFilterType.APP_NAME, "testApp"));
         filters.add(new PingFilter(PingFilterType.SENTINEL_EVENT, "testEvent"));
         PingRequest pingRequest = new PingRequest("TEST.RESPONSE", filters, "testRequestor");
