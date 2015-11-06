@@ -11,8 +11,6 @@ package org.carewebframework.common;
 
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-import org.springframework.util.StringUtils;
-
 /**
  * Representation of a standard 4-part version number in the format:
  * <p>
@@ -33,7 +31,7 @@ public class Version implements Comparable<Version> {
     }
     
     public Version(String value) {
-        if (!StringUtils.isEmpty(value)) {
+        if (value != null && !value.isEmpty()) {
             String[] pcs = StrUtil.split(value, ".", 4);
             
             for (int i = 0; i < 4; i++) {
