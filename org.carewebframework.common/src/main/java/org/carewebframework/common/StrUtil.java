@@ -20,13 +20,24 @@ import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import org.springframework.context.MessageSource;
-import org.springframework.context.NoSuchMessageException;
-
 /**
  * Utility methods for managing strings.
  */
 public class StrUtil {
+    
+    public interface MessageSource {
+        
+        /**
+         * Retrieve a message for the specified locale given its id.
+         * 
+         * @param id The message identifier.
+         * @param locale The locale.
+         * @param args Optional message arguments.
+         * @return A fully formatted message, or null if none was found.
+         */
+        String getMessage(String id, Locale locale, Object... args);
+        
+    }
     
     private static final Log log = LogFactory.getLog(StrUtil.class);
     
@@ -537,8 +548,8 @@ public class StrUtil {
         
         for (MessageSource messageSource : messageSources) {
             try {
-                return messageSource.getMessage(id, args, locale).replace("\\\n", "");
-            } catch (NoSuchMessageException e) {
+                return messageSource.getMessage(id, locale, args).replace("\\\n", "");
+            } catch (Exception e) {
                 // Ignore and try next message source.
             }
         }
