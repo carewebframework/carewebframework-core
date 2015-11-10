@@ -47,23 +47,29 @@ The CareWeb Framework uses a Maven-based build system. In the instructions that 
 ### Check out sources
 
 `git clone https://github.com/carewebframework/carewebframework-core.git`
-<br /><br />
-**Note:** Problem checking out?  Windows (yes, sadly, even Windows 10) has a file path length limit of 260 characters.  As
-Maven uses an often deeply nested directory structure with long directory names, this can become a problem.  
+
+**Note:** Problem checking out?  Windows (yes, sadly, even Windows 10) has a file path length limit of 260 characters.  As Maven uses an often deeply nested directory structure with long directory names, this can become a problem.  
+
 If you run into errors suggesting that a file cannot be created, try cloning from a shorter root path (e.g., `C:\git`).
 
 ### Install all CareWeb Framework jars into your local Maven repository/cache
 Make sure to make the carewebframework-core directory your default and then execute
-<br />`mvn clean install`<br />  
+
+`mvn clean install`
+
 This will build all core artifacts and deploy them to your local Maven repository.
 
 ### Run TestHarness (Mock Webapp)
 Pre-requisite is to install all CareWeb Framework jars into local Maven repository/cache as directed above.
 Then, change to the org.carewebframework.webapp.testharness module directory and execute the following:
-<br />`mvn tomcat:run-war`<br />
+
+`mvn tomcat:run-war`
 
 Once tomcat has started, open your browser and enter following URL
-<br />`http://localhost:8080/org.carewebframework.webapp.testharness-4.0.0-SNAPSHOT`
+
+`http://localhost:8080/org.carewebframework.webapp.testharness-x.y.z`
+
+**Note:**  Replace x.y.z with the version of the CareWeb Framework that you have checked out.
 
 ## Contributing
 [Pull requests](http://help.github.com/send-pull-requests) are welcome.
