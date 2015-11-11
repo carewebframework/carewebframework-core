@@ -20,7 +20,7 @@ Each project has its own issue tracker.  For example, issue tracking for the <b>
 be logged, you may log it at that location.
 
 ## Downloading artifacts
-CareWeb Framework artifacts for release and snapshot versions are available from [Maven Central][] and do not require any special configuration. 
+CareWeb Framework artifacts for release versions are available from [Maven Central][] and do not require any special configuration.  Both snapshot and release versions are available from the Sonatype open source [snapshot](https://oss.sonatype.org/content/repositories/snapshots) and [release](https://oss.sonatype.org/content/repositories/releases) repositories, respectively.  To use either of these sources, you must configure your Maven [settings.xml](https://maven.apache.org/ref/3.3.3/maven-settings/settings.html) file.  A sample settings.xml file configured to access the Sonatype snapshot repository can be downloaded [here](http://www.carewebframework.org/downloads/sample-settings.xml).
 
 ### Transitive dependencies
 The CareWeb Framework leverages many open source technologies.  Except where otherwise indicated, the vast majority of these requisite
