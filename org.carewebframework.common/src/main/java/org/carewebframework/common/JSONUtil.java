@@ -375,5 +375,5 @@ public class JSONUtil {
      * Enforce static class.
      */
     private JSONUtil() {
-    };
+    }
 }

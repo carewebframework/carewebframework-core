@@ -59,7 +59,7 @@ public class ColorUtil {
             { "SeaShell", "#FFF5EE" }, { "Cornsilk", "#FFF8DC" }, { "LemonChiffon", "#FFFACD" },
             { "FloralWhite", "#FFFAF0" }, { "Snow", "#FFFAFA" }, { "Yellow", "#FFFF00" }, { "LightYellow", "#FFFFE0" },
             { "Ivory", "#FFFFF0" }, { "White", "#FFFFFF" } };
-    
+            
     private static final Map<String, String> name2color = new HashMap<>(NAMED_COLORS.length);
     
     private static final Map<String, String> color2name = new HashMap<>(NAMED_COLORS.length);
@@ -130,5 +130,5 @@ public class ColorUtil {
      * Enforce static class.
      */
     private ColorUtil() {
-    };
+    }
 }

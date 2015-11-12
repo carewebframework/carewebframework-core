@@ -67,9 +67,6 @@ public class Localizer {
         messageSources.add(messageSource);
     }
     
-    private Localizer() {
-    }
-    
     /**
      * Returns a formatted message given a label identifier. Recognizes line continuation with
      * backslash characters.
@@ -100,6 +97,12 @@ public class Localizer {
     
     public static void setLocaleFinder(ILocaleFinder localeFinder) {
         Localizer.localeFinder = localeFinder;
+    }
+    
+    /**
+     * Enforce static class.
+     */
+    private Localizer() {
     }
     
 }

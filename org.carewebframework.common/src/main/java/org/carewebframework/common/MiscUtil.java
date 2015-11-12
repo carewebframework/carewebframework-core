@@ -90,5 +90,5 @@ public class MiscUtil {
      * Enforce static class.
      */
     private MiscUtil() {
-    };
+    }
 }

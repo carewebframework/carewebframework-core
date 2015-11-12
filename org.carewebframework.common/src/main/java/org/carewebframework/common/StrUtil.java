@@ -524,5 +524,5 @@ public class StrUtil {
      * Enforce static class.
      */
     private StrUtil() {
-    };
+    }
 }

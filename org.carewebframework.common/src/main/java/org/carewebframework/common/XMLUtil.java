@@ -149,5 +149,5 @@ public class XMLUtil {
      * Enforce static class.
      */
     private XMLUtil() {
-    };
+    }
 }

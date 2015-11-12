@@ -84,5 +84,5 @@ public class ImageUtil {
      * Enforce static class.
      */
     private ImageUtil() {
-    };
+    }
 }
