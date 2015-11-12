@@ -72,7 +72,7 @@ public class Localizer {
      * backslash characters.
      * 
      * @param id A label identifier.
-     * @param locale The locale.
+     * @param locale The locale. If null, uses the default locale.
      * @param args Optional replaceable parameters.
      * @return The formatted label.
      */
