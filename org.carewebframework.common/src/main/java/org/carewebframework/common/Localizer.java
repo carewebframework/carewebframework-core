@@ -91,10 +91,20 @@ public class Localizer {
         return null;
     }
     
+    /**
+     * Returns the default locale.
+     * 
+     * @return The default locale.
+     */
     public static Locale getDefaultLocale() {
         return localeFinder.getLocale();
     }
     
+    /**
+     * Sets the locale finder used to determine the default locale.
+     * 
+     * @param localeFinder An ILocaleFinder implementation.
+     */
     public static void setLocaleFinder(ILocaleFinder localeFinder) {
         Localizer.localeFinder = localeFinder;
     }
