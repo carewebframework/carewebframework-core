@@ -11,6 +11,8 @@ package org.carewebframework.help;
 
 import java.util.Locale;
 
+import org.springframework.util.StringUtils;
+
 /**
  * Each instance of this class represents a complete definition of a CareWeb help module.
  */
@@ -40,6 +42,18 @@ public class HelpModule {
         return HelpModuleRegistry.getInstance().get(id);
     }
     
+    /**
+     * Adds locale information to a help module id.
+     * 
+     * @param id Help module id.
+     * @param locale Locale (may be null).
+     * @return The id with locale information appended.
+     */
+    public static String getLocalizedId(String id, Locale locale) {
+        String locstr = locale == null ? "" : ("_" + locale.toString());
+        return id + locstr;
+    }
+    
     public HelpModule() {
     }
     
@@ -49,6 +63,15 @@ public class HelpModule {
     
     public void setId(String id) {
         this.id = id;
+    }
+    
+    /**
+     * Adds locale information to a help module id.
+     * 
+     * @return The id with locale information appended.
+     */
+    public String getLocalizedId() {
+        return getLocalizedId(id, locale);
     }
     
     public String getUrl() {
@@ -64,7 +87,7 @@ public class HelpModule {
     }
     
     public void setLocale(String locale) {
-        this.locale = locale == null ? null : new Locale(locale);
+        this.locale = StringUtils.isEmpty(locale) ? null : new Locale(locale);
     }
     
     public String getFormat() {

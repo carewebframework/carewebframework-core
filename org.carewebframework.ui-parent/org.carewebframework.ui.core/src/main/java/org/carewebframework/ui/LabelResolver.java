@@ -11,7 +11,7 @@ package org.carewebframework.ui;
 
 import java.util.Locale;
 
-import org.carewebframework.common.StrUtil.MessageSource;
+import org.carewebframework.common.Localizer.IMessageSource;
 
 import org.zkoss.text.MessageFormats;
 import org.zkoss.util.resource.Labels;
@@ -19,7 +19,7 @@ import org.zkoss.util.resource.Labels;
 /**
  * Wraps ZK's Labels class in as message source.
  */
-public class LabelResolver implements MessageSource {
+public class LabelResolver implements IMessageSource {
     
     @Override
     public String getMessage(String code, Locale locale, Object... args) {

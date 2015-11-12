@@ -17,29 +17,11 @@ import java.util.Locale;
 import org.apache.commons.lang.CharEncoding;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * Utility methods for managing strings.
  */
 public class StrUtil {
-    
-    public interface MessageSource {
-        
-        /**
-         * Retrieve a message for the specified locale given its id.
-         * 
-         * @param id The message identifier.
-         * @param locale The locale.
-         * @param args Optional message arguments.
-         * @return A fully formatted message, or null if none was found.
-         */
-        String getMessage(String id, Locale locale, Object... args);
-        
-    }
-    
-    private static final Log log = LogFactory.getLog(StrUtil.class);
     
     public static final String U = "^";
     
@@ -50,8 +32,6 @@ public class StrUtil {
     public static final String LINE_TERMINATOR = "\n";
     
     public static final String CHARSET = CharEncoding.UTF_8;
-    
-    private static final List<MessageSource> messageSources = new ArrayList<>();
     
     /**
      * Splits a string using the specified delimiter.
@@ -478,15 +458,6 @@ public class StrUtil {
     }
     
     /**
-     * Registers a message source for resolving messages.
-     * 
-     * @param messageSource The message source.
-     */
-    public static void registerMessageSource(MessageSource messageSource) {
-        messageSources.add(messageSource);
-    }
-    
-    /**
      * Formats a message. If the message begins with "@", the remainder is assumed to be a label
      * name that is resolved.
      * 
@@ -503,7 +474,7 @@ public class StrUtil {
         String message = msg.startsWith("@") ? getLabel(msg, locale, args) : null;
         
         if (message == null && args != null && args.length > 0) {
-            message = String.format(locale, msg, args);
+            message = String.format(locale == null ? Localizer.getDefaultLocale() : locale, msg, args);
         }
         
         return message == null ? msg : message;
@@ -518,7 +489,7 @@ public class StrUtil {
      * @return The formatted message.
      */
     public static String formatMessage(String msg, Object... args) {
-        return formatMessage(msg, Locale.getDefault(), args);
+        return formatMessage(msg, null, args);
     }
     
     /**
@@ -529,7 +500,7 @@ public class StrUtil {
      * @return The formatted label.
      */
     public static String getLabel(String id, Object... args) {
-        return getLabel(id, Locale.getDefault(), args);
+        return getLabel(id, null, args);
     }
     
     /**
@@ -546,16 +517,7 @@ public class StrUtil {
             id = id.substring(1);
         }
         
-        for (MessageSource messageSource : messageSources) {
-            try {
-                return messageSource.getMessage(id, locale, args).replace("\\\n", "");
-            } catch (Exception e) {
-                // Ignore and try next message source.
-            }
-        }
-        // Failing resolution, just return null.
-        log.warn("Label not found for identifier: " + id);
-        return null;
+        return Localizer.getMessage(id, locale, args);
     }
     
     /**

@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.TimeZone;
 
 import org.carewebframework.common.DateUtil.TimeUnit;
@@ -310,6 +311,15 @@ public class CommonTest {
         assertEquals("", v1.toString());
         v2 = new Version(null);
         assertEquals(v1, v2);
+    }
+    
+    @Test
+    public void testBundle() {
+        Localizer.registerMessageSource(new BundleMessageSource());
+        Locale locale1 = new Locale("en");
+        Locale locale2 = new Locale("fr");
+        assertEquals("keyboard", StrUtil.getLabel("message.test1", locale1));
+        assertEquals("clavier", StrUtil.getLabel("message.test1", locale2));
     }
     
     private void print(Object object) {

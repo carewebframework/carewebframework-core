@@ -11,6 +11,7 @@ package org.carewebframework.maven.plugin.help;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
@@ -62,6 +63,12 @@ public class HelpConverterMojo extends BaseMojo {
      */
     @Parameter(property = "maven.carewebframework.help.moduleFormat")
     private String moduleFormat;
+    
+    /**
+     * Help set locale.
+     */
+    @Parameter(property = "maven.carewebframework.help.moduleLocale")
+    private final String moduleLocale = Locale.getDefault().toString();
     
     /**
      * Source file name (Help jar file)
@@ -121,7 +128,8 @@ public class HelpConverterMojo extends BaseMojo {
             String sourceFilename = FileUtils.normalize(baseDirectory + "/" + moduleSource);
             HelpProcessor processor = new HelpProcessor(this, sourceFilename, loader);
             processor.transform();
-            addConfigEntry("help", moduleId, processor.getHelpSetFile(), moduleName, getModuleVersion(), moduleFormat);
+            addConfigEntry("help", moduleId, processor.getHelpSetFile(), moduleName, getModuleVersion(), moduleFormat,
+                moduleLocale);
             assembleArchive();
         } catch (Exception e) {
             throw new MojoExecutionException("Unexpected error.", e);

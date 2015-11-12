@@ -22,11 +22,13 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import org.carewebframework.common.StrUtil;
+import org.carewebframework.common.Localizer;
+import org.carewebframework.common.Localizer.ILocaleFinder;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.Resource;
 
+import org.zkoss.util.Locales;
 import org.zkoss.util.Maps;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zel.impl.util.Validation;
@@ -100,7 +102,15 @@ public class LabelFinder {
      * @param appContext The application context.
      */
     public LabelFinder(ApplicationContext appContext) {
-        StrUtil.registerMessageSource(new LabelResolver());
+        Localizer.registerMessageSource(new LabelResolver());
+        Localizer.setLocaleFinder(new ILocaleFinder() {
+            
+            @Override
+            public Locale getLocale() {
+                return Locales.getCurrent();
+            }
+            
+        });
         init(appContext);
     };
     

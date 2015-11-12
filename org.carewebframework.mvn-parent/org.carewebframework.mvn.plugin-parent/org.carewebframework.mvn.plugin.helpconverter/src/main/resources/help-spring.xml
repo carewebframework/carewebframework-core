@@ -12,7 +12,7 @@
 
 	<beans profile="root">
 
-*help*		<cwh:help id="{0}" url="{1}" title="{2}" version="{3}" format="{4}" />
+*help*		<cwh:help id="{0}" url="{1}" title="{2}" version="{3}" format="{4}" locale="{5}" />
 	
 	</beans>
 	

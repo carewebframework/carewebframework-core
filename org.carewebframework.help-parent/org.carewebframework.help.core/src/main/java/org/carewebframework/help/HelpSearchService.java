@@ -150,7 +150,7 @@ public class HelpSearchService implements ApplicationContextAware {
          * @param module Help module to add.
          */
         void add(HelpModule module) {
-            properties.setProperty(module.getId(), module.getVersion());
+            properties.setProperty(module.getLocalizedId(), module.getVersion());
             changed = true;
         }
         
@@ -160,7 +160,7 @@ public class HelpSearchService implements ApplicationContextAware {
          * @param module Help module to remove.
          */
         void remove(HelpModule module) {
-            properties.remove(module.getId());
+            properties.remove(module.getLocalizedId());
             changed = true;
         }
         
@@ -171,7 +171,7 @@ public class HelpSearchService implements ApplicationContextAware {
          * @return True if the indexed module version is the same as the loaded one.
          */
         boolean isSame(HelpModule module) {
-            String v = properties.getProperty(module.getId());
+            String v = properties.getProperty(module.getLocalizedId());
             
             if (v == null) {
                 return false;
@@ -254,7 +254,7 @@ public class HelpSearchService implements ApplicationContextAware {
             }
             
             unindexHelpModule(helpModule);
-            log.info("Indexing help module " + helpModule.getId());
+            log.info("Indexing help module " + helpModule.getLocalizedId());
             int i = helpModule.getUrl().lastIndexOf('/');
             String pattern = "classpath:" + helpModule.getUrl().substring(0, i + 1) + "*.htm*";
             
@@ -276,8 +276,8 @@ public class HelpSearchService implements ApplicationContextAware {
      */
     public void unindexHelpModule(HelpModule helpModule) {
         try {
-            log.info("Removing index for help module " + helpModule.getId());
-            Term term = new Term("module", helpModule.getId());
+            log.info("Removing index for help module " + helpModule.getLocalizedId());
+            Term term = new Term("module", helpModule.getLocalizedId());
             writer.deleteDocuments(term);
             writer.commit();
             indexTracker.remove(helpModule);
@@ -298,7 +298,7 @@ public class HelpSearchService implements ApplicationContextAware {
         
         try (InputStream is = resource.getInputStream()) {
             Document document = new Document();
-            document.add(new TextField("module", helpModule.getId(), Store.YES));
+            document.add(new TextField("module", helpModule.getLocalizedId(), Store.YES));
             document.add(new TextField("source", helpModule.getTitle(), Store.YES));
             document.add(new TextField("title", title, Store.YES));
             document.add(new TextField("url", resource.getURL().toString(), Store.YES));

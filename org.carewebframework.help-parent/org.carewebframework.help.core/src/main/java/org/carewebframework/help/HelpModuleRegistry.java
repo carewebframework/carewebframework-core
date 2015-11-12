@@ -10,6 +10,7 @@
 package org.carewebframework.help;
 
 import org.carewebframework.api.spring.BeanRegistry;
+import org.carewebframework.common.Localizer;
 
 /**
  * Registry of all known help modules.
@@ -31,9 +32,30 @@ public class HelpModuleRegistry extends BeanRegistry<String, HelpModule> {
         super(HelpModule.class);
     }
     
+    /**
+     * Make <code>get</code> locale-aware.
+     */
     @Override
-    protected String getKey(HelpModule item) {
-        return item.getId();
+    public HelpModule get(String key) {
+        key = HelpModule.getLocalizedId(key, Localizer.getDefaultLocale());
+        
+        while (!key.isEmpty()) {
+            HelpModule helpModule = super.get(key);
+            
+            if (helpModule != null) {
+                return helpModule;
+            }
+            
+            int i = key.lastIndexOf('_');
+            key = i < 0 ? "" : key.substring(i + 1);
+        }
+        
+        return null;
+    }
+    
+    @Override
+    protected String getKey(HelpModule helpModule) {
+        return helpModule.getLocalizedId();
     }
     
     @Override
@@ -48,4 +70,5 @@ public class HelpModuleRegistry extends BeanRegistry<String, HelpModule> {
     public void setService(HelpSearchService service) {
         this.service = service;
     }
+    
 }
