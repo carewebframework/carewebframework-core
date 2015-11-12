@@ -45,23 +45,18 @@ public class Localizer {
         Locale getLocale();
     }
     
-    /**
-     * Default implementation for locale finder.
-     */
-    private static class LocaleFinder implements ILocaleFinder {
+    private static final Log log = LogFactory.getLog(Localizer.class);
+    
+    private static final List<IMessageSource> messageSources = new ArrayList<>();
+    
+    private static ILocaleFinder localeFinder = new ILocaleFinder() {
         
         @Override
         public Locale getLocale() {
             return Locale.getDefault();
         }
         
-    }
-    
-    private static final Log log = LogFactory.getLog(Localizer.class);
-    
-    private static final List<IMessageSource> messageSources = new ArrayList<>();
-    
-    private static ILocaleFinder localeFinder = new LocaleFinder();
+    };
     
     /**
      * Registers a message source for resolving messages.
