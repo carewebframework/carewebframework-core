@@ -26,5 +26,9 @@
 			<artifactId>tika-parsers</artifactId>
 			<version>1.10</version>
 		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+		</dependency>
 	</dependencies>
 </project>

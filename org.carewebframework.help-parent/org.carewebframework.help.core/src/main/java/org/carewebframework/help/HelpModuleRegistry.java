@@ -47,7 +47,7 @@ public class HelpModuleRegistry extends BeanRegistry<String, HelpModule> {
             }
             
             int i = key.lastIndexOf('_');
-            key = i < 0 ? "" : key.substring(i + 1);
+            key = i < 0 ? "" : key.substring(0, i);
         }
         
         return null;
