@@ -11,7 +11,7 @@ package org.carewebframework.shell.plugins;
 
 import java.util.Properties;
 
-import org.carewebframework.shell.BaseXmlParser;
+import org.carewebframework.api.spring.BaseXmlParser;
 import org.carewebframework.shell.property.PropertyInfo;
 
 import org.springframework.beans.factory.support.AbstractBeanDefinition;

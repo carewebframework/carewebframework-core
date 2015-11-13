@@ -1,3 +1,1 @@
 http\://www.carewebframework.org/schema/plugin=org.carewebframework.shell.plugins.PluginXmlHandler
-http\://www.carewebframework.org/schema/help=org.carewebframework.shell.help.HelpXmlHandler
-http\://www.carewebframework.org/schema/theme=org.carewebframework.shell.themes.ThemeXmlHandler

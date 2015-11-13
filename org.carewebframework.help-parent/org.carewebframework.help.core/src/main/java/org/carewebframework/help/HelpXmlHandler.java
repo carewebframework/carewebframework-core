@@ -7,7 +7,7 @@
  * Disclaimer of Warranty and Limitation of Liability available at
  * http://www.carewebframework.org/licensing/disclaimer.
  */
-package org.carewebframework.shell.help;
+package org.carewebframework.help;
 
 import org.springframework.beans.factory.xml.NamespaceHandlerSupport;
 

@@ -7,10 +7,9 @@
  * Disclaimer of Warranty and Limitation of Liability available at
  * http://www.carewebframework.org/licensing/disclaimer.
  */
-package org.carewebframework.shell.help;
+package org.carewebframework.help;
 
-import org.carewebframework.help.HelpModule;
-import org.carewebframework.shell.BaseXmlParser;
+import org.carewebframework.api.spring.BaseXmlParser;
 
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 
