@@ -38,7 +38,9 @@ public class HelpProcessor extends AbstractProcessor<HelpConverterMojo> {
     
     @Override
     public String getResourceBase() {
-        return mojo.getModuleBase() + mojo.getModuleId() + "/";
+        String locale = mojo.getModuleLocale();
+        locale = locale == null || locale.isEmpty() ? "" : ("/" + locale);
+        return mojo.getModuleBase() + mojo.getModuleId() + locale + "/";
     }
     
     @Override

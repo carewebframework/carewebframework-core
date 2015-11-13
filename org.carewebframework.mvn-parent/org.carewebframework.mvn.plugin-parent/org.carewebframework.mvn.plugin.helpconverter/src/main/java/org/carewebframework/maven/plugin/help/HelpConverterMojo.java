@@ -11,7 +11,6 @@ package org.carewebframework.maven.plugin.help;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
@@ -68,7 +67,7 @@ public class HelpConverterMojo extends BaseMojo {
      * Help set locale.
      */
     @Parameter(property = "maven.carewebframework.help.moduleLocale")
-    private final String moduleLocale = Locale.getDefault().toString();
+    private String moduleLocale;
     
     /**
      * Source file name (Help jar file)
@@ -101,6 +100,10 @@ public class HelpConverterMojo extends BaseMojo {
     
     public String getModuleId() {
         return moduleId;
+    }
+    
+    public String getModuleLocale() {
+        return moduleLocale;
     }
     
     /**
