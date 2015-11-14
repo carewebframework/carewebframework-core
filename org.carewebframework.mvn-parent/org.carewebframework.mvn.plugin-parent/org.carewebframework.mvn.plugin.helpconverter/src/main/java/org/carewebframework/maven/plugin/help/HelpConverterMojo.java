@@ -21,6 +21,7 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 
 import org.carewebframework.maven.plugin.core.BaseMojo;
+import org.carewebframework.maven.plugin.help.chm.ChmSourceLoader;
 import org.carewebframework.maven.plugin.iterator.ZipIterator;
 
 import org.codehaus.plexus.util.FileUtils;
@@ -120,6 +121,7 @@ public class HelpConverterMojo extends BaseMojo {
         init("help", moduleBase);
         registerLoader(new SourceLoader("javahelp", "*.hs", ZipIterator.class));
         registerLoader(new SourceLoader("ohj", "*.hs", ZipIterator.class));
+        registerLoader(new ChmSourceLoader());
         registerExternalLoaders();
         SourceLoader loader = sourceLoaders.get(moduleFormat);
         

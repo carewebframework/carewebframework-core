@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+
+<topics>
+  <topic id="Accessing Patient Goals" label="Accessing Patient Goals" url="Accessing_Patient_Goals.htm" />
+  <topic id="Functionality" label="Functionality" url="Functionality.htm" />
+  <topic id="Goal Actions" label="Goal Actions" url="Goal_Actions.htm" />
+  <topic id="Goal Number" label="Goal Number" url="Goal_Number.htm" />
+  <topic id="Patient Goals Categories" label="Patient Goals Categories" url="Patient_Goals_Categories.htm" />
+  <topic id="Review an Active Goal" label="Review an Active Goal" url="Review_Active_Goal.htm" />
+  <topic id="Expand All" label="Expand All" url="Expand_All.htm" />
+  <topic id="Patient Goals" label="Patient Goals" url="Patient_Goals.htm" />
+  <topic id="Decline a Goal" label="Decline a Goal" url="Decline_Goal.htm" />
+  <topic id="Move a Column" label="Move a Column" url="Move_Column.htm" />
+  <topic id="Collapse All" label="Collapse All" url="Collapse_All.htm" />
+  <topic id="Filter a Goal" label="Filter a Goal" url="Filter_a_Goal.htm" />
+  <topic id="Sort by a Specific Column" label="Sort by a Specific Column" url="Sort_Specific_Column.htm" />
+  <topic id="Add/Change a Start Date or Follow-up Date" label="Add/Change a Start Date or Follow-up Date" url="Add_Change_Start_Date_Follow-up_Date.htm" />
+  <topic id="Add a New Note" label="Add a New Note" url="Add_New_Note.htm" />
+  <topic id="View History of Notes on a Goal" label="View History of Notes on a Goal" url="View_History_Notes_Goal.htm" />
+  <topic id="Goal Status" label="Goal Status" url="Goal_Status.htm" />
+  <topic id="Filter a Step" label="Filter a Step" url="Filter_Step.htm" />
+  <topic id="Review a Step" label="Review a Step" url="Review_a_Step.htm" />
+  <topic id="Change a Step Position" label="Change a Step Position" url="Change_Step_Position.htm" />
+  <topic id="Delete a Step" label="Delete a Step" url="Delete_Step.htm" />
+  <topic id="Access" label="Access" url="Access.htm" />
+  <topic id="Create a Step" label="Create a Step" url="Create_a_Step.htm" />
+  <topic id="Inactive Goals" label="Inactive Goals" url="Inactive_Goals.htm" />
+  <topic id="Step Numbers" label="Step Numbers" url="Step_Numbers.htm" />
+  <topic id="Patient Goal Steps" label="Patient Goal Steps" url="Patient_Goal_Steps.htm" />
+  <topic id="Adding a Goal" label="Adding a Goal" url="Adding_a_Goal.htm" />
+  <topic id="Add a Step" label="Add a Step" url="Add_Step.htm" />
+  <topic id="Remote Access" label="Remote Access" url="Remote_Access.htm" />
+  <topic id="Awareness" label="Awareness" url="Awareness.htm" />
+  <topic id="" label="" url="IhsPatientGoals.hhc" />
+  <topic id="Patient Goals" label="Patient Goals" url="Patient_Goals.htm#642b3b9347ca42c9b00b820c00c373fa=1" />
+  <topic id="Accessing Patient Goals" label="Accessing Patient Goals" url="Accessing_Patient_Goals.htm#642b3b9347ca42c9b00b820c00c373fa=1" />
+  <topic id="Functionality" label="Functionality" url="Functionality.htm#642b3b9347ca42c9b00b820c00c373fa=1" />
+  <topic id="Patient Goals Categories" label="Patient Goals Categories" url="Patient_Goals_Categories.htm#642b3b9347ca42c9b00b820c00c373fa=1" />
+  <topic id="Goal Actions" label="Goal Actions" url="Goal_Actions.htm#642b3b9347ca42c9b00b820c00c373fa=1" />
+  <topic id="Goal Status" label="Goal Status" url="Goal_Status.htm#642b3b9347ca42c9b00b820c00c373fa=1" />
+  <topic id="Active" label="Active" url="Goal_Status.htm#Active642b3b9347ca42c9b00b820c00c373fa=2" />
+  <topic id="Met a Goal – Becomes Inactive" label="Met a Goal – Becomes Inactive" url="Goal_Status.htm#Met_a_Goal___Becomes_Inactive642b3b9347ca42c9b00b820c00c373fa=3" />
+  <topic id="Maintained Goal" label="Maintained Goal" url="Goal_Status.htm#Maintained_Goal642b3b9347ca42c9b00b820c00c373fa=4" />
+  <topic id="Stopped Goal – Becomes Inactive" label="Stopped Goal – Becomes Inactive" url="Goal_Status.htm#Stopped_Goal___Becomes_Inactive642b3b9347ca42c9b00b820c00c373fa=5" />
+  <topic id="Delete/Entered in Error Goal" label="Delete/Entered in Error Goal" url="Goal_Status.htm#Delete_Entered_in_Error_Goal642b3b9347ca42c9b00b820c00c373fa=6" />
+  <topic id="Patient Goal Steps" label="Patient Goal Steps" url="Patient_Goal_Steps.htm#642b3b9347ca42c9b00b820c00c373fa=1" />
+</topics>

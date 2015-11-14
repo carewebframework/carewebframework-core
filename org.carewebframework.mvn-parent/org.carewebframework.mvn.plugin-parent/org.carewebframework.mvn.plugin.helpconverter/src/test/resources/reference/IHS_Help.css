@@ -1,0 +1,188 @@
+﻿BODY {
+      font-family:Arial;
+      background-color:#ffffff;
+}
+H1 {
+    font-weight:bold;
+    font-size:24.0pt;
+    x-next-type:P;
+    color:#800000;
+}
+H2 {
+    font-weight:bold;
+    font-size:18.0pt;
+    x-next-type:P;
+    color:#008080;
+}
+H3 {
+    font-weight:bold;
+    font-size:14.0pt;
+}
+H4 {
+    font-weight:bold;
+    font-size:12.0pt;
+    x-next-class:Bdytxt1;
+    x-next-type:p;
+}
+H5 {
+    font-weight:bold;
+    font-size:10.0pt;
+}
+H6 {
+    font-weight:bold;
+    font-size:8.0pt;
+}
+P {
+   margin-top:0pt;
+   margin-bottom:0pt;
+   font-size:11pt;
+}
+A.expandspot {
+              color:#008000;
+              cursor:hand;
+              font-style:italic;
+              text-decoration:none;
+}
+SPAN.expandtext {
+                 font-style:italic;
+                 font-weight:normal;
+                 color:#ff0000;
+}
+A.dropspot {
+            cursor:hand;
+            color:#008000;
+            font-style:italic;
+            text-decoration:none;
+}
+A.glossterm {
+             color:#800000;
+             cursor:hand;
+             font-style:italic;
+             text-decoration:none;
+}
+SPAN.glosstext {
+                font-style:italic;
+                font-weight:normal;
+                color:#0000ff;
+}
+OL {
+    margin-top:0px;
+    margin-bottom:0px;
+}
+UL {
+    margin-top:0px;
+    margin-bottom:0px;
+}
+p.Number {
+          list-style:rh-list;
+          x-list-class:rl-p-Number;
+          x-list-level:1;
+          font-size:11pt;
+          text-indent:-0.25in;
+          margin-top:6pt;
+          margin-bottom:6pt;
+          margin-left:0.5in;
+}
+p.Bdytxt1 {
+           line-height:Normal;
+           margin-top:9pt;
+           margin-bottom:9pt;
+           font-size:11pt;
+}
+p.Bdytxt2 {
+           font-size:11pt;
+           margin-left:24px;
+           margin-top:9pt;
+           margin-bottom:9pt;
+}
+p.Bdytxt3 {
+           font-size:10pt;
+           margin-left:0.43in;
+           margin-bottom:4.5pt;
+}
+p.Number3 {
+           text-indent:-0.25in;
+           margin-bottom:4.5pt;
+           font-size:10pt;
+           margin-left:0.65in;
+}
+p.Number4 {
+           text-indent:-0.25in;
+           margin-left:1in;
+           margin-bottom:4.5pt;
+           font-size:10pt;
+}
+p.Bdytxt4 {
+           margin-bottom:4.5pt;
+           font-size:10pt;
+           margin-left:0.68in;
+}
+H3.Title {
+          font-weight:bold;
+          font-size:14.0pt;
+          x-next-class:Bdytxt1;
+          x-next-type:p;
+}
+li.Bullet1 {
+            list-style:disc;
+            margin-left:0in;
+            margin-bottom:0pt;
+            font-size:10pt;
+}
+span.UIText {
+             font-weight:bold;
+             font-size:10pt;
+}
+p.Note {
+        margin-top:9pt;
+        margin-bottom:9pt;
+        border-left-style:Solid;
+        border-right-style:Solid;
+        border-top-style:Solid;
+        border-bottom-style:Solid;
+        padding-left:5px;
+        padding-right:5px;
+        padding-top:5px;
+        padding-bottom:5px;
+        margin-right:0.75in;
+        border-left-width:1px;
+        border-right-width:1px;
+        border-top-width:1px;
+        border-bottom-width:1px;
+        background-color:#e5e5e5;
+        font-size:11pt;
+        margin-left:0px;
+}
+span.BoldItalic {
+                 font-size:10pt;
+                 font-weight:bold;
+                 font-style:italic;
+}
+span.BoldNote {
+               font-size:8pt;
+               font-weight:bold;
+}
+p.Caption {
+           text-align:center;
+           font-style:italic;
+           font-weight:bold;
+           font-size:8pt;
+}
+span.Picture {
+              font-weight:bold;
+              font-style:italic;
+}
+rh-list.rl-p-Number {
+                     x-level-count:1;
+                     x-lvl-1-format:<x>.;
+                     x-lvl-1-type:decimal;
+}
+p.Picture {
+           text-align:center;
+           margin-top:9pt;
+}
+rh-list.rl-p-Number2 {
+                      x-level-count:1;
+                      x-lvl-1-format:<x>.;
+                      x-lvl-1-type:lower-alpha;
+}
