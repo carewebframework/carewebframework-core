@@ -1,0 +1,38 @@
+.btn-default:hover=\
+.panel-default>.panel-heading .z-menu-content:hover,\
+.panel-default>.panel-heading .z-menu-selected>.z-menu-content{background:|background-color|}
+
+.btn-primary:hover=\
+.panel-primary>.panel-heading .z-menu-content:hover,\
+.panel-primary>.panel-heading .z-menu-selected>.z-menu-content{background:|background-color|}
+
+.btn-success:hover=\
+.panel-success>.panel-heading .z-menu-content:hover,\
+.panel-success>.panel-heading .z-menu-selected>.z-menu-content{background:|background-color|}
+
+.btn-warning:hover=\
+.panel-warning>.panel-heading .z-menu-content:hover,\
+.panel-warning>.panel-heading .z-menu-selected>.z-menu-content{background:|background-color|}
+
+.btn-danger:hover=\
+.panel-danger>.panel-heading .z-menu-content:hover,\
+.panel-danger>.panel-heading .z-menu-selected>.z-menu-content{background:|background-color|}
+
+.btn-info:hover=\
+.panel-info>.panel-heading .z-menu-content:hover,\
+.panel-info>.panel-heading .z-menu-selected>.z-menu-content{background:|background-color|}
+
+.panel .panel-title=\
+.panel>.panel-heading .z-menu-content *{color:|color|;text-shadow:none}
+
+!.panel .panel-title=\
+.panel>.panel-heading .z-menu-content *{color:#fff;text-shadow:none}
+
+.glyphicon-chevron-left:before=\
+glyphicon-chevron-left-double:before {content:|content||content|;letter-spacing:-4px}
+
+.glyphicon-chevron-right:before=\
+glyphicon-chevron-right-double:before {content:|content||content|;letter-spacing:-4px}
+
+@after@=\
+.panel{margin:0}

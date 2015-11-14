@@ -17,7 +17,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.carewebframework</groupId>
-			<artifactId>org.carewebframework.ui.themes</artifactId>
+			<artifactId>org.carewebframework.theme.core</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.carewebframework</groupId>

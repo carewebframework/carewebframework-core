@@ -14,7 +14,6 @@
 	<modules>
 		<module>org.carewebframework.ui.core</module>
 		<module>org.carewebframework.ui.test</module>
-		<module>org.carewebframework.ui.themes</module>
 		<module>org.carewebframework.ui.chat</module>
 		<module>org.carewebframework.ui.currentdatetime</module>
 		<module>org.carewebframework.ui.infopanel</module>

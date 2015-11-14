@@ -28,7 +28,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 
 	<desktop-config>
 		<desktop-timeout>900</desktop-timeout>
-		<theme-provider-class>org.carewebframework.ui.themes.ThemeProvider</theme-provider-class>
+		<theme-provider-class>org.carewebframework.theme.ThemeProvider</theme-provider-class>
 	</desktop-config>
 	
 	<device-config>
