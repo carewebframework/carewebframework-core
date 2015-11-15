@@ -48,7 +48,7 @@
 				<cwp:property id="style" type="enum"
 					name="${labels.cwf.shell.plugin._desktop.style.name}" description="${labels.cwf.shell.plugin._desktop.style.description}">
 					<cwp:config>
-						<cwp:entry key="class">org.carewebframework.ui.themes.ThemeUtil$PanelStyle</cwp:entry>
+						<cwp:entry key="class">org.carewebframework.theme.ThemeUtil$PanelStyle</cwp:entry>
 					</cwp:config>
 				</cwp:property>
 				<cwp:property id="icon" type="icon"
@@ -144,7 +144,7 @@
 				<cwp:property id="selectionStyle" type="enum"
 					name="${labels.cwf.shell.plugin.treeview.selection.style.name}" description="${labels.cwf.shell.plugin.treeview.selection.style.description}">
 					<cwp:config>
-						<cwp:entry key="class">org.carewebframework.ui.themes.ThemeUtil$ButtonStyle</cwp:entry>
+						<cwp:entry key="class">org.carewebframework.theme.ThemeUtil$ButtonStyle</cwp:entry>
 					</cwp:config>
 				</cwp:property>
 				<cwp:property id="" type="nodes"
@@ -215,7 +215,7 @@
 				<cwp:property id="style" type="enum"
 					name="${labels.cwf.shell.plugin.stepview.style.name}" description="${labels.cwf.shell.plugin._desktop.style.description}">
 					<cwp:config>
-						<cwp:entry key="class">org.carewebframework.ui.themes.ThemeUtil$PanelStyle</cwp:entry>
+						<cwp:entry key="class">org.carewebframework.theme.ThemeUtil$PanelStyle</cwp:entry>
 					</cwp:config>
 				</cwp:property>
 				<cwp:property id="noHome" type="boolean"
@@ -329,13 +329,13 @@
 				<cwp:property id="size" type="enum"
 					name="${labels.cwf.shell.plugin.button.size.name}" description="${labels.cwf.shell.plugin.button.size.description}">
 					<cwp:config>
-						<cwp:entry key="class">org.carewebframework.ui.themes.ThemeUtil$ButtonSize</cwp:entry>
+						<cwp:entry key="class">org.carewebframework.theme.ThemeUtil$ButtonSize</cwp:entry>
 					</cwp:config>
 				</cwp:property>
 				<cwp:property id="style" type="enum"
 					name="${labels.cwf.shell.plugin.button.style.name}" description="${labels.cwf.shell.plugin.button.style.description}">
 					<cwp:config>
-						<cwp:entry key="class">org.carewebframework.ui.themes.ThemeUtil$ButtonStyle</cwp:entry>
+						<cwp:entry key="class">org.carewebframework.theme.ThemeUtil$ButtonStyle</cwp:entry>
 					</cwp:config>
 				</cwp:property>
 				<cwp:property id="action" type="action"
@@ -360,7 +360,7 @@
 				<cwp:property id="size" type="enum"
 					name="${labels.cwf.shell.plugin.link.size.name}" description="${labels.cwf.shell.plugin.link.size.description}">
 					<cwp:config>
-						<cwp:entry key="class">org.carewebframework.ui.themes.ThemeUtil$ButtonSize</cwp:entry>
+						<cwp:entry key="class">org.carewebframework.theme.ThemeUtil$ButtonSize</cwp:entry>
 					</cwp:config>
 				</cwp:property>
 				<cwp:property id="action" type="action"
