@@ -120,8 +120,8 @@
 	<session-config>
 		<session-timeout>15</session-timeout>
 	</session-config>
+	
 	<welcome-file-list>
 		<welcome-file>index.zul</welcome-file>
-		<welcome-file>careWeb.zul</welcome-file>
 	</welcome-file-list>
 </web-app>
