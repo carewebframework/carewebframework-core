@@ -50,7 +50,7 @@ public class RequestUtil {
      */
     public static HttpServletRequest getRequest() {
         ServletRequestAttributes requestAttrs = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-
+        
         if (requestAttrs == null) {
             return null;
         }
@@ -82,7 +82,7 @@ public class RequestUtil {
     public static void logHeaderNames() {
         HttpServletRequest request = getRequest();
         if (request == null) {
-            log.debug("logHeaderNames() invoked outside the scope of an Execution/ServletRequest"); 
+            log.debug("logHeaderNames() invoked outside the scope of an Execution/ServletRequest");
         } else {
             Enumeration<?> enumeration = request.getHeaderNames();
             while (enumeration.hasMoreElements()) {
@@ -123,10 +123,9 @@ public class RequestUtil {
     }
     
     /**
-     * Return client's ip address.  Returns null if invoked outside scope of Execution/ServletRequest
+     * Return client's ip address. Returns null if invoked outside scope of Execution/ServletRequest
      * <p>
-     * This considers header
-     * X-FORWARDED-FOR (i.e. useful if behind a proxy)
+     * This considers header X-FORWARDED-FOR (i.e. useful if behind a proxy)
      * 
      * @return the client's IP
      */
@@ -147,14 +146,17 @@ public class RequestUtil {
             //log headers in case we find a case where above logic doesn't return correct ip
             if (log.isTraceEnabled()) {
                 logHeaderNames();
-                log.trace(String.format("Remote address: %s , obtained from X-FORWARDED_FOR header?", ipAddress, ipFromHeader));
+                log.trace(
+                    String.format("Remote address: %s , obtained from X-FORWARDED_FOR header?", ipAddress, ipFromHeader));
             }
         }
         return ipAddress;
     }
     
     /**
-     * Get current request's session id or null if session has not yet been created or if invoked outside the scope of an Execution/ServletRequest.
+     * Get current request's session id or null if session has not yet been created or if invoked
+     * outside the scope of an Execution/ServletRequest.
+     * 
      * @return String representing session id or null if session has not yet been created
      */
     public static String getSessionId() {
@@ -163,7 +165,8 @@ public class RequestUtil {
     }
     
     /**
-     * Return request, throwing IllegalStateException if invoked outside the scope of an Execution/ServletRequest
+     * Return request, throwing IllegalStateException if invoked outside the scope of an
+     * Execution/ServletRequest
      * 
      * @return HttpServletRequest
      * @throws IllegalStateException if called outside scope of an HttpServletRequest
@@ -196,7 +199,7 @@ public class RequestUtil {
         IUser user = SecurityUtil.getAuthenticatedUser();
         List<String> dc = new ArrayList<String>();
         dc.add(getSessionId());
-        dc.add(user == null ? "Unknown user" : user.getFullName());
+        dc.add(user == null ? "Unknown user" : user.getLoginName());
         dc.add(FrameworkWebSupport.getDesktopId());
         dc.add(getRemoteAddress());
         dc.add(getLocalHostAddress());
