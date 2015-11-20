@@ -7,7 +7,7 @@
  * Disclaimer of Warranty and Limitation of Liability available at
  * http://www.carewebframework.org/licensing/disclaimer.
  */
-package org.carewebframework.help;
+package org.carewebframework.help.viewer;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -17,7 +17,9 @@ import org.apache.commons.beanutils.MethodUtils;
 import org.apache.commons.lang.StringUtils;
 
 import org.carewebframework.common.MiscUtil;
-import org.carewebframework.help.HelpHistory.ITopicListener;
+import org.carewebframework.help.HelpTopic;
+import org.carewebframework.help.IHelpSet;
+import org.carewebframework.help.viewer.HelpHistory.ITopicListener;
 import org.carewebframework.ui.event.InvocationRequestQueue;
 import org.carewebframework.ui.zk.ZKUtil;
 
@@ -87,7 +89,7 @@ public class HelpViewer extends Window implements IHelpViewer, AfterCompose, ITo
     }
     
     /**
-     * @see org.carewebframework.help.IHelpViewer#show()
+     * @see org.carewebframework.help.viewer.IHelpViewer#show()
      */
     @Override
     public void show() {
@@ -103,7 +105,7 @@ public class HelpViewer extends Window implements IHelpViewer, AfterCompose, ITo
     }
     
     /**
-     * @see org.carewebframework.help.IHelpViewer#show(java.lang.String)
+     * @see org.carewebframework.help.viewer.IHelpViewer#show(java.lang.String)
      */
     @Override
     public void show(String homeId) {
@@ -111,7 +113,7 @@ public class HelpViewer extends Window implements IHelpViewer, AfterCompose, ITo
     }
     
     /**
-     * @see org.carewebframework.help.IHelpViewer#show(IHelpSet)
+     * @see org.carewebframework.help.viewer.IHelpViewer#show(IHelpSet)
      */
     @Override
     public void show(IHelpSet helpSet) {
@@ -119,7 +121,7 @@ public class HelpViewer extends Window implements IHelpViewer, AfterCompose, ITo
     }
     
     /**
-     * @see org.carewebframework.help.IHelpViewer#show(java.lang.String, java.lang.String)
+     * @see org.carewebframework.help.viewer.IHelpViewer#show(java.lang.String, java.lang.String)
      */
     @Override
     public void show(String homeId, String topicId) {
@@ -127,7 +129,7 @@ public class HelpViewer extends Window implements IHelpViewer, AfterCompose, ITo
     }
     
     /**
-     * @see org.carewebframework.help.IHelpViewer#show(IHelpSet, java.lang.String)
+     * @see org.carewebframework.help.viewer.IHelpViewer#show(IHelpSet, java.lang.String)
      */
     @Override
     public void show(IHelpSet helpSet, String topicId) {
@@ -135,7 +137,8 @@ public class HelpViewer extends Window implements IHelpViewer, AfterCompose, ITo
     }
     
     /**
-     * @see org.carewebframework.help.IHelpViewer#show(IHelpSet, java.lang.String, java.lang.String)
+     * @see org.carewebframework.help.viewer.IHelpViewer#show(IHelpSet, java.lang.String,
+     *      java.lang.String)
      */
     @Override
     public void show(IHelpSet helpSet, String topicId, String topicLabel) {
@@ -151,7 +154,7 @@ public class HelpViewer extends Window implements IHelpViewer, AfterCompose, ITo
     }
     
     /**
-     * @see org.carewebframework.help.IHelpViewer#show(org.carewebframework.help.HelpViewType)
+     * @see org.carewebframework.help.viewer.IHelpViewer#show(org.carewebframework.help.viewer.HelpViewType)
      */
     @Override
     public void show(HelpViewType viewType) {
@@ -169,7 +172,7 @@ public class HelpViewer extends Window implements IHelpViewer, AfterCompose, ITo
      * Close the window. If this is a local window, simply hide it. If it is a remote window, close
      * the browser window entirely.
      * 
-     * @see org.carewebframework.help.IHelpViewer#close()
+     * @see org.carewebframework.help.viewer.IHelpViewer#close()
      */
     @Override
     public void close() {
@@ -194,7 +197,7 @@ public class HelpViewer extends Window implements IHelpViewer, AfterCompose, ITo
     }
     
     /**
-     * @see org.carewebframework.help.IHelpViewer#load(java.lang.Iterable)
+     * @see org.carewebframework.help.viewer.IHelpViewer#load(java.lang.Iterable)
      */
     @Override
     public void load(Iterable<IHelpSet> helpSets) {
@@ -224,7 +227,7 @@ public class HelpViewer extends Window implements IHelpViewer, AfterCompose, ITo
     }
     
     /**
-     * @see org.carewebframework.help.IHelpViewer#mergeHelpSet(IHelpSet)
+     * @see org.carewebframework.help.viewer.IHelpViewer#mergeHelpSet(IHelpSet)
      */
     @Override
     public void mergeHelpSet(IHelpSet helpSet) {
@@ -232,8 +235,10 @@ public class HelpViewer extends Window implements IHelpViewer, AfterCompose, ITo
             return;
         }
         
-        HelpSearchTab searchTab = (HelpSearchTab) findTab(HelpViewType.Search, true);
-        searchTab.mergeHelpSet(helpSet);
+        if (HelpUtil.getSearchService() != null) {
+            HelpSearchTab searchTab = (HelpSearchTab) findTab(HelpViewType.Search, true);
+            searchTab.mergeHelpSet(helpSet);
+        }
         
         // Each supported view type will result in a dedicated tab
         
@@ -469,7 +474,7 @@ public class HelpViewer extends Window implements IHelpViewer, AfterCompose, ITo
     /**
      * Invoked by the view history whenever the selected topic changes.
      * 
-     * @see org.carewebframework.help.HelpHistory.ITopicListener#onTopicSelected(HelpTopic)
+     * @see org.carewebframework.help.viewer.HelpHistory.ITopicListener#onTopicSelected(HelpTopic)
      */
     @Override
     public void onTopicSelected(HelpTopic topic) {

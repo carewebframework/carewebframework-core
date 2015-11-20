@@ -28,11 +28,10 @@ import org.carewebframework.api.security.SecurityUtil;
 import org.carewebframework.api.spring.SpringUtil;
 import org.carewebframework.common.MiscUtil;
 import org.carewebframework.common.StrUtil;
-import org.carewebframework.help.HelpCSH;
 import org.carewebframework.help.HelpModule;
 import org.carewebframework.help.HelpSetCache;
-import org.carewebframework.help.HelpUtil;
 import org.carewebframework.help.IHelpSet;
+import org.carewebframework.help.viewer.HelpUtil;
 import org.carewebframework.shell.layout.UIElementDesktop;
 import org.carewebframework.shell.layout.UIElementZKBase;
 import org.carewebframework.shell.layout.UILayout;
@@ -197,7 +196,7 @@ public class CareWebShell extends Div implements AfterCompose {
     public void onCommand(CommandEvent event) {
         if ("help".equals(event.getCommandName())) {
             Component ref = event.getReference();
-            HelpCSH.showCSH(ref == null ? event.getTarget() : ref);
+            HelpUtil.showCSH(ref == null ? event.getTarget() : ref);
         }
     }
     
@@ -447,6 +446,17 @@ public class CareWebShell extends Div implements AfterCompose {
         }
         
         desktop.addHelpMenu(resource);
+    }
+    
+    /**
+     * Registers help resource from a plugin definition.
+     * 
+     * @param def A plugin definition.
+     */
+    public void registerHelpResources(PluginDefinition def) {
+        for (PluginResourceHelp resource : def.getResources(PluginResourceHelp.class)) {
+            registerHelpResource(resource);
+        }
     }
     
     /**

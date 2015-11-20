@@ -4,16 +4,11 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="
 		http://www.springframework.org/schema/beans
-		http://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.carewebframework.org/schema/plugin
-		http://www.carewebframework.org/schema/plugin/plugin-extensions.xsd">
+		http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 	<beans profile="root">
-		<!-- Builds a lucene index for searching help content. -->
-		<bean id="helpSearchService" class="org.carewebframework.help.HelpSearchService"
-			factory-method="getInstance" init-method="init" destroy-method="destroy">
-			<property name="indexDirectoryPath" value="${org.carewebframework.help.index.dir:}" />
-		</bean>
+		<!-- Null implementation of search service. -->
+		<bean id="helpSearchService" class="org.carewebframework.api.spring.NullFactoryBean" />
 		
 		<!-- Represents a registry of all known help modules. -->
 		<bean id="helpRegistry" class="org.carewebframework.help.HelpModuleRegistry"
@@ -23,7 +18,7 @@
 
 		<!-- Set Help Subsystem Properties -->
 		<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
-			<property name="staticMethod" value="org.carewebframework.help.HelpUtil.setEmbeddedMode" />
+			<property name="staticMethod" value="org.carewebframework.help.viewer.HelpUtil.setEmbeddedMode" />
 			<property name="arguments" value="${org.carewebframework.help.viewer.embedded:false}" />
 		</bean>
 		

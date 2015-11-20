@@ -12,14 +12,14 @@ package org.carewebframework.shell.layout;
 import org.apache.commons.lang.StringUtils;
 
 import org.carewebframework.api.security.SecurityUtil;
-import org.carewebframework.help.HelpUtil;
-import org.carewebframework.help.HelpViewer.HelpViewerMode;
+import org.carewebframework.help.viewer.HelpUtil;
+import org.carewebframework.help.viewer.HelpViewer.HelpViewerMode;
 import org.carewebframework.shell.CareWebShell;
 import org.carewebframework.shell.designer.DesignConstants;
 import org.carewebframework.shell.designer.DesignMenu;
 import org.carewebframework.shell.plugins.PluginResourceHelp;
-import org.carewebframework.ui.action.ActionListener;
 import org.carewebframework.theme.ThemeUtil;
+import org.carewebframework.ui.action.ActionListener;
 import org.carewebframework.ui.zk.MenuEx;
 import org.carewebframework.ui.zk.MenuUtil;
 import org.carewebframework.ui.zk.ZKUtil;
@@ -263,6 +263,7 @@ public class UIElementDesktop extends UIElementZKBase {
      */
     @Override
     public void activate(boolean activate) {
+        shell.registerHelpResources(getDefinition());
         Clients.resize(desktopOuter);
         super.activate(activate);
     }

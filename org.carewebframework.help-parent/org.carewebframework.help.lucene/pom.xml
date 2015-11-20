@@ -7,14 +7,24 @@
 		<version>5.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>org.carewebframework.help.core</artifactId>
-	<name>CareWeb Framework Help Subsystem</name>
-	<description>Help subsystem for CareWeb Framework</description>
+	<artifactId>org.carewebframework.help.lucene</artifactId>
+	<name>CareWeb Framework Help Indexer</name>
+	<description>Lucene-based indexing and search service for help system.</description>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.carewebframework</groupId>
-			<artifactId>org.carewebframework.ui.core</artifactId>
+			<artifactId>org.carewebframework.help.core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-analyzers-common</artifactId>
+			<version>4.10.4</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.tika</groupId>
+			<artifactId>tika-parsers</artifactId>
+			<version>1.10</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>

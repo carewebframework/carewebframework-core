@@ -1,5 +1,5 @@
 <window xmlns:c="client" id="win" border="none" height="80%"
-	mold="bootstrap" use="org.carewebframework.help.HelpViewer">
+	mold="bootstrap" use="org.carewebframework.help.viewer.HelpViewer">
 	<borderlayout>
 		<west size="33%" splittable="true">
 			<div height="100%" width="100%">

@@ -11,8 +11,8 @@ package org.carewebframework.shell;
 
 import org.carewebframework.api.FrameworkUtil;
 import org.carewebframework.api.ManifestIterator;
-import org.carewebframework.help.HelpCSH;
 import org.carewebframework.help.HelpContext;
+import org.carewebframework.help.viewer.HelpUtil;
 import org.carewebframework.ui.action.ActionRegistry;
 import org.carewebframework.ui.zk.MessageWindow.MessageInfo;
 
@@ -98,7 +98,7 @@ public class CareWebUtil {
      */
     public static void associateCSH(XulElement component, String module, String topic, String label) {
         HelpContext context = new HelpContext(module, topic, label);
-        HelpCSH.associateCSH(component, context, getShell());
+        HelpUtil.associateCSH(component, context, getShell());
     }
     
     /**
@@ -108,7 +108,7 @@ public class CareWebUtil {
      * @param context The help context.
      */
     public static void associateCSH(XulElement component, HelpContext context) {
-        HelpCSH.associateCSH(component, context, getShell());
+        HelpUtil.associateCSH(component, context, getShell());
     }
     
     /**

@@ -7,21 +7,31 @@
  * Disclaimer of Warranty and Limitation of Liability available at
  * http://www.carewebframework.org/licensing/disclaimer.
  */
-package org.carewebframework.help;
+package org.carewebframework.help.viewer;
 
 import java.io.IOException;
 
-import org.carewebframework.help.HelpViewer.HelpViewerMode;
+import org.carewebframework.api.spring.SpringUtil;
+import org.carewebframework.help.HelpContext;
+import org.carewebframework.help.HelpModule;
+import org.carewebframework.help.HelpModuleRegistry;
+import org.carewebframework.help.HelpSetCache;
+import org.carewebframework.help.IHelpSearch;
+import org.carewebframework.help.IHelpSet;
+import org.carewebframework.help.viewer.HelpViewer.HelpViewerMode;
 import org.carewebframework.ui.FrameworkWebSupport;
+import org.carewebframework.ui.command.CommandUtil;
 import org.carewebframework.ui.event.InvocationRequest;
 import org.carewebframework.ui.event.InvocationRequestQueue;
 import org.carewebframework.ui.zk.ZKUtil;
 
 import org.zkoss.image.AImage;
+import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.util.Clients;
+import org.zkoss.zul.impl.XulElement;
 
 /**
  * Utility class containing helper methods in support of online help infrastructure.
@@ -34,11 +44,15 @@ public class HelpUtil {
     
     protected static final String IMAGES_ROOT = RESOURCE_PREFIX + "images/";
     
-    protected static final String VIEWER_URL = HelpUtil.RESOURCE_PREFIX + "helpViewer.zul";
+    protected static final String VIEWER_URL = RESOURCE_PREFIX + "helpViewer.zul";
     
     protected static final String VIEWER_ATTRIB = VIEWER_URL;
     
     protected static final String EMBEDDED_ATTRIB = RESOURCE_PREFIX + "embedded";
+    
+    private static final String CSH_PREFIX = HelpUtil.class.getPackage().getName() + ".";
+    
+    private static final String CSH_TARGET = CSH_PREFIX + "target";
     
     /*package*/static final String HELP_QUEUE_PREFIX = "Help_Message_Queue";
     
@@ -152,8 +166,99 @@ public class HelpUtil {
     }
     
     /**
+     * Show help for the given module and optional topic.
+     * 
+     * @param module The id of the help module.
+     * @param topic The id of the desired topic. If null, the home topic is shown.
+     * @param label The label to display for the topic. If null, the topic id is displayed as the
+     *            label.
+     */
+    public static void show(String module, String topic, String label) {
+        show(new HelpContext(module, topic, label));
+    }
+    
+    /**
+     * Show help for the given help target.
+     * 
+     * @param target The help target.
+     */
+    public static void show(HelpContext target) {
+        HelpModule dx = HelpModuleRegistry.getInstance().get(target.module);
+        IHelpSet hs = dx == null ? null : HelpSetCache.getInstance().get(dx);
+        
+        if (hs != null) {
+            String label = target.label == null && target.topic == null ? dx.getTitle() : target.label;
+            IHelpViewer viewer = getViewer();
+            viewer.mergeHelpSet(hs);
+            viewer.show(hs, target.topic, label);
+        }
+    }
+    
+    /**
+     * Displays the help viewer's table of contents.
+     */
+    public static void showTOC() {
+        getViewer().show(HelpViewType.TOC);
+    }
+    
+    /**
+     * Display context-sensitive help associated with the specified component. If none is associated
+     * with the component, its parent is examined, and so on. If no help association is found, no
+     * action is taken.
+     * 
+     * @param component Component whose CSH is to be displayed.
+     */
+    public static void showCSH(Component component) {
+        while (component != null) {
+            HelpContext target = (HelpContext) component.getAttribute(CSH_TARGET);
+            
+            if (target != null) {
+                HelpUtil.show(target);
+                break;
+            }
+            component = component.getParent();
+        }
+    }
+    
+    /**
+     * Associates context-sensitive help topic with a component. Any existing association is
+     * replaced.
+     * 
+     * @param component Component to be associated.
+     * @param helpContext The help target.
+     * @param commandTarget The command target.
+     */
+    public static void associateCSH(XulElement component, HelpContext helpContext, Component commandTarget) {
+        if (component != null) {
+            component.setAttribute(CSH_TARGET, helpContext);
+            CommandUtil.associateCommand("help", component, commandTarget);
+        }
+    }
+    
+    /**
+     * Dissociates context-sensitive help from a component.
+     * 
+     * @param component Component to dissociate.
+     */
+    public static void dissociateCSH(XulElement component) {
+        if (component != null && component.hasAttribute(CSH_TARGET)) {
+            CommandUtil.dissociateCommand("help", component);
+            component.removeAttribute(CSH_TARGET);
+        }
+    }
+    
+    /**
+     * Returns a reference to the help search service if one is available.
+     * 
+     * @return A reference to the help search service (possibily null).
+     */
+    public static IHelpSearch getSearchService() {
+        return SpringUtil.getBean("helpSearchService", IHelpSearch.class);
+    }
+    
+    /**
      * Static invocation only.
      */
     private HelpUtil() {
-    };
+    }
 }

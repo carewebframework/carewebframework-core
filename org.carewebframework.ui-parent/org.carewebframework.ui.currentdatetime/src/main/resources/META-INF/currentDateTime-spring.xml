@@ -9,13 +9,6 @@
 		 http://www.carewebframework.org/schema/plugin/plugin-extensions.xsd">
 
 	<beans profile="root">
-		<!--
-		********************************************************************* 
-		
-		This profile is processed during web server startup.  
-		
-		*********************************************************************
-		-->
 		
 		<cwp:plugin id="currentDateTime" name="Current Date and Time" url="~./org/carewebframework/ui/currentdatetime/currentDateTime.zul">
 			<cwp:serialization>

@@ -9,8 +9,8 @@
  */
 package org.carewebframework.shell.plugins;
 
-import org.carewebframework.help.HelpCSH;
 import org.carewebframework.help.HelpModule;
+import org.carewebframework.help.viewer.HelpUtil;
 
 /**
  * Resource for declaring items to appear under the help menu.
@@ -83,7 +83,7 @@ public class PluginResourceHelp implements IPluginResource {
         if (action == null) {
             HelpModule module = HelpModule.getModule(id);
             action = module == null ? ""
-                    : "zscript:" + HelpCSH.class.getName() + ".show(\"" + id + "\",\"" + (topic == null ? "" : topic)
+                    : "zscript:" + HelpUtil.class.getName() + ".show(\"" + id + "\",\"" + (topic == null ? "" : topic)
                             + "\",\"" + module.getTitle() + "\");";
         }
         

@@ -7,11 +7,13 @@
  * Disclaimer of Warranty and Limitation of Liability available at
  * http://www.carewebframework.org/licensing/disclaimer.
  */
-package org.carewebframework.help;
+package org.carewebframework.help.viewer;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import org.carewebframework.help.HelpTopic;
+import org.carewebframework.help.HelpTopicNode;
 import org.carewebframework.ui.zk.TreeUtil;
 
 import org.zkoss.zul.Tree;

@@ -7,12 +7,13 @@
  * Disclaimer of Warranty and Limitation of Liability available at
  * http://www.carewebframework.org/licensing/disclaimer.
  */
-package org.carewebframework.help;
+package org.carewebframework.help.viewer;
 
 import java.util.List;
 
 import org.carewebframework.common.StrUtil;
-import org.carewebframework.help.HelpHistory.ITopicListener;
+import org.carewebframework.help.HelpTopic;
+import org.carewebframework.help.viewer.HelpHistory.ITopicListener;
 import org.carewebframework.ui.zk.ZKUtil;
 
 import org.zkoss.zk.ui.Component;
@@ -173,7 +174,7 @@ public abstract class HelpTab extends Tabpanel implements IdSpace, ITopicListene
      * (like selecting the corresponding UI element). Note that the originator of the topic change
      * may be the same tab.
      * 
-     * @see org.carewebframework.help.HelpHistory.ITopicListener#onTopicSelected(HelpTopic)
+     * @see org.carewebframework.help.viewer.HelpHistory.ITopicListener#onTopicSelected(HelpTopic)
      */
     @Override
     public void onTopicSelected(HelpTopic topic) {

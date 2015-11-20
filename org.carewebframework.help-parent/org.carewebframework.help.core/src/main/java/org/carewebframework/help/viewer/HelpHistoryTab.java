@@ -7,7 +7,9 @@
  * Disclaimer of Warranty and Limitation of Liability available at
  * http://www.carewebframework.org/licensing/disclaimer.
  */
-package org.carewebframework.help;
+package org.carewebframework.help.viewer;
+
+import org.carewebframework.help.HelpTopic;
 
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listitem;
@@ -50,7 +52,7 @@ public class HelpHistoryTab extends HelpTab implements ListitemRenderer<HelpTopi
     /**
      * Sets focus to the list box when the tab is selected.
      * 
-     * @see org.carewebframework.help.HelpTab#onSelect()
+     * @see org.carewebframework.help.viewer.HelpTab#onSelect()
      */
     @Override
     public void onSelect() {
@@ -61,7 +63,7 @@ public class HelpHistoryTab extends HelpTab implements ListitemRenderer<HelpTopi
     /**
      * Updated the list box selection when the history selection changes.
      * 
-     * @see org.carewebframework.help.HelpTab#onTopicSelected(HelpTopic)
+     * @see org.carewebframework.help.viewer.HelpTab#onTopicSelected(HelpTopic)
      */
     @Override
     public void onTopicSelected(HelpTopic topic) {

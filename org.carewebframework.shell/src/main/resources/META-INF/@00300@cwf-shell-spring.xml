@@ -66,6 +66,9 @@
 				<cwp:property id="toolbar" type="children"
 					name="${labels.cwf.shell.plugin._desktop.toolbar.name}" description="${labels.cwf.shell.plugin._desktop.toolbar.description}" />
 			</cwp:serialization>
+			<cwp:resource>
+				<cwp:help-resource module="${org.carewebframework.help.module.shell:cwfShellHelp}"/>
+			</cwp:resource>
 		</cwp:plugin>
 
 		<cwp:plugin id="tabview" category="${labels.cwf.shell.plugin.category.stock}"

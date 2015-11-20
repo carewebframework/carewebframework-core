@@ -7,9 +7,9 @@ import java.util.Collection;
 
 import org.carewebframework.help.HelpModule;
 import org.carewebframework.help.HelpTopicNode;
-import org.carewebframework.help.HelpViewType;
 import org.carewebframework.help.IHelpSet;
-import org.carewebframework.help.IHelpView;
+import org.carewebframework.help.viewer.HelpViewType;
+import org.carewebframework.help.viewer.IHelpView;
 
 import org.junit.Test;
 

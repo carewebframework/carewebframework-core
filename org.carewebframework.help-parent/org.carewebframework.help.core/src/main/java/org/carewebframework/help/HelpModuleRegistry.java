@@ -23,7 +23,7 @@ public class HelpModuleRegistry extends BeanRegistry<String, HelpModule> {
         return instance;
     }
     
-    private HelpSearchService service;
+    private IHelpSearch service;
     
     /**
      * Enforce singleton instance.
@@ -67,7 +67,7 @@ public class HelpModuleRegistry extends BeanRegistry<String, HelpModule> {
         }
     }
     
-    public void setService(HelpSearchService service) {
+    public void setService(IHelpSearch service) {
         this.service = service;
     }
     

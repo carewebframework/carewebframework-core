@@ -7,7 +7,9 @@
  * Disclaimer of Warranty and Limitation of Liability available at
  * http://www.carewebframework.org/licensing/disclaimer.
  */
-package org.carewebframework.help;
+package org.carewebframework.help.viewer;
+
+import org.carewebframework.help.HelpTopicNode;
 
 /**
  * Interface to be implemented by a help view provider.

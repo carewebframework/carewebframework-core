@@ -7,7 +7,7 @@
  * Disclaimer of Warranty and Limitation of Liability available at
  * http://www.carewebframework.org/licensing/disclaimer.
  */
-package org.carewebframework.help;
+package org.carewebframework.help.viewer;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -16,7 +16,10 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 
 import org.carewebframework.common.StrUtil;
-import org.carewebframework.help.HelpSearchService.IHelpSearchListener;
+import org.carewebframework.help.HelpSearchHit;
+import org.carewebframework.help.HelpTopic;
+import org.carewebframework.help.IHelpSearch.IHelpSearchListener;
+import org.carewebframework.help.IHelpSet;
 
 import org.zkoss.image.AImage;
 import org.zkoss.zk.ui.Executions;
@@ -90,7 +93,7 @@ public class HelpSearchTab extends HelpTab implements ListitemRenderer<HelpSearc
     /**
      * Sets the focus to the search text box when the tab is selected.
      * 
-     * @see org.carewebframework.help.HelpTab#onSelect()
+     * @see org.carewebframework.help.viewer.HelpTab#onSelect()
      */
     @Override
     public void onSelect() {
@@ -125,7 +128,7 @@ public class HelpSearchTab extends HelpTab implements ListitemRenderer<HelpSearc
         showMessage(null);
         
         if (query != null && query.trim().length() > 0) {
-            HelpSearchService.getInstance().search(query, helpSets, this);
+            HelpUtil.getSearchService().search(query, helpSets, this);
         } else {
             showMessage("cwf.help.tab.search.noentry");
         }

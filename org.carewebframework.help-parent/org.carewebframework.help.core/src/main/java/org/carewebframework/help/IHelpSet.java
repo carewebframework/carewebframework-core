@@ -11,6 +11,8 @@ package org.carewebframework.help;
 
 import java.util.Collection;
 
+import org.carewebframework.help.viewer.IHelpView;
+
 /**
  * Interface to be implemented by a help set provider.
  */

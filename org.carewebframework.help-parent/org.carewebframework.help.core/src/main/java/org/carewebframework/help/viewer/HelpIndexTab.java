@@ -7,7 +7,7 @@
  * Disclaimer of Warranty and Limitation of Liability available at
  * http://www.carewebframework.org/licensing/disclaimer.
  */
-package org.carewebframework.help;
+package org.carewebframework.help.viewer;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,6 +17,8 @@ import java.util.TreeMap;
 
 import org.apache.commons.lang.StringUtils;
 
+import org.carewebframework.help.HelpTopic;
+import org.carewebframework.help.HelpTopicNode;
 import org.carewebframework.ui.zk.ZKUtil;
 
 import org.zkoss.zk.ui.event.Event;
@@ -137,7 +139,7 @@ public class HelpIndexTab extends HelpTab implements ListitemRenderer<HelpTopic>
      * Initialize the tab the first time it is selected. This method creates a model list from the
      * current keyword list and assigns it to the keyword list box.
      * 
-     * @see org.carewebframework.help.HelpTab#init()
+     * @see org.carewebframework.help.viewer.HelpTab#init()
      */
     @Override
     protected void init() {
@@ -149,7 +151,7 @@ public class HelpIndexTab extends HelpTab implements ListitemRenderer<HelpTopic>
     /**
      * Sets the focus to the quick find text box when the tab is selected.
      * 
-     * @see org.carewebframework.help.HelpTab#onSelect()
+     * @see org.carewebframework.help.viewer.HelpTab#onSelect()
      */
     @Override
     public void onSelect() {
@@ -161,7 +163,7 @@ public class HelpIndexTab extends HelpTab implements ListitemRenderer<HelpTopic>
     /**
      * Add keywords and topics from the specified view to the tab.
      * 
-     * @see org.carewebframework.help.HelpTab#addView(IHelpView)
+     * @see org.carewebframework.help.viewer.HelpTab#addView(IHelpView)
      */
     @Override
     public void addView(IHelpView view) {

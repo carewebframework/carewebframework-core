@@ -7,7 +7,7 @@
  * Disclaimer of Warranty and Limitation of Liability available at
  * http://www.carewebframework.org/licensing/disclaimer.
  */
-package org.carewebframework.help;
+package org.carewebframework.help.lucene;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -52,6 +52,11 @@ import org.apache.tika.parser.html.HtmlParser;
 
 import org.carewebframework.common.MiscUtil;
 import org.carewebframework.common.StrUtil;
+import org.carewebframework.help.HelpModule;
+import org.carewebframework.help.HelpSearchHit;
+import org.carewebframework.help.HelpTopic;
+import org.carewebframework.help.IHelpSearch;
+import org.carewebframework.help.IHelpSet;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
@@ -62,23 +67,9 @@ import org.springframework.util.StringUtils;
 /**
  * Service for managing the search index and providing search capabilities using Lucene.
  */
-public class HelpSearchService implements ApplicationContextAware {
+public class HelpSearchService implements IHelpSearch, ApplicationContextAware {
     
     private static final Log log = LogFactory.getLog(HelpSearchService.class);
-    
-    /**
-     * Callback interface for receiving search results.
-     */
-    public interface IHelpSearchListener {
-        
-        /**
-         * Called by search engine to report results.
-         * 
-         * @param results List of search results (may be null to indicated no results or no search
-         *            capability).
-         */
-        void onSearchComplete(List<HelpSearchHit> results);
-    }
     
     private static class IndexTracker {
         
@@ -232,7 +223,7 @@ public class HelpSearchService implements ApplicationContextAware {
             indexDirectoryPath = System.getProperty("java.io.tmpdir") + appContext.getApplicationName();
         }
         
-        File dir = new File(indexDirectoryPath, HelpUtil.class.getPackage().getName());
+        File dir = new File(indexDirectoryPath, getClass().getPackage().getName());
         
         if (!dir.exists() && !dir.mkdirs()) {
             throw new IOException("Failed to create help search index directory.");
@@ -247,6 +238,7 @@ public class HelpSearchService implements ApplicationContextAware {
      * 
      * @param helpModule Help module to be indexed.
      */
+    @Override
     public void indexHelpModule(HelpModule helpModule) {
         try {
             if (indexTracker.isSame(helpModule)) {
@@ -274,6 +266,7 @@ public class HelpSearchService implements ApplicationContextAware {
      * 
      * @param helpModule Help module whose index is to be removed.
      */
+    @Override
     public void unindexHelpModule(HelpModule helpModule) {
         try {
             log.info("Removing index for help module " + helpModule.getLocalizedId());
@@ -347,6 +340,7 @@ public class HelpSearchService implements ApplicationContextAware {
      * @param helpSets Help sets to be searched
      * @param listener Listener for search results.
      */
+    @Override
     public void search(String words, Collection<IHelpSet> helpSets, IHelpSearchListener listener) {
         try {
             if (queryBuilder == null) {

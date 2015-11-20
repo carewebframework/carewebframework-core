@@ -7,11 +7,12 @@
  * Disclaimer of Warranty and Limitation of Liability available at
  * http://www.carewebframework.org/licensing/disclaimer.
  */
-package org.carewebframework.help;
+package org.carewebframework.help.viewer;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.carewebframework.help.IHelpSet;
 import org.carewebframework.ui.event.InvocationRequest;
 import org.carewebframework.ui.event.InvocationRequestQueue;
 
@@ -118,7 +119,7 @@ public class HelpViewerProxy implements IHelpViewer {
     }
     
     /**
-     * @see org.carewebframework.help.IHelpViewer#load(java.lang.Iterable)
+     * @see org.carewebframework.help.viewer.IHelpViewer#load(java.lang.Iterable)
      */
     @Override
     public void load(Iterable<IHelpSet> helpSets) {
@@ -134,7 +135,7 @@ public class HelpViewerProxy implements IHelpViewer {
     }
     
     /**
-     * @see org.carewebframework.help.IHelpViewer#mergeHelpSet
+     * @see org.carewebframework.help.viewer.IHelpViewer#mergeHelpSet
      */
     @Override
     public void mergeHelpSet(IHelpSet helpSet) {
@@ -143,7 +144,7 @@ public class HelpViewerProxy implements IHelpViewer {
     }
     
     /**
-     * @see org.carewebframework.help.IHelpViewer#show()
+     * @see org.carewebframework.help.viewer.IHelpViewer#show()
      */
     @Override
     public void show() {
@@ -151,7 +152,7 @@ public class HelpViewerProxy implements IHelpViewer {
     }
     
     /**
-     * @see org.carewebframework.help.IHelpViewer#show(IHelpSet)
+     * @see org.carewebframework.help.viewer.IHelpViewer#show(IHelpSet)
      */
     @Override
     public void show(IHelpSet helpSet) {
@@ -159,7 +160,7 @@ public class HelpViewerProxy implements IHelpViewer {
     }
     
     /**
-     * @see org.carewebframework.help.IHelpViewer#show(IHelpSet, java.lang.String)
+     * @see org.carewebframework.help.viewer.IHelpViewer#show(IHelpSet, java.lang.String)
      */
     @Override
     public void show(IHelpSet helpSet, String topicId) {
@@ -167,7 +168,7 @@ public class HelpViewerProxy implements IHelpViewer {
     }
     
     /**
-     * @see org.carewebframework.help.IHelpViewer#show(IHelpSet, java.lang.String, java.lang.String)
+     * @see org.carewebframework.help.viewer.IHelpViewer#show(IHelpSet, java.lang.String, java.lang.String)
      */
     @Override
     public void show(IHelpSet helpSet, String topicId, String topicLabel) {
@@ -175,7 +176,7 @@ public class HelpViewerProxy implements IHelpViewer {
     }
     
     /**
-     * @see org.carewebframework.help.IHelpViewer#show(HelpViewType)
+     * @see org.carewebframework.help.viewer.IHelpViewer#show(HelpViewType)
      */
     @Override
     public void show(HelpViewType viewType) {
@@ -183,7 +184,7 @@ public class HelpViewerProxy implements IHelpViewer {
     }
     
     /**
-     * @see org.carewebframework.help.IHelpViewer#show(java.lang.String)
+     * @see org.carewebframework.help.viewer.IHelpViewer#show(java.lang.String)
      */
     @Override
     public void show(String homeId) {
@@ -191,7 +192,7 @@ public class HelpViewerProxy implements IHelpViewer {
     }
     
     /**
-     * @see org.carewebframework.help.IHelpViewer#show(java.lang.String, java.lang.String)
+     * @see org.carewebframework.help.viewer.IHelpViewer#show(java.lang.String, java.lang.String)
      */
     @Override
     public void show(String homeId, String topicId) {
@@ -199,7 +200,7 @@ public class HelpViewerProxy implements IHelpViewer {
     }
     
     /**
-     * @see org.carewebframework.help.IHelpViewer#close()
+     * @see org.carewebframework.help.viewer.IHelpViewer#close()
      */
     @Override
     public void close() {
