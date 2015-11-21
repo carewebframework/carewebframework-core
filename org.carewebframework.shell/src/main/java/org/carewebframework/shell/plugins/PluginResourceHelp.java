@@ -145,11 +145,4 @@ public class PluginResourceHelp implements IPluginResource {
         this.id = module;
     }
     
-    /**
-     * Registers the help resource with the container.
-     */
-    @Override
-    public void process(PluginContainer container) {
-        container.getShell().registerHelpResource(this);
-    }
 }

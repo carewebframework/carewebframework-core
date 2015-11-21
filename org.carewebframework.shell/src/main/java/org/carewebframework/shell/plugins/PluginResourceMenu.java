@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -8,8 +8,6 @@
  * http://www.carewebframework.org/licensing/disclaimer.
  */
 package org.carewebframework.shell.plugins;
-
-import org.zkoss.zul.Menu;
 
 /**
  * Resource for declaring items to appear on the common menu.
@@ -85,13 +83,4 @@ public class PluginResourceMenu implements IPluginResource {
         this.id = id;
     }
     
-    /**
-     * Registers the menu resource with the container.
-     */
-    @Override
-    public void process(PluginContainer container) {
-        Menu menu = container.getShell().addMenu(path, action);
-        container.registerComponent(menu);
-        container.registerId(id, menu);
-    }
 }

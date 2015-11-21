@@ -263,7 +263,6 @@ public class UIElementDesktop extends UIElementZKBase {
      */
     @Override
     public void activate(boolean activate) {
-        shell.registerHelpResources(getDefinition());
         Clients.resize(desktopOuter);
         super.activate(activate);
     }

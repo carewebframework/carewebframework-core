@@ -10,13 +10,18 @@
 package org.carewebframework.shell.layout;
 
 import org.carewebframework.shell.AboutDialog;
-import org.carewebframework.shell.plugins.IPluginResource;
 import org.carewebframework.shell.plugins.PluginContainer;
 import org.carewebframework.shell.plugins.PluginDefinition;
+import org.carewebframework.shell.plugins.PluginResourceBean;
+import org.carewebframework.shell.plugins.PluginResourceButton;
+import org.carewebframework.shell.plugins.PluginResourceMenu;
 import org.carewebframework.shell.property.IPropertyAccessor;
 import org.carewebframework.shell.property.PropertyInfo;
+import org.carewebframework.ui.action.ActionListener;
 
 import org.zkoss.zk.ui.ext.Disable;
+import org.zkoss.zul.Button;
+import org.zkoss.zul.Menu;
 
 /**
  * This class is used for all container-hosted plugins.
@@ -94,10 +99,6 @@ public class UIElementPlugin extends UIElementZKBase implements Disable, IProper
     public void afterInitialize(boolean deserializing) throws Exception {
         super.afterInitialize(deserializing);
         
-        for (IPluginResource resource : getDefinition().getResources()) {
-            resource.process(container);
-        }
-        
         if (!getDefinition().isLazyLoad()) {
             container.load();
         }
@@ -161,4 +162,28 @@ public class UIElementPlugin extends UIElementZKBase implements Disable, IProper
         setEnabled(!disabled);
     }
     
+    public void registerResource(PluginResourceBean resource) {
+        container.registerBean(resource.getBean(), resource.isRequired());
+    }
+    
+    public void registerResource(PluginResourceButton resource) {
+        Button button = new Button(resource.getCaption());
+        button.setId(resource.getId());
+        button.setTooltiptext(resource.getTooltip());
+        button.setImage(resource.getIcon());
+        ActionListener.addAction(button, resource.getAction());
+        container.addToolbarComponent(button);
+        container.registerId(resource.getId(), button);
+    }
+    
+    /**
+     * Registers the menu resource with the container.
+     * 
+     * @param resource A menu resource.
+     */
+    public void registerResource(PluginResourceMenu resource) {
+        Menu menu = container.getShell().addMenu(resource.getPath(), resource.getAction());
+        container.registerComponent(menu);
+        container.registerId(resource.getId(), menu);
+    }
 }

@@ -447,7 +447,7 @@ public class PluginContainer extends Idspace {
      * @param id Component id.
      * @param component Component to be registered.
      */
-    /*package*/void registerId(String id, Component component) {
+    public void registerId(String id, Component component) {
         if (!StringUtils.isEmpty(id) && !hasAttribute(id)) {
             setAttribute(id, component);
         }
@@ -614,7 +614,7 @@ public class PluginContainer extends Idspace {
      * @param beanId The bean's id.
      * @param isRequired If true and the bean is not found, an exception is raised.
      */
-    /*package*/void registerBean(String beanId, boolean isRequired) {
+    public void registerBean(String beanId, boolean isRequired) {
         if (beanId == null || beanId.isEmpty()) {
             return;
         }

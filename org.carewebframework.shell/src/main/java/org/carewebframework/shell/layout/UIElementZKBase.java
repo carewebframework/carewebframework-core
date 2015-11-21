@@ -13,6 +13,8 @@ import org.apache.commons.lang.StringUtils;
 
 import org.carewebframework.shell.designer.DesignContextMenu;
 import org.carewebframework.shell.designer.PropertyGrid;
+import org.carewebframework.shell.plugins.PluginResourceCommand;
+import org.carewebframework.ui.command.CommandUtil;
 import org.carewebframework.ui.zk.PromptDialog;
 import org.carewebframework.ui.zk.ZKUtil;
 
@@ -447,4 +449,9 @@ public abstract class UIElementZKBase extends UIElementBase {
         
         return false;
     }
+    
+    public void registerResource(PluginResourceCommand resource) {
+        CommandUtil.associateCommand(resource.getName(), (XulElement) getOuterComponent());
+    }
+    
 }

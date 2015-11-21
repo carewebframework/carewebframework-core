@@ -387,6 +387,7 @@ public class CareWebShell extends Div implements AfterCompose {
             desktop.activate(false);
             desktop.clear();
             helpModules.clear();
+            desktop.afterInitialize(false);
             HelpUtil.getViewer().load(null);
             propertyGroups.clear();
             registerPropertyGroup("CAREWEB.CONTROLS");
@@ -449,30 +450,29 @@ public class CareWebShell extends Div implements AfterCompose {
     }
     
     /**
-     * Registers help resource from a plugin definition.
-     * 
-     * @param def A plugin definition.
-     */
-    public void registerHelpResources(PluginDefinition def) {
-        for (PluginResourceHelp resource : def.getResources(PluginResourceHelp.class)) {
-            registerHelpResource(resource);
-        }
-    }
-    
-    /**
      * Registers an external style sheet. If the style sheet has not already been registered,
      * creates a style component and adds it to the current page.
      * 
      * @param url URL of style sheet.
      */
     public void registerStyleSheet(String url) {
-        for (Object style : registeredStyles.getChildren()) {
-            if (((Style) style).getSrc().equals(url)) {
-                return;
+        if (findStyleSheet(url) == null)
+        registeredStyles.appendChild(new Style(url));
+    }
+    
+    /**
+     * Returns the style sheet associated with the specified URL.
+     * @param url URL of style sheet.
+     * @return The associated style sheet, or null if not found.
+     */
+    private Style findStyleSheet(String url) {
+        for (Style style : registeredStyles.<Style>getChildren()) {
+            if (style.getSrc().equals(url)) {
+                return style;
             }
         }
         
-        registeredStyles.appendChild(new Style(url));
+        return null;
     }
     
     /**

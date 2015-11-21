@@ -9,8 +9,6 @@
  */
 package org.carewebframework.shell.plugins;
 
-import org.carewebframework.ui.action.ActionRegistry;
-
 /**
  * Resource for declaring actions supported by a plugin.
  */
@@ -79,11 +77,4 @@ public class PluginResourceAction implements IPluginResource {
         this.script = script;
     }
     
-    /**
-     * Registers the action resource with the action registry.
-     */
-    @Override
-    public void process(PluginContainer container) {
-        ActionRegistry.register(false, id, label, script);
-    }
 }

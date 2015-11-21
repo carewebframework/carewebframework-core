@@ -16,15 +16,22 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang.reflect.MethodUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import org.carewebframework.api.event.EventManager;
 import org.carewebframework.api.event.IEventManager;
 import org.carewebframework.shell.AboutDialog;
+import org.carewebframework.shell.CareWebUtil;
 import org.carewebframework.shell.plugins.PluginDefinition;
 import org.carewebframework.shell.plugins.PluginRegistry;
+import org.carewebframework.shell.plugins.PluginResourceAction;
+import org.carewebframework.shell.plugins.PluginResourceCSS;
+import org.carewebframework.shell.plugins.PluginResourceHelp;
+import org.carewebframework.shell.plugins.PluginResourcePropertyGroup;
 import org.carewebframework.shell.property.PropertyInfo;
+import org.carewebframework.ui.action.ActionRegistry;
 import org.carewebframework.ui.zk.PromptDialog;
 import org.carewebframework.ui.zk.ZKUtil;
 
@@ -400,20 +407,21 @@ public abstract class UIElementBase {
      */
     public void destroy() {
         unbind();
+        processResources(false);
     }
     
     /**
      * Override to bind wrapped components to the UI.
      */
     protected void bind() {
-        
+    
     }
     
     /**
      * Override to unbind wrapped components from the UI.
      */
     protected void unbind() {
-        
+    
     }
     
     /**
@@ -465,7 +473,7 @@ public abstract class UIElementBase {
      * @param index New position for element.
      */
     protected void afterMoveTo(int index) {
-        
+    
     }
     
     /**
@@ -1182,8 +1190,8 @@ public abstract class UIElementBase {
      * @return True if this element may accept a parent.
      */
     public boolean canAcceptParent() {
-        rejectReason = !allowedParentClasses.hasRelated(getClass()) ? getDisplayName()
-                + " does not accept any parent component." : null;
+        rejectReason = !allowedParentClasses.hasRelated(getClass())
+                ? getDisplayName() + " does not accept any parent component." : null;
         return rejectReason == null;
     }
     
@@ -1283,7 +1291,7 @@ public abstract class UIElementBase {
      * @throws Exception Unspecified exception.
      */
     public void beforeInitialize(boolean deserializing) throws Exception {
-        
+    
     }
     
     /**
@@ -1294,7 +1302,61 @@ public abstract class UIElementBase {
      * @throws Exception Unspecified exception.
      */
     public void afterInitialize(boolean deserializing) throws Exception {
-        
+        processResources(true);
     }
     
+    /**
+     * Process all associated resources.
+     * 
+     * @param register If true, resources will be registered; if false, unregistered.
+     */
+    private void processResources(boolean register) {
+        String method = register ? "registerResource" : "unregisterResource";
+        
+        for (Object resource : getDefinition().getResources()) {
+            try {
+                MethodUtils.invokeExactMethod(this, method, resource);
+            } catch (Exception e) {
+                if (register) {
+                    log.error("Error processing plugin resource of type " + resource.getClass().getName(), e);
+                }
+            }
+        }
+    }
+    
+    /**
+     * Register an action resource.
+     * 
+     * @param resource An action resource.
+     */
+    public void registerResource(PluginResourceAction resource) {
+        ActionRegistry.register(false, resource.getId(), resource.getLabel(), resource.getScript());
+    }
+    
+    /**
+     * Register a CSS resource.
+     * 
+     * @param resource A CSS resource.
+     */
+    public void registerResource(PluginResourceCSS resource) {
+        CareWebUtil.getShell().registerStyleSheet(resource.getUrl());
+    }
+    
+    /**
+     * Register a help resource.
+     * 
+     * @param resource A help resource.
+     */
+    public void registerResource(PluginResourceHelp resource) {
+        CareWebUtil.getShell().registerHelpResource(resource);
+    }
+    
+    /**
+     * Register a property resource.
+     * 
+     * @param resource A property resource.
+     */
+    public void registerResource(PluginResourcePropertyGroup resource) {
+        CareWebUtil.getShell().registerPropertyGroup(resource.getGroup());
+    }
 }

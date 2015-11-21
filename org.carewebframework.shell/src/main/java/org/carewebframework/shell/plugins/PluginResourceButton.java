@@ -10,9 +10,6 @@
 package org.carewebframework.shell.plugins;
 
 import org.carewebframework.common.StrUtil;
-import org.carewebframework.ui.action.ActionListener;
-
-import org.zkoss.zul.Button;
 
 /**
  * Resource for declaring buttons to appear on common toolbar.
@@ -125,17 +122,4 @@ public class PluginResourceButton implements IPluginResource {
         this.id = id;
     }
     
-    /**
-     * Registers the button resource with the container.
-     */
-    @Override
-    public void process(PluginContainer container) {
-        Button button = new Button(caption);
-        button.setId(id);
-        button.setTooltiptext(tooltip);
-        button.setImage(icon);
-        ActionListener.addAction(button, action);
-        container.addToolbarComponent(button);
-        container.registerId(id, button);
-    }
 }
