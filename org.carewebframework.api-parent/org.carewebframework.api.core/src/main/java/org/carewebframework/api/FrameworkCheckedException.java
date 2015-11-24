@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -45,7 +45,7 @@ public class FrameworkCheckedException extends NestedCheckedException implements
     }
     
     public FrameworkCheckedException(String msg, Throwable cause, String throwableContext, Object... params) {
-        super(StrUtil.formatMessage(msg, null, params), cause);
+        super(StrUtil.formatMessage(msg, params), cause);
         this.throwableContext = throwableContext;
         
         if (msg.startsWith("@")) {

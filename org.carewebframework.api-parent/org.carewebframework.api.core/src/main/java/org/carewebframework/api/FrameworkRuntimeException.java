@@ -45,7 +45,7 @@ public class FrameworkRuntimeException extends NestedRuntimeException implements
     }
     
     public FrameworkRuntimeException(String msg, Throwable cause, String throwableContext, Object... args) {
-        super(StrUtil.formatMessage(msg, null, args), cause);
+        super(StrUtil.formatMessage(msg, args), cause);
         this.throwableContext = throwableContext;
         
         if (msg.startsWith("@")) {
