@@ -1,44 +1,19 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+	
 	<parent>
 		<groupId>org.carewebframework</groupId>
 		<artifactId>org.carewebframework-parent</artifactId>
 		<version>5.0.0-SNAPSHOT</version>
 	</parent>
+	
 	<artifactId>org.carewebframework.testharness</artifactId>
 	<name>CareWeb Framework Test Harness Base Support</name>
+	
 	<dependencies>
-		<!-- CareWeb Framework Components -->
 		<dependency>
 			<groupId>org.carewebframework</groupId>
 			<artifactId>org.carewebframework.shell</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.carewebframework</groupId>
-			<artifactId>org.carewebframework.ui.statuspanel</artifactId>
-			<version>${org.carewebframework.core.version}</version>
-		</dependency>
-		<!-- ZK Libraries -->
-		<dependency>
-			<groupId>org.zkoss.zk</groupId>
-			<artifactId>zkplus</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.zkoss.zk</groupId>
-			<artifactId>zhtml</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.zkoss.common</groupId>
-			<artifactId>zweb</artifactId>
-		</dependency>
-		<!-- Logging -->
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>commons-collections</groupId>
-			<artifactId>commons-collections</artifactId>
 		</dependency>
 	</dependencies>
 </project>
