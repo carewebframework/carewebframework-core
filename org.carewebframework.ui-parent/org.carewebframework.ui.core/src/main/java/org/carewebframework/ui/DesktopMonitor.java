@@ -79,23 +79,7 @@ public class DesktopMonitor extends Thread {
      * Available timeout modes.
      */
     private enum Mode {
-        BASELINE, LOCK, SHUTDOWN;
-        
-        public void onTimeout(DesktopMonitor monitor) {
-            switch (this) {
-                case BASELINE:
-                    monitor.setMode(Mode.LOCK);
-                    break;
-                    
-                case LOCK:
-                    monitor.requestLogout();
-                    break;
-                    
-                case SHUTDOWN:
-                    monitor.requestLogout();
-                    break;
-            }
-        }
+        BASELINE, LOCK, LOGOUT, SHUTDOWN;
         
         /**
          * Returns a label from a label reference.
@@ -134,7 +118,7 @@ public class DesktopMonitor extends Thread {
     
     private static final String TIMEOUT_WARNING = "cwf.timeout.%.warning.message";
     
-    private static final String TIMEOUT_EXPIRATION = "cwf.timeout.%.expiration.message";
+    private static final String TIMEOUT_EXPIRATION = "cwf.timeout.%.reason.message";
     
     private static final String SCLASS_COUNTDOWN = "cwf-timeout-%-countdown";
     
@@ -153,6 +137,8 @@ public class DesktopMonitor extends Thread {
      * How often to update the displayed count down timer (in ms).
      */
     private long countdownInterval = 2000;
+    
+    private boolean canAutoLock = true;
     
     private Mode mode = Mode.BASELINE;
     
@@ -190,7 +176,7 @@ public class DesktopMonitor extends Thread {
     
     private IEventManager eventManager;
     
-    private Set<String> desktopMonitorLockingExclusions = new TreeSet<>();
+    private Set<String> autoLockingExclusions = new TreeSet<>();
     
     private final Object monitor = new Object();
     
@@ -298,35 +284,23 @@ public class DesktopMonitor extends Thread {
             Action action = (Action) event.getData();
             trace(action.name());
             
-            //appName is not set by afterPageAttached so, checking each event
-            String appName = StringUtils.trimToEmpty(FrameworkUtil.getAppName());
-            boolean isDesktopLockingDisabled = DesktopMonitor.this.desktopMonitorLockingExclusions.contains(appName);
-            
             switch (action) {
                 case UPDATE_COUNTDOWN:
-                    String s = mode.getLabel(TIMEOUT_WARNING, DateUtil.formatDuration(countdown, TimeUnit.SECONDS));
+                    String s = nextMode().getLabel(TIMEOUT_WARNING, DateUtil.formatDuration(countdown, TimeUnit.SECONDS));
                     lblDuration.setValue(s);
-                    if (!isDesktopLockingDisabled) {
-                        setSclass(SCLASS_COUNTDOWN);
-                        ZKUtil.toggleSclass(timeoutPanel, "alert-danger", "alert-warning", countdown <= 10000);
-                    }
+                    setSclass(SCLASS_COUNTDOWN);
+                    ZKUtil.toggleSclass(timeoutPanel, "alert-danger", "alert-warning", countdown <= 10000);
                     resetActivity(false);
                     break;
                     
                 case UPDATE_MODE:
-                    if (!isDesktopLockingDisabled) {
-                        setSclass(SCLASS_IDLE);
-                        timeoutWindow.setMode(mode == Mode.LOCK ? "highlighted" : "embedded");
-                        txtPassword.setFocus(mode == Mode.LOCK);
-                        Application.getDesktopInfo(desktop).sendToSpawned(mode == Mode.LOCK ? Command.LOCK : Command.UNLOCK);
-                    }
+                    setSclass(SCLASS_IDLE);
+                    timeoutWindow.setMode(mode == Mode.LOCK ? "highlighted" : "embedded");
+                    txtPassword.setFocus(mode == Mode.LOCK);
+                    Application.getDesktopInfo(desktop).sendToSpawned(mode == Mode.LOCK ? Command.LOCK : Command.UNLOCK);
                     break;
                     
                 case LOGOUT:
-                    if (isDesktopLockingDisabled) {
-                        log.info(String.format("App[%s] Desktop[%s] was excluded from pre-invalidation locking", appName,
-                            DesktopMonitor.this.desktop));
-                    }
                     terminate = true;
                     timeoutWindow.setVisible(false);
                     securityService.logout(true, null, mode.getLabel(TIMEOUT_EXPIRATION));
@@ -380,9 +354,11 @@ public class DesktopMonitor extends Thread {
         setName("DesktopMonitor-" + desktop.getId());
         inactivityDuration.put(Mode.BASELINE, 900000L);
         inactivityDuration.put(Mode.LOCK, 900000L);
+        inactivityDuration.put(Mode.LOGOUT, 0L);
         inactivityDuration.put(Mode.SHUTDOWN, 0L);
         countdownDuration.put(Mode.BASELINE, 60000L);
         countdownDuration.put(Mode.LOCK, 60000L);
+        countdownDuration.put(Mode.LOGOUT, 60000L);
     }
     
     /**
@@ -475,13 +451,37 @@ public class DesktopMonitor extends Thread {
                 // fall through is intentional here.
                 
             case TIMEDOUT:
-                mode.onTimeout(this);
+                setMode(nextMode());
+                
+                if (mode == Mode.LOGOUT) {
+                    requestLogout();
+                }
+                
                 break;
                 
             case DEAD:
                 this.terminate = true;
                 this.desktopDead = true;
                 break;
+        }
+    }
+    
+    /**
+     * Returns the next mode in the timeout sequence.
+     * 
+     * @return Next mode.
+     */
+    private Mode nextMode() {
+        switch (mode) {
+            case BASELINE:
+                return canAutoLock ? Mode.LOCK : Mode.LOGOUT;
+                
+            case LOCK:
+            case SHUTDOWN:
+                return Mode.LOGOUT;
+                
+            default:
+                return null;
         }
     }
     
@@ -631,6 +631,9 @@ public class DesktopMonitor extends Thread {
     public void init() {
         desktop.addListener(uiLifeCycle);
         eventManager.subscribe(Constants.DESKTOP_EVENT, desktopEventListener);
+        String path = desktop.getRequestPath();
+        path = path.startsWith("/") ? path.substring(1) : path;
+        canAutoLock = !autoLockingExclusions.contains(path);
     }
     
     /**
@@ -738,20 +741,22 @@ public class DesktopMonitor extends Thread {
     }
     
     /**
-     * @return the desktopMonitorLockingExclusions
+     * @return Set of application names (FrameworkUtil.getAppName) to exclude from automatic
+     *         locking.
+     * @see FrameworkUtil#getAppName()
      */
-    public Set<String> getDesktopMonitorLockingExclusions() {
-        return desktopMonitorLockingExclusions;
+    public Set<String> getAutoLockingExclusions() {
+        return autoLockingExclusions;
     }
     
     /**
-     * Set of application names (FrameworkUtil.getAppName) to exclude from locking
+     * Set of application names (FrameworkUtil.getAppName) to exclude from automatic locking.
      * 
-     * @param desktopMonitorLockingExclusions the desktopMonitorLockingExclusions to set
+     * @param autoLockingExclusions The set of exclusions.
      * @see FrameworkUtil#getAppName()
      */
-    public void setDesktopMonitorLockingExclusions(Set<String> desktopMonitorLockingExclusions) {
-        this.desktopMonitorLockingExclusions = desktopMonitorLockingExclusions;
+    public void setAutoLockingExclusions(Set<String> autoLockingExclusions) {
+        this.autoLockingExclusions = autoLockingExclusions;
     }
     
 }

@@ -97,11 +97,11 @@
 				value="${org.carewebframework.ui.desktop.countdown.duration.lock}" />
 			<property name="securityService" ref="securityService" />
 			<property name="eventManager" ref="eventManager" />
-			<property name="desktopMonitorLockingExclusions">
+			<property name="autoLockingExclusions">
 				<bean class="org.springframework.util.StringUtils"
 					factory-method="commaDelimitedListToSet">
 					<constructor-arg type="java.lang.String"
-						value="${org.carewebframework.ui.desktop.lock.exclusions}" />
+						value="${org.carewebframework.ui.desktop.autolocking.exclusions}" />
 				</bean>
 			</property>
 		</bean>
