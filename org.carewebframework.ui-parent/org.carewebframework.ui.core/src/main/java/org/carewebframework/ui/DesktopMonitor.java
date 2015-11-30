@@ -470,12 +470,8 @@ public class DesktopMonitor extends Thread {
             case BASELINE:
                 return canAutoLock ? Mode.LOCK : Mode.LOGOUT;
                 
-            case LOCK:
-            case SHUTDOWN:
-                return Mode.LOGOUT;
-                
             default:
-                return null;
+                return Mode.LOGOUT;
         }
     }
     
