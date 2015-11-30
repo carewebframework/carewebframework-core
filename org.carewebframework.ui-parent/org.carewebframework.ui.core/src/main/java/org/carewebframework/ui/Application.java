@@ -784,6 +784,7 @@ public class Application {
             
             if (isManaged(desktop)) {
                 AppContextFinder.createAppContext(desktop);
+                desktop.setAttribute(ATTR_SERVER_PUSH, true);
             }
             
         } else {

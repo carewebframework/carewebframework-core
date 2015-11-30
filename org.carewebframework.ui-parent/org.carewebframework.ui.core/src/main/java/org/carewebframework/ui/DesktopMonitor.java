@@ -197,7 +197,6 @@ public class DesktopMonitor extends Thread {
             IUser user = securityService.getAuthenticatedUser();
             lblLocked.setValue(
                 Mode.BASELINE.getLabel(TIMEOUT_EXPIRATION, user.getFullName() + "@" + user.getSecurityDomain().getName()));
-            desktop.enableServerPush(true);
             desktop.addListener(desktopActivityMonitor);
             ThreadUtil.startThread(DesktopMonitor.this);
         }
@@ -259,12 +258,7 @@ public class DesktopMonitor extends Thread {
         }
         
         /**
-         * Determines if request is a 'keep alive' request. The logic is based on ZK
-         * org.zkoss.zk.au.http.DHtmlUpdateServlet (as of zk 3.5.2) keepAlive = keepAlive ||
-         * (!(!timerKeepAlive && Events.ON_TIMER.equals(cmdId)) && !"dummy".equals(cmdId)); This
-         * basically said that for ServerPush (i.e. COMET / Reverse AJAX), don't regard these
-         * requests as dictating session expiration Assumes DHtmlUpdateServlet in web.xml is mapped
-         * to /zkau
+         * Determines if request is a 'keep alive' request.
          * 
          * @param request The inbound request.
          * @return keepAlive True if request should reset inactivity timeout.
