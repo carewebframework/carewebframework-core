@@ -166,6 +166,14 @@ zk.afterLoad('zul.inp', function() {
 	zul.inp.Bandbox.prototype.slideDown_ = cwf.slideDown_;
 
 	zul.inp.InputWidget.onChangingDelay = 150;	// Change the delay between keystrokes before calling the onChanging event from 350ms to 150ms
+
+	// Fix combobox dropdown positioning anomaly (ZK-2997) when server push enabled.
+	cwf.old_cbx_onresponse = zul.inp.Combobox.prototype.onResponse;
+	
+	zul.inp.Combobox.prototype.onResponse = function() {
+		this._shallSyncPopupPosition = false;
+		cwf.old_cbx_onresponse.apply(this, arguments);
+	}
 });
 
 /**
