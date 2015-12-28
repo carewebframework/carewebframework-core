@@ -10,6 +10,7 @@
 package org.carewebframework.common;
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import org.apache.commons.lang.UnhandledException;
@@ -79,6 +80,10 @@ public class MiscUtil {
      * @return The returned unchecked exception.
      */
     public static RuntimeException toUnchecked(Throwable e) {
+        if (e instanceof InvocationTargetException) {
+            e = ((InvocationTargetException) e).getTargetException();
+        }
+        
         if (e instanceof RuntimeException) {
             return (RuntimeException) e;
         }
