@@ -14,6 +14,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Abstract class for managing globally cached data. Subclasses must implement the fetch logic for
@@ -24,7 +25,43 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public abstract class AbstractCache<KEY, VALUE> implements Iterable<VALUE> {
     
-    private final Map<KEY, VALUE> map = new ConcurrentHashMap<>();
+    private static class CachedObject<VALUE> {
+        
+        private VALUE object;
+        
+        private ReentrantLock lock = new ReentrantLock();
+        
+        private CachedObject() {
+            lock.lock();
+        }
+        
+        public void setObject(VALUE object) {
+            this.object = object;
+            ReentrantLock lock = this.lock;
+            this.lock = null;
+            lock.unlock();
+        }
+        
+        public VALUE getObject() {
+            lock();
+            unlock();
+            return object;
+        }
+        
+        private void lock() {
+            if (lock != null) {
+                lock.lock();
+            }
+        }
+        
+        private void unlock() {
+            if (lock != null) {
+                lock.unlock();
+            }
+        }
+    }
+    
+    private final Map<KEY, CachedObject<VALUE>> map = new ConcurrentHashMap<>();
     
     /**
      * Logic to retrieve the data item from its primary store based on the provided key. The
@@ -44,7 +81,7 @@ public abstract class AbstractCache<KEY, VALUE> implements Iterable<VALUE> {
      * @return The associated value.
      */
     public VALUE get(KEY key) {
-        return isCached(key) ? map.get(key) : internalGet(key);
+        return isCached(key) ? map.get(key).object : internalGet(key);
     }
     
     /**
@@ -65,12 +102,22 @@ public abstract class AbstractCache<KEY, VALUE> implements Iterable<VALUE> {
      */
     private VALUE internalGet(KEY key) {
         VALUE value = null;
+        CachedObject<VALUE> cachedObject = null;
         
         synchronized (map) {
-            value = map.get(key);
-            
-            if (value == null) {
-                map.put(key, value = fetch(key));
+            if (!map.containsKey(key)) {
+                cachedObject = new CachedObject<VALUE>();
+                map.put(key, cachedObject);
+            } else {
+                value = map.get(key).getObject();
+            }
+        }
+        
+        if (cachedObject != null) {
+            try {
+                cachedObject.setObject(fetch(key));
+            } catch (Throwable e) {
+                cachedObject.setObject(null);
             }
         }
         
@@ -96,7 +143,26 @@ public abstract class AbstractCache<KEY, VALUE> implements Iterable<VALUE> {
      */
     @Override
     public Iterator<VALUE> iterator() {
-        return map.values().iterator();
+        return new Iterator<VALUE>() {
+            
+            Iterator<CachedObject<VALUE>> iterator = map.values().iterator();
+            
+            @Override
+            public boolean hasNext() {
+                return iterator.hasNext();
+            }
+            
+            @Override
+            public VALUE next() {
+                return iterator.next().getObject();
+            }
+            
+            @Override
+            public void remove() {
+                throw new UnsupportedOperationException();
+            }
+            
+        };
     }
     
     /**
