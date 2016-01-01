@@ -29,23 +29,38 @@ public abstract class AbstractCache<KEY, VALUE> implements Iterable<VALUE> {
         
         private VALUE object;
         
+        private RuntimeException exception;
+        
         private ReentrantLock lock = new ReentrantLock();
         
         private CachedObject() {
             lock.lock();
         }
         
-        public void setObject(VALUE object) {
+        void setObject(VALUE object) {
             this.object = object;
-            ReentrantLock lock = this.lock;
-            this.lock = null;
-            lock.unlock();
+            removeLock();
         }
         
-        public VALUE getObject() {
+        void setException(RuntimeException exception) {
+            this.exception = exception;
+            removeLock();
+        }
+        
+        VALUE getObject() {
+            if (exception != null) {
+                throw exception;
+            }
+            
             lock();
             unlock();
             return object;
+        }
+        
+        private void removeLock() {
+            ReentrantLock lock = this.lock;
+            this.lock = null;
+            lock.unlock();
         }
         
         private void lock() {
@@ -117,7 +132,9 @@ public abstract class AbstractCache<KEY, VALUE> implements Iterable<VALUE> {
             try {
                 cachedObject.setObject(fetch(key));
             } catch (Throwable e) {
-                cachedObject.setObject(null);
+                RuntimeException e2 = MiscUtil.toUnchecked(e);
+                cachedObject.setException(e2);
+                throw e2;
             }
         }
         
