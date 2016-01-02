@@ -116,19 +116,21 @@ public abstract class AbstractCache<KEY, VALUE> implements Iterable<VALUE> {
      * @return The associated value.
      */
     private VALUE internalGet(KEY key) {
-        VALUE value = null;
-        CachedObject<VALUE> cachedObject = null;
+        CachedObject<VALUE> cachedObject;
+        boolean needsFetch;
         
         synchronized (map) {
-            if (!map.containsKey(key)) {
+            needsFetch = !map.containsKey(key);
+            
+            if (needsFetch) {
                 cachedObject = new CachedObject<VALUE>();
                 map.put(key, cachedObject);
             } else {
-                value = map.get(key).getObject();
+                cachedObject = map.get(key);
             }
         }
         
-        if (cachedObject != null) {
+        if (needsFetch) {
             try {
                 cachedObject.setObject(fetch(key));
             } catch (Throwable e) {
@@ -138,7 +140,7 @@ public abstract class AbstractCache<KEY, VALUE> implements Iterable<VALUE> {
             }
         }
         
-        return value;
+        return cachedObject.getObject();
     }
     
     /**
