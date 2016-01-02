@@ -96,7 +96,7 @@ public abstract class AbstractCache<KEY, VALUE> implements Iterable<VALUE> {
      * @return The associated value.
      */
     public VALUE get(KEY key) {
-        return isCached(key) ? map.get(key).object : internalGet(key);
+        return isCached(key) ? map.get(key).getObject() : internalGet(key);
     }
     
     /**
