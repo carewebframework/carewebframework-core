@@ -186,12 +186,14 @@ public class UIElementTreePane extends UIElementZKBase {
     protected void afterAddChild(UIElementBase child) {
         super.afterAddChild(child);
         
-        if (!(child instanceof UIElementTreePane)) {
-            mainChild = child;
-        }
-        
         if (child instanceof UIElementTreePane) {
             checkChildren();
+        } else {
+            mainChild = child;
+            
+            if (isActivated()) {
+                activeChild = mainChild;
+            }
         }
     }
     
