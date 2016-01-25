@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.carewebframework.common.MiscUtil;
-import org.carewebframework.common.WeakArrayList;
+import org.carewebframework.common.WeakList;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.DestructionAwareBeanPostProcessor;
@@ -31,9 +31,9 @@ public class AppFramework implements ApplicationContextAware, DestructionAwareBe
     
     private ApplicationContext appContext;
     
-    private final List<Object> registeredObjects = new WeakArrayList<>();
+    private final List<Object> registeredObjects = new WeakList<>();
     
-    private final List<IRegisterEvent> onRegisterList = new WeakArrayList<>();
+    private final List<IRegisterEvent> onRegisterList = new WeakList<>();
     
     private final Map<String, Object> attributes = new HashMap<>();
     

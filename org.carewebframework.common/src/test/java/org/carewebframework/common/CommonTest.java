@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.TimeZone;
 
 import org.carewebframework.common.DateUtil.TimeUnit;
@@ -320,6 +321,32 @@ public class CommonTest {
         Locale locale2 = new Locale("fr");
         assertEquals("keyboard", StrUtil.getLabel("message.test1", locale1));
         assertEquals("clavier", StrUtil.getLabel("message.test1", locale2));
+    }
+    
+    @Test
+    public void testWeakCollections() {
+        List<Object> list = new WeakList<>();
+        Map<String, Object> map = new WeakMap<>();
+        
+        Object o1 = new Object();
+        Object o2 = new Object();
+        list.add(o1);
+        list.add(o2);
+        map.put("o1", o1);
+        map.put("o2", o2);
+        assertEquals(2, list.size());
+        assertEquals(2, map.size());
+        o1 = null;
+        System.gc();
+        wait(3000);
+        assertEquals(1, list.size());
+        assertEquals(1, map.size());
+    }
+    
+    private void wait(int ms) {
+        try {
+            Thread.sleep(ms);
+        } catch (InterruptedException e) {}
     }
     
     private void print(Object object) {
