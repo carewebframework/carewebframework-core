@@ -11,6 +11,10 @@ repositories under the [CareWeb Framework main page](https://github.com/carewebf
 Documentation and presentation materials may be downloaded 
 [here](https://github.com/carewebframework/carewebframework.github.io/tree/master/documentation).
 
+## Current Versions
+Stable: 4.0.4
+Development: 5.0.0-SNAPSHOT
+
 ## Getting support
 Support questions may be directed to [support@carewebframework.org](mailto:support@carewebframework.org).
 
