@@ -303,8 +303,8 @@ public class ManagedContext<DomainClass> implements Comparable<IManagedContext<D
     public void notifySubscribers(boolean accept, boolean all) {
         Map<String, Object> map = null;
         
-        if (log.isDebugEnabled()) {
-            map = new HashMap<String, Object>();
+        if (log.isDebugEnabled() && StopWatchFactory.hasFactory()) {
+            map = new HashMap<>();
             map.put("action", accept ? "committed" : "canceled");
             map.put("context", getContextName());
         }
