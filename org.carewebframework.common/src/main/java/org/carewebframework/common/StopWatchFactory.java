@@ -47,7 +47,7 @@ public class StopWatchFactory {
         }
         
         if (factory != null) {
-            throw new IllegalStateException("Stopwatch factory already initialized.");
+            throw new IllegalStateException("Stopwatch factory already registered.");
         }
         
         return factory = new StopWatchFactory(clazz);
@@ -58,6 +58,15 @@ public class StopWatchFactory {
     }
     
     /**
+     * Returns true if a factory has been registered.
+     * 
+     * @return True if a factory has been registered.
+     */
+    public static boolean hasFactory() {
+        return factory != null;
+    }
+    
+    /**
      * Returns an uninitialized stopwatch instance.
      * 
      * @return An uninitialized stopwatch instance. Will be null if the factory has not been
@@ -65,7 +74,7 @@ public class StopWatchFactory {
      */
     public static IStopWatch create() {
         if (factory == null) {
-            throw new IllegalStateException("No stopwatch factory has been registered.");
+            throw new IllegalStateException("No stopwatch factory registered.");
         }
         
         try {
