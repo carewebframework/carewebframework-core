@@ -29,6 +29,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.savedrequest.SavedRequest;
 
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.util.GenericForwardComposer;
 import org.zkoss.zul.Html;
@@ -171,7 +172,7 @@ public class LoginPaneController extends GenericForwardComposer<Component> {
             case 1:
                 setDomainSelectionMode(DomainSelectionMode.DISALLOW);
                 break;
-            
+                
             default:
                 setDomainSelectionMode(DomainSelectionMode.OPTIONAL);
                 break;
@@ -202,7 +203,8 @@ public class LoginPaneController extends GenericForwardComposer<Component> {
         domainChanged();
         
         if (authError == null && autoLogin) {
-            comp.setVisible(false);
+            // Do not use setVisible here as it prevents posting of credentials with some versions of ZK.
+            ((HtmlBasedComponent) comp).setStyle("display: none");
             Events.echoEvent("onSubmit", comp, null);
         }
         
