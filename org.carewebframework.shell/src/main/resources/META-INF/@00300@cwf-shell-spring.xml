@@ -58,7 +58,7 @@
 				<cwp:property id="helpViewerMode" type="enum"
 					name="${labels.cwf.shell.plugin._desktop.helpviewermode.name}" description="${labels.cwf.shell.plugin._desktop.helpviewermode.description}">
 					<cwp:config>
-						<cwp:entry key="class">org.carewebframework.help.HelpViewer$HelpViewerMode</cwp:entry>
+						<cwp:entry key="class">org.carewebframework.help.viewer.HelpViewer$HelpViewerMode</cwp:entry>
 					</cwp:config>
 				</cwp:property>
 				<cwp:property id="menubar" type="menuitems"
