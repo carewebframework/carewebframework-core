@@ -154,6 +154,44 @@ public class LayoutManager extends Window {
     }
     
     /**
+     * Import a layout.
+     * 
+     * @param shared If true, import as a shared layout.
+     * @return The layout identifier if the import was successful, null otherwise.
+     */
+    public static LayoutIdentifier importLayout(boolean shared) {
+        while (true) {
+            try {
+                Media media = Fileupload.get(StrUtil.formatMessage(MSG_LAYOUT_IMPORT),
+                    StrUtil.formatMessage(CAP_LAYOUT_IMPORT), false);
+                    
+                if (media == null) {
+                    break;
+                }
+                
+                if (!"text/xml".equalsIgnoreCase(media.getContentType())) {
+                    PromptDialog.showError(ERR_LAYOUT_IMPORT);
+                    continue;
+                }
+                
+                UILayout layout = new UILayout();
+                layout.loadFromText(media.getStringData());
+                LayoutIdentifier layoutId = saveLayout(layout, new LayoutIdentifier(layout.getName(), shared), false);
+                return layoutId;
+            } catch (Exception e) {
+                PromptDialog.showError(e);
+            }
+        }
+        
+        return null;
+    }
+    
+    public static void exportLayout(LayoutIdentifier layout) {
+        String content = LayoutUtil.getLayoutContent(layout);
+        Filedownload.save(content, "text/xml", layout.name + ".xml");
+    }
+    
+    /**
      * Initialize and display the dialog.
      * 
      * @param manage If true, open in management mode; otherwise, in selection mode.
@@ -269,32 +307,10 @@ public class LayoutManager extends Window {
      * Import a layout.
      */
     public void onClick$btnImport() {
-        while (true) {
-            try {
-                Media media = Fileupload.get(StrUtil.formatMessage(MSG_LAYOUT_IMPORT),
-                    StrUtil.formatMessage(CAP_LAYOUT_IMPORT), false);
-                
-                if (media == null) {
-                    break;
-                }
-                
-                if (!"text/xml".equalsIgnoreCase(media.getContentType())) {
-                    PromptDialog.showError(ERR_LAYOUT_IMPORT);
-                    continue;
-                }
-                
-                UILayout layout = new UILayout();
-                layout.loadFromText(media.getStringData());
-                LayoutIdentifier layoutId = saveLayout(layout, new LayoutIdentifier(layout.getName(), shared), false);
-                
-                if (layoutId != null) {
-                    refresh(layoutId.name);
-                }
-                
-                break;
-            } catch (Exception e) {
-                PromptDialog.showError(e);
-            }
+        LayoutIdentifier layoutId = importLayout(shared);
+        
+        if (layoutId != null) {
+            refresh(layoutId.name);
         }
     }
     
@@ -302,9 +318,7 @@ public class LayoutManager extends Window {
      * Export a layout
      */
     public void onClick$btnExport() {
-        LayoutIdentifier layout = getSelectedLayout();
-        String content = LayoutUtil.getLayoutContent(layout);
-        Filedownload.save(content, "text/xml", layout.name + ".xml");
+        exportLayout(getSelectedLayout());
     }
     
     /**

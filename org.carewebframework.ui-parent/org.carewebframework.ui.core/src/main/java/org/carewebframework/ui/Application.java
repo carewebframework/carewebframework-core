@@ -47,6 +47,7 @@ import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zk.ui.util.UiLifeCycle;
+import org.zkoss.zul.Fileupload;
 import org.zkoss.zul.Label;
 
 /**
@@ -710,6 +711,7 @@ public class Application {
     private Application() {
         super();
         DateUtil.localTimeZone = localTimeZone;
+        Fileupload.setTemplate("~./org/carewebframework/ui/zk/fileuploaddlg.zul");
         LifecycleEventDispatcher.addDesktopCallback(desktopLifeCycle);
         LifecycleEventDispatcher.addSessionCallback(sessionLifeCycle);
         ActionRegistry.register(true, "cwf.refresh", "@cwf.btn.refresh.label",
