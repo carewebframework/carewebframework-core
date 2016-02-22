@@ -6,7 +6,7 @@ CREATE TABLE CWF_DOMAIN (
 INSERT INTO CWF_DOMAIN (ID, NAME, ATTRIBUTES) VALUES
 	('1', 'General Medicine Clinic', ''),
 	('2','Emergency Room', ''),
-	('3', 'Test Hospital', '');
+	('3', 'Test Hospital', 'default=true');
 
 CREATE TABLE CWF_USER (
 	ID VARCHAR(20) PRIMARY KEY,
