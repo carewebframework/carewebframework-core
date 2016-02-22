@@ -3,21 +3,22 @@
 	
 	<parent>
 		<groupId>org.carewebframework</groupId>
-		<artifactId>org.carewebframework.security.spring-parent</artifactId>
+		<artifactId>org.carewebframework.h2-parent</artifactId>
 		<version>5.0.0-SNAPSHOT</version>
 	</parent>
 	
-	<artifactId>org.carewebframework.security.spring.mock</artifactId>
-	<name>CareWeb Framework Mock Spring Security Profile</name>
+	<artifactId>org.carewebframework.h2.security</artifactId>
+	<name>CareWeb Framework H2 Spring Security Profile</name>
 	
 	<dependencies>
 		<dependency>
 			<groupId>org.carewebframework</groupId>
-			<artifactId>org.carewebframework.security.spring.core</artifactId>
+			<artifactId>org.carewebframework.h2.core</artifactId>
+			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.carewebframework</groupId>
-			<artifactId>org.carewebframework.api.security.mock</artifactId>
+			<artifactId>org.carewebframework.security.spring.core</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>

@@ -103,6 +103,7 @@
 		<module>org.carewebframework.security.spring-parent</module>
 		<module>org.carewebframework.amqp-parent</module>
 		<module>org.carewebframework.jms-parent</module>
+		<module>org.carewebframework.h2-parent</module>
 		<module>org.carewebframework.ext-parent</module>
 		<module>org.carewebframework.lib-parent</module>
 		<module>org.carewebframework.testharness</module>
@@ -881,7 +882,22 @@
 			</dependency>
 			<dependency>
 				<groupId>org.carewebframework</groupId>
-				<artifactId>org.carewebframework.api.mock</artifactId>
+				<artifactId>org.carewebframework.api.security.mock</artifactId>
+				<version>${org.carewebframework.core.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.carewebframework</groupId>
+				<artifactId>org.carewebframework.api.property.mock</artifactId>
+				<version>${org.carewebframework.core.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.carewebframework</groupId>
+				<artifactId>org.carewebframework.api.security.h2</artifactId>
+				<version>${org.carewebframework.core.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.carewebframework</groupId>
+				<artifactId>org.carewebframework.api.property.h2</artifactId>
 				<version>${org.carewebframework.core.version}</version>
 			</dependency>
 			<dependency>

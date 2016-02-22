@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:cwf="http://www.carewebframework.org/schema/spring"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.carewebframework.org/schema/spring
+        http://www.carewebframework.org/schema/spring/spring-extensions.xsd">
+
+	<beans profile="root">
+		
+		<bean id="h2Database" class="org.carewebframework.h2.core.H2Database"
+			init-method="init" destroy-method="destroy">
+			<constructor-arg>
+				<map>
+					<entry key="address" value="${org.carewebframework.h2.address}" />
+					<entry key="port" value="${org.carewebframework.h2.port}" />
+					<entry key="database" value="${org.carewebframework.h2.database}" />
+					<entry key="user" value="${org.carewebframework.h2.user}" />
+					<entry key="password" value="${org.carewebframework.h2.password}" />
+					<entry key="extra" value="${org.carewebframework.h2.extra}" />
+				</map>
+			</constructor-arg>
+		</bean>
+		
+	</beans>
+
+</beans>

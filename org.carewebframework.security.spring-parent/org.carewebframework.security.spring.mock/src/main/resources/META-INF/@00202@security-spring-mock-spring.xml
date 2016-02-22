@@ -10,16 +10,21 @@
 
 	<beans profile="root">
 
-		<bean id="securityService" class="org.carewebframework.security.spring.mock.MockSecurityService">
+		<bean id="securityService" 
+			class="org.carewebframework.security.spring.mock.MockSecurityService"
+			cwf:override="never">
 			<property name="logoutTarget" value="${org.carewebframework.security.logout.url}" />
 		</bean>
 		
-		<bean class="org.carewebframework.api.security.mock.MockSecurityDomainLoader">
+		<bean 
+			class="org.carewebframework.api.security.mock.MockSecurityDomainLoader"
+			cwf:override="never">
 			<constructor-arg value="${mock.domains}" />
 			<constructor-arg value="${mock.authorities}" />
 		</bean>
 
-		<bean id="securityLoginPaneController" class="org.carewebframework.security.spring.controller.LoginPaneController"
+		<bean id="securityLoginPaneController" 
+			class="org.carewebframework.security.spring.controller.LoginPaneController"
 			scope="prototype" cwf:override="always">
 			<property name="securityDomainRegistry" ref="securityDomainRegistry" />
 			<property name="defaultUsername" value="${mock.username}" />
