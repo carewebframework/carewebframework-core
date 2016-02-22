@@ -202,7 +202,8 @@ public class LoginPaneController extends GenericForwardComposer<Component> {
         domainChanged();
         
         if (authError == null && autoLogin) {
-            comp.setVisible(false);
+            // Do not use setVisible here as it prevents posting of credentials with some versions of ZK.
+            ((HtmlBasedComponent) comp).setStyle("display: none");
             Events.echoEvent("onSubmit", comp, null);
         }
         
