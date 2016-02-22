@@ -12,7 +12,7 @@ Documentation and presentation materials may be downloaded
 [here](https://github.com/carewebframework/carewebframework.github.io/tree/master/documentation).
 
 ## Current Versions
-Stable: 4.0.4
+Stable: 4.0.5
 Development: 5.0.0-SNAPSHOT
 
 ## Getting support
