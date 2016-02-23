@@ -78,6 +78,46 @@ public class ThemeUtil {
     };
     
     /**
+     * Corresponds to Bootstrap button size classes.
+     */
+    public enum LabelSize implements IThemeClass {
+        XLARGE("label-xl"), LARGE("label-lg"), DEFAULT("label-rg"), SMALL("label-sm"), TINY("label-xs");
+        
+        private final String themeClass;
+        
+        LabelSize(String themeClass) {
+            this.themeClass = themeClass;
+        }
+        
+        @Override
+        public String getThemeClass() {
+            return themeClass;
+        }
+        
+        @Override
+        public String toString() {
+            return name().toLowerCase();
+        }
+    };
+    
+    /**
+     * Corresponds to Bootstrap label style classes.
+     */
+    public enum LabelStyle implements IThemeClass {
+        DEFAULT, PRIMARY, SUCCESS, INFO, WARNING, DANGER, NONE;
+        
+        @Override
+        public String getThemeClass() {
+            return "label-" + name().toLowerCase();
+        }
+        
+        @Override
+        public String toString() {
+            return name().toLowerCase();
+        }
+    };
+    
+    /**
      * Corresponds to Bootstrap panel style classes.
      */
     public enum PanelStyle implements IThemeClass {

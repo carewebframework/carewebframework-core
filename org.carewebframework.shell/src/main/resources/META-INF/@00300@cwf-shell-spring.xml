@@ -140,8 +140,8 @@
 					name="${labels.cwf.shell.plugin.treeview.open.name}"
 					getter="isOpen" description="${labels.cwf.shell.plugin.treeview.open.description}">
 					<cwp:config>
-						<cwp:entry key="true">expanded</cwp:entry>
-						<cwp:entry key="false">collapsed</cwp:entry>
+						<cwp:entry key="true">${labels.cwf.shell.plugin.treeview.open.expanded}</cwp:entry>
+						<cwp:entry key="false">${labels.cwf.shell.plugin.treeview.open.collapsed}</cwp:entry>
 					</cwp:config>
 				</cwp:property>
 				<cwp:property id="selectionStyle" type="enum"
@@ -200,8 +200,8 @@
 				<cwp:property id="relative" type="boolean" getter="isRelative"
 					name="${labels.cwf.shell.plugin.splitterpane.relative.name}" description="${labels.cwf.shell.plugin.splitterpane.relative.description}">
 					<cwp:config>
-						<cwp:entry key="true">yes</cwp:entry>
-						<cwp:entry key="false">no</cwp:entry>
+						<cwp:entry key="true">${labels.cwf.shell.plugin.splitterpane.relative.yes}</cwp:entry>
+						<cwp:entry key="false">${labels.cwf.shell.plugin.splitterpane.relative.no}</cwp:entry>
 					</cwp:config>
 				</cwp:property>
 				<cwp:property id="size" type="double" editable="false"
@@ -224,15 +224,15 @@
 				<cwp:property id="noHome" type="boolean"
 					name="${labels.cwf.shell.plugin.stepview.nohome.name}" description="${labels.cwf.shell.plugin.stepview.nohome.description}">
 					<cwp:config>
-						<cwp:entry key="true">hide</cwp:entry>
-						<cwp:entry key="false">show</cwp:entry>
+						<cwp:entry key="true">${labels.cwf.shell.plugin.stepview.nohome.hide}</cwp:entry>
+						<cwp:entry key="false">${labels.cwf.shell.plugin.stepview.nohome.show}</cwp:entry>
 					</cwp:config>
 				</cwp:property>
 				<cwp:property id="noNavigation" type="boolean"
 					name="${labels.cwf.shell.plugin.stepview.nonav.name}" description="${labels.cwf.shell.plugin.stepview.nonav.description}">
 					<cwp:config>
-						<cwp:entry key="true">hide</cwp:entry>
-						<cwp:entry key="false">show</cwp:entry>
+						<cwp:entry key="true">${labels.cwf.shell.plugin.stepview.nonav.hide}</cwp:entry>
+						<cwp:entry key="false">${labels.cwf.shell.plugin.stepview.nonav.show}</cwp:entry>
 					</cwp:config>
 				</cwp:property>
 				<cwp:property id="" type="step"
@@ -259,6 +259,14 @@
 			class="org.carewebframework.shell.layout.UIElementToolbar" name="${labels.cwf.shell.plugin.toolbar.name}"
 			description="${labels.cwf.shell.plugin.toolbar.description}">
 			<cwp:serialization>
+				<cwp:property id="alignRight" type="boolean"
+					name="${labels.cwf.shell.plugin.toolbar.align.name}"
+					description="${labels.cwf.shell.plugin.toolbar.align.description}">
+					<cwp:config>
+						<cwp:entry key="true">${labels.cwf.shell.plugin.toolbar.align.right}</cwp:entry>
+						<cwp:entry key="false">${labels.cwf.shell.plugin.toolbar.align.left}</cwp:entry>
+					</cwp:config>
+				</cwp:property>
 				<cwp:property id="" type="children"
 					name="${labels.cwf.shell.plugin.toolbar.children.name}"
 					description="${labels.cwf.shell.plugin.toolbar.children.description}" />
@@ -269,6 +277,14 @@
 			class="org.carewebframework.shell.layout.UIElementToolbar" name="${labels.cwf.shell.plugin._toolbar.name}"
 			description="${labels.cwf.shell.plugin.toolbar.description}">
 			<cwp:serialization>
+				<cwp:property id="alignRight" type="boolean"
+					name="${labels.cwf.shell.plugin.toolbar.align.name}"
+					description="${labels.cwf.shell.plugin.toolbar.align.description}">
+					<cwp:config>
+						<cwp:entry key="true">${labels.cwf.shell.plugin.toolbar.align.right}</cwp:entry>
+						<cwp:entry key="false">${labels.cwf.shell.plugin.toolbar.align.left}</cwp:entry>
+					</cwp:config>
+				</cwp:property>
 				<cwp:property id="" type="children"
 					name="${labels.cwf.shell.plugin._toolbar.children.name}" description="${labels.cwf.shell.plugin._toolbar.children.description}" />
 			</cwp:serialization>
@@ -315,6 +331,43 @@
 			<cwp:serialization>
 				<cwp:property id="url" name="${labels.cwf.shell.plugin.frame.url.name}"
 					description="${labels.cwf.shell.plugin.frame.url.description}" />
+			</cwp:serialization>
+		</cwp:plugin>
+
+		<cwp:plugin id="image" category="${labels.cwf.shell.plugin.category.stock}"
+			class="org.carewebframework.shell.layout.UIElementImage" name="${labels.cwf.shell.plugin.image.name}"
+			description="${labels.cwf.shell.plugin.image.description}">
+			<cwp:serialization>
+				<cwp:property id="url"
+					name="${labels.cwf.shell.plugin.image.url.name}" description="${labels.cwf.shell.plugin.image.url.description}" />
+				<cwp:property id="stretch" type="boolean"
+					name="${labels.cwf.shell.plugin.image.stretch.name}" description="${labels.cwf.shell.plugin.image.stretch.description}" />
+				<cwp:property id="hint"
+					name="${labels.cwf.shell.plugin.image.hint.name}" description="${labels.cwf.shell.plugin.image.hint.description}" />
+			</cwp:serialization>
+		</cwp:plugin>
+
+		<cwp:plugin id="label" category="${labels.cwf.shell.plugin.category.stock}"
+			class="org.carewebframework.shell.layout.UIElementLabel" name="${labels.cwf.shell.plugin.label.name}"
+			description="${labels.cwf.shell.plugin.label.description}">
+			<cwp:serialization>
+				<cwp:property id="label"
+					default="${labels.cwf.shell.plugin.label.label.default_}" name="${labels.cwf.shell.plugin.label.label.name}"
+					description="${labels.cwf.shell.plugin.label.label.description}" />
+				<cwp:property id="hint"
+					name="${labels.cwf.shell.plugin.label.hint.name}" description="${labels.cwf.shell.plugin.label.hint.description}" />
+				<cwp:property id="size" type="enum"
+					name="${labels.cwf.shell.plugin.label.size.name}" description="${labels.cwf.shell.plugin.label.size.description}">
+					<cwp:config>
+						<cwp:entry key="class">org.carewebframework.theme.ThemeUtil$LabelSize</cwp:entry>
+					</cwp:config>
+				</cwp:property>
+				<cwp:property id="style" type="enum"
+					name="${labels.cwf.shell.plugin.label.style.name}" description="${labels.cwf.shell.plugin.label.style.description}">
+					<cwp:config>
+						<cwp:entry key="class">org.carewebframework.theme.ThemeUtil$LabelStyle</cwp:entry>
+					</cwp:config>
+				</cwp:property>
 			</cwp:serialization>
 		</cwp:plugin>
 

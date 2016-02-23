@@ -70,7 +70,7 @@ public class UIElementButton extends UIElementActionBase {
     }
     
     /**
-     * Sets the URL of the icon to be display on the button.
+     * Sets the URL of the icon to display on the button.
      * 
      * @param url Icon URL.
      */
@@ -80,7 +80,7 @@ public class UIElementButton extends UIElementActionBase {
     }
     
     /**
-     * Returns the URL of the icon to be display on the button.
+     * Returns the URL of the icon to display on the button.
      * 
      * @return Icon URL.
      */

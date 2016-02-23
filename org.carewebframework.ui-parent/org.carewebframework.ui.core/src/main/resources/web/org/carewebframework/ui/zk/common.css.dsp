@@ -307,6 +307,31 @@
   float: none;
 }
 
+.label-xl {
+	font-size: 36px !important;
+}
+
+.label-lg {
+	font-size: 24px !important;
+}
+
+.label-rg {
+	font-size: 14px !important;
+}
+
+.label-sm {
+	font-size: 12px !important;
+}
+
+.label-xs {
+	font-size: 8px !important;
+}
+
+.label-none {
+	color: black;
+	background: transparent;
+}
+
 /* ZK overrides */
 
 .z-window-modal-header {

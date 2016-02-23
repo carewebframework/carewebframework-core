@@ -31,6 +31,8 @@ public class UIElementToolbar extends UIElementZKBase {
     
     private final Toolbar toolbar;
     
+    private boolean alignRight = true;
+    
     public UIElementToolbar() {
         this(new Toolbar());
     }
@@ -87,6 +89,15 @@ public class UIElementToolbar extends UIElementZKBase {
     protected void afterAddChild(UIElementBase child) {
         super.afterAddChild(child);
         Clients.resize(toolbar);
+    }
+    
+    public boolean getAlignRight() {
+        return alignRight;
+    }
+    
+    public void setAlignRight(boolean alignRight) {
+        this.alignRight = alignRight;
+        toolbar.setAlign(alignRight ? "end" : "start");
     }
     
 }
