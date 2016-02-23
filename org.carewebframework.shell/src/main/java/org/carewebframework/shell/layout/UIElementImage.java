@@ -33,7 +33,6 @@ public class UIElementImage extends UIElementZKBase {
         fullSize(root);
         root.appendChild(image);
         associateComponent(image);
-        setEnableDesignModeMask(true);
     }
     
     /**

@@ -1031,9 +1031,9 @@ public abstract class UIElementBase {
      * Applies the current color setting to the wrapped component. Subclasses that support this
      * capability should override this to supply the proper implementation.
      * 
-     * @param cmpt Component to receive the color setting.
+     * @param component Component to receive the color setting.
      */
-    protected void applyColor(Object cmpt) {
+    protected void applyColor(Object component) {
     }
     
     /**
@@ -1060,6 +1060,10 @@ public abstract class UIElementBase {
      * text of the inner and outer components. Override to modify this default behavior.
      */
     protected void applyHint() {
+        if (isDesignMode()) {
+            return;
+        }
+        
         applyHint(getOuterComponent());
         
         if (getInnerComponent() != getOuterComponent()) {
@@ -1071,9 +1075,9 @@ public abstract class UIElementBase {
      * Applies the current hint text to the wrapped component. Subclasses that support this
      * capability should override this to supply the proper implementation.
      * 
-     * @param cmpt Component to receive the hint text.
+     * @param component Component to receive the hint text.
      */
-    protected void applyHint(Object cmpt) {
+    protected void applyHint(Object component) {
     }
     
     /**
@@ -1359,4 +1363,27 @@ public abstract class UIElementBase {
     public void registerResource(PluginResourcePropertyGroup resource) {
         CareWebUtil.getShell().registerPropertyGroup(resource.getGroup());
     }
+    
+    /**
+     * Allows a child element to notify its parent of an event of interest.
+     * 
+     * @param eventName Name of the event.
+     * @param eventData Data associated with the event.
+     */
+    protected void notifyParent(String eventName, Object eventData) {
+        if (parent != null) {
+            parent.onNotifyParent(this, eventName, eventData);
+        }
+    }
+    
+    /**
+     * Implement to respond to an event sent by a child element.
+     * 
+     * @param child The child element that sent the event.
+     * @param eventName Name of the event.
+     * @param eventData Data associated with the event.
+     */
+    protected void onNotifyParent(UIElementBase child, String eventName, Object eventData) {
+    }
+    
 }

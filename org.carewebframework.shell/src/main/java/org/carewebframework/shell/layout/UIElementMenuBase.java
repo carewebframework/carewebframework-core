@@ -33,6 +33,7 @@ public class UIElementMenuBase extends UIElementZKBase {
         setOuterComponent(menubar);
         setInnerComponent(root);
         maxChildren = Integer.MAX_VALUE;
+        setMaskMode(null);
     }
     
     /**

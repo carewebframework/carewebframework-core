@@ -42,7 +42,6 @@ public class UIElementPlugin extends UIElementZKBase implements Disable, IProper
         super();
         setOuterComponent(container);
         container.registerAction(this);
-        setEnableDesignModeMask(true);
     }
     
     /**

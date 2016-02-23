@@ -196,20 +196,24 @@ cwf.cancelNavigation = function(event) {
  * @param msg Caption for mask.
  * @param popid Optional id of popup menu
  * @param hint Optional hint text
+ * @param anchor Optional subid of mask anchor
  */
 zAu.cmd0.cwf_addMask =
-cwf.addMask = function(uuid, msg, popid, hint) {
+cwf.addMask = function(uuid, msg, popid, hint, anchor) {
 	cwf.removeMask(uuid);
 	cwf.zkMask_(uuid, true);
 	
-	if (uuid.uuid)
+	if (uuid.uuid) {
 		uuid = uuid.uuid;
+	}
 
 	var w = jq('<div />').attr('id', uuid + '-cwfMask').addClass('cwf-mask'),
 		ctx;
 
+	anchor = anchor ? uuid + '-' + anchor : uuid;
+	
 	jq('<div />').text(msg).appendTo(w);
-	jq('#' + uuid).append(w);
+	jq('#' + anchor).append(w);
 	
 	if (popid && (ctx = zk.Widget.$(popid))) {
 		w.bind('contextmenu', function(e) {
@@ -247,6 +251,24 @@ cwf.zkMask_ = function(uuid, hide) {
 		jq(wgt.__mask.mask).css('display', hide ? 'none' : 'block');
 	}
 };
+
+/**
+ * Add or remove a badge.
+ * 
+ * @param selector Selector for element to receive badge.
+ * @param text Text for the badge.  If none, any existing badge will be removed.
+ */
+cwf.setBadge = function(selector, text) {
+	var w$ = jq(selector),
+		b$ = w$.find('.badge');
+	
+	if (text) {
+		b$ = b$.length ? b$ : w$.append('<span class="badge" />');
+		b$.text(text);
+	} else {
+		b$.remove();
+	}
+}
 
 /**
  * Prevent backspace key from invoking browser back function.

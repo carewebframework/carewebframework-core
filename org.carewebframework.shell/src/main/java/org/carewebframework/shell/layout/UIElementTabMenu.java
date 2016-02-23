@@ -101,6 +101,7 @@ public class UIElementTabMenu extends UIElementZKBase {
         paneAnchor.setSclass("cwf-tab-menu");
         associateComponent(paneAnchor);
         maxChildren = Integer.MAX_VALUE;
+        setMaskMode(null);
     }
     
     /**

@@ -108,11 +108,11 @@ public class UIElementTreeView extends UIElementZKBase {
      * Remove the associated tree node when a tree pane is removed.
      */
     @Override
-    protected void beforeRemoveChild(UIElementBase child) {
+    protected void afterRemoveChild(UIElementBase child) {
         if (child == activePane) {
-            setActivePane(null);
+            setActivePane((UIElementTreePane) getFirstChild());
         }
-        super.beforeRemoveChild(child);
+        super.afterRemoveChild(child);
     }
     
     /**

@@ -70,6 +70,8 @@ public class ZKUtil {
     
     private static final String CUSTOM_COLOR_OVERRIDE = "setCustomColor";
     
+    private static final String MASK_ANCHOR = "maskTarget";
+    
     private static final EventListener<Event> deferredDelivery = new EventListener<Event>() {
         
         @Override
@@ -947,13 +949,14 @@ public class ZKUtil {
     /**
      * Places a semi-transparent mask over the specified component to disable user interaction.
      * 
-     * @param c Component to be disabled.
+     * @param component Component to be disabled.
      * @param caption Caption text to appear over disabled component.
      * @param popup Optional popup to display when context menu is invoked.
      * @param hint Optional tooltip text.
      */
-    public static void addMask(Component c, String caption, Popup popup, String hint) {
-        AuResponse rsp = new AuResponse("cwf_addMask", c, new Object[] { c, caption, popup, hint });
+    public static void addMask(Component component, String caption, Popup popup, String hint) {
+        String anchor = getMaskAnchor(component);
+        AuResponse rsp = new AuResponse("cwf_addMask", component, new Object[] { component, caption, popup, hint, anchor });
         Clients.response(rsp);
     }
     
@@ -965,6 +968,26 @@ public class ZKUtil {
     public static void removeMask(Component component) {
         AuResponse rsp = new AuResponse("cwf_removeMask", component, new Object[] { component });
         Clients.response(rsp);
+    }
+    
+    /**
+     * Returns the uuid of the mask's anchor..
+     * 
+     * @param component Component
+     * @return The subid of the mask anchor, or null if none specified.
+     */
+    private static String getMaskAnchor(Component component) {
+        return (String) component.getAttribute(MASK_ANCHOR);
+    }
+    
+    /**
+     * Sets the subid of the real mask anchor.
+     * 
+     * @param component Component
+     * @param target The subid of the real anchor, or null to remove existing anchor.
+     */
+    public static void setMaskAnchor(Component component, String target) {
+        component.setAttribute(MASK_ANCHOR, target);
     }
     
     /**

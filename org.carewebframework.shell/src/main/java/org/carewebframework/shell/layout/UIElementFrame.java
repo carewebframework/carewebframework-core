@@ -34,7 +34,6 @@ public class UIElementFrame extends UIElementZKBase {
         root.setZclass("cwf-plugin-container");
         fullSize(root);
         setOuterComponent(root);
-        setEnableDesignModeMask(true);
     }
     
     /**

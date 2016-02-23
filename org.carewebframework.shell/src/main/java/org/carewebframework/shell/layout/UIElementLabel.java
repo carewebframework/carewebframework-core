@@ -32,6 +32,7 @@ public class UIElementLabel extends UIElementZKBase {
     public UIElementLabel() {
         setOuterComponent(label);
         updateStyle();
+        setMaskMode(null);
     }
     
     private void updateStyle() {

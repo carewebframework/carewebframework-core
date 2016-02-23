@@ -12,18 +12,18 @@ package org.carewebframework.shell.layout;
 import org.apache.commons.lang.StringUtils;
 
 import org.carewebframework.shell.designer.DesignContextMenu;
+import org.carewebframework.shell.designer.DesignMask;
+import org.carewebframework.shell.designer.DesignMask.MaskMode;
 import org.carewebframework.shell.designer.PropertyGrid;
 import org.carewebframework.shell.plugins.PluginResourceCommand;
 import org.carewebframework.ui.command.CommandUtil;
 import org.carewebframework.ui.zk.PromptDialog;
 import org.carewebframework.ui.zk.ZKUtil;
 
+import org.zkoss.zk.au.out.AuInvoke;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.HtmlBasedComponent;
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.Menupopup;
 import org.zkoss.zul.impl.XulElement;
 
@@ -38,27 +38,33 @@ public abstract class UIElementZKBase extends UIElementBase {
      */
     private static class SavedState {
         
-        final XulElement comp;
+        final XulElement component;
         
         final String tooltipText;
         
         final String contextMenu;
         
-        public SavedState(XulElement comp) {
-            this.comp = comp;
-            tooltipText = comp.getTooltiptext();
-            contextMenu = comp.getContext();
-            comp.setAttribute(SAVED_STATE, this);
+        public SavedState(XulElement component) {
+            this.component = component;
+            tooltipText = component.getTooltiptext();
+            contextMenu = component.getContext();
+            component.setAttribute(SAVED_STATE, this);
+            ZKUtil.updateSclass(component, "cwf-designmode-active", false);
         }
         
         private void restore() {
-            comp.setTooltiptext(tooltipText);
-            comp.setContext(contextMenu);
+            component.setTooltiptext(tooltipText);
+            component.setContext(contextMenu);
+            component.removeAttribute(SAVED_STATE);
+            ZKUtil.updateSclass(component, "cwf-designmode-active", true);
         }
         
         public static void restore(XulElement comp) {
-            SavedState ss = (SavedState) comp.removeAttribute(SAVED_STATE);
-            ss.restore();
+            SavedState ss = (SavedState) comp.getAttribute(SAVED_STATE);
+            
+            if (ss != null) {
+                ss.restore();
+            }
         }
     }
     
@@ -68,24 +74,11 @@ public abstract class UIElementZKBase extends UIElementBase {
     
     private static final String SAVED_STATE = ATTR_PREFIX + "SavedState";
     
-    private boolean enableDesignModeMask;
+    private static final String CONTEXT_MENU = ATTR_PREFIX + "ContextMenu";
     
-    private Event maskEvent;
+    private static final String SET_BADGE_LOGIC = "cwf.setBadge(s, t);";
     
-    /**
-     * Handles the onMask event, which is posted with a low priority to ensure that the target
-     * widget states have been properly set.
-     */
-    private final EventListener<Event> maskListener = new EventListener<Event>() {
-        
-        @Override
-        public void onEvent(Event event) throws Exception {
-            Component target = event.getTarget();
-            Menupopup contextMenu = (Menupopup) event.getData();
-            ZKUtil.addMask(target, getDisplayName(), contextMenu, getDisplayName());
-        }
-        
-    };
+    private final DesignMask mask;
     
     /**
      * Returns the UI element that registered the ZK component.
@@ -95,6 +88,20 @@ public abstract class UIElementZKBase extends UIElementBase {
      */
     public static UIElementBase getAssociatedUIElement(Component component) {
         return component == null ? null : (UIElementBase) component.getAttribute(ASSOC_ELEMENT);
+    }
+    
+    /**
+     * Returns the design context menu currently bound to the component.
+     * 
+     * @param component The ZK component of interest.
+     * @return The associated design context menu, or null if none.
+     */
+    public static Menupopup getDesignContextMenu(Component component) {
+        return component == null ? null : (Menupopup) component.getAttribute(CONTEXT_MENU);
+    }
+    
+    public UIElementZKBase() {
+        mask = new DesignMask(this);
     }
     
     /**
@@ -228,17 +235,29 @@ public abstract class UIElementZKBase extends UIElementBase {
     @Override
     protected void afterMoveTo(int index) {
         moveChild(getOuterComponent(), index);
-        applyMask(true);
+        updateMasks();
+    }
+    
+    @Override
+    protected void afterAddChild(UIElementBase child) {
+        mask.update();
+        super.afterAddChild(child);
+    }
+    
+    @Override
+    protected void afterRemoveChild(UIElementBase child) {
+        mask.update();
+        super.afterRemoveChild(child);
     }
     
     /**
      * Set width and height of a component to 100%.
      * 
-     * @param cmpt Component
+     * @param component Component
      */
-    protected void fullSize(HtmlBasedComponent cmpt) {
-        cmpt.setWidth("100%");
-        cmpt.setHeight("100%");
+    protected void fullSize(HtmlBasedComponent component) {
+        component.setWidth("100%");
+        component.setHeight("100%");
     }
     
     /**
@@ -249,7 +268,7 @@ public abstract class UIElementZKBase extends UIElementBase {
         super.activate(activate);
         
         if (activate) {
-            applyMask(false);
+            mask.update();
         }
     }
     
@@ -264,9 +283,9 @@ public abstract class UIElementZKBase extends UIElementBase {
         if (isDesignMode() != designMode) {
             super.setDesignMode(designMode);
             setDesignContextMenu(designMode ? DesignContextMenu.getInstance() : null);
-        } else {
-            applyMask(false);
         }
+        
+        mask.update();
     }
     
     /**
@@ -291,47 +310,37 @@ public abstract class UIElementZKBase extends UIElementBase {
     protected void setDesignContextMenu(Component component, Menupopup contextMenu) {
         if (component instanceof XulElement) {
             XulElement comp = (XulElement) component;
+            comp.setAttribute(CONTEXT_MENU, contextMenu);
             
             if (contextMenu == null) {
-                if (enableDesignModeMask) {
-                    maskEvent = null;
-                    comp.removeEventListener("onMask", maskListener);
-                    ZKUtil.removeMask(comp);
-                } else {
-                    SavedState.restore(comp);
-                    ZKUtil.updateSclass(comp, "cwf-designmode-active", true);
-                }
+                SavedState.restore(comp);
+                applyHint();
             } else {
-                if (enableDesignModeMask) {
-                    comp.addEventListener("onMask", maskListener);
-                    maskEvent = new Event("onMask", comp, contextMenu);
-                    applyMask(false);
-                } else {
-                    new SavedState(comp);
-                    comp.setContext(contextMenu);
-                    comp.setTooltiptext(getDefinition().getName());
-                    ZKUtil.updateSclass(comp, "cwf-designmode-active", false);
-                }
+                new SavedState(comp);
+                comp.setContext(contextMenu);
+                comp.setTooltiptext(getDefinition().getName());
             }
         }
     }
     
     /**
-     * Applies the mask if one is present. Does this by firing the onMask event to the target
-     * component.
+     * Returns the component that will receive the design mode mask. Override if necessary.
      * 
-     * @param recurse If true, recurse over all children as well.
+     * @return The component that will receive the design mode mask.
      */
-    private void applyMask(boolean recurse) {
-        if (maskEvent != null && isActivated()) {
-            Events.postEvent(-9999, maskEvent);
-        }
+    public Component getMaskTarget() {
+        return getOuterComponent();
+    }
+    
+    /**
+     * Updates mask for this element and its children.
+     */
+    private void updateMasks() {
+        mask.update();
         
-        if (recurse) {
-            for (UIElementBase child : getChildren()) {
-                if (child instanceof UIElementZKBase) {
-                    ((UIElementZKBase) child).applyMask(recurse);
-                }
+        for (UIElementBase child : getChildren()) {
+            if (child instanceof UIElementZKBase) {
+                ((UIElementZKBase) child).updateMasks();
             }
         }
     }
@@ -388,24 +397,24 @@ public abstract class UIElementZKBase extends UIElementBase {
      * method for performing this operation, that method will be invoked. Otherwise, the background
      * color of the target is set. Override this method to provide alternate implementations.
      * 
-     * @param cmpt Component to receive the color setting.
+     * @param component Component to receive the color setting.
      */
     @Override
-    protected void applyColor(Object cmpt) {
-        if (cmpt instanceof HtmlBasedComponent) {
-            ZKUtil.applyColor((HtmlBasedComponent) cmpt, getColor());
+    protected void applyColor(Object component) {
+        if (component instanceof HtmlBasedComponent) {
+            ZKUtil.applyColor((HtmlBasedComponent) component, getColor());
         }
     }
     
     /**
      * Applies the current hint text to the target component.
      * 
-     * @param cmpt Component to receive the hint text.
+     * @param component Component to receive the hint text.
      */
     @Override
-    protected void applyHint(Object cmpt) {
-        if (cmpt instanceof HtmlBasedComponent) {
-            ((HtmlBasedComponent) cmpt).setTooltiptext(getHint());
+    protected void applyHint(Object component) {
+        if (component instanceof HtmlBasedComponent) {
+            ((HtmlBasedComponent) component).setTooltiptext(getHint());
         }
     }
     
@@ -415,27 +424,27 @@ public abstract class UIElementZKBase extends UIElementBase {
      * 
      * @return True if the design mode mask is enabled.
      */
-    protected boolean getEnableDesignModeMask() {
-        return enableDesignModeMask;
+    protected MaskMode getMaskMode() {
+        return mask.getMode();
     }
     
     /**
      * Sets whether to use the design mode mask.
      * 
-     * @param value True to enable the design mode mask.
+     * @param mode True to enable the design mode mask.
      */
-    protected void setEnableDesignModeMask(boolean value) {
-        this.enableDesignModeMask = value;
+    protected void setMaskMode(MaskMode mode) {
+        mask.setMode(mode);
     }
     
     /**
      * Returns true if any associated UI elements in the component subtree are visible.
      * 
-     * @param comp Component subtree to examine.
+     * @param component Component subtree to examine.
      * @return True if any associated UI element in the subtree is visible.
      */
-    protected boolean hasVisibleElements(Component comp) {
-        for (Component child : comp.getChildren()) {
+    protected boolean hasVisibleElements(Component component) {
+        for (Component child : component.getChildren()) {
             UIElementBase ele = getAssociatedUIElement(child);
             
             if (ele != null && ele.isVisible()) {
@@ -450,6 +459,21 @@ public abstract class UIElementZKBase extends UIElementBase {
         return false;
     }
     
+    /**
+     * For components that support them, this logic adds/removes a badge.
+     * 
+     * @param selector JQuery selector for element to receive badge.
+     * @param label Text for the badge.
+     */
+    protected void setBadge(String selector, String label, String style) {
+        Executions.getCurrent().addAuResponse(new AuInvoke(selector, SET_BADGE_LOGIC, label));
+    }
+    
+    /**
+     * Registers a command resource.
+     * 
+     * @param resource Resource to register.
+     */
     public void registerResource(PluginResourceCommand resource) {
         CommandUtil.associateCommand(resource.getName(), (XulElement) getOuterComponent());
     }
