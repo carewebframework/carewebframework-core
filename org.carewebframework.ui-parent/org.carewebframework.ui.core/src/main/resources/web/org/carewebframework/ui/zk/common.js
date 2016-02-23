@@ -179,7 +179,6 @@ zk.afterLoad('zul.inp', function() {
 /**
  * Disable back navigation when backspace key is pressed.
  */
-
 cwf.cancelNavigation = function(event) {
 	if (event.keyCode == 8) {
 		var tp = event.srcElement || event.target;
@@ -249,6 +248,9 @@ cwf.zkMask_ = function(uuid, hide) {
 	}
 };
 
+/**
+ * Prevent backspace key from invoking browser back function.
+ */
 jq(document).ready(function() {
 	jq(document).keydown(function(event) {cwf.cancelNavigation(event);});
 });
