@@ -9,21 +9,15 @@
  */
 package org.carewebframework.ui.userheader;
 
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import org.carewebframework.api.context.UserContext;
 import org.carewebframework.api.context.UserContext.IUserContextEvent;
 import org.carewebframework.api.domain.IUser;
-import org.carewebframework.api.property.PropertyUtil;
 import org.carewebframework.api.security.SecurityUtil;
 import org.carewebframework.shell.CareWebUtil;
-import org.carewebframework.shell.plugins.PluginContainer;
 import org.carewebframework.shell.plugins.PluginController;
-import org.carewebframework.ui.FrameworkWebSupport;
 
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.util.Clients;
@@ -43,15 +37,7 @@ public class UserHeader extends PluginController implements IUserContextEvent {
     
     private A password;
     
-    private static final String DATABASE_DISPLAY_NAME_PROPERTY = "DATABASE.NAME";
-    
-    private static final String DATABASE_DISPLAY_BACKGROUNDCOLOR_PROPERTY = "DATABASE.BACKGROUNDCOLOR";
-    
     private IUser currentUser;
-    
-    private String dbRegion;
-    
-    //
     
     /**
      * Event handler for logout link
@@ -80,7 +66,6 @@ public class UserHeader extends PluginController implements IUserContextEvent {
     @Override
     public void doAfterCompose(Component comp) throws Exception {
         super.doAfterCompose(comp);
-        dbRegion = StringUtils.trimToEmpty(getPropertyValue(DATABASE_DISPLAY_NAME_PROPERTY));
         committed();
     }
     
@@ -113,25 +98,9 @@ public class UserHeader extends PluginController implements IUserContextEvent {
             text += "@" + user.getSecurityDomain().getName();
         }
         
-        HttpServletRequest request = FrameworkWebSupport.getHttpServletRequest();
-        String info = StringUtils.trimToEmpty((request == null ? "" : request.getLocalAddr()) + " " + dbRegion);
-        userHeader.setValue(text + (info.isEmpty() ? "" : " (" + info + ")"));
+        userHeader.setValue(text);
         password.setVisible(SecurityUtil.getSecurityService().canChangePassword());
         Clients.resize(root);
-    }
-    
-    /**
-     * Returns a property value.
-     * 
-     * @param propertyName The property name.
-     * @return The property value.
-     */
-    private String getPropertyValue(String propertyName) {
-        try {
-            return PropertyUtil.getValue(propertyName);
-        } catch (Exception e) {
-            return "";
-        }
     }
     
     /**
@@ -140,12 +109,6 @@ public class UserHeader extends PluginController implements IUserContextEvent {
     @Override
     public String pending(boolean silent) {
         return null;
-    }
-    
-    @Override
-    public void onLoad(PluginContainer container) {
-        super.onLoad(container);
-        container.setColor(getPropertyValue(DATABASE_DISPLAY_BACKGROUNDCOLOR_PROPERTY));
     }
     
 }
