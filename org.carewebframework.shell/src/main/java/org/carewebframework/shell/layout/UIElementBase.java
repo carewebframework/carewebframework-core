@@ -53,7 +53,7 @@ public abstract class UIElementBase {
          * @param sender The sender of the event.
          * @param eventName The event name.
          * @param eventData The event data.
-         * @return If returns false, further notification propagation is stopped.
+         * @return If returns false, the propagation chain is stopped.
          */
         boolean onNotification(UIElementBase sender, String eventName, Object eventData);
     }
@@ -1449,13 +1449,12 @@ public abstract class UIElementBase {
         notifyChildren(this, eventName, eventData, recurse);
     }
     
-    private boolean notifyChildren(UIElementBase sender, String eventName, Object eventData, boolean recurse) {
+    private void notifyChildren(UIElementBase sender, String eventName, Object eventData, boolean recurse) {
         for (UIElementBase child : getChildren()) {
-            recurse &= child.childListeners.notify(sender, eventName, eventData);
-            recurse = recurse && child.notifyChildren(sender, eventName, eventData, recurse);
+            if (child.childListeners.notify(sender, eventName, eventData) && recurse) {
+                child.notifyChildren(sender, eventName, eventData, recurse);
+            }
         }
-        
-        return recurse;
     }
     
     /**
