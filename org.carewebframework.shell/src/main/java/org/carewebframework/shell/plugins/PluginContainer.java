@@ -195,11 +195,20 @@ public class PluginContainer extends Idspace {
      * Calls the hosting UI element to bring the plugin to the front of the UI.
      */
     public void bringToFront() {
-        UIElementBase associated = UIElementZKBase.getAssociatedUIElement(this);
+        UIElementBase host = getHost();
         
-        if (associated != null) {
-            associated.bringToFront();
+        if (host != null) {
+            host.bringToFront();
         }
+    }
+    
+    /**
+     * Returns the UI element hosting this container.
+     * 
+     * @return The hosting UI element (could be null).
+     */
+    public UIElementBase getHost() {
+        return UIElementZKBase.getAssociatedUIElement(this);
     }
     
     /**
