@@ -30,7 +30,7 @@ public class UIElementTabPane extends UIElementZKBase {
     /**
      * Re-purpose close tab button for drop down menu.
      */
-    public static class TabEx extends Tab {
+    public static class TabEx extends Tab implements INotificationListener {
         
         private static final long serialVersionUID = 1L;
         
@@ -44,17 +44,13 @@ public class UIElementTabPane extends UIElementZKBase {
         public void onClose() {
             // Ignore
         }
-    };
-    
-    private final INotificationListener badgeListener = new UIElementBase.INotificationListener() {
         
         @Override
         public boolean onNotification(UIElementBase sender, String eventName, Object eventData) {
             Badge badge = eventData == null ? new Badge() : (Badge) eventData;
-            badge.apply("#" + tab.getUuid() + "-cnt");
+            badge.apply("#" + getUuid() + "-cnt");
             return false;
         }
-        
     };
     
     private final TabEx tab = new TabEx();
@@ -71,7 +67,7 @@ public class UIElementTabPane extends UIElementZKBase {
         associateComponent(tab);
         tabPanel.setSclass("cwf-tab-panel");
         tabPanel.setHeight("100%");
-        listenToChild("badge", badgeListener);
+        listenToChild("badge", tab);
     }
     
     /**
