@@ -9,6 +9,7 @@
  */
 package org.carewebframework.shell.layout;
 
+import org.carewebframework.ui.zk.Badge;
 import org.carewebframework.ui.zk.ZKUtil;
 
 import org.zkoss.zul.Menupopup;
@@ -48,8 +49,10 @@ public class UIElementTabPane extends UIElementZKBase {
     private final INotificationListener badgeListener = new UIElementBase.INotificationListener() {
         
         @Override
-        public void onNotification(UIElementBase sender, String eventName, Object eventData) {
-            ZKUtil.setBadge("#" + tab.getUuid() + "-cnt", (String) eventData);
+        public boolean onNotification(UIElementBase sender, String eventName, Object eventData) {
+            Badge badge = eventData == null ? new Badge() : (Badge) eventData;
+            badge.apply("#" + tab.getUuid() + "-cnt");
+            return false;
         }
         
     };

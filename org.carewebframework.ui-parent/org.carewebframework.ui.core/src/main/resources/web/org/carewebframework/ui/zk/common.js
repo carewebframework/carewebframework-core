@@ -257,14 +257,20 @@ cwf.zkMask_ = function(uuid, hide) {
  * 
  * @param selector Selector for element to receive badge.
  * @param text Text for the badge.  If none, any existing badge will be removed.
+ * @param classes Any additional CSS classes to add.
  */
-cwf.setBadge = function(selector, text) {
+cwf.setBadge = function(selector, text, classes) {
 	var w$ = jq(selector),
 		b$ = w$.find('.badge');
 	
 	if (text) {
-		b$ = b$.length ? b$ : jq('<span class="badge" />').appendTo(w$);
+		b$ = b$.length ? b$ : jq('<span />').appendTo(w$);
 		b$.text(text);
+		classes = classes ? ' ' + classes : '';
+		b$.attr('class', 'badge' + classes);
+		if (classes) {
+			b$.addClass(classes);
+		}
 	} else {
 		b$.remove();
 	}

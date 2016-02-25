@@ -994,10 +994,11 @@ public class ZKUtil {
      * Adds or removes a badge to/from an HTML element.
      * 
      * @param selector Selector for the target element.
-     * @param text Text for the badge. Null value removes any existing badge.
+     * @param label Text for the badge. Null value removes any existing badge.
+     * @param classes Optional additional CSS classes for badge.
      */
-    public static void setBadge(String selector, String text) {
-        AuResponse rsp = new AuInvoke("cwf.setBadge", new Object[] { selector, text });
+    public static void setBadge(String selector, String label, String classes) {
+        AuResponse rsp = new AuInvoke("cwf.setBadge", new Object[] { selector, label, classes });
         Clients.response(rsp);
     }
     

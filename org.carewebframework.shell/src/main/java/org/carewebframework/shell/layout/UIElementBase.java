@@ -47,7 +47,42 @@ public abstract class UIElementBase {
      */
     public interface INotificationListener {
         
-        void onNotification(UIElementBase sender, String eventName, Object eventData);
+        /**
+         * Notifies the listener of an event.
+         * 
+         * @param sender The sender of the event.
+         * @param eventName The event name.
+         * @param eventData The event data.
+         * @return If returns false, further notification propagation is stopped.
+         */
+        boolean onNotification(UIElementBase sender, String eventName, Object eventData);
+    }
+    
+    /**
+     * Allows a UI element to listen to notifications from its parent or children.
+     */
+    private static class NotificationListeners {
+        
+        private Map<String, INotificationListener> listeners;
+        
+        public void register(String eventName, INotificationListener listener) {
+            if (listener == null) {
+                if (listeners != null) {
+                    listeners.remove(eventName);
+                }
+            } else {
+                if (listeners == null) {
+                    listeners = new HashMap<>();
+                }
+                
+                listeners.put(eventName, listener);
+            }
+        }
+        
+        public boolean notify(UIElementBase sender, String eventName, Object eventData) {
+            INotificationListener listener = listeners == null ? null : listeners.get(eventName);
+            return listener == null || listener.onNotification(sender, eventName, eventData);
+        }
     }
     
     /**
@@ -124,6 +159,10 @@ public abstract class UIElementBase {
     
     private static final RelatedClassMap allowedChildClasses = new RelatedClassMap();
     
+    private final NotificationListeners parentListeners = new NotificationListeners();
+    
+    private final NotificationListeners childListeners = new NotificationListeners();
+    
     protected int maxChildren = 1;
     
     protected boolean autoHide = true;
@@ -157,8 +196,6 @@ public abstract class UIElementBase {
     private String color;
     
     private IEventManager eventManager;
-    
-    private Map<String, INotificationListener> notificationListeners;
     
     /**
      * A UIElementBase subclass should call this in its static initializer block to register any
@@ -1379,15 +1416,14 @@ public abstract class UIElementBase {
      * 
      * @param eventName Name of the event.
      * @param eventData Data associated with the event.
+     * @param recurse If true, recurse up the parent chain.
      */
-    protected void notifyParent(String eventName, Object eventData) {
-        if (parent != null) {
-            INotificationListener listener = parent.notificationListeners == null ? null
-                    : parent.notificationListeners.get(eventName);
-                    
-            if (listener != null) {
-                listener.onNotification(this, eventName, eventData);
-            }
+    protected void notifyParent(String eventName, Object eventData, boolean recurse) {
+        UIElementBase ele = parent;
+        
+        while (ele != null) {
+            recurse &= ele.parentListeners.notify(this, eventName, eventData);
+            ele = recurse ? ele.parent : null;
         }
     }
     
@@ -1399,17 +1435,38 @@ public abstract class UIElementBase {
      *            null and a listener is already registered, it will be replaced.
      */
     protected void listenToChild(String eventName, INotificationListener listener) {
-        if (listener == null) {
-            if (notificationListeners != null) {
-                notificationListeners.remove(eventName);
-            }
-        } else {
-            if (notificationListeners == null) {
-                notificationListeners = new HashMap<>();
-            }
-            
-            notificationListeners.put(eventName, listener);
+        parentListeners.register(eventName, listener);
+    }
+    
+    /**
+     * Allows a parent element to notify its children of an event of interest.
+     * 
+     * @param eventName Name of the event.
+     * @param eventData Data associated with the event.
+     * @param recurse If true, recurse over all child levels.
+     */
+    protected void notifyChildren(String eventName, Object eventData, boolean recurse) {
+        notifyChildren(this, eventName, eventData, recurse);
+    }
+    
+    private boolean notifyChildren(UIElementBase sender, String eventName, Object eventData, boolean recurse) {
+        for (UIElementBase child : getChildren()) {
+            recurse &= child.childListeners.notify(sender, eventName, eventData);
+            recurse = recurse && child.notifyChildren(sender, eventName, eventData, recurse);
         }
+        
+        return recurse;
+    }
+    
+    /**
+     * Register/unregister a parent notification listener.
+     * 
+     * @param eventName The event name.
+     * @param listener A notification listener. If null, any existing listener is removed. If not
+     *            null and a listener is already registered, it will be replaced.
+     */
+    protected void listenToParent(String eventName, INotificationListener listener) {
+        childListeners.register(eventName, listener);
     }
     
 }
