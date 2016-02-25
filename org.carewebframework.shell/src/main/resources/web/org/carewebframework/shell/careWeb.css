@@ -101,6 +101,10 @@
 	min-height: 20px;
 }
 
+.cwf-tab .z-tab-text .badge {
+	margin-left: 5px;
+}
+
 .cwf-tab-disabled .z-tab-text {
 	opacity: .5;
 }

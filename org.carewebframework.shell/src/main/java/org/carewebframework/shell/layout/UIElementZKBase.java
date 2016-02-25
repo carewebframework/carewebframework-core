@@ -20,7 +20,6 @@ import org.carewebframework.ui.command.CommandUtil;
 import org.carewebframework.ui.zk.PromptDialog;
 import org.carewebframework.ui.zk.ZKUtil;
 
-import org.zkoss.zk.au.out.AuInvoke;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.HtmlBasedComponent;
@@ -75,8 +74,6 @@ public abstract class UIElementZKBase extends UIElementBase {
     private static final String SAVED_STATE = ATTR_PREFIX + "SavedState";
     
     private static final String CONTEXT_MENU = ATTR_PREFIX + "ContextMenu";
-    
-    private static final String SET_BADGE_LOGIC = "cwf.setBadge(s, t);";
     
     private final DesignMask mask;
     
@@ -457,16 +454,6 @@ public abstract class UIElementZKBase extends UIElementBase {
         }
         
         return false;
-    }
-    
-    /**
-     * For components that support them, this logic adds/removes a badge.
-     * 
-     * @param selector JQuery selector for element to receive badge.
-     * @param label Text for the badge.
-     */
-    protected void setBadge(String selector, String label, String style) {
-        Executions.getCurrent().addAuResponse(new AuInvoke(selector, SET_BADGE_LOGIC, label));
     }
     
     /**

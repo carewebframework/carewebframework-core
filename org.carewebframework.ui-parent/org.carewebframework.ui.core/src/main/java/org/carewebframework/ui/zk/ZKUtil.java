@@ -991,6 +991,17 @@ public class ZKUtil {
     }
     
     /**
+     * Adds or removes a badge to/from an HTML element.
+     * 
+     * @param selector Selector for the target element.
+     * @param text Text for the badge. Null value removes any existing badge.
+     */
+    public static void setBadge(String selector, String text) {
+        AuResponse rsp = new AuInvoke("cwf.setBadge", new Object[] { selector, text });
+        Clients.response(rsp);
+    }
+    
+    /**
      * Wires a controller (events and component references) for the specified component where the
      * component serves as its own controller.
      * 

@@ -263,7 +263,7 @@ cwf.setBadge = function(selector, text) {
 		b$ = w$.find('.badge');
 	
 	if (text) {
-		b$ = b$.length ? b$ : w$.append('<span class="badge" />');
+		b$ = b$.length ? b$ : jq('<span class="badge" />').appendTo(w$);
 		b$.text(text);
 	} else {
 		b$.remove();

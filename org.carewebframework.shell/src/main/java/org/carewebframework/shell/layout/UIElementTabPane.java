@@ -43,10 +43,18 @@ public class UIElementTabPane extends UIElementZKBase {
         public void onClose() {
             // Ignore
         }
+    };
+    
+    private final INotificationListener badgeListener = new UIElementBase.INotificationListener() {
+        
+        @Override
+        public void onNotification(UIElementBase sender, String eventName, Object eventData) {
+            ZKUtil.setBadge("#" + tab.getUuid() + "-cnt", (String) eventData);
+        }
         
     };
     
-    private final Tab tab = new TabEx();
+    private final TabEx tab = new TabEx();
     
     private final Tabpanel tabPanel = new Tabpanel();
     
@@ -60,6 +68,7 @@ public class UIElementTabPane extends UIElementZKBase {
         associateComponent(tab);
         tabPanel.setSclass("cwf-tab-panel");
         tabPanel.setHeight("100%");
+        listenToChild("badge", badgeListener);
     }
     
     /**
