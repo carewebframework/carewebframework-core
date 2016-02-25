@@ -10,9 +10,15 @@
 
 	<beans profile="root">
 	
-		<bean id="propertyService"
+		<bean id="propertyService" 
 			class="org.carewebframework.api.property.mock.MockPropertyService"
-			destroy-method="clear">
+			destroy-method="clear" cwf:override="never">
+			<property name="resources">
+				<bean class="org.springframework.util.StringUtils" 
+				factory-method="commaDelimitedListToStringArray">
+					<constructor-arg value="${org.carewebframework.api.property.mock.sources:}" />
+				</bean>
+			</property>
 		</bean>
 
 	</beans>
