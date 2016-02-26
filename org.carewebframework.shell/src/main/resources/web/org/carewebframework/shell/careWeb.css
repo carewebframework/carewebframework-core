@@ -147,6 +147,10 @@
 	content: " ";
 }
 
+.cwf-treeview-node > a > .badge {
+	margin-left: 5px;
+}
+
 .cwf-treeview-node-disabled {
 	opacity: 0.5;
 }

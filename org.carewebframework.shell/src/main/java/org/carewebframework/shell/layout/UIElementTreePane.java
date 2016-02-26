@@ -10,6 +10,7 @@
 package org.carewebframework.shell.layout;
 
 import org.carewebframework.theme.ThemeUtil;
+import org.carewebframework.ui.zk.Badge;
 import org.carewebframework.ui.zk.ZKUtil;
 
 import org.zkoss.zk.ui.Component;
@@ -50,6 +51,16 @@ public class UIElementTreePane extends UIElementZKBase {
         
     };
     
+    private final INotificationListener badgeListener = new INotificationListener() {
+        
+        @Override
+        public boolean onNotification(UIElementBase sender, String eventName, Object eventData) {
+            Badge badge = eventData == null ? new Badge() : (Badge) eventData;
+            badge.apply("#" + anchor.getUuid());
+            return false;
+        }
+    };
+    
     private final Div pane = new Div();
     
     private final Span node;
@@ -79,6 +90,7 @@ public class UIElementTreePane extends UIElementZKBase {
         anchor = (A) node.getFirstChild();
         anchor.addEventListener(Events.ON_CLICK, clickListener);
         associateComponent(anchor);
+        listenToChild("badge", badgeListener);
     }
     
     /**
