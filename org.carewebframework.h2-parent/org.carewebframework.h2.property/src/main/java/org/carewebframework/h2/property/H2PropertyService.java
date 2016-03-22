@@ -29,11 +29,12 @@ import org.carewebframework.h2.core.H2Database;
  */
 public class H2PropertyService implements IPropertyService {
     
+    
     private static final String PROPERTIES_TABLE = "CWF_PROPERTY";
     
     private static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS %1$s ("
             + "NAME VARCHAR(255) NOT NULL, USER VARCHAR(255) DEFAULT '', INSTANCE VARCHAR(255) DEFAULT '', VALUE CLOB)";
-            
+    
     private static final String CREATE_INDEX1 = "CREATE INDEX IF NOT EXISTS INSTANCE_INDEX ON %1$s (INSTANCE)";
     
     private static final String CREATE_INDEX2 = "CREATE PRIMARY KEY ON %1$s (NAME, USER, INSTANCE)";
@@ -42,10 +43,10 @@ public class H2PropertyService implements IPropertyService {
     
     private static final String SAVE_VALUE = "MERGE INTO %s (NAME, USER, INSTANCE, VALUE) "
             + "KEY(NAME, USER, INSTANCE) VALUES(?1, ?2, ?3, ?4)";
-            
+    
     private static final String GET_VALUE = "SELECT VALUE FROM %s WHERE NAME=?1 AND INSTANCE=?2 AND (USER='' OR USER=?3) "
             + "ORDER BY USER DESC";
-            
+    
     private static final String DELETE_VALUE = "DELETE FROM %s WHERE NAME=?1 AND USER=?2 AND INSTANCE=?3";
     
     private static final String GET_INSTANCES = "SELECT DISTINCT INSTANCE FROM %s WHERE NAME=?1 AND USER=?2";
@@ -66,7 +67,6 @@ public class H2PropertyService implements IPropertyService {
     }
     
     public H2PropertyService init(boolean reset) throws Exception {
-        Class.forName("org.h2.Driver");
         connection = database.getConnection();
         
         if (reset) {
@@ -132,7 +132,7 @@ public class H2PropertyService implements IPropertyService {
     public String getValue(String propertyName, String instanceName) {
         try (PreparedStatement ps = getPreparedStatement(GET_VALUE, propertyName, instanceName, getUserId(false));
                 ResultSet rs = ps.executeQuery();) {
-                
+            
             if (rs.next()) {
                 Clob clob = rs.getClob("VALUE");
                 return clob.getSubString(1, (int) clob.length());
@@ -184,7 +184,7 @@ public class H2PropertyService implements IPropertyService {
     public List<String> getInstances(String propertyName, boolean asGlobal) {
         try (PreparedStatement ps = getPreparedStatement(GET_INSTANCES, propertyName, getUserId(asGlobal));
                 ResultSet rs = ps.executeQuery();) {
-                
+            
             List<String> results = new ArrayList<>();
             
             while (rs.next()) {

@@ -25,6 +25,7 @@ import org.h2.tools.Server;
  */
 public class H2Database implements AutoCloseable {
     
+    
     public enum DBMode {
         EMBEDDED, // H2 embedded mode
         REMOTE, // H2 remote server
@@ -39,7 +40,7 @@ public class H2Database implements AutoCloseable {
     
     private DBMode dbMode;
     
-    public H2Database(Map<String, String> params) throws Exception {
+    public H2Database(Map<String, String> params) {
         this.params = params;
     }
     
