@@ -103,7 +103,7 @@
 		<module>org.carewebframework.security.spring-parent</module>
 		<module>org.carewebframework.amqp-parent</module>
 		<module>org.carewebframework.jms-parent</module>
-		<module>org.carewebframework.h2-parent</module>
+		<module>org.carewebframework.jdbc-parent</module>
 		<module>org.carewebframework.ext-parent</module>
 		<module>org.carewebframework.lib-parent</module>
 		<module>org.carewebframework.testharness</module>
@@ -698,6 +698,11 @@
 				<version>3.2.2</version>
 			</dependency>
 			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-dbcp2</artifactId>
+				<version>2.1.1</version>
+			</dependency>
+			<dependency>
 				<groupId>commons-io</groupId>
 				<artifactId>commons-io</artifactId>
 				<version>2.4</version>
@@ -892,12 +897,12 @@
 			</dependency>
 			<dependency>
 				<groupId>org.carewebframework</groupId>
-				<artifactId>org.carewebframework.api.security.h2</artifactId>
+				<artifactId>org.carewebframework.api.security.jdbc</artifactId>
 				<version>${org.carewebframework.core.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.carewebframework</groupId>
-				<artifactId>org.carewebframework.api.property.h2</artifactId>
+				<artifactId>org.carewebframework.api.property.jdbc</artifactId>
 				<version>${org.carewebframework.core.version}</version>
 			</dependency>
 			<dependency>
