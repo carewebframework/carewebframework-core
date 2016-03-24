@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -19,6 +19,7 @@ import org.junit.BeforeClass;
 
 public class CommonTest {
     
+    
     public static FrameworkAppContext appContext;
     
     public static AppFramework appFramework;
@@ -31,8 +32,14 @@ public class CommonTest {
     public static void beforeClass$CommonTest() {
         if (appContext == null) {
             System.out.println("Initializing test IOC container...");
-            appContext = new FrameworkAppContext(true);
-            appContext.refresh();
+            try {
+                appContext = new FrameworkAppContext(true);
+                appContext.refresh();
+            } catch (Exception e) {
+                appContext = null;
+                System.out.println(e.getMessage());
+                throw e;
+            }
             appFramework = appContext.getBean("appFramework", AppFramework.class);
             eventManager = appContext.getBean("eventManager", EventManager.class);
             contextManager = appContext.getBean("contextManager", ContextManager.class);
@@ -43,7 +50,11 @@ public class CommonTest {
     public static void afterClass$CommonTest() {
         if (appContext != null) {
             System.out.println("Closing test IOC container...");
-            appContext.close();
+            try {
+                appContext.close();
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
             appContext = null;
             appFramework = null;
             eventManager = null;

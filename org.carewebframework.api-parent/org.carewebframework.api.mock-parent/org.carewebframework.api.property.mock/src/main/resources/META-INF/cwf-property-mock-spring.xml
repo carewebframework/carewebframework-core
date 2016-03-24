@@ -12,7 +12,7 @@
 	
 		<bean id="propertyService" 
 			class="org.carewebframework.api.property.mock.MockPropertyService"
-			destroy-method="clear" cwf:override="never">
+			destroy-method="clear" cwf:override="ignore">
 			<property name="resources">
 				<bean class="org.springframework.util.StringUtils" 
 				factory-method="commaDelimitedListToStringArray">
