@@ -35,9 +35,9 @@ public class CommonTest {
             try {
                 appContext = new FrameworkAppContext(true);
                 appContext.refresh();
-            } catch (Exception e) {
+            } catch (Throwable e) {
                 appContext = null;
-                System.out.println(e.getMessage());
+                e.printStackTrace();
                 throw e;
             }
             appFramework = appContext.getBean("appFramework", AppFramework.class);
@@ -52,8 +52,8 @@ public class CommonTest {
             System.out.println("Closing test IOC container...");
             try {
                 appContext.close();
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
+            } catch (Throwable e) {
+                e.printStackTrace();
             }
             appContext = null;
             appFramework = null;
