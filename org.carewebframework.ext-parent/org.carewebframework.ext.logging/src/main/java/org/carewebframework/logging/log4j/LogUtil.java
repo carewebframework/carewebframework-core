@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -15,6 +15,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.NDC;
+
 import org.carewebframework.ui.util.RequestUtil;
 
 /**
@@ -23,10 +24,11 @@ import org.carewebframework.ui.util.RequestUtil;
  * <p>
  * Intentionally not using MDC as the map uses InheritableThreadLocal, which causes problems in a
  * web/pool environment. Using Log4j NDC %x and pushing the sessionId.
- * </p>
- * <b>Please take caution and ensure that add/remove calls are handled atomically</b> </p>
+ * <p>
+ * <b>Please take caution and ensure that add/remove calls are handled atomically</b>
  */
 public final class LogUtil {
+    
     
     private static final Log log = LogFactory.getLog(LogUtil.class);
     
@@ -66,10 +68,8 @@ public final class LogUtil {
     /**
      * <p>
      * <b>Please take caution and ensure that add/remove calls are handled atomically</b>
-     * </p>
      * <p>
      * As convenience, attempts to add the following diagnostic context to current thread.
-     * <p>
      * 
      * @see RequestUtil#getStandardDiagnosticContext()
      */

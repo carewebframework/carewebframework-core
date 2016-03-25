@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -35,6 +35,7 @@ import org.springframework.jmx.export.annotation.ManagedResource;
  */
 @ManagedResource(description = "Manage Logging at Runtime")
 public class Log4JLogManager implements ILogManager {
+    
     
     private static final Log log = LogFactory.getLog(Log4JLogManager.class);
     
@@ -131,9 +132,9 @@ public class Log4JLogManager implements ILogManager {
     }
     
     /**
-     * Getter for List of loggerNames
+     * Getter for set of logger names
      * 
-     * @return List<String> String objects
+     * @return Set of logger names.
      */
     @ManagedAttribute(description = "Returns logger names")
     public Set<String> getLoggerNames() {
@@ -141,9 +142,9 @@ public class Log4JLogManager implements ILogManager {
     }
     
     /**
-     * Setter for List of loggerNames
+     * Setter for set of logger names
      * 
-     * @param loggerNames List of String objects
+     * @param loggerNames Set of logger names
      */
     public void setLoggerNames(Set<String> loggerNames) {
         this.loggerNames = loggerNames;
