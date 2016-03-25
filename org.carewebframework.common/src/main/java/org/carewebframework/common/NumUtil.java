@@ -16,12 +16,13 @@ import java.text.DecimalFormat;
  */
 public class NumUtil {
     
+    
     /**
      * Compares two integer values.
      * 
      * @param val1 First value.
      * @param val2 Second value.
-     * @return <0 if val1 < val2; 0 if val1 == val2; >0 if val1 > val2
+     * @return &lt; 0 if val1 &lt; val2; 0 if val1 == val2; &gt; 0 if val1 &gt; val2
      */
     public static int compare(int val1, int val2) {
         return val1 - val2;
@@ -32,7 +33,7 @@ public class NumUtil {
      * 
      * @param val1 First value.
      * @param val2 Second value.
-     * @return <0 if val1 < val2; 0 if val1 == val2; >0 if val1 > val2
+     * @return &lt; 0 if val1 &lt; val2; 0 if val1 == val2; &gt; 0 if val1 &gt; val2
      */
     public static int compare(double val1, double val2) {
         return Double.compare(val1, val2);

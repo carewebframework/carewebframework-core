@@ -46,6 +46,7 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
  */
 public class JSONUtil {
     
+    
     private static final String DEFAULT_TYPE_PROPERTY = "@class";
     
     private static final Map<String, ObjectMapper> mappers = new ConcurrentHashMap<>();
@@ -54,6 +55,7 @@ public class JSONUtil {
      * Identifies properties that require type metadata (via property specified in typeProperty).
      */
     private static class CWTypeResolverBuilder extends StdTypeResolverBuilder {
+        
         
         @Override
         public TypeDeserializer buildTypeDeserializer(DeserializationConfig config, JavaType baseType,
@@ -85,6 +87,7 @@ public class JSONUtil {
      * Resolves type identifiers to classes. Supports aliases and class names.
      */
     private static class CWTypedIdResolver implements TypeIdResolver {
+        
         
         private JavaType baseType;
         
@@ -151,6 +154,7 @@ public class JSONUtil {
      * Required to suppress writing of type information except for top-level objects.
      */
     public final static class AsPropertyTypeSerializerEx extends AsPropertyTypeSerializer {
+        
         
         public AsPropertyTypeSerializerEx(TypeIdResolver idRes, BeanProperty property, String propName) {
             super(idRes, property, propName);
@@ -347,6 +351,7 @@ public class JSONUtil {
     /**
      * Deserializes a list of objects.
      * 
+     * @param <T> The list elements' class.
      * @param data Serialized form of the list in JSON format.
      * @param clazz The class of objects found in the list.
      * @return A list of objects of the specified type.
@@ -358,6 +363,7 @@ public class JSONUtil {
     /**
      * Deserializes a list of objects.
      * 
+     * @param <T> The list elements' class.
      * @param typeProperty The name of the property signifying the data type.
      * @param data Serialized form of the list in JSON format.
      * @param clazz The class of objects found in the list.

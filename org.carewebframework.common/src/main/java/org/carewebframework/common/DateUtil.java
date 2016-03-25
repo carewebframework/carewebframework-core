@@ -27,7 +27,9 @@ import org.apache.commons.lang.time.FastDateFormat;
  */
 public class DateUtil {
     
+    
     private static ThreadLocal<DecimalFormat> decimalFormat = new ThreadLocal<DecimalFormat>() {
+        
         
         @Override
         protected DecimalFormat initialValue() {
@@ -39,6 +41,7 @@ public class DateUtil {
      * Interface for accessing and setting user's timezone
      */
     public static interface ITimeZoneAccessor {
+        
         
         /**
          * Returns the current time zone.
@@ -57,6 +60,7 @@ public class DateUtil {
     }
     
     public static ITimeZoneAccessor localTimeZone = new ITimeZoneAccessor() {
+        
         
         @Override
         public TimeZone getTimeZone() {
@@ -85,7 +89,7 @@ public class DateUtil {
      */
     private static final Pattern PATTERN_EXT_DATE = Pattern
             .compile("^\\s*[t|n]{1}\\s*([+|-]{1}\\s*[\\d]*\\s*[d|m|y]?)?\\s*$");
-            
+    
     /*
      * Defines a regular expression pattern representing a value ending in one
      * of the acceptable extended style date units (d, m, or y).
@@ -99,15 +103,15 @@ public class DateUtil {
     
     private static final double[] MS_FP = new double[] { 31557600000.0, 2592000000.0, 604800000.0, 86400000.0, 3600000.0,
             60000.0, 1000.0, 1.0 };
-            
+    
     private static final long[] MS_LG = new long[] { 31557600000L, 2592000000L, 604800000L, 86400000L, 3600000L, 60000L,
             1000L, 1L };
-            
+    
     public static String[][] TIME_UNIT = new String[][] { { "year", "years", "yr", "yrs" },
             { "month", "months", "mo", "mos" }, { "week", "weeks", "wk", "wks" }, { "day", "days", "day", "days" },
             { "hour", "hours", "hr", "hrs" }, { "minute", "minutes", "min", "mins" }, { "second", "seconds", "sec", "secs" },
             { "millisecond", "milliseconds", "ms", "ms" } };
-            
+    
     public enum TimeUnit {
         YEARS, MONTHS, WEEKS, DAYS, HOURS, MINUTES, SECONDS, MILLISECONDS
     };
@@ -118,7 +122,7 @@ public class DateUtil {
     public enum Format {
         WITH_TZ("dd-MMM-yyyy HH:mm zzz"), WITHOUT_TZ("dd-MMM-yyyy HH:mm"), WITHOUT_TIME("dd-MMM-yyyy"), HL7(
                 HL7_DATE_TIME_PATTERN), HL7_WITHOUT_TIME(HL7_DATE_ONLY_PATTERN);
-                
+        
         private String pattern;
         
         private Format(String pattern) {
@@ -679,7 +683,7 @@ public class DateUtil {
     /**
      * <p>
      * Returns age as a formatted string expressed in days, months, or years, depending on whether
-     * person is an infant (< 2 mos), toddler (> 2 mos, < 2 yrs), or more than 2 years old.
+     * person is an infant (&lt; 2 mos), toddler (&gt; 2 mos, &lt; 2 yrs), or more than 2 years old.
      * </p>
      * 
      * @param dob Date of person's birth
@@ -692,7 +696,7 @@ public class DateUtil {
     /**
      * <p>
      * Returns age as a formatted string expressed in days, months, or years, depending on whether
-     * person is an infant (< 2 mos), toddler (> 2 mos, < 2 yrs), or more than 2 years old.
+     * person is an infant (&lt; 2 mos), toddler (&gt; 2 mos, &lt; 2 yrs), or more than 2 years old.
      * </p>
      * <p>
      * Allows the caller to specify an &quot;as-of&quot; date. The calculated age will be as-of the
