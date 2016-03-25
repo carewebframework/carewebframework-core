@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:cwf="http://www.carewebframework.org/schema/spring"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.carewebframework.org/schema/spring
+        http://www.carewebframework.org/schema/spring/spring-extensions.xsd">
+
+	<beans profile="root">
+		
+		<bean id="cwfHibernateDataSource" 
+			class="org.apache.commons.dbcp2.BasicDataSource"
+			destroy-method="close" cwf:override="always">
+			<property name="driverClassName" value="${org.carewebframework.hibernate.driverclassname}" />
+			<property name="url" value="${org.carewebframework.hibernate.url}" />
+			<property name="username" value="${org.carewebframework.hibernate.username:}" />
+			<property name="password" value="${org.carewebframework.hibernate.password:}" />
+			<property name="connectionProperties" value="${org.carewebframework.hibernate.connectionproperties:" />
+		</bean>
+		
+		<bean id="cwfHibernateSessionFactory" 
+			class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		    <property name="dataSource" ref="cwfHibernateDataSource"/>
+		    <property name="packagesToScan" value="org.carewebframework.hibernate"/>
+		    <property name="hibernateProperties">
+		        <props>
+		            <prop key="hibernate.dialect">${org.carewebframework.hibernate.dialect}</prop>
+		            <prop key="hibernate.current_session_context_class">thread</prop>
+		            <prop key="hibernate.hbm2ddl.auto">${org.carewebframework.hibernate.hbm2ddl.auto:update}</prop>
+		        </props>
+		    </property>
+		</bean>
+
+		<bean id="cwfHibernateTransactionManager" 
+			class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		    <property name="sessionFactory" ref="cwfHibernateSessionFactory"/>
+		</bean>
+		
+		<bean id="cwfHibernateAbstractDAO" 
+			class="org.carewebframework.hibernate.AbstractDAO" 
+			abstract="true">
+			<constructor-arg ref="cwfHibernateSessionFactory" />
+		</bean>
+		
+	</beans>
+
+</beans>

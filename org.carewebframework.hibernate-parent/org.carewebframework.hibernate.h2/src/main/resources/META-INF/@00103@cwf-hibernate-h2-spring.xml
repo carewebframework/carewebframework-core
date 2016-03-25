@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:cwf="http://www.carewebframework.org/schema/spring"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.carewebframework.org/schema/spring
+        http://www.carewebframework.org/schema/spring/spring-extensions.xsd">
+
+	<beans profile="root">
+		
+		<bean id="cwfHibernateDataSource" class="org.carewebframework.hibernate.h2.H2DataSource"
+			init-method="init" destroy-method="destroy" cwf:override="always">
+			<property name="driverClassName" value="org.h2.Driver" />
+			<property name="url" value="${org.carewebframework.hibernate.url}" />
+			<property name="username" value="${org.carewebframework.hibernate.username:}" />
+			<property name="password" value="${org.carewebframework.hibernate.password:}" />
+			<property name="connectionProperties" value="${org.carewebframework.hibernate.connectionproperties:" />
+			<property name="mode" value="${org.carewebframework.hibernate.h2.mode:embedded}" />
+		</bean>
+		
+	</beans>
+
+</beans>

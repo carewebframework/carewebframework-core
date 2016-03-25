@@ -103,7 +103,7 @@
 		<module>org.carewebframework.security.spring-parent</module>
 		<module>org.carewebframework.amqp-parent</module>
 		<module>org.carewebframework.jms-parent</module>
-		<module>org.carewebframework.jdbc-parent</module>
+		<module>org.carewebframework.hibernate-parent</module>
 		<module>org.carewebframework.ext-parent</module>
 		<module>org.carewebframework.lib-parent</module>
 		<module>org.carewebframework.testharness</module>

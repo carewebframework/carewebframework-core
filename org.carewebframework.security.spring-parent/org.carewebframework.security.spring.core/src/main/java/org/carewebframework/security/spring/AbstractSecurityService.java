@@ -43,6 +43,7 @@ import org.zkoss.zk.ui.Desktop;
  */
 public abstract class AbstractSecurityService implements ISecurityService {
     
+    
     private static final Log log = LogFactory.getLog(AbstractSecurityService.class);
     
     private String logoutTarget;
@@ -190,8 +191,8 @@ public abstract class AbstractSecurityService implements ISecurityService {
     public IUser getAuthenticatedUser() {
         Authentication authentication = getAuthentication();
         Object details = authentication == null ? null : authentication.getDetails();
-        return (details instanceof CWFAuthenticationDetails) ? (IUser) ((CWFAuthenticationDetails) details)
-                .getDetail("user") : null;
+        return (details instanceof CWFAuthenticationDetails) ? (IUser) ((CWFAuthenticationDetails) details).getDetail("user")
+                : null;
     }
     
     /**
@@ -347,8 +348,8 @@ public abstract class AbstractSecurityService implements ISecurityService {
     @Override
     public String generateRandomPassword() {
         int len = getRandomPasswordLength();
-        return SecurityUtil.generateRandomPassword(len, len, StrUtil.getLabel(Constants.LBL_PASSWORD_RANDOM_CONSTRAINTS)
-                .split("\n"));
+        return SecurityUtil.generateRandomPassword(len, len,
+            StrUtil.getLabel(Constants.LBL_PASSWORD_RANDOM_CONSTRAINTS).split("\n"));
     }
     
     /**

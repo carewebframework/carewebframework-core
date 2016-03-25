@@ -102,12 +102,12 @@
 		</dependency>
 		<dependency>
 			<groupId>org.carewebframework</groupId>
-			<artifactId>org.carewebframework.jdbc.h2</artifactId>
+			<artifactId>org.carewebframework.hibernate.h2</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.carewebframework</groupId>
-			<artifactId>org.carewebframework.jdbc.property</artifactId>
+			<artifactId>org.carewebframework.hibernate.property</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
