@@ -29,6 +29,7 @@ import org.carewebframework.help.viewer.IHelpView;
  */
 public class HelpView implements IHelpView {
     
+    
     protected final NavigatorView view;
     
     private final HelpViewType viewType;
@@ -79,7 +80,7 @@ public class HelpView implements IHelpView {
     
     /**
      * Retrieves the help topic associated with the given node. Note that this also maintains a map
-     * of topic id --> topic mappings in the parent help set.
+     * of topic id --&gt; topic mappings in the parent help set.
      * 
      * @param node Tree node.
      * @return A help topic instance.
