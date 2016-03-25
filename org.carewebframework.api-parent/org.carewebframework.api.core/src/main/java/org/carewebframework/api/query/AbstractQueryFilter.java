@@ -19,6 +19,7 @@ import java.util.Set;
  */
 public abstract class AbstractQueryFilter<T> implements IQueryFilter<T> {
     
+    
     private final Set<IQueryFilterChanged<T>> listeners = new HashSet<>();
     
     public AbstractQueryFilter() {
@@ -62,6 +63,8 @@ public abstract class AbstractQueryFilter<T> implements IQueryFilter<T> {
     
     /**
      * Convenience method for notifying a listener (if any) of a query filter change event.
+     * 
+     * @param filter The filter that changed.
      */
     protected void notifyListeners(IQueryFilter<T> filter) {
         for (IQueryFilterChanged<T> listener : listeners) {

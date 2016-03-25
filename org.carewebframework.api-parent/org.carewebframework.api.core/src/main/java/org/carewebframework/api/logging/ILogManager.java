@@ -16,6 +16,7 @@ import java.util.List;
  */
 public interface ILogManager {
     
+    
     /**
      * Enable ERROR level logging
      * 
@@ -55,7 +56,7 @@ public interface ILogManager {
      * Find all loggers (i.e. appenders, etc.) and return all paths to files being written to. Based
      * on configuration.
      * 
-     * @return List<String>
+     * @return List of log file paths.
      */
     List<String> getAllPathsToLogFiles();
 }

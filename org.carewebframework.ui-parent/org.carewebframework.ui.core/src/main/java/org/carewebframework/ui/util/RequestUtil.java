@@ -34,9 +34,10 @@ import org.springframework.web.context.request.ServletRequestAttributes;
  * <p>
  * Note that due to static nature of these getters and such scope'd objects as Request/Session, we
  * are throwing IllegalStateException for most methods, with the exception of {@link #getRequest()}
- * & {@link #getSession()}.
+ * and {@link #getSession()}.
  */
 public class RequestUtil {
+    
     
     private static Log log = LogFactory.getLog(RequestUtil.class);
     
@@ -191,7 +192,6 @@ public class RequestUtil {
      * <li>Client Remote Address</li>
      * <li>Server Name</li>
      * </ul>
-     * </p>
      * 
      * @return order List of Strings representing the diagnostic context
      */

@@ -27,12 +27,13 @@ import org.zkoss.zk.ui.util.UiLifeCycle;
  * must be registered as a listener in the zk.xml configuration file as follows:
  * 
  * <pre>
- *  &lt;listener>
- *      &lt;listener-class>org.carewebframework.ui.LifecycleEventDispatcher&lt;/listener-class>
- *  &lt;/listener>
+ *  &lt;listener&gt;
+ *      &lt;listener-class&gt;org.carewebframework.ui.LifecycleEventDispatcher&lt;/listener-class>
+ *  &lt;/listener&gt;
  * </pre>
  */
 public class LifecycleEventDispatcher implements DesktopInit, DesktopCleanup, SessionInit, SessionCleanup, UiLifeCycle {
+    
     
     private static final String ATTR_COMP_LISTENER = "@component_listener";
     
@@ -115,7 +116,7 @@ public class LifecycleEventDispatcher implements DesktopInit, DesktopCleanup, Se
         @SuppressWarnings("unchecked")
         LifecycleEventListener<Component> listener = (LifecycleEventListener<Component>) comp
                 .getAttribute(ATTR_COMP_LISTENER);
-                
+        
         if (listener == null && autoCreate) {
             listener = new LifecycleEventListener<>();
             comp.setAttribute(ATTR_COMP_LISTENER, listener);

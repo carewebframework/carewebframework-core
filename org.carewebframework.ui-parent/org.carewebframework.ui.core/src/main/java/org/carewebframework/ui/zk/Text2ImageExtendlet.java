@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -37,10 +37,9 @@ import org.zkoss.zk.ui.util.WebAppInit;
  * This is a ZK extendlet that intercepts resources with a ".txt2img" extension and returns a png
  * image of the text. A sample url follows:
  * <p>
- * <code>~./.txt2img?text=text to display&font=Arial-Bold-12&bgcolor=yellow&fgcolor=red</code>
+ * <code>~./.txt2img?text=text to display&amp;font=Arial-Bold-12&amp;bgcolor=yellow&amp;fgcolor=red</code>
  * <p>
  * To active the extendlet, include it as a registered listener in the zk.xml configuration file:
- * <p>
  * 
  * <pre>
  * {@literal
@@ -52,7 +51,9 @@ import org.zkoss.zk.ui.util.WebAppInit;
  */
 public class Text2ImageExtendlet implements Extendlet, WebAppInit {
     
+    
     private class ImageLoader implements Loader<Object, Object> {
+        
         
         @Override
         public boolean shallCheck(Object src, long expiredMillis) {
@@ -105,7 +106,7 @@ public class Text2ImageExtendlet implements Extendlet, WebAppInit {
     
     @Override
     public void service(HttpServletRequest request, HttpServletResponse response, String path) throws ServletException,
-                                                                                              IOException {
+                                                                                               IOException {
         byte[] data = (byte[]) _cache.get(request.getQueryString());
         response.setContentType("image/png");
         response.getOutputStream().write(data);

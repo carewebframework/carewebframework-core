@@ -34,11 +34,13 @@ import org.zkoss.zul.ext.GroupsSortableModel;
  * @param <G> The group class.
  */
 @SuppressWarnings("rawtypes")
-public class HybridModel<T, G> extends AbstractListModel<T>implements Collection<T>, GroupsModel<T, GroupHeader, Object>, GroupsSortableModel<T>, Iterable<T> {
+public class HybridModel<T, G> extends AbstractListModel<T> implements Collection<T>, GroupsModel<T, GroupHeader, Object>, GroupsSortableModel<T>, Iterable<T> {
+    
     
     private static final long serialVersionUID = 1L;
     
     public interface IGrouper<T, G> {
+        
         
         G getGroup(T element);
         
@@ -56,6 +58,7 @@ public class HybridModel<T, G> extends AbstractListModel<T>implements Collection
      * @param <E> The list element class.
      */
     private static class SortedList<E> extends ArrayList<E> {
+        
         
         private static final long serialVersionUID = 1L;
         
@@ -80,7 +83,8 @@ public class HybridModel<T, G> extends AbstractListModel<T>implements Collection
         }
     }
     
-    public static class GroupHeader<T, G> extends SortedList<T>implements Comparable<GroupHeader> {
+    public static class GroupHeader<T, G> extends SortedList<T> implements Comparable<GroupHeader> {
+        
         
         private static final long serialVersionUID = 1L;
         
@@ -128,6 +132,7 @@ public class HybridModel<T, G> extends AbstractListModel<T>implements Collection
     
     private final Comparator<T> elementComparator = new Comparator<T>() {
         
+        
         @Override
         public int compare(T t1, T t2) {
             return grouper == null ? 0 : grouper.compareElement(t1, t2);
@@ -139,6 +144,7 @@ public class HybridModel<T, G> extends AbstractListModel<T>implements Collection
     
     @SuppressWarnings("unchecked")
     private final SimpleGroupsModel<T, GroupHeader, ?, ?> groupsModel = new SimpleGroupsModel(groupHeaders) {
+        
         
         private static final long serialVersionUID = 1L;
         
@@ -444,14 +450,14 @@ public class HybridModel<T, G> extends AbstractListModel<T>implements Collection
         return getGroup(groupIndex).setOpened(false);
     }
     
-    /******** Iterable<T> ********/
+    /******** Iterable ********/
     
     @Override
     public Iterator<T> iterator() {
         return data.iterator();
     }
     
-    /******** GroupsSortableModel<T> ********/
+    /******** GroupsSortableModel ********/
     
     @Override
     public void sort(Comparator<T> cmpr, boolean ascending, int colIndex) {

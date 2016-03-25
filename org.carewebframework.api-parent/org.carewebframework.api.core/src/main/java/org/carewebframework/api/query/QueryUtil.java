@@ -20,7 +20,9 @@ import org.carewebframework.api.query.IQueryResult.CompletionStatus;
  */
 public class QueryUtil {
     
+    
     private static class QueryResult<T> implements IQueryResult<T> {
+        
         
         private final List<T> results;
         
@@ -54,6 +56,7 @@ public class QueryUtil {
     /**
      * Returns a query result for an aborted operation.
      * 
+     * @param <T> Class of query result.
      * @param reason Optional reason for the aborted operation.
      * @return Query result.
      */
@@ -65,6 +68,7 @@ public class QueryUtil {
     /**
      * Returns a query result for an error.
      * 
+     * @param <T> Class of query result.
      * @param exception The exception being reported.
      * @return Query result.
      */
@@ -76,6 +80,7 @@ public class QueryUtil {
     /**
      * Convenience method for packaging query results.
      *
+     * @param <T> Class of query result.
      * @param results Results to package.
      * @return Packaged results.
      */
@@ -86,6 +91,7 @@ public class QueryUtil {
     /**
      * Convenience method for packaging query results.
      *
+     * @param <T> Class of query result.
      * @param results Results to package.
      * @param status The completion status.
      * @return Packaged results.
@@ -97,6 +103,7 @@ public class QueryUtil {
     /**
      * Convenience method for packaging query results.
      *
+     * @param <T> Class of query result.
      * @param results Results to package.
      * @param status The completion status.
      * @param metadata Additional metadata.
@@ -110,5 +117,5 @@ public class QueryUtil {
      * Force static class.
      */
     private QueryUtil() {
-    };
+    }
 }

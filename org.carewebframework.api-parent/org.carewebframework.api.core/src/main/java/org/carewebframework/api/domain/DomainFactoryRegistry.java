@@ -19,6 +19,7 @@ import org.carewebframework.api.spring.BeanRegistry;
 @SuppressWarnings("rawtypes")
 public class DomainFactoryRegistry extends BeanRegistry<String, IDomainFactory> {
     
+    
     private static DomainFactoryRegistry instance = new DomainFactoryRegistry();
     
     public static DomainFactoryRegistry getInstance() {
@@ -28,6 +29,7 @@ public class DomainFactoryRegistry extends BeanRegistry<String, IDomainFactory> 
     /**
      * Creates a new instance of an object of this domain.
      * 
+     * @param <T> Class of domain object.
      * @param clazz Class of object to create.
      * @return The new domain object instance.
      */
@@ -38,6 +40,7 @@ public class DomainFactoryRegistry extends BeanRegistry<String, IDomainFactory> 
     /**
      * Fetches an object, identified by its unique id, from the underlying data store.
      *
+     * @param <T> Class of domain object.
      * @param clazz Class of object to create.
      * @param id Unique id of the object.
      * @return The requested object.
@@ -49,6 +52,7 @@ public class DomainFactoryRegistry extends BeanRegistry<String, IDomainFactory> 
     /**
      * Fetches multiple domain objects as specified by an array of identifier values.
      *
+     * @param <T> Class of domain object.
      * @param clazz Class of object to create.
      * @param ids An array of unique identifiers.
      * @return A list of domain objects in the same order as requested in the ids parameter.
@@ -57,6 +61,13 @@ public class DomainFactoryRegistry extends BeanRegistry<String, IDomainFactory> 
         return getFactory(clazz).fetchObjects(clazz, ids);
     }
     
+    /**
+     * Returns a domain factory for the specified class.
+     * 
+     * @param <T> Class of domain object.
+     * @param clazz Class of object created by factory.
+     * @return A domain object factory.
+     */
     @SuppressWarnings("unchecked")
     public static <T> IDomainFactory<T> getFactory(Class<T> clazz) {
         for (IDomainFactory<?> factory : instance) {

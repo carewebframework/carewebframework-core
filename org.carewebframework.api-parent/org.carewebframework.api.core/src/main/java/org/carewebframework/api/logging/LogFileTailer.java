@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -25,17 +25,17 @@ import org.apache.commons.logging.LogFactory;
  * are added to the file. This class has a notification strategy similar to a SAX parser: implement
  * the <code>FileTailerListener</code> interface, create a <code>FileTailer</code> to tail your
  * file, add yourself as a listener, and start the <code>FileTailer</code>.
- * </p>
  * <p>
  * It is somewhat equivalent to the unix command <code>tail -f fileToTail</code>
- * </p>
  * <p>
  * It is your job to interpret the results, build meaningful sets of data, etc. This tailer simply
  * fires notifications containing new file lines, one at a time.
  * 
- * @author Steven Haines {@link "http://www.informit.com/guides/content.aspx?g=java&seqNum=226"}
+ * @author Steven Haines
+ *         <a href="http://www.informit.com/guides/content.aspx?g=java&seqNum=226">project</a>
  */
 public class LogFileTailer implements Runnable {
+    
     
     private static final Log log = LogFactory.getLog(LogFileTailer.class);
     

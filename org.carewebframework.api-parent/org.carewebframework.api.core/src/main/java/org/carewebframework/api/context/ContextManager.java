@@ -29,12 +29,13 @@ import org.carewebframework.api.spring.SpringUtil;
 /**
  * Manages context objects and mediates context change requests on their behalf. Context objects are
  * special services that maintain information about different shared context states (user, patient,
- * etc.) Each context object must implement the IManagedContext<?> interface which is used by the
+ * etc.) Each context object must implement the IManagedContext interface which is used by the
  * context manager to interact with the context object. Furthermore, each context object must
  * declare an extension of the IContextEvent interface which will be implemented by subscribers to
  * process context change events.
  */
 public class ContextManager implements IContextManager, CCOWContextManager.ICCOWContextEvent, IRegisterEvent {
+    
     
     private static final Log log = LogFactory.getLog(ContextManager.class);
     
@@ -276,15 +277,15 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
     public String setMarshaledContext(ContextItems marshaledContext) {
         return setMarshaledContext(marshaledContext, true);
     }
-    
-    /**
-     * Updates managed contexts based on the marshaledContext.
-     * 
-     * @param marshaledContext The marshaled context to process.
-     * @param commit If true the pending contexts are committed.
-     * @return Reason if context change rejected.
-     */
-    /*package*/String setMarshaledContext(ContextItems marshaledContext, boolean commit) {
+            
+            /**
+             * Updates managed contexts based on the marshaledContext.
+             * 
+             * @param marshaledContext The marshaled context to process.
+             * @param commit If true the pending contexts are committed.
+             * @return Reason if context change rejected.
+             */
+            /*package*/String setMarshaledContext(ContextItems marshaledContext, boolean commit) {
         StringBuilder reason = new StringBuilder();
         
         for (IManagedContext<?> managedContext : managedContexts) {
@@ -374,8 +375,7 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
     // ***********************************************************************************************/
     
     /**
-     * Register an object with the context manager if it implements the IManagedContext
-     * <?> interface.
+     * Register an object with the context manager if it implements the IManagedContext interface.
      * 
      * @param object Object to register.
      */
@@ -439,7 +439,7 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
      */
     public String localChangeEnd(IManagedContext<?> managedContext, boolean silent,
                                  boolean deferCommit) throws ContextException {
-                                 
+        
         if (pendingStack.isEmpty() || pendingStack.peek() != managedContext) {
             throw new ContextException("Illegal context change nesting.");
         }

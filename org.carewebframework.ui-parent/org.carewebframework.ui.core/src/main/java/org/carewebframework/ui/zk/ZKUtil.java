@@ -63,6 +63,7 @@ import org.zkoss.zul.impl.XulElement;
  */
 public class ZKUtil {
     
+    
     /**
      * Resource prefix for resources within this package
      */
@@ -73,6 +74,7 @@ public class ZKUtil {
     private static final String MASK_ANCHOR = "maskTarget";
     
     private static final EventListener<Event> deferredDelivery = new EventListener<Event>() {
+        
         
         @Override
         public void onEvent(Event event) throws Exception {
@@ -463,6 +465,7 @@ public class ZKUtil {
     /**
      * Finds the first child component of the specified class, or null if none found;
      * 
+     * @param <T> The child class.
      * @param parent Parent whose children are to be searched.
      * @param childClass Class of the child component being sought.
      * @return Child component matching the specified class, or null if not found.
@@ -474,6 +477,7 @@ public class ZKUtil {
     /**
      * Finds a child component of the specified class, or null if none found;
      * 
+     * @param <T> The child class.
      * @param parent Parent whose children are to be searched.
      * @param childClass Class of the child component being sought.
      * @param lastChild Child after which search will begin, or null to begin with first child.
@@ -493,6 +497,7 @@ public class ZKUtil {
     /**
      * Finds the first ancestor that belongs to the specified class.
      * 
+     * @param <T> The ancestor class.
      * @param child Child whose ancestors are to be searched.
      * @param ancestorClass Class being sought.
      * @return Ancestor matching requested class, or null if not found.
@@ -523,6 +528,7 @@ public class ZKUtil {
     /**
      * Returns the first visible child of a given class, if any.
      * 
+     * @param <T> The child class.
      * @param parent The parent component.
      * @param clazz The child class to consider.
      * @param recurse If true, all descendant levels are also searched using a breadth first
@@ -625,7 +631,7 @@ public class ZKUtil {
      * Returns a component of the specified ID in the same ID space. Components in the same ID space
      * are called fellows. This is mainly used in cases where you can't call a method/function (e.g.
      * EL in zul). This may be deprecated after we move to ZK5, which should provide what we need
-     * via ZK Widget {@link "http://docs.zkoss.org/wiki/Zk.Widget#Overview:_zk.Widget"}
+     * via <a href="http://docs.zkoss.org/wiki/Zk.Widget#Overview:_zk.Widget">ZK Widget</a>.
      * 
      * @see org.zkoss.zk.ui.Component
      * @param component Component to search for fellow
@@ -641,7 +647,7 @@ public class ZKUtil {
      * Returns a component of the specified ID in the same ID space. Components in the same ID space
      * are called fellows. This is mainly used in cases where you can't call a method/function (e.g.
      * EL in zul). This may be deprecated after we move to ZK5, which should provide what we need
-     * via ZK Widget {@link "http://docs.zkoss.org/wiki/Zk.Widget#Overview:_zk.Widget"}
+     * via <a href="http://docs.zkoss.org/wiki/Zk.Widget#Overview:_zk.Widget">ZK Widget</a>.
      * 
      * @see org.zkoss.zk.ui.Component
      * @param component Component to search for fellow
@@ -833,6 +839,7 @@ public class ZKUtil {
     /**
      * Returns named List attribute from the specified component.
      * 
+     * @param <T> Class of the list elements.
      * @param c The component containing the desired attribute.
      * @param attr The name of the attribute.
      * @param elementClass The expected class of the list elements.
@@ -868,6 +875,7 @@ public class ZKUtil {
     /**
      * Returns named attribute of the specified type from the specified component.
      * 
+     * @param <T> Class of the attribute value.
      * @param c The component containing the desired attribute.
      * @param attr The name of the attribute.
      * @param clazz The expected type of the attribute value.
@@ -1170,6 +1178,8 @@ public class ZKUtil {
     /**
      * Returns the node associated with the specified \-delimited path.
      * 
+     * @param <ANCHOR> Class of the anchor component.
+     * @param <NODE> Class of the node component.
      * @param root Root component of hierarchy.
      * @param anchorClass Class of the anchor component.
      * @param nodeClass Class of the node component.

@@ -26,6 +26,7 @@ import org.zkoss.zul.impl.LabelImageElement;
  */
 public class MenuUtil {
     
+    
     private static final String[] NULL_PATH = { "null" };
     
     /**
@@ -62,7 +63,8 @@ public class MenuUtil {
     
     /**
      * Adds an element (menu or menu item) to the main menu.
-     * 
+     *
+     * @param <T> Class of element to be added.
      * @param path Determines the position of the element in the menu tree.
      * @param ele The element to be added. If null, a new element of the specified type is created.
      * @param menubar The menubar to receive the new element.

@@ -23,6 +23,7 @@ import org.springframework.util.AntPathMatcher;
  */
 public class SecurityUtil {
     
+    
     private static final AntPathMatcher urlMatcher = new AntPathMatcher();
     
     private static ISecurityService securityService;
@@ -154,7 +155,8 @@ public class SecurityUtil {
      * @param minLength Minimum password length.
      * @param maxLength Maximum password length.
      * @param constraints Password constraints. This is an array of character groups, each of the
-     *            format <code>[minimum required occurrences],[string of characters in group]
+     *            format <br>
+     *            <code>[minimum required occurrences],[string of characters in group]</code>
      * @return A random password.
      */
     public static String generateRandomPassword(int minLength, int maxLength, String[] constraints) {

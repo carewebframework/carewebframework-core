@@ -18,6 +18,7 @@ import org.springframework.core.env.PropertySource;
  */
 public class SpringUtil {
     
+    
     private static IAppContextFinder appContextFinder;
     
     /**
@@ -74,6 +75,7 @@ public class SpringUtil {
     /**
      * Returns the bean with an id matching the specified id, or null if none found.
      * 
+     * @param <T> Class of return type.
      * @param id Bean id
      * @param clazz Expected return type.
      * @return Returns the bean instance whose id matches the specified id, or null if none found or
@@ -81,8 +83,8 @@ public class SpringUtil {
      */
     public static <T> T getBean(String id, Class<T> clazz) {
         ApplicationContext appContext = getAppContext();
-        return appContext == null ? null : appContext.containsBean(id) && appContext.isTypeMatch(id, clazz) ? appContext
-                .getBean(id, clazz) : null;
+        return appContext == null ? null
+                : appContext.containsBean(id) && appContext.isTypeMatch(id, clazz) ? appContext.getBean(id, clazz) : null;
     }
     
     /**
@@ -102,8 +104,8 @@ public class SpringUtil {
         
         if (value == null) {
             PropertySourcesPlaceholderConfigurer cfg = appContext.getBean(PropertySourcesPlaceholderConfigurer.class);
-            PropertySource<?> ps = cfg.getAppliedPropertySources().get(
-                PropertySourcesPlaceholderConfigurer.LOCAL_PROPERTIES_PROPERTY_SOURCE_NAME);
+            PropertySource<?> ps = cfg.getAppliedPropertySources()
+                    .get(PropertySourcesPlaceholderConfigurer.LOCAL_PROPERTIES_PROPERTY_SOURCE_NAME);
             value = ps == null ? null : (String) ps.getProperty(name);
         }
         

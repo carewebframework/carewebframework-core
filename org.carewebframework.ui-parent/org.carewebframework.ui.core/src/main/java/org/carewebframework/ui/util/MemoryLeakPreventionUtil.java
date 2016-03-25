@@ -1,6 +1,6 @@
 /**
- * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. 
- * If a copy of the MPL was not distributed with this file, You can obtain one at 
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at
  * http://mozilla.org/MPL/2.0/.
  * 
  * This Source Code Form is also subject to the terms of the Health-Related Additional
@@ -19,12 +19,13 @@ import org.apache.commons.logging.LogFactory;
  */
 public final class MemoryLeakPreventionUtil {
     
+    
     private static final Log log = LogFactory.getLog(MemoryLeakPreventionUtil.class);
     
     /**
      * Attempt all known cleanup measures.
      * 
-     * @see #clearReferencesHttpClientKeepAliveThread() 
+     * @see #clearReferencesHttpClientKeepAliveThread()
      */
     /*@see #shutdownLogging()*/
     public static void clean() {
@@ -49,7 +50,7 @@ public final class MemoryLeakPreventionUtil {
      * <li>JDK 7 is said to fix the keepAliveTimer thread bug.</li>
      * <li>Tomcat 7.0.x context attribute clearReferencesHttpClientKeepAliveThread is suggested to
      * fix this leak but does not</li>
-     * </p>
+     * </ul>
      */
     @SuppressWarnings("restriction")
     protected static void clearReferencesHttpClientKeepAliveThread() {
@@ -60,7 +61,7 @@ public final class MemoryLeakPreventionUtil {
             keepAliveTimer.setAccessible(true);
             
             Thread t = (Thread) keepAliveTimer.get(kac.get(null));//kac is a static field, hence null argument
-
+            
             if (t != null) {//May not actually be running
                 log.debug("KeepAliveTimer contextClassLoader: " + t.getContextClassLoader());
                 if (t.getContextClassLoader() == Thread.currentThread().getContextClassLoader()) {

@@ -93,10 +93,12 @@ import org.codehaus.plexus.util.FileUtils;
  *                     </themeSources>
  * 
  * }
+ * </pre>
  */
 @Mojo(name = "prepare", requiresDependencyResolution = ResolutionScope.COMPILE)
 @Execute(goal = "prepare", phase = LifecyclePhase.PREPARE_PACKAGE)
 public class ThemeGeneratorMojo extends BaseMojo {
+    
     
     /**
      * Themes to be built.

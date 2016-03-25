@@ -542,7 +542,6 @@ public class Application {
          * </li>
          * </ol>
          * Once the requested information is processed, stops listening to further client requests.
-         * <p>
          */
         @Override
         public boolean service(AuRequest request, boolean everError) {

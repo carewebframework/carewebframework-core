@@ -26,6 +26,7 @@ import org.zkoss.zul.Label;
  */
 public abstract class AbstractRenderer {
     
+    
     protected final String compStyle;
     
     protected final String cellStyle;
@@ -102,6 +103,7 @@ public abstract class AbstractRenderer {
     /**
      * Creates a component containing a label with the specified parameters.
      * 
+     * @param <C> Class of created component.
      * @param parent Component that will be the parent of the created component.
      * @param value Value to be used as label text.
      * @param prefix Value to be used as a prefix for the label text.
@@ -137,9 +139,9 @@ public abstract class AbstractRenderer {
     
     public String createLabelText(Object value, String prefix) {
         String text = StringUtils.trimToEmpty(value == null ? null
-                : value instanceof Collection ? createLabelText((Collection<?>) value) : value instanceof Date ? DateUtil
-                        .formatDate((Date) value) : value instanceof String ? StrUtil.formatMessage((String) value) : value
-                        .toString());
+                : value instanceof Collection ? createLabelText((Collection<?>) value)
+                        : value instanceof Date ? DateUtil.formatDate((Date) value)
+                                : value instanceof String ? StrUtil.formatMessage((String) value) : value.toString());
         return text.isEmpty() ? "" : StrUtil.formatMessage(StringUtils.defaultString(prefix)) + text;
     }
     

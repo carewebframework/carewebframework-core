@@ -37,6 +37,7 @@ import org.zkoss.zul.Rows;
  */
 public class SelectionGrid extends Grid {
     
+    
     private static final long serialVersionUID = 1L;
     
     private static final String UPDATING_ATTR = "_updating";
@@ -59,6 +60,7 @@ public class SelectionGrid extends Grid {
      * Filter for selecting rows.
      */
     private class Filter {
+        
         
         Boolean selected;
         
@@ -462,7 +464,7 @@ public class SelectionGrid extends Grid {
     /**
      * Inserts a row at the specified row index.
      * 
-     * @param index Row index for new row. If < 0, appends the row to the end of the grid.
+     * @param index Row index for new row. If &lt; 0, appends the row to the end of the grid.
      * @return Newly created row.
      */
     public Row addRow(int index) {
@@ -473,7 +475,7 @@ public class SelectionGrid extends Grid {
      * Inserts the specified row at the specified row index.
      * 
      * @param row Row to insert. If there is no checkbox associated with the row, one is added.
-     * @param index Row index for the row. If < 0, appends the row to the end of the grid.
+     * @param index Row index for the row. If &lt; 0, appends the row to the end of the grid.
      * @return The same as the row passed in.
      */
     public Row addRow(Row row, int index) {
@@ -769,7 +771,7 @@ public class SelectionGrid extends Grid {
      * checkColumnIndex variable reflects the index of this column.
      */
     @SuppressWarnings("rawtypes")
-    /*package*/void init() {
+            /*package*/void init() {
         if (!initialized) {
             initialized = true;
             List cols = forceColumns().getChildren();

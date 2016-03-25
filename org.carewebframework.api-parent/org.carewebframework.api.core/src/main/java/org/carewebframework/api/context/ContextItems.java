@@ -23,6 +23,7 @@ import org.carewebframework.common.ISerializer;
  */
 public class ContextItems {
     
+    
     private final Map<String, String> items = new HashMap<>();
     
     private final Map<String, String> index = new HashMap<>();
@@ -185,6 +186,7 @@ public class ContextItems {
      * Returns an object of the specified class. The class must have an associated context
      * serializer registered.
      * 
+     * @param <T> The item's class.
      * @param itemName Item name
      * @param clazz Class of item to be returned.
      * @return Deserialized item of specified class.
@@ -236,8 +238,8 @@ public class ContextItems {
             setItem(itemName, (String) null);
         } else {
             @SuppressWarnings("unchecked")
-            ISerializer<Object> contextSerializer = (ISerializer<Object>) ContextSerializerRegistry.getInstance().get(
-                value.getClass());
+            ISerializer<Object> contextSerializer = (ISerializer<Object>) ContextSerializerRegistry.getInstance()
+                    .get(value.getClass());
             
             if (contextSerializer == null) {
                 throw new ContextException("No serializer found for type " + value.getClass().getName());

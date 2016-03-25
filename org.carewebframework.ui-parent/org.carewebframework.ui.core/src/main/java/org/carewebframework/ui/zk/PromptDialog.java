@@ -40,6 +40,7 @@ import org.zkoss.zul.Window;
  */
 public class PromptDialog extends Window {
     
+    
     private static final long serialVersionUID = 1L;
     
     protected static final Log log = LogFactory.getLog(PromptDialog.class.getClass());
@@ -71,6 +72,7 @@ public class PromptDialog extends Window {
      * response.
      */
     public static class Response {
+        
         
         private final int index;
         
@@ -168,6 +170,7 @@ public class PromptDialog extends Window {
     /**
      * Display the prompt dialog.
      * 
+     * @param <T> Type of response object
      * @param message Text message
      * @param title Title of dialog
      * @param responses Array of response objects.
@@ -259,6 +262,7 @@ public class PromptDialog extends Window {
     /**
      * Display the prompt dialog.
      * 
+     * @param <T> Type of response object
      * @param message Text message
      * @param title Title of dialog
      * @param responses Array of response objects.
@@ -291,6 +295,7 @@ public class PromptDialog extends Window {
     /**
      * Display the prompt dialog.
      * 
+     * @param <T> Type of response object
      * @param message Text message
      * @param title Title of dialog
      * @param responses Array of response objects.
@@ -319,6 +324,7 @@ public class PromptDialog extends Window {
     /**
      * Display the prompt dialog.
      * 
+     * @param <T> Type of response object
      * @param message Text message
      * @param title Title of dialog
      * @param responses Array of response objects.
@@ -345,6 +351,7 @@ public class PromptDialog extends Window {
     /**
      * Display the prompt dialog.
      * 
+     * @param <T> Type of response object
      * @param message Text message
      * @param title Title of dialog
      * @param responses Array of response objects.
@@ -704,6 +711,7 @@ public class PromptDialog extends Window {
      */
     public static class InputItem {
         
+        
         private final String name;
         
         private final Object item;
@@ -787,6 +795,7 @@ public class PromptDialog extends Window {
      * Used by input dialogs to disable closure if input is incomplete.
      */
     private class InputListener implements EventListener<Event> {
+        
         
         @Override
         public void onEvent(Event event) throws Exception {

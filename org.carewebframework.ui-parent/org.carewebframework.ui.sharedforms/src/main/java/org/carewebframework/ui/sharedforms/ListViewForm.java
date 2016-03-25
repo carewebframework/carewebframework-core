@@ -43,6 +43,7 @@ import org.zkoss.zul.Listitem;
  */
 public abstract class ListViewForm<DAO> extends CaptionedForm {
     
+    
     private static final long serialVersionUID = 1L;
     
     private static final String SORT_TYPE_ATTR = "@sort_type";
@@ -83,6 +84,7 @@ public abstract class ListViewForm<DAO> extends CaptionedForm {
     
     private final AbstractListitemRenderer<DAO, Object> renderer = new AbstractListitemRenderer<DAO, Object>() {
         
+        
         @Override
         protected void renderItem(Listitem item, DAO object) {
             item.addForward(Events.ON_CLICK, listbox, Events.ON_SELECT);
@@ -92,6 +94,7 @@ public abstract class ListViewForm<DAO> extends CaptionedForm {
     };
     
     private final EventListener<SortEvent> sortListener = new EventListener<SortEvent>() {
+        
         
         @Override
         public void onEvent(SortEvent event) throws Exception {
@@ -205,6 +208,8 @@ public abstract class ListViewForm<DAO> extends CaptionedForm {
      * 
      * <pre>
      *   List Pane Size:Sort Column:Sort Direction;Column 0 Index:Column 0 Width;...
+     * </pre>
+     * 
      * @return The layout data.
      */
     public String getLayout() {

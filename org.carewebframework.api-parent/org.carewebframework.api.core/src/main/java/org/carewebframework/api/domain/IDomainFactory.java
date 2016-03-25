@@ -18,9 +18,11 @@ import java.util.List;
  */
 public interface IDomainFactory<D> {
     
+    
     /**
      * Creates a new instance of an object of this domain.
      * 
+     * @param <T> Class of domain object.
      * @param clazz Class of object to create.
      * @return The new domain object instance.
      */
@@ -29,6 +31,7 @@ public interface IDomainFactory<D> {
     /**
      * Fetches an object, identified by its unique id, from the underlying data store.
      *
+     * @param <T> Class of domain object.
      * @param clazz Class of object to create.
      * @param id Unique id of the object.
      * @return The requested object.
@@ -38,6 +41,7 @@ public interface IDomainFactory<D> {
     /**
      * Fetches multiple domain objects as specified by an array of identifier values.
      *
+     * @param <T> Class of domain object.
      * @param clazz Class of object to create.
      * @param ids An array of unique identifiers.
      * @return A list of domain objects in the same order as requested in the ids parameter.
