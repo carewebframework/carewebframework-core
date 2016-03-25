@@ -28,7 +28,7 @@ import org.zkoss.zk.ui.util.UiLifeCycle;
  * 
  * <pre>
  *  &lt;listener&gt;
- *      &lt;listener-class&gt;org.carewebframework.ui.LifecycleEventDispatcher&lt;/listener-class>
+ *      &lt;listener-class&gt;org.carewebframework.ui.LifecycleEventDispatcher&lt;/listener-class&gt;
  *  &lt;/listener&gt;
  * </pre>
  */
