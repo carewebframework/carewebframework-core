@@ -24,6 +24,8 @@ import org.carewebframework.api.domain.IUser;
 import org.carewebframework.api.security.ISecurityDomain;
 import org.carewebframework.api.spring.SpringUtil;
 
+import org.springframework.security.authentication.BadCredentialsException;
+
 @Entity
 @Table(name = "CWF_DOMAIN")
 @EntityListeners({ SecurityDomain.class })
@@ -75,7 +77,13 @@ public class SecurityDomain implements ISecurityDomain {
     
     @Override
     public IUser authenticate(String username, String password) {
-        return getUserDAO().authenticate(username, password, this);
+        IUser user = getUserDAO().authenticate(username, password, this);
+        
+        if (user == null) {
+            throw new BadCredentialsException("Incorrect username or password.");
+        }
+        
+        return user;
     }
     
     @Override

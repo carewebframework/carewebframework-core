@@ -24,7 +24,7 @@ public class UserDAO extends AbstractDAO<User> {
     
     
     private static final String HQL_AUTHENTICATE = "FROM org.carewebframework.hibernate.security.User "
-            + "WHERE username=:username AND password=:password AND (domain=:domain OR domain=null)";
+            + "WHERE LOWER(username)=:username AND password=:password AND (domain=:domain OR domain='*')";
     
     public UserDAO(SessionFactory sessionFactory) {
         super(sessionFactory);
@@ -38,7 +38,7 @@ public class UserDAO extends AbstractDAO<User> {
         try {
             Query query = getSession().createQuery(HQL_AUTHENTICATE);
             query.setString("password", password);
-            query.setString("username", username);
+            query.setString("username", username.toLowerCase());
             query.setString("domain", domain.getLogicalId());
             user = (User) query.uniqueResult();
             
