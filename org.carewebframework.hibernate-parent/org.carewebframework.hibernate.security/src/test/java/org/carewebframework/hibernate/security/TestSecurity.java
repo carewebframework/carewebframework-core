@@ -10,7 +10,6 @@
 package org.carewebframework.hibernate.security;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import org.carewebframework.api.domain.IUser;
@@ -33,14 +32,9 @@ public class TestSecurity extends CommonTest {
         UserDAO udao = rootContext.getBean(UserDAO.class);
         setupUsers(udao);
         SecurityDomain domain = getSecurityDomain("1");
-        IUser user = domain.authenticate("DOCTOR123", "DOCTOR321$");
-        assertNotNull(user);
-        assertEquals("1", user.getLogicalId());
-        user = domain.authenticate("DOCTOR123", "DOCTOR321$XXX");
-        assertNull(user);
-        user = domain.authenticate("USER123", "USER321$");
-        assertNotNull(user);
-        assertEquals("2", user.getLogicalId());
+        authenticate(domain, "DOCTOR123", "DOCTOR321$", "1");
+        authenticate(domain, "DOCTOR123", "DOCTOR321$XXX", null);
+        authenticate(domain, "USER123", "USER321$", "2");
     }
     
     private void setupDomains(SecurityDomainDAO sc) {
@@ -50,15 +44,26 @@ public class TestSecurity extends CommonTest {
         sc.saveOrUpdate(domain);
         domain = new SecurityDomain("3", "Test Hospital", "default=true");
         sc.saveOrUpdate(domain);
+        domain = new SecurityDomain("*", "All Domains", null);
+        sc.saveOrUpdate(domain);
     }
     
     private void setupUsers(UserDAO udao) {
         SecurityDomain domain = getSecurityDomain("1");
         User user = new User("1", "Doctor, Test", "DOCTOR123", "DOCTOR321$", domain, "PRIV_PATIENT_SELECT");
         udao.saveOrUpdate(user);
-        user = new User("2", "User, Test", "USER123", "USER321$", null,
+        user = new User("2", "User, Test", "USER123", "USER321$", domain,
                 "PRIV_DEBUG,PRIV_CAREWEB_DESIGNER,PRIV_PATIENT_SELECT");
         udao.saveOrUpdate(user);
+    }
+    
+    private void authenticate(SecurityDomain domain, String username, String password, String expectedId) {
+        try {
+            IUser user = domain.authenticate(username, password);
+            assertEquals(expectedId, user.getLogicalId());
+        } catch (Exception e) {
+            assertNull(expectedId);
+        }
     }
     
     private SecurityDomain getSecurityDomain(String id) {

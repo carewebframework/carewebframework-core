@@ -39,7 +39,7 @@ public class SecurityDomainDAO extends AbstractDAO<SecurityDomain> {
             List<SecurityDomain> domains = criteria.list();
             
             for (SecurityDomain domain : domains) {
-                if (domain.getLogicalId() != "*") {
+                if (!"*".equals(domain.getLogicalId())) {
                     SecurityDomainRegistry.registerSecurityDomain(domain);
                 }
             }
