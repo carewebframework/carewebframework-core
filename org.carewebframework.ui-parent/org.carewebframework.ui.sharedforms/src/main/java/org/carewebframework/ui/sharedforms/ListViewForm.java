@@ -348,8 +348,18 @@ public abstract class ListViewForm<DAO> extends CaptionedForm {
         item.setVisible(!columns.isEmpty());
         
         for (Object colData : columns) {
-            renderer.createCell(item, colData).setValue(colData);
+            renderer.createCell(item, colData).setValue(transformData(colData));
         }
+    }
+    
+    /**
+     * Override to perform any necessary transforms on data before rendering.
+     * 
+     * @param data Data to transform.
+     * @return Transformed data.
+     */
+    protected Object transformData(Object data) {
+        return data;
     }
     
     /**
