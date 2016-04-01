@@ -32,7 +32,9 @@ import org.springframework.core.io.Resource;
  */
 public class ManifestIterator implements ApplicationContextAware, Iterable<Manifest> {
     
+    
     private static class ManifestEx extends Manifest {
+        
         
         private final String path;
         
@@ -162,7 +164,7 @@ public class ManifestIterator implements ApplicationContextAware, Iterable<Manif
                 return manifest;
             }
         } catch (Exception e) {
-            log.debug("Exception occurred reading manifest.", e);
+            log.debug("Exception occurred reading manifest: " + resource);
         }
         
         return null;
