@@ -32,6 +32,7 @@ import org.zkoss.zk.ui.event.SortEvent;
 import org.zkoss.zul.Auxheader;
 import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Listbox;
+import org.zkoss.zul.Listcell;
 import org.zkoss.zul.Listhead;
 import org.zkoss.zul.Listheader;
 import org.zkoss.zul.Listitem;
@@ -337,18 +338,25 @@ public abstract class ListViewForm<DAO> extends CaptionedForm {
      */
     protected void renderItem(Listitem item, DAO dao) {
         List<Object> columns = new ArrayList<>();
+        boolean error = false;
         
         try {
             render(dao, columns);
         } catch (Exception e) {
             columns.clear();
             columns.add(ZKUtil.formatExceptionForDisplay(e));
+            error = true;
         }
         
         item.setVisible(!columns.isEmpty());
         
         for (Object colData : columns) {
-            renderer.createCell(item, colData).setValue(transformData(colData));
+            Listcell cell = renderer.createCell(item, transformData(colData));
+            cell.setValue(colData);
+            
+            if (error) {
+                cell.setSpan(colCount);
+            }
         }
     }
     
