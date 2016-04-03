@@ -1365,7 +1365,7 @@ public abstract class UIElementBase {
         CareWebShell shell = CareWebUtil.getShell();
         
         for (IPluginResource resource : getDefinition().getResources()) {
-            resource.register(shell, register);
+            resource.register(shell, this, register);
         }
     }
     

@@ -11,6 +11,11 @@ package org.carewebframework.shell.plugins;
 
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.shell.CareWebShell;
+import org.carewebframework.shell.layout.UIElementBase;
+import org.carewebframework.shell.layout.UIElementPlugin;
+import org.carewebframework.ui.action.ActionListener;
+
+import org.zkoss.zul.Button;
 
 /**
  * Resource for declaring buttons to appear on common toolbar.
@@ -125,13 +130,25 @@ public class PluginResourceButton implements IPluginResource {
     }
     
     /**
-     * Registers/unregisters a plugin resource.
+     * Registers/unregisters a button resource.
      * 
      * @param shell The running shell.
+     * @param owner Owner of the resource.
      * @param register If true, register the resource. If false, unregister it.
      */
     @Override
-    public void register(CareWebShell shell, boolean register) {
+    public void register(CareWebShell shell, UIElementBase owner, boolean register) {
+        if (register) {
+            UIElementPlugin plugin = (UIElementPlugin) owner;
+            PluginContainer container = plugin.getContainer();
+            Button button = new Button(getCaption());
+            button.setId(getId());
+            button.setTooltiptext(getTooltip());
+            button.setImage(getIcon());
+            ActionListener.addAction(button, getAction());
+            container.addToolbarComponent(button);
+            container.registerId(getId(), button);
+        }
     }
     
 }

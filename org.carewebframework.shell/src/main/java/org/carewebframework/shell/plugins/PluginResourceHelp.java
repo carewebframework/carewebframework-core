@@ -12,6 +12,7 @@ package org.carewebframework.shell.plugins;
 import org.carewebframework.help.HelpModule;
 import org.carewebframework.help.viewer.HelpUtil;
 import org.carewebframework.shell.CareWebShell;
+import org.carewebframework.shell.layout.UIElementBase;
 
 /**
  * Resource for declaring items to appear under the help menu.
@@ -151,10 +152,11 @@ public class PluginResourceHelp implements IPluginResource {
      * Registers/unregisters a help resource.
      * 
      * @param shell The running shell.
+     * @param owner Owner of the resource.
      * @param register If true, register the resource. If false, unregister it.
      */
     @Override
-    public void register(CareWebShell shell, boolean register) {
+    public void register(CareWebShell shell, UIElementBase owner, boolean register) {
         if (register) {
             shell.registerHelpResource(this);
         }

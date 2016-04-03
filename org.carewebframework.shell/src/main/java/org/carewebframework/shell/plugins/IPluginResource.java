@@ -10,6 +10,7 @@
 package org.carewebframework.shell.plugins;
 
 import org.carewebframework.shell.CareWebShell;
+import org.carewebframework.shell.layout.UIElementBase;
 
 /**
  * Interface for all plugin-associated resources.
@@ -21,7 +22,8 @@ public interface IPluginResource {
      * Registers/unregisters a plugin resource.
      * 
      * @param shell The running shell.
+     * @param owner Owner of the resource.
      * @param register If true, register the resource. If false, unregister it.
      */
-    void register(CareWebShell shell, boolean register);
+    void register(CareWebShell shell, UIElementBase owner, boolean register);
 }

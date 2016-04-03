@@ -15,8 +15,6 @@ import org.carewebframework.shell.designer.DesignContextMenu;
 import org.carewebframework.shell.designer.DesignMask;
 import org.carewebframework.shell.designer.DesignMask.MaskMode;
 import org.carewebframework.shell.designer.PropertyGrid;
-import org.carewebframework.shell.plugins.PluginResourceCommand;
-import org.carewebframework.ui.command.CommandUtil;
 import org.carewebframework.ui.zk.PromptDialog;
 import org.carewebframework.ui.zk.ZKUtil;
 
@@ -31,11 +29,13 @@ import org.zkoss.zul.impl.XulElement;
  */
 public abstract class UIElementZKBase extends UIElementBase {
     
+    
     /**
      * Saves various states of a component prior to configuring it for design mode. The restore
      * method then restores to the saved state.
      */
     private static class SavedState {
+        
         
         final XulElement component;
         
@@ -454,15 +454,6 @@ public abstract class UIElementZKBase extends UIElementBase {
         }
         
         return false;
-    }
-    
-    /**
-     * Registers a command resource.
-     * 
-     * @param resource Resource to register.
-     */
-    public void registerResource(PluginResourceCommand resource) {
-        CommandUtil.associateCommand(resource.getName(), (XulElement) getOuterComponent());
     }
     
 }

@@ -10,6 +10,10 @@
 package org.carewebframework.shell.plugins;
 
 import org.carewebframework.shell.CareWebShell;
+import org.carewebframework.shell.layout.UIElementBase;
+import org.carewebframework.shell.layout.UIElementPlugin;
+
+import org.zkoss.zul.Menu;
 
 /**
  * Resource for declaring items to appear on the common menu.
@@ -90,10 +94,18 @@ public class PluginResourceMenu implements IPluginResource {
      * Registers/unregisters a plugin resource.
      * 
      * @param shell The running shell.
+     * @param owner Owner of the resource.
      * @param register If true, register the resource. If false, unregister it.
      */
     @Override
-    public void register(CareWebShell shell, boolean register) {
+    public void register(CareWebShell shell, UIElementBase owner, boolean register) {
+        if (register) {
+            UIElementPlugin plugin = (UIElementPlugin) owner;
+            PluginContainer container = plugin.getContainer();
+            Menu menu = container.getShell().addMenu(getPath(), getAction());
+            container.registerComponent(menu);
+            container.registerId(getId(), menu);
+        }
     }
     
 }

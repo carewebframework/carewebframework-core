@@ -10,6 +10,7 @@
 package org.carewebframework.shell.plugins;
 
 import org.carewebframework.shell.CareWebShell;
+import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.ui.action.ActionRegistry;
 
 /**
@@ -85,10 +86,11 @@ public class PluginResourceAction implements IPluginResource {
      * Registers/unregisters an action resource.
      * 
      * @param shell The running shell.
+     * @param owner Owner of the resource.
      * @param register If true, register the resource. If false, unregister it.
      */
     @Override
-    public void register(CareWebShell shell, boolean register) {
+    public void register(CareWebShell shell, UIElementBase owner, boolean register) {
         if (register) {
             ActionRegistry.register(false, getId(), getLabel(), getScript());
         }
