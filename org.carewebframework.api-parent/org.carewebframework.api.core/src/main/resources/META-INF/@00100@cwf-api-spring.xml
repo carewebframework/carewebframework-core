@@ -112,6 +112,8 @@
 
 	<beans profile="desktop">
 
+		<context:annotation-config />
+
 		<!-- Framework support -->
 		<bean id="appFramework" class="org.carewebframework.api.AppFramework">
 		</bean>
