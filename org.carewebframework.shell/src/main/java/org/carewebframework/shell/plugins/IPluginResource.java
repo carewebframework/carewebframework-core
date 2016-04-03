@@ -9,7 +9,19 @@
  */
 package org.carewebframework.shell.plugins;
 
+import org.carewebframework.shell.CareWebShell;
+
 /**
- * Marker interface for all plugin-associated resources.
+ * Interface for all plugin-associated resources.
  */
-public interface IPluginResource {}
+public interface IPluginResource {
+    
+    
+    /**
+     * Registers/unregisters a plugin resource.
+     * 
+     * @param shell The running shell.
+     * @param register If true, register the resource. If false, unregister it.
+     */
+    void register(CareWebShell shell, boolean register);
+}

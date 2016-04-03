@@ -11,6 +11,7 @@ package org.carewebframework.shell.plugins;
 
 import org.carewebframework.help.HelpModule;
 import org.carewebframework.help.viewer.HelpUtil;
+import org.carewebframework.shell.CareWebShell;
 
 /**
  * Resource for declaring items to appear under the help menu.
@@ -28,6 +29,7 @@ import org.carewebframework.help.viewer.HelpUtil;
  * </ul>
  */
 public class PluginResourceHelp implements IPluginResource {
+    
     
     // Determines where the menu item will appear under the help submenu.
     private String path;
@@ -143,6 +145,19 @@ public class PluginResourceHelp implements IPluginResource {
      */
     public void setModule(String module) {
         this.id = module;
+    }
+    
+    /**
+     * Registers/unregisters a help resource.
+     * 
+     * @param shell The running shell.
+     * @param register If true, register the resource. If false, unregister it.
+     */
+    @Override
+    public void register(CareWebShell shell, boolean register) {
+        if (register) {
+            shell.registerHelpResource(this);
+        }
     }
     
 }

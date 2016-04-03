@@ -9,10 +9,13 @@
  */
 package org.carewebframework.shell.plugins;
 
+import org.carewebframework.shell.CareWebShell;
+
 /**
  * Resource for declaring style sheets associated with the plugin.
  */
 public class PluginResourceCSS implements IPluginResource {
+    
     
     // The url of the style sheet.
     private String url;
@@ -33,6 +36,19 @@ public class PluginResourceCSS implements IPluginResource {
      */
     public void setUrl(String url) {
         this.url = url;
+    }
+    
+    /**
+     * Registers/unregisters a CSS resource.
+     * 
+     * @param shell The running shell.
+     * @param register If true, register the resource. If false, unregister it.
+     */
+    @Override
+    public void register(CareWebShell shell, boolean register) {
+        if (register) {
+            shell.registerStyleSheet(getUrl());
+        }
     }
     
 }

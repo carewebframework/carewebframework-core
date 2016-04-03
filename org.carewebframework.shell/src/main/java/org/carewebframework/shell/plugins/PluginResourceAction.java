@@ -9,10 +9,14 @@
  */
 package org.carewebframework.shell.plugins;
 
+import org.carewebframework.shell.CareWebShell;
+import org.carewebframework.ui.action.ActionRegistry;
+
 /**
  * Resource for declaring actions supported by a plugin.
  */
 public class PluginResourceAction implements IPluginResource {
+    
     
     // The unique id of the action.
     private String id;
@@ -75,6 +79,19 @@ public class PluginResourceAction implements IPluginResource {
      */
     public void setScript(String script) {
         this.script = script;
+    }
+    
+    /**
+     * Registers/unregisters an action resource.
+     * 
+     * @param shell The running shell.
+     * @param register If true, register the resource. If false, unregister it.
+     */
+    @Override
+    public void register(CareWebShell shell, boolean register) {
+        if (register) {
+            ActionRegistry.register(false, getId(), getLabel(), getScript());
+        }
     }
     
 }

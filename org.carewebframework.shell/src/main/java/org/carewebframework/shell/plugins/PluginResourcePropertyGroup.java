@@ -9,11 +9,14 @@
  */
 package org.carewebframework.shell.plugins;
 
+import org.carewebframework.shell.CareWebShell;
+
 /**
  * Resource for declaring property groups associated with the plugin. This information can be used
  * by components that manage user preferences, for example.
  */
 public class PluginResourcePropertyGroup implements IPluginResource {
+    
     
     // The name of the property group.
     private String group;
@@ -34,6 +37,19 @@ public class PluginResourcePropertyGroup implements IPluginResource {
      */
     public void setGroup(String group) {
         this.group = group;
+    }
+    
+    /**
+     * Registers/unregisters a property group resource.
+     * 
+     * @param shell The running shell.
+     * @param register If true, register the resource. If false, unregister it.
+     */
+    @Override
+    public void register(CareWebShell shell, boolean register) {
+        if (register) {
+            shell.registerPropertyGroup(getGroup());
+        }
     }
     
 }

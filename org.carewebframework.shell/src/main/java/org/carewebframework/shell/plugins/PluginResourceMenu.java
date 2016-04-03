@@ -9,10 +9,13 @@
  */
 package org.carewebframework.shell.plugins;
 
+import org.carewebframework.shell.CareWebShell;
+
 /**
  * Resource for declaring items to appear on the common menu.
  */
 public class PluginResourceMenu implements IPluginResource {
+    
     
     // Determines where the menu item will appear on the common menu.
     private String path;
@@ -81,6 +84,16 @@ public class PluginResourceMenu implements IPluginResource {
      */
     public void setId(String id) {
         this.id = id;
+    }
+    
+    /**
+     * Registers/unregisters a plugin resource.
+     * 
+     * @param shell The running shell.
+     * @param register If true, register the resource. If false, unregister it.
+     */
+    @Override
+    public void register(CareWebShell shell, boolean register) {
     }
     
 }

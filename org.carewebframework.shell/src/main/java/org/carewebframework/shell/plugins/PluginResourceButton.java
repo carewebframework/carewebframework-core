@@ -10,11 +10,13 @@
 package org.carewebframework.shell.plugins;
 
 import org.carewebframework.common.StrUtil;
+import org.carewebframework.shell.CareWebShell;
 
 /**
  * Resource for declaring buttons to appear on common toolbar.
  */
 public class PluginResourceButton implements IPluginResource {
+    
     
     // The caption text for the button.
     private String caption;
@@ -120,6 +122,16 @@ public class PluginResourceButton implements IPluginResource {
      */
     public void setId(String id) {
         this.id = id;
+    }
+    
+    /**
+     * Registers/unregisters a plugin resource.
+     * 
+     * @param shell The running shell.
+     * @param register If true, register the resource. If false, unregister it.
+     */
+    @Override
+    public void register(CareWebShell shell, boolean register) {
     }
     
 }

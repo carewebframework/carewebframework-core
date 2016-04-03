@@ -9,10 +9,13 @@
  */
 package org.carewebframework.shell.plugins;
 
+import org.carewebframework.shell.CareWebShell;
+
 /**
  * Resource for declaring helper beans associated with the plugin.
  */
 public class PluginResourceBean implements IPluginResource {
+    
     
     private String bean;
     
@@ -52,6 +55,16 @@ public class PluginResourceBean implements IPluginResource {
      */
     public boolean isRequired() {
         return required;
+    }
+    
+    /**
+     * Registers/unregisters a plugin resource.
+     * 
+     * @param shell The running shell.
+     * @param register If true, register the resource. If false, unregister it.
+     */
+    @Override
+    public void register(CareWebShell shell, boolean register) {
     }
     
 }

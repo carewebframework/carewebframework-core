@@ -9,10 +9,13 @@
  */
 package org.carewebframework.shell.plugins;
 
+import org.carewebframework.shell.CareWebShell;
+
 /**
  * Resource for declaring commands supported by a plugin.
  */
 public class PluginResourceCommand implements IPluginResource {
+    
     
     // The name of the command.
     private String name;
@@ -33,6 +36,16 @@ public class PluginResourceCommand implements IPluginResource {
      */
     public void setName(String name) {
         this.name = name;
+    }
+    
+    /**
+     * Registers/unregisters a plugin resource.
+     * 
+     * @param shell The running shell.
+     * @param register If true, register the resource. If false, unregister it.
+     */
+    @Override
+    public void register(CareWebShell shell, boolean register) {
     }
     
 }
