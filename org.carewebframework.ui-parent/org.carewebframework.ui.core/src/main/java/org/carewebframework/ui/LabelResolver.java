@@ -17,9 +17,10 @@ import org.zkoss.text.MessageFormats;
 import org.zkoss.util.resource.Labels;
 
 /**
- * Wraps ZK's Labels class in as message source.
+ * Wraps ZK's Labels class as message source.
  */
 public class LabelResolver implements IMessageSource {
+    
     
     @Override
     public String getMessage(String code, Locale locale, Object... args) {
