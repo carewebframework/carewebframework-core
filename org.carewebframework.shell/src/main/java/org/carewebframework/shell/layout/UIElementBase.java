@@ -1376,7 +1376,7 @@ public abstract class UIElementBase {
      * @param eventData Data associated with the event.
      * @param recurse If true, recurse up the parent chain.
      */
-    protected void notifyParent(String eventName, Object eventData, boolean recurse) {
+    public void notifyParent(String eventName, Object eventData, boolean recurse) {
         UIElementBase ele = parent;
         
         while (ele != null) {
@@ -1403,7 +1403,7 @@ public abstract class UIElementBase {
      * @param eventData Data associated with the event.
      * @param recurse If true, recurse over all child levels.
      */
-    protected void notifyChildren(String eventName, Object eventData, boolean recurse) {
+    public void notifyChildren(String eventName, Object eventData, boolean recurse) {
         notifyChildren(this, eventName, eventData, recurse);
     }
     
