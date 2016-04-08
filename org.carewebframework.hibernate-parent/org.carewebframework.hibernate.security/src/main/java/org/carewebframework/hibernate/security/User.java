@@ -19,6 +19,7 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.carewebframework.api.domain.IUser;
 import org.carewebframework.api.security.ISecurityDomain;
@@ -38,7 +39,7 @@ public class User implements IUser {
     @JoinColumn(name = "domain", nullable = true)
     @ManyToOne
     @PrimaryKeyJoinColumn
-    private SecurityDomain securityDomain;
+    private SecurityDomain assignedDomain;
     
     @Column(name = "name")
     private String fullName;
@@ -53,6 +54,9 @@ public class User implements IUser {
     @Lob
     private String authorities;
     
+    @Transient
+    private SecurityDomain loginDomain;
+    
     protected User() {
     }
     
@@ -62,7 +66,7 @@ public class User implements IUser {
         this.fullName = fullName;
         this.loginName = loginName;
         this.password = password;
-        this.securityDomain = securityDomain;
+        this.assignedDomain = securityDomain;
         this.authorities = authorities;
     }
     
@@ -88,7 +92,7 @@ public class User implements IUser {
     
     @Override
     public ISecurityDomain getSecurityDomain() {
-        return securityDomain;
+        return loginDomain != null ? loginDomain : assignedDomain;
     }
     
     @Override
@@ -105,8 +109,8 @@ public class User implements IUser {
         this.password = password;
     }
     
-    protected void setSecurityDomain(SecurityDomain securityDomain) {
-        this.securityDomain = securityDomain;
+    protected void setLoginDomain(SecurityDomain loginDomain) {
+        this.loginDomain = loginDomain;
     }
     
     public List<String> getGrantedAuthorities() {

@@ -43,7 +43,7 @@ public class UserDAO extends AbstractDAO<User> {
             user = (User) query.uniqueResult();
             
             if (user != null) {
-                user.setSecurityDomain(domain);
+                user.setLoginDomain(domain);
             }
             
             tx.commit();
