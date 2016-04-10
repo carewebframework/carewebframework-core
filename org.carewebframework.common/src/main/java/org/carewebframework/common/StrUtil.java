@@ -108,9 +108,10 @@ public class StrUtil {
      * 
      * @param sb StringBuilder instance to append to.
      * @param value Value to append.
+     * @return The StringBuilder instance (for chaining).
      */
-    public static void strAppend(StringBuilder sb, String value) {
-        strAppend(sb, value, ", ");
+    public static StringBuilder strAppend(StringBuilder sb, String value) {
+        return strAppend(sb, value, ", ");
     }
     
     /**
@@ -119,11 +120,14 @@ public class StrUtil {
      * @param sb StringBuilder instance to append to.
      * @param value Value to append.
      * @param separator String to use as separator.
+     * @return The StringBuilder instance (for chaining).
      */
-    public static void strAppend(StringBuilder sb, String value, String separator) {
+    public static StringBuilder strAppend(StringBuilder sb, String value, String separator) {
         if (value != null && !value.isEmpty()) {
             sb.append(sb.length() == 0 ? "" : separator).append(value);
         }
+        
+        return sb;
     }
     
     /**
