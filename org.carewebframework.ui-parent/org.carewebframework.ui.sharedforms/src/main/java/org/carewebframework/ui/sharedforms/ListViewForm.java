@@ -138,15 +138,26 @@ public abstract class ListViewForm<DAO> extends CaptionedForm {
     protected void setup(String title, int sortBy, String... headers) {
         setCaption(title);
         dataName = title;
-        String w = Integer.toString(100 / headers.length) + "%";
+        String defWidth = (100 / headers.length) + "%";
         
         for (String header : headers) {
-            String[] pcs = StrUtil.split(header, StrUtil.U, 2);
+            String[] pcs = StrUtil.split(header, StrUtil.U, 3);
             Listheader lhdr = new Listheader(pcs[0]);
             listhead.appendChild(lhdr);
             lhdr.setAttribute(SORT_TYPE_ATTR, NumberUtils.toInt(pcs[1]));
             lhdr.setAttribute(COL_INDEX_ATTR, colCount++);
-            lhdr.setWidth(w);
+            String width = pcs[2];
+            
+            if (!width.isEmpty()) {
+                if (NumberUtils.isDigits(width) || "min".equals(width)) {
+                    lhdr.setHflex(width);
+                } else {
+                    lhdr.setWidth(width);
+                }
+            } else {
+                lhdr.setWidth(defWidth);
+            }
+            
             lhdr.addEventListener(Events.ON_SORT, sortListener);
         }
         
