@@ -23,6 +23,7 @@ import org.apache.commons.lang.math.NumberUtils;
  */
 public class StrUtil {
     
+    
     public static final String U = "^";
     
     public static final String CRLF = "\r\n";
@@ -100,6 +101,29 @@ public class StrUtil {
      */
     public static String strTruncate(String value, int maxLength) {
         return value == null ? null : value.length() <= maxLength ? value : value.substring(0, maxLength) + "...";
+    }
+    
+    /**
+     * Append a value to a string builder, using specified separator.
+     * 
+     * @param sb StringBuilder instance to append to.
+     * @param value Value to append.
+     */
+    public static void strAppend(StringBuilder sb, String value) {
+        strAppend(sb, value, ", ");
+    }
+    
+    /**
+     * Append a value to a string builder, using specified separator.
+     * 
+     * @param sb StringBuilder instance to append to.
+     * @param value Value to append.
+     * @param separator String to use as separator.
+     */
+    public static void strAppend(StringBuilder sb, String value, String separator) {
+        if (value != null && !value.isEmpty()) {
+            sb.append(sb.length() == 0 ? "" : separator).append(value);
+        }
     }
     
     /**
