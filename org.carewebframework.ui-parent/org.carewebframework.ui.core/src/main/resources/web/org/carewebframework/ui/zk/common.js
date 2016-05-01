@@ -59,15 +59,14 @@ function (source, printStyles, printPreview) {
 				}
 			}
 		}
+		
+		this.focus();
 
-		if (printPreview)
-			this.focus();
-		else {
-			this.jq(this).load(function() {
-				this.print();
-				this.close();
-			});
-		};
+		if (!printPreview) {
+			this.print();
+			this.setTimeout(this.close, 100);
+		}
+
 	};
 
 	window.open(zk.ajaxURI('/web/org/carewebframework/ui/zk/printPreview.zul?owner=' + zk.Desktop.$().id, {au:true}), 'PrintPreview');
