@@ -107,7 +107,7 @@
 		<module>org.carewebframework.ext-parent</module>
 		<module>org.carewebframework.lib-parent</module>
 		<module>org.carewebframework.testharness</module>
-		<module>org.carewebframework.webapp.testharness</module>
+		<module>org.carewebframework.webapp-parent</module>
 	</modules>
 
 	<build>
