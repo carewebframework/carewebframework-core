@@ -99,7 +99,6 @@ import org.codehaus.plexus.util.FileUtils;
 @Execute(goal = "prepare", phase = LifecyclePhase.PREPARE_PACKAGE)
 public class ThemeGeneratorMojo extends BaseMojo {
     
-    
     /**
      * Themes to be built.
      */
@@ -146,6 +145,10 @@ public class ThemeGeneratorMojo extends BaseMojo {
      */
     @Override
     public void execute() throws MojoExecutionException {
+        if ("pom".equalsIgnoreCase(getMavenProject().getPackaging())) {
+            return;
+        }
+        
         if (skip) {
             getLog().info("Skipping theme generation.");
             return;
