@@ -8,7 +8,6 @@
 		<version>5.0.0-SNAPSHOT</version>
 	</parent>
 
-	<groupId>org.carewebframework</groupId>
 	<artifactId>org.carewebframework.theme.bootstrap</artifactId>
 	<name>CareWeb Framework Bootstrap Themes</name>
 	<description>Third party, public domain bootstrap themes.</description>
