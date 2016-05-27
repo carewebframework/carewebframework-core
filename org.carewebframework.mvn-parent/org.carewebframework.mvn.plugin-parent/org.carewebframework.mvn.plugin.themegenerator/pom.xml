@@ -26,6 +26,7 @@
 			<groupId>org.carewebframework</groupId>
 			<artifactId>org.carewebframework.mvn.plugin.core</artifactId>
 			<version>${project.parent.version}</version>
+			<type>maven-plugin</type>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.sanselan</groupId>
