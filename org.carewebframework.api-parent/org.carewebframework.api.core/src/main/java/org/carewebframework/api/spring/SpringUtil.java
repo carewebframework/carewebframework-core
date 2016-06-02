@@ -18,7 +18,7 @@ public class SpringUtil {
     
     private static IAppContextFinder appContextFinder;
     
-    private static PropertyProvider propertyProvider;
+    private static volatile PropertyProvider propertyProvider;
     
     /**
      * Sets the finder logic for locating the framework context. This is set during framework
@@ -28,7 +28,6 @@ public class SpringUtil {
      */
     public static void setAppContextFinder(IAppContextFinder appContextFinder) {
         SpringUtil.appContextFinder = appContextFinder;
-        propertyProvider = new PropertyProvider(getRootAppContext());
     }
     
     /**
@@ -94,7 +93,17 @@ public class SpringUtil {
      * @return Property value, or null if not found.
      */
     public static String getProperty(String name) {
+        if (propertyProvider == null) {
+            initPropertyProvider();
+        }
+        
         return propertyProvider.getProperty(name);
+    }
+    
+    private static synchronized void initPropertyProvider() {
+        if (propertyProvider == null) {
+            propertyProvider = new PropertyProvider(getRootAppContext());
+        }
     }
     
     /**

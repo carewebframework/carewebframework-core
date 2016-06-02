@@ -9,6 +9,9 @@
  */
 package org.carewebframework.api.spring;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.carewebframework.api.property.IPropertyProvider;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
@@ -51,7 +54,7 @@ public class PropertyProvider implements IPropertyProvider, ApplicationContextAw
     
     @Override
     public String getProperty(String key) {
-        String realKey = prefix + key;
+        String realKey = getRealKey(key);
         String value = environment == null ? null : environment.getProperty(realKey);
         return value != null ? value
                 : localPropertySource == null ? null : (String) localPropertySource.getProperty(realKey);
@@ -68,5 +71,23 @@ public class PropertyProvider implements IPropertyProvider, ApplicationContextAw
         PropertySourcesPlaceholderConfigurer cfg = applicationContext.getBean(PropertySourcesPlaceholderConfigurer.class);
         localPropertySource = cfg.getAppliedPropertySources()
                 .get(PropertySourcesPlaceholderConfigurer.LOCAL_PROPERTIES_PROPERTY_SOURCE_NAME);
+    }
+    
+    protected String getRealKey(String key) {
+        return prefix + key;
+    }
+    
+    public Map<String, String> toMap(Iterable<String> keys) {
+        Map<String, String> map = new HashMap<>();
+        
+        for (String key : keys) {
+            String value = getProperty(key);
+            
+            if (value != null) {
+                map.put(getRealKey(key), value);
+            }
+        }
+        
+        return map;
     }
 }
