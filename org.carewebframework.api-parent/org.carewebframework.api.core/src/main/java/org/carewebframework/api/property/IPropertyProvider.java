@@ -7,7 +7,7 @@
  * Disclaimer of Warranty and Limitation of Liability available at
  * http://www.carewebframework.org/licensing/disclaimer.
  */
-package org.carewebframework.shell.property;
+package org.carewebframework.api.property;
 
 /**
  * Generic interface for reading property values from an arbitrary source.

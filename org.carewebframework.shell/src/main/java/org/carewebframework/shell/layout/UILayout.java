@@ -16,11 +16,10 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
+import org.carewebframework.api.property.IPropertyProvider;
 import org.carewebframework.common.XMLUtil;
 import org.carewebframework.shell.designer.IClipboardAware;
 import org.carewebframework.shell.plugins.PluginDefinition;
-import org.carewebframework.shell.property.IPropertyProvider;
 import org.carewebframework.shell.property.PropertyInfo;
 
 import org.zkoss.zk.ui.Executions;
@@ -523,7 +522,7 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
     }
     
     /**
-     * @see org.carewebframework.shell.property.IPropertyProvider#getProperty(String)
+     * @see org.carewebframework.api.property.IPropertyProvider#getProperty(String)
      */
     @Override
     public String getProperty(String key) {

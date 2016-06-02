@@ -10,16 +10,15 @@
 package org.carewebframework.api.spring;
 
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
-import org.springframework.core.env.PropertySource;
 
 /**
  * Static utility class for the access to Spring Framework services.
  */
 public class SpringUtil {
     
-    
     private static IAppContextFinder appContextFinder;
+    
+    private static PropertyProvider propertyProvider;
     
     /**
      * Sets the finder logic for locating the framework context. This is set during framework
@@ -29,6 +28,7 @@ public class SpringUtil {
      */
     public static void setAppContextFinder(IAppContextFinder appContextFinder) {
         SpringUtil.appContextFinder = appContextFinder;
+        propertyProvider = new PropertyProvider(getRootAppContext());
     }
     
     /**
@@ -94,22 +94,7 @@ public class SpringUtil {
      * @return Property value, or null if not found.
      */
     public static String getProperty(String name) {
-        ApplicationContext appContext = getRootAppContext();
-        
-        if (appContext == null) {
-            return null;
-        }
-        
-        String value = appContext.getEnvironment().getProperty(name);
-        
-        if (value == null) {
-            PropertySourcesPlaceholderConfigurer cfg = appContext.getBean(PropertySourcesPlaceholderConfigurer.class);
-            PropertySource<?> ps = cfg.getAppliedPropertySources()
-                    .get(PropertySourcesPlaceholderConfigurer.LOCAL_PROPERTIES_PROPERTY_SOURCE_NAME);
-            value = ps == null ? null : (String) ps.getProperty(name);
-        }
-        
-        return value;
+        return propertyProvider.getProperty(name);
     }
     
     /**

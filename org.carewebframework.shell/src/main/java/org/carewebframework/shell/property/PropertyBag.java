@@ -11,6 +11,8 @@ package org.carewebframework.shell.property;
 
 import java.util.Properties;
 
+import org.carewebframework.api.property.IPropertyProvider;
+
 /**
  * A simple property map that can be used to pass property values to a plugin during
  * deserialization.

@@ -17,11 +17,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import org.carewebframework.api.ManifestIterator;
+import org.carewebframework.api.property.IPropertyProvider;
 import org.carewebframework.api.security.SecurityUtil;
 import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.layout.UIElementPlugin;
 import org.carewebframework.shell.layout.UILayout;
-import org.carewebframework.shell.property.IPropertyProvider;
 import org.carewebframework.shell.property.PropertyInfo;
 
 import org.springframework.beans.BeanUtils;
