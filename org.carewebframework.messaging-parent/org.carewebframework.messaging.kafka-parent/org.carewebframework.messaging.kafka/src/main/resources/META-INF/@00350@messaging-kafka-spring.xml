@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:cwf="http://www.carewebframework.org/schema/spring"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.carewebframework.org/schema/spring
+        http://www.carewebframework.org/schema/spring/spring-extensions.xsd">
+
+	<beans profile="root">
+		<bean id="kafkaService" class="org.carewebframework.messaging.kafka.KafkaService" 
+			init-method="start" destroy-method="stop" />
+	</beans>
+	
+	<beans profile="desktop">
+
+		<!-- globalEventDispatcher: Mediates communications between the local and 
+			the global event manager, in this case a Kafka messaging server. -->
+		<bean id="globalEventDispatcher" init-method="init"
+			destroy-method="destroy" cwf:override="always"
+			class="org.carewebframework.messaging.kafka.GlobalEventDispatcher">
+			<constructor-arg ref="kafkaService" />
+		</bean>
+
+	</beans>
+</beans>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:amq="http://activemq.apache.org/schema/core" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://activemq.apache.org/schema/core 
+  		http://activemq.apache.org/schema/core/activemq-core.xsd">
+
+	<beans profile="root">
+
+		<!-- Create an embedded ActiveMQ Broker. Using delegation in order to guarantee 
+			shutdown (i.e. destroy-method). 
+		 -->
+		<bean id="brokerServiceDelegator" class="org.carewebframework.messaging.jms.activemq.BrokerServiceDelegator"
+			init-method="start" destroy-method="stop">
+			<property name="brokerService">
+				<amq:broker id="broker" useJmx="true" persistent="true"
+					brokerName="${org.carewebframework.jms.activemq.broker.name}"
+					useShutdownHook="false" start="false">
+					<amq:managementContext>
+						<amq:managementContext createConnector="false" />
+					</amq:managementContext>
+					<amq:networkConnectors>
+						<!-- Given Hub & Spoke topology, networkTTL must be greater than 1 for 
+							spokes to see other spoke consumers. -->
+						<amq:networkConnector
+							uri="${org.carewebframework.jms.activemq.broker.network.uri}" name="remoteJMSNetworkConnector"
+							duplex="true" networkTTL="3" />
+					</amq:networkConnectors>
+					<amq:persistenceAdapter>
+						<amq:kahaDB
+							directory="${org.carewebframework.jms.activemq.broker.persistence.dir}"
+							journalMaxFileLength="${org.carewebframework.jms.activemq.broker.persistence.maxsize}" />
+					</amq:persistenceAdapter>
+					<amq:transportConnectors>
+						<amq:transportConnector
+							uri="${org.carewebframework.jms.activemq.broker.transport.connector.url}" />
+					</amq:transportConnectors>
+				</amq:broker>
+			</property>
+		</bean>
+	
+		<bean id="jmsConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory"
+			depends-on="brokerServiceDelegator">
+			<property name="brokerURL"
+				value="${org.carewebframework.jms.activemq.broker.url}" />
+		</bean>
+			
+	</beans>
+</beans>

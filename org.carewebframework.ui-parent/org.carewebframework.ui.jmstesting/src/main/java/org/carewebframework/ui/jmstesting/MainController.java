@@ -14,18 +14,16 @@ import java.util.Iterator;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang.StringUtils;
-
 import org.carewebframework.api.event.EventUtil;
 import org.carewebframework.api.event.IEventManager;
 import org.carewebframework.api.event.IGenericEvent;
 import org.carewebframework.api.event.ILocalEventDispatcher;
 import org.carewebframework.api.event.IPublisherInfo;
 import org.carewebframework.common.StrUtil;
-import org.carewebframework.jms.MessagingSupport;
+import org.carewebframework.messaging.jms.MessagingSupport;
 import org.carewebframework.shell.plugins.PluginContainer;
 import org.carewebframework.shell.plugins.PluginController;
 import org.carewebframework.ui.zk.AbstractListitemRenderer;
-
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.ListModelList;
@@ -81,7 +79,7 @@ public class MainController extends PluginController {
     
     private final AbstractListitemRenderer<IPublisherInfo, String> renderer = new AbstractListitemRenderer<IPublisherInfo, String>(
             "", null) {
-            
+        
         @Override
         protected void renderItem(Listitem item, IPublisherInfo data) {
             item.setValue(data.getEndpointId());

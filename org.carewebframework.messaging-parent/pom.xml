@@ -1,0 +1,59 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	
+	<parent>
+		<groupId>org.carewebframework</groupId>
+		<artifactId>org.carewebframework-parent</artifactId>
+		<version>5.0.0-SNAPSHOT</version>
+	</parent>
+	
+	<artifactId>org.carewebframework.messaging-parent</artifactId>
+	<packaging>pom</packaging>
+	
+	<name>CareWeb Framework Messaging Aggregator POM</name>
+	
+	<properties>
+		<org.springframework.amqp.version>1.5.2.RELEASE</org.springframework.amqp.version>
+		<org.apache.activemq.version>5.12.1</org.apache.activemq.version>
+		<com.rabbitmq.version>3.5.6</com.rabbitmq.version>
+	</properties>
+	
+	<modules>
+		<module>org.carewebframework.messaging.amqp-parent</module>
+		<module>org.carewebframework.messaging.jms-parent</module>
+		<module>org.carewebframework.messaging.kafka-parent</module>
+	</modules>
+	
+	<dependencyManagement>
+		<dependencies>
+			<!-- ActiveMQ -->
+			<dependency>
+				<groupId>org.apache.activemq</groupId>
+				<artifactId>activemq-broker</artifactId>
+				<version>${org.apache.activemq.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.activemq</groupId>
+				<artifactId>activemq-kahadb-store</artifactId>
+				<version>${org.apache.activemq.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.activemq</groupId>
+				<artifactId>activemq-spring</artifactId>
+				<version>${org.apache.activemq.version}</version>
+			</dependency>
+			<!-- RabbitMQ -->
+			<dependency>
+				<groupId>com.rabbitmq</groupId>
+				<artifactId>amqp-client</artifactId>
+				<version>${com.rabbitmq.version}</version>
+			</dependency>
+			<!-- Kafka -->
+	        <dependency>
+	           <groupId>org.apache.kafka</groupId>
+		        <artifactId>kafka-clients</artifactId>
+		        <version>0.10.0.0</version>
+	        </dependency>
+		</dependencies>
+	</dependencyManagement>
+</project>

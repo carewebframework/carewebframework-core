@@ -17,7 +17,8 @@
 		</dependency>
 		<dependency>
 			<groupId>org.carewebframework</groupId>
-			<artifactId>org.carewebframework.jms.core</artifactId>
+			<artifactId>org.carewebframework.messaging.jms.core</artifactId>
+			<version>${project.parent.version}</version>
 		</dependency>
 	</dependencies>
 </project>
