@@ -41,7 +41,12 @@
 		</dependency>
 		<dependency>
 			<groupId>org.carewebframework</groupId>
-			<artifactId>org.carewebframework.ui.chat</artifactId>
+			<artifactId>org.carewebframework.ui.currentdatetime</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.carewebframework</groupId>
+			<artifactId>org.carewebframework.ui.messaging</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
 		<!-- CareWeb Framework Components -->

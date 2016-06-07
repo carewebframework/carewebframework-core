@@ -71,6 +71,16 @@ public class EventUtil {
     }
     
     /**
+     * Returns the messaging channel name from the event name.
+     * 
+     * @param eventName The event name.
+     * @return The channel name.
+     */
+    public static String getChannelName(String eventName) {
+        return eventName == null ? null : "cwf-event-" + eventName.split("\\.", 2)[0];
+    }
+    
+    /**
      * Enforce static class.
      */
     private EventUtil() {

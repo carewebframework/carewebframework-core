@@ -9,13 +9,10 @@
  */
 package org.carewebframework.messaging.amqp.rabbitmq;
 
-import org.springframework.amqp.AmqpException;
+import org.carewebframework.api.messaging.Message;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.Binding.DestinationType;
 import org.springframework.amqp.core.Exchange;
-import org.springframework.amqp.core.Message;
-import org.springframework.amqp.core.MessagePostProcessor;
-import org.springframework.amqp.core.MessageProperties;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
@@ -23,13 +20,13 @@ import org.springframework.amqp.rabbit.core.RabbitAdmin;
 /**
  * AMQP broker administration.
  */
-public class Broker extends RabbitAdmin {
+public class Broker {
     
-    protected static final String RECIPIENTS_PROPERTY = "recipients";
-    
-    protected static final String SENDER_PROPERTY = "sender";
+    private final ConnectionFactory connectionFactory;
     
     private final Exchange exchange;
+    
+    private final RabbitAdmin admin;
     
     /**
      * Creates a broker instance with the specified connection factory and default exchange.
@@ -38,87 +35,64 @@ public class Broker extends RabbitAdmin {
      * @param exchange Default exchange for message delivery.
      */
     public Broker(ConnectionFactory connectionFactory, Exchange exchange) {
-        super(connectionFactory);
+        this.connectionFactory = connectionFactory;
+        admin = new RabbitAdmin(connectionFactory);
         this.exchange = exchange;
     }
     
-    /**
-     * Returns the default exchange.
-     * 
-     * @return The default exchange.
-     */
-    public Exchange getExchange() {
-        return exchange;
+    public ConnectionFactory getConnectionFactory() {
+        return connectionFactory;
     }
     
     /**
-     * Declares an event queue if one does not exist.
+     * Creates a channel if one does not exist.
      * 
-     * @param eventName Name of event handled by queue.
+     * @param channel The channel name.
      */
-    public void declareEventQueue(String eventName) {
-        if (!queueExists(eventName)) {
-            createEventQueue(eventName);
+    public void ensureChannel(String channel) {
+        if (!channelExists(channel)) {
+            createChannel(channel);
         }
     }
     
     /**
-     * Returns true if the named queue already exists.
+     * Returns true if the named channel already exists.
      * 
-     * @param queueName The queue name.
-     * @return True if the queue exists.
+     * @param channel The channel name.
+     * @return True if the channel exists.
      */
-    private boolean queueExists(String queueName) {
-        return getQueueProperties(queueName) != null;
+    private boolean channelExists(String channel) {
+        return admin.getQueueProperties(channel) != null;
     }
     
     /**
      * Creates an event queue (thread safe) with the correct binding.
      * 
-     * @param eventName Name of event handled by queue.
+     * @param channel Name of event handled by queue.
      */
-    private synchronized void createEventQueue(String eventName) {
-        if (!queueExists(eventName)) {
-            Queue queue = new Queue(eventName, true, false, true);
-            declareQueue(queue);
-            Binding binding = new Binding(eventName, DestinationType.QUEUE, exchange.getName(), eventName + ".#", null);
-            declareBinding(binding);
+    private synchronized void createChannel(String channel) {
+        if (!channelExists(channel)) {
+            Queue queue = new Queue(channel, true, false, true);
+            admin.declareQueue(queue);
+            Binding binding = new Binding(channel, DestinationType.QUEUE, exchange.getName(), channel + ".#", null);
+            admin.declareBinding(binding);
         }
     }
     
     /**
      * Sends an event to the default exchange.
      * 
-     * @param eventName Name of the event.
-     * @param eventData Associated event data.
-     * @param sender Sender of the event.
-     * @param recipients Recipients of the event.
+     * @param channel Name of the channel.
+     * @param message Message to send.
      */
-    public void sendEvent(String eventName, Object eventData, final String sender, final String recipients) {
-        getRabbitTemplate().convertAndSend(exchange.getName(), eventName, eventData, new MessagePostProcessor() {
-            
-            @Override
-            public Message postProcessMessage(Message message) throws AmqpException {
-                return decorateMessage(message, sender, recipients);
-            }
-            
-        });
+    public void sendMessage(String channel, Message message) {
+        ensureChannel(channel);
+        admin.getRabbitTemplate().convertAndSend(exchange.getName(), channel, message);
     }
     
-    /**
-     * Given a Message, supplement the message with additional properties/attributes ( recipients,
-     * sender).
-     * 
-     * @param message The message.
-     * @param sender Sender client ID.
-     * @param recipients Comma-delimited list of recipient client IDs.
-     * @return The decorated Message.
-     */
-    private Message decorateMessage(Message message, String sender, String recipients) {
-        MessageProperties props = message.getMessageProperties();
-        props.setHeader(SENDER_PROPERTY, sender);
-        props.setHeader(RECIPIENTS_PROPERTY, recipients);
-        return message;
+    public Message convertMessage(String channel, org.springframework.amqp.core.Message message) {
+        Object msg = admin.getRabbitTemplate().getMessageConverter().fromMessage(message);
+        return msg instanceof Message ? (Message) msg : new Message(channel, msg);
     }
     
 }

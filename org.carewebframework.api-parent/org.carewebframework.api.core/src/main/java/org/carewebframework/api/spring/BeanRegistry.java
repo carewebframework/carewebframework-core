@@ -11,7 +11,6 @@ package org.carewebframework.api.spring;
 
 import org.carewebframework.common.AbstractRegistry;
 import org.carewebframework.common.RegistryMap.DuplicateAction;
-
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.DestructionAwareBeanPostProcessor;
 
@@ -21,7 +20,7 @@ import org.springframework.beans.factory.config.DestructionAwareBeanPostProcesso
  * @param <K> A unique key.
  * @param <V> The class or interface being tracked.
  */
-public abstract class BeanRegistry<K, V> extends AbstractRegistry<K, V>implements DestructionAwareBeanPostProcessor, Iterable<V> {
+public abstract class BeanRegistry<K, V> extends AbstractRegistry<K, V> implements DestructionAwareBeanPostProcessor, Iterable<V> {
     
     private final Class<V> clazz;
     

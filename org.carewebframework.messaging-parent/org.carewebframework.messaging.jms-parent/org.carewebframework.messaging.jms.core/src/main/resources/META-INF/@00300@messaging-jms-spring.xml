@@ -35,24 +35,20 @@
 			<property name="clientId" value="${org.carewebframework.jms.connection.factory.client.id}" />
 		</bean>
 
-		<bean id="jmsMessagingSupport" class="org.carewebframework.messaging.jms.MessagingSupport">
+		<bean id="jmsService" class="org.carewebframework.messaging.jms.JMSService">
 			<constructor-arg ref="jmsTopicTemplate" />
 			<constructor-arg ref="jmsQueueTemplate" />
+			<constructor-arg ref="jmsLocalConnectionFactory" />
+		</bean>
+		
+		<bean class="org.carewebframework.messaging.jms.MessageConsumer">
+			<constructor-arg ref="jmsService" />
+		</bean>
+
+		<bean class="org.carewebframework.messaging.jms.MessageProducer">
+			<constructor-arg ref="jmsService" />
 		</bean>
 
 	</beans>
 
-	<beans profile="desktop">
-
-		<!-- globalEventDispatcher: Mediates communications between the local and 
-			the global event manager, in this case a JMS messaging server. -->
-		<bean id="globalEventDispatcher" init-method="init"
-			destroy-method="destroy" cwf:override="always"
-			class="org.carewebframework.messaging.jms.GlobalEventDispatcher">
-			<property name="factory" ref="jmsLocalConnectionFactory" />
-			<property name="topicTemplate" ref="jmsTopicTemplate" />
-			<property name="localEventDispatcher" ref="eventManager" />
-		</bean>
-
-	</beans>
 </beans>

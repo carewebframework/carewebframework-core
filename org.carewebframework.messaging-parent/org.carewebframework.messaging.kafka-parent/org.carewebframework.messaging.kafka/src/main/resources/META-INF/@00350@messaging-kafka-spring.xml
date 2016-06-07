@@ -11,17 +11,17 @@
 	<beans profile="root">
 		<bean id="kafkaService" class="org.carewebframework.messaging.kafka.KafkaService" 
 			init-method="start" destroy-method="stop" />
-	</beans>
-	
-	<beans profile="desktop">
-
-		<!-- globalEventDispatcher: Mediates communications between the local and 
-			the global event manager, in this case a Kafka messaging server. -->
-		<bean id="globalEventDispatcher" init-method="init"
-			destroy-method="destroy" cwf:override="always"
-			class="org.carewebframework.messaging.kafka.GlobalEventDispatcher">
+			
+		<bean class="org.carewebframework.messaging.kafka.Consumer"
+			init-method="init" destroy-method="destroy">
+			<constructor-arg ref="kafkaService" />
+			<constructor-arg value="${org.carewebframework.messaging.kafka.polling_interval}" />
+		</bean>
+		
+		<bean class="org.carewebframework.messaging.kafka.Producer">
 			<constructor-arg ref="kafkaService" />
 		</bean>
-
+		
 	</beans>
+	
 </beans>

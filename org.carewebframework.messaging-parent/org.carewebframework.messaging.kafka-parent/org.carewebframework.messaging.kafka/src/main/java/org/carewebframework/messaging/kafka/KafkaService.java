@@ -31,13 +31,13 @@ public class KafkaService {
     
     private static final Log log = LogFactory.getLog(KafkaService.class);
     
-    private final Producer<Object, Message> producer;
+    private final Producer<Object, Object> producer;
     
-    private final Map<String, Object> consumerConfig;
+    private final Consumer<Object, Object> consumer;
     
     public KafkaService() {
-        consumerConfig = getConfigParams(ConsumerConfig.class);
-        producer = new KafkaProducer<Object, Message>(getConfigParams(ProducerConfig.class));
+        producer = new KafkaProducer<>(getConfigParams(ProducerConfig.class));
+        consumer = new KafkaConsumer<>(getConfigParams(ConsumerConfig.class));
     }
     
     /**
@@ -62,16 +62,19 @@ public class KafkaService {
     /**
      * @return The producer
      */
-    public Producer<Object, Message> getProducer() {
+    public Producer<Object, Object> getProducer() {
         return producer;
     }
     
-    public Consumer<Object, Message> getNewConsumer() {
-        return new KafkaConsumer<>(consumerConfig);
+    public Consumer<Object, Object> getConsumer() {
+        return consumer;
     }
     
     /**
-     * A bit of a hack to return possible configuration parameters from Spring property store.
+     * A bit of a hack to return configuration parameters from the Spring property store as a map,
+     * which is required to initialize Kafka consumers and producers. Uses reflection on the
+     * specified class to enumerate static fields with a name ending in "_CONFIG". By Kafka
+     * convention, these fields contain the names of configuration parameters.
      * 
      * @param clazz Class defining configuration parameters as static fields.
      * @return A map of configuration parameters with their values from the Spring property store.
@@ -83,7 +86,7 @@ public class KafkaService {
             if (Modifier.isStatic(field.getModifiers()) && field.getName().endsWith("_CONFIG")) {
                 try {
                     String key = field.get(null).toString();
-                    String value = SpringUtil.getProperty("org.carewebframework.kafka." + key);
+                    String value = SpringUtil.getProperty("org.carewebframework.messaging.kafka." + key);
                     
                     if (value != null) {
                         params.put(key, value);

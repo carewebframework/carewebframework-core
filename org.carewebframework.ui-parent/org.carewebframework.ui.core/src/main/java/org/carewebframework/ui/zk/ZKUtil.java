@@ -26,11 +26,9 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.lang.reflect.FieldUtils;
-
 import org.carewebframework.common.MiscUtil;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.ui.FrameworkWebSupport;
-
 import org.zkoss.json.JavaScriptValue;
 import org.zkoss.lang.Exceptions;
 import org.zkoss.zk.au.AuResponse;
@@ -63,7 +61,6 @@ import org.zkoss.zul.impl.XulElement;
  */
 public class ZKUtil {
     
-    
     /**
      * Resource prefix for resources within this package
      */
@@ -74,7 +71,6 @@ public class ZKUtil {
     private static final String MASK_ANCHOR = "maskTarget";
     
     private static final EventListener<Event> deferredDelivery = new EventListener<Event>() {
-        
         
         @Override
         public void onEvent(Event event) throws Exception {
@@ -1085,7 +1081,7 @@ public class ZKUtil {
         
         if (dtp != null && !inEventThread(dtp)) {
             Executions.schedule(dtp, listener, event);
-        } else if (dtp == null) {
+        } else {
             try {
                 listener.onEvent(event);
             } catch (Exception e) {

@@ -108,6 +108,15 @@
 		<!-- Default NamingStrategy -->
 		<bean id="mbeanNamingStrategy" class="org.springframework.jmx.export.naming.IdentityNamingStrategy" />
 
+		<!-- Messaging Support -->
+		<bean id="messageProducerService" class="org.carewebframework.api.messaging.ProducerService" />
+
+		<bean id="messageConsumerService" class="org.carewebframework.api.messaging.ConsumerService">
+			<constructor-arg value="${org.carewebframework.messaging.cache_life}" />
+		</bean>
+		
+		<bean class="org.carewebframework.api.messaging.SimpleConsumerProducer" />
+		
 	</beans>
 
 	<beans profile="desktop">
@@ -121,6 +130,13 @@
 		<!-- Manages subscription and publication of generic events. -->
 		<bean id="eventManager" class="org.carewebframework.api.event.EventManager"
 			destroy-method="destroy">
+		</bean>
+
+		<bean id="globalEventDispatcher" class="org.carewebframework.api.event.GlobalEventDispatcher"
+			init-method="init" destroy-method="destroy">
+			<constructor-arg ref="eventManager" />
+			<constructor-arg ref="messageProducerService" />
+			<constructor-arg ref="messageConsumerService" />
 		</bean>
 
 		<!-- Manages all shared contexts. -->

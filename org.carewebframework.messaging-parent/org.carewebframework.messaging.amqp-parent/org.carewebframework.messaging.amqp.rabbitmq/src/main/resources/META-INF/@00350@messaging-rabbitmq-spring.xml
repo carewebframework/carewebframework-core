@@ -11,22 +11,22 @@
 	<beans profile="root">
 
 		<bean id="amqpExchange" class="org.springframework.amqp.core.TopicExchange">
-			<constructor-arg value="${org.carewebframework.amqp.exchange.id}" />
+			<constructor-arg value="${org.carewebframework.messaging.rabbitmq.exchange.id}" />
 		</bean>
 
 		<!-- AMQP ConnectionFactory to use. -->
 		<bean id="amqpConnectionFactory"
 			class="org.springframework.amqp.rabbit.connection.CachingConnectionFactory">
 			<property name="username"
-				value="${org.carewebframework.amqp.broker.username}" />
+				value="${org.carewebframework.messaging.rabbitmq.broker.username}" />
 			<property name="password"
-				value="${org.carewebframework.amqp.broker.password}" />
+				value="${org.carewebframework.messaging.rabbitmq.broker.password}" />
 			<property name="virtualHost"
-				value="${org.carewebframework.amqp.broker.virtualhost}" />
-			<property name="host" value="${org.carewebframework.amqp.broker.host}" />
-			<property name="port" value="${org.carewebframework.amqp.broker.port}" />
+				value="${org.carewebframework.messaging.rabbitmq.broker.virtualhost}" />
+			<property name="host" value="${org.carewebframework.messaging.rabbitmq.broker.host}" />
+			<property name="port" value="${org.carewebframework.messaging.rabbitmq.broker.port}" />
 			<property name="channelCacheSize"
-				value="${org.carewebframework.amqp.channel.cache.size}" />
+				value="${org.carewebframework.messaging.rabbitmq.channel.cache.size}" />
 		</bean>
 
 		<bean id="amqpBroker" class="org.carewebframework.messaging.amqp.rabbitmq.Broker">

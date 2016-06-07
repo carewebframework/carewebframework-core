@@ -69,12 +69,6 @@
 			<property name="desktop" ref="desktop" />
 		</bean>
 
-		<bean id="globalEventDispatcher" class="org.carewebframework.ui.event.GlobalEventDispatcher"
-			init-method="init" destroy-method="destroy" cwf:override="always">
-			<property name="desktop" ref="desktop" />
-			<property name="localEventDispatcher" ref="eventManager" />
-		</bean>
-
 		<!-- A registry of all supported commands. -->
 		<bean id="commandRegistry" class="org.carewebframework.ui.command.CommandRegistry">
 			<constructor-arg ref="commandShortcuts" />

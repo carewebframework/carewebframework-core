@@ -10,7 +10,14 @@
 	<artifactId>org.carewebframework.messaging-parent</artifactId>
 	<packaging>pom</packaging>
 	
-	<name>CareWeb Framework Messaging Aggregator POM</name>
+	<name>CWF Messaging Aggregator POM</name>
+	
+	<description>
+		Messaging adapters for various messaging implementations.  These are used for
+		remote event delivery, but may be leveraged for other purposes as well.  More
+		than one messaging adapter may be used at one time.  The messaging subsystem
+		will handle delivery to and receipt from each registered adapter.
+	</description>
 	
 	<properties>
 		<org.springframework.amqp.version>1.5.2.RELEASE</org.springframework.amqp.version>

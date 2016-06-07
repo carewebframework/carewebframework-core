@@ -19,11 +19,9 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.carewebframework.api.event.EventUtil;
 import org.carewebframework.api.event.IGenericEvent;
 import org.carewebframework.api.event.IPublisherInfo;
-
 import org.junit.Test;
 
 public class GenericEventTest extends CommonTest {
@@ -46,7 +44,7 @@ public class GenericEventTest extends CommonTest {
     
     protected String recipients;
     
-    private final List<TestPacket> tests = Collections.synchronizedList(new ArrayList<TestPacket>());
+    private final List<TestPacket> tests = Collections.synchronizedList(new ArrayList<>());
     
     protected String recipientId;
     
@@ -58,12 +56,12 @@ public class GenericEventTest extends CommonTest {
         public void eventCallback(String eventName, TestPacket testPacket) {
             try {
                 log.info("Received: " + testPacket);
-                assertTrue(testPacket + ": unexpected test packet", GenericEventTest.this.tests.remove(testPacket));
+                assertTrue(testPacket + ": unexpected test packet", tests.remove(testPacket));
                 assertTrue(testPacket + ": name does not match.", testPacket.getEventName().equals(eventName));
                 assertTrue(testPacket + ": should not have been received.", testPacket.isShouldReceive());
             } catch (AssertionError e) {
-                if (GenericEventTest.this.assertionError == null) {
-                    GenericEventTest.this.assertionError = e;
+                if (assertionError == null) {
+                    assertionError = e;
                 }
             }
         }
@@ -86,35 +84,35 @@ public class GenericEventTest extends CommonTest {
      * @param shouldReceive Indicates whether or not the event should be received.
      */
     private void fireEvent(String eventName, boolean shouldReceive) {
-        TestPacket testPacket = new TestPacket(++this.eventCount, eventName, shouldReceive, this.remote);
-        this.tests.add(testPacket);
+        TestPacket testPacket = new TestPacket(++eventCount, eventName, shouldReceive, remote);
+        tests.add(testPacket);
         
         if (!shouldReceive) {
-            this.expectedUndelivered++;
+            expectedUndelivered++;
         }
         
         log.info("Sending: " + testPacket);
         
-        if (this.remote) {
-            eventManager.fireRemoteEvent(eventName, testPacket, this.recipients);
+        if (remote) {
+            eventManager.fireRemoteEvent(eventName, testPacket, recipients);
         } else {
             eventManager.fireLocalEvent(eventName, testPacket);
         }
     }
     
     public GenericEventTest() {
-        this.remote = false;
-        this.recipients = null;
+        remote = false;
+        recipients = null;
     }
     
     @Test
     public void testEvents() {
-        if (this.remote) {
+        if (remote) {
             pingTest();
         }
         
         fireTestEvents();
-        assertEquals("Error testing ping response.", this.remote, this.pingResponded);
+        assertEquals("Error testing ping response.", remote, pingResponded);
     }
     
     public void pingTest() {
@@ -129,16 +127,16 @@ public class GenericEventTest extends CommonTest {
         subscribe(EVENT_NAME1, true);
         fireEvent(EVENT_NAME1, true); // Subscriber registered, should receive
         fireEvent(EVENT_NAME2, true); // Subevent should also be received
-        if (this.remote) {
+        if (remote) {
             //Additional routing options / recipient filtering
-            this.recipients = this.recipientId;
+            recipients = recipientId;
             fireEvent(EVENT_NAME1, true); // Subscriber registered, should receive due to defined/intended recipients
             fireEvent(EVENT_NAME2, true); // Subevent w/ defined/intended recipients should also be received
             //not null bogus recipients
-            this.recipients = "alternateClient";
+            recipients = "alternateClient";
             fireEvent(EVENT_NAME1, false); // Subscriber registered, but should not receive due to defined unintended recipients
             fireEvent(EVENT_NAME2, false); // Subevent should not also be received
-            this.recipients = null;
+            recipients = null;
         }
         subscribe(EVENT_NAME1, false);
         fireEvent(EVENT_NAME1, false); // Subscriber not registered, should not receive
@@ -146,59 +144,59 @@ public class GenericEventTest extends CommonTest {
         subscribe(EVENT_NAME2, true);
         fireEvent(EVENT_NAME1, false); // Subscriber not registered, should not receive
         fireEvent(EVENT_NAME2, true); // Subevent should be received
-        if (this.remote) {
+        if (remote) {
             //Additional routing options / recipient filtering
-            this.recipients = this.recipientId;
+            recipients = recipientId;
             fireEvent(EVENT_NAME1, false); // Subscriber registered, should receive due to defined/intended recipients
             fireEvent(EVENT_NAME2, true); // Subevent w/ defined/intended recipients should also be received
             //not null bogus recipients
-            this.recipients = "alternateClient";
+            recipients = "alternateClient";
             fireEvent(EVENT_NAME1, false); // Subscriber registered, but should not receive due to defined unintended recipients
             fireEvent(EVENT_NAME2, false); // Subevent should not also be received
-            this.recipients = null;
+            recipients = null;
         }
         subscribe(EVENT_NAME1, true);
         subscribe(EVENT_NAME2, false);
         fireEvent(EVENT_NAME1, true); // Subscriber registered, should receive
         fireEvent(EVENT_NAME2, true); // Subevent should also be received
-        if (this.remote) {
+        if (remote) {
             //Additional routing options / recipient filtering
-            this.recipients = this.recipientId;
+            recipients = recipientId;
             fireEvent(EVENT_NAME1, true); // Subscriber registered, should receive due to defined/intended recipients
             fireEvent(EVENT_NAME2, true); // Subevent w/ defined/intended recipients should also be received
             //not null bogus recipients
-            this.recipients = "alternateClient";
+            recipients = "alternateClient";
             fireEvent(EVENT_NAME1, false); // Subscriber registered, but should not receive due to defined unintended recipients
             fireEvent(EVENT_NAME2, false); // Subevent should not also be received
-            this.recipients = null;
+            recipients = null;
         }
         subscribe(EVENT_NAME1, false);
         fireEvent(EVENT_NAME1, false); // Subscriber not registered, should not receive
         fireEvent(EVENT_NAME2, false); // Subevent should also not be received
-        undeliveredEvents(this.remote);
+        undeliveredEvents(remote);
         checkAssertion();
     }
     
     private void checkAssertion() {
-        if (this.assertionError != null) {
-            throw this.assertionError;
+        if (assertionError != null) {
+            throw assertionError;
         }
     }
     
     private void subscribe(String eventName, boolean subscribe) {
-        if (this.remote) {
+        if (remote) {
             doWait(30);
         }
         
         if (subscribe) {
-            eventManager.subscribe(eventName, this.subscriber);
+            eventManager.subscribe(eventName, subscriber);
         } else {
-            eventManager.unsubscribe(eventName, this.subscriber);
+            eventManager.unsubscribe(eventName, subscriber);
         }
     }
     
     private void doWait(int count) {
-        while ((count-- > 0) && (this.tests.size() > this.expectedUndelivered)) {
+        while ((count-- > 0) && (tests.size() > expectedUndelivered)) {
             try {
                 Thread.sleep(pollingInterval);
             } catch (InterruptedException e) {
@@ -206,7 +204,7 @@ public class GenericEventTest extends CommonTest {
             }
         }
         
-        assertFalse("Timed out waiting for packet delivery.", this.tests.size() > this.expectedUndelivered);
+        assertFalse("Timed out waiting for packet delivery.", tests.size() > expectedUndelivered);
     }
     
     /**
@@ -219,10 +217,11 @@ public class GenericEventTest extends CommonTest {
             doWait(20);
         }
         
-        for (TestPacket testPacket : this.tests) {
+        while (!tests.isEmpty()) {
+            TestPacket testPacket = tests.remove(0);
             assertFalse(testPacket + ": was not received.", testPacket.isShouldReceive());
         }
         
-        this.tests.clear();
+        tests.clear();
     }
 }

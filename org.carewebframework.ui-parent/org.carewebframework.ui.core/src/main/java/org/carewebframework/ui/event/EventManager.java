@@ -9,13 +9,13 @@
  */
 package org.carewebframework.ui.event;
 
+import org.carewebframework.ui.zk.ZKUtil;
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuService;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zk.ui.event.Events;
 
 /**
  * Subclasses framework's event manager to ensure that events are delivered in desktop's event
@@ -45,7 +45,7 @@ public class EventManager extends org.carewebframework.api.event.EventManager im
      */
     @Override
     public void fireLocalEvent(String eventName, Object eventData) {
-        if (Events.inEventListener()) {
+        if (ZKUtil.inEventThread(desktop)) {
             super.fireLocalEvent(eventName, eventData);
         } else {
             Executions.schedule(desktop, eventListener, new Event(eventName, null, eventData));

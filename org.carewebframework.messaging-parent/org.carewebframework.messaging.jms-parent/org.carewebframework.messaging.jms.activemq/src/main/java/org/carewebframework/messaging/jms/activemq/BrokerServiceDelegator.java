@@ -20,7 +20,11 @@ public class BrokerServiceDelegator {
     
     private static final Log log = LogFactory.getLog(BrokerServiceDelegator.class);
     
-    private BrokerService brokerService;
+    private final BrokerService brokerService;
+    
+    public BrokerServiceDelegator(BrokerService brokerService) {
+        this.brokerService = brokerService;
+    }
     
     /**
      * Start BrokerService
@@ -47,13 +51,6 @@ public class BrokerServiceDelegator {
      */
     public BrokerService getBrokerService() {
         return this.brokerService;
-    }
-    
-    /**
-     * @param brokerService the brokerService to set
-     */
-    public void setBrokerService(BrokerService brokerService) {
-        this.brokerService = brokerService;
     }
     
 }
