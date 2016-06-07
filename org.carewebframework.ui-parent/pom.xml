@@ -9,24 +9,14 @@
 	
 	<artifactId>org.carewebframework.ui-parent</artifactId>
 	<packaging>pom</packaging>
-	<name>CareWeb Framework UI Components Aggregator POM</name>
+	
+	<name>CWF UI Support Aggregator POM</name>
 	
 	<modules>
 		<module>org.carewebframework.ui.core</module>
 		<module>org.carewebframework.ui.test</module>
-		<module>org.carewebframework.ui.chat</module>
-		<module>org.carewebframework.ui.currentdatetime</module>
-		<module>org.carewebframework.ui.infopanel</module>
 		<module>org.carewebframework.ui.popupsupport</module>
-		<module>org.carewebframework.ui.statuspanel</module>
-		<module>org.carewebframework.ui.eventtesting</module>
-		<module>org.carewebframework.ui.messaging</module>
-		<module>org.carewebframework.ui.filetailer</module>
-		<module>org.carewebframework.ui.mockup</module>
-		<module>org.carewebframework.ui.sessiontracker</module>
 		<module>org.carewebframework.ui.sharedforms</module>
-		<module>org.carewebframework.ui.settings</module>
-		<module>org.carewebframework.ui.userheader</module>
 		<module>org.carewebframework.ui.wonderbar</module>
 	</modules>
 </project>

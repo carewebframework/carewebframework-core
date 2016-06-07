@@ -9,7 +9,21 @@
 	<artifactId>org.carewebframework.plugin-parent</artifactId>
 	<packaging>pom</packaging>
 	
-	<name>CareWeb Framework Library POM for Plugin Development</name>
+	<name>CWF Parent POM for Plugins</name>
+	
+	<modules>
+		<module>org.carewebframework.plugin.chat</module>
+		<module>org.carewebframework.plugin.currentdatetime</module>
+		<module>org.carewebframework.plugin.infopanel</module>
+		<module>org.carewebframework.plugin.statuspanel</module>
+		<module>org.carewebframework.plugin.eventtesting</module>
+		<module>org.carewebframework.plugin.messaging</module>
+		<module>org.carewebframework.plugin.filetailer</module>
+		<module>org.carewebframework.plugin.mockup</module>
+		<module>org.carewebframework.plugin.sessiontracker</module>
+		<module>org.carewebframework.plugin.settings</module>
+		<module>org.carewebframework.plugin.userheader</module>
+	</modules>
 	
 	<dependencies>
 		<dependency>

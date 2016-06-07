@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:cwp="http://www.carewebframework.org/schema/plugin" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+		 http://www.springframework.org/schema/beans/spring-beans.xsd
+		 http://www.carewebframework.org/schema/plugin
+		 http://www.carewebframework.org/schema/plugin/plugin-extensions.xsd">
+
+	<beans profile="root">
+
+		<cwp:plugin id="cwfMessagingTest" name="Messaging Test Plugin" 
+			category="${labels.cwf.shell.plugin.category.system}"
+			url="~./org/carewebframework/plugin/messaging/main.zul">
+			<cwp:security requiresAll="false">
+				<cwp:authority name="PRIV_MONITOR_SYSTEM" />
+			</cwp:security>
+		</cwp:plugin>
+
+	</beans>
+
+	<beans profile="desktop">
+
+		<!-- Controller -->
+		<bean id="cwfMessagingTestController" class="org.carewebframework.plugin.messaging.MainController"
+			scope="prototype">
+			<constructor-arg ref="messageConsumerService" />
+			<constructor-arg ref="messageProducerService" />
+		</bean>
+
+	</beans>
+</beans>

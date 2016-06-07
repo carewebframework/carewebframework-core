@@ -21,43 +21,38 @@
 		<!-- Insert any plugins to be tested here. -->
 		<dependency>
 			<groupId>org.carewebframework</groupId>
-			<artifactId>org.carewebframework.ui.mockup</artifactId>
+			<artifactId>org.carewebframework.plugin.mockup</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.carewebframework</groupId>
-			<artifactId>org.carewebframework.ui.popupsupport</artifactId>
+			<artifactId>org.carewebframework.plugin.infopanel</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.carewebframework</groupId>
-			<artifactId>org.carewebframework.ui.infopanel</artifactId>
+			<artifactId>org.carewebframework.plugin.currentdatetime</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.carewebframework</groupId>
-			<artifactId>org.carewebframework.ui.currentdatetime</artifactId>
-			<version>${project.parent.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.carewebframework</groupId>
-			<artifactId>org.carewebframework.ui.currentdatetime</artifactId>
-			<version>${project.parent.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.carewebframework</groupId>
-			<artifactId>org.carewebframework.ui.messaging</artifactId>
+			<artifactId>org.carewebframework.plugin.messaging</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
 		<!-- CareWeb Framework Components -->
 		<dependency>
 			<groupId>org.carewebframework</groupId>
-			<artifactId>org.carewebframework.ui.userheader</artifactId>
+			<artifactId>org.carewebframework.plugin.userheader</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.carewebframework</groupId>
-			<artifactId>org.carewebframework.ui.statuspanel</artifactId>
+			<artifactId>org.carewebframework.plugin.statuspanel</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.carewebframework</groupId>
+			<artifactId>org.carewebframework.ui.popupsupport</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>

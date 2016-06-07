@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:cwp="http://www.carewebframework.org/schema/plugin"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation=
+		"http://www.springframework.org/schema/beans 
+		 http://www.springframework.org/schema/beans/spring-beans.xsd
+		 http://www.carewebframework.org/schema/plugin
+		 http://www.carewebframework.org/schema/plugin/plugin-extensions.xsd">
+
+	<beans profile="root">
+		<!--
+		********************************************************************* 
+		
+		This profile is processed during web server startup.  
+		
+		*********************************************************************
+		-->
+		
+		<cwp:plugin id="mockupViewer" name="Mockup Viewer" url="~./org/carewebframework/plugin/mockup/main.zul"
+			description="Plugin to allow embedding third-party wireframes for quick UI prototyping.">
+			<cwp:serialization>
+				<cwp:property id="mockupType" name="${labels.mockup.type.name}" type="enum"
+					description="${labels.mockup.type.description}">
+					<cwp:config>
+						<cwp:entry key="bean">mockupTypeEnumerator</cwp:entry>
+					</cwp:config>
+				</cwp:property>
+				<cwp:property id="mockupId" name="${labels.mockup.identifier.name}" type="text"
+					description="${labels.mockup.identifier.description}" />
+			</cwp:serialization>
+		</cwp:plugin>
+		
+		<bean id="mockupController" class="org.carewebframework.plugin.mockup.MainController" scope="prototype">
+			<constructor-arg ref="mockupTypeEnumerator" />
+		</bean>
+		
+		<bean id="mockupTypeEnumerator" class="org.carewebframework.plugin.mockup.MockupTypeEnumerator">
+			<constructor-arg value="classpath*:**/ui-mockup.properties" />
+		</bean>
+	</beans>
+</beans>

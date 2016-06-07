@@ -1,0 +1,7 @@
+<zk>
+	<panel closable="true" collapsible="true" mold="bootstrap"
+		sclass="panel-info" width="100%"
+		use="org.carewebframework.plugin.infopanel.controller.DropContainer">
+		<panelchildren />
+	</panel>
+</zk>
