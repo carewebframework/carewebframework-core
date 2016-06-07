@@ -9,7 +9,7 @@
 	
 	<artifactId>org.carewebframework.mvn.archetype.plugin</artifactId>
 	<packaging>maven-archetype</packaging>
-	<name>CareWeb Framework Plugin Maven Archetype</name>
+	<name>CWF Plugin Maven Archetype</name>
 	
 	<build>
 		<extensions>

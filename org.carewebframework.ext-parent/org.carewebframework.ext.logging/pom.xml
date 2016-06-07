@@ -6,7 +6,7 @@
 		<version>5.0.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>org.carewebframework.ext.logging</artifactId>
-	<name>CareWeb Framework Logging Extensions</name>
+	<name>CWF Logging Extensions</name>
 	<dependencies>
 		<dependency>
 			<groupId>org.carewebframework</groupId>

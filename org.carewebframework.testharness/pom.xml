@@ -8,7 +8,7 @@
 	</parent>
 	
 	<artifactId>org.carewebframework.testharness</artifactId>
-	<name>CareWeb Framework Test Harness Base Support</name>
+	<name>CWF Test Harness Base Support</name>
 	
 	<dependencies>
 		<dependency>

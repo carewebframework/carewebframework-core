@@ -8,7 +8,7 @@
 	</parent>
 	
 	<artifactId>org.carewebframework.api.property.mock</artifactId>
-	<name>CareWeb Framework Mock Property Implementation</name>
+	<name>CWF Mock Property Implementation</name>
 	<description>
 		Mock implementation of a property store using in-memory hash tables.
 	</description>

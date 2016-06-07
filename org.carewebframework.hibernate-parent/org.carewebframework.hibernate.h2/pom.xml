@@ -8,7 +8,7 @@
 	</parent>
 	
 	<artifactId>org.carewebframework.hibernate.h2</artifactId>
-	<name>CareWeb Framework H2 Database Support</name>
+	<name>CWF H2 Database Support</name>
 	
 	<dependencies>
 		<dependency>

@@ -7,7 +7,7 @@
 	</parent>
 	
 	<artifactId>org.carewebframework.security.spring.core</artifactId>
-	<name>CareWeb Framework Spring Security Adapter</name>
+	<name>CWF Spring Security Adapter</name>
 	
 	<dependencies>
 		<dependency>

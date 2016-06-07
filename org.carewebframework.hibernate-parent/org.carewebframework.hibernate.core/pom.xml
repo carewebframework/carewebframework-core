@@ -8,7 +8,7 @@
 	</parent>
 	
 	<artifactId>org.carewebframework.hibernate.core</artifactId>
-	<name>CareWeb Framework Core Hibernate Support</name>
+	<name>CWF Core Hibernate Support</name>
 	
 	<dependencies>
 		<dependency>

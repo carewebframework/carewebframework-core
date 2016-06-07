@@ -9,7 +9,7 @@
 	
 	<artifactId>org.carewebframework.help-parent</artifactId>
 	<packaging>pom</packaging>
-	<name>CareWeb Framework Help Components Aggregator POM</name>
+	<name>CWF Help Components Aggregator POM</name>
 	
 	<modules>
 		<module>org.carewebframework.help.core</module>

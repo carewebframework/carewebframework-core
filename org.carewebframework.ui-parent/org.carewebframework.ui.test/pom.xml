@@ -9,7 +9,7 @@
 	</parent>
 
 	<artifactId>org.carewebframework.ui.test</artifactId>
-	<name>CareWeb Framework UI Testing Framework</name>
+	<name>CWF UI Testing Framework</name>
 
 	<dependencies>
 		<!-- CareWeb Framework -->

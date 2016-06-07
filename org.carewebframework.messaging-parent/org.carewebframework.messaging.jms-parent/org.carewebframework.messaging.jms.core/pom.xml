@@ -8,7 +8,7 @@
 	</parent>
 	
 	<artifactId>org.carewebframework.messaging.jms.core</artifactId>
-	<name>CareWeb Framework Core JMS Support</name>
+	<name>CWF Core JMS Support</name>
 	
 	<description>
 		Provides an implementation of the global event dispatcher using Spring's Java Messaging

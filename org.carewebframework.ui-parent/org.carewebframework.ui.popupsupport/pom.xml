@@ -7,7 +7,7 @@
 		<version>5.0.0-SNAPSHOT</version>
 	</parent>
 	
-	<name>CareWeb Framework PopupSupport</name>
+	<name>CWF PopupSupport</name>
 	<artifactId>org.carewebframework.ui.popupsupport</artifactId>
 	
 	<dependencies>

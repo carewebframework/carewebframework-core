@@ -9,7 +9,7 @@
 	</parent>
 
 	<artifactId>org.carewebframework.theme.bootstrap</artifactId>
-	<name>CareWeb Framework Bootstrap Themes</name>
+	<name>CWF Bootstrap Themes</name>
 	<description>Third party, public domain bootstrap themes.</description>
 
 	<build>

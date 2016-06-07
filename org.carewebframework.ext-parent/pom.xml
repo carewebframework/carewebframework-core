@@ -7,7 +7,7 @@
 	</parent>
 	<artifactId>org.carewebframework.ext-parent</artifactId>
 	<packaging>pom</packaging>
-	<name>CareWeb Framework Extensions Aggregator POM</name>
+	<name>CWF Extensions Aggregator POM</name>
 	<modules>
 		<module>org.carewebframework.ext.performance</module>
 		<module>org.carewebframework.ext.logging</module>

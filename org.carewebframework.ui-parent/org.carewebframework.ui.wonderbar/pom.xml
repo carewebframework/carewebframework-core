@@ -8,7 +8,7 @@
 	</parent>
 	
 	<artifactId>org.carewebframework.ui.wonderbar</artifactId>
-	<name>CareWeb Framework Wonderbar Component</name>
+	<name>CWF Wonderbar Component</name>
 	
 	<dependencies>
 		<dependency>

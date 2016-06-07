@@ -8,7 +8,7 @@
 	</parent>
 	
 	<artifactId>org.carewebframework.messaging.jms.activemq</artifactId>
-	<name>CareWeb Framework ActiveMQ JMS Adapter</name>
+	<name>CWF ActiveMQ JMS Adapter</name>
 	
 	<description>
 		Provides an implementation of JMS using Apache ActiveMQ.

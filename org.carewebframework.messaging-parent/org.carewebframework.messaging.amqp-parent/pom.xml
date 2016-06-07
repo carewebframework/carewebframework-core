@@ -10,7 +10,7 @@
 	<artifactId>org.carewebframework.messaging.amqp-parent</artifactId>
 	<packaging>pom</packaging>
 	
-	<name>CareWeb Framework AMQP Aggregator POM</name>
+	<name>CWF AMQP Aggregator POM</name>
 	
 	<modules>
 		<module>org.carewebframework.messaging.amqp.rabbitmq</module>

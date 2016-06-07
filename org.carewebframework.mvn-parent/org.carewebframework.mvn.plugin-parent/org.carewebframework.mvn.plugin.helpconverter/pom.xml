@@ -9,7 +9,7 @@
 	
 	<artifactId>org.carewebframework.mvn.plugin.helpconverter</artifactId>
 	<packaging>maven-plugin</packaging>
-	<name>CareWeb Framework Help Converter Maven Plugin</name>
+	<name>CWF Help Converter Maven Plugin</name>
 	
 	<build>
 		<plugins>

@@ -8,7 +8,7 @@
 	
 	<artifactId>org.carewebframework.mvn.plugin.themegenerator</artifactId>
 	<packaging>maven-plugin</packaging>
-	<name>CareWeb Framework Theme Generator Maven Plugin</name>
+	<name>CWF Theme Generator Maven Plugin</name>
 	
 	<build>
 		<plugins>

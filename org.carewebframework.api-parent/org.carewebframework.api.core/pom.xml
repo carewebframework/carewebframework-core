@@ -8,7 +8,7 @@
 	</parent>
 	
 	<artifactId>org.carewebframework.api.core</artifactId>
-	<name>CareWeb Framework API Core Support</name>
+	<name>CWF API Core Support</name>
 	
 	<dependencies>
 		<dependency>

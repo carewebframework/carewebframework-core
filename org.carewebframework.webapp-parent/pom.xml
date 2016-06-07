@@ -9,7 +9,7 @@
 	
 	<artifactId>org.carewebframework.webapp-parent</artifactId>
 	<packaging>pom</packaging>
-	<name>CareWeb Framework WebApp Aggregator POM</name>
+	<name>CWF WebApp Aggregator POM</name>
 	
 	<modules>
 		<module>org.carewebframework.webapp.testharness</module>

@@ -9,7 +9,7 @@
 	
 	<artifactId>org.carewebframework.hibernate-parent</artifactId>
 	<packaging>pom</packaging>
-	<name>CareWeb Framework Hibernate Components Aggregator POM</name>
+	<name>CWF Hibernate Components Aggregator POM</name>
 	
 	<modules>
 		<module>org.carewebframework.hibernate.core</module>

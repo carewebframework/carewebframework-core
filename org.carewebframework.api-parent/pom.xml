@@ -9,7 +9,7 @@
 	
 	<artifactId>org.carewebframework.api-parent</artifactId>
 	<packaging>pom</packaging>
-	<name>CareWeb Framework API Components Aggregator POM</name>
+	<name>CWF API Components Aggregator POM</name>
 	
 	<modules>
 		<module>org.carewebframework.api.core</module>

@@ -8,7 +8,7 @@
 	</parent>
 	
 	<artifactId>org.carewebframework.api.security.mock</artifactId>
-	<name>CareWeb Framework Security Mock Classes</name>
+	<name>CWF Security Mock Classes</name>
 	<description>
 		Mock implementation of security services.
 	</description>

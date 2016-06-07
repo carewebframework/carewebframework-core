@@ -10,7 +10,7 @@
 	<artifactId>org.carewebframework.messaging.kafka-parent</artifactId>
 	<packaging>pom</packaging>
 	
-	<name>CareWeb Framework Kafka Messaging Aggregator POM</name>
+	<name>CWF Kafka Messaging Aggregator POM</name>
 	
 	<modules>
 		<module>org.carewebframework.messaging.kafka</module>

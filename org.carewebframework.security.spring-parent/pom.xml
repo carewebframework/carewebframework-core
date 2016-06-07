@@ -9,7 +9,7 @@
 	
 	<artifactId>org.carewebframework.security.spring-parent</artifactId>
 	<packaging>pom</packaging>
-	<name>CareWeb Framework Spring Security Aggregator</name>
+	<name>CWF Spring Security Aggregator</name>
 	
 	<modules>
 		<module>org.carewebframework.security.spring.core</module>

@@ -8,7 +8,7 @@
 	
 	<artifactId>org.carewebframework.mvn.archetype-parent</artifactId>
 	<packaging>pom</packaging>
-	<name>CareWeb Framework Maven Archetype Aggregator POM</name>
+	<name>CWF Maven Archetype Aggregator POM</name>
 	
 	<modules>
 		<module>org.carewebframework.mvn.archetype.plugin</module>

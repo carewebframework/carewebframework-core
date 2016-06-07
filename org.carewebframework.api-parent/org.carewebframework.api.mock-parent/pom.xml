@@ -9,7 +9,7 @@
 	
 	<artifactId>org.carewebframework.api.mock-parent</artifactId>
 	<packaging>pom</packaging>
-	<name>CareWeb Framework Mock Components  Aggregator POM</name>
+	<name>CWF Mock Components  Aggregator POM</name>
 	
 	<modules>
 		<module>org.carewebframework.api.property.mock</module>

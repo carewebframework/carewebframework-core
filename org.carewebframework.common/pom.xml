@@ -6,7 +6,7 @@
 		<version>5.0.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>org.carewebframework.common</artifactId>
-	<name>CareWeb Framework Common Utilities</name>
+	<name>CWF Common Utilities</name>
 	<dependencies>
 		<dependency>
 			<groupId>commons-io</groupId>

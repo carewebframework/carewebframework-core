@@ -9,7 +9,7 @@
 	
 	<artifactId>org.carewebframework.theme-parent</artifactId>
 	<packaging>pom</packaging>
-	<name>CareWeb Framework Theme Components Aggregator POM</name>
+	<name>CWF Theme Components Aggregator POM</name>
 	
 	<modules>
 		<module>org.carewebframework.theme.bootstrap</module>

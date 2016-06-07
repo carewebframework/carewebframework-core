@@ -8,7 +8,7 @@
 	
 	<artifactId>org.carewebframework.mvn.plugin-parent</artifactId>
 	<packaging>pom</packaging>
-	<name>CareWeb Framework Maven Plugin Aggregator POM</name>
+	<name>CWF Maven Plugin Aggregator POM</name>
 	
 	<modules>
 		<module>org.carewebframework.mvn.plugin.core</module>

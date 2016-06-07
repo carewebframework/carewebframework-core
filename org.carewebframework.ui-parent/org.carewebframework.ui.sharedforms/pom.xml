@@ -7,7 +7,7 @@
 		<version>5.0.0-SNAPSHOT</version>
 	</parent>
 	
-	<name>CareWeb Framework SharedForms</name>
+	<name>CWF SharedForms</name>
 	<artifactId>org.carewebframework.ui.sharedforms</artifactId>
 	
 	<dependencies>
