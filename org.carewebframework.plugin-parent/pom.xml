@@ -2,12 +2,15 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.carewebframework</groupId>
-		<artifactId>org.carewebframework.lib-parent</artifactId>
+		<artifactId>org.carewebframework.ui-parent</artifactId>
 		<version>5.0.0-SNAPSHOT</version>
 	</parent>
-	<artifactId>org.carewebframework.lib.plugin</artifactId>
+	
+	<artifactId>org.carewebframework.plugin-parent</artifactId>
 	<packaging>pom</packaging>
+	
 	<name>CareWeb Framework Library POM for Plugin Development</name>
+	
 	<dependencies>
 		<dependency>
 			<groupId>log4j</groupId>
