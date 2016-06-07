@@ -23,8 +23,8 @@ public class MessageProducer implements IMessageProducer {
     }
     
     @Override
-    public boolean publish(Message message) {
-        ProducerRecord<Object, Object> producerRecord = new ProducerRecord<>(message.getChannel(), message);
+    public boolean publish(String channel, Message message) {
+        ProducerRecord<Object, Object> producerRecord = new ProducerRecord<>(channel, message);
         producer.send(producerRecord);
         return false;
     }

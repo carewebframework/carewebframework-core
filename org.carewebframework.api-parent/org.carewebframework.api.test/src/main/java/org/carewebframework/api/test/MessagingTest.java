@@ -50,9 +50,9 @@ public class MessagingTest extends CommonTest {
     private final IMessageCallback callback = new IMessageCallback() {
         
         @Override
-        public void onMessage(Message message) {
+        public void onMessage(String channel, Message message) {
             try {
-                log.info("Received: " + message);
+                log.info("Received on channel " + channel + ": " + message);
                 assertTrue("  : unexpected message", messages.remove(message));
             } catch (AssertionError e) {
                 if (assertionError == null) {
@@ -69,29 +69,6 @@ public class MessagingTest extends CommonTest {
     
     public MessagingTest() {
         this(null);
-    }
-    
-    /**
-     * Publish a message.
-     * 
-     * @param channel The channel on which to publish.
-     * @param shouldReceive Indicates whether or not the message should be received.
-     */
-    private void publish(String channel, boolean shouldReceive) {
-        Message message = new Message(channel, null);
-        message.setMetadata("count", ++messageCount);
-        
-        if (shouldReceive) {
-            messages.add(message);
-        }
-        
-        log.info("Sending: " + message);
-        
-        if (producerClass != null) {
-            getProducerService().publish(message, producerClass);
-        } else {
-            getProducerService().publish(message);
-        }
     }
     
     @Test
@@ -118,8 +95,7 @@ public class MessagingTest extends CommonTest {
         subscribe(CHANNEL1, false);
         publish(CHANNEL1, false);
         publish(CHANNEL2, false);
-        undeliveredMessages();
-        checkAssertion();
+        doWait(30);
     }
     
     private void checkAssertion() {
@@ -138,7 +114,32 @@ public class MessagingTest extends CommonTest {
         }
     }
     
+    /**
+     * Publish a message.
+     * 
+     * @param channel The channel on which to publish.
+     * @param shouldReceive Indicates whether or not the message should be received.
+     */
+    private void publish(String channel, boolean shouldReceive) {
+        Message message = new Message("test", "Test Message");
+        message.setMetadata("count", ++messageCount);
+        
+        if (shouldReceive) {
+            messages.add(message);
+        }
+        
+        log.info("Sending: " + message);
+        
+        if (producerClass != null) {
+            getProducerService().publish(channel, message, producerClass);
+        } else {
+            getProducerService().publish(channel, message);
+        }
+    }
+    
     private void doWait(int count) {
+        checkAssertion();
+        
         while (count-- > 0 && !messages.isEmpty()) {
             try {
                 Thread.sleep(pollingInterval);
@@ -156,7 +157,6 @@ public class MessagingTest extends CommonTest {
      * Verify all undelivered messages.
      */
     private void undeliveredMessages() {
-        doWait(20);
         StringBuilder sb = new StringBuilder();
         
         while (!messages.isEmpty()) {

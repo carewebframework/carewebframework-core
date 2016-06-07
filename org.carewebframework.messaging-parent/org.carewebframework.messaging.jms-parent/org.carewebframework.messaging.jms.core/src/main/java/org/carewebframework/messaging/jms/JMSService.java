@@ -153,12 +153,12 @@ public class JMSService {
      * @param recipients Comma-delimited list of recipient ids.
      */
     public void produceTopicMessage(String destinationName, String messageData, String recipients) {
-        Message msg = createObjectMessage(destinationName, messageData, "anonymous", recipients);
+        Message msg = createObjectMessage(messageData, "anonymous", recipients);
         sendMessage(destinationName, msg);
     }
     
     public void produceQueueMessage(String destinationName, String messageData) {
-        Message msg = createObjectMessage(destinationName, messageData, "anynomyous", null);
+        Message msg = createObjectMessage(messageData, "anynomyous", null);
         jmsQueueTemplate.convertAndSend(destinationName, msg);
     }
     
@@ -167,16 +167,15 @@ public class JMSService {
      * {@value #MESSAGE_SENDER_PROPERTY}, {@value #MESSAGE_RECIPIENTS_PROPERTY}.
      * 
      * @param session The session for which to create the message.
-     * @param topic Topic to which message will be published.
      * @param messageData Message data.
      * @param sender Sender client ID.
      * @param recipients Comma-delimited list of recipient client IDs
      * @return MessageThe newly created message.
      * @throws JMSException if error thrown from creation of object message
      */
-    public Message createObjectMessage(String topic, Serializable messageData, String sender, String recipients) {
+    public Message createObjectMessage(Serializable messageData, String sender, String recipients) {
         try {
-            return decorateMessage(getSession().createObjectMessage(messageData), topic, sender, recipients);
+            return decorateMessage(getSession().createObjectMessage(messageData), sender, recipients);
         } catch (JMSException e) {
             throw MiscUtil.toUnchecked(e);
         }
@@ -187,15 +186,14 @@ public class JMSService {
      * {@value #MESSAGE_SENDER_PROPERTY}, {@value #MESSAGE_RECIPIENTS_PROPERTY}.
      * 
      * @param session the session for which to create the message
-     * @param topic Topic to which message will be published.
      * @param text text data
      * @param sender Sender client ID.
      * @param recipients Comma-delimited list of recipient client IDs
      * @return Message
      * @throws JMSException if error thrown from creation of object message
      */
-    public Message createTextMessage(String topic, String text, String sender, String recipients) throws JMSException {
-        return decorateMessage(getSession().createTextMessage(text), topic, sender, recipients);
+    public Message createTextMessage(String text, String sender, String recipients) throws JMSException {
+        return decorateMessage(getSession().createTextMessage(text), sender, recipients);
     }
     
     /**
@@ -209,8 +207,7 @@ public class JMSService {
      * @return The decorated Message
      * @throws JMSException if error thrown setting properties
      */
-    public Message decorateMessage(Message message, String topic, String sender, String recipients) throws JMSException {
-        message.setStringProperty("topic", topic);
+    public Message decorateMessage(Message message, String sender, String recipients) throws JMSException {
         message.setStringProperty("sender", sender);
         message.setStringProperty("recipients", StringUtils.isEmpty(recipients) ? null : "," + recipients + ",");
         return message;

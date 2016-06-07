@@ -12,6 +12,7 @@ package org.carewebframework.ui.messaging;
 import java.util.Collection;
 
 import org.carewebframework.api.event.EventMessage;
+import org.carewebframework.api.event.EventUtil;
 import org.carewebframework.api.messaging.ConsumerService;
 import org.carewebframework.api.messaging.IMessageConsumer.IMessageCallback;
 import org.carewebframework.api.messaging.IMessageProducer;
@@ -52,8 +53,8 @@ public class MainController extends PluginController {
         };
         
         @Override
-        public void onMessage(Message message) {
-            ZKUtil.fireEvent(new Event("onMessage", root, message), eventListener);
+        public void onMessage(String channel, Message message) {
+            ZKUtil.fireEvent(new Event(channel, root, message), eventListener);
         }
         
     };
@@ -147,9 +148,11 @@ public class MainController extends PluginController {
         Comboitem item = cboxChannels.getSelectedItem();
         
         if (item != null) {
-            Message message = chkAsEvent.isChecked() ? new EventMessage(item.getLabel(), tboxMessage.getText())
-                    : new Message(item.getLabel(), tboxMessage.getText());
-            producerService.publish(message);
+            String channel = item.getLabel();
+            channel = chkAsEvent.isChecked() ? EventUtil.getChannelName(channel) : channel;
+            Message message = chkAsEvent.isChecked() ? new EventMessage(channel, tboxMessage.getText())
+                    : new Message(channel, tboxMessage.getText());
+            producerService.publish(channel, message);
         }
     }
     

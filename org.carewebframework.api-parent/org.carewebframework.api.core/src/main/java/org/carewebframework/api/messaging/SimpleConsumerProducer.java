@@ -33,8 +33,8 @@ public class SimpleConsumerProducer implements IMessageProducer, IMessageConsume
     }
     
     @Override
-    public boolean publish(Message message) {
-        callback.onMessage(message);
+    public boolean publish(String channel, Message message) {
+        callback.onMessage(channel, message);
         return true;
     }
     

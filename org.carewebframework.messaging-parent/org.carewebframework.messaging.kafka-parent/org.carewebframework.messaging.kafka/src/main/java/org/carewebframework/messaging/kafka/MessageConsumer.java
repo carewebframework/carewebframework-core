@@ -133,10 +133,10 @@ public class MessageConsumer implements IMessageConsumer {
             
             for (ConsumerRecord<Object, Object> record : records) {
                 Object value = record.value();
-                Message message = value instanceof Message ? (Message) value : new Message(record.topic(), value);
+                Message message = value instanceof Message ? (Message) value : new Message("kafkaMessage", value);
                 
                 if (callback != null) {
-                    callback.onMessage(message);
+                    callback.onMessage(record.topic(), message);
                 }
             }
         }

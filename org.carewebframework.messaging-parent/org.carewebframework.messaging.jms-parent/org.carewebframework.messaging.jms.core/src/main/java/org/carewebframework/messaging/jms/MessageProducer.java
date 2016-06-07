@@ -21,9 +21,9 @@ public class MessageProducer implements IMessageProducer {
     }
     
     @Override
-    public boolean publish(Message message) {
-        javax.jms.Message msg = service.createObjectMessage(message.getChannel(), message, null, null);
-        service.sendMessage(message.getChannel(), msg);
+    public boolean publish(String channel, Message message) {
+        javax.jms.Message msg = service.createObjectMessage(message, null, null);
+        service.sendMessage(channel, msg);
         return true;
     }
     

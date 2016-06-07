@@ -17,9 +17,10 @@ public interface IMessageProducer {
     /**
      * Publish a message.
      * 
+     * @param channel The channel on which to publish the message.
      * @param message The message to publish.
      * @return True if successfully published.
      */
-    boolean publish(Message message);
+    boolean publish(String channel, Message message);
     
 }

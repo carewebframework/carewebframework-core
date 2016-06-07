@@ -14,6 +14,10 @@
 		Provides an implementation of AMQP using RabbitMQ.
 	</description>
 	
+	<properties>
+		<maven.test.skip>true</maven.test.skip>
+	</properties>
+	
 	<dependencies>
         <!-- RabbitMQ -->
 		<dependency>

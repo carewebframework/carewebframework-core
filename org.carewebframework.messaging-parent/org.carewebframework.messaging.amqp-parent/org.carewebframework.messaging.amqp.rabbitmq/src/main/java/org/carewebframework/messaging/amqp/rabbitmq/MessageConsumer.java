@@ -29,10 +29,10 @@ public class MessageConsumer implements IMessageConsumer {
         
         @Override
         public void onMessage(org.springframework.amqp.core.Message message) {
-            Message msg = broker.convertMessage(channel, message);
+            Message msg = broker.convertMessage(message);
             
             if (callback != null) {
-                callback.onMessage(msg);
+                callback.onMessage(channel, msg);
             }
         }
     }

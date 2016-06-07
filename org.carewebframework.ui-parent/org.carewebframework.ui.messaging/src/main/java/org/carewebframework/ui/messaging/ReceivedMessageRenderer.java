@@ -12,7 +12,7 @@ public class ReceivedMessageRenderer extends AbstractListitemRenderer<Message, O
     @Override
     protected void renderItem(Listitem item, Message message) {
         createCell(item, message.getCreated());
-        createCell(item, message.getChannel());
+        createCell(item, message.getType());
         createCell(item, message.getId());
         Listcell cell = createCell(item, message.getPayload());
         cell.setTooltiptext(ZKUtil.findChild(cell, Label.class).getValue());

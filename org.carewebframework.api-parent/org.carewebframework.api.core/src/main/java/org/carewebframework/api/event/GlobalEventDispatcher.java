@@ -101,7 +101,7 @@ public class GlobalEventDispatcher implements IGlobalEventDispatcher, IMessageCo
     @Override
     public void fireRemoteEvent(String eventName, Serializable eventData, String recipients) {
         Message message = new EventMessage(eventName, eventData);
-        producer.publish(message);
+        producer.publish(EventUtil.getChannelName(eventName), message);
     }
     
     /**
@@ -189,7 +189,7 @@ public class GlobalEventDispatcher implements IGlobalEventDispatcher, IMessageCo
     }
     
     @Override
-    public void onMessage(Message message) {
+    public void onMessage(String channel, Message message) {
         localEventDelivery(message.getType(), message.getPayload());
     }
     

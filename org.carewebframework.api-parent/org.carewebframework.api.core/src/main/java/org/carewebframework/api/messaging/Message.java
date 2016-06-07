@@ -22,8 +22,6 @@ public class Message implements Serializable {
     
     private static final long serialVersionUID = 1L;
     
-    private final String channel;
-    
     private final String type;
     
     private final Object payload;
@@ -37,22 +35,10 @@ public class Message implements Serializable {
     /**
      * Creates a message.
      * 
-     * @param channel The channel (and type) associated with the message.
-     * @param payload The associated payload.
-     */
-    public Message(String channel, Object payload) {
-        this(channel, null, payload);
-    }
-    
-    /**
-     * Creates a message.
-     * 
-     * @param channel The channel associated with the message.
      * @param type The type of the message.
      * @param payload The associated payload.
      */
-    public Message(String channel, String type, Object payload) {
-        this.channel = channel;
+    public Message(String type, Object payload) {
         this.type = type;
         this.payload = payload;
         this.id = UUID.randomUUID().toString();
@@ -60,18 +46,11 @@ public class Message implements Serializable {
     }
     
     /**
-     * @return Returns the channel associated with this message.
-     */
-    public String getChannel() {
-        return channel;
-    }
-    
-    /**
      * @return Returns the type of message. If a type was not specified, it defaults to the channel
      *         name.
      */
     public String getType() {
-        return type == null ? channel : type;
+        return type;
     }
     
     /**
@@ -150,16 +129,26 @@ public class Message implements Serializable {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         // @formatter:off
-        sb.append("Channel: ").append(channel)
-            .append("; Type: ").append(doFormat(type))
-            .append("; Created: ").append(getCreated())
-            .append("; Metadata: ").append(doFormat(metadata))
-            .append("; Payload: ").append(doFormat(payload));
+        sb.append("Type: ").append(doFormat(type))
+            .append("; id: ").append(id)
+            .append("; created: ").append(getCreated())
+            .append("; metadata: ").append(doFormat(metadata))
+            .append("; payload: ").append(doFormat(payload));
         // @formatter:on
         return sb.toString();
     }
     
     private Object doFormat(Object object) {
         return object == null ? "none" : object;
+    }
+    
+    @Override
+    public boolean equals(Object object) {
+        return object == this || (object instanceof Message && ((Message) object).id.equals(id));
+    }
+    
+    @Override
+    public int hashCode() {
+        return id.hashCode();
     }
 }

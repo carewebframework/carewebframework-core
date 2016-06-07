@@ -19,7 +19,7 @@ public interface IMessageConsumer {
      */
     interface IMessageCallback {
         
-        void onMessage(Message message);
+        void onMessage(String channel, Message message);
     }
     
     /**

@@ -38,12 +38,44 @@ import org.carewebframework.common.MiscUtil;
 /**
  * JMS-based message consumer.
  */
-public class MessageConsumer implements IMessageConsumer, MessageListener {
+public class MessageConsumer implements IMessageConsumer {
     
     private static final Log log = LogFactory.getLog(MessageConsumer.class);
     
-    private final Map<String, TopicSubscriber> subscribers = Collections
-            .synchronizedMap(new HashMap<String, TopicSubscriber>());
+    private class Subscriber implements MessageListener {
+        
+        private final String topic;
+        
+        Subscriber(String topic) {
+            this.topic = topic;
+        }
+        
+        @Override
+        public void onMessage(javax.jms.Message message) {
+            try {
+                Object payload;
+                
+                if (message instanceof ObjectMessage) {
+                    payload = ((ObjectMessage) message).getObject();
+                } else if (message instanceof TextMessage) {
+                    payload = ((TextMessage) message).getText();
+                } else {
+                    throw new Exception("Ignoring unsupported message");
+                }
+                
+                Message msg = payload instanceof Message ? (Message) payload : new Message("jmsMessage", payload);
+                
+                if (callback != null) {
+                    callback.onMessage(topic, msg);
+                }
+            } catch (Exception e) {
+                log.warn(String.format("Error processing message: type [%s], message [%s]", message.getClass(), message), e);
+            }
+        }
+        
+    }
+    
+    private final Map<String, TopicSubscriber> subscribers = Collections.synchronizedMap(new HashMap<>());
     
     private final JMSService service;
     
@@ -60,7 +92,7 @@ public class MessageConsumer implements IMessageConsumer, MessageListener {
     
     @Override
     public boolean subscribe(String channel) {
-        if (subscribers.containsKey(channel)) {
+        if (subscribers.get(channel) != null) {
             if (log.isDebugEnabled()) {
                 log.debug(String.format("Already subscribed to Topic[%s]", channel));
             }
@@ -79,7 +111,7 @@ public class MessageConsumer implements IMessageConsumer, MessageListener {
         TopicSubscriber subscriber = service.createSubscriber(topic, selector);
         
         try {
-            subscriber.setMessageListener(this);
+            subscriber.setMessageListener(new Subscriber(channel));
         } catch (JMSException e) {
             throw MiscUtil.toUnchecked(e);
         }
@@ -99,6 +131,7 @@ public class MessageConsumer implements IMessageConsumer, MessageListener {
         log.debug(String.format("Unsubscribing Subscriber[%s] for Topic [%s].", subscriber, channel));
         
         try {
+            subscriber.setMessageListener(null);
             subscriber.close();
         } catch (JMSException e) {}
         
@@ -134,29 +167,4 @@ public class MessageConsumer implements IMessageConsumer, MessageListener {
         subscribers.clear();
     }
     
-    @Override
-    public void onMessage(javax.jms.Message message) {
-        
-        try {
-            Object payload;
-            
-            if (message instanceof ObjectMessage) {
-                payload = ((ObjectMessage) message).getObject();
-            } else if (message instanceof TextMessage) {
-                payload = ((TextMessage) message).getText();
-            } else {
-                throw new Exception("Ignoring unsupported message");
-            }
-            
-            Message msg = payload instanceof Message ? (Message) payload
-                    : new Message(message.getStringProperty("topic"), payload);
-            
-            if (callback != null) {
-                callback.onMessage(msg);
-            }
-        } catch (Exception e) {
-            log.warn(String.format("Error processing message: type [%s], message [%s]", message.getClass(), message), e);
-        }
-        
-    }
 }

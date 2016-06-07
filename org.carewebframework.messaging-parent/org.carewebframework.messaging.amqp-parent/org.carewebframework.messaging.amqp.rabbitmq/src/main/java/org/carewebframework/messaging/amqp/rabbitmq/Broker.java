@@ -90,9 +90,9 @@ public class Broker {
         admin.getRabbitTemplate().convertAndSend(exchange.getName(), channel, message);
     }
     
-    public Message convertMessage(String channel, org.springframework.amqp.core.Message message) {
+    public Message convertMessage(org.springframework.amqp.core.Message message) {
         Object msg = admin.getRabbitTemplate().getMessageConverter().fromMessage(message);
-        return msg instanceof Message ? (Message) msg : new Message(channel, msg);
+        return msg instanceof Message ? (Message) msg : new Message("amqpMessage", msg);
     }
     
 }

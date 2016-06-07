@@ -12,8 +12,8 @@ public class MessageProducer implements IMessageProducer {
     }
     
     @Override
-    public boolean publish(Message message) {
-        broker.sendMessage(message.getChannel(), message);
+    public boolean publish(String channel, Message message) {
+        broker.sendMessage(channel, message);
         return true;
     }
     

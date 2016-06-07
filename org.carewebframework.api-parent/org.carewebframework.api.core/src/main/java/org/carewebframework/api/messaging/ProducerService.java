@@ -55,15 +55,16 @@ public class ProducerService implements DestructionAwareBeanPostProcessor {
     /**
      * Publish a message.
      * 
+     * @param channel The channel on which to publish the message.
      * @param message Message to publish.
      * @return True if successfully published.
      */
-    public boolean publish(Message message) {
+    public boolean publish(String channel, Message message) {
         boolean result = false;
         prepare(message);
         
         for (IMessageProducer producer : producers) {
-            result |= producer.publish(message);
+            result |= producer.publish(channel, message);
         }
         
         return result;
@@ -72,26 +73,28 @@ public class ProducerService implements DestructionAwareBeanPostProcessor {
     /**
      * Publish a message to the producer of the specified class.
      * 
+     * @param channel The channel on which to publish the message.
      * @param message Message to publish
      * @param clazz Class of the producer.
      * @return True if successfully published.
      */
-    public boolean publish(Message message, Class<? extends IMessageProducer> clazz) {
+    public boolean publish(String channel, Message message, Class<? extends IMessageProducer> clazz) {
         IMessageProducer producer = clazz == null ? null : findRegisteredProducer(clazz);
-        return publish(message, producer);
+        return publish(channel, message, producer);
     }
     
     /**
      * Publish a message to the producer of the specified class.
      * 
+     * @param channel The channel on which to publish the message.
      * @param message Message to publish
      * @param className Fully specified name of the producer's class.
      * @return True if successfully published.
      */
-    public boolean publish(Message message, String className) {
+    public boolean publish(String channel, Message message, String className) {
         try {
             IMessageProducer producer = findRegisteredProducer(Class.forName(className, false, null));
-            return publish(message, producer);
+            return publish(channel, message, producer);
         } catch (Exception e) {
             return false;
         }
@@ -101,14 +104,15 @@ public class ProducerService implements DestructionAwareBeanPostProcessor {
      * Publish a message to the specified producer. Use this only when publishing to a single
      * producer.
      * 
+     * @param channel The channel on which to publish the message.
      * @param message Message to publish.
      * @param producer The message producer.
      * @return True if successfully published.
      */
-    private boolean publish(Message message, IMessageProducer producer) {
+    private boolean publish(String channel, Message message, IMessageProducer producer) {
         if (producer != null) {
             prepare(message);
-            return producer.publish(message);
+            return producer.publish(channel, message);
         }
         
         return false;

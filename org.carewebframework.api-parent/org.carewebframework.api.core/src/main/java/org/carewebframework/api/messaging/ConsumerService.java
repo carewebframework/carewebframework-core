@@ -116,12 +116,12 @@ public class ConsumerService implements IMessageCallback, DestructionAwareBeanPo
     }
     
     @Override
-    public void onMessage(Message message) {
+    public void onMessage(String channel, Message message) {
         if (updateDelivered(message)) {
-            LinkedHashSet<IMessageCallback> callbacks = getCallbacks(message.getChannel(), false, true);
+            LinkedHashSet<IMessageCallback> callbacks = getCallbacks(channel, false, true);
             
             if (callbacks != null) {
-                dispatchMessages(message, callbacks);
+                dispatchMessages(channel, message, callbacks);
             }
         }
     }
@@ -175,13 +175,14 @@ public class ConsumerService implements IMessageCallback, DestructionAwareBeanPo
     /**
      * Dispatch message to callback. Override to address special threading considerations.
      * 
+     * @param channel The channel that delivered the message.
      * @param message The message to dispatch.
      * @param callbacks The callbacks to receive the message.
      */
-    protected void dispatchMessages(Message message, Set<IMessageCallback> callbacks) {
+    protected void dispatchMessages(String channel, Message message, Set<IMessageCallback> callbacks) {
         for (IMessageCallback callback : callbacks) {
             try {
-                callback.onMessage(message);
+                callback.onMessage(channel, message);
             } catch (Exception e) {
                 
             }

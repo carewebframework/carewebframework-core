@@ -18,8 +18,10 @@ import org.carewebframework.api.messaging.Message;
  */
 public class EventMessage extends Message {
     
+    private static final long serialVersionUID = 1L;
+    
     public EventMessage(String eventName, Serializable eventData) {
-        super(EventUtil.getChannelName(eventName), eventName, eventData);
+        super(eventName, eventData);
     }
     
 }
