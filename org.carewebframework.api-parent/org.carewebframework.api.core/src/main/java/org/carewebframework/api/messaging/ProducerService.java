@@ -61,7 +61,7 @@ public class ProducerService implements DestructionAwareBeanPostProcessor {
      */
     public boolean publish(String channel, Message message) {
         boolean result = false;
-        prepare(message);
+        prepare(channel, message);
         
         for (IMessageProducer producer : producers) {
             result |= producer.publish(channel, message);
@@ -111,7 +111,7 @@ public class ProducerService implements DestructionAwareBeanPostProcessor {
      */
     private boolean publish(String channel, Message message, IMessageProducer producer) {
         if (producer != null) {
-            prepare(message);
+            prepare(channel, message);
             return producer.publish(channel, message);
         }
         
@@ -140,9 +140,10 @@ public class ProducerService implements DestructionAwareBeanPostProcessor {
      * @param message The message.
      * @return The original message.
      */
-    private Message prepare(Message message) {
-        message.setMetadata("cwf-pubid", UUID.randomUUID().toString());
-        message.setMetadata("cwf-published", System.currentTimeMillis());
+    private Message prepare(String channel, Message message) {
+        message.setMetadata("cwf.pub.channel", channel);
+        message.setMetadata("cwf.pub.id", UUID.randomUUID().toString());
+        message.setMetadata("cwf.pub.when", System.currentTimeMillis());
         return message;
     }
     

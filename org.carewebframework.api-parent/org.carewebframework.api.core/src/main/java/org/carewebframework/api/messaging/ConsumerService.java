@@ -158,7 +158,7 @@ public class ConsumerService implements IMessageCallback, DestructionAwareBeanPo
                 }
             }
             
-            String pubid = (String) message.getMetadata("cwf-pubid");
+            String pubid = (String) message.getMetadata("cwf.pub.id");
             boolean result = !delivered.containsKey(pubid);
             
             if (result) {
