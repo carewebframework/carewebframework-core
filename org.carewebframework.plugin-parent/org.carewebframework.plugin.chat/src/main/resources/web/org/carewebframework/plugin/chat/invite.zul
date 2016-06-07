@@ -3,27 +3,27 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
 
-	<window title="${labels.chat.invite.title}" width="500px" mold="bootstrap"
+	<window title="${labels.cwf.chat.invite.title}" width="500px" mold="bootstrap"
 		apply="${chatInviteController}" contentSclass="chat-invite">
 		<style src="~./org/carewebframework/plugin/chat/chat.css" />
 		<listbox id="lstSessions" rows="10" checkmark="true" vflex="1"
 			multiple="true">
 			<listhead>
 				<listheader width="30px" />
-					<listheader label="${labels.chat.participant.header.user}"
+					<listheader label="${labels.cwf.chat.participant.header.user}"
 						id="getUserName" hflex="1" />
 			</listhead>
 		</listbox>
 		<toolbar>
 			<span style="float:left;margin-top:5px">
 				<checkbox id="chkHideActive"
-					label="${labels.chat.invite.check.hide.label}" />
+					label="${labels.cwf.chat.invite.check.hide.label}" />
 			</span>
 			<span style="float:right">
 				<button id="btnInvite" zclass="btn" sclass="btn-default btn-sm"
-					label="${labels.chat.invite.button.invite.label}" />
+					label="${labels.cwf.chat.invite.button.invite.label}" />
 				<button id="btnCancel" zclass="btn" sclass="btn-danger btn-sm"
-					label="${labels.chat.invite.button.cancel.label}"
+					label="${labels.cwf.chat.invite.button.cancel.label}"
 					forward="onClick=onClose" />
 			</span>
 		</toolbar>
