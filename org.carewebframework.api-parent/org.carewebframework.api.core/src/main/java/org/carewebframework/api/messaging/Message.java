@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -40,7 +41,8 @@ public class Message implements Serializable {
      * @param type The type of the message.
      * @param payload The associated payload.
      */
-    public Message(String type, Object payload) {
+    @JsonCreator
+    public Message(@JsonProperty("type") String type, @JsonProperty("payload") Object payload) {
         this.type = type;
         this.payload = payload;
         this.id = UUID.randomUUID().toString();
