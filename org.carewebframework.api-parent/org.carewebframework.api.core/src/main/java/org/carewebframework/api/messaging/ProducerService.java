@@ -25,6 +25,15 @@ public class ProducerService implements DestructionAwareBeanPostProcessor {
     
     private final Set<IMessageProducer> producers = new LinkedHashSet<>();
     
+    private final String nodeId = UUID.randomUUID().toString();
+    
+    /**
+     * @return The unique node id for this service.
+     */
+    public String getNodeId() {
+        return nodeId;
+    }
+    
     /**
      * @return The list of registered producers.
      */
@@ -57,11 +66,12 @@ public class ProducerService implements DestructionAwareBeanPostProcessor {
      * 
      * @param channel The channel on which to publish the message.
      * @param message Message to publish.
+     * @param recipients Optional list of targeted recipients.
      * @return True if successfully published.
      */
-    public boolean publish(String channel, Message message) {
+    public boolean publish(String channel, Message message, Recipient... recipients) {
         boolean result = false;
-        prepare(channel, message);
+        prepare(channel, message, recipients);
         
         for (IMessageProducer producer : producers) {
             result |= producer.publish(channel, message);
@@ -76,11 +86,13 @@ public class ProducerService implements DestructionAwareBeanPostProcessor {
      * @param channel The channel on which to publish the message.
      * @param message Message to publish
      * @param clazz Class of the producer.
+     * @param recipients Optional list of targeted recipients.
      * @return True if successfully published.
      */
-    public boolean publish(String channel, Message message, Class<? extends IMessageProducer> clazz) {
+    public boolean publish(String channel, Message message, Class<? extends IMessageProducer> clazz,
+                           Recipient... recipients) {
         IMessageProducer producer = clazz == null ? null : findRegisteredProducer(clazz);
-        return publish(channel, message, producer);
+        return publish(channel, message, producer, recipients);
     }
     
     /**
@@ -89,12 +101,13 @@ public class ProducerService implements DestructionAwareBeanPostProcessor {
      * @param channel The channel on which to publish the message.
      * @param message Message to publish
      * @param className Fully specified name of the producer's class.
+     * @param recipients Optional list of targeted recipients.
      * @return True if successfully published.
      */
-    public boolean publish(String channel, Message message, String className) {
+    public boolean publish(String channel, Message message, String className, Recipient... recipients) {
         try {
             IMessageProducer producer = findRegisteredProducer(Class.forName(className, false, null));
-            return publish(channel, message, producer);
+            return publish(channel, message, producer, recipients);
         } catch (Exception e) {
             return false;
         }
@@ -107,11 +120,12 @@ public class ProducerService implements DestructionAwareBeanPostProcessor {
      * @param channel The channel on which to publish the message.
      * @param message Message to publish.
      * @param producer The message producer.
+     * @param recipients Optional list of targeted recipients.
      * @return True if successfully published.
      */
-    private boolean publish(String channel, Message message, IMessageProducer producer) {
+    private boolean publish(String channel, Message message, IMessageProducer producer, Recipient[] recipients) {
         if (producer != null) {
-            prepare(channel, message);
+            prepare(channel, message, recipients);
             return producer.publish(channel, message);
         }
         
@@ -140,10 +154,12 @@ public class ProducerService implements DestructionAwareBeanPostProcessor {
      * @param message The message.
      * @return The original message.
      */
-    private Message prepare(String channel, Message message) {
+    private Message prepare(String channel, Message message, Recipient[] recipients) {
+        message.setMetadata("cwf.pub.node", nodeId);
         message.setMetadata("cwf.pub.channel", channel);
-        message.setMetadata("cwf.pub.id", UUID.randomUUID().toString());
+        message.setMetadata("cwf.pub.event", UUID.randomUUID().toString());
         message.setMetadata("cwf.pub.when", System.currentTimeMillis());
+        message.setMetadata("cwf.pub.recipients", recipients);
         return message;
     }
     

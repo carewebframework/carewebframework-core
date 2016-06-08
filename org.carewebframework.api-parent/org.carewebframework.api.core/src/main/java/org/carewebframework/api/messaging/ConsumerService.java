@@ -17,8 +17,10 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.UUID;
 
 import org.carewebframework.api.messaging.IMessageConsumer.IMessageCallback;
+import org.carewebframework.api.messaging.Recipient.RecipientType;
 import org.carewebframework.common.DateUtil;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.DestructionAwareBeanPostProcessor;
@@ -34,6 +36,8 @@ public class ConsumerService implements IMessageCallback, DestructionAwareBeanPo
     
     private final Map<String, Long> delivered = new LinkedHashMap<>();
     
+    private final String nodeId = UUID.randomUUID().toString();
+    
     private final long maxLife;
     
     private long oldest;
@@ -43,6 +47,13 @@ public class ConsumerService implements IMessageCallback, DestructionAwareBeanPo
      */
     public ConsumerService(String maxLife) {
         this.maxLife = (long) DateUtil.parseElapsed(maxLife);
+    }
+    
+    /**
+     * @return The unique node id for this service.
+     */
+    public String getNodeId() {
+        return nodeId;
     }
     
     /**
@@ -117,6 +128,10 @@ public class ConsumerService implements IMessageCallback, DestructionAwareBeanPo
     
     @Override
     public void onMessage(String channel, Message message) {
+        if (MessageUtil.isMessageExcluded(message, RecipientType.CONSUMER, nodeId)) {
+            return;
+        }
+        
         if (updateDelivered(message)) {
             LinkedHashSet<IMessageCallback> callbacks = getCallbacks(channel, false, true);
             
@@ -158,7 +173,7 @@ public class ConsumerService implements IMessageCallback, DestructionAwareBeanPo
                 }
             }
             
-            String pubid = (String) message.getMetadata("cwf.pub.id");
+            String pubid = (String) message.getMetadata("cwf.pub.event");
             boolean result = !delivered.containsKey(pubid);
             
             if (result) {

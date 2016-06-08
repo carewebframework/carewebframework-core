@@ -9,6 +9,8 @@
  */
 package org.carewebframework.api.event;
 
+import org.carewebframework.api.messaging.Recipient;
+
 /**
  * Defines the interface for accessing event management services.
  */
@@ -44,20 +46,9 @@ public interface IEventManager {
      * 
      * @param eventName Name of the event to fire.
      * @param eventData Associated data object.
+     * @param recipients Optional list of event recipients.
      */
-    void fireRemoteEvent(String eventName, Object eventData);
-    
-    /**
-     * Fires the event remotely via the global event manager to a specified list of recipients.
-     * 
-     * @param eventName Name of the event to fire.
-     * @param eventData Associated data object.
-     * @param recipients Optional recipient list. This is a comma-delimited list of client
-     *            identifiers as assigned by the underlying JMS implementation. If null or empty,
-     *            the event is delivered to all subscribers. If a specified recipient is not a
-     *            subscriber, the event delivery request will be ignored.
-     */
-    void fireRemoteEvent(String eventName, Object eventData, String recipients);
+    void fireRemoteEvent(String eventName, Object eventData, Recipient... recipients);
     
     /**
      * Register an event subscription.

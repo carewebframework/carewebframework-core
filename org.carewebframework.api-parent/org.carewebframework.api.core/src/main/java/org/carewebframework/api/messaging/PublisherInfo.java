@@ -7,11 +7,13 @@
  * Disclaimer of Warranty and Limitation of Liability available at
  * http://www.carewebframework.org/licensing/disclaimer.
  */
-package org.carewebframework.api.event;
+package org.carewebframework.api.messaging;
 
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.carewebframework.api.messaging.Recipient.RecipientType;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -54,52 +56,57 @@ public class PublisherInfo implements IPublisherInfo, Serializable {
     
     @Override
     public String getUserId() {
-        return attributes.get("userId");
+        return get(RecipientType.USER);
     }
     
     @JsonIgnore
     public void setUserId(String userId) {
-        put("userId", "u-", userId);
+        put(RecipientType.USER, userId);
     }
     
     @Override
     public String getAppName() {
-        return attributes.get("appName");
+        return get(RecipientType.APPLICATION);
     }
     
     @JsonIgnore
     public void setAppName(String appName) {
-        put("appName", "a-", appName);
+        put(RecipientType.APPLICATION, appName);
     }
     
     @Override
-    public String getNodeId() {
-        return attributes.get("nodeId");
+    public String getProducerId() {
+        return attributes.get("cwf-PRODUCER");
     }
     
     @JsonIgnore
-    public void setNodeId(String nodeId) {
-        put("nodeId", "n-", nodeId);
+    public void setProducerId(String nodeId) {
+        attributes.put("cwf-PRODUCER", nodeId);
     }
     
     @Override
-    public String getEndpointId() {
-        return attributes.get("ep");
+    public String getConsumerId() {
+        return get(RecipientType.CONSUMER);
     }
     
     @JsonIgnore
-    public void setEndpointId(String endpointId) {
-        put("ep", "", endpointId);
+    public void setConsumerId(String nodeId) {
+        put(RecipientType.CONSUMER, nodeId);
     }
     
     @Override
-    public Map<String, String> getAttributes() {
-        return attributes;
+    public String getSessionId() {
+        return get(RecipientType.SESSION);
+    }
+    
+    @JsonIgnore
+    public void setSessionId(String nodeId) {
+        put(RecipientType.SESSION, nodeId);
     }
     
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof IPublisherInfo && attributes.equals(((IPublisherInfo) obj).getAttributes());
+        return obj == this || (obj instanceof IPublisherInfo && attributes.equals(((IPublisherInfo) obj).getAttributes()));
     }
     
     @Override
@@ -107,11 +114,16 @@ public class PublisherInfo implements IPublisherInfo, Serializable {
         return attributes.hashCode();
     }
     
-    public void put(String key, String prefix, String value) {
-        if (value == null) {
-            attributes.keySet().remove(key);
-        } else {
-            attributes.put(key, prefix + value.replace(",", "_"));
-        }
+    @Override
+    public Map<String, String> getAttributes() {
+        return attributes;
+    }
+    
+    public String get(RecipientType recipientType) {
+        return attributes.get("cwf-" + recipientType.name());
+    }
+    
+    public void put(RecipientType recipientType, String value) {
+        attributes.put("cwf-" + recipientType.name(), value);
     }
 }

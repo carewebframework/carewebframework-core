@@ -13,7 +13,7 @@ import java.io.Serializable;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
+import org.carewebframework.api.messaging.Recipient;
 import org.carewebframework.api.spring.SpringUtil;
 
 /**
@@ -73,19 +73,10 @@ public class EventManager implements ILocalEventDispatcher, IEventManager {
     
     /**
      * @see org.carewebframework.api.event.IEventManager#fireRemoteEvent(java.lang.String,
-     *      java.lang.Object)
-     */
-    @Override
-    public void fireRemoteEvent(String eventName, Object eventData) {
-        fireRemoteEvent(eventName, eventData, null);
-    }
-    
-    /**
-     * @see org.carewebframework.api.event.IEventManager#fireRemoteEvent(java.lang.String,
      *      java.lang.Object, java.lang.String)
      */
     @Override
-    public void fireRemoteEvent(String eventName, Object eventData, String recipients) {
+    public void fireRemoteEvent(String eventName, Object eventData, Recipient... recipients) {
         if (globalEventDispatcher != null) {
             try {
                 globalEventDispatcher.fireRemoteEvent(eventName, (Serializable) eventData, recipients);
@@ -139,8 +130,9 @@ public class EventManager implements ILocalEventDispatcher, IEventManager {
             try {
                 globalEventDispatcher.subscribeRemoteEvent(eventName, subscribe);
             } catch (Throwable e) {
-                log.error("Error " + (subscribe ? "subscribing to" : "unsubscribing from") + " remote event '" + eventName
-                        + "'", e);
+                log.error(
+                    "Error " + (subscribe ? "subscribing to" : "unsubscribing from") + " remote event '" + eventName + "'",
+                    e);
             }
         }
     }

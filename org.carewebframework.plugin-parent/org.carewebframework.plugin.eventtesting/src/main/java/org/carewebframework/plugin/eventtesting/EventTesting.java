@@ -9,13 +9,16 @@
  */
 package org.carewebframework.plugin.eventtesting;
 
-import org.apache.commons.lang.StringUtils;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.carewebframework.api.event.EventManager;
 import org.carewebframework.api.event.IEventManager;
 import org.carewebframework.api.event.IGenericEvent;
+import org.carewebframework.api.messaging.Recipient;
+import org.carewebframework.api.messaging.Recipient.RecipientType;
 import org.carewebframework.ui.zk.ZKUtil;
-
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.SelectEvent;
 import org.zkoss.zul.Checkbox;
@@ -63,7 +66,7 @@ public class EventTesting extends Window implements IGenericEvent<String> {
             eventData.setText("Sending test event #" + messageCount);
         }
         
-        eventManager.fireRemoteEvent(eventName.getText(), eventData.getText(), eventRecipients.getText());
+        eventManager.fireRemoteEvent(eventName.getText(), eventData.getText(), parseRecipients(eventRecipients.getText()));
         info("Fired", eventName.getText());
     }
     
@@ -86,6 +89,25 @@ public class EventTesting extends Window implements IGenericEvent<String> {
         }
         
         newEvent.setText("");
+    }
+    
+    private Recipient[] parseRecipients(String text) {
+        if (text == null || text.isEmpty()) {
+            return null;
+        }
+        
+        List<Recipient> recipients = new ArrayList<>();
+        
+        for (String recip : text.split("\\,")) {
+            String[] pcs = recip.split("\\:", 2);
+            
+            if (pcs.length == 2) {
+                RecipientType type = RecipientType.valueOf(pcs[0].trim());
+                recipients.add(new Recipient(type, pcs[1]));
+            }
+        }
+        
+        return recipients.isEmpty() ? null : (Recipient[]) recipients.toArray();
     }
     
     private boolean containsEvent(String eventName) {

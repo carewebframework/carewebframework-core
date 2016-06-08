@@ -21,7 +21,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.carewebframework.api.event.EventUtil;
 import org.carewebframework.api.event.IGenericEvent;
-import org.carewebframework.api.event.IPublisherInfo;
+import org.carewebframework.api.messaging.IPublisherInfo;
+import org.carewebframework.api.messaging.Recipient;
+import org.carewebframework.api.messaging.Recipient.RecipientType;
 import org.junit.Test;
 
 public class GenericEventTest extends CommonTest {
@@ -40,15 +42,17 @@ public class GenericEventTest extends CommonTest {
     
     private boolean pingResponded;
     
-    protected boolean remote;
+    private final boolean remote;
     
-    protected String recipients;
+    private final Recipient validRecipient;
+    
+    private final Recipient invalidRecipient = new Recipient(RecipientType.USER, "invalid");
     
     private final List<TestPacket> tests = Collections.synchronizedList(new ArrayList<>());
     
-    protected String recipientId;
-    
     private AssertionError assertionError;
+    
+    private Recipient currentRecipient;
     
     private final IGenericEvent<TestPacket> subscriber = new IGenericEvent<TestPacket>() {
         
@@ -94,15 +98,19 @@ public class GenericEventTest extends CommonTest {
         log.info("Sending: " + testPacket);
         
         if (remote) {
-            eventManager.fireRemoteEvent(eventName, testPacket, recipients);
+            if (currentRecipient == null) {
+                eventManager.fireRemoteEvent(eventName, testPacket);
+            } else {
+                eventManager.fireRemoteEvent(eventName, testPacket, currentRecipient);
+            }
         } else {
             eventManager.fireLocalEvent(eventName, testPacket);
         }
     }
     
-    public GenericEventTest() {
-        remote = false;
-        recipients = null;
+    public GenericEventTest(boolean testRemote, Recipient testRecipient) {
+        remote = testRemote;
+        validRecipient = testRecipient;
     }
     
     @Test
@@ -117,7 +125,7 @@ public class GenericEventTest extends CommonTest {
     
     public void pingTest() {
         eventManager.subscribe("PING.TEST", pingSubscriber);
-        EventUtil.ping("PING.TEST", null, recipients);
+        EventUtil.ping("PING.TEST", null, validRecipient);
     }
     
     private void fireTestEvents() {
@@ -129,14 +137,14 @@ public class GenericEventTest extends CommonTest {
         fireEvent(EVENT_NAME2, true); // Subevent should also be received
         if (remote) {
             //Additional routing options / recipient filtering
-            recipients = recipientId;
+            currentRecipient = validRecipient;
             fireEvent(EVENT_NAME1, true); // Subscriber registered, should receive due to defined/intended recipients
             fireEvent(EVENT_NAME2, true); // Subevent w/ defined/intended recipients should also be received
             //not null bogus recipients
-            recipients = "alternateClient";
+            currentRecipient = invalidRecipient;
             fireEvent(EVENT_NAME1, false); // Subscriber registered, but should not receive due to defined unintended recipients
             fireEvent(EVENT_NAME2, false); // Subevent should not also be received
-            recipients = null;
+            currentRecipient = null;
         }
         subscribe(EVENT_NAME1, false);
         fireEvent(EVENT_NAME1, false); // Subscriber not registered, should not receive
@@ -146,14 +154,14 @@ public class GenericEventTest extends CommonTest {
         fireEvent(EVENT_NAME2, true); // Subevent should be received
         if (remote) {
             //Additional routing options / recipient filtering
-            recipients = recipientId;
-            fireEvent(EVENT_NAME1, false); // Subscriber registered, should receive due to defined/intended recipients
+            currentRecipient = validRecipient;
+            fireEvent(EVENT_NAME1, false); // Subscriber not registered, should not receive
             fireEvent(EVENT_NAME2, true); // Subevent w/ defined/intended recipients should also be received
             //not null bogus recipients
-            recipients = "alternateClient";
+            currentRecipient = invalidRecipient;
             fireEvent(EVENT_NAME1, false); // Subscriber registered, but should not receive due to defined unintended recipients
             fireEvent(EVENT_NAME2, false); // Subevent should not also be received
-            recipients = null;
+            currentRecipient = null;
         }
         subscribe(EVENT_NAME1, true);
         subscribe(EVENT_NAME2, false);
@@ -161,14 +169,14 @@ public class GenericEventTest extends CommonTest {
         fireEvent(EVENT_NAME2, true); // Subevent should also be received
         if (remote) {
             //Additional routing options / recipient filtering
-            recipients = recipientId;
+            currentRecipient = invalidRecipient;
             fireEvent(EVENT_NAME1, true); // Subscriber registered, should receive due to defined/intended recipients
             fireEvent(EVENT_NAME2, true); // Subevent w/ defined/intended recipients should also be received
             //not null bogus recipients
-            recipients = "alternateClient";
+            currentRecipient = invalidRecipient;
             fireEvent(EVENT_NAME1, false); // Subscriber registered, but should not receive due to defined unintended recipients
             fireEvent(EVENT_NAME2, false); // Subevent should not also be received
-            recipients = null;
+            currentRecipient = null;
         }
         subscribe(EVENT_NAME1, false);
         fireEvent(EVENT_NAME1, false); // Subscriber not registered, should not receive

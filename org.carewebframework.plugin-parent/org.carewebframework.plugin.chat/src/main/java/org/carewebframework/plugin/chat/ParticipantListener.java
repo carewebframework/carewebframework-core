@@ -16,9 +16,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.carewebframework.api.event.EventUtil;
 import org.carewebframework.api.event.IEventManager;
 import org.carewebframework.api.event.IGenericEvent;
-import org.carewebframework.api.event.IPublisherInfo;
 import org.carewebframework.api.event.PingFilter;
 import org.carewebframework.api.event.PingFilter.PingFilterType;
+import org.carewebframework.api.messaging.IPublisherInfo;
 
 /**
  * Class for listening to participant changes.
@@ -158,7 +158,7 @@ public class ParticipantListener {
      * Sends a ping request to all candidate participants.
      */
     public void refresh() {
-        EventUtil.ping(pingEvent, pingFilter, null);
+        EventUtil.ping(pingEvent, pingFilter);
     }
     
 }

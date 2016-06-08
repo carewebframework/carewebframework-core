@@ -11,7 +11,7 @@ package org.carewebframework.plugin.chat;
 
 import java.util.Collection;
 
-import org.carewebframework.api.event.IPublisherInfo;
+import org.carewebframework.api.messaging.IPublisherInfo;
 import org.carewebframework.ui.zk.AbstractListitemRenderer;
 
 import org.zkoss.zul.Listitem;

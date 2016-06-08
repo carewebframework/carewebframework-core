@@ -10,7 +10,7 @@
 package org.carewebframework.plugin.chat;
 
 import org.carewebframework.api.event.IEventManager;
-import org.carewebframework.api.event.IPublisherInfo;
+import org.carewebframework.api.messaging.IPublisherInfo;
 import org.carewebframework.common.StrUtil;
 
 /**

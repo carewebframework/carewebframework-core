@@ -11,6 +11,9 @@ package org.carewebframework.api.event;
 
 import java.util.List;
 
+import org.carewebframework.api.messaging.IPublisherInfo;
+import org.carewebframework.api.messaging.PublisherInfo;
+
 /**
  * Handles ping requests.
  */

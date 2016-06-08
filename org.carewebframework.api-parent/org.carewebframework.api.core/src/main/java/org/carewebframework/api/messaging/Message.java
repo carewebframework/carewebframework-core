@@ -15,6 +15,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * Message wrapper.
  */
@@ -97,6 +99,7 @@ public class Message implements Serializable {
      * 
      * @return The metadata map.
      */
+    @JsonProperty
     private Map<String, Object> getMetadata() {
         if (metadata == null) {
             metadata = new HashMap<>();
@@ -122,7 +125,9 @@ public class Message implements Serializable {
      * @param value The value.
      */
     public void setMetadata(String key, Object value) {
-        getMetadata().put(key, value);
+        if (value != null) {
+            getMetadata().put(key, value);
+        }
     }
     
     @Override

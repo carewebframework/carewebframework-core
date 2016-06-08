@@ -13,18 +13,21 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.carewebframework.api.event.IEventManager;
 import org.carewebframework.api.event.ILocalEventDispatcher;
-import org.carewebframework.api.event.IPublisherInfo;
+import org.carewebframework.api.messaging.IPublisherInfo;
+import org.carewebframework.api.messaging.Recipient;
+import org.carewebframework.api.messaging.Recipient.RecipientType;
 import org.carewebframework.api.spring.SpringUtil;
 import org.carewebframework.common.StrUtil;
-import org.carewebframework.ui.action.ActionRegistry;
 import org.carewebframework.plugin.chat.ParticipantListener.IParticipantUpdate;
 import org.carewebframework.plugin.chat.SessionService.ISessionUpdate;
+import org.carewebframework.ui.action.ActionRegistry;
 import org.carewebframework.ui.zk.MessageWindow;
 import org.carewebframework.ui.zk.MessageWindow.MessageInfo;
 
@@ -89,8 +92,7 @@ public class ChatService implements IParticipantUpdate {
      */
     public void init() {
         participantListener = new ParticipantListener(self, EVENT_INVITE, EVENT_ACTIVE, EVENT_INACTIVE, eventManager, this);
-        inviteListener = new ServiceListener<String>(
-                                                     EVENT_INVITE, eventManager) {
+        inviteListener = new ServiceListener<String>(EVENT_INVITE, eventManager) {
             
             /**
              * If event data is of the format [session id]^[requester], this is an invitation
@@ -113,8 +115,7 @@ public class ChatService implements IParticipantUpdate {
                 }
             }
         };
-        acceptListener = new ServiceListener<String>(
-                                                     EVENT_ACCEPT, eventManager) {
+        acceptListener = new ServiceListener<String>(EVENT_ACCEPT, eventManager) {
             
             @Override
             public void eventCallback(String eventName, String eventData) {
@@ -154,7 +155,7 @@ public class ChatService implements IParticipantUpdate {
      * @return Session root.
      */
     public String getSessionRoot() {
-        String id = self.getNodeId();
+        String id = self.getSessionId();
         return id == null ? "" : id + "-";
     }
     
@@ -267,18 +268,14 @@ public class ChatService implements IParticipantUpdate {
             return;
         }
         
-        StringBuilder sb = new StringBuilder();
+        List<Recipient> recipients = new ArrayList<>();
         
         for (IPublisherInfo invitee : invitees) {
-            if (sb.length() > 0) {
-                sb.append(",");
-            }
-            
-            sb.append(invitee.getEndpointId());
+            recipients.add(new Recipient(RecipientType.SESSION, invitee.getSessionId()));
         }
         
         String eventData = sessionId + (cancel ? "" : StrUtil.U + self.getUserName());
-        eventManager.fireRemoteEvent(EVENT_INVITE, eventData, sb.toString());
+        eventManager.fireRemoteEvent(EVENT_INVITE, eventData, (Recipient[]) recipients.toArray());
     }
     
     /**

@@ -13,7 +13,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.carewebframework.api.event.IPublisherInfo;
+import org.carewebframework.api.messaging.IPublisherInfo;
 import org.carewebframework.ui.FrameworkController;
 import org.carewebframework.ui.zk.PopupDialog;
 import org.carewebframework.ui.zk.RowComparator;

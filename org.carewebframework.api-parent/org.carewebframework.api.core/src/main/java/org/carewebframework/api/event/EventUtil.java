@@ -13,6 +13,7 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.carewebframework.api.messaging.Recipient;
 
 /**
  * Static utility class for the event operations.
@@ -58,15 +59,14 @@ public class EventUtil {
      * 
      * @param responseEvent Event to use for response.
      * @param filters Response filters (null for none).
-     * @param recipients The recipient ids of the ping targets (or null for all recipients).
+     * @param recipients The list of ping recipients (or none for all recipients).
      */
-    public static void ping(String responseEvent, List<PingFilter> filters, String recipients) {
+    public static void ping(String responseEvent, List<PingFilter> filters, Recipient... recipients) {
         IEventManager eventManager = getEventManager();
         IGlobalEventDispatcher ged = ((ILocalEventDispatcher) eventManager).getGlobalEventDispatcher();
         
         if (ged != null) {
-            PingRequest pingRequest = new PingRequest(responseEvent, filters, ged.getPublisherInfo().getEndpointId());
-            eventManager.fireRemoteEvent(PingEventHandler.EVENT_PING_REQUEST, pingRequest, recipients);
+            ged.Ping(responseEvent, filters, recipients);
         }
     }
     

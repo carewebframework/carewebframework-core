@@ -12,7 +12,7 @@ package org.carewebframework.messaging.jms;
 import javax.jms.Connection;
 import javax.jms.JMSException;
 
-import org.carewebframework.api.event.IPublisherInfo;
+import org.carewebframework.api.messaging.IPublisherInfo;
 import org.carewebframework.api.spring.SpringUtil;
 import org.springframework.jms.core.JmsTemplate;
 

@@ -10,6 +10,10 @@
 package org.carewebframework.api.event;
 
 import java.io.Serializable;
+import java.util.List;
+
+import org.carewebframework.api.messaging.IPublisherInfo;
+import org.carewebframework.api.messaging.Recipient;
 
 /**
  * Interface implemented by the global event dispatcher.
@@ -28,18 +32,22 @@ public interface IGlobalEventDispatcher {
      * 
      * @param eventName The name of the event of interest.
      * @param subscribe If true, a subscription is requested. If false, it is revoked.
-     * @throws Exception Unspecified exception.
      */
-    void subscribeRemoteEvent(String eventName, boolean subscribe) throws Exception;
+    void subscribeRemoteEvent(String eventName, boolean subscribe);
     
     /**
-     * Queues the specified event for delivery via the message server.
+     * Queues the specified event for delivery via the messaging service.
      * 
      * @param eventName Name of the event.
      * @param eventData Data object associated with the event.
-     * @param recipients List of recipients for the event (null or empty string means all
-     *            subscribers).
-     * @throws Exception Unspecified exception.
+     * @param recipients Optional list of recipients for the event.
      */
-    void fireRemoteEvent(String eventName, Serializable eventData, String recipients) throws Exception;
+    void fireRemoteEvent(String eventName, Serializable eventData, Recipient... recipients);
+    
+    /**
+     * @param responseEvent
+     * @param filters
+     * @param recipients
+     */
+    void Ping(String responseEvent, List<PingFilter> filters, Recipient... recipients);
 }

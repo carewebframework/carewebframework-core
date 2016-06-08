@@ -12,10 +12,10 @@ package org.carewebframework.plugin.chat;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.carewebframework.api.messaging.IPublisherInfo;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-import org.carewebframework.api.event.IPublisherInfo;
 
 /**
  * A single chat message.

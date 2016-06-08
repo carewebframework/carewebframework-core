@@ -10,6 +10,7 @@
 package org.carewebframework.api.event;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.UUID;
 
 import org.apache.commons.lang.StringUtils;
@@ -17,8 +18,13 @@ import org.carewebframework.api.FrameworkUtil;
 import org.carewebframework.api.domain.IUser;
 import org.carewebframework.api.messaging.ConsumerService;
 import org.carewebframework.api.messaging.IMessageConsumer;
+import org.carewebframework.api.messaging.IPublisherInfo;
 import org.carewebframework.api.messaging.Message;
+import org.carewebframework.api.messaging.MessageUtil;
 import org.carewebframework.api.messaging.ProducerService;
+import org.carewebframework.api.messaging.PublisherInfo;
+import org.carewebframework.api.messaging.Recipient;
+import org.carewebframework.api.messaging.Recipient.RecipientType;
 import org.carewebframework.api.security.SecurityUtil;
 
 /**
@@ -28,11 +34,11 @@ public class GlobalEventDispatcher implements IGlobalEventDispatcher, IMessageCo
     
     private PingEventHandler pingEventHandler;
     
-    protected final IUser user;
-    
     private final ILocalEventDispatcher localEventDispatcher;
     
-    protected final PublisherInfo publisherInfo = new PublisherInfo();
+    private final PublisherInfo publisherInfo = new PublisherInfo();
+    
+    private final String sessionId = UUID.randomUUID().toString();
     
     private final ProducerService producer;
     
@@ -49,18 +55,19 @@ public class GlobalEventDispatcher implements IGlobalEventDispatcher, IMessageCo
         this.localEventDispatcher = localEventDispatcher;
         this.producer = producer;
         this.consumer = consumer;
-        user = SecurityUtil.getAuthenticatedUser();
     }
     
     /**
      * Initialize after setting all requisite properties.
      */
     public void init() {
-        publisherInfo.setEndpointId(getEndpointId());
+        IUser user = SecurityUtil.getAuthenticatedUser();
         publisherInfo.setUserId(user == null ? null : user.getLogicalId());
         publisherInfo.setUserName(user == null ? "" : user.getFullName());
-        publisherInfo.setNodeId(getNodeId());
         publisherInfo.setAppName(getAppName());
+        publisherInfo.setConsumerId(consumer.getNodeId());
+        publisherInfo.setProducerId(producer.getNodeId());
+        publisherInfo.setSessionId(sessionId);
         localEventDispatcher.setGlobalEventDispatcher(this);
         pingEventHandler = new PingEventHandler((IEventManager) localEventDispatcher, publisherInfo);
         pingEventHandler.init();
@@ -90,18 +97,16 @@ public class GlobalEventDispatcher implements IGlobalEventDispatcher, IMessageCo
     }
     
     /**
-     * Fires a remote event.
-     *
+     * Queues the specified event for delivery via the messaging service.
+     * 
      * @param eventName Name of the event.
      * @param eventData Data object associated with the event.
-     * @param recipients List of recipients for the event (null or empty string means all
-     *            subscribers). A recipient may be an endpoint, a user, an application, a node, or a
-     *            custom selector.
+     * @param recipients Optional list of recipients for the event.
      */
     @Override
-    public void fireRemoteEvent(String eventName, Serializable eventData, String recipients) {
+    public void fireRemoteEvent(String eventName, Serializable eventData, Recipient... recipients) {
         Message message = new EventMessage(eventName, eventData);
-        producer.publish(EventUtil.getChannelName(eventName), message);
+        producer.publish(EventUtil.getChannelName(eventName), message, recipients);
     }
     
     /**
@@ -110,24 +115,6 @@ public class GlobalEventDispatcher implements IGlobalEventDispatcher, IMessageCo
     @Override
     public IPublisherInfo getPublisherInfo() {
         return publisherInfo;
-    }
-    
-    /**
-     * Gets the unique id for this end point.
-     *
-     * @return The end point's unique id.
-     */
-    protected String getEndpointId() {
-        return UUID.randomUUID().toString();
-    }
-    
-    /**
-     * Returns the node id. The default implementation will return null.
-     *
-     * @return The node id.
-     */
-    protected String getNodeId() {
-        return null;
     }
     
     /**
@@ -169,7 +156,7 @@ public class GlobalEventDispatcher implements IGlobalEventDispatcher, IMessageCo
      * @param connected If true, send a CONNECT event. If false, send a DISCONNECT event.
      */
     protected void updateConnectionStatus(boolean connected) {
-        fireRemoteEvent(connected ? "CONNECT" : "DISCONNECT", publisherInfo, null);
+        fireRemoteEvent(connected ? "CONNECT" : "DISCONNECT", publisherInfo);
     }
     
     /**
@@ -190,7 +177,22 @@ public class GlobalEventDispatcher implements IGlobalEventDispatcher, IMessageCo
     
     @Override
     public void onMessage(String channel, Message message) {
-        localEventDelivery(message.getType(), message.getPayload());
+        if (!isMessageExcluded(message)) {
+            localEventDelivery(message.getType(), message.getPayload());
+        }
+    }
+    
+    private boolean isMessageExcluded(Message message) {
+        return MessageUtil.isMessageExcluded(message, RecipientType.USER, publisherInfo.getUserId())
+                || MessageUtil.isMessageExcluded(message, RecipientType.APPLICATION, publisherInfo.getAppName())
+                || MessageUtil.isMessageExcluded(message, RecipientType.SESSION, publisherInfo.getSessionId());
+    }
+    
+    @Override
+    public void Ping(String responseEvent, List<PingFilter> filters, Recipient... recipients) {
+        Recipient requestor = new Recipient(RecipientType.CONSUMER, getPublisherInfo().getConsumerId());
+        PingRequest pingRequest = new PingRequest(responseEvent, filters, requestor);
+        fireRemoteEvent(PingEventHandler.EVENT_PING_REQUEST, pingRequest, recipients);
     }
     
 }

@@ -7,7 +7,7 @@
  * Disclaimer of Warranty and Limitation of Liability available at
  * http://www.carewebframework.org/licensing/disclaimer.
  */
-package org.carewebframework.api.event;
+package org.carewebframework.api.messaging;
 
 import java.util.Map;
 
@@ -20,44 +20,37 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 public interface IPublisherInfo {
     
     /**
-     * Domain id of the user.
-     * 
-     * @return User's domain id.
+     * Returns the user's domain id.
      */
     String getUserId();
     
     /**
-     * Full name of the user.
-     * 
-     * @return User's full name.
+     * Returns the full name of the user.
      */
     String getUserName();
     
     /**
-     * Application name.
-     * 
-     * @return Application name.
+     * Returns the application name.
      */
     String getAppName();
     
     /**
-     * Unique id of the publisher's endpoint.
-     * 
-     * @return Endpoint id.
+     * Returns the unique id of the message producer's node.
      */
-    String getEndpointId();
+    String getProducerId();
     
     /**
-     * Unique id of the node in a multi-node messaging implementation.
-     * 
-     * @return The node id.
+     * Returns the unique id of the message consumer's node.
      */
-    String getNodeId();
+    String getConsumerId();
     
     /**
-     * Map of additional message routing attributes.
-     * 
-     * @return Attribute map.
+     * Returns the unique id of an application instance.
+     */
+    String getSessionId();
+    
+    /**
+     * Returns a map of message routing attributes.
      */
     Map<String, String> getAttributes();
     
