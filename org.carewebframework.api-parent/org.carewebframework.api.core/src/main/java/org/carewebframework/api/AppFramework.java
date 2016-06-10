@@ -15,7 +15,6 @@ import java.util.Map;
 
 import org.carewebframework.common.MiscUtil;
 import org.carewebframework.common.WeakList;
-
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.DestructionAwareBeanPostProcessor;
 import org.springframework.context.ApplicationContext;
@@ -205,6 +204,11 @@ public class AppFramework implements ApplicationContextAware, DestructionAwareBe
     @Override
     public void postProcessBeforeDestruction(Object bean, String beanName) throws BeansException {
         unregisterObject(bean);
+    }
+    
+    @Override
+    public boolean requiresDestruction(Object bean) {
+        return true;
     }
     
 }

@@ -63,4 +63,12 @@ public abstract class BeanRegistry<K, V> extends AbstractRegistry<K, V> implemen
         }
     }
     
+    /**
+     * Flag to unregister if the managed bean is of the desired type.
+     */
+    @Override
+    public boolean requiresDestruction(Object bean) {
+        return clazz.isInstance(bean);
+    }
+    
 }

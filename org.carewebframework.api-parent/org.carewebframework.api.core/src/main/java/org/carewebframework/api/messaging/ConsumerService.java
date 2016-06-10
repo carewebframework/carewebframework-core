@@ -11,17 +11,23 @@ package org.carewebframework.api.messaging;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import org.carewebframework.api.messaging.IMessageConsumer.IMessageCallback;
 import org.carewebframework.api.messaging.Recipient.RecipientType;
 import org.carewebframework.common.DateUtil;
+import org.ehcache.Cache;
+import org.ehcache.CacheManager;
+import org.ehcache.config.CacheConfiguration;
+import org.ehcache.config.builders.CacheConfigurationBuilder;
+import org.ehcache.config.builders.ResourcePoolsBuilder;
+import org.ehcache.expiry.Duration;
+import org.ehcache.expiry.Expirations;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.DestructionAwareBeanPostProcessor;
 
@@ -30,23 +36,28 @@ import org.springframework.beans.factory.config.DestructionAwareBeanPostProcesso
  */
 public class ConsumerService implements IMessageCallback, DestructionAwareBeanPostProcessor {
     
+    private static final String CACHE_NAME = ConsumerService.class.getName();
+    
     private final Set<IMessageConsumer> consumers = new LinkedHashSet<>();
     
     private final Map<String, LinkedHashSet<IMessageCallback>> callbacks = new LinkedHashMap<>();
     
-    private final Map<String, Long> delivered = new LinkedHashMap<>();
-    
     private final String nodeId = UUID.randomUUID().toString();
     
-    private final long maxLife;
+    private final Cache<String, String> cache;
     
-    private long oldest;
+    private static Cache<String, String> createCache(CacheManager cacheManager, long maxLife) {
+        CacheConfiguration<String, String> cacheConfiguration = CacheConfigurationBuilder
+                .newCacheConfigurationBuilder(String.class, String.class, ResourcePoolsBuilder.heap(10))
+                .withExpiry(Expirations.timeToIdleExpiration(Duration.of(maxLife, TimeUnit.MILLISECONDS))).build();
+        return cacheManager.createCache(CACHE_NAME, cacheConfiguration);
+    }
     
     /**
      * @param maxLife Maximum life (in milliseconds) of an entry in the message delivery cache.
      */
-    public ConsumerService(String maxLife) {
-        this.maxLife = (long) DateUtil.parseElapsed(maxLife);
+    public ConsumerService(CacheManager cacheManager, String maxLife) {
+        cache = createCache(cacheManager, (long) DateUtil.parseElapsed(maxLife));
     }
     
     /**
@@ -154,37 +165,8 @@ public class ConsumerService implements IMessageCallback, DestructionAwareBeanPo
             return true;
         }
         
-        synchronized (delivered) {
-            long now = System.currentTimeMillis();
-            long expiry = now - maxLife;
-            
-            if (oldest <= expiry) {
-                Iterator<Entry<String, Long>> iter = delivered.entrySet().iterator();
-                
-                while (iter.hasNext()) {
-                    Entry<String, Long> entry = iter.next();
-                    
-                    if (entry.getValue() > expiry) {
-                        oldest = expiry;
-                        break;
-                    }
-                    
-                    iter.remove();
-                }
-            }
-            
-            String pubid = (String) message.getMetadata("cwf.pub.event");
-            boolean result = !delivered.containsKey(pubid);
-            
-            if (result) {
-                if (pubid != null && !pubid.isEmpty()) {
-                    delivered.put(pubid, now);
-                }
-                oldest = delivered.size() == 1 ? now : oldest;
-            }
-            
-            return result;
-        }
+        String pubid = (String) message.getMetadata("cwf.pub.event");
+        return cache.putIfAbsent(pubid, pubid) == null;
     }
     
     /**
@@ -223,6 +205,11 @@ public class ConsumerService implements IMessageCallback, DestructionAwareBeanPo
         if (bean instanceof IMessageConsumer) {
             unregisterConsumer((IMessageConsumer) bean);
         }
+    }
+    
+    @Override
+    public boolean requiresDestruction(Object bean) {
+        return bean instanceof IMessageConsumer;
     }
     
 }

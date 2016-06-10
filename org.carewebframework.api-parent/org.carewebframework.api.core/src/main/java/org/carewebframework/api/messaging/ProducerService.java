@@ -184,4 +184,9 @@ public class ProducerService implements DestructionAwareBeanPostProcessor {
         }
     }
     
+    @Override
+    public boolean requiresDestruction(Object bean) {
+        return bean instanceof IMessageProducer;
+    }
+    
 }

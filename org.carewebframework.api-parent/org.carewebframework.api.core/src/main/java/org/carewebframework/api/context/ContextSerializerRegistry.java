@@ -12,7 +12,6 @@ package org.carewebframework.api.context;
 import org.carewebframework.common.AbstractRegistry;
 import org.carewebframework.common.ISerializer;
 import org.carewebframework.common.RegistryMap.DuplicateAction;
-
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.DestructionAwareBeanPostProcessor;
 
@@ -81,6 +80,11 @@ public class ContextSerializerRegistry extends AbstractRegistry<Class<?>, ISeria
         if (bean instanceof ISerializer) {
             unregister((ISerializer<?>) bean);
         }
+    }
+    
+    @Override
+    public boolean requiresDestruction(Object bean) {
+        return bean instanceof ISerializer;
     }
     
 }

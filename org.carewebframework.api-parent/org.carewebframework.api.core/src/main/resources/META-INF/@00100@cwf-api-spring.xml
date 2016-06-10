@@ -108,10 +108,16 @@
 		<!-- Default NamingStrategy -->
 		<bean id="mbeanNamingStrategy" class="org.springframework.jmx.export.naming.IdentityNamingStrategy" />
 
+		<!-- Caching Support -->
+		<bean id="ehcacheManagerBuilder" class="org.ehcache.config.builders.CacheManagerBuilder" factory-method="newCacheManagerBuilder" />
+	
+		<bean id="ehcache" factory-bean="ehcacheManagerBuilder" factory-method="build" init-method="init" />
+		
 		<!-- Messaging Support -->
 		<bean id="messageProducerService" class="org.carewebframework.api.messaging.ProducerService" />
 
 		<bean id="messageConsumerService" class="org.carewebframework.api.messaging.ConsumerService">
+			<constructor-arg ref="ehcache" />
 			<constructor-arg value="${org.carewebframework.messaging.cache_life}" />
 		</bean>
 		
