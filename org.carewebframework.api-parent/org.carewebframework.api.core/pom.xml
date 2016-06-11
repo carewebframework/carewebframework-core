@@ -16,7 +16,7 @@
 			<artifactId>org.carewebframework.common</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.ehcache</groupId>
+			<groupId>net.sf.ehcache</groupId>
 			<artifactId>ehcache</artifactId>
 		</dependency>
 		<dependency>
@@ -53,7 +53,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
-			<artifactId>spring-context</artifactId>
+			<artifactId>spring-context-support</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>

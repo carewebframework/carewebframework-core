@@ -48,6 +48,7 @@
 		<org.springframework.version>4.3.0.RELEASE</org.springframework.version>
 		<org.springframework.security.version>4.0.4.RELEASE</org.springframework.security.version>
 		<org.zkoss.zk.version>8.0.1.1</org.zkoss.zk.version>
+		<ehcache.version>2.10.2.2.21</ehcache.version>
 		<jackson.version>2.6.2</jackson.version>
 		<servlet.api.version>3.1.0</servlet.api.version>
 		<java.version>1.8</java.version>
@@ -679,9 +680,9 @@
 			</dependency>
 			<!-- Caching Support -->
 			<dependency>
-				<groupId>org.ehcache</groupId>
+				<groupId>net.sf.ehcache</groupId>
 				<artifactId>ehcache</artifactId>
-				<version>3.0.2</version>
+				<version>${ehcache.version}</version>
 			</dependency>
 			<!-- Apache Libraries -->
 			<dependency>

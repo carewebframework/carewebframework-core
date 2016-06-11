@@ -16,27 +16,20 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 import org.carewebframework.api.messaging.IMessageConsumer.IMessageCallback;
 import org.carewebframework.api.messaging.Recipient.RecipientType;
-import org.carewebframework.common.DateUtil;
-import org.ehcache.Cache;
-import org.ehcache.CacheManager;
-import org.ehcache.config.CacheConfiguration;
-import org.ehcache.config.builders.CacheConfigurationBuilder;
-import org.ehcache.config.builders.ResourcePoolsBuilder;
-import org.ehcache.expiry.Duration;
-import org.ehcache.expiry.Expirations;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.DestructionAwareBeanPostProcessor;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
 
 /**
  * Aggregator for multiple consumers.
  */
 public class ConsumerService implements IMessageCallback, DestructionAwareBeanPostProcessor {
     
-    private static final String CACHE_NAME = ConsumerService.class.getName();
+    private static final String CACHE_NAME = ConsumerService.class.getPackage().getName();
     
     private final Set<IMessageConsumer> consumers = new LinkedHashSet<>();
     
@@ -44,20 +37,13 @@ public class ConsumerService implements IMessageCallback, DestructionAwareBeanPo
     
     private final String nodeId = UUID.randomUUID().toString();
     
-    private final Cache<String, String> cache;
-    
-    private static Cache<String, String> createCache(CacheManager cacheManager, long maxLife) {
-        CacheConfiguration<String, String> cacheConfiguration = CacheConfigurationBuilder
-                .newCacheConfigurationBuilder(String.class, String.class, ResourcePoolsBuilder.heap(10))
-                .withExpiry(Expirations.timeToIdleExpiration(Duration.of(maxLife, TimeUnit.MILLISECONDS))).build();
-        return cacheManager.createCache(CACHE_NAME, cacheConfiguration);
-    }
+    private final Cache deliveredMessageCache;
     
     /**
-     * @param maxLife Maximum life (in milliseconds) of an entry in the message delivery cache.
+     * Access the cache for tracking delivered messages.
      */
-    public ConsumerService(CacheManager cacheManager, String maxLife) {
-        cache = createCache(cacheManager, (long) DateUtil.parseElapsed(maxLife));
+    public ConsumerService(CacheManager cacheManager) {
+        deliveredMessageCache = cacheManager.getCache(CACHE_NAME);
     }
     
     /**
@@ -166,7 +152,7 @@ public class ConsumerService implements IMessageCallback, DestructionAwareBeanPo
         }
         
         String pubid = (String) message.getMetadata("cwf.pub.event");
-        return cache.putIfAbsent(pubid, pubid) == null;
+        return deliveredMessageCache.putIfAbsent(pubid, pubid) == null;
     }
     
     /**

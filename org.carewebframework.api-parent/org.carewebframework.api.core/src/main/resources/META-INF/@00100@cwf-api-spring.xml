@@ -109,16 +109,19 @@
 		<bean id="mbeanNamingStrategy" class="org.springframework.jmx.export.naming.IdentityNamingStrategy" />
 
 		<!-- Caching Support -->
-		<bean id="ehcacheManagerBuilder" class="org.ehcache.config.builders.CacheManagerBuilder" factory-method="newCacheManagerBuilder" />
-	
-		<bean id="ehcache" factory-bean="ehcacheManagerBuilder" factory-method="build" init-method="init" />
+		<bean id="ehcache" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+			<property name="configLocation" value="classpath:/META-INF/cwf-ehcache.xml" />
+		</bean>
 		
+		<bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
+			<property name="cacheManager" ref="ehcache" />
+		</bean>
+
 		<!-- Messaging Support -->
 		<bean id="messageProducerService" class="org.carewebframework.api.messaging.ProducerService" />
 
 		<bean id="messageConsumerService" class="org.carewebframework.api.messaging.ConsumerService">
-			<constructor-arg ref="ehcache" />
-			<constructor-arg value="${org.carewebframework.messaging.cache_life}" />
+			<constructor-arg ref="cacheManager" />
 		</bean>
 		
 		<bean class="org.carewebframework.api.messaging.SimpleConsumerProducer" />

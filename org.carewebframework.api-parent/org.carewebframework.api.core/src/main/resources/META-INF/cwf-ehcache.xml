@@ -1,0 +1,21 @@
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="ehcache.xsd" 
+	updateCheck="true"
+	monitoring="autodetect" 
+	dynamicConfig="true">
+
+	<diskStore path="java.io.tmpdir" />
+	
+	<cache name="org.carewebframework.api.messaging" 
+		maxEntriesLocalHeap="10000"
+		maxEntriesLocalDisk="10000" 
+		eternal="false" 
+		diskSpoolBufferSizeMB="10"
+		timeToIdleSeconds="300" 
+		timeToLiveSeconds="0"
+		memoryStoreEvictionPolicy="LRU" 
+		transactionalMode="off">
+		<persistence strategy="localTempSwap" />
+	</cache>
+
+</ehcache>
