@@ -109,12 +109,16 @@
 		<bean id="mbeanNamingStrategy" class="org.springframework.jmx.export.naming.IdentityNamingStrategy" />
 
 		<!-- Caching Support -->
-		<bean id="ehcache" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
-			<property name="configLocation" value="classpath:/META-INF/cwf-ehcache.xml" />
+		<bean id="cacheManagerFactory" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+			<property name="configLocation">
+				<bean class="org.carewebframework.api.spring.PropertyAwareResource">
+				 	<constructor-arg value="classpath:/META-INF/cwf-ehcache.xml" />
+				</bean>
+			</property>
 		</bean>
 		
 		<bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
-			<property name="cacheManager" ref="ehcache" />
+			<property name="cacheManager" ref="cacheManagerFactory" />
 		</bean>
 
 		<!-- Messaging Support -->

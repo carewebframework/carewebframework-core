@@ -4,14 +4,14 @@
 	monitoring="autodetect" 
 	dynamicConfig="true">
 
-	<diskStore path="java.io.tmpdir" />
+	<diskStore path="${org.carewebframework.dir.cache}" />
 	
 	<cache name="org.carewebframework.api.messaging" 
 		maxEntriesLocalHeap="10000"
 		maxEntriesLocalDisk="10000" 
 		eternal="false" 
 		diskSpoolBufferSizeMB="10"
-		timeToIdleSeconds="300" 
+		timeToIdleSeconds="${org.carewebframework.messaging.cache.life}" 
 		timeToLiveSeconds="0"
 		memoryStoreEvictionPolicy="LRU" 
 		transactionalMode="off">
