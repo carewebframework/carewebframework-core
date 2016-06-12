@@ -41,6 +41,8 @@ public class ConsumerService implements IMessageCallback, DestructionAwareBeanPo
     
     /**
      * Access the cache for tracking delivered messages.
+     * 
+     * @param cacheManager Cache manager used to retrieve instance of delivered message cache.
      */
     public ConsumerService(CacheManager cacheManager) {
         deliveredMessageCache = cacheManager.getCache(CACHE_NAME);
@@ -123,6 +125,9 @@ public class ConsumerService implements IMessageCallback, DestructionAwareBeanPo
         }
     }
     
+    /**
+     * Callback entry point for all registered consumers.
+     */
     @Override
     public void onMessage(String channel, Message message) {
         if (MessageUtil.isMessageExcluded(message, RecipientType.CONSUMER, nodeId)) {
@@ -140,8 +145,8 @@ public class ConsumerService implements IMessageCallback, DestructionAwareBeanPo
     
     /**
      * Updates the delivered message cache. This avoids delivering the same message transported by
-     * different messaging frameworks. If we have only one messaging framework registered, we don't
-     * need to worry about this.
+     * different messaging frameworks. If we have only one consumer registered, we don't need to
+     * worry about this.
      * 
      * @param message The message being delivered.
      * @return True if the cache was updated (i.e., the message has not been previously delivered).
@@ -152,7 +157,7 @@ public class ConsumerService implements IMessageCallback, DestructionAwareBeanPo
         }
         
         String pubid = (String) message.getMetadata("cwf.pub.event");
-        return deliveredMessageCache.putIfAbsent(pubid, pubid) == null;
+        return deliveredMessageCache.putIfAbsent(pubid, "") == null;
     }
     
     /**
