@@ -86,7 +86,7 @@ public class AlertContainer extends Row implements IdSpace, IActionTarget {
         }
         
         if (parent != null) {
-            Events.postEvent(InfoPanelController.ALERT_ACTION_EVENT, parent, action);
+            Events.postEvent(MainController.ALERT_ACTION_EVENT, parent, action);
         }
     }
     

@@ -4,7 +4,7 @@
 	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
 
 	<window title="${labels.cwf.chat.invite.title}" width="500px" mold="bootstrap"
-		apply="${chatInviteController}" contentSclass="chat-invite">
+		apply="${cwfChatInviteController}" contentSclass="chat-invite">
 		<style src="~./org/carewebframework/plugin/chat/chat.css" />
 		<listbox id="lstSessions" rows="10" checkmark="true" vflex="1"
 			multiple="true">

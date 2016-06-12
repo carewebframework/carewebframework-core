@@ -4,7 +4,7 @@
 	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
 	
 	<window width="500px" height="500px" title="${arg.title}" visible="false"
-		apply="${chatSessionController}" position="center" mold="bootstrap">
+		apply="${cwfChatSessionController}" position="center" mold="bootstrap">
 		<style src="~./org/carewebframework/plugin/chat/chat.css" />
 		<hbox vflex="1" hflex="1">
 			<cell width="50%">

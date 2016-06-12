@@ -1,9 +1,11 @@
-
 <zk xmlns="http://www.zkoss.org/2005/zul"
 	xmlns:h="http://www.w3.org/1999/xhtml"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
-	
-	<iframe id="iframe" apply="${cwfMockupController}" height="99%" width="99%" />
-	
+
+<div apply="${cwfCurrentDateTimeController}">
+	<label id="lblCurrentTime"/>
+	<timer id="timer" delay="60000" repeats="true" running="false" />
+</div>
+
 </zk>

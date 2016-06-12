@@ -1,0 +1,31 @@
+<zk xmlns="http://www.zkoss.org/2005/zul"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.zkoss.org/2005/zul 
+		http://www.zkoss.org/2005/zul/zul.xsd">
+		
+	<vlayout apply="${cwfSessionTrackerController}">
+		<toolbar>
+			<span style="float:left;padding-top:5px">
+				<label id="lblSessionSummary" style="font-weight:bold" />
+			</span>
+			<span style="float:right">
+				<button id="btnRefreshSessionView" label="${labels.cwf.btn.refresh.label}" />
+			</span>
+		</toolbar>
+		<label id="lblMessage" style="color: red;font-weight: bold;"
+			visible="false" />
+		<grid id="grid" sizedByContent="false" hflex="1" mold="paging"
+			pageSize="5" pagingPosition="both">
+			<columns sizable="true">
+				<column width="20px" label="${labels.cwf.sessiontracker.master.col1.label}" />
+				<column hflex="1" label="${labels.cwf.sessiontracker.master.col2.label}" />
+				<column hflex="1" label="${labels.cwf.sessiontracker.master.col3.label}" />
+				<column hflex="1" label="${labels.cwf.sessiontracker.master.col4.label}" />
+				<column hflex="min" label="${labels.cwf.sessiontracker.master.col5.label}" />
+				<column hflex="min" label="${labels.cwf.sessiontracker.master.col6.label}" />
+				<column hflex="min" label="${labels.cwf.sessiontracker.master.col7.label}" />
+			</columns>
+			<rows />
+		</grid>
+	</vlayout>
+</zk>

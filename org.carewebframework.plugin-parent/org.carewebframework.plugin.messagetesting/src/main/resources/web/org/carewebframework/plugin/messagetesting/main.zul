@@ -1,0 +1,79 @@
+<zk xmlns="http://www.zkoss.org/2005/zul"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.zkoss.org/2005/zul 
+		http://www.zkoss.org/2005/zul/zul.xsd">
+
+	<style>
+		.cwf-messagetesting-root .z-toolbar-content>* { 
+			float: right; 
+			margin-left: 4px;
+		}
+
+		.cwf-messagetesting-root .z-toolbar-content>.z-label {
+			float: left; 
+			font-weight: bold; 
+			zoom: 110%
+		}
+
+	</style>
+
+	<borderlayout apply="${cwfMessageTestingController}" sclass="cwf-messagetesting-root" height="100%">
+		<north sclass="btn-danger">
+			<caption label="Messaging Test Plugin - Warning:  Do not use this in a production system." />
+		</north>
+		<center>
+			<hbox vflex="1">
+				<cell width="50%">
+					<toolbar height="30px">
+						<label value="Messaging Providers" />
+					</toolbar>
+					<listbox id="lboxProviders" checkmark="true" multiple="true"
+						width="100%" vflex="1" />
+				</cell>
+				<splitter />
+				<cell width="50%">
+					<toolbar height="30px">
+						<label value="Subscriptions" />
+						<button id="btnAddSubscription" label="Add"
+							zclass="btn" sclass="btn-xs btn-primary" />
+					</toolbar>
+					<listbox id="lboxSubscriptions" checkmark="true" multiple="true"
+						width="100%" vflex="1" />
+				</cell>
+			</hbox>
+		</center>
+		<south splittable="true" height="50%">
+			<hbox vflex="1">
+				<cell width="50%">
+					<toolbar>
+						<label value="Enter Message" />
+						<button id="btnSendMessage" label="Send" disabled="true"
+							zclass="btn" sclass="btn-xs btn-success" />
+						<button id="btnClearMessage" label="Clear"
+							zclass="btn" sclass="btn-xs btn-danger" />
+						<combobox id="cboxChannels" readonly="true" />
+						<checkbox id="chkAsEvent" label="Send as event" />
+					</toolbar>
+					<textbox id="tboxMessage" multiline="true" vflex="1"
+						width="100%" />
+				</cell>
+				<splitter />
+				<cell width="50%">
+					<toolbar>
+						<label value="Received" />
+						<button id="btnClearReceived" label="Clear"
+							zclass="btn" sclass="btn-xs btn-danger" />
+					</toolbar>
+					<listbox id="lboxReceived" width="100%" vflex="1">
+						<listhead>
+							<listheader label="Time" />
+							<listheader label="Channel" />
+							<listheader label="ID" />
+							<listheader label="Payload" />
+						</listhead>
+					</listbox>
+				</cell>
+			</hbox>
+		</south>
+	</borderlayout>
+</zk>

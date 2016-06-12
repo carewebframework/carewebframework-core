@@ -3,7 +3,7 @@
 	<_toolbar />
 	<splitterview orientation="vertical">
 		<splitterpane size="47" relative="false">
-			<userHeader />
+			<cwfUserHeader />
 		</splitterpane>
 		<splitterpane size="90" relative="true">
 			<tabview orientation="horizontal">

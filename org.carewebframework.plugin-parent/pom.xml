@@ -17,7 +17,7 @@
 		<module>org.carewebframework.plugin.infopanel</module>
 		<module>org.carewebframework.plugin.statuspanel</module>
 		<module>org.carewebframework.plugin.eventtesting</module>
-		<module>org.carewebframework.plugin.messaging</module>
+		<module>org.carewebframework.plugin.messagetesting</module>
 		<module>org.carewebframework.plugin.filetailer</module>
 		<module>org.carewebframework.plugin.mockup</module>
 		<module>org.carewebframework.plugin.sessiontracker</module>

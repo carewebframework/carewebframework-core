@@ -57,12 +57,11 @@ public class SessionService extends ParticipantListener {
         return new SessionService(self, sendEvent, joinEvent, leaveEvent, eventManager, callback);
     }
     
-    private SessionService(final IPublisherInfo self, String sendEvent, String addEvent, String removeEvent,
-        IEventManager eventManager, final ISessionUpdate callback) {
+    private SessionService(IPublisherInfo self, String sendEvent, String addEvent, String removeEvent,
+        IEventManager eventManager, ISessionUpdate callback) {
         super(self, sendEvent, addEvent, removeEvent, eventManager, callback);
         this.sendEvent = sendEvent;
-        this.messageListener = new ServiceListener<ChatMessage>(
-                                                                sendEvent, eventManager) {
+        this.messageListener = new ServiceListener<ChatMessage>(sendEvent, eventManager) {
             
             @Override
             public void eventCallback(String eventName, ChatMessage chatMessage) {

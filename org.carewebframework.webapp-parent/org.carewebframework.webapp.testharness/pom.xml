@@ -36,7 +36,12 @@
 		</dependency>
 		<dependency>
 			<groupId>org.carewebframework</groupId>
-			<artifactId>org.carewebframework.plugin.messaging</artifactId>
+			<artifactId>org.carewebframework.plugin.eventtesting</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.carewebframework</groupId>
+			<artifactId>org.carewebframework.plugin.messagetesting</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
 		<!-- CareWeb Framework Components -->

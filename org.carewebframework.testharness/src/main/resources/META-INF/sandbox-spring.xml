@@ -10,9 +10,11 @@
 
 	<beans profile="root">
 		
-		<cwp:plugin id="sandboxPlugin" name="ZK Sandbox" url="~./org/carewebframework/testharness/sandbox.zul">
+		<cwp:plugin id="cwfSandboxPlugin" name="ZK Sandbox" 
+			url="~./org/carewebframework/testharness/sandbox.zul">
 		</cwp:plugin>
 		
-		<bean id="sandboxController" class="org.carewebframework.testharness.SandboxController" scope="prototype" />
+		<bean id="cwfSandboxController" 
+			class="org.carewebframework.testharness.SandboxController" scope="prototype" />
 	</beans>
 </beans>

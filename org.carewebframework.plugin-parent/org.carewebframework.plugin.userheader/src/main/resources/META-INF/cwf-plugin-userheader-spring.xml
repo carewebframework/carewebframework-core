@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:cwp="http://www.carewebframework.org/schema/plugin" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+		 http://www.springframework.org/schema/beans/spring-beans.xsd
+		 http://www.carewebframework.org/schema/plugin
+		 http://www.carewebframework.org/schema/plugin/plugin-extensions.xsd">
+
+	<beans profile="root">
+
+		<cwp:plugin id="cwfUserHeader" name="Current User Header"
+			url="~./org/carewebframework/plugin/userheader/main.zul">
+			<cwp:serialization>
+				<cwp:property name="Background Color" id="color" type="color"
+					description="Sets the background color." />
+			</cwp:serialization>
+		</cwp:plugin>
+
+	</beans>
+
+	<beans profile="desktop">
+
+		<bean id="cwfUserHeaderController" scope="prototype"
+			class="org.carewebframework.plugin.userheader.MainController" />
+
+	</beans>
+
+</beans>

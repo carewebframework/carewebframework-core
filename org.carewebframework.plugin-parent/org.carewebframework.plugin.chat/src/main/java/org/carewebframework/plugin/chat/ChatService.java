@@ -72,7 +72,7 @@ public class ChatService implements IParticipantUpdate {
      * @return The chat service.
      */
     public static ChatService getInstance() {
-        return SpringUtil.getBean("chatService", ChatService.class);
+        return SpringUtil.getBean("cwfChatService", ChatService.class);
     }
     
     /**
