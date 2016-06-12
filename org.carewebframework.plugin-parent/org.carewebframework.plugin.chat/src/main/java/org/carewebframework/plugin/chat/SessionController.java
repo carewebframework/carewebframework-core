@@ -18,11 +18,10 @@ import java.util.Set;
 import org.carewebframework.api.messaging.IPublisherInfo;
 import org.carewebframework.common.DateUtil;
 import org.carewebframework.common.StrUtil;
-import org.carewebframework.ui.FrameworkController;
 import org.carewebframework.plugin.chat.SessionService.ISessionUpdate;
+import org.carewebframework.ui.FrameworkController;
 import org.carewebframework.ui.zk.PopupDialog;
 import org.carewebframework.ui.zk.ZKUtil;
-
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.InputEvent;
 import org.zkoss.zk.ui.util.Clients;
@@ -70,7 +69,7 @@ public class SessionController extends FrameworkController implements ISessionUp
     protected static SessionController create(String sessionId, boolean originator) {
         Map<Object, Object> args = new HashMap<>();
         args.put("id", sessionId);
-        args.put("title", StrUtil.formatMessage("@chat.session.title", sessionId));
+        args.put("title", StrUtil.formatMessage("@cwf.chat.session.title"));
         args.put("originator", originator ? true : null);
         Window dlg = PopupDialog.popup(DIALOG, args, true, true, false);
         
@@ -237,7 +236,7 @@ public class SessionController extends FrameworkController implements ISessionUp
     @Override
     public void onParticipantAdded(IPublisherInfo participant, boolean fromRefresh) {
         if (model.add(participant) && !fromRefresh && !participant.equals(chatService.getSelf())) {
-            addDialog(StrUtil.formatMessage("@chat.session.event.join", participant.getUserName()), null, false);
+            addDialog(StrUtil.formatMessage("@cwf.chat.session.event.join", participant.getUserName()), null, false);
         }
         
         outstandingInvitations.remove(participant);
@@ -251,7 +250,7 @@ public class SessionController extends FrameworkController implements ISessionUp
     @Override
     public void onParticipantRemoved(IPublisherInfo participant) {
         if (model.remove(participant)) {
-            addDialog(StrUtil.formatMessage("@chat.session.event.leave", participant.getUserName()), null, false);
+            addDialog(StrUtil.formatMessage("@cwf.chat.session.event.leave", participant.getUserName()), null, false);
         }
     }
     

@@ -83,7 +83,7 @@ public class ChatService implements IParticipantUpdate {
     public ChatService(IEventManager eventManager) {
         this.eventManager = eventManager;
         self = ((ILocalEventDispatcher) eventManager).getGlobalEventDispatcher().getPublisherInfo();
-        ActionRegistry.register(false, "chat.create.session", "@chat.action.create.session",
+        ActionRegistry.register(false, "chat.create.session", "@cwf.chat.action.create.session",
             "zscript:" + ChatService.class.getName() + ".getInstance().createSession();");
     }
     
@@ -105,8 +105,8 @@ public class ChatService implements IParticipantUpdate {
                 String tag = EVENT_INVITE + "_" + pcs[0];
                 
                 if (pcs.length == 2) {
-                    String message = StrUtil.formatMessage("@chat.invitation.message", pcs[1]);
-                    String caption = StrUtil.formatMessage("@chat.invitation.caption");
+                    String message = StrUtil.formatMessage("@cwf.chat.invitation.message", pcs[1]);
+                    String caption = StrUtil.formatMessage("@cwf.chat.invitation.caption");
                     String action = "cwf.fireLocalEvent('" + EVENT_ACCEPT + "', '" + pcs[0] + "'); return true;";
                     MessageInfo mi = new MessageInfo(message, caption, null, 999999, tag, action);
                     eventManager.fireLocalEvent(MessageWindow.EVENT_SHOW, mi);
@@ -275,7 +275,8 @@ public class ChatService implements IParticipantUpdate {
         }
         
         String eventData = sessionId + (cancel ? "" : StrUtil.U + self.getUserName());
-        eventManager.fireRemoteEvent(EVENT_INVITE, eventData, (Recipient[]) recipients.toArray());
+        Recipient[] recips = new Recipient[recipients.size()];
+        eventManager.fireRemoteEvent(EVENT_INVITE, eventData, recipients.toArray(recips));
     }
     
     /**
