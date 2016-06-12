@@ -17,11 +17,9 @@ import org.carewebframework.shell.CareWebShell;
 import org.carewebframework.shell.plugins.PluginContainer;
 import org.carewebframework.ui.FrameworkController;
 import org.carewebframework.ui.test.CommonTest;
-
+import org.junit.Test;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zul.Label;
-
-import org.junit.Test;
 
 public class StatusPanelTest extends CommonTest {
     
@@ -32,7 +30,7 @@ public class StatusPanelTest extends CommonTest {
         shell.setPage(mockEnvironment.getDesktop().getFirstPage());
         shell.afterCompose();
         mockEnvironment.flushEvents();
-        PluginContainer plugin = shell.getActivatedPlugin("statusPanel");
+        PluginContainer plugin = shell.getActivatedPlugin("cwfStatusPanel");
         Component root = plugin.getFirstChild();
         StatusPanel controller = (StatusPanel) FrameworkController.getController(root);
         assertNotNull("Controller must not be null.", controller);
