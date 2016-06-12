@@ -46,6 +46,22 @@ public class CompositeException extends RuntimeException {
     }
     
     /**
+     * Returns true if this instance contains an exception of the given type.
+     * 
+     * @param type The exception class sought.
+     * @return True if the exception class is present.
+     */
+    public boolean hasException(Class<? extends Throwable> type) {
+        for (Throwable exception : exceptions) {
+            if (type.isInstance(exception)) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    /**
      * Throws the exception if it is not empty.
      */
     public void throwIfExceptions() {
