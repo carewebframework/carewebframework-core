@@ -7,8 +7,8 @@
 	<diskStore path="${org.carewebframework.dir.cache}" />
 	
 	<cache name="org.carewebframework.api.messaging" 
-		maxEntriesLocalHeap="10000"
-		maxEntriesLocalDisk="10000" 
+		maxEntriesLocalHeap="${org.carewebframework.messaging.cache.size}"
+		maxEntriesLocalDisk="${org.carewebframework.messaging.cache.size}" 
 		eternal="false" 
 		diskSpoolBufferSizeMB="10"
 		timeToIdleSeconds="${org.carewebframework.messaging.cache.life}" 
