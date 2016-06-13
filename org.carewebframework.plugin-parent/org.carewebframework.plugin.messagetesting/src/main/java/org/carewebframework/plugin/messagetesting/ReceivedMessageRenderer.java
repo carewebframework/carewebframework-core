@@ -12,6 +12,7 @@ public class ReceivedMessageRenderer extends AbstractListitemRenderer<Message, O
     @Override
     protected void renderItem(Listitem item, Message message) {
         createCell(item, message.getCreated());
+        createCell(item, message.getMetadata("cwf.pub.channel"));
         createCell(item, message.getType());
         createCell(item, message.getId());
         Listcell cell = createCell(item, message.getPayload());

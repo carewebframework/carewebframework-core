@@ -1,15 +1,27 @@
 <zk>
-	<window title="Event Testing" border="normal" height="100%"
-		width="100%" mold="bootstrap" apply="${cwfEventTestingController}">
-		<borderlayout>
+	<window title="Event Testing - Warning:  Do not use this in a production system." 
+		sclass="panel-danger" mold="bootstrap" height="100%" width="100%" 
+		apply="${cwfEventTestingController}">
+		<borderlayout height="100%">
 			<west splittable="true" size="50%">
 				<panel title="Publish Test Events" height="100%"
-					mold="bootstrap">
+					sclass="panel-primary panel-sm" mold="bootstrap">
+					<toolbar align="end">
+						<button id="btnPing" label="Send Ping Request" 
+							zclass="btn" sclass="btn-xs btn-primary" />
+						<separator orient="vertical" width="20px" />
+						<button id="btnReset" label="Reset" 
+							zclass="btn" sclass="btn-xs btn-danger" />
+						<separator orient="vertical" width="20px" />
+						<button id="btnSend" label="Send" 
+							zclass="btn" sclass="btn-xs btn-success" />
+						<separator orient="vertical" width="15px" />
+					</toolbar>
 					<panelchildren>
-						<grid width="100%" height="100%">
+						<grid width="100%" height="100%" sizedByContent="true">
 							<columns>
 								<column align="right" />
-								<column align="left" />
+								<column align="left" hflex="1" />
 							</columns>
 							<rows>
 								<row>
@@ -23,32 +35,29 @@
 										width="100%" />
 								</row>
 								<row>
-									<vbox>
+									<div>
 										<label value="Event Data:" />
 										<separator orient="horizontal"
 											height="30px" />
 										<checkbox id="chkAutoGenerate"
 											label="Auto generate" />
-									</vbox>
+									</div>
 									<textbox id="tboxEventData"
 										multiline="true" width="100%" height="300px" />
 								</row>
 							</rows>
 						</grid>
 					</panelchildren>
-					<toolbar align="end">
-						<button id="btnPing" label="Send Ping Request" />
-						<separator orient="vertical" width="20px" />
-						<button id="btnReset" label="Reset" />
-						<separator orient="vertical" width="20px" />
-						<button id="btnSend" label="Send" />
-						<separator orient="vertical" width="15px" />
-					</toolbar>
 				</panel>
 			</west>
 			<center>
 				<panel title="Subscribe/Unsubscribe" height="100%"
-					mold="bootstrap">
+					sclass="panel-primary panel-sm" mold="bootstrap">
+					<toolbar>
+						<textbox id="tboxNewEvent" hflex="1" />
+						<button id="btnNewEvent" label="Add Event" 
+							zclass="btn" sclass="btn-xs btn-success" />
+					</toolbar>
 					<panelchildren>
 						<listbox id="lboxEventList" checkmark="true"
 							multiple="true" height="100%">
@@ -57,25 +66,22 @@
 							<listitem label="STATUS" checkable="true" />
 						</listbox>
 					</panelchildren>
-					<toolbar>
-						<textbox id="tboxNewEvent" width="60%" />
-						<button id="btnNewEvent" label="Add Event" />
-					</toolbar>
 				</panel>
 			</center>
 			<east splittable="true" size="25%">
 				<panel title="Received Events" height="100%"
-					mold="bootstrap">
+					sclass="panel-primary panel-sm" mold="bootstrap">
+					<toolbar align="end">
+						<checkbox id="chkScrollLock" label="Scroll Lock" />
+						<separator orient="vertical" width="20px" />
+						<button id="btnClear" label="Clear" 
+							zclass="btn" sclass="btn-xs btn-danger" />
+						<separator orient="vertical" width="15px" />
+					</toolbar>
 					<panelchildren>
 						<textbox id="tboxEventResults" multiline="true" style="white-space:pre"
 							width="100%" height="100%" readonly="true" />
 					</panelchildren>
-					<toolbar align="end">
-						<checkbox id="chkScrollLock" label="Scroll Lock" />
-						<separator orient="vertical" width="20px" />
-						<button id="btnClear" label="Clear" />
-						<separator orient="vertical" width="15px" />
-					</toolbar>
 				</panel>
 			</east>
 			<south size="5%">

@@ -24,7 +24,9 @@ import org.carewebframework.ui.zk.PromptDialog;
 import org.carewebframework.ui.zk.ZKUtil;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.SelectEvent;
+import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Checkbox;
 import org.zkoss.zul.Combobox;
@@ -48,6 +50,10 @@ public class MainController extends PluginController {
             @Override
             public void onEvent(Event event) throws Exception {
                 received.add((Message) event.getData());
+                
+                if (!chkScrollLock.isChecked()) {
+                    Events.echoEvent("onScrollToBottom", root, null);
+                }
             }
             
         };
@@ -72,6 +78,8 @@ public class MainController extends PluginController {
     private Button btnSendMessage;
     
     private Checkbox chkAsEvent;
+    
+    private Checkbox chkScrollLock;
     
     private final ConsumerService consumerService;
     
@@ -148,9 +156,9 @@ public class MainController extends PluginController {
         Comboitem item = cboxChannels.getSelectedItem();
         
         if (item != null) {
-            String channel = item.getLabel();
-            channel = chkAsEvent.isChecked() ? EventUtil.getChannelName(channel) : channel;
-            Message message = chkAsEvent.isChecked() ? new EventMessage(channel, tboxMessage.getText())
+            String type = item.getLabel();
+            String channel = chkAsEvent.isChecked() ? EventUtil.getChannelName(type) : type;
+            Message message = chkAsEvent.isChecked() ? new EventMessage(type, tboxMessage.getText())
                     : new Message(channel, tboxMessage.getText());
             producerService.publish(channel, message);
         }
@@ -180,8 +188,9 @@ public class MainController extends PluginController {
         }
     }
     
-    public void onNewMessage(Event event) {
-        received.add((Message) event.getData());
+    public void onScrollToBottom() {
+        Listitem item = lboxReceived.getItemAtIndex(lboxReceived.getItemCount() - 1);
+        Clients.scrollIntoView(item);
     }
     
     private void subscribe(String channel, boolean subscribe) {
