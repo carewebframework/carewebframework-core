@@ -39,23 +39,23 @@ public class MainController extends PluginController implements IGenericEvent<Ob
     
     private static final long serialVersionUID = 1L;
     
-    private Textbox eventName;
+    private Textbox tboxEventName;
     
-    private Textbox eventRecipients;
+    private Textbox tboxEventRecipients;
     
-    private Textbox eventData;
+    private Textbox tboxEventData;
     
-    private Textbox eventResults;
+    private Textbox tboxEventResults;
     
-    private Textbox newEvent;
+    private Textbox tboxNewEvent;
     
-    private Listbox eventList;
+    private Listbox lboxEventList;
     
-    private Checkbox autoGenerate;
+    private Checkbox chkAutoGenerate;
     
-    private Checkbox scrollLock;
+    private Checkbox chkScrollLock;
     
-    private Label info;
+    private Label lblInfo;
     
     private final IEventManager eventManager = EventManager.getInstance();
     
@@ -64,18 +64,18 @@ public class MainController extends PluginController implements IGenericEvent<Ob
     public void onClick$btnSend() {
         messageCount++;
         
-        if (autoGenerate.isChecked()) {
-            eventData.setText("Sending test event #" + messageCount);
+        if (chkAutoGenerate.isChecked()) {
+            tboxEventData.setText("Sending test event #" + messageCount);
         }
         
-        eventManager.fireRemoteEvent(eventName.getText(), eventData.getText(), parseRecipients(eventRecipients.getText()));
-        info("Fired", eventName.getText());
+        eventManager.fireRemoteEvent(tboxEventName.getText(), tboxEventData.getText(), parseRecipients(tboxEventRecipients.getText()));
+        info("Fired", tboxEventName.getText());
     }
     
     public void onClick$btnReset() {
-        eventName.setText("");
-        eventRecipients.setText("");
-        eventData.setText("");
+        tboxEventName.setText("");
+        tboxEventRecipients.setText("");
+        tboxEventData.setText("");
     }
     
     public void onClick$btnPing() {
@@ -83,18 +83,18 @@ public class MainController extends PluginController implements IGenericEvent<Ob
     }
     
     public void onClick$btnClear() {
-        eventResults.setText("");
+        tboxEventResults.setText("");
     }
     
-    public void onClick$addEvent() {
-        String eventName = newEvent.getText().trim();
+    public void onClick$btnNewEvent() {
+        String eventName = tboxNewEvent.getText().trim();
         
         if (!StringUtils.isEmpty(eventName) && !containsEvent(eventName)) {
             Listitem item = new Listitem(eventName);
-            eventList.appendChild(item);
+            lboxEventList.appendChild(item);
         }
         
-        newEvent.setText("");
+        tboxNewEvent.setText("");
     }
     
     private Recipient[] parseRecipients(String text) {
@@ -117,7 +117,7 @@ public class MainController extends PluginController implements IGenericEvent<Ob
     }
     
     private boolean containsEvent(String eventName) {
-        for (Object object : eventList.getItems()) {
+        for (Object object : lboxEventList.getItems()) {
             if (((Listitem) object).getLabel().equals(eventName)) {
                 return true;
             }
@@ -126,9 +126,8 @@ public class MainController extends PluginController implements IGenericEvent<Ob
         return false;
     }
     
-    public void onSelect$eventList(Event event) {
-        @SuppressWarnings("rawtypes")
-        SelectEvent sel = (SelectEvent) ZKUtil.getEventOrigin(event);
+    public void onSelect$lboxEventList(Event event) {
+        SelectEvent<?, ?> sel = (SelectEvent<?, ?>) ZKUtil.getEventOrigin(event);
         Listitem item = (Listitem) sel.getReference();
         String eventName = item.getLabel();
         
@@ -142,12 +141,12 @@ public class MainController extends PluginController implements IGenericEvent<Ob
     }
     
     private void info(String action, String eventName) {
-        info.setValue(action + " '" + eventName + " ' event.");
+        lblInfo.setValue(action + " '" + eventName + " ' event.");
     }
     
     @Override
     public void eventCallback(String eventName, Object eventData) {
-        String s = eventResults.getText();
+        String s = tboxEventResults.getText();
         
         if (!(eventData instanceof String)) {
             try {
@@ -156,11 +155,11 @@ public class MainController extends PluginController implements IGenericEvent<Ob
         }
         
         s += "\n\n" + eventName + ":\n" + eventData;
-        eventResults.setText(s);
+        tboxEventResults.setText(s);
         info("Received", eventName);
         
-        if (!scrollLock.isChecked()) {
-            String js = StrUtil.formatMessage("jq('#%1$s').scrollTop(jq('#%1$s')[0].scrollHeight);", eventResults.getUuid());
+        if (!chkScrollLock.isChecked()) {
+            String js = StrUtil.formatMessage("jq('#%1$s').scrollTop(jq('#%1$s')[0].scrollHeight);", tboxEventResults.getUuid());
             Clients.evalJavaScript(js);
         }
     }

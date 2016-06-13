@@ -14,12 +14,12 @@
 							<rows>
 								<row>
 									<label value="Event Name:" />
-									<textbox id="eventName"
+									<textbox id="tboxEventName"
 										width="100%" />
 								</row>
 								<row>
 									<label value="Event Recipients:" />
-									<textbox id="eventRecipients"
+									<textbox id="tboxEventRecipients"
 										width="100%" />
 								</row>
 								<row>
@@ -27,10 +27,10 @@
 										<label value="Event Data:" />
 										<separator orient="horizontal"
 											height="30px" />
-										<checkbox id="autoGenerate"
+										<checkbox id="chkAutoGenerate"
 											label="Auto generate" />
 									</vbox>
-									<textbox id="eventData"
+									<textbox id="tboxEventData"
 										multiline="true" width="100%" height="300px" />
 								</row>
 							</rows>
@@ -50,7 +50,7 @@
 				<panel title="Subscribe/Unsubscribe" height="100%"
 					mold="bootstrap">
 					<panelchildren>
-						<listbox id="eventList" checkmark="true"
+						<listbox id="lboxEventList" checkmark="true"
 							multiple="true" height="100%">
 							<listitem label="PING" checkable="true" />
 							<listitem label="POPUP" checkable="true" />
@@ -58,8 +58,8 @@
 						</listbox>
 					</panelchildren>
 					<toolbar>
-						<textbox id="newEvent" width="60%" />
-						<button id="addEvent" label="Add Event" />
+						<textbox id="tboxNewEvent" width="60%" />
+						<button id="btnNewEvent" label="Add Event" />
 					</toolbar>
 				</panel>
 			</center>
@@ -67,11 +67,11 @@
 				<panel title="Received Events" height="100%"
 					mold="bootstrap">
 					<panelchildren>
-						<textbox id="eventResults" multiline="true" style="white-space:pre"
+						<textbox id="tboxEventResults" multiline="true" style="white-space:pre"
 							width="100%" height="100%" readonly="true" />
 					</panelchildren>
 					<toolbar align="end">
-						<checkbox id="scrollLock" label="Scroll Lock" />
+						<checkbox id="chkScrollLock" label="Scroll Lock" />
 						<separator orient="vertical" width="20px" />
 						<button id="btnClear" label="Clear" />
 						<separator orient="vertical" width="15px" />
@@ -79,7 +79,7 @@
 				</panel>
 			</east>
 			<south size="5%">
-				<label id="info" />
+				<label id="lblInfo" />
 			</south>
 		</borderlayout>
 	</window>
