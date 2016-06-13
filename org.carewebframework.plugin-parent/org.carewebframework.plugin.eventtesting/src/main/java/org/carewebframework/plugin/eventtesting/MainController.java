@@ -14,14 +14,18 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.carewebframework.api.event.EventManager;
+import org.carewebframework.api.event.EventUtil;
 import org.carewebframework.api.event.IEventManager;
 import org.carewebframework.api.event.IGenericEvent;
 import org.carewebframework.api.messaging.Recipient;
 import org.carewebframework.api.messaging.Recipient.RecipientType;
+import org.carewebframework.common.JSONUtil;
+import org.carewebframework.common.StrUtil;
 import org.carewebframework.shell.plugins.PluginController;
 import org.carewebframework.ui.zk.ZKUtil;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.SelectEvent;
+import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Checkbox;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Listbox;
@@ -31,7 +35,7 @@ import org.zkoss.zul.Textbox;
 /**
  * Plug-in to test remote events.
  */
-public class MainController extends PluginController implements IGenericEvent<String> {
+public class MainController extends PluginController implements IGenericEvent<Object> {
     
     private static final long serialVersionUID = 1L;
     
@@ -48,6 +52,8 @@ public class MainController extends PluginController implements IGenericEvent<St
     private Listbox eventList;
     
     private Checkbox autoGenerate;
+    
+    private Checkbox scrollLock;
     
     private Label info;
     
@@ -70,6 +76,10 @@ public class MainController extends PluginController implements IGenericEvent<St
         eventName.setText("");
         eventRecipients.setText("");
         eventData.setText("");
+    }
+    
+    public void onClick$btnPing() {
+        EventUtil.ping("PING.RESPONSE", null);
     }
     
     public void onClick$btnClear() {
@@ -136,12 +146,23 @@ public class MainController extends PluginController implements IGenericEvent<St
     }
     
     @Override
-    public void eventCallback(String eventName, String eventData) {
+    public void eventCallback(String eventName, Object eventData) {
         String s = eventResults.getText();
+        
+        if (!(eventData instanceof String)) {
+            try {
+                eventData = JSONUtil.serialize(eventData, true);
+            } catch (Exception e) {}
+        }
+        
         s += "\n\n" + eventName + ":\n" + eventData;
         eventResults.setText(s);
-        //eventResults.smartUpdate("scrollTop", "1000000");
         info("Received", eventName);
+        
+        if (!scrollLock.isChecked()) {
+            String js = StrUtil.formatMessage("jq('#%1$s').scrollTop(jq('#%1$s')[0].scrollHeight);", eventResults.getUuid());
+            Clients.evalJavaScript(js);
+        }
     }
     
 }

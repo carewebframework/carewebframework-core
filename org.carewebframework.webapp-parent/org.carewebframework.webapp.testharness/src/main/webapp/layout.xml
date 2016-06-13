@@ -8,13 +8,12 @@
 		<splitterpane size="90" relative="true">
 			<tabview orientation="horizontal">
 				<tabpane label="Test Harness">
-					<treeview caption="Plugins:" open="true">
-					</treeview>
+					<treeview caption="Plugins:" open="true" />
 				</tabpane>
 			</tabview>
 		</splitterpane>
 		<splitterpane size="17" relative="false">
-			<statusPanel />
+			<cwfStatusPanel />
 		</splitterpane>
 	</splitterview>
 </layout>
