@@ -46,7 +46,6 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
  */
 public class JSONUtil {
     
-    
     private static final String DEFAULT_TYPE_PROPERTY = "@class";
     
     private static final Map<String, ObjectMapper> mappers = new ConcurrentHashMap<>();
@@ -55,7 +54,6 @@ public class JSONUtil {
      * Identifies properties that require type metadata (via property specified in typeProperty).
      */
     private static class CWTypeResolverBuilder extends StdTypeResolverBuilder {
-        
         
         @Override
         public TypeDeserializer buildTypeDeserializer(DeserializationConfig config, JavaType baseType,
@@ -87,7 +85,6 @@ public class JSONUtil {
      * Resolves type identifiers to classes. Supports aliases and class names.
      */
     private static class CWTypedIdResolver implements TypeIdResolver {
-        
         
         private JavaType baseType;
         
@@ -154,7 +151,6 @@ public class JSONUtil {
      * Required to suppress writing of type information except for top-level objects.
      */
     public final static class AsPropertyTypeSerializerEx extends AsPropertyTypeSerializer {
-        
         
         public AsPropertyTypeSerializerEx(TypeIdResolver idRes, BeanProperty property, String propName) {
             super(idRes, property, propName);
@@ -297,7 +293,18 @@ public class JSONUtil {
      * @return Serialized form of the object in JSON format.
      */
     public static String serialize(Object object) {
-        return serialize(null, object);
+        return serialize(object, false);
+    }
+    
+    /**
+     * Serializes an object to JSON format.
+     * 
+     * @param object Object to be serialized.
+     * @param prettyPrint If true, format output for display.
+     * @return Serialized form of the object in JSON format.
+     */
+    public static String serialize(Object object, boolean prettyPrint) {
+        return serialize(null, object, prettyPrint);
     }
     
     /**
@@ -308,8 +315,22 @@ public class JSONUtil {
      * @return Serialized form of the object in JSON format.
      */
     public static String serialize(String typeProperty, Object object) {
+        return serialize(typeProperty, object, false);
+    }
+    
+    /**
+     * Serializes an object to JSON format.
+     * 
+     * @param typeProperty The name of the property signifying the data type.
+     * @param object Object to be serialized.
+     * @param prettyPrint If true, format output for display.
+     * @return Serialized form of the object in JSON format.
+     */
+    public static String serialize(String typeProperty, Object object, boolean prettyPrint) {
         try {
-            return getMapper(typeProperty).writeValueAsString(object);
+            ObjectMapper mapper = getMapper(typeProperty);
+            return prettyPrint ? mapper.writerWithDefaultPrettyPrinter().writeValueAsString(object)
+                    : mapper.writeValueAsString(object);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
