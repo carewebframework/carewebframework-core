@@ -14,9 +14,7 @@ import java.util.concurrent.ScheduledExecutorService;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.carewebframework.api.spring.SpringUtil;
-
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.TaskScheduler;
 
@@ -27,15 +25,9 @@ public class ThreadUtil {
     
     private static final Log log = LogFactory.getLog(ThreadUtil.class);
     
-    /**
-     * Bean ID for shared {@linkplain TaskExecutor}
-     */
-    protected static final String TASK_EXECUTOR_BEANID = "taskExecutor";
+    private static ExecutorService taskExecutor;
     
-    /**
-     * Bean ID for shared {@linkplain TaskScheduler}
-     */
-    protected static final String TASK_SCHEDULER_BEANID = "taskScheduler";
+    private static ScheduledExecutorService taskScheduler;
     
     /**
      * Returns the task scheduler, or null if one has not been defined. Instance of
@@ -45,7 +37,8 @@ public class ThreadUtil {
      * @see TaskScheduler
      */
     public static ScheduledExecutorService getTaskScheduler() {
-        return SpringUtil.getBean(TASK_SCHEDULER_BEANID, ScheduledExecutorService.class);
+        return taskScheduler == null ? taskScheduler = SpringUtil.getBean("taskScheduler", ScheduledExecutorService.class)
+                : taskScheduler;
     }
     
     /**
@@ -55,7 +48,8 @@ public class ThreadUtil {
      * @see TaskExecutor
      */
     public static ExecutorService getTaskExecutor() {
-        return SpringUtil.getBean(TASK_EXECUTOR_BEANID, ExecutorService.class);
+        return taskExecutor == null ? taskExecutor = SpringUtil.getBean("taskExecutor", ExecutorService.class)
+                : taskExecutor;
     }
     
     /**
