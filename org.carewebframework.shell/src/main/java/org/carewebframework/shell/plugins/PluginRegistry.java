@@ -11,16 +11,17 @@ package org.carewebframework.shell.plugins;
 
 import org.carewebframework.api.spring.BeanRegistry;
 import org.carewebframework.common.AbstractRegistry;
+import org.carewebframework.shell.layout.UIElementBase;
 
 /**
  * Registry of all known plugins.
  */
 public class PluginRegistry extends BeanRegistry<String, PluginDefinition> {
     
-    private final AbstractRegistry<Class<?>, PluginDefinition> classRegistry = new AbstractRegistry<Class<?>, PluginDefinition>() {
+    private final AbstractRegistry<Class<? extends UIElementBase>, PluginDefinition> classRegistry = new AbstractRegistry<Class<? extends UIElementBase>, PluginDefinition>() {
         
         @Override
-        protected Class<?> getKey(PluginDefinition item) {
+        protected Class<? extends UIElementBase> getKey(PluginDefinition item) {
             return item.getClazz();
         }
     };
@@ -44,17 +45,22 @@ public class PluginRegistry extends BeanRegistry<String, PluginDefinition> {
         classRegistry.register(item);
     }
     
-    public boolean unregister(Class<?> clazz) {
+    public PluginDefinition unregister(Class<? extends UIElementBase> clazz) {
         return unregister(get(clazz));
     }
     
     @Override
-    public boolean unregister(PluginDefinition item) {
-        classRegistry.unregister(item);
-        return super.unregister(item);
+    public PluginDefinition unregisterByKey(String id) {
+        return classRegistry.unregister(super.unregisterByKey(id));
     }
     
-    public PluginDefinition get(Class<?> clazz) {
+    /**
+     * Returns the plugin definition for a given UI element.
+     * 
+     * @param clazz The class of the UI element.
+     * @return The associated plugin definition, or null if not found.
+     */
+    public PluginDefinition get(Class<? extends UIElementBase> clazz) {
         return classRegistry.get(clazz);
     }
     
