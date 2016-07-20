@@ -3,7 +3,7 @@ Health-Related Additional Disclaimer of Warranty and Limitation of Liability
 
 In the United States, or any other jurisdictions where they may apply, the following
 additional disclaimer of warranty and limitation of liability are hereby incorporated 
-into the terms and conditions of MPL 2.0:
+into the terms and conditions of Apache License 2.0:
 
   a. No warranties of any kind whatsoever are made as to the results that You will
      obtain from relying upon the covered code (or any information or content obtained 
