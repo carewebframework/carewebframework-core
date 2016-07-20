@@ -80,9 +80,9 @@ Once tomcat has started, open your browser and enter following URL
 
 ## License
 The CareWeb Framework is released under version 2.0 of the 
-[Apache License](https://github.com/carewebframework/carewebframework-core/blob/master/LICENSE.md) 
+[Apache License](https://github.com/carewebframework/carewebframework-core/blob/master/LICENSE.txt) 
 as amended by the
-[Health-Related Additional Disclaimer of Warranty and Limitation of Liability](https://github.com/carewebframework/carewebframework-core/blob/master/DISCLAIMER.md).
+[Health-Related Additional Disclaimer of Warranty and Limitation of Liability](https://github.com/carewebframework/carewebframework-core/blob/master/DISCLAIMER.txt).
 
 While the core framework requires only the Community Edition of the ZK Framework, many add-ons will use the
 more advanced features of ZK.  Inclusion of artifacts from the Enterprise Edition of the ZK Framework is, 
