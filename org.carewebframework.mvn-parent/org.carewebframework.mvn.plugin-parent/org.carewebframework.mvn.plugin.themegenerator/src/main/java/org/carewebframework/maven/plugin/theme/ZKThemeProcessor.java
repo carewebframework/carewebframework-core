@@ -47,7 +47,6 @@ import org.apache.commons.io.LineIterator;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.sanselan.ImageFormat;
 import org.apache.sanselan.Sanselan;
-
 import org.carewebframework.maven.plugin.core.BaseMojo;
 import org.carewebframework.maven.plugin.iterator.ZipIterator;
 import org.carewebframework.maven.plugin.transform.AbstractTransform;
@@ -67,11 +66,11 @@ public class ZKThemeProcessor extends AbstractThemeProcessor {
             super(mojo);
         }
         
-        protected Graphics2D g;
+        protected Graphics2D graphics2D;
         
-        protected Image resultImg;
+        protected Image image;
         
-        protected BufferedImage result;
+        protected BufferedImage bufferedImage;
         
         protected int width;
         
@@ -80,14 +79,11 @@ public class ZKThemeProcessor extends AbstractThemeProcessor {
         @Override
         public void transform(InputStream inputStream, OutputStream outputStream) throws Exception {
             BufferedImage orig = ImageIO.read(inputStream);
-            this.width = orig.getWidth();
-            this.height = orig.getHeight();
-            
-            this.resultImg = Toolkit.getDefaultToolkit()
-                    .createImage(new FilteredImageSource(orig.getSource(), ZKThemeProcessor.this.hueFilter));
-                    
-            this.result = new BufferedImage(this.width, this.height, BufferedImage.TYPE_INT_ARGB);
-            this.g = this.result.createGraphics();
+            width = orig.getWidth();
+            height = orig.getHeight();
+            image = Toolkit.getDefaultToolkit().createImage(new FilteredImageSource(orig.getSource(), colorTransform));
+            bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+            graphics2D = bufferedImage.createGraphics();
         }
     }
     
@@ -103,9 +99,9 @@ public class ZKThemeProcessor extends AbstractThemeProcessor {
         @Override
         public void transform(InputStream inputStream, OutputStream outputStream) throws Exception {
             super.transform(inputStream, outputStream);
-            g.drawImage(resultImg, 0, 0, null);
-            ImageIO.write(result, "png", outputStream);
-            g.dispose();
+            graphics2D.drawImage(image, 0, 0, null);
+            ImageIO.write(bufferedImage, "png", outputStream);
+            graphics2D.dispose();
         }
     }
     
@@ -121,13 +117,13 @@ public class ZKThemeProcessor extends AbstractThemeProcessor {
         @Override
         public void transform(InputStream inputStream, OutputStream outputStream) throws Exception {
             super.transform(inputStream, outputStream);
-            g.setColor(java.awt.Color.white);
-            g.setComposite(AlphaComposite.Clear);
-            g.fillRect(0, 0, width, height);
-            g.setComposite(AlphaComposite.SrcOver);
-            g.drawImage(this.resultImg, 0, 0, null);
-            Sanselan.writeImage(result, outputStream, ImageFormat.IMAGE_FORMAT_GIF, null);
-            g.dispose();
+            graphics2D.setColor(java.awt.Color.white);
+            graphics2D.setComposite(AlphaComposite.Clear);
+            graphics2D.fillRect(0, 0, width, height);
+            graphics2D.setComposite(AlphaComposite.SrcOver);
+            graphics2D.drawImage(this.image, 0, 0, null);
+            Sanselan.writeImage(bufferedImage, outputStream, ImageFormat.IMAGE_FORMAT_GIF, null);
+            graphics2D.dispose();
         }
     }
     
@@ -154,7 +150,7 @@ public class ZKThemeProcessor extends AbstractThemeProcessor {
     
     private static final Pattern COLOR_PATTERN = Pattern.compile("#([A-Fa-f0-9]{6,6})");
     
-    private final HueFilter hueFilter;
+    private final ColorTransform colorTransform;
     
     private final Color color;
     
@@ -167,7 +163,7 @@ public class ZKThemeProcessor extends AbstractThemeProcessor {
         
         super(theme, mojo);
         color = toColor(theme.getBaseColor());
-        hueFilter = new HueFilter(color);
+        colorTransform = new ColorTransform(color);
         addConfigEntry("zk");
         registerTransform("*.gif", new GifTransform(mojo));
         registerTransform("*.png", new PngTransform(mojo));
@@ -224,7 +220,7 @@ public class ZKThemeProcessor extends AbstractThemeProcessor {
         
         while (matcher.find()) {
             String hexColor = matcher.group(1);
-            int rgb = hueFilter.filterRGB(0, 0, Integer.parseInt(hexColor, 16));
+            int rgb = colorTransform.filterRGB(0, 0, Integer.parseInt(hexColor, 16));
             String transfHexColor = String.format("%06x", rgb);
             matcher.appendReplacement(sb, "#" + transfHexColor);
         }
