@@ -37,16 +37,6 @@
 					</resources>
 					<themes>
 						<theme>
-							<themeName>admin</themeName>
-							<themeUri>src/main/themes/admin/bootstrap.min.css</themeUri>
-							<cssMapper>src/main/map/style-map.txt</cssMapper>
-						</theme>
-						<theme>
-							<themeName>bootable</themeName>
-							<themeUri>src/main/themes/bootable/bootstrap.min.css</themeUri>
-							<cssMapper>src/main/map/style-map.txt</cssMapper>
-						</theme>
-						<theme>
 							<themeName>cerulean</themeName>
 							<themeUri>src/main/themes/cerulean/bootstrap.min.css</themeUri>
 							<cssMapper>src/main/map/style-map.txt</cssMapper>
@@ -79,11 +69,6 @@
 						<theme>
 							<themeName>lumen</themeName>
 							<themeUri>src/main/themes/lumen/bootstrap.min.css</themeUri>
-							<cssMapper>src/main/map/style-map.txt</cssMapper>
-						</theme>
-						<theme>
-							<themeName>metro</themeName>
-							<themeUri>src/main/themes/metro/bootstrap.min.css</themeUri>
 							<cssMapper>src/main/map/style-map.txt</cssMapper>
 						</theme>
 						<theme>
