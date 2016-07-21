@@ -30,8 +30,6 @@ import java.io.FileFilter;
 import java.util.Date;
 import java.util.List;
 
-import com.google.common.io.Files;
-
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.commons.lang.StringUtils;
 import org.apache.maven.archiver.MavenArchiveConfiguration;
@@ -45,11 +43,11 @@ import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectHelper;
-
 import org.carewebframework.maven.plugin.processor.ResourceProcessor;
-
 import org.codehaus.plexus.archiver.jar.JarArchiver;
 import org.codehaus.plexus.util.FileUtils;
+
+import com.google.common.io.Files;
 
 /**
  * Base plugin.
@@ -315,7 +313,13 @@ public abstract class BaseMojo extends AbstractMojo {
         archiver.setArchiver(jarArchiver);
         archiver.setOutputFile(jarFile);
         archiver.createArchive(mavenSession, mavenProject, archiveConfig);
-        projectHelper.attachArtifact(mavenProject, jarFile, classifier);
+        
+        if (noclassifier) {
+            artifact.setFile(jarFile);
+        } else {
+            projectHelper.attachArtifact(mavenProject, jarFile, classifier);
+        }
+        
         FileUtils.deleteDirectory(stagingDirectory);
         return jarFile;
     }
