@@ -30,32 +30,21 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.carewebframework.api.AppFramework;
 import org.carewebframework.api.FrameworkUtil;
-
+import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.component.Page;
+import org.carewebframework.web.component.Window;
+import org.carewebframework.web.core.ExecutionContext;
+import org.carewebframework.web.page.PageDefinition;
 import org.springframework.context.ApplicationContext;
 
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.HtmlBasedComponent;
-import org.zkoss.zk.ui.Page;
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.event.SizeEvent;
-import org.zkoss.zk.ui.metainfo.PageDefinition;
-import org.zkoss.zk.ui.sys.ExecutionsCtrl;
-import org.zkoss.zul.Window;
-
 /**
- * Base class for a ZK popup window.
+ * Base class for a popup window.
  */
 public class PopupDialog extends Window {
     
     private static final Log log = LogFactory.getLog(PopupDialog.class);
-    
-    private static final long serialVersionUID = 1L;
     
     private boolean cancelled = true;
     
@@ -80,7 +69,7 @@ public class PopupDialog extends Window {
     /**
      * Can be used to popup any zul page definition as a modal dialog.
      * 
-     * @param zulPageDefinition Page definition used to construct the dialog.
+     * @param pageDefinition Page definition used to construct the dialog.
      * @param args Argument list (may be null)
      * @param closable If true, window closure button appears.
      * @param sizable If true, window sizing grips appear.
@@ -88,28 +77,27 @@ public class PopupDialog extends Window {
      *            displayed.
      * @return Reference to the opened window, if successful.
      */
-    public static Window popup(PageDefinition zulPageDefinition, Map<Object, Object> args, boolean closable, boolean sizable,
+    public static Window popup(PageDefinition pageDefinition, Map<Object, Object> args, boolean closable, boolean sizable,
                                boolean show) {
         Window parent = new Window(); // Temporary parent in case createComponents fails, so can cleanup.
-        Page currentPage = ExecutionsCtrl.getCurrentCtrl().getCurrentPage();
-        parent.setMold("bootstrap");
-        parent.setPage(currentPage);
+        Page currentPage = ExecutionContext.getPage();
+        parent.setParent(currentPage);
         Window window = null;
         
         try {
-            Executions.getCurrent().createComponents(zulPageDefinition, parent, args);
+            pageDefinition.materialize(parent);
             window = ZKUtil.findChild(parent, Window.class);
             
             if (window != null) { // If any top component is a window, discard temp parent
                 window.setParent(null);
-                Component child;
+                BaseComponent child;
                 
                 while ((child = parent.getFirstChild()) != null) {
                     child.setParent(window);
                 }
                 
                 parent.detach();
-                window.setPage(currentPage);
+                window.setParent(currentPage);
             } else { // Otherwise, use the temp parent as the window
                 window = parent;
             }
@@ -190,7 +178,7 @@ public class PopupDialog extends Window {
         }
         
         try {
-            PageDefinition pageDefinition = ZKUtil.loadZulPageDefinition(zulPage, args);
+            PageDefinition pageDefinition = ZKUtil.loadPageDefinition(zulPage);
             return popup(pageDefinition, args, closable, sizable, show);
         } catch (Exception e) {
             log.error(e);
@@ -215,15 +203,15 @@ public class PopupDialog extends Window {
      * @param owner Component that requested creation (may be null)
      * @param title Window title
      */
-    public PopupDialog(Component owner, String title) {
+    public PopupDialog(BaseComponent owner, String title) {
         super();
         loadDefaults();
         setTitle(title);
         
         if (owner != null) {
-            setPage(owner.getPage());
+            setParent(owner.getPage());
         } else {
-            setPage(ExecutionsCtrl.getCurrentCtrl().getCurrentPage());
+            setParent(ExecutionContext.getPage());
         }
     }
     
@@ -237,7 +225,7 @@ public class PopupDialog extends Window {
     }
     
     private void loadDefaults() {
-        setContentStyle("overflow:auto");
+        //setContentStyle("overflow:auto");
         setVisible(false);
         setClosable(true);
         setSizable(true);
@@ -259,14 +247,6 @@ public class PopupDialog extends Window {
      */
     public void show() {
         try {
-            if (getWidth() == null && Executions.getCurrent().getBrowser("ie") != null) { // Hack to fix window sizing issue in IE
-                HtmlBasedComponent child = ZKUtil.findChild(this, HtmlBasedComponent.class, null);
-                
-                if (child != null) {
-                    setWidth(child.getWidth());
-                }
-            }
-            
             doModal();
         } catch (Exception e) {}
     }
@@ -296,8 +276,7 @@ public class PopupDialog extends Window {
      */
     public void close(boolean canceled) {
         this.cancelled = canceled;
-        onClose();
-        detach();
+        close();
     }
     
     /**

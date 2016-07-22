@@ -29,25 +29,20 @@ import org.carewebframework.api.event.EventUtil;
 import org.carewebframework.api.event.IGenericEvent;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.ui.FrameworkController;
-
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zul.Cell;
-import org.zkoss.zul.Label;
-import org.zkoss.zul.Splitter;
+import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.component.Label;
 
 /**
  * Controller for status panel plugin.
  */
 public class StatusPanel extends FrameworkController implements IGenericEvent<Object> {
     
-    private static final long serialVersionUID = 1L;
-    
     /**
      * Creates the default pane.
      */
     @Override
-    public void doAfterCompose(Component comp) throws Exception {
-        super.doAfterCompose(comp);
+    public void afterInitialized(BaseComponent comp) {
+        super.afterInitialized(comp);
         createLabel("default");
         getEventManager().subscribe(EventUtil.STATUS_EVENT, this);
     }
@@ -63,8 +58,8 @@ public class StatusPanel extends FrameworkController implements IGenericEvent<Ob
     public void eventCallback(String eventName, Object eventData) {
         String pane = StrUtil.piece(eventName, ".", 2);
         Label lbl = getLabel(pane.isEmpty() ? "default" : pane);
-        lbl.setValue(eventData.toString());
-        lbl.setTooltiptext(eventData.toString());
+        lbl.setLabel(eventData.toString());
+        lbl.setHint(eventData.toString());
     }
     
     /**
@@ -74,7 +69,7 @@ public class StatusPanel extends FrameworkController implements IGenericEvent<Ob
      * @return The associated label.
      */
     private Label getLabel(String pane) {
-        Label lbl = (Label) root.getFellowIfAny(pane);
+        Label lbl = root.findByName(pane, Label.class);
         return lbl == null ? createLabel(pane) : lbl;
     }
     
@@ -103,7 +98,7 @@ public class StatusPanel extends FrameworkController implements IGenericEvent<Ob
         cell.setSclass("cwf-header-cell");
         root.appendChild(cell);
         Label lbl = new Label();
-        lbl.setId(pane);
+        lbl.setName(pane);
         cell.appendChild(lbl);
         return lbl;
     }

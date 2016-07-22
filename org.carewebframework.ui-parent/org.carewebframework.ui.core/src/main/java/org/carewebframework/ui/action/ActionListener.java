@@ -26,27 +26,24 @@
 package org.carewebframework.ui.action;
 
 import org.apache.commons.lang.StringUtils;
+import org.carewebframework.web.client.ClientUtil;
+import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.event.Event;
+import org.carewebframework.web.event.IEventListener;
 
-import org.carewebframework.ui.zk.ZKUtil;
-
-import org.zkoss.zk.au.out.AuScript;
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.Page;
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.metainfo.NodeInfo;
-import org.zkoss.zk.ui.metainfo.PageDefinition;
-import org.zkoss.zk.ui.metainfo.ZScript;
-import org.zkoss.zk.ui.metainfo.ZScriptInfo;
+import groovy.lang.GroovyShell;
+import groovy.lang.Script;
 
 /**
  * An event listener associated with an invokable action.
  */
-public class ActionListener implements EventListener<Event> {
+public class ActionListener implements IEventListener {
     
     private static final String ATTR_LISTENER = "ActionListener.";
+    
+    private static final String CLICK_EVENT = "click";
+    
+    private static final GroovyShell groovyShell = new GroovyShell();
     
     private IAction action;
     
@@ -54,7 +51,7 @@ public class ActionListener implements EventListener<Event> {
     
     private final String attrName;
     
-    private final Component component;
+    private final BaseComponent component;
     
     private Object target;
     
@@ -71,7 +68,7 @@ public class ActionListener implements EventListener<Event> {
      *            event listener from the component.
      * @return The newly created action listener.
      */
-    public static ActionListener addAction(Component component, String action) {
+    public static ActionListener addAction(BaseComponent component, String action) {
         return addAction(component, createAction(action));
     }
     
@@ -83,8 +80,8 @@ public class ActionListener implements EventListener<Event> {
      *            event listener from the component.
      * @return The newly created action listener.
      */
-    public static ActionListener addAction(Component component, IAction action) {
-        return addAction(component, action, Events.ON_CLICK);
+    public static ActionListener addAction(BaseComponent component, IAction action) {
+        return addAction(component, action, CLICK_EVENT);
     }
     
     /**
@@ -97,7 +94,7 @@ public class ActionListener implements EventListener<Event> {
      * @param eventName The name of the event that will trigger the action.
      * @return The newly created action listener, or null if removed.
      */
-    public static ActionListener addAction(Component component, String action, String eventName) {
+    public static ActionListener addAction(BaseComponent component, String action, String eventName) {
         return addAction(component, createAction(action), eventName);
     }
     
@@ -110,7 +107,7 @@ public class ActionListener implements EventListener<Event> {
      * @param eventName The name of the event that will trigger the action.
      * @return The newly created or just removed action listener.
      */
-    public static ActionListener addAction(Component component, IAction action, String eventName) {
+    public static ActionListener addAction(BaseComponent component, IAction action, String eventName) {
         ActionListener listener;
         
         if (action == null) {
@@ -134,8 +131,8 @@ public class ActionListener implements EventListener<Event> {
      * @param component Component whose action is to be removed.
      * @return The removed deferred event listener, or null if none found.
      */
-    public static ActionListener removeAction(Component component) {
-        return removeAction(component, Events.ON_CLICK);
+    public static ActionListener removeAction(BaseComponent component) {
+        return removeAction(component, CLICK_EVENT);
     }
     
     /**
@@ -145,7 +142,7 @@ public class ActionListener implements EventListener<Event> {
      * @param eventName The event whose associated action is being removed.
      * @return The removed deferred event listener, or null if none found.
      */
-    public static ActionListener removeAction(Component component, String eventName) {
+    public static ActionListener removeAction(BaseComponent component, String eventName) {
         ActionListener listener = getListener(component, eventName);
         
         if (listener != null) {
@@ -161,8 +158,8 @@ public class ActionListener implements EventListener<Event> {
      * @param component The component.
      * @param disable Disable state for listener.
      */
-    public static void disableAction(Component component, boolean disable) {
-        disableAction(component, Events.ON_CLICK, disable);
+    public static void disableAction(BaseComponent component, boolean disable) {
+        disableAction(component, CLICK_EVENT, disable);
     }
     
     /**
@@ -172,7 +169,7 @@ public class ActionListener implements EventListener<Event> {
      * @param eventName The name of the event.
      * @param disable Disable state for listener.
      */
-    public static void disableAction(Component component, String eventName, boolean disable) {
+    public static void disableAction(BaseComponent component, String eventName, boolean disable) {
         ActionListener listener = getListener(component, eventName);
         
         if (listener != null) {
@@ -204,8 +201,8 @@ public class ActionListener implements EventListener<Event> {
      * @param component The component.
      * @return A DeferredEventListener, or null if not found.
      */
-    public static ActionListener getListener(Component component) {
-        return getListener(component, Events.ON_CLICK);
+    public static ActionListener getListener(BaseComponent component) {
+        return getListener(component, CLICK_EVENT);
     }
     
     /**
@@ -215,14 +212,14 @@ public class ActionListener implements EventListener<Event> {
      * @param eventName The event name.
      * @return A DeferredEventListener, or null if not found.
      */
-    public static ActionListener getListener(Component component, String eventName) {
+    public static ActionListener getListener(BaseComponent component, String eventName) {
         return (ActionListener) component.getAttribute(getAttrName(eventName));
     }
     
     /**
      * Returns the attribute name where the listener reference is stored.
      * 
-     * @param eventName The event anem.
+     * @param eventName The event name.
      * @return The attribute name.
      */
     private static String getAttrName(String eventName) {
@@ -236,13 +233,13 @@ public class ActionListener implements EventListener<Event> {
      * @param action Action to be invoked upon receipt of the event.
      * @param eventName The name of the event.
      */
-    private ActionListener(Component component, IAction action, String eventName) {
+    private ActionListener(BaseComponent component, IAction action, String eventName) {
         this.component = component;
         this.action = action;
         this.eventName = eventName;
         this.attrName = getAttrName(eventName);
         removeAction(component, eventName);
-        component.addEventListener(eventName, this);
+        component.registerEventListener(eventName, this);
         component.setAttribute(attrName, this);
     }
     
@@ -261,7 +258,7 @@ public class ActionListener implements EventListener<Event> {
      * Remove this listener from its associated component.
      */
     private void removeAction() {
-        component.removeEventListener(eventName, this);
+        component.unregisterEventListener(eventName, this);
         
         if (component.getAttribute(attrName) == this) {
             component.removeAttribute(attrName);
@@ -275,7 +272,7 @@ public class ActionListener implements EventListener<Event> {
      * @throws Exception Unspecified exception.
      */
     @Override
-    public void onEvent(Event event) throws Exception {
+    public void onEvent(Event event) {
         if (isDisabled()) {
             return;
         }
@@ -285,18 +282,15 @@ public class ActionListener implements EventListener<Event> {
         if (target != null) {
             switch (type) {
                 case URL:
-                    Executions.getCurrent().sendRedirect((String) target, "_blank");
+                    ClientUtil.redirect((String) target, "_blank");
                     break;
-                    
+                
                 case JSCRIPT:
-                    Executions.getCurrent().addAuResponse((AuScript) target);
+                    ClientUtil.eval((String) target);
                     break;
-                    
-                case ZUL:
-                case ZSCRIPT:
-                    ZScript zscript = (ZScript) target;
-                    Page page = component.getPage();
-                    page.interpret(zscript.getLanguage(), zscript.getContent(page, component), component);
+                
+                case GROOVY:
+                    ((Script) target).run();
                     break;
             }
         }
@@ -321,29 +315,18 @@ public class ActionListener implements EventListener<Event> {
             type = ActionType.getType(script);
             
             switch (type) {
-                case ZSCRIPT:
-                    target = ZScript.parseContent(stripPrefix(script));
+                case GROOVY:
+                    target = groovyShell.parse(stripPrefix(script));
                     break;
-                    
+                
                 case JSCRIPT:
-                    target = new AuScript(stripPrefix(script));
+                    target = stripPrefix(script);
                     break;
-                    
+                
                 case URL:
                     target = script;
                     break;
-                    
-                case ZUL:
-                    PageDefinition pd = ZKUtil.loadZulPageDefinition(script);
-                    
-                    for (NodeInfo node : pd.getChildren()) {
-                        if (node instanceof ZScriptInfo) {
-                            target = ((ZScriptInfo) node).getZScript();
-                            break;
-                        }
-                    }
-                    break;
-                    
+                
                 default:
                     target = null;
             }

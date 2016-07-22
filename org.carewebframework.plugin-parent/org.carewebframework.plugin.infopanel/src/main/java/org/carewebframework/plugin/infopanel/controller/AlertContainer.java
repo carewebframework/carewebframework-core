@@ -30,16 +30,14 @@ import java.util.List;
 import org.carewebframework.plugin.infopanel.model.IActionTarget;
 import org.carewebframework.plugin.infopanel.model.IInfoPanel.Action;
 import org.carewebframework.plugin.infopanel.service.InfoPanelService;
-
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.IdSpace;
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zul.Row;
+import org.carewebframework.web.ancillary.INamespace;
+import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.event.EventUtil;
 
 /**
  * Container for receiving components rendered by drop renderer.
  */
-public class AlertContainer extends Row implements IdSpace, IActionTarget {
+public class AlertContainer extends Row implements INamespace, IActionTarget {
     
     private static final long serialVersionUID = 1L;
     
@@ -52,9 +50,9 @@ public class AlertContainer extends Row implements IdSpace, IActionTarget {
      * @param child Child component that is the root component of the alert.
      * @return The created container.
      */
-    public static AlertContainer render(Component parent, Component child) {
+    public static AlertContainer render(BaseComponent parent, BaseComponent child) {
         AlertContainer container = new AlertContainer(child);
-        parent.insertBefore(container, parent.getFirstChild());
+        parent.addChild(container, 0);
         return container;
     }
     
@@ -63,9 +61,9 @@ public class AlertContainer extends Row implements IdSpace, IActionTarget {
      * 
      * @param child The child component.
      */
-    private AlertContainer(Component child) {
+    private AlertContainer(BaseComponent child) {
         super();
-        appendChild(child);
+        addChild(child);
         actionListeners = InfoPanelService.getActionListeners(child);
         ActionListener.bindActionListeners(this, actionListeners);
     }
@@ -78,7 +76,7 @@ public class AlertContainer extends Row implements IdSpace, IActionTarget {
      */
     @Override
     public void doAction(Action action) {
-        Component parent = getParent();
+        BaseComponent parent = getParent();
         
         switch (action) {
             case REMOVE:
@@ -97,12 +95,12 @@ public class AlertContainer extends Row implements IdSpace, IActionTarget {
                 break;
             
             case TOP:
-                parent.insertBefore(this, parent.getFirstChild());
+                parent.addChild(this, 0);
                 break;
         }
         
         if (parent != null) {
-            Events.postEvent(MainController.ALERT_ACTION_EVENT, parent, action);
+            EventUtil.post(MainController.ALERT_ACTION_EVENT, parent, action);
         }
     }
     

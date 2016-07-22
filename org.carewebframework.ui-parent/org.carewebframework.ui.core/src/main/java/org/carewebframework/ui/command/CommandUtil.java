@@ -31,12 +31,9 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
-
 import org.carewebframework.ui.action.IAction;
-
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.event.KeyEvent;
-import org.zkoss.zul.impl.XulElement;
+import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.event.KeyEvent;
 
 /**
  * Static utility class.
@@ -115,7 +112,7 @@ public class CommandUtil {
      * @param remove If true, the specified shortcuts are removed from the component's ctrlKeys
      *            property. If false, they are added.
      */
-    /*package*/static void updateShortcuts(XulElement component, String shortcuts, boolean remove) {
+    /*package*/static void updateShortcuts(BaseComponent component, String shortcuts, boolean remove) {
         updateShortcuts(component, parseShortcuts(shortcuts, null), remove);
     }
     
@@ -128,7 +125,7 @@ public class CommandUtil {
      * @param remove If true, the specified shortcuts are removed from the component's ctrlKeys
      *            property. If false, they are added.
      */
-    /*package*/static void updateShortcuts(XulElement component, Set<String> shortcuts, boolean remove) {
+    /*package*/static void updateShortcuts(BaseComponent component, Set<String> shortcuts, boolean remove) {
         Set<String> currentShortcuts = CommandUtil.parseShortcuts(component.getCtrlKeys(), null);
         
         if (remove) {
@@ -255,8 +252,8 @@ public class CommandUtil {
      * @param commandName Name of the command.
      * @param component Component to be associated.
      */
-    public static void associateCommand(String commandName, XulElement component) {
-        associateCommand(commandName, component, (Component) null);
+    public static void associateCommand(String commandName, BaseComponent component) {
+        associateCommand(commandName, component, (BaseComponent) null);
     }
     
     /**
@@ -267,7 +264,7 @@ public class CommandUtil {
      * @param commandTarget The target of the command event. A null value indicates that the
      *            component itself will be the target.
      */
-    public static void associateCommand(String commandName, XulElement component, Component commandTarget) {
+    public static void associateCommand(String commandName, BaseComponent component, BaseComponent commandTarget) {
         getCommand(commandName, true).bind(component, commandTarget);
     }
     
@@ -278,7 +275,7 @@ public class CommandUtil {
      * @param component Component to be associated.
      * @param action Action to be executed when the command is invoked.
      */
-    public static void associateCommand(String commandName, XulElement component, IAction action) {
+    public static void associateCommand(String commandName, BaseComponent component, IAction action) {
         getCommand(commandName, true).bind(component, action);
     }
     
@@ -288,7 +285,7 @@ public class CommandUtil {
      * @param commandName Name of the command.
      * @param component Component to be associated.
      */
-    public static void dissociateCommand(String commandName, XulElement component) {
+    public static void dissociateCommand(String commandName, BaseComponent component) {
         Command command = getCommand(commandName, false);
         
         if (command != null) {
@@ -301,7 +298,7 @@ public class CommandUtil {
      * 
      * @param component The component.
      */
-    public static void dissociateAll(XulElement component) {
+    public static void dissociateAll(BaseComponent component) {
         for (Command command : CommandRegistry.getInstance()) {
             command.unbind(component);
         }

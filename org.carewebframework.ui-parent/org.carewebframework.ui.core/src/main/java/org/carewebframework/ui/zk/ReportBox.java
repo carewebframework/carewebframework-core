@@ -30,8 +30,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.carewebframework.common.StrUtil;
-
-import org.zkoss.zul.Window;
+import org.carewebframework.web.component.Window;
 
 /**
  * A simple dialog for displaying text information modally or amodally.
@@ -50,7 +49,7 @@ public class ReportBox {
      * @return The created window.
      */
     public static Window amodal(String text, String title, boolean allowPrint) {
-        return show(text, title, allowPrint, Window.OVERLAPPED);
+        return show(text, title, allowPrint, Window.Mode.POPUP);
     }
     
     /**
@@ -63,20 +62,7 @@ public class ReportBox {
      * @return The created window.
      */
     public static Window modal(String text, String title, boolean allowPrint) {
-        return show(text, title, allowPrint, Window.MODAL);
-    }
-    
-    /**
-     * Displays the dialog amodally.
-     * 
-     * @param text The text or HTML content. HTML content is indicated by prefixing with the html
-     *            tag.
-     * @param title Dialog title.
-     * @param allowPrint If true, a print button is provided.
-     * @return The created window.
-     */
-    public static Window amodal(List<String> text, String title, boolean allowPrint) {
-        return show(text, title, allowPrint, Window.OVERLAPPED);
+        return show(text, title, allowPrint, Window.Mode.MODAL);
     }
     
     /**
@@ -89,7 +75,7 @@ public class ReportBox {
      * @return The created window.
      */
     public static Window modal(List<String> text, String title, boolean allowPrint) {
-        return show(text, title, allowPrint, Window.MODAL);
+        return show(text, title, allowPrint, Window.Mode.MODAL);
     }
     
     /**
@@ -102,7 +88,7 @@ public class ReportBox {
      * @param mode The window mode.
      * @return The created window.
      */
-    private static Window show(List<String> text, String title, boolean allowPrint, int mode) {
+    private static Window show(List<String> text, String title, boolean allowPrint, Window.Mode mode) {
         return show(StrUtil.fromList(text), title, allowPrint, mode);
     }
     
@@ -116,7 +102,7 @@ public class ReportBox {
      * @param mode The window mode.
      * @return The created window.
      */
-    private static Window show(String text, String title, boolean allowPrint, int mode) {
+    private static Window show(String text, String title, boolean allowPrint, Window.Mode mode) {
         Map<Object, Object> args = new HashMap<>();
         
         if (text.startsWith("<html>")) {

@@ -25,7 +25,7 @@
  */
 package org.carewebframework.ui.zk;
 
-import org.zkoss.zk.ui.Component;
+import org.carewebframework.web.component.BaseComponent;
 
 /**
  * Interface to support rendering of dropped items.
@@ -40,7 +40,7 @@ public interface IDropRenderer {
      * @return The root component of the rendered view. The implementation may return null,
      *         indicating an inability to render the dropped item for any reason.
      */
-    Component renderDroppedItem(Component droppedItem);
+    BaseComponent renderDroppedItem(BaseComponent droppedItem);
     
     /**
      * The drop renderer should supply text to be displayed in association with the dropped item.
@@ -48,7 +48,7 @@ public interface IDropRenderer {
      * @param droppedItem The dropped component.
      * @return The display text.
      */
-    String getDisplayText(Component droppedItem);
+    String getDisplayText(BaseComponent droppedItem);
     
     /**
      * The drop renderer may return a value of false to temporarily disable its participation in

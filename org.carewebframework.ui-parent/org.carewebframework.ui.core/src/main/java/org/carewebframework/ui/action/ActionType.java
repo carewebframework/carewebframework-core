@@ -29,9 +29,9 @@ package org.carewebframework.ui.action;
  * Recognized action types.
  */
 public enum ActionType {
-    UNKNOWN, URL, ZUL, ZSCRIPT, JSCRIPT;
+    UNKNOWN, URL, GROOVY, JSCRIPT;
     
-    private static final String[] PATTERN = { null, "^https?:.*", "^\\~\\.\\/.*", "^zscript:.*", "^j(ava)?script:.*" };
+    private static final String[] PATTERN = { null, "^https?:.*", "^\\~\\.\\/.*", "^groovy:.*", "^j(ava)?script:.*" };
     
     /**
      * Returns the action type from the action. Formats for supported actions are:
@@ -42,9 +42,9 @@ public enum ActionType {
      * <td>Url for external web page.</td>
      * </tr>
      * <tr>
-     * <td><b>ZSCRIPT</b></td>
-     * <td><i>zscript:&lt;script&gt;</i></td>
-     * <td>Executable zscript code.</td>
+     * <td><b>GROOVY</b></td>
+     * <td><i>groovy:&lt;script&gt;</i></td>
+     * <td>Executable groovy code.</td>
      * </tr>
      * <tr>
      * <td><b>JSCRIPT</b></td>

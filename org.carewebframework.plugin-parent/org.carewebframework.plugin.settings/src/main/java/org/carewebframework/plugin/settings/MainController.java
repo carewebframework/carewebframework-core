@@ -26,11 +26,9 @@
 package org.carewebframework.plugin.settings;
 
 import org.apache.commons.lang.StringUtils;
-
 import org.carewebframework.shell.designer.PropertyGrid;
 import org.carewebframework.shell.plugins.PluginController;
-
-import org.zkoss.zk.ui.Component;
+import org.carewebframework.web.component.BaseComponent;
 
 /**
  * Controller for settings plugin. The settings plugin is a generic plugin for managing settings of
@@ -53,7 +51,7 @@ public class MainController extends PluginController {
      * Connects an embedded instance of the property grid to the plug-in's root component.
      */
     @Override
-    public void doAfterCompose(Component comp) throws Exception {
+    public void doAfterCompose(BaseComponent comp) throws Exception {
         super.doAfterCompose(comp);
         propertyGrid = PropertyGrid.create(null, comp, true);
         getContainer().registerProperties(this, "provider", "group");

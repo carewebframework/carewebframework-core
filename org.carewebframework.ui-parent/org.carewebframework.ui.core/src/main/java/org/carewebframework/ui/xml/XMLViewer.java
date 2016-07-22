@@ -25,10 +25,10 @@
  */
 package org.carewebframework.ui.xml;
 
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.event.Events;
-
+import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.event.Event;
+import org.carewebframework.web.event.EventUtil;
+import org.carewebframework.web.page.PageParser;
 import org.w3c.dom.Document;
 
 /**
@@ -40,10 +40,11 @@ public class XMLViewer {
      * Show the dialog, loading the specified document.
      * 
      * @param document The XML document.
+     * @throws Exception
      */
-    public static void showXML(Document document) {
-        Component dlg = Executions.createComponents(XMLConstants.VIEW_DIALOG, null, null);
-        Events.sendEvent(Events.ON_MODAL, dlg, document);
+    public static void showXML(Document document) throws Exception {
+        BaseComponent dlg = PageParser.getInstance().parse(XMLConstants.VIEW_DIALOG).materialize(null);
+        EventUtil.send(new Event("modal", dlg, document));
     }
     
     /**
@@ -51,7 +52,7 @@ public class XMLViewer {
      * 
      * @param root Root component of tree.
      */
-    public static void showZUML(Component root) {
+    public static void showZUML(BaseComponent root) {
         showZUML(root, XMLConstants.EXCLUDED_PROPERTIES);
         
     }
@@ -62,7 +63,7 @@ public class XMLViewer {
      * @param root Root component of tree.
      * @param excludedProperties Excluded properties.
      */
-    public static void showZUML(Component root, String... excludedProperties) {
+    public static void showZUML(BaseComponent root, String... excludedProperties) {
         showXML(ZK2XML.toDocument(root, excludedProperties));
         
     }

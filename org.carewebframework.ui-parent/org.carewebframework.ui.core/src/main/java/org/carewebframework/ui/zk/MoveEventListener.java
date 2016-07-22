@@ -25,16 +25,15 @@
  */
 package org.carewebframework.ui.zk;
 
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.HtmlBasedComponent;
-import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.event.MoveEvent;
+import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.component.BaseUIComponent;
+import org.carewebframework.web.event.Event;
+import org.carewebframework.web.event.IEventListener;
 
 /**
  * Used to prevent a modal window from being moved outside the view port.
  */
-public class MoveEventListener implements EventListener<MoveEvent> {
+public class MoveEventListener implements IEventListener {
     
     private static final MoveEventListener moveEventListener = new MoveEventListener();
     
@@ -43,8 +42,8 @@ public class MoveEventListener implements EventListener<MoveEvent> {
      * 
      * @param comp The component to receive the event listener.
      */
-    public static void add(Component comp) {
-        comp.addEventListener(Events.ON_MOVE, moveEventListener);
+    public static void add(BaseUIComponent comp) {
+        comp.registerEventListener("move", moveEventListener);
     }
     
     /**
@@ -52,14 +51,14 @@ public class MoveEventListener implements EventListener<MoveEvent> {
      * 
      * @param comp The component from which to remove the event listener.
      */
-    public static void remove(Component comp) {
-        comp.removeEventListener(Events.ON_MOVE, moveEventListener);
+    public static void remove(BaseComponent comp) {
+        comp.unregisterEventListener("move", moveEventListener);
     }
     
     @Override
-    public void onEvent(MoveEvent moveEvent) throws Exception {
+    public void onEvent(Event moveEvent) {
         // Prevent movement outside of browser margins where we can't move it back.
-        HtmlBasedComponent target = (HtmlBasedComponent) moveEvent.getTarget();
+        BaseUIComponent target = (BaseUIComponent) moveEvent.getTarget();
         
         if (target.getTop().startsWith("-")) {
             target.setTop("0px");

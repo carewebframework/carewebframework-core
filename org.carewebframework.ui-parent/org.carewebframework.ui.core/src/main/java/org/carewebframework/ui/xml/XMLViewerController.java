@@ -27,15 +27,9 @@ package org.carewebframework.ui.xml;
 
 import org.carewebframework.ui.FrameworkController;
 import org.carewebframework.ui.zk.TreeUtil;
-
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.util.Clients;
-import org.zkoss.zul.Label;
-import org.zkoss.zul.Textbox;
-import org.zkoss.zul.Tree;
-import org.zkoss.zul.Treeitem;
-
+import org.carewebframework.web.component.Label;
+import org.carewebframework.web.component.Textbox;
+import org.carewebframework.web.event.Event;
 import org.w3c.dom.Document;
 
 /**
@@ -76,8 +70,8 @@ public class XMLViewerController extends FrameworkController {
         String text = textbox.getValue();
         
         if (text != null && !text.isEmpty()) {
-            lastItem = lastItem == null ? TreeUtil.search(tree, text, renderer.treeitemSearch) : TreeUtil.search(lastItem,
-                text, renderer.treeitemSearch);
+            lastItem = lastItem == null ? TreeUtil.search(tree, text, renderer.treeitemSearch)
+                    : TreeUtil.search(lastItem, text, renderer.treeitemSearch);
             lblNotFound.setVisible(lastItem == null);
             
             if (lastItem != null) {
@@ -99,7 +93,6 @@ public class XMLViewerController extends FrameworkController {
     public void onModal(Event event) {
         Document document = (Document) event.getData();
         tree.setModel(new XMLTreeModel(document, true));
-        Clients.resize(tree);
     }
     
     /**

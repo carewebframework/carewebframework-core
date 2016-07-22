@@ -25,15 +25,14 @@
  */
 package org.carewebframework.ui.command;
 
+import java.awt.event.KeyEvent;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
 import org.carewebframework.api.spring.SpringUtil;
-
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.KeyEvent;
-import org.zkoss.zul.impl.XulElement;
+import org.carewebframework.web.component.BaseUIComponent;
+import org.carewebframework.web.event.Event;
 
 /**
  * Registry for commands.
@@ -114,16 +113,16 @@ public class CommandRegistry implements Iterable<Command> {
     }
     
     public void process(KeyEvent event) {
-        if (event.getReference() instanceof XulElement) {
+        if (event.getReference() instanceof BaseUIComponent) {
             String shortcut = CommandUtil.getShortcut(event);
-            fireCommands(shortcut, event, (XulElement) event.getReference());
+            fireCommands(shortcut, event, (BaseUIComponent) event.getReference());
         }
     }
     
-    public void fireCommands(String shortcut, Event triggerEvent, Iterable<? extends XulElement> targets) {
+    public void fireCommands(String shortcut, Event triggerEvent, Iterable<? extends BaseUIComponent> targets) {
         for (Command command : this) {
             if (command.isBound(shortcut)) {
-                for (XulElement target : targets) {
+                for (BaseUIComponent target : targets) {
                     if (command.isBound(target)) {
                         if (!command.fire(target, triggerEvent)) {
                             break;
@@ -134,7 +133,7 @@ public class CommandRegistry implements Iterable<Command> {
         }
     }
     
-    public void fireCommands(String shortcut, Event triggerEvent, XulElement target) {
+    public void fireCommands(String shortcut, Event triggerEvent, BaseUIComponent target) {
         for (Command command : this) {
             if (command.isBound(shortcut) && command.isBound(target)) {
                 command.fire(target, triggerEvent);

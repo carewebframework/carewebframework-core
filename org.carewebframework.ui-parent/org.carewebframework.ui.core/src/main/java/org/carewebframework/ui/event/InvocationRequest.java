@@ -25,14 +25,12 @@
  */
 package org.carewebframework.ui.event;
 
-import org.zkoss.zk.ui.event.Event;
+import org.carewebframework.web.event.Event;
 
 /**
  * A single invocation request that will be sent to the target.
  */
 public class InvocationRequest extends Event {
-    
-    private static final long serialVersionUID = 1L;
     
     /**
      * Create a help request.

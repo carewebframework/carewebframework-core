@@ -25,11 +25,8 @@
  */
 package org.carewebframework.ui.zk;
 
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zul.Listcell;
-import org.zkoss.zul.Listgroup;
-import org.zkoss.zul.Listitem;
-import org.zkoss.zul.ListitemRenderer;
+import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.component.Listitem;
 
 /**
  * Base list item renderer.
@@ -76,36 +73,36 @@ public abstract class AbstractListitemRenderer<T, G> extends AbstractRenderer im
     /**
      * Creates a list cell containing a label with the specified parameters.
      * 
-     * @param parent Component that will be the parent of the list cell.
+     * @param parent BaseComponent that will be the parent of the list cell.
      * @param value Value to be used as label text.
      * @return The newly created list cell.
      */
-    public Listcell createCell(Component parent, Object value) {
+    public Listcell createCell(BaseComponent parent, Object value) {
         return createCell(parent, value, null);
     }
     
     /**
      * Creates a list cell containing a label with the specified parameters.
      * 
-     * @param parent Component that will be the parent of the list cell.
+     * @param parent BaseComponent that will be the parent of the list cell.
      * @param value Value to be used as label text.
      * @param prefix Value to be used as a prefix for the label text.
      * @return The newly created list cell.
      */
-    public Listcell createCell(Component parent, Object value, String prefix) {
+    public Listcell createCell(BaseComponent parent, Object value, String prefix) {
         return createCell(parent, value, prefix, null);
     }
     
     /**
      * Creates a list cell containing a label with the specified parameters.
      * 
-     * @param parent Component that will be the parent of the list cell.
+     * @param parent BaseComponent that will be the parent of the list cell.
      * @param value Value to be used as label text.
      * @param prefix Value to be used as a prefix for the label text.
      * @param style Style to be applied to the label.
      * @return The newly created list cell.
      */
-    public Listcell createCell(Component parent, Object value, String prefix, String style) {
+    public Listcell createCell(BaseComponent parent, Object value, String prefix, String style) {
         return createCell(parent, value, prefix, style, null, Listcell.class);
     }
     

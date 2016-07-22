@@ -38,14 +38,11 @@ import org.carewebframework.api.thread.IAbortable;
 import org.carewebframework.ui.LifecycleEventListener.ILifecycleCallback;
 import org.carewebframework.ui.thread.ZKThread;
 import org.carewebframework.ui.thread.ZKThread.ZKRunnable;
-import org.carewebframework.ui.zk.ZKUtil;
-
+import org.carewebframework.web.ancillary.IAutoWired;
+import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.event.Event;
+import org.carewebframework.web.event.IEventListener;
 import org.springframework.context.ApplicationContext;
-
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zk.ui.util.GenericForwardComposer;
 
 /**
  * Can be subclassed to be used as a controller with convenience methods for accessing the
@@ -53,7 +50,7 @@ import org.zkoss.zk.ui.util.GenericForwardComposer;
  * framework and subclasses can implement special interfaces recognized by the framework, such as
  * context change interfaces.
  */
-public class FrameworkController extends GenericForwardComposer<Component> {
+public class FrameworkController implements IAutoWired {
     
     private static final long serialVersionUID = 1L;
     
@@ -63,13 +60,13 @@ public class FrameworkController extends GenericForwardComposer<Component> {
     
     private IEventManager eventManager;
     
-    protected Component root;
+    protected BaseComponent root;
     
-    private Component comp;
+    private BaseComponent comp;
     
     private final List<IAbortable> threads = new ArrayList<>();
     
-    private final EventListener<Event> threadCompletionListener = new EventListener<Event>() {
+    private final IEventListener threadCompletionListener = new IEventListener() {
         
         /**
          * Background thread completion will be notified via this event listener. The listener will
@@ -79,7 +76,7 @@ public class FrameworkController extends GenericForwardComposer<Component> {
          */
         @Override
         public void onEvent(Event event) {
-            ZKThread thread = (ZKThread) ZKUtil.getEventOrigin(event).getData();
+            ZKThread thread = (ZKThread) event.getData();
             
             if (thread != null) {
                 removeThread(thread);
@@ -103,16 +100,16 @@ public class FrameworkController extends GenericForwardComposer<Component> {
         
     };
     
-    private final ILifecycleCallback<Component> lifecycleListener = new ILifecycleCallback<Component>() {
+    private final ILifecycleCallback<BaseComponent> lifecycleListener = new ILifecycleCallback<BaseComponent>() {
         
         @Override
-        public void onInit(Component object) {
+        public void onInit(BaseComponent object) {
             eventManager.subscribe(Constants.REFRESH_EVENT, refreshListener);
             appFramework.registerObject(FrameworkController.this);
         }
         
         @Override
-        public void onCleanup(Component object) {
+        public void onCleanup(BaseComponent object) {
             eventManager.unsubscribe(Constants.REFRESH_EVENT, refreshListener);
             appFramework.unregisterObject(FrameworkController.this);
             cleanup();
@@ -131,7 +128,7 @@ public class FrameworkController extends GenericForwardComposer<Component> {
      * @param comp The component whose controller is sought.
      * @return The associated controller, or null if none found.
      */
-    public static Object getController(Component comp) {
+    public static Object getController(BaseComponent comp) {
         return getController(comp, false);
     }
     
@@ -142,8 +139,8 @@ public class FrameworkController extends GenericForwardComposer<Component> {
      * @param recurse If true, search up the parent chain until a controller is found.
      * @return The associated controller, or null if none found.
      */
-    public static Object getController(Component comp, boolean recurse) {
-        return comp.getAttribute(Constants.ATTR_COMPOSER, recurse);
+    public static Object getController(BaseComponent comp, boolean recurse) {
+        return comp.findAttribute(Constants.ATTR_COMPOSER);
     }
     
     /**
@@ -177,15 +174,14 @@ public class FrameworkController extends GenericForwardComposer<Component> {
      * Override the doAfterCompose method to set references to the application context and the
      * framework and register the controller with the framework.
      * 
-     * @param comp Component associated with this controller.
+     * @param comp BaseComponent associated with this controller.
      */
     @Override
-    public void doAfterCompose(Component comp) throws Exception {
-        super.doAfterCompose(comp);
+    public void afterInitialized(BaseComponent comp) {
         root = comp;
         this.comp = comp;
         comp.setAttribute(Constants.ATTR_COMPOSER, this);
-        comp.addEventListener(ZKThread.ON_THREAD_COMPLETE, threadCompletionListener);
+        comp.registerEventListener(ZKThread.ON_THREAD_COMPLETE, threadCompletionListener);
         appContext = SpringUtil.getAppContext();
         appFramework = FrameworkUtil.getAppFramework();
         eventManager = EventManager.getInstance();
@@ -204,14 +200,14 @@ public class FrameworkController extends GenericForwardComposer<Component> {
      * Override to respond to a refresh request.
      */
     public void refresh() {
-    
+        
     }
     
     /**
      * Override to perform any special cleanup.
      */
     public void cleanup() {
-    
+        
     }
     
     /**

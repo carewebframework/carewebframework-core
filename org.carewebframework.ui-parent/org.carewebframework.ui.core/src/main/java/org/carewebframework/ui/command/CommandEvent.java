@@ -26,16 +26,13 @@
 package org.carewebframework.ui.command;
 
 import org.apache.commons.beanutils.PropertyUtils;
-
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.event.Event;
+import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.event.Event;
 
 /**
  * Event object for sending commands to components.
  */
 public class CommandEvent extends Event {
-    
-    private static final long serialVersionUID = 1L;
     
     public static final String EVENT_NAME = "onCommand";
     
@@ -43,7 +40,7 @@ public class CommandEvent extends Event {
     
     private final String commandName;
     
-    public CommandEvent(String commandName, Event triggerEvent, Component target) {
+    public CommandEvent(String commandName, Event triggerEvent, BaseComponent target) {
         super(EVENT_NAME, target);
         this.commandName = commandName;
         this.triggerEvent = triggerEvent;
@@ -57,10 +54,10 @@ public class CommandEvent extends Event {
         return triggerEvent;
     }
     
-    public Component getReference() {
+    public BaseComponent getReference() {
         try {
             Object ref = triggerEvent == null ? null : PropertyUtils.getProperty(triggerEvent, "reference");
-            return ref instanceof Component ? (Component) ref : null;
+            return ref instanceof BaseComponent ? (BaseComponent) ref : null;
         } catch (Exception e) {
             return null;
         }

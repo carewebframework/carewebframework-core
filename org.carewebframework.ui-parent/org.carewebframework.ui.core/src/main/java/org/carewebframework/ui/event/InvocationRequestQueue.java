@@ -29,26 +29,22 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.beanutils.MethodUtils;
-
-import org.zkoss.zk.au.AuRequest;
-import org.zkoss.zk.au.AuService;
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Desktop;
-import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zk.ui.event.EventQueue;
-import org.zkoss.zk.ui.event.EventQueues;
-import org.zkoss.zk.ui.util.DesktopCleanup;
+import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.component.Page;
+import org.carewebframework.web.event.Event;
+import org.carewebframework.web.event.EventQueue;
+import org.carewebframework.web.event.IEventListener;
 
 /**
- * This class implements a queue that allows one desktop to execute methods on a target on another
- * desktop (the owner of the queue) via invocation requests.
+ * This class implements a queue that allows one page to execute methods on a target on another page
+ * (the owner of the queue) via invocation requests.
  */
-public class InvocationRequestQueue implements EventListener<InvocationRequest> {
+public class InvocationRequestQueue implements IEventListener {
     
     /**
-     * Listens to desktop async requests.
+     * Listens to page async requests.
      */
-    private class DesktopListener implements AuService {
+    private class PageListener implements AuService {
         
         /**
          * Resets the keep alive timer.
@@ -69,13 +65,13 @@ public class InvocationRequestQueue implements EventListener<InvocationRequest> 
     
     private final Object target;
     
-    private final EventQueue<InvocationRequest> eventQueue;
+    private final EventQueue eventQueue;
     
-    private final Desktop desktop;
+    private final Page page;
     
     private final String queueName;
     
-    private final DesktopListener desktopListener = new DesktopListener();
+    private final PageListener pageListener = new PageListener();
     
     private final InvocationRequest onClose;
     
@@ -86,7 +82,7 @@ public class InvocationRequestQueue implements EventListener<InvocationRequest> 
     /**
      * Looks up and returns the named queue registered with the specified owner.
      * 
-     * @param ownerId This is the unique desktop id of the queue's owner.
+     * @param ownerId This is the unique page id of the queue's owner.
      * @param queueName The queue name.
      * @return The requested message queue, or null if not found.
      */
@@ -99,7 +95,7 @@ public class InvocationRequestQueue implements EventListener<InvocationRequest> 
     /**
      * Returns the queue name qualified by the owner id.
      * 
-     * @param ownerId This is the unique desktop id of the queue's owner.
+     * @param ownerId This is the unique page id of the queue's owner.
      * @param queueName The queue name.
      * @return The qualified queue name.
      */
@@ -125,46 +121,46 @@ public class InvocationRequestQueue implements EventListener<InvocationRequest> 
      * @param queueName The name of the queue to be created.
      * @param onClose Invocation request to send to the target upon queue closure (may be null).
      */
-    public InvocationRequestQueue(Component target, String queueName, InvocationRequest onClose) {
-        this(target.getDesktop(), target, queueName, onClose);
+    public InvocationRequestQueue(BaseComponent target, String queueName, InvocationRequest onClose) {
+        this(target.getPage(), target, queueName, onClose);
     }
     
     /**
-     * Create a help message queue for the specified desktop and target.
+     * Create a help message queue for the specified page and target.
      * 
-     * @param desktop Desktop instance that owns the queue.
+     * @param page Page instance that owns the queue.
      * @param target Target of requests sent to the queue.
      * @param queueName The name of the queue to be created.
      * @param onClose Invocation request to send to the target upon queue closure (may be null).
      */
-    public InvocationRequestQueue(Desktop desktop, Object target, String queueName, InvocationRequest onClose) {
+    public InvocationRequestQueue(Page page, Object target, String queueName, InvocationRequest onClose) {
         super();
         this.target = target;
-        this.desktop = desktop;
-        this.queueName = getQualifiedQueueName(desktop.getId(), queueName);
+        this.page = page;
+        this.queueName = getQualifiedQueueName(page.getId(), queueName);
         this.onClose = onClose;
         resetKeepAlive();
         eventQueue = createQueue();
-        desktop.addListener(new DesktopCleanup() {
+        page.addListener(new PageCleanup() {
             
             /**
-             * Closes the invocation request queue when the owning desktop is destroyed.
+             * Closes the invocation request queue when the owning page is destroyed.
              * 
-             * @see org.zkoss.zk.ui.util.DesktopCleanup#cleanup(org.zkoss.zk.ui.Desktop)
+             * @see org.zkoss.zk.ui.util.PageCleanup#cleanup(org.zkoss.zk.ui.Page)
              */
             @Override
-            public void cleanup(Desktop desktop) throws Exception {
+            public void cleanup(Page page) throws Exception {
                 close();
             }
             
         });
         
-        desktop.addListener(desktopListener);
+        page.addListener(pageListener);
     }
     
     /**
      * Creates a queue for the specified owner and establishes a subscriber. The queue will be
-     * automatically removed when the owning desktop is destroyed.
+     * automatically removed when the owning page is destroyed.
      * 
      * @return The newly created event queue.
      */
@@ -177,15 +173,14 @@ public class InvocationRequestQueue implements EventListener<InvocationRequest> 
     
     /**
      * Registers a message queue. A run time exception is thrown if a queue by the same name is
-     * already registered for this desktop.
+     * already registered for this page.
      */
     private void registerQueue() {
         synchronized (messageQueues) {
             if (messageQueues.get(queueName) == null) {
                 messageQueues.put(queueName, this);
             } else {
-                throw new RuntimeException("An invocation request queue '" + queueName
-                        + "' already exists for this desktop.");
+                throw new RuntimeException("An invocation request queue '" + queueName + "' already exists for this page.");
             }
         }
     }
@@ -207,9 +202,9 @@ public class InvocationRequestQueue implements EventListener<InvocationRequest> 
     protected void close() {
         if (!closed) {
             closed = true;
-            desktop.removeListener(desktopListener);
+            page.removeListener(pageListener);
             unregisterQueue();
-            EventQueues.remove(queueName, desktop.getWebApp());
+            EventQueues.remove(queueName, page.getWebApp());
             
             if (onClose != null) {
                 onEvent(onClose);
@@ -263,7 +258,7 @@ public class InvocationRequestQueue implements EventListener<InvocationRequest> 
      */
     public boolean isAlive() {
         checkKeepAlive();
-        return !closed && desktop.isAlive() && lookupQueue(false) != null;
+        return !closed && !page.isDead() && lookupQueue(false) != null;
     }
     
     /**
@@ -275,7 +270,7 @@ public class InvocationRequestQueue implements EventListener<InvocationRequest> 
     
     /**
      * If keep-alive is enabled, check to see if it has exceeded the threshold. If it has, it is
-     * assumed that the owner desktop is no longer valid and closes the queue.
+     * assumed that the owner page is no longer valid and closes the queue.
      */
     private void checkKeepAlive() {
         if (!closed && System.currentTimeMillis() - lastKeepAlive > TIMEOUT_INTERVAL) {
@@ -289,9 +284,10 @@ public class InvocationRequestQueue implements EventListener<InvocationRequest> 
      * @param request The invocation request.
      */
     @Override
-    public void onEvent(InvocationRequest request) {
+    public void onEvent(Event event) {
         try {
-            MethodUtils.invokeMethod(target, request.getName(), request.getArgs());
+            InvocationRequest request = (InvocationRequest) event;
+            MethodUtils.invokeMethod(target, request.getType(), request.getArgs());
         } catch (Throwable e) {}
     }
 }

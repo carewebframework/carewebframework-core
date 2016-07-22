@@ -33,21 +33,19 @@ import org.carewebframework.api.event.EventManager;
 import org.carewebframework.api.event.IGenericEvent;
 import org.carewebframework.ui.zk.MoveEventListener;
 import org.carewebframework.ui.zk.ZKUtil;
-
-import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.Page;
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.metainfo.PageDefinition;
-import org.zkoss.zk.ui.sys.ExecutionsCtrl;
-import org.zkoss.zul.Label;
-import org.zkoss.zul.Window;
+import org.carewebframework.web.component.Label;
+import org.carewebframework.web.component.Page;
+import org.carewebframework.web.component.Window;
+import org.carewebframework.web.core.ExecutionContext;
+import org.carewebframework.web.event.Event;
+import org.carewebframework.web.event.IEventListener;
+import org.carewebframework.web.page.PageDefinition;
+import org.carewebframework.web.page.PageParser;
 
 /**
  * Displays a popup message when a POPUP generic event is received.
  */
-public class PopupSupport implements IGenericEvent<Object>, EventListener<Event> {
+public class PopupSupport implements IGenericEvent<Object>, IEventListener {
     
     private static final String RESOURCE_PREFIX = ZKUtil.getResourcePath(PopupSupport.class);
     
@@ -59,7 +57,7 @@ public class PopupSupport implements IGenericEvent<Object>, EventListener<Event>
     
     private int position = INITIAL_POSITION;
     
-    private final List<Window> windows = Collections.synchronizedList(new ArrayList<Window>());
+    private final List<Window> windows = Collections.synchronizedList(new ArrayList<>());
     
     private EventManager eventManager;
     
@@ -125,17 +123,17 @@ public class PopupSupport implements IGenericEvent<Object>, EventListener<Event>
                 return;
             }
             
-            Page currentPage = ExecutionsCtrl.getCurrentCtrl().getCurrentPage();
+            Page currentPage = ExecutionContext.getPage();
             Window window = getPopupWindow();
             window.setTitle(popupData.getTitle());
-            window.setPage(currentPage);
-            window.addEventListener(Events.ON_MOVE, new MoveEventListener());
+            window.setParent(currentPage);
+            window.registerEventListener("move", new MoveEventListener());
             String pos = getPosition();
             window.setLeft(pos);
             window.setTop(pos);
             window.addEventListener(Events.ON_CLOSE, this);
-            Label label = (Label) window.getFellow("messagetext");
-            label.setValue(popupData.getMessage());
+            Label label = window.findByName("messagetext", Label.class);
+            label.setLabel(popupData.getMessage());
             window.doOverlapped();
         } catch (Exception e) {}
     }
@@ -167,16 +165,16 @@ public class PopupSupport implements IGenericEvent<Object>, EventListener<Event>
      */
     private synchronized Window getPopupWindow() throws Exception {
         if (popupDefinition == null) {
-            popupDefinition = ZKUtil.loadZulPageDefinition(RESOURCE_PREFIX + "popupWindow.zul");
+            popupDefinition = PageParser.getInstance().parse(RESOURCE_PREFIX + "popupWindow.cwf");
         }
         
-        Window window = (Window) Executions.getCurrent().createComponents(popupDefinition, null, null);
+        Window window = (Window) popupDefinition.materialize(null);
         windows.add(window);
         return window;
     }
     
     @Override
-    public void onEvent(Event event) throws Exception {
+    public void onEvent(Event event) {
         windows.remove(event.getTarget());
         resetPosition();
     }

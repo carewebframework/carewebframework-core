@@ -27,13 +27,7 @@ package org.carewebframework.ui.icons;
 
 import org.carewebframework.ui.zk.IconPicker;
 import org.carewebframework.ui.zk.ListUtil;
-
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zul.Combobox;
-import org.zkoss.zul.Comboitem;
-import org.zkoss.zul.Toolbar;
+import org.carewebframework.web.component.Toolbar;
 
 /**
  * Extends the icon picker by adding the ability to pick an icon library from which to choose.

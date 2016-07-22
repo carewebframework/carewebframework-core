@@ -33,7 +33,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.carewebframework.api.alias.AliasType;
 import org.carewebframework.api.alias.AliasTypeRegistry;
 import org.carewebframework.api.context.ContextManager;
@@ -43,22 +42,21 @@ import org.carewebframework.api.security.ISecurityService;
 import org.carewebframework.api.security.SecurityUtil;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.ui.Application;
-import org.carewebframework.ui.FrameworkWebSupport;
 import org.carewebframework.ui.zk.PopupDialog;
 import org.carewebframework.ui.zk.PromptDialog;
-
+import org.carewebframework.web.client.ClientUtil;
+import org.carewebframework.web.component.Page;
+import org.carewebframework.web.core.ExecutionContext;
+import org.carewebframework.web.core.WebUtil;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.ObjectUtils;
 
-import org.zkoss.zk.ui.Desktop;
-
 /**
  * Base Spring Security implementation.
  */
 public abstract class AbstractSecurityService implements ISecurityService {
-    
     
     private static final Log log = LogFactory.getLog(AbstractSecurityService.class);
     
@@ -97,7 +95,7 @@ public abstract class AbstractSecurityService implements ISecurityService {
      * @param deflt Default value if value is null.
      */
     private static void setCookie(String cookieName, String value, String deflt) {
-        FrameworkWebSupport.setCookie(cookieName, (value == null ? deflt : value));
+        WebUtil.setCookie(cookieName, (value == null ? deflt : value));
     }
     
     /**
@@ -109,14 +107,14 @@ public abstract class AbstractSecurityService implements ISecurityService {
      * @return Value of the attribute, which is automatically converted from its base64 encoding.
      */
     public static String getLogoutAttribute(String attributeName, String deflt) {
-        String value = FrameworkWebSupport.getCookieValue(attributeName);
+        String value = WebUtil.getCookieValue(attributeName);
         //delete cookie
-        FrameworkWebSupport.setCookie(attributeName, null);
+        WebUtil.setCookie(attributeName, null);
         return StringUtils.isEmpty(value) ? deflt : value;
     }
     
     /**
-     * Logout out the current desktop instance.
+     * Logout out the current page instance.
      * 
      * @param force If true, force logout without user interaction.
      * @param target Optional target url for next login.
@@ -132,17 +130,16 @@ public abstract class AbstractSecurityService implements ISecurityService {
         if (result) {
             if (target == null) {
                 try {
-                    target = FrameworkWebSupport.addQueryString(FrameworkWebSupport.getRequestUrl(),
-                        FrameworkWebSupport.getRequestParams());
+                    target = WebUtil.addQueryString(WebUtil.getRequestUrl(), WebUtil.getRequestParams());
                 } catch (Exception e) {}
             }
             
             setLogoutAttributes(target, message);
-            Desktop contextDesktop = FrameworkWebSupport.getDesktop();
-            log.debug("Redirecting Desktop to logout filter URI: " + contextDesktop);
+            Page contextPage = ExecutionContext.getPage();
+            log.debug("Redirecting Page to logout filter URI: " + contextPage);
             String queryParam = replaceParam(replaceParam(logoutTarget, "%target%", target), "%message%", message);
-            contextDesktop.getExecution().sendRedirect(Constants.LOGOUT_URI + queryParam);
-            Application.getInstance().register(contextDesktop, false);
+            ClientUtil.redirect(Constants.LOGOUT_URI + queryParam, null);
+            Application.getInstance().register(contextPage, false);
         }
         
         return result;

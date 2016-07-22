@@ -31,24 +31,17 @@ import java.util.Map;
 import org.apache.commons.lang.time.StopWatch;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.carewebframework.api.thread.IAbortable;
 import org.carewebframework.api.thread.ThreadUtil;
 import org.carewebframework.ui.FrameworkWebSupport;
-
+import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.component.Page;
+import org.carewebframework.web.event.Event;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Desktop;
-import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zk.ui.event.Events;
-
 /**
- * Used to run long operations in the background. Uses ZK events to notify the requester of
- * completion.
+ * Used to run long operations in the background. Uses events to notify the requester of completion.
  * <p>
  * <i>Note: reference {@link #getException()} to evaluate any exception the ZKRunnable target may
  * have thrown. You may also invoke {@link #rethrow()}. One of these methods should be referenced to
@@ -92,7 +85,7 @@ public class ZKThread implements IAbortable {
          */
         @Override
         public void run() {
-            associateThread(desktop, requestAttributes);
+            associateThread(page, requestAttributes);
             watch.start();
             
             try {
@@ -107,21 +100,6 @@ public class ZKThread implements IAbortable {
         
     }
     
-    /**
-     * The deferred event dispatcher receives the notification on the desktop's event thread that
-     * the background thread has completed. It then posts an event (on the desktop's event thread)
-     * to the requester that the operation has completed. The data associated with the event is a
-     * reference to this ZKThread object and may be interrogated for the outcome of the operation.
-     */
-    private static final EventListener<Event> deferredEventDispatcher = new EventListener<Event>() {
-        
-        @Override
-        public void onEvent(Event event) throws Exception {
-            Events.postEvent(event);
-        }
-        
-    };
-    
     private boolean aborted;
     
     private Throwable exception;
@@ -132,7 +110,7 @@ public class ZKThread implements IAbortable {
     
     private final Event event;
     
-    private final Desktop desktop;
+    private final Page page;
     
     private final Thread thread;
     
@@ -141,15 +119,15 @@ public class ZKThread implements IAbortable {
     private final Map<String, Object> attribute = new HashMap<>();
     
     /**
-     * Associates a desktop and request attributes with a background thread and notifies any thread
+     * Associates a page and request attributes with a background thread and notifies any thread
      * listeners.
      * 
-     * @param desktop The desktop to associate.
+     * @param page The page to associate.
      * @param requestAttributes The Spring request attributes to associate.
      */
-    public static void associateThread(Desktop desktop, RequestAttributes requestAttributes) {
+    public static void associateThread(Page page, RequestAttributes requestAttributes) {
         RequestContextHolder.setRequestAttributes(requestAttributes, true);
-        FrameworkWebSupport.associateDesktop(desktop);
+        FrameworkWebSupport.associatePage(page);
         ThreadListenerRegistry.notifyListeners(true);
     }
     
@@ -159,7 +137,7 @@ public class ZKThread implements IAbortable {
      */
     public static void disassociateThread() {
         ThreadListenerRegistry.notifyListeners(false);
-        FrameworkWebSupport.associateDesktop(null);
+        FrameworkWebSupport.associatePage(null);
         RequestContextHolder.setRequestAttributes(null);
     }
     
@@ -170,7 +148,7 @@ public class ZKThread implements IAbortable {
      * @param target Target operation.
      * @param requester ZK component requesting the operation.
      */
-    public ZKThread(ZKRunnable target, Component requester) {
+    public ZKThread(ZKRunnable target, BaseComponent requester) {
         this(target, requester, ON_THREAD_COMPLETE);
     }
     
@@ -183,10 +161,10 @@ public class ZKThread implements IAbortable {
      *            data associated with the event will be a reference to this instance and may be
      *            interrogated to determine the outcome of the operation.
      */
-    public ZKThread(ZKRunnable target, Component requester, String eventName) {
+    public ZKThread(ZKRunnable target, BaseComponent requester, String eventName) {
         this.target = target;
         this.event = new Event(eventName, requester, this);
-        this.desktop = requester.getDesktop();
+        this.page = requester.getPage();
         this.requestAttributes = RequestContextHolder.getRequestAttributes();
         this.thread = new ThreadEx();
     }
@@ -229,7 +207,7 @@ public class ZKThread implements IAbortable {
      */
     protected void done() {
         try {
-            Executions.schedule(desktop, deferredEventDispatcher, event);
+            page.getEventQueue().queue(event);
         } catch (Exception e) {
             log.error(e);
         }

@@ -36,11 +36,10 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.carewebframework.api.domain.IUser;
 import org.carewebframework.api.security.SecurityUtil;
-import org.carewebframework.ui.FrameworkWebSupport;
-
+import org.carewebframework.web.component.Page;
+import org.carewebframework.web.core.ExecutionContext;
 import org.springframework.util.Assert;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -53,7 +52,6 @@ import org.springframework.web.context.request.ServletRequestAttributes;
  * and {@link #getSession()}.
  */
 public class RequestUtil {
-    
     
     private static Log log = LogFactory.getLog(RequestUtil.class);
     
@@ -204,7 +202,7 @@ public class RequestUtil {
      * <ul>
      * <li>Session ID</li>
      * <li>Authentication Principal Username</li>
-     * <li>ZK Desktop ID</li>
+     * <li>CWF Page ID</li>
      * <li>Client Remote Address</li>
      * <li>Server Name</li>
      * </ul>
@@ -213,10 +211,11 @@ public class RequestUtil {
      */
     public static List<String> getStandardDiagnosticContext() {
         IUser user = SecurityUtil.getAuthenticatedUser();
+        Page page = ExecutionContext.getPage();
         List<String> dc = new ArrayList<>();
         dc.add(getSessionId());
         dc.add(user == null ? "Unknown user" : user.getLoginName());
-        dc.add(FrameworkWebSupport.getDesktopId());
+        dc.add(page == null ? "Unknown" : page.getId());
         dc.add(getRemoteAddress());
         dc.add(getLocalHostAddress());
         return dc;

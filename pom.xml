@@ -383,14 +383,6 @@
 						</execution>
 					</executions>
 					<configuration>
-						<themeSources>
-							<themeSource>org.zkoss.zk:zk:jar</themeSource>
-							<themeSource>org.zkoss.zkforge.el:zcommons-el:jar</themeSource>
-							<themeSource>org.zkoss.zk:zkex:jar</themeSource>
-							<themeSource>org.zkoss.zk:zkmax:jar</themeSource>
-							<themeSource>org.zkoss.zk:zul:jar</themeSource>
-							<themeSource>org.zkoss.common:zweb:jar</themeSource>
-						</themeSources>
 						<archive>
 							<manifestEntries>
 								<Implementation-Version>${project.version}.${buildNumber}
@@ -445,19 +437,6 @@
 						</execution>
 					</executions>
 				</plugin>
-				<!-- CSS/JS minify plugin -->
-				<plugin>
-					<groupId>org.zkoss.maven</groupId>
-					<artifactId>yuicompressor-maven-plugin-zk</artifactId>
-					<version>1.1.6</version>
-					<executions>
-						<execution>
-							<goals>
-								<goal>compress</goal>
-							</goals>
-						</execution>
-					</executions>
-				</plugin>
 			</plugins>
 		</pluginManagement>
 
@@ -496,26 +475,6 @@
 			</build>
 		</profile>
 		<profile>
-			<id>minify</id>
-			<activation>
-				<property>
-					<name>minify</name>
-					<value>true</value>
-				</property>
-				<file>
-					<exists>${basedir}/src/main/resources/web</exists>
-				</file>
-			</activation>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.zkoss.maven</groupId>
-						<artifactId>yuicompressor-maven-plugin-zk</artifactId>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-		<profile>
 			<id>sign</id>
 			<activation>
 				<property>
@@ -545,6 +504,11 @@
 
 	<dependencyManagement>
 		<dependencies>
+			<dependency>
+				<groupId>org.carewebframework</groupId>
+				<artifactId>org.carewebframework.web.core</artifactId>
+				<version>${project.version}</version>
+			</dependency>
 			<!-- Spring Framework -->
 			<dependency>
 				<groupId>org.springframework</groupId>
@@ -750,74 +714,6 @@
 				<groupId>org.slf4j</groupId>
 				<artifactId>slf4j-jcl</artifactId>
 				<version>1.7.10</version>
-			</dependency>
-			<!-- ZK -->
-			<dependency>
-				<groupId>org.zkoss.zk</groupId>
-				<artifactId>zk</artifactId>
-				<version>${org.zkoss.zk.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.zkoss.zk</groupId>
-				<artifactId>zul</artifactId>
-				<version>${org.zkoss.zk.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.zkoss.zk</groupId>
-				<artifactId>zkbind</artifactId>
-				<version>${org.zkoss.zk.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.zkoss.common</groupId>
-				<artifactId>zcommon</artifactId>
-				<version>${org.zkoss.zk.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.zkoss.common</groupId>
-				<artifactId>zel</artifactId>
-				<version>${org.zkoss.zk.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.zkoss.zk</groupId>
-				<artifactId>zhtml</artifactId>
-				<version>${org.zkoss.zk.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.zkoss.zk</groupId>
-				<artifactId>zkplus</artifactId>
-				<version>${org.zkoss.zk.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.zkoss.common</groupId>
-				<artifactId>zweb</artifactId>
-				<version>${org.zkoss.zk.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.zkoss.zk</groupId>
-				<artifactId>zkex</artifactId>
-				<version>${org.zkoss.zk.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.zkoss.zk</groupId>
-				<artifactId>zkmax</artifactId>
-				<version>${org.zkoss.zk.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.zkoss.zk</groupId>
-				<artifactId>zml</artifactId>
-				<version>${org.zkoss.zk.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.zkoss.zats</groupId>
-				<artifactId>zats-mimic</artifactId>
-				<version>1.2.0</version>
-				<scope>test</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.zkoss.zats</groupId>
-				<artifactId>zats-mimic-ext7</artifactId>
-				<version>1.2.0</version>
-				<scope>test</scope>
 			</dependency>
 			<!-- JUnit -->
 			<dependency>

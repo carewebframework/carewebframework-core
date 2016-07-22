@@ -28,11 +28,8 @@ package org.carewebframework.ui;
 import java.util.List;
 
 import org.carewebframework.ui.thread.ThreadListenerRegistry;
-
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.EventThreadCleanup;
-import org.zkoss.zk.ui.event.EventThreadInit;
+import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.event.Event;
 
 /**
  * ZK EventThreads suspend the servlet request thread. This class is meant to transfer any necessary
@@ -41,38 +38,38 @@ import org.zkoss.zk.ui.event.EventThreadInit;
 public class EventThreadListener implements EventThreadInit, EventThreadCleanup {
     
     /**
-     * @see org.zkoss.zk.ui.event.EventThreadInit#init(org.zkoss.zk.ui.Component,
+     * @see org.zkoss.zk.ui.event.EventThreadInit#init(org.zkoss.zk.ui.BaseComponent,
      *      org.zkoss.zk.ui.event.Event)
      */
     @Override
-    public boolean init(Component comp, Event event) throws Exception {
+    public boolean init(BaseComponent comp, Event event) throws Exception {
         ThreadListenerRegistry.notifyListeners(true);
         return true;
     }
     
     /**
-     * @see org.zkoss.zk.ui.event.EventThreadCleanup#cleanup(org.zkoss.zk.ui.Component,
+     * @see org.zkoss.zk.ui.event.EventThreadCleanup#cleanup(org.zkoss.zk.ui.BaseComponent,
      *      org.zkoss.zk.ui.event.Event, java.util.List)
      */
     @Override
-    public void cleanup(Component comp, Event evt, @SuppressWarnings("rawtypes") List errs) {
+    public void cleanup(BaseComponent comp, Event evt, @SuppressWarnings("rawtypes") List errs) {
         ThreadListenerRegistry.notifyListeners(false);
     }
     
     /**
-     * @see org.zkoss.zk.ui.event.EventThreadCleanup#complete(org.zkoss.zk.ui.Component,
+     * @see org.zkoss.zk.ui.event.EventThreadCleanup#complete(org.zkoss.zk.ui.BaseComponent,
      *      org.zkoss.zk.ui.event.Event)
      */
     @Override
-    public void complete(Component comp, Event evt) throws Exception {
+    public void complete(BaseComponent comp, Event evt) throws Exception {
     }
     
     /**
-     * @see org.zkoss.zk.ui.event.EventThreadInit#prepare(org.zkoss.zk.ui.Component,
+     * @see org.zkoss.zk.ui.event.EventThreadInit#prepare(org.zkoss.zk.ui.BaseComponent,
      *      org.zkoss.zk.ui.event.Event)
      */
     @Override
-    public void prepare(Component comp, Event event) throws Exception {
+    public void prepare(BaseComponent comp, Event event) throws Exception {
     }
     
 }

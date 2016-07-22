@@ -25,6 +25,7 @@
  */
 package org.carewebframework.ui.zk;
 
+import java.awt.Checkbox;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,30 +35,22 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.carewebframework.api.property.PropertyUtil;
 import org.carewebframework.common.StrUtil;
-
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.util.Clients;
-import org.zkoss.zk.ui.util.ConventionWires;
-import org.zkoss.zul.Button;
-import org.zkoss.zul.Checkbox;
-import org.zkoss.zul.Listbox;
-import org.zkoss.zul.Listitem;
-import org.zkoss.zul.Messagebox;
-import org.zkoss.zul.Textbox;
-import org.zkoss.zul.Window;
+import org.carewebframework.web.annotation.WiredComponentScanner;
+import org.carewebframework.web.component.Button;
+import org.carewebframework.web.component.Listbox;
+import org.carewebframework.web.component.Listitem;
+import org.carewebframework.web.component.Textbox;
+import org.carewebframework.web.component.Window;
+import org.carewebframework.web.event.Event;
+import org.carewebframework.web.event.EventUtil;
+import org.carewebframework.web.event.IEventListener;
 
 /**
  * Implements a simple, generic dialog for prompting for arbitrary responses.
  */
 public class PromptDialog extends Window {
-    
-    
-    private static final long serialVersionUID = 1L;
     
     protected static final Log log = LogFactory.getLog(PromptDialog.class.getClass());
     
@@ -88,7 +81,6 @@ public class PromptDialog extends Window {
      * response.
      */
     public static class Response {
-        
         
         private final int index;
         
@@ -169,7 +161,7 @@ public class PromptDialog extends Window {
     
     private Response _response;
     
-    private EventListener<Event> _listener;
+    private IEventListener _listener;
     
     private Object _input;
     
@@ -205,7 +197,7 @@ public class PromptDialog extends Window {
      * @return Chosen response.
      */
     public static <T> T show(String message, String title, T[] responses, String styles, T defaultResponse,
-                             EventListener<Event> eventListener, String saveResponseId, T[] excludeResponses) {
+                             IEventListener eventListener, String saveResponseId, T[] excludeResponses) {
         int rsp = show(message, title, toResponseStr(responses), styles,
             defaultResponse == null ? null : defaultResponse.toString(), eventListener, saveResponseId,
             toResponseStr(excludeResponses));
@@ -235,7 +227,7 @@ public class PromptDialog extends Window {
      * @return Index of button that was clicked.
      */
     public static int show(String message, String title, String buttonCaptions, String styles, String defaultButton,
-                           EventListener<Event> eventListener, String saveResponseId, String excludeResponses) {
+                           IEventListener eventListener, String saveResponseId, String excludeResponses) {
         List<Response> responseList = toResponseList(buttonCaptions, excludeResponses, defaultButton);
         
         if (saveResponseId != null) {
@@ -288,7 +280,7 @@ public class PromptDialog extends Window {
      * @return Chosen response.
      */
     public static <T> T show(String message, String title, T[] responses, String styles, T defaultResponse,
-                             EventListener<Event> eventListener) {
+                             IEventListener eventListener) {
         return show(message, title, responses, styles, defaultResponse, eventListener, null, null);
     }
     
@@ -304,7 +296,7 @@ public class PromptDialog extends Window {
      * @return Index of button that was clicked.
      */
     public static int show(String message, String title, String buttonCaptions, String styles, String defaultButton,
-                           EventListener<Event> eventListener) {
+                           IEventListener eventListener) {
         return show(message, title, buttonCaptions, styles, defaultButton, eventListener, null, null);
     }
     
@@ -411,16 +403,15 @@ public class PromptDialog extends Window {
      * @param useInputListener If true, use the generic input listener.
      * @return The prompt dialog.
      */
-    private static PromptDialog showDialog(Map<Object, Object> args, EventListener<Event> eventListener,
+    private static PromptDialog showDialog(Map<Object, Object> args, IEventListener eventListener,
                                            boolean useInputListener) {
         PromptDialog dlg = null;
         
         try {
-            dlg = (PromptDialog) ZKUtil.loadZulPage(RESOURCE_PREFIX + "promptDialog.zul", null, args);
+            dlg = (PromptDialog) ZKUtil.loadPage(RESOURCE_PREFIX + "promptDialog.cwf", null);
             dlg.addEventListener(Events.ON_MOVE, new MoveEventListener());
             dlg._listener = useInputListener ? dlg.new InputListener() : eventListener;
-            ConventionWires.wireVariables(dlg, dlg);
-            ZKUtil.suppressContextMenu(dlg, true);
+            WiredComponentScanner.wire(dlg, dlg);
             dlg.doModal();
             return dlg;
         } catch (Exception e) {
@@ -727,7 +718,6 @@ public class PromptDialog extends Window {
      */
     public static class InputItem {
         
-        
         private final String name;
         
         private final Object item;
@@ -810,11 +800,10 @@ public class PromptDialog extends Window {
     /**
      * Used by input dialogs to disable closure if input is incomplete.
      */
-    private class InputListener implements EventListener<Event> {
-        
+    private class InputListener implements IEventListener {
         
         @Override
-        public void onEvent(Event event) throws Exception {
+        public void onEvent(Event event) {
             if (!inputCheck(((Button) event.getTarget()))) {
                 event.stopPropagation();
             }
@@ -826,7 +815,7 @@ public class PromptDialog extends Window {
      */
     public void onCreate() {
         setClosable(false);
-        Events.echoEvent("onShow", this, null);
+        EventUtil.post("onShow", this, null);
     }
     
     /**
@@ -867,12 +856,10 @@ public class PromptDialog extends Window {
      * @throws Exception Unspecified exception.
      */
     public void onButtonClick(Event event) throws Exception {
-        event = ZKUtil.getEventOrigin(event);
-        
         if (_listener != null) {
             _listener.onEvent(event);
             
-            if (!event.isPropagatable()) {
+            if (event.isStopped()) {
                 return;
             }
         }

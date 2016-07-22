@@ -25,7 +25,7 @@
  */
 package org.carewebframework.ui.zk;
 
-import org.zkoss.zk.ui.Component;
+import org.carewebframework.web.component.BaseComponent;
 
 /**
  * Static class of convenience methods for drag-and-drop support.
@@ -38,10 +38,10 @@ public class DropUtil {
      * Searches for a drop renderer associated with the specified component or one of its ancestor
      * components.
      * 
-     * @param component Component whose drop renderer is sought.
+     * @param component BaseComponent whose drop renderer is sought.
      * @return The associated drop renderer, or null if none found.
      */
-    public static IDropRenderer getDropRenderer(Component component) {
+    public static IDropRenderer getDropRenderer(BaseComponent component) {
         IDropRenderer dropRenderer = null;
         
         while (dropRenderer == null && component != null) {
@@ -55,10 +55,10 @@ public class DropUtil {
     /**
      * Associates a drop renderer with a component.
      * 
-     * @param component Component to be associated.
+     * @param component BaseComponent to be associated.
      * @param dropRenderer Drop renderer to associate.
      */
-    public static void setDropRenderer(Component component, IDropRenderer dropRenderer) {
+    public static void setDropRenderer(BaseComponent component, IDropRenderer dropRenderer) {
         if (dropRenderer == null) {
             component.removeAttribute(DROP_RENDERER_ATTR);
         } else {

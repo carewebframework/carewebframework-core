@@ -26,9 +26,8 @@
 package org.carewebframework.plugin.infopanel.model;
 
 import org.carewebframework.ui.zk.IDropHandler;
-
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zul.Menuitem;
+import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.component.Menuitem;
 
 /**
  * Interface for interacting with an information panel.
@@ -69,7 +68,7 @@ public interface IInfoPanel extends IDropHandler {
      * 
      * @param root The root component.
      */
-    void showAlert(Component root);
+    void showAlert(BaseComponent root);
     
     /**
      * Clears all alerts.

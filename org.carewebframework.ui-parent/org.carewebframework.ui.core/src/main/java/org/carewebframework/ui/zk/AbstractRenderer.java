@@ -29,19 +29,16 @@ import java.util.Collection;
 import java.util.Date;
 
 import org.apache.commons.lang.StringUtils;
-
 import org.carewebframework.common.DateUtil;
 import org.carewebframework.common.StrUtil;
-
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.HtmlBasedComponent;
-import org.zkoss.zul.Label;
+import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.component.BaseUIComponent;
+import org.carewebframework.web.component.Label;
 
 /**
  * Base for renderers.
  */
 public abstract class AbstractRenderer {
-    
     
     protected final String compStyle;
     
@@ -66,53 +63,53 @@ public abstract class AbstractRenderer {
     /**
      * Creates a label for a string value.
      * 
-     * @param parent Component that will be the parent of the label.
+     * @param parent BaseComponent that will be the parent of the label.
      * @param value Value to be used as label text.
      * @return The newly created label.
      */
-    public Label createLabel(Component parent, Object value) {
+    public Label createLabel(BaseComponent parent, Object value) {
         return createLabel(parent, value, null, null);
     }
     
     /**
      * Creates a label for a string value.
      * 
-     * @param parent Component that will be the parent of the label.
+     * @param parent BaseComponent that will be the parent of the label.
      * @param value Value to be used as label text.
      * @param prefix Value to be used as a prefix for the label text.
      * @return The newly created label.
      */
-    public Label createLabel(Component parent, Object value, String prefix) {
+    public Label createLabel(BaseComponent parent, Object value, String prefix) {
         return createLabel(parent, value, prefix, null);
     }
     
     /**
      * Creates a label for a string value.
      * 
-     * @param parent Component that will be the parent of the label.
+     * @param parent BaseComponent that will be the parent of the label.
      * @param value Value to be used as label text.
      * @param prefix Value to be used as a prefix for the label text.
      * @param style Style to be applied to the label.
      * @return The newly created label.
      */
-    public Label createLabel(Component parent, Object value, String prefix, String style) {
+    public Label createLabel(BaseComponent parent, Object value, String prefix, String style) {
         return createLabel(parent, value, prefix, style, false);
     }
     
     /**
      * Creates a label for a string value.
      * 
-     * @param parent Component that will be the parent of the label.
+     * @param parent BaseComponent that will be the parent of the label.
      * @param value Value to be used as label text.
      * @param prefix Value to be used as a prefix for the label text.
      * @param style Style to be applied to the label.
      * @param asFirst If true, the label is prepended to the parent. If false, it is appended.
      * @return The newly created label.
      */
-    public Label createLabel(Component parent, Object value, String prefix, String style, boolean asFirst) {
+    public Label createLabel(BaseComponent parent, Object value, String prefix, String style, boolean asFirst) {
         Label label = new Label(createLabelText(value, prefix));
-        label.setStyle(style);
-        parent.insertBefore(label, asFirst ? parent.getFirstChild() : null);
+        label.setStyles(style);
+        parent.addChild(label, asFirst ? 0 : -1);
         return label;
     }
     
@@ -120,7 +117,7 @@ public abstract class AbstractRenderer {
      * Creates a component containing a label with the specified parameters.
      * 
      * @param <C> Class of created component.
-     * @param parent Component that will be the parent of the created component.
+     * @param parent BaseComponent that will be the parent of the created component.
      * @param value Value to be used as label text.
      * @param prefix Value to be used as a prefix for the label text.
      * @param style Style to be applied to the label.
@@ -128,21 +125,21 @@ public abstract class AbstractRenderer {
      * @param clazz The class of the component to be created.
      * @return The newly created component.
      */
-    protected <C extends HtmlBasedComponent> C createCell(Component parent, Object value, String prefix, String style,
-                                                          String width, Class<C> clazz) {
+    protected <C extends BaseUIComponent> C createCell(BaseComponent parent, Object value, String prefix, String style,
+                                                       String width, Class<C> clazz) {
         C container = null;
         
         try {
             container = clazz.newInstance();
             container.setParent(parent);
-            container.setStyle(cellStyle);
+            container.setStyles(cellStyle);
             
             if (width != null) {
                 container.setWidth(width);
             }
             
-            if (value instanceof Component) {
-                ((Component) value).setParent(container);
+            if (value instanceof BaseComponent) {
+                ((BaseComponent) value).setParent(container);
             } else if (value != null) {
                 createLabel(container, value, prefix, style);
             }

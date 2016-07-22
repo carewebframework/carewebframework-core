@@ -25,7 +25,7 @@
  */
 package org.carewebframework.ui.zk;
 
-import org.zkoss.zk.ui.Component;
+import org.carewebframework.web.component.BaseComponent;
 
 /**
  * Interface to be implemented by handlers of drop events.
@@ -46,5 +46,5 @@ public interface IDropHandler {
      * 
      * @param droppedItem The dropped item.
      */
-    void drop(Component droppedItem);
+    void drop(BaseComponent droppedItem);
 }

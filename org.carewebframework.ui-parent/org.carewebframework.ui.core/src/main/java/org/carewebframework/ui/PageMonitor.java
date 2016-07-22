@@ -36,7 +36,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.carewebframework.api.FrameworkUtil;
 import org.carewebframework.api.domain.IUser;
 import org.carewebframework.api.event.IEventManager;
@@ -49,33 +48,21 @@ import org.carewebframework.common.StrUtil;
 import org.carewebframework.ui.Application.Command;
 import org.carewebframework.ui.zk.MessageWindow;
 import org.carewebframework.ui.zk.ZKUtil;
-
-import org.zkoss.zk.au.AuRequest;
-import org.zkoss.zk.au.AuService;
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Desktop;
-import org.zkoss.zk.ui.DesktopUnavailableException;
-import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.HtmlBasedComponent;
-import org.zkoss.zk.ui.Page;
-import org.zkoss.zk.ui.ShadowElement;
-import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.sys.SessionCtrl;
-import org.zkoss.zk.ui.util.UiLifeCycle;
-import org.zkoss.zul.Label;
-import org.zkoss.zul.Textbox;
-import org.zkoss.zul.Window;
+import org.carewebframework.web.component.BaseUIComponent;
+import org.carewebframework.web.component.Label;
+import org.carewebframework.web.component.Page;
+import org.carewebframework.web.component.Textbox;
+import org.carewebframework.web.component.Window;
+import org.carewebframework.web.event.Event;
+import org.carewebframework.web.event.IEventListener;
 
 /**
- * Desktop timeout thread that evaluates ZK's Desktop and the time a request was last sent. Used to
- * notify user regarding their inactivity and take appropriate action.
+ * Page timeout thread that evaluates ZK's Page and the time a request was last sent. Used to notify
+ * user regarding their inactivity and take appropriate action.
  */
-public class DesktopMonitor extends Thread {
+public class PageMonitor extends Thread {
     
-    private static final Log log = LogFactory.getLog(DesktopMonitor.class);
+    private static final Log log = LogFactory.getLog(PageMonitor.class);
     
     /**
      * Reflects the different execution states for the thread.
@@ -123,12 +110,12 @@ public class DesktopMonitor extends Thread {
      * Path to the zul code that will be used to display the count down.
      */
     private static final String DESKTOP_TIMEOUT_ZUL = org.carewebframework.ui.zk.Constants.RESOURCE_PREFIX
-            + "desktopTimeoutWarning.zul";
-            
+            + "pageTimeoutWarning.zul";
+    
     /**
      * Events that will not reset keepalive timer.
      */
-    private static final String[] ignore = new String[] { "dummy", Events.ON_TIMER, Events.ON_CLIENT_INFO };
+    private static final String[] ignore = new String[] {};
     
     private static final String ATTR_LOGGING_OUT = "@logging_out";
     
@@ -145,7 +132,7 @@ public class DesktopMonitor extends Thread {
     private final Map<Mode, Long> inactivityDuration = new HashMap<>();
     
     /**
-     * Maximum interval of inactivity after which a desktop is assumed to be dead (in ms).
+     * Maximum interval of inactivity after which a page is assumed to be dead (in ms).
      */
     private long maximumInactivityInterval = 300000;
     
@@ -162,7 +149,7 @@ public class DesktopMonitor extends Thread {
     
     private Window timeoutWindow;
     
-    private HtmlBasedComponent timeoutPanel;
+    private BaseUIComponent timeoutPanel;
     
     private Label lblDuration;
     
@@ -174,7 +161,7 @@ public class DesktopMonitor extends Thread {
     
     private boolean terminate;
     
-    private final Desktop desktop;
+    private final Page page;
     
     private long pollingInterval;
     
@@ -182,7 +169,7 @@ public class DesktopMonitor extends Thread {
     
     private long lastActivity;
     
-    private boolean desktopDead;
+    private boolean pageDead;
     
     private long countdown;
     
@@ -199,22 +186,22 @@ public class DesktopMonitor extends Thread {
     private final UiLifeCycle uiLifeCycle = new UiLifeCycle() {
         
         /**
-         * Attaches the time out warning zul to the desktop root. This markup remains hidden until
-         * the timeout count down commences.
+         * Attaches the time out warning zul to the page root. This markup remains hidden until the
+         * timeout count down commences.
          * 
          * @see org.zkoss.zk.ui.util.UiLifeCycle#afterPageAttached(org.zkoss.zk.ui.Page,
-         *      org.zkoss.zk.ui.Desktop)
+         *      org.zkoss.zk.ui.Page)
          */
         @Override
-        public void afterPageAttached(Page page, Desktop desktop) {
-            desktop.removeListener(this);
-            timeoutWindow = (Window) desktop.getExecution().createComponents(DESKTOP_TIMEOUT_ZUL, null, null);
-            ZKUtil.wireController(timeoutWindow, DesktopMonitor.this);
+        public void afterPageAttached(Page page, Page page) {
+            page.removeListener(this);
+            timeoutWindow = (Window) page.getExecution().createComponents(DESKTOP_TIMEOUT_ZUL, null, null);
+            ZKUtil.wireController(timeoutWindow, PageMonitor.this);
             IUser user = securityService.getAuthenticatedUser();
             lblLocked.setValue(
                 Mode.BASELINE.getLabel(TIMEOUT_EXPIRATION, user.getFullName() + "@" + user.getSecurityDomain().getName()));
-            desktop.addListener(desktopActivityMonitor);
-            ThreadUtil.startThread(DesktopMonitor.this);
+            page.addListener(pageActivityMonitor);
+            ThreadUtil.startThread(PageMonitor.this);
         }
         
         /*
@@ -242,7 +229,7 @@ public class DesktopMonitor extends Thread {
          * Not used.
          */
         @Override
-        public void afterPageDetached(Page page, Desktop desktop) {
+        public void afterPageDetached(Page page, Page page) {
         }
         
         @Override
@@ -258,10 +245,10 @@ public class DesktopMonitor extends Thread {
     /**
      * Monitors Ajax traffic to determine client activity.
      */
-    private final AuService desktopActivityMonitor = new AuService() {
+    private final AuService pageActivityMonitor = new AuService() {
         
         /**
-         * Tracks desktop activity.
+         * Tracks page activity.
          * 
          * @param request The asynchronous update request
          * @param everError Whether error occurred prior to processing request
@@ -285,31 +272,31 @@ public class DesktopMonitor extends Thread {
     };
     
     /**
-     * Event listener to handle desktop actions in event thread.
+     * Event listener to handle page actions in event thread.
      */
-    private final EventListener<Event> actionHandler = new EventListener<Event>() {
+    private final IEventListener actionHandler = new IEventListener() {
         
         @Override
-        public void onEvent(Event event) throws Exception {
+        public void onEvent(Event event) {
             Action action = (Action) event.getData();
             trace(action.name());
             
             switch (action) {
                 case UPDATE_COUNTDOWN:
                     String s = nextMode().getLabel(TIMEOUT_WARNING, DateUtil.formatDuration(countdown, TimeUnit.SECONDS));
-                    lblDuration.setValue(s);
+                    lblDuration.setLabel(s);
                     setSclass(SCLASS_COUNTDOWN);
-                    ZKUtil.toggleSclass(timeoutPanel, "alert-danger", "alert-warning", countdown <= 10000);
+                    timeoutPanel.addClass("alert:" + (countdown <= 10000 ? "alert-danger" : "alert-warning"));
                     resetActivity(false);
                     break;
-                    
+                
                 case UPDATE_MODE:
                     setSclass(SCLASS_IDLE);
-                    timeoutWindow.setMode(mode == Mode.LOCK ? "highlighted" : "embedded");
+                    timeoutWindow.setMode(mode == Mode.LOCK ? Window.Mode.POPUP : Window.Mode.INLINE);
                     txtPassword.setFocus(mode == Mode.LOCK);
-                    Application.getDesktopInfo(desktop).sendToSpawned(mode == Mode.LOCK ? Command.LOCK : Command.UNLOCK);
+                    Application.getPageInfo(page).sendToSpawned(mode == Mode.LOCK ? Command.LOCK : Command.UNLOCK);
                     break;
-                    
+                
                 case LOGOUT:
                     terminate = true;
                     timeoutWindow.setVisible(false);
@@ -320,15 +307,15 @@ public class DesktopMonitor extends Thread {
         
         private void setSclass(String sclass) {
             if (mode == Mode.SHUTDOWN && previousMode == Mode.LOCK) {
-                timeoutWindow.setSclass(mode.format(sclass) + " " + previousMode.format(sclass));
+                timeoutWindow.setClasses(mode.format(sclass) + " " + previousMode.format(sclass));
             } else {
-                timeoutWindow.setSclass(mode.format(sclass));
+                timeoutWindow.setClasses(mode.format(sclass));
             }
         }
         
     };
     
-    private final IGenericEvent<Object> desktopEventListener = new IGenericEvent<Object>() {
+    private final IGenericEvent<Object> pageEventListener = new IGenericEvent<Object>() {
         
         @Override
         public void eventCallback(String eventName, Object eventData) {
@@ -339,7 +326,7 @@ public class DesktopMonitor extends Thread {
             } else if (eventName.equals(Constants.SHUTDOWN_EVENT)) {
                 updateShutdown(NumberUtils.toLong(StrUtil.piece(eventData.toString(), StrUtil.U)) * 1000);
             } else if (eventName.equals(Constants.LOCK_EVENT)) {
-                lockDesktop(eventData == null || BooleanUtils.toBoolean(eventData.toString()));
+                lockPage(eventData == null || BooleanUtils.toBoolean(eventData.toString()));
             }
         }
     };
@@ -350,18 +337,18 @@ public class DesktopMonitor extends Thread {
         pollingInterval = mode == newMode ? pollingInterval : inactivityDuration.get(mode);
         countdown = countdownDuration.get(mode);
         previousMode = mode == Mode.SHUTDOWN ? previousMode : mode;
-        queueDesktopAction(Action.UPDATE_MODE);
+        queuePageAction(Action.UPDATE_MODE);
         wakeup();
     }
     
     /**
-     * Create a monitor instance for the specified desktop.
+     * Create a monitor instance for the specified page.
      * 
-     * @param desktop Desktop with which this thread will be associated.
+     * @param page Page with which this thread will be associated.
      */
-    public DesktopMonitor(Desktop desktop) {
-        this.desktop = desktop;
-        setName("DesktopMonitor-" + desktop.getId());
+    public PageMonitor(Page page) {
+        this.page = page;
+        setName("PageMonitor-" + page.getId());
         inactivityDuration.put(Mode.BASELINE, 900000L);
         inactivityDuration.put(Mode.LOCK, 900000L);
         inactivityDuration.put(Mode.LOGOUT, 0L);
@@ -405,14 +392,14 @@ public class DesktopMonitor extends Thread {
     }
     
     /**
-     * Resets the activity timer. Note that we always keep the session alive since the desktop
-     * monitor is responsible for handling the session timeout.
+     * Resets the activity timer. Note that we always keep the session alive since the page monitor
+     * is responsible for handling the session timeout.
      * 
      * @param resetKeepAlive If true, the keepalive timer is reset.
      */
     private synchronized void resetActivity(boolean resetKeepAlive) {
         lastActivity = System.currentTimeMillis();
-        ((SessionCtrl) desktop.getSession()).notifyClientRequest(true);
+        ((SessionCtrl) page.getSession()).notifyClientRequest(true);
         
         if (resetKeepAlive) {
             lastKeepAlive = lastActivity;
@@ -439,13 +426,13 @@ public class DesktopMonitor extends Thread {
                 if (stateChanged) {
                     pollingInterval = inactivityDuration.get(mode);
                     countdown = countdownDuration.get(mode);
-                    queueDesktopAction(Action.UPDATE_MODE);
+                    queuePageAction(Action.UPDATE_MODE);
                 } else {
                     pollingInterval = delta;
                 }
                 
                 break;
-                
+            
             case COUNTDOWN:
                 if (stateChanged) {
                     pollingInterval = countdownInterval;
@@ -454,7 +441,7 @@ public class DesktopMonitor extends Thread {
                 }
                 
                 if (countdown > 0) {
-                    queueDesktopAction(Action.UPDATE_COUNTDOWN);
+                    queuePageAction(Action.UPDATE_COUNTDOWN);
                     break;
                 }
                 
@@ -468,10 +455,10 @@ public class DesktopMonitor extends Thread {
                 }
                 
                 break;
-                
+            
             case DEAD:
                 this.terminate = true;
-                this.desktopDead = true;
+                this.pageDead = true;
                 break;
         }
     }
@@ -485,7 +472,7 @@ public class DesktopMonitor extends Thread {
         switch (mode) {
             case BASELINE:
                 return canAutoLock ? Mode.LOCK : Mode.LOGOUT;
-                
+            
             default:
                 return Mode.LOGOUT;
         }
@@ -495,32 +482,32 @@ public class DesktopMonitor extends Thread {
      * Queues a logout request.
      */
     private void requestLogout() {
-        boolean inProgress = desktop.hasAttribute(ATTR_LOGGING_OUT);
+        boolean inProgress = page.hasAttribute(ATTR_LOGGING_OUT);
         
         if (!inProgress) {
-            desktop.setAttribute(ATTR_LOGGING_OUT, true);
-            queueDesktopAction(Action.LOGOUT);
+            page.setAttribute(ATTR_LOGGING_OUT, true);
+            queuePageAction(Action.LOGOUT);
         } else {
             log.debug("Logout already underway");
         }
     }
     
     /**
-     * Queues a desktop action for deferred execution.
+     * Queues a page action for deferred execution.
      * 
      * @param action The action to queue.
      */
-    private void queueDesktopAction(Action action) {
+    private void queuePageAction(Action action) {
         Event actionEvent = new Event("onAction", null, action);
         
         if (Events.inEventListener()) {
             try {
                 actionHandler.onEvent(actionEvent);
             } catch (Exception e) {
-                log.error("Error executing desktop action.", e);
+                log.error("Error executing page action.", e);
             }
         } else {
-            Executions.schedule(desktop, actionHandler, actionEvent);
+            Executions.schedule(page, actionHandler, actionEvent);
         }
     }
     
@@ -568,7 +555,7 @@ public class DesktopMonitor extends Thread {
      */
     private void trace(String label, Object value) {
         if (log.isTraceEnabled()) {
-            log.trace(this.desktop + " " + label + (value == null ? "" : " = " + value));
+            log.trace(this.page + " " + label + (value == null ? "" : " = " + value));
         }
     }
     
@@ -580,37 +567,36 @@ public class DesktopMonitor extends Thread {
     @Override
     public void run() {
         if (log.isTraceEnabled()) {
-            trace("The DesktopMonitor has started", getName());
+            trace("The PageMonitor has started", getName());
         }
         
         setMode(Mode.BASELINE);
         
         synchronized (monitor) {
-            while (!terminate && desktop.isAlive() && desktop.isServerPushEnabled()
-                    && !Thread.currentThread().isInterrupted()) {
+            while (!terminate && page.isAlive() && page.isServerPushEnabled() && !Thread.currentThread().isInterrupted()) {
                 try {
                     process();
                     monitor.wait(pollingInterval);
-                } catch (DesktopUnavailableException e) {
-                    log.warn(desktop + " DesktopUnavailableException: " + e.getMessage());
+                } catch (PageUnavailableException e) {
+                    log.warn(page + " PageUnavailableException: " + e.getMessage());
                 } catch (InterruptedException e) {
                     log.warn(String.format("%s interrupted. Terminating.", this.getClass().getName()));
                     terminate = true;
                     Thread.currentThread().interrupt();
                 } catch (Exception e) {
-                    log.error(desktop + " : " + e.getMessage(), e);
+                    log.error(page + " : " + e.getMessage(), e);
                     throw UiException.Aide.wrap(e);
                 }
             }
         }
         
         if (log.isTraceEnabled()) {
-            trace("The DesktopMonitor terminated", getName());
+            trace("The PageMonitor terminated", getName());
         }
         
-        if (desktopDead && desktop.isAlive()) {
-            log.warn("Desktop presumed dead due to prolonged inactivity: " + this.desktop);
-            Application.getInstance().register(this.desktop, false);
+        if (pageDead && page.isAlive()) {
+            log.warn("Page presumed dead due to prolonged inactivity: " + this.page);
+            Application.getInstance().register(this.page, false);
         }
     }
     
@@ -635,9 +621,9 @@ public class DesktopMonitor extends Thread {
      * Called by the IOC container after all properties have been set.
      */
     public void init() {
-        desktop.addListener(uiLifeCycle);
-        eventManager.subscribe(Constants.DESKTOP_EVENT, desktopEventListener);
-        String path = desktop.getRequestPath();
+        page.addListener(uiLifeCycle);
+        eventManager.subscribe(Constants.DESKTOP_EVENT, pageEventListener);
+        String path = page.getRequestPath();
         path = path.startsWith("/") ? path.substring(1) : path;
         canAutoLock = !autoLockingExclusions.contains(path);
     }
@@ -646,22 +632,22 @@ public class DesktopMonitor extends Thread {
      * Called by IOC container during bean destruction.
      */
     public void tearDown() {
-        eventManager.unsubscribe(Constants.DESKTOP_EVENT, desktopEventListener);
-        desktop.removeListener(uiLifeCycle);
+        eventManager.unsubscribe(Constants.DESKTOP_EVENT, pageEventListener);
+        page.removeListener(uiLifeCycle);
         terminate = true;
         wakeup();
     }
     
-    public void lockDesktop(boolean lock) {
+    public void lockPage(boolean lock) {
         if (mode != Mode.SHUTDOWN) {
             setMode(lock ? Mode.LOCK : Mode.BASELINE);
         }
     }
     
     /**
-     * Return the maximum interval of inactivity after which a desktop is assumed to be dead (in
-     * ms). Note: setting this too short will result in a desktop whose event thread is busy in a
-     * prolonged operation being prematurely discarded.
+     * Return the maximum interval of inactivity after which a page is assumed to be dead (in ms).
+     * Note: setting this too short will result in a page whose event thread is busy in a prolonged
+     * operation being prematurely discarded.
      * 
      * @return maximum inactivity interval
      */
@@ -670,9 +656,9 @@ public class DesktopMonitor extends Thread {
     }
     
     /**
-     * Set the maximum interval of inactivity after which a desktop is assumed to be dead (in ms).
-     * Note: setting this too short will result in a desktop whose event thread is busy in a
-     * prolonged operation being prematurely discarded.
+     * Set the maximum interval of inactivity after which a page is assumed to be dead (in ms).
+     * Note: setting this too short will result in a page whose event thread is busy in a prolonged
+     * operation being prematurely discarded.
      * 
      * @param maximumInactivityInterval Maximum inactivity interval in ms.
      */

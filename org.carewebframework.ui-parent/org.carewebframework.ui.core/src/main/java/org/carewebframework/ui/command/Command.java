@@ -30,15 +30,13 @@ import java.util.Set;
 
 import org.carewebframework.ui.action.ActionListener;
 import org.carewebframework.ui.action.IAction;
-import org.carewebframework.ui.zk.ZKUtil;
-
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.event.KeyEvent;
-import org.zkoss.zul.Div;
-import org.zkoss.zul.impl.XulElement;
+import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.component.BaseUIComponent;
+import org.carewebframework.web.component.Div;
+import org.carewebframework.web.event.Event;
+import org.carewebframework.web.event.EventUtil;
+import org.carewebframework.web.event.IEventListener;
+import org.carewebframework.web.event.KeyEvent;
 
 /**
  * Represents an intermediary between an event handler and a keyboard shortcut. A command provides
@@ -56,7 +54,7 @@ public class Command {
     /**
      * Each command has a control key event listener to process shortcut key presses.
      */
-    private class CtrlKeyListener implements EventListener<Event> {
+    private class CtrlKeyListener implements IEventListener {
         
         /**
          * Respond to the control key press event by sending an onCommand event to the target
@@ -66,7 +64,7 @@ public class Command {
          */
         @Override
         public void onEvent(Event event) {
-            KeyEvent keyEvent = (KeyEvent) ZKUtil.getEventOrigin(event);
+            KeyEvent keyEvent = (KeyEvent) event;
             String shortcut = CommandUtil.getShortcut(keyEvent);
             
             if (isBound(shortcut)) {
@@ -74,11 +72,11 @@ public class Command {
             }
         }
         
-        public void registerComponent(XulElement component, boolean register) {
+        public void registerComponent(BaseComponent component, boolean register) {
             if (register) {
-                component.addEventListener(Events.ON_CTRL_KEY, this);
+                component.registerEventListener("keypress", this);
             } else {
-                component.removeEventListener(Events.ON_CTRL_KEY, this);
+                component.unregisterEventListener("keypress", this);
             }
         }
     }
@@ -87,7 +85,7 @@ public class Command {
     
     private final Set<String> shortcutBindings = new HashSet<>();
     
-    private final Set<XulElement> componentBindings = new HashSet<>();
+    private final Set<BaseComponent> componentBindings = new HashSet<>();
     
     private final CtrlKeyListener keyEventListener = new CtrlKeyListener();
     
@@ -96,7 +94,7 @@ public class Command {
      * 
      * @param name The command name.
      */
-    /*package*/Command(String name) {
+    /*package*/ Command(String name) {
         this.name = name;
     }
     
@@ -116,7 +114,7 @@ public class Command {
      * @param commandTarget Optional component that will be the target of the onCommand event. If
      *            null, the bound component will be the target.
      */
-    /*package*/void bind(XulElement component, Component commandTarget) {
+    /*package*/void bind(BaseComponent component, BaseComponent commandTarget) {
         if (componentBindings.add(component)) {
             setCommandTarget(component, commandTarget);
             CommandUtil.updateShortcuts(component, shortcutBindings, false);
@@ -130,11 +128,11 @@ public class Command {
      * @param component The component to be bound.
      * @param action The action to be executed when the command is invoked.
      */
-    /*package*/void bind(XulElement component, IAction action) {
-        Component dummy = new Div();
+    /*package*/void bind(BaseComponent component, IAction action) {
+        BaseUIComponent dummy = new Div();
         dummy.setAttribute(ATTR_DUMMY, true);
         dummy.setVisible(false);
-        dummy.setPage(component.getPage());
+        dummy.setParent(component.getPage());
         ActionListener.addAction(dummy, action, CommandEvent.EVENT_NAME);
         bind(component, dummy);
     }
@@ -159,7 +157,7 @@ public class Command {
      * 
      * @param component The component to unbind.
      */
-    public void unbind(XulElement component) {
+    public void unbind(BaseComponent component) {
         if (componentBindings.remove(component)) {
             keyEventListener.registerComponent(component, false);
             CommandUtil.updateShortcuts(component, shortcutBindings, true);
@@ -188,7 +186,7 @@ public class Command {
         Set<String> bindings = new HashSet<>();
         bindings.add(shortcut);
         
-        for (XulElement component : componentBindings) {
+        for (BaseComponent component : componentBindings) {
             CommandUtil.updateShortcuts(component, bindings, unbind);
         }
     }
@@ -199,7 +197,7 @@ public class Command {
      * @param component The component of interest.
      * @return True if the component is bound to this command.
      */
-    public boolean isBound(XulElement component) {
+    public boolean isBound(BaseComponent component) {
         return componentBindings.contains(component);
     }
     
@@ -227,7 +225,7 @@ public class Command {
      * 
      * @return Iterable of component bindings.
      */
-    public Iterable<XulElement> getComponentBindings() {
+    public Iterable<BaseComponent> getComponentBindings() {
         return componentBindings;
     }
     
@@ -247,9 +245,9 @@ public class Command {
      * @param commandTarget If null, any associated command target is removed. Otherwise, this value
      *            is set as the command target.
      */
-    private void setCommandTarget(Component component, Component commandTarget) {
+    private void setCommandTarget(BaseComponent component, BaseComponent commandTarget) {
         if (commandTarget == null) {
-            commandTarget = (Component) component.removeAttribute(getTargetAttributeName());
+            commandTarget = (BaseComponent) component.removeAttribute(getTargetAttributeName());
             
             if (commandTarget != null && commandTarget.hasAttribute(ATTR_DUMMY)) {
                 commandTarget.detach();
@@ -266,8 +264,8 @@ public class Command {
      * @return The associated command target. If there is no associated command target, returns the
      *         component itself (i.e., the component is the command target).
      */
-    private Component getCommandTarget(Component component) {
-        Component commandTarget = (Component) component.getAttribute(getTargetAttributeName());
+    private BaseComponent getCommandTarget(BaseComponent component) {
+        BaseComponent commandTarget = (BaseComponent) component.getAttribute(getTargetAttributeName());
         return commandTarget == null ? component : commandTarget;
     }
     
@@ -277,7 +275,7 @@ public class Command {
      * @param triggerEvent An optional trigger event.
      */
     public void fire(Event triggerEvent) {
-        for (XulElement target : componentBindings) {
+        for (BaseComponent target : componentBindings) {
             if (!fire(target, triggerEvent)) {
                 break;
             }
@@ -291,10 +289,10 @@ public class Command {
      * @param triggerEvent The trigger event.
      * @return If false, do not propagate the event further.
      */
-    public boolean fire(Component target, Event triggerEvent) {
+    public boolean fire(BaseComponent target, Event triggerEvent) {
         CommandEvent event = new CommandEvent(name, triggerEvent, getCommandTarget(target));
-        Events.postEvent(event);
-        return event.isPropagatable();
+        EventUtil.post(event);
+        return !event.isStopped();
     }
     
     /**

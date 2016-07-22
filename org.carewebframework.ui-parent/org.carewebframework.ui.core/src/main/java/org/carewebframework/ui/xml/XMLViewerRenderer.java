@@ -29,15 +29,7 @@ import org.carewebframework.common.XMLUtil;
 import org.carewebframework.common.XMLUtil.TagFormat;
 import org.carewebframework.ui.xml.XMLTreeModel.XMLTreeNode;
 import org.carewebframework.ui.zk.TreeUtil.ITreeitemSearch;
-
-import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.event.OpenEvent;
-import org.zkoss.zul.Label;
-import org.zkoss.zul.Treecell;
-import org.zkoss.zul.Treeitem;
-import org.zkoss.zul.TreeitemRenderer;
-
+import org.carewebframework.web.component.Label;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
@@ -136,7 +128,7 @@ class XMLViewerRenderer implements TreeitemRenderer<XMLTreeNode> {
     
     private Label addLabel(TreeitemValue itemValue, String text, String sclass) {
         Label label = new Label(text);
-        label.setSclass(sclass);
+        label.addClass(sclass);
         label.setParent(itemValue.cell);
         itemValue.text += text.toLowerCase();
         return label;

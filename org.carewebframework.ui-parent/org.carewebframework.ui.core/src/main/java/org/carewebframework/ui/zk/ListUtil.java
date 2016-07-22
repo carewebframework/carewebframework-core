@@ -30,10 +30,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import org.zkoss.zul.Combobox;
-import org.zkoss.zul.Comboitem;
-import org.zkoss.zul.Listbox;
-import org.zkoss.zul.Listitem;
+import org.carewebframework.web.component.Listbox;
+import org.carewebframework.web.component.Listitem;
 
 /**
  * Useful combo and list box functions.
@@ -47,7 +45,7 @@ public class ListUtil {
         
         @Override
         public int compare(Listitem i1, Listitem i2) {
-            return i1.getIndex() - i2.getIndex();
+            return i1.indexOf() - i2.indexOf();
         }
         
     };
@@ -144,7 +142,7 @@ public class ListUtil {
      */
     public static int selectListboxItem(Listbox lb, String label) {
         int i = findListboxItem(lb, label);
-        lb.setSelectedIndex(i);
+        lb.setSelected(i);
         return i;
     }
     
@@ -168,7 +166,7 @@ public class ListUtil {
      */
     public static int selectListboxData(Listbox lb, Object data) {
         int i = findListboxData(lb, data);
-        lb.setSelectedIndex(i);
+        lb.setSelected(i);
         return i;
     }
     
@@ -218,5 +216,5 @@ public class ListUtil {
      * Enforces static class.
      */
     private ListUtil() {
-    };
+    }
 }

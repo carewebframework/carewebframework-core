@@ -34,12 +34,11 @@ import org.carewebframework.common.StrUtil;
 import org.carewebframework.ui.zk.PopupDialog;
 import org.carewebframework.ui.zk.PromptDialog;
 import org.carewebframework.ui.zk.ZKUtil;
-
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.util.Clients;
-import org.zkoss.zul.Button;
+import org.carewebframework.web.annotation.WiredComponent;
+import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.component.Button;
+import org.carewebframework.web.event.Event;
+import org.carewebframework.web.event.EventUtil;
 
 /**
  * Base controller for creating/editing a domain object.
@@ -65,9 +64,9 @@ public abstract class FormController<T> extends FrameworkController {
     
     private T domainObject;
     
-    private Component wrongValueTarget;
+    private BaseComponent wrongValueTarget;
     
-    private final Set<Component> changeSet = new HashSet<>();
+    private final Set<BaseComponent> changeSet = new HashSet<>();
     
     private String label_cancel_title = "@cwf.formcontroller.cancel.title";
     
@@ -77,6 +76,7 @@ public abstract class FormController<T> extends FrameworkController {
     
     // Start of auto-wired members
     
+    @WiredComponent
     private Button btnOK;
     
     // End of auto-wired members.
@@ -91,7 +91,7 @@ public abstract class FormController<T> extends FrameworkController {
     protected static boolean execute(String form, Object domainObject) {
         Map<Object, Object> args = new HashMap<>();
         args.put("domainObject", domainObject);
-        Component dlg = PopupDialog.popup(form, args, true, false, true);
+        BaseComponent dlg = PopupDialog.popup(form, args, true, false, true);
         return !ZKUtil.getAttributeBoolean(dlg, "cancelled");
     }
     
@@ -101,12 +101,12 @@ public abstract class FormController<T> extends FrameworkController {
      */
     @SuppressWarnings("unchecked")
     @Override
-    public void doAfterCompose(Component comp) throws Exception {
-        super.doAfterCompose(comp);
+    public void afterInitialized(BaseComponent comp) {
+        super.afterInitialized(comp);
         domainObject = (T) arg.get("domainObject");
         btnOK.setDisabled(true);
         initControls();
-        Events.postEvent("onDeferredInit", root, null);
+        EventUtil.post(new Event("onDeferredInit", root, null));
     }
     
     /**
@@ -115,7 +115,7 @@ public abstract class FormController<T> extends FrameworkController {
     public void onDeferredInit() {
         populateControls(domainObject);
         ZKUtil.focusFirst(root, true);
-        ZKUtil.wireChangeEvents(root, root, Events.ON_CHANGE);
+        ZKUtil.wireChangeEvents(root, root, "change");
     }
     
     /**
@@ -124,7 +124,7 @@ public abstract class FormController<T> extends FrameworkController {
      * @param event Change event.
      */
     public void onChange(Event event) {
-        changed(ZKUtil.getEventOrigin(event).getTarget());
+        changed(event.getTarget());
     }
     
     /**
@@ -139,7 +139,7 @@ public abstract class FormController<T> extends FrameworkController {
      * 
      * @param target The component whose input state changed.
      */
-    protected void changed(Component target) {
+    protected void changed(BaseComponent target) {
         changeSet.add(target);
         wrongValue(null, null);
         btnOK.setDisabled(false);
@@ -151,7 +151,7 @@ public abstract class FormController<T> extends FrameworkController {
      * @param target The target input element.
      * @return Always false.
      */
-    protected boolean isMissing(Component target) {
+    protected boolean isMissing(BaseComponent target) {
         wrongValue(target, label_required_message);
         return false;
     }
@@ -163,7 +163,7 @@ public abstract class FormController<T> extends FrameworkController {
      * @param target The target input element.
      * @param message The validation error message.
      */
-    protected void wrongValue(Component target, String message) {
+    protected void wrongValue(BaseComponent target, String message) {
         if (wrongValueTarget != null) {
             Clients.clearWrongValue(wrongValueTarget);
         }

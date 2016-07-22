@@ -29,19 +29,15 @@ import java.util.List;
 
 import org.carewebframework.common.MiscUtil;
 import org.carewebframework.ui.zk.ZKUtil.MatchMode;
-
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zul.Menu;
-import org.zkoss.zul.Menubar;
-import org.zkoss.zul.Menuitem;
-import org.zkoss.zul.Menupopup;
-import org.zkoss.zul.impl.LabelImageElement;
+import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.component.Menu;
+import org.carewebframework.web.component.Menuitem;
+import org.carewebframework.web.component.Toolbar;
 
 /**
- * Useful ZK menu functions.
+ * Useful menu functions.
  */
 public class MenuUtil {
-    
     
     private static final String[] NULL_PATH = { "null" };
     
@@ -57,7 +53,7 @@ public class MenuUtil {
      * @return The menu item added. If the menuItem parameter was not null, this is the value
      *         returned. Otherwise, it is a reference to the newly created menu item.
      */
-    public static Menuitem addMenuItem(String path, Menuitem menuItem, Menubar menubar, Component insertBefore) {
+    public static Menuitem addMenuItem(String path, Menuitem menuItem, Toolbar menubar, BaseComponent insertBefore) {
         return addMenuOrMenuItem(path, menuItem, menubar, insertBefore, Menuitem.class);
     }
     
@@ -73,7 +69,7 @@ public class MenuUtil {
      * @return The menu added. If the menu parameter was not null, this is the value returned.
      *         Otherwise, it is a reference to the newly created menu.
      */
-    public static Menu addMenu(String path, Menu menu, Menubar menubar, Component insertBefore) {
+    public static Menu addMenu(String path, Menu menu, Toolbar menubar, BaseComponent insertBefore) {
         return addMenuOrMenuItem(path, menu, menubar, insertBefore, Menu.class);
     }
     
@@ -90,11 +86,11 @@ public class MenuUtil {
      * @param clazz Class of the element to be added.
      * @return The element that was added.
      */
-    public static <T extends LabelImageElement> T addMenuOrMenuItem(String path, T ele, Menubar menubar,
-                                                                    Component insertBefore, Class<T> clazz) {
+    public static <T extends LabelImageElement> T addMenuOrMenuItem(String path, T ele, Toolbar menubar,
+                                                                    BaseComponent insertBefore, Class<T> clazz) {
         String pcs[] = path == null ? NULL_PATH : path.split(Constants.PATH_DELIMITER_REGEX);
         int last = pcs.length - 1;
-        Component parent = menubar;
+        BaseComponent parent = menubar;
         
         if (ele == null) {
             try {
@@ -112,9 +108,9 @@ public class MenuUtil {
         parent = getRealParent(parent);
         
         if (insertBefore != null && parent == insertBefore.getParent()) {
-            parent.insertBefore(ele, insertBefore);
+            parent.addChild(ele, insertBefore.getIndex());
         } else {
-            parent.appendChild(ele);
+            parent.addChild(ele);
         }
         
         return ele;
@@ -126,7 +122,7 @@ public class MenuUtil {
      * @param parent The parent component.
      * @return The true parent.
      */
-    private static Component getRealParent(Component parent) {
+    private static BaseComponent getRealParent(BaseComponent parent) {
         if (!(parent instanceof Menu)) {
             return parent;
         }
@@ -147,10 +143,10 @@ public class MenuUtil {
      * 
      * @param parent The starting menu container.
      */
-    public static void pruneMenus(Component parent) {
-        while (parent != null && !(parent instanceof Menubar)) {
+    public static void pruneMenus(BaseComponent parent) {
+        while (parent != null && !(parent instanceof Toolbar)) {
             if (parent.getChildren().isEmpty()) {
-                Component newParent = parent.getParent();
+                BaseComponent newParent = parent.getParent();
                 parent.detach();
                 parent = newParent;
             } else {
@@ -160,41 +156,18 @@ public class MenuUtil {
     }
     
     /**
-     * Creates a menu based on the given path.
-     * 
-     * @param menubar The menu bar that will contain the menu.
-     * @param path The menu path.
-     * @param insertBefore If not null, the new menu is inserted before this one. If null, the menu
-     *            is appended.
-     * @return The menu corresponding to the specified path. All missing menu nodes are created
-     *         automatically.
-     * @deprecated Use FindMenu instead
-     */
-    @Deprecated
-    public static Menu createMenu(Menubar menubar, String path, Component insertBefore) {
-        String[] pcs = path.split(Constants.PATH_DELIMITER_REGEX);
-        Menu menu = null;
-        
-        for (int i = 0; i < pcs.length; i++) {
-            menu = findMenu(menu == null ? menubar : menu, pcs[i], insertBefore);
-        }
-        
-        return menu;
-    }
-    
-    /**
      * Returns the menu with the specified label, or creates one if it does not exist.
      * 
-     * @param parent The parent component under which to search. May be a Menubar or a Menupopup
+     * @param parent The parent component under which to search. May be a Toolbar or a Menupopup
      *            component.
      * @param label Label of menu to search.
      * @param insertBefore If not null, the new menu is inserted before this one. If null, the menu
      *            is appended.
      * @return Menu with the specified label.
      */
-    public static Menu findMenu(Component parent, String label, Component insertBefore) {
-        Component child = null;
-        Component realParent = getRealParent(parent);
+    public static Menu findMenu(BaseComponent parent, String label, BaseComponent insertBefore) {
+        BaseComponent child = null;
+        BaseComponent realParent = getRealParent(parent);
         
         while ((child = ZKUtil.findChild(realParent, Menu.class, child)) != null) {
             if (((Menu) child).getLabel().equalsIgnoreCase(label)) {
@@ -206,9 +179,9 @@ public class MenuUtil {
         menu.setLabel(label);
         
         if (insertBefore != null && realParent == insertBefore.getParent()) {
-            realParent.insertBefore(menu, insertBefore);
+            realParent.addChild(menu, insertBefore.indexOf());
         } else {
-            realParent.appendChild(menu);
+            realParent.addChild(menu);
         }
         
         return menu;
@@ -224,7 +197,7 @@ public class MenuUtil {
      * @param matchMode The match mode.
      * @return The menu corresponding to the specified path, or null if not found.
      */
-    public static Menu findMenu(Menubar menubar, String path, boolean create, Class<? extends Menu> clazz,
+    public static Menu findMenu(Toolbar menubar, String path, boolean create, Class<? extends Menu> clazz,
                                 MatchMode matchMode) {
         return ZKUtil.findNode(menubar, Menupopup.class, clazz, path, create, matchMode);
     }
@@ -236,8 +209,8 @@ public class MenuUtil {
      * @param startIndex Index of first child to be sorted.
      * @param endIndex Index of last child to be sorted.
      */
-    public static void sortMenu(Component parent, int startIndex, int endIndex) {
-        List<Component> items = parent.getChildren();
+    public static void sortMenu(BaseComponent parent, int startIndex, int endIndex) {
+        List<BaseComponent> items = parent.getChildren();
         int bottom = startIndex + 1;
         
         for (int i = startIndex; i < endIndex;) {
@@ -273,8 +246,8 @@ public class MenuUtil {
      * @param comp Current component in menu tree.
      * @param sb String builder to receive path.
      */
-    private static void getPath(Component comp, StringBuilder sb) {
-        if (comp == null || comp instanceof Menubar) {
+    private static void getPath(BaseComponent comp, StringBuilder sb) {
+        if (comp == null || comp instanceof Toolbar) {
             return;
         }
         
@@ -292,7 +265,7 @@ public class MenuUtil {
      * @return True if the menu was opened.
      */
     public static boolean open(Menu menu) {
-        Component parent = menu.getParent();
+        BaseComponent parent = menu.getParent();
         
         if (parent instanceof Menupopup) {
             Menupopup menupopup = (Menupopup) parent;
@@ -318,22 +291,22 @@ public class MenuUtil {
      * @param menu Menu to close.
      */
     public static void close(Menu menu) {
-        Component target = menu.getMenupopup();
+        BaseComponent target = menu.getMenupopup();
         closeMenu(target == null ? menu : target);
     }
     
     /**
      * Closes the top level menu popup.
      * 
-     * @param comp Component within menu tree.
+     * @param comp BaseComponent within menu tree.
      */
-    private static void closeMenu(Component comp) {
+    private static void closeMenu(BaseComponent comp) {
         Menupopup menuPopup = null;
         
         while (comp != null) {
             if (comp instanceof Menupopup) {
                 menuPopup = (Menupopup) comp;
-            } else if (comp instanceof Menubar) {
+            } else if (comp instanceof Toolbar) {
                 break;
             }
             
@@ -350,7 +323,7 @@ public class MenuUtil {
      * 
      * @param comp Current menu tree component.
      */
-    public static void updateStyles(Component comp) {
+    public static void updateStyles(BaseComponent comp) {
         if (comp == null) {
             return;
         }
@@ -369,7 +342,7 @@ public class MenuUtil {
         
         boolean hasImages = menupopup == null;
         
-        for (Component child : comp.getChildren()) {
+        for (BaseComponent child : comp.getChildren()) {
             updateStyles(child);
             hasImages |= child instanceof Menu && ((Menu) child).isImageAssigned();
         }

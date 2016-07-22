@@ -33,18 +33,13 @@ import org.carewebframework.plugin.infopanel.service.InfoPanelService;
 import org.carewebframework.ui.zk.DropUtil;
 import org.carewebframework.ui.zk.IDropRenderer;
 import org.carewebframework.ui.zk.ZKUtil;
-
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.event.DropEvent;
-import org.zkoss.zk.ui.util.Clients;
-import org.zkoss.zul.Panel;
+import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.component.Window;
 
 /**
  * Container for receiving components rendered by drop renderer.
  */
-public class DropContainer extends Panel implements IActionTarget {
-    
-    private static final long serialVersionUID = 1L;
+public class DropContainer extends Window implements IActionTarget {
     
     private static final String SCLASS = "cwf-infopanel-container";
     
@@ -62,14 +57,14 @@ public class DropContainer extends Panel implements IActionTarget {
      *         droppedItem is successfully rendered, its newly created container is returned. If the
      *         droppedItem cannot be rendered, null will be returned.
      */
-    public static DropContainer render(Component dropRoot, Component droppedItem) {
+    public static DropContainer render(BaseComponent dropRoot, BaseComponent droppedItem) {
         IDropRenderer dropRenderer = DropUtil.getDropRenderer(droppedItem);
         
         if (dropRenderer == null || !dropRenderer.isEnabled()) {
             return null;
         }
         
-        Component renderedItem = dropRenderer.renderDroppedItem(droppedItem);
+        BaseComponent renderedItem = dropRenderer.renderDroppedItem(droppedItem);
         DropContainer dropContainer = null;
         
         if (renderedItem != null) {
@@ -92,11 +87,11 @@ public class DropContainer extends Panel implements IActionTarget {
      * Creates a new container for the contents to be rendered by the drop provider.
      * 
      * @param dropRoot The root component that will host the container.
-     * @param cmpt Component rendered by the drop renderer.
+     * @param cmpt BaseComponent rendered by the drop renderer.
      * @param title Title to be associated with the container.
      * @param actionListeners Listeners to be bound to the drop container (optional).
      */
-    private static DropContainer create(Component dropRoot, Component cmpt, String title,
+    private static DropContainer create(BaseComponent dropRoot, BaseComponent cmpt, String title,
                                         List<ActionListener> actionListeners) {
         DropContainer dc = (DropContainer) ZKUtil.loadZulPage(TEMPLATE, null);
         dc.actionListeners = actionListeners;
@@ -155,9 +150,9 @@ public class DropContainer extends Panel implements IActionTarget {
      * 
      * @param dropRoot Parent
      */
-    public void moveToTop(Component dropRoot) {
+    public void moveToTop(BaseComponent dropRoot) {
         if (dropRoot != null) {
-            dropRoot.insertBefore(this, dropRoot.getFirstChild());
+            dropRoot.addChild(this, 0);
             Clients.scrollIntoView(this);
         }
     }
@@ -168,16 +163,16 @@ public class DropContainer extends Panel implements IActionTarget {
      * @param event The drop event.
      */
     public void onDrop(DropEvent event) {
-        Component dragged = event.getDragged();
+        BaseComponent dragged = event.getDragged();
         
         if (dragged instanceof DropContainer) {
-            getParent().insertBefore(dragged, this);
+            getParent().addChild(dragged, this.indexOf());
         }
     }
     
     @Override
-    public void onClose() {
+    public void destroy() {
         ActionListener.unbindActionListeners(this, actionListeners);
-        super.onClose();
+        super.destroy();
     }
 }

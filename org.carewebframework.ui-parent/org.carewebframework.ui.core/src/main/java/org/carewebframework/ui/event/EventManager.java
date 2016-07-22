@@ -26,55 +26,52 @@
 package org.carewebframework.ui.event;
 
 import org.carewebframework.ui.zk.ZKUtil;
-import org.zkoss.zk.au.AuRequest;
-import org.zkoss.zk.au.AuService;
-import org.zkoss.zk.ui.Desktop;
-import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.EventListener;
+import org.carewebframework.web.component.Page;
+import org.carewebframework.web.event.Event;
+import org.carewebframework.web.event.IEventListener;
 
 /**
- * Subclasses framework's event manager to ensure that events are delivered in desktop's event
- * thread and to support delivering events sent from the client.
+ * Subclasses framework's event manager to ensure that events are delivered in page's event thread
+ * and to support delivering events sent from the client.
  */
 public class EventManager extends org.carewebframework.api.event.EventManager implements AuService {
     
     private static final String GENERIC_EVENT = "onGenericEvent";
     
-    private Desktop desktop;
+    private Page page;
     
-    private final EventListener<Event> eventListener = new EventListener<Event>() {
+    private final IEventListener eventListener = new IEventListener() {
         
         @Override
-        public void onEvent(Event event) throws Exception {
-            EventManager.super.fireLocalEvent(event.getName(), event.getData());
+        public void onEvent(Event event) {
+            EventManager.super.fireLocalEvent(event.getType(), event.getData());
         }
         
     };
     
     /**
-     * Fires the event to local subscribers. Ensures that event delivery takes place in the
-     * desktop's event thread.
+     * Fires the event to local subscribers. Ensures that event delivery takes place in the page's
+     * event thread.
      * 
      * @see org.carewebframework.api.event.EventManager#fireLocalEvent(java.lang.String,
      *      java.lang.Object)
      */
     @Override
     public void fireLocalEvent(String eventName, Object eventData) {
-        if (ZKUtil.inEventThread(desktop)) {
+        if (ZKUtil.inEventThread(page)) {
             super.fireLocalEvent(eventName, eventData);
         } else {
-            Executions.schedule(desktop, eventListener, new Event(eventName, null, eventData));
+            Executions.schedule(page, eventListener, new Event(eventName, null, eventData));
         }
     }
     
-    public Desktop getDesktop() {
-        return desktop;
+    public Page getPage() {
+        return page;
     }
     
-    public void setDesktop(Desktop desktop) {
-        this.desktop = desktop;
-        desktop.addListener(this);
+    public void setPage(Page page) {
+        this.page = page;
+        page.addListener(this);
     }
     
     /**
