@@ -29,8 +29,7 @@ import java.util.Collection;
 
 import org.carewebframework.api.messaging.IPublisherInfo;
 import org.carewebframework.ui.zk.AbstractListitemRenderer;
-
-import org.zkoss.zul.Listitem;
+import org.carewebframework.web.component.Listitem;
 
 /**
  * Renderer for participant list.
@@ -66,12 +65,12 @@ public class ParticipantRenderer extends AbstractListitemRenderer<IPublisherInfo
         if (exclusions != null && exclusions.contains(participant)) {
             item.setSelectable(false);
             item.setDisabled(true);
-            item.setSclass("chat-participant-active");
+            item.addClass("chat-participant-active");
             item.setVisible(!hideExclusions);
         }
         
         if (participant.equals(self)) {
-            item.setSclass("chat-participant-self");
+            item.addClass("chat-participant-self");
         }
     }
     

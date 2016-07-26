@@ -38,22 +38,18 @@ import org.carewebframework.api.messaging.Recipient.RecipientType;
 import org.carewebframework.common.JSONUtil;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.shell.plugins.PluginController;
-import org.carewebframework.ui.zk.ZKUtil;
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.SelectEvent;
-import org.zkoss.zk.ui.util.Clients;
-import org.zkoss.zul.Checkbox;
-import org.zkoss.zul.Label;
-import org.zkoss.zul.Listbox;
-import org.zkoss.zul.Listitem;
-import org.zkoss.zul.Textbox;
+import org.carewebframework.web.client.ClientUtil;
+import org.carewebframework.web.component.Checkbox;
+import org.carewebframework.web.component.Label;
+import org.carewebframework.web.component.Listbox;
+import org.carewebframework.web.component.Listitem;
+import org.carewebframework.web.component.Textbox;
+import org.carewebframework.web.event.SelectEvent;
 
 /**
  * Plug-in to test remote events.
  */
 public class MainController extends PluginController implements IGenericEvent<Object> {
-    
-    private static final long serialVersionUID = 1L;
     
     private Textbox tboxEventName;
     
@@ -81,17 +77,18 @@ public class MainController extends PluginController implements IGenericEvent<Ob
         messageCount++;
         
         if (chkAutoGenerate.isChecked()) {
-            tboxEventData.setText("Sending test event #" + messageCount);
+            tboxEventData.setValue("Sending test event #" + messageCount);
         }
         
-        eventManager.fireRemoteEvent(tboxEventName.getText(), tboxEventData.getText(), parseRecipients(tboxEventRecipients.getText()));
-        info("Fired", tboxEventName.getText());
+        eventManager.fireRemoteEvent(tboxEventName.getValue(), tboxEventData.getValue(),
+            parseRecipients(tboxEventRecipients.getValue()));
+        info("Fired", tboxEventName.getValue());
     }
     
     public void onClick$btnReset() {
-        tboxEventName.setText("");
-        tboxEventRecipients.setText("");
-        tboxEventData.setText("");
+        tboxEventName.setValue("");
+        tboxEventRecipients.setValue("");
+        tboxEventData.setValue("");
     }
     
     public void onClick$btnPing() {
@@ -99,18 +96,19 @@ public class MainController extends PluginController implements IGenericEvent<Ob
     }
     
     public void onClick$btnClear() {
-        tboxEventResults.setText("");
+        tboxEventResults.setValue("");
     }
     
     public void onClick$btnNewEvent() {
-        String eventName = tboxNewEvent.getText().trim();
+        String eventName = tboxNewEvent.getValue().trim();
         
         if (!StringUtils.isEmpty(eventName) && !containsEvent(eventName)) {
-            Listitem item = new Listitem(eventName);
-            lboxEventList.appendChild(item);
+            Listitem item = new Listitem();
+            item.setLabel(eventName);
+            lboxEventList.addChild(item);
         }
         
-        tboxNewEvent.setText("");
+        tboxNewEvent.setValue("");
     }
     
     private Recipient[] parseRecipients(String text) {
@@ -133,7 +131,7 @@ public class MainController extends PluginController implements IGenericEvent<Ob
     }
     
     private boolean containsEvent(String eventName) {
-        for (Object object : lboxEventList.getItems()) {
+        for (Object object : lboxEventList.getChildren()) {
             if (((Listitem) object).getLabel().equals(eventName)) {
                 return true;
             }
@@ -142,9 +140,8 @@ public class MainController extends PluginController implements IGenericEvent<Ob
         return false;
     }
     
-    public void onSelect$lboxEventList(Event event) {
-        SelectEvent<?, ?> sel = (SelectEvent<?, ?>) ZKUtil.getEventOrigin(event);
-        Listitem item = (Listitem) sel.getReference();
+    public void onSelect$lboxEventList(SelectEvent event) {
+        Listitem item = (Listitem) event.getTarget();
         String eventName = item.getLabel();
         
         if (item.isSelected()) {
@@ -157,12 +154,12 @@ public class MainController extends PluginController implements IGenericEvent<Ob
     }
     
     private void info(String action, String eventName) {
-        lblInfo.setValue(action + " '" + eventName + " ' event.");
+        lblInfo.setLabel(action + " '" + eventName + " ' event.");
     }
     
     @Override
     public void eventCallback(String eventName, Object eventData) {
-        String s = tboxEventResults.getText();
+        String s = tboxEventResults.getValue();
         
         if (!(eventData instanceof String)) {
             try {
@@ -171,12 +168,13 @@ public class MainController extends PluginController implements IGenericEvent<Ob
         }
         
         s += "\n\n" + eventName + ":\n" + eventData;
-        tboxEventResults.setText(s);
+        tboxEventResults.setValue(s);
         info("Received", eventName);
         
         if (!chkScrollLock.isChecked()) {
-            String js = StrUtil.formatMessage("jq('#%1$s').scrollTop(jq('#%1$s')[0].scrollHeight);", tboxEventResults.getUuid());
-            Clients.evalJavaScript(js);
+            String js = StrUtil.formatMessage("jq('#%1$s').scrollTop(jq('#%1$s')[0].scrollHeight);",
+                tboxEventResults.getId());
+            ClientUtil.eval(js);
         }
     }
     

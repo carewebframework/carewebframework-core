@@ -5,22 +5,22 @@
 
 	<vlayout apply="${cwfFileTailerController}" vflex="1">
 		<hlayout sclass="z-toolbar">
-			<combobox id="cboLogFiles" readonly="true" hflex="1" />
+			<combobox name="cboLogFiles" readonly="true" hflex="1" />
 			<span style="float:right">
-				<button id="btnToggle" disabled="true"
+				<button name="btnToggle" disabled="true"
 					label="${labels.cwf.filetailer.btn.toggle.on.label}" />
-				<button id="btnClear"
+				<button name="btnClear"
 					label="${labels.cwf.filetailer.btn.clear.label}" />
 			</span>
 		</hlayout>
 		
-		<label id="lblMessage" style="color: red;font-weight: bold;"
+		<label name="lblMessage" style="color: red;font-weight: bold;"
 			visible="false" />
 			
-		<textbox id="txtOutput" hflex="1" vflex="1" multiline="true"
+		<textbox name="txtOutput" hflex="1" vflex="1" multiline="true"
 			readonly="true" style="border-top:1px solid gray"/>
 			
-		<timer id="timer" repeats="true" running="false" />
+		<timer name="timer" running="false" />
 	</vlayout>
 
 </zk>

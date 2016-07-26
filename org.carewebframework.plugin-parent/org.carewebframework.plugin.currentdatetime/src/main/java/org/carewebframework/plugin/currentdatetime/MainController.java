@@ -28,22 +28,17 @@ package org.carewebframework.plugin.currentdatetime;
 import java.util.Calendar;
 
 import org.apache.commons.lang.time.FastDateFormat;
-
 import org.carewebframework.common.DateUtil;
 import org.carewebframework.shell.plugins.PluginContainer;
 import org.carewebframework.shell.plugins.PluginController;
-import org.carewebframework.ui.zk.ZKUtil;
-
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zul.Label;
-import org.zkoss.zul.Timer;
+import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.component.Label;
+import org.carewebframework.web.component.Timer;
 
 /**
  * Simple component to display the current date and time.
  */
 public class MainController extends PluginController {
-    
-    private static final long serialVersionUID = 1L;
     
     private Label lblCurrentTime;
     
@@ -56,8 +51,8 @@ public class MainController extends PluginController {
     private FastDateFormat formatter;
     
     @Override
-    public void doAfterCompose(Component comp) throws Exception {
-        super.doAfterCompose(comp);
+    public void afterInitialized(BaseComponent comp) {
+        super.afterInitialized(comp);
         timer.start();
     }
     
@@ -67,7 +62,7 @@ public class MainController extends PluginController {
     
     private void updateTime() {
         Calendar cal = Calendar.getInstance(DateUtil.getLocalTimeZone());
-        lblCurrentTime.setValue(formatter == null ? "" : formatter.format(cal));
+        lblCurrentTime.setLabel(formatter == null ? "" : formatter.format(cal));
     }
     
     public String getFormat() {
@@ -86,7 +81,7 @@ public class MainController extends PluginController {
     
     public void setColor(String color) {
         this.color = color;
-        ZKUtil.updateStyle(lblCurrentTime, "color", color);
+        lblCurrentTime.addStyle("color", color);
     }
     
     @Override

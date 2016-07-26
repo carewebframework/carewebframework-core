@@ -29,19 +29,17 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.swing.ListModel;
+
 import org.carewebframework.api.messaging.IPublisherInfo;
 import org.carewebframework.ui.FrameworkController;
 import org.carewebframework.ui.zk.PopupDialog;
 import org.carewebframework.ui.zk.RowComparator;
 import org.carewebframework.ui.zk.ZKUtil;
-
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zul.Button;
-import org.zkoss.zul.Checkbox;
-import org.zkoss.zul.ListModel;
-import org.zkoss.zul.ListModelSet;
-import org.zkoss.zul.Listbox;
-import org.zkoss.zul.Listheader;
+import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.component.Button;
+import org.carewebframework.web.component.Checkbox;
+import org.carewebframework.web.component.Listbox;
 
 /**
  * Controller for inviting participants to a chat session.
@@ -90,8 +88,8 @@ public class InviteController extends FrameworkController {
      */
     @SuppressWarnings("unchecked")
     @Override
-    public void doAfterCompose(Component comp) throws Exception {
-        super.doAfterCompose(comp);
+    public void afterInitialized(BaseComponent comp) {
+        super.afterInitialized(comp);
         sessionId = (String) arg.get("sessionId");
         Collection<IPublisherInfo> exclusions = (Collection<IPublisherInfo>) arg.get("exclusions");
         model.setMultiple(lstSessions.isMultiple());

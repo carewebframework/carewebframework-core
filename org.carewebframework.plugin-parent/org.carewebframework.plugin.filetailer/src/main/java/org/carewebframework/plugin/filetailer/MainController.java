@@ -35,27 +35,23 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.carewebframework.api.logging.ILogManager;
 import org.carewebframework.api.logging.LogFileTailer;
 import org.carewebframework.api.logging.LogFileTailerListener;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.shell.plugins.PluginController;
-
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zul.Button;
-import org.zkoss.zul.Combobox;
-import org.zkoss.zul.Comboitem;
-import org.zkoss.zul.Label;
-import org.zkoss.zul.Textbox;
-import org.zkoss.zul.Timer;
+import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.component.Button;
+import org.carewebframework.web.component.Combobox;
+import org.carewebframework.web.component.Comboitem;
+import org.carewebframework.web.component.Label;
+import org.carewebframework.web.component.Textbox;
+import org.carewebframework.web.component.Timer;
 
 /**
  * Controller class for log file tailer.
  */
 public class MainController extends PluginController {
-    
-    private static final long serialVersionUID = 1L;
     
     private static final Log log = LogFactory.getLog(MainController.class);
     
@@ -111,8 +107,8 @@ public class MainController extends PluginController {
      * Map
      */
     @Override
-    public void doAfterCompose(Component comp) throws Exception {
-        super.doAfterCompose(comp);
+    public void afterInitialized(BaseComponent comp) {
+        super.afterInitialized(comp);
         log.trace("Initializing Controller");
         
         //Populate LogFilePaths Combobox
@@ -121,11 +117,11 @@ public class MainController extends PluginController {
             
             for (String pathToLogFile : logFilePaths) {
                 logFiles.put(pathToLogFile, new File(pathToLogFile));
-                cboLogFiles.appendChild(new Comboitem(pathToLogFile));
+                cboLogFiles.addChild(new Comboitem(pathToLogFile));
             }
             
-            if (cboLogFiles.getItemCount() > 0) {
-                cboLogFiles.setSelectedItem(cboLogFiles.getItemAtIndex(0));
+            if (cboLogFiles.getChildCount() > 0) {
+                cboLogFiles.setSelectedItem((Comboitem) cboLogFiles.getChildAt(0));
                 onSelect$cboLogFiles();
             }
         }
@@ -220,7 +216,7 @@ public class MainController extends PluginController {
                 }
             }
             showMessage("@cwf.filetailer.msg.duration", tailer.getMaxActiveInterval() / 1000);
-            timer.setDelay(TIMER_INTERVAL);
+            timer.setInterval(TIMER_INTERVAL);
             timer.start();
             log.trace("Timer started");
             new Thread(tailer).start();
@@ -255,7 +251,7 @@ public class MainController extends PluginController {
             lblMessage.setVisible(false);
         } else {
             lblMessage.setVisible(true);
-            lblMessage.setValue(StrUtil.formatMessage(message, params));
+            lblMessage.setLabel(StrUtil.formatMessage(message, params));
         }
     }
     

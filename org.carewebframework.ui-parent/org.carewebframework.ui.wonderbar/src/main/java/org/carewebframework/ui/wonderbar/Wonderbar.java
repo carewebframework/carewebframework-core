@@ -25,22 +25,10 @@
  */
 package org.carewebframework.ui.wonderbar;
 
+import java.awt.Component;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.zkoss.json.JSONAware;
-import org.zkoss.text.MessageFormats;
-import org.zkoss.util.resource.Labels;
-import org.zkoss.zk.au.AuRequest;
-import org.zkoss.zk.au.out.AuInvoke;
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Page;
-import org.zkoss.zk.ui.UiException;
-import org.zkoss.zk.ui.WrongValueException;
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.sys.ContentRenderer;
-import org.zkoss.zul.impl.InputElement;
 
 /**
  * This is the main ZK component for the wonder bar. It supports both server-side searching for
@@ -68,7 +56,7 @@ public class Wonderbar<T> extends InputElement {
     
     private static final long serialVersionUID = 1L;
     
-    private final String MESSAGE_TOO_MANY = Labels.getLabel("cwf.wonderbar.items.truncated",
+    private final String MESSAGE_TOO_MANY = StrUtil.getLabel("cwf.wonderbar.items.truncated",
         "<< More than {0} items were found for the current input.  Please enter more characters. >>");
     
     private boolean changeOnOKOnly;

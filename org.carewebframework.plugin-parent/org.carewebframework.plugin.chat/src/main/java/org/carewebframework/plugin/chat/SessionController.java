@@ -38,15 +38,13 @@ import org.carewebframework.plugin.chat.SessionService.ISessionUpdate;
 import org.carewebframework.ui.FrameworkController;
 import org.carewebframework.ui.zk.PopupDialog;
 import org.carewebframework.ui.zk.ZKUtil;
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.event.InputEvent;
-import org.zkoss.zk.ui.util.Clients;
-import org.zkoss.zul.Button;
-import org.zkoss.zul.Label;
-import org.zkoss.zul.ListModelSet;
-import org.zkoss.zul.Listbox;
-import org.zkoss.zul.Textbox;
-import org.zkoss.zul.Window;
+import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.component.Button;
+import org.carewebframework.web.component.Label;
+import org.carewebframework.web.component.Listbox;
+import org.carewebframework.web.component.Textbox;
+import org.carewebframework.web.component.Window;
+import org.carewebframework.web.event.InputEvent;
 
 /**
  * Controller for an individual chat session.
@@ -63,7 +61,7 @@ public class SessionController extends FrameworkController implements ISessionUp
     
     private Listbox lstParticipants;
     
-    private Component pnlDialog;
+    private BaseComponent pnlDialog;
     
     private Textbox txtMessage;
     
@@ -102,8 +100,8 @@ public class SessionController extends FrameworkController implements ISessionUp
      * Initialize the dialog.
      */
     @Override
-    public void doAfterCompose(Component comp) throws Exception {
-        super.doAfterCompose(comp);
+    public void afterInitialized(BaseComponent comp) {
+        super.afterInitialized(comp);
         sessionId = (String) arg.get("id");
         lstParticipants.setItemRenderer(new ParticipantRenderer(chatService.getSelf(), null));
         model.add(chatService.getSelf());
@@ -144,7 +142,7 @@ public class SessionController extends FrameworkController implements ISessionUp
      * Clear any text in the message text box.
      */
     private void clearMessage() {
-        txtMessage.setText(null);
+        txtMessage.setValue(null);
         updateControls(true);
     }
     
@@ -169,7 +167,7 @@ public class SessionController extends FrameworkController implements ISessionUp
      * Send the message text.
      */
     public void onClick$btnSendMessage() {
-        addDialog(sessionService.sendMessage(txtMessage.getText().trim()), true);
+        addDialog(sessionService.sendMessage(txtMessage.getValue().trim()), true);
         clearMessage();
     }
     
@@ -237,10 +235,10 @@ public class SessionController extends FrameworkController implements ISessionUp
      */
     private void newLabel(String text, String sclass) {
         Label lbl = new Label(text);
-        lbl.setSclass(sclass);
+        lbl.addClass(sclass);
         lbl.setMultiline(true);
         lbl.setPre(true);
-        pnlDialog.appendChild(lbl);
+        pnlDialog.addChild(lbl);
         Clients.scrollIntoView(lbl);
     }
     
