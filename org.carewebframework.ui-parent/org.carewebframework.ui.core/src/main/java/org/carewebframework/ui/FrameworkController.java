@@ -52,8 +52,6 @@ import org.springframework.context.ApplicationContext;
  */
 public class FrameworkController implements IAutoWired {
     
-    private static final long serialVersionUID = 1L;
-    
     private ApplicationContext appContext;
     
     private AppFramework appFramework;

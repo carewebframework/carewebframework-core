@@ -89,7 +89,7 @@ public class PopupSupport implements IGenericEvent<Object>, IEventListener {
     public synchronized void closeAll() {
         for (Window window : windows) {
             try {
-                window.removeEventListener(Events.ON_CLOSE, this);
+                window.unregisterEventListener("close", this);
                 window.detach();
             } catch (Throwable e) {
                 

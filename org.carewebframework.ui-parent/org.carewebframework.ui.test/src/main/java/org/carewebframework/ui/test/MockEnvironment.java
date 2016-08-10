@@ -29,8 +29,7 @@ import java.lang.reflect.Method;
 
 import org.carewebframework.ui.ConsistentIdGenerator;
 import org.carewebframework.ui.LifecycleEventDispatcher;
-import org.carewebframework.ui.spring.FrameworkAppContext;
-
+import org.carewebframework.web.spring.FrameworkAppContext;
 import org.springframework.beans.BeanUtils;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -38,7 +37,6 @@ import org.springframework.mock.web.MockHttpSession;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-
 import org.zkoss.zk.au.out.AuEcho;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;

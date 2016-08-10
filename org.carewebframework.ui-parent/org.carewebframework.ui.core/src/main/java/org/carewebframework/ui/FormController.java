@@ -60,8 +60,6 @@ import org.carewebframework.web.event.EventUtil;
  */
 public abstract class FormController<T> extends FrameworkController {
     
-    private static final long serialVersionUID = 1L;
-    
     private T domainObject;
     
     private BaseComponent wrongValueTarget;

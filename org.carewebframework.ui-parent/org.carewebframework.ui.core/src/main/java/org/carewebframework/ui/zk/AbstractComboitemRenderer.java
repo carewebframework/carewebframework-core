@@ -25,8 +25,7 @@
  */
 package org.carewebframework.ui.zk;
 
-import org.zkoss.zul.Comboitem;
-import org.zkoss.zul.ComboitemRenderer;
+import org.carewebframework.web.component.Comboitem;
 
 /**
  * Base row renderer.
@@ -44,7 +43,7 @@ public abstract class AbstractComboitemRenderer<T> extends AbstractRenderer impl
     
     @Override
     public final void render(Comboitem item, T object, int index) throws Exception {
-        item.setValue(object);
+        item.setData(object);
         renderItem(item, object);
     }
     

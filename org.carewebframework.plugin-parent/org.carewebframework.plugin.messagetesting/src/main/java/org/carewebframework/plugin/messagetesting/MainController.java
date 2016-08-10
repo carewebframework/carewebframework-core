@@ -38,19 +38,15 @@ import org.carewebframework.shell.plugins.PluginContainer;
 import org.carewebframework.shell.plugins.PluginController;
 import org.carewebframework.ui.zk.PromptDialog;
 import org.carewebframework.ui.zk.ZKUtil;
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.event.SelectEvent;
-import org.zkoss.zk.ui.util.Clients;
-import org.zkoss.zul.Button;
-import org.zkoss.zul.Checkbox;
-import org.zkoss.zul.Combobox;
-import org.zkoss.zul.Comboitem;
-import org.zkoss.zul.ListModelList;
-import org.zkoss.zul.Listbox;
-import org.zkoss.zul.Listitem;
-import org.zkoss.zul.Textbox;
+import org.carewebframework.web.component.Button;
+import org.carewebframework.web.component.Checkbox;
+import org.carewebframework.web.component.Combobox;
+import org.carewebframework.web.component.Comboitem;
+import org.carewebframework.web.component.Listbox;
+import org.carewebframework.web.component.Listitem;
+import org.carewebframework.web.component.Textbox;
+import org.carewebframework.web.event.Event;
+import org.carewebframework.web.event.SelectEvent;
 
 /**
  * Controller class for ActiveMQ Tester.
@@ -184,18 +180,18 @@ public class MainController extends PluginController {
         received.clear();
     }
     
-    public void onSelect$cboxChannels(SelectEvent<Comboitem, ?> event) {
+    public void onSelect$cboxChannels(SelectEvent event) {
         btnSendMessage.setDisabled(false);
     }
     
-    public void onSelect$lboxSubscriptions(SelectEvent<Listitem, ?> event) {
+    public void onSelect$lboxSubscriptions(SelectEvent event) {
         Listitem item = event.getReference();
         subscribe(item.getLabel(), item.isSelected());
     }
     
-    public void onSelect$lboxProviders(SelectEvent<Listitem, ?> event) {
+    public void onSelect$lboxProviders(SelectEvent event) {
         Listitem item = event.getReference();
-        IMessageProducer producer = (IMessageProducer) item.getValue();
+        IMessageProducer producer = (IMessageProducer) item.getData();
         
         if (item.isSelected()) {
             producerService.registerProducer(producer);
@@ -205,7 +201,7 @@ public class MainController extends PluginController {
     }
     
     public void onScrollToBottom() {
-        Listitem item = lboxReceived.getItemAtIndex(lboxReceived.getItemCount() - 1);
+        Listitem item = lboxReceived.getItemAtIndex(lboxReceived.getChildCount() - 1);
         Clients.scrollIntoView(item);
     }
     

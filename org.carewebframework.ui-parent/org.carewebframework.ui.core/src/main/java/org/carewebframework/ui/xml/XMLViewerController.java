@@ -27,6 +27,7 @@ package org.carewebframework.ui.xml;
 
 import org.carewebframework.ui.FrameworkController;
 import org.carewebframework.ui.zk.TreeUtil;
+import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.Label;
 import org.carewebframework.web.component.Textbox;
 import org.carewebframework.web.event.Event;
@@ -58,8 +59,8 @@ public class XMLViewerController extends FrameworkController {
      * @throws Exception Unspecified exception.
      */
     @Override
-    public void doAfterCompose(Component comp) throws Exception {
-        super.doAfterCompose(comp);
+    public void afterInitialized(BaseComponent comp) {
+        super.afterInitialized(comp);
         tree.setItemRenderer(renderer);
     }
     

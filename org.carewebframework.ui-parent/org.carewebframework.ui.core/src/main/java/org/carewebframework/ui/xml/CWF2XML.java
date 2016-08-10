@@ -38,12 +38,9 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringUtils;
-
 import org.carewebframework.common.XMLUtil;
-
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.metainfo.ComponentDefinition;
-
+import org.carewebframework.web.annotation.ComponentDefinition;
+import org.carewebframework.web.component.BaseComponent;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -51,7 +48,7 @@ import org.w3c.dom.Node;
 /**
  * Converts a ZK component tree to XML format.
  */
-public class ZK2XML {
+public class CWF2XML {
     
     private final Set<String> exclude = new HashSet<>();
     
@@ -60,7 +57,7 @@ public class ZK2XML {
     /**
      * Returns an XML document that mirrors the ZK component tree starting at the specified root.
      * 
-     * @param root Component whose subtree is to be traversed.
+     * @param root BaseComponent whose subtree is to be traversed.
      * @param excludedProperties An optional list of properties that should be excluded from the
      *            output. These may either be the property name (e.g., "uuid") or a property name
      *            qualified by a component name (e.g., "window.uuid"). Optionally, an entry may be
@@ -68,9 +65,9 @@ public class ZK2XML {
      *            "innerAttrs" and "outerAttrs" are always excluded.
      * @return An XML document that represents the component subtree.
      */
-    public static Document toDocument(Component root, String... excludedProperties) {
+    public static Document toDocument(BaseComponent root, String... excludedProperties) {
         try {
-            ZK2XML instance = new ZK2XML(excludedProperties);
+            CWF2XML instance = new CWF2XML(excludedProperties);
             instance.toXML(root, instance.doc);
             return instance.doc;
         } catch (ParserConfigurationException e) {
@@ -82,7 +79,7 @@ public class ZK2XML {
      * Returns an XML-formatted string that mirrors the ZK component tree starting at the specified
      * root.
      * 
-     * @param root Component whose subtree is to be traversed.
+     * @param root BaseComponent whose subtree is to be traversed.
      * @param excludedProperties An optional list of properties that should be excluded from the
      *            output. These may either be the property name (e.g., "uuid") or a property name
      *            qualified by a component name (e.g., "window.uuid"). Optionally, an entry may be
@@ -90,7 +87,7 @@ public class ZK2XML {
      *            "innerAttrs" and "outerAttrs" are always excluded.
      * @return The XML text representation of the component subtree.
      */
-    public static String toXML(Component root, String... excludedProperties) {
+    public static String toXML(BaseComponent root, String... excludedProperties) {
         return XMLUtil.toString(toDocument(root, excludedProperties));
     }
     
@@ -104,7 +101,7 @@ public class ZK2XML {
      *            "innerAttrs" and "outerAttrs" are always excluded.
      * @throws ParserConfigurationException On parser exception.
      */
-    private ZK2XML(String[] excludedProperties) throws ParserConfigurationException {
+    private CWF2XML(String[] excludedProperties) throws ParserConfigurationException {
         doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
         
         if (excludedProperties != null) {
@@ -123,19 +120,19 @@ public class ZK2XML {
      * @param root The root component.
      * @param parent The parent XML node.
      */
-    private void toXML(Component root, Node parent) {
+    private void toXML(BaseComponent root, Node parent) {
         TreeMap<String, String> properties = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
         Class<?> clazz = root.getClass();
         ComponentDefinition def = root.getDefinition();
-        String cmpname = def.getName();
+        String cmpname = def.getTag();
         
-        if (def.getImplementationClass() != clazz) {
+        if (def.getClazz() != clazz) {
             properties.put("use", clazz.getName());
         }
         
-        if (def.getApply() != null) {
-            properties.put("apply", def.getApply());
-        }
+        //if (root.getController() != null) {
+        //    properties.put("apply", def.getApply());
+        //}
         
         Node child = doc.createElement(cmpname);
         parent.appendChild(child);
@@ -170,7 +167,7 @@ public class ZK2XML {
         
         properties = null;
         
-        for (Component cmp : root.getChildren()) {
+        for (BaseComponent cmp : root.getChildren()) {
             toXML(cmp, child);
         }
     }

@@ -25,6 +25,7 @@
  */
 package org.carewebframework.ui.xml;
 
+import org.carewebframework.common.MiscUtil;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.event.Event;
 import org.carewebframework.web.event.EventUtil;
@@ -42,9 +43,13 @@ public class XMLViewer {
      * @param document The XML document.
      * @throws Exception
      */
-    public static void showXML(Document document) throws Exception {
-        BaseComponent dlg = PageParser.getInstance().parse(XMLConstants.VIEW_DIALOG).materialize(null);
-        EventUtil.send(new Event("modal", dlg, document));
+    public static void showXML(Document document) {
+        try {
+            BaseComponent dlg = PageParser.getInstance().parse(XMLConstants.VIEW_DIALOG).materialize(null);
+            EventUtil.send(new Event("modal", dlg, document));
+        } catch (Exception e) {
+            throw MiscUtil.toUnchecked(e);
+        }
     }
     
     /**
@@ -64,7 +69,7 @@ public class XMLViewer {
      * @param excludedProperties Excluded properties.
      */
     public static void showZUML(BaseComponent root, String... excludedProperties) {
-        showXML(ZK2XML.toDocument(root, excludedProperties));
+        showXML(CWF2XML.toDocument(root, excludedProperties));
         
     }
     

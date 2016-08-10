@@ -30,65 +30,62 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.carewebframework.api.IThrowableContext;
 import org.carewebframework.api.security.SecurityUtil;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.ui.Application.SessionInfo;
-import org.carewebframework.ui.zk.ZKUtil;
-
+import org.carewebframework.web.ancillary.IAutoWired;
+import org.carewebframework.web.annotation.WiredComponent;
+import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.component.BaseUIComponent;
+import org.carewebframework.web.component.Button;
+import org.carewebframework.web.component.Label;
+import org.carewebframework.web.component.Textbox;
+import org.carewebframework.web.component.Window;
 import org.springframework.core.ErrorCoded;
 import org.springframework.core.NestedCheckedException;
 import org.springframework.core.NestedRuntimeException;
 import org.springframework.web.util.WebUtils;
-
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.util.Clients;
-import org.zkoss.zk.ui.util.GenericForwardComposer;
-import org.zkoss.zul.Button;
-import org.zkoss.zul.Label;
-import org.zkoss.zul.Textbox;
-import org.zkoss.zul.Window;
 
 /**
  * Controller to handle exceptions caught by the framework. This controller currently assumes the
  * listed ZK/ZUL members are properly wired. This class logs to our our logging appender with the
  * name defined by constant {@link Constants#EXCEPTION_LOG}.
  */
-public class ExceptionController extends GenericForwardComposer<Component> {
-    
-    private static final long serialVersionUID = 1L;
+public class ExceptionController implements IAutoWired {
     
     private static final Log log = LogFactory.getLog(ExceptionController.class);//TODO Constants.EXCEPTION_LOG);
     
     private Window root;
     
-    //autowired members
+    @WiredComponent
     private Label lblExceptionClass;
     
+    @WiredComponent
     private Label lblMessage;
     
+    @WiredComponent
     private Label lblStatusCode;
     
+    @WiredComponent
     private Label lblCode;
     
+    @WiredComponent
     private Textbox txtStackTrace;
     
-    private Component detail;
+    @WiredComponent
+    private BaseUIComponent detail;
     
+    @WiredComponent
     private Button btnDetail;
     
     /**
      * Populate the display with information from the current execution.
-     * 
-     * @see org.zkoss.zk.ui.util.GenericAutowireComposer#doAfterCompose(org.zkoss.zk.ui.Component)
      */
     @Override
-    public void doAfterCompose(Component comp) throws Exception {
-        super.doAfterCompose(comp);
+    public void afterInitialized(BaseComponent comp) {
         Clients.clearBusy();
-        this.root = ZKUtil.findAncestor(comp, Window.class);
+        this.root = comp.getAncestor(Window.class);
         HttpServletRequest req = (HttpServletRequest) this.execution.getNativeRequest();
         
         Class<?> errClass = (Class<?>) req.getAttribute(WebUtils.ERROR_EXCEPTION_TYPE_ATTRIBUTE);
@@ -125,7 +122,7 @@ public class ExceptionController extends GenericForwardComposer<Component> {
         if (err instanceof ErrorCoded) {
             String errorCode = ((ErrorCoded) err).getErrorCode();
             buffer.append("\nErrorCode: ").append(errorCode);
-            this.lblCode.setValue(errorCode);
+            this.lblCode.setLabel(errorCode);
         }
         buffer.append("\nStatusCode: ").append(errStatusCode);
         buffer.append("\nServletName: ").append(errServletName);
@@ -139,9 +136,9 @@ public class ExceptionController extends GenericForwardComposer<Component> {
         appendStackTrace(err);
         
         log.error(buffer, err);
-        this.lblExceptionClass.setValue(String.valueOf(errClass));
-        this.lblMessage.setValue(errMsg);
-        this.lblStatusCode.setValue(String.valueOf(errStatusCode));
+        this.lblExceptionClass.setLabel(String.valueOf(errClass));
+        this.lblMessage.setLabel(errMsg);
+        this.lblStatusCode.setLabel(String.valueOf(errStatusCode));
         
         if (SecurityUtil.isGrantedAny(StrUtil.getLabel("cwf.error.dialog.expanded"))) {
             Events.echoEvent(Events.ON_CLICK, this.btnDetail, null);
@@ -163,8 +160,8 @@ public class ExceptionController extends GenericForwardComposer<Component> {
                     + StringUtils.trimToEmpty(clazz.getCanonicalName()) + ": " + StringUtils.trimToEmpty(msg) + "\n");
             
             for (StackTraceElement element : err.getStackTrace()) {
-                this.txtStackTrace.setValue(StringUtils.defaultString(this.txtStackTrace.getValue())
-                        + String.valueOf(element) + "\n");
+                this.txtStackTrace
+                        .setValue(StringUtils.defaultString(this.txtStackTrace.getValue()) + String.valueOf(element) + "\n");
             }
         }
     }

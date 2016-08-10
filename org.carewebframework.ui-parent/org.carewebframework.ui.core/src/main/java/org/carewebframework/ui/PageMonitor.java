@@ -198,7 +198,7 @@ public class PageMonitor extends Thread {
             timeoutWindow = (Window) page.getExecution().createComponents(DESKTOP_TIMEOUT_ZUL, null, null);
             ZKUtil.wireController(timeoutWindow, PageMonitor.this);
             IUser user = securityService.getAuthenticatedUser();
-            lblLocked.setValue(
+            lblLocked.setLabel(
                 Mode.BASELINE.getLabel(TIMEOUT_EXPIRATION, user.getFullName() + "@" + user.getSecurityDomain().getName()));
             page.addListener(pageActivityMonitor);
             ThreadUtil.startThread(PageMonitor.this);
