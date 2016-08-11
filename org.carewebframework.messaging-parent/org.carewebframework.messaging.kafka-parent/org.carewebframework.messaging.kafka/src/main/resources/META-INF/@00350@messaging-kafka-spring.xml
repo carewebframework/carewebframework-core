@@ -12,13 +12,13 @@
 		<bean id="kafkaService" class="org.carewebframework.messaging.kafka.KafkaService" 
 			init-method="start" destroy-method="stop" />
 			
-		<bean class="org.carewebframework.messaging.kafka.Consumer"
+		<bean class="org.carewebframework.messaging.kafka.MessageConsumer"
 			init-method="init" destroy-method="destroy">
 			<constructor-arg ref="kafkaService" />
 			<constructor-arg value="${org.carewebframework.messaging.kafka.polling_interval}" />
 		</bean>
 		
-		<bean class="org.carewebframework.messaging.kafka.Producer">
+		<bean class="org.carewebframework.messaging.kafka.MessageProducer">
 			<constructor-arg ref="kafkaService" />
 		</bean>
 		
