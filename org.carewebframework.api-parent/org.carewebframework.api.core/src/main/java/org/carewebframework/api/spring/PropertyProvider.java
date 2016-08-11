@@ -84,7 +84,9 @@ public class PropertyProvider implements IPropertyProvider, ApplicationContextAw
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         environment = applicationContext.getEnvironment();
-        PropertySourcesPlaceholderConfigurer cfg = applicationContext.getBean(PropertySourcesPlaceholderConfigurer.class);
+        PropertySourcesPlaceholderConfigurer cfg = applicationContext.getBean(
+            "org.springframework.context.support.PropertySourcesPlaceholderConfigurer#0",
+            PropertySourcesPlaceholderConfigurer.class);
         localPropertySource = cfg.getAppliedPropertySources()
                 .get(PropertySourcesPlaceholderConfigurer.LOCAL_PROPERTIES_PROPERTY_SOURCE_NAME);
     }
