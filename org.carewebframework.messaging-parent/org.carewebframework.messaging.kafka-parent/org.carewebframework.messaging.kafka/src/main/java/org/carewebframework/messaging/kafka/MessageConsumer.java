@@ -91,6 +91,8 @@ public class MessageConsumer implements IMessageConsumer {
     
     private final MessagePoller messagePoller = new MessagePoller();
     
+    private volatile boolean subscriptionsUpdated;
+    
     private IMessageCallback callback;
     
     public MessageConsumer(KafkaService service, long pollingInterval) {
@@ -105,12 +107,20 @@ public class MessageConsumer implements IMessageConsumer {
     
     @Override
     public boolean subscribe(String channel) {
-        return updateSubscriptions(channels.add(channel));
+        return updateSubscriptions(channel, false);
     }
     
     @Override
     public boolean unsubscribe(String channel) {
-        return updateSubscriptions(channels.remove(channel));
+        return updateSubscriptions(channel, true);
+    }
+    
+    private boolean updateSubscriptions(String channel, boolean unsubscribe) {
+        synchronized (channels) {
+            boolean updated = unsubscribe ? channels.remove(channel) : channels.add(channel);
+            subscriptionsUpdated |= updated;
+            return updated;
+        }
     }
     
     public void init() {
@@ -121,30 +131,31 @@ public class MessageConsumer implements IMessageConsumer {
         messagePoller.terminate();
     }
     
-    private boolean updateSubscriptions(boolean doUpdate) {
-        if (doUpdate) {
-            consumer.subscribe(channels);
-        }
-        
-        return doUpdate;
-    }
-    
     private void poll() {
-        if (!channels.isEmpty()) {
-            ConsumerRecords<Object, Object> records;
-            
-            synchronized (consumer) {
-                records = consumer.poll(0);
-                consumer.commitAsync();
+        synchronized (channels) {
+            if (subscriptionsUpdated) {
+                subscriptionsUpdated = false;
+                consumer.subscribe(channels);
             }
             
-            for (ConsumerRecord<Object, Object> record : records) {
-                Object value = record.value();
-                Message message = value instanceof Message ? (Message) value : new Message("kafkaMessage", value);
-                
-                if (callback != null) {
-                    callback.onMessage(record.topic(), message);
-                }
+            if (channels.isEmpty()) {
+                return;
+            }
+        }
+        
+        ConsumerRecords<Object, Object> records;
+        
+        synchronized (consumer) {
+            records = consumer.poll(0);
+            consumer.commitAsync();
+        }
+        
+        for (ConsumerRecord<Object, Object> record : records) {
+            Object value = record.value();
+            Message message = value instanceof Message ? (Message) value : new Message("kafkaMessage", value);
+            
+            if (callback != null) {
+                callback.onMessage(record.topic(), message);
             }
         }
     }

@@ -41,7 +41,7 @@ import org.apache.kafka.clients.producer.ProducerConfig;
 import org.carewebframework.api.spring.SpringUtil;
 
 /**
- * Delegates calls to underlying producer service.
+ * Access to Kafka-based messaging services.
  */
 public class KafkaService {
     
