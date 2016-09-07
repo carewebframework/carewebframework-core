@@ -45,7 +45,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<org.carewebframework.core.version>5.0.0-SNAPSHOT</org.carewebframework.core.version>
-		<org.springframework.version>4.3.0.RELEASE</org.springframework.version>
+		<org.springframework.version>4.3.2.RELEASE</org.springframework.version>
 		<org.springframework.security.version>4.0.4.RELEASE</org.springframework.security.version>
 		<org.zkoss.zk.version>8.0.1.1</org.zkoss.zk.version>
 		<ehcache.version>2.10.2.2.21</ehcache.version>
