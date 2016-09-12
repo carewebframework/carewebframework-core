@@ -28,6 +28,8 @@ package org.carewebframework.ui;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.carewebframework.api.AppFramework;
 import org.carewebframework.api.FrameworkUtil;
 import org.carewebframework.api.event.EventManager;
@@ -39,9 +41,7 @@ import org.carewebframework.ui.LifecycleEventListener.ILifecycleCallback;
 import org.carewebframework.ui.thread.ZKThread;
 import org.carewebframework.ui.thread.ZKThread.ZKRunnable;
 import org.carewebframework.ui.zk.ZKUtil;
-
 import org.springframework.context.ApplicationContext;
-
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
@@ -56,6 +56,8 @@ import org.zkoss.zk.ui.util.GenericForwardComposer;
 public class FrameworkController extends GenericForwardComposer<Component> {
     
     private static final long serialVersionUID = 1L;
+    
+    private static final Log log = LogFactory.getLog(FrameworkController.class);
     
     private ApplicationContext appContext;
     
@@ -181,16 +183,21 @@ public class FrameworkController extends GenericForwardComposer<Component> {
      */
     @Override
     public void doAfterCompose(Component comp) throws Exception {
-        super.doAfterCompose(comp);
-        root = comp;
-        this.comp = comp;
-        comp.setAttribute(Constants.ATTR_COMPOSER, this);
-        comp.addEventListener(ZKThread.ON_THREAD_COMPLETE, threadCompletionListener);
-        appContext = SpringUtil.getAppContext();
-        appFramework = FrameworkUtil.getAppFramework();
-        eventManager = EventManager.getInstance();
-        LifecycleEventDispatcher.addComponentCallback(comp, lifecycleListener);
-        lifecycleListener.onInit(comp);
+        try {
+            super.doAfterCompose(comp);
+            root = comp;
+            this.comp = comp;
+            comp.setAttribute(Constants.ATTR_COMPOSER, this);
+            comp.addEventListener(ZKThread.ON_THREAD_COMPLETE, threadCompletionListener);
+            appContext = SpringUtil.getAppContext();
+            appFramework = FrameworkUtil.getAppFramework();
+            eventManager = EventManager.getInstance();
+            LifecycleEventDispatcher.addComponentCallback(comp, lifecycleListener);
+            lifecycleListener.onInit(comp);
+        } catch (Exception e) {
+            log.error(e);
+            throw e;
+        }
     }
     
     /**
@@ -204,14 +211,14 @@ public class FrameworkController extends GenericForwardComposer<Component> {
      * Override to respond to a refresh request.
      */
     public void refresh() {
-    
+        
     }
     
     /**
      * Override to perform any special cleanup.
      */
     public void cleanup() {
-    
+        
     }
     
     /**
