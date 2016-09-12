@@ -37,7 +37,6 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.carewebframework.api.FrameworkRuntimeException;
 import org.carewebframework.common.DateUtil;
 import org.carewebframework.common.DateUtil.ITimeZoneAccessor;
@@ -46,7 +45,6 @@ import org.carewebframework.ui.LifecycleEventListener.ILifecycleCallback;
 import org.carewebframework.ui.action.ActionRegistry;
 import org.carewebframework.ui.spring.AppContextFinder;
 import org.carewebframework.ui.spring.FrameworkAppContext;
-
 import org.zkoss.zk.au.AuRequest;
 import org.zkoss.zk.au.AuService;
 import org.zkoss.zk.au.out.AuClientInfo;
@@ -91,11 +89,11 @@ public class Application {
                 case CLOSE:
                     Clients.evalJavaScript("window.close();");
                     break;
-                    
+                
                 case LOCK:
                     lock(true);
                     break;
-                    
+                
                 case UNLOCK:
                     lock(false);
                     break;
@@ -308,7 +306,7 @@ public class Application {
                         .append(", DeviceType=").append(deviceType).append(", LocalAddresss=").append(localAddress)
                         .append(", RemotedAddress=").append(remoteAddress).append(", RemoteHost=").append(remoteHost)
                         .append(", ServerName=").append(serverName);
-                        
+                
                 for (Desktop desktop : getDesktops()) {
                     DesktopInfo desktopInfo = Application.getDesktopInfo(desktop);
                     buffer.append(desktopInfo);
@@ -377,8 +375,8 @@ public class Application {
             if (isManaged(desktop)) {
                 owner = null;
             } else {
-                String qs = desktop.getQueryString();
-                owner = qs == null ? null : FrameworkWebSupport.queryStringToMap(qs).get("owner");
+                Map<String, String> map = FrameworkWebSupport.queryStringToMap(desktop.getQueryString());
+                owner = map == null ? null : map.get("owner");
                 
                 if (registerWithOwner(true)) {
                     desktop.setAttribute(ATTR_SERVER_PUSH, true);
