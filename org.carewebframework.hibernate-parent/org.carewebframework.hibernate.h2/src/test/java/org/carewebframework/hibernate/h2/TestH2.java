@@ -38,13 +38,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.beanutils.BeanUtils;
-
 import org.carewebframework.hibernate.h2.H2DataSource.DBMode;
-
 import org.junit.Test;
 
 public class TestH2 {
-    
     
     @Test
     public void test() throws Exception {
@@ -56,7 +53,7 @@ public class TestH2 {
         
         params.put("url", "jdbc:h2:tcp://localhost/" + database);
         testDB(params, DBMode.LOCAL, null);
-        testDB(params, DBMode.REMOTE, "Connection refused");
+        //testDB(params, DBMode.REMOTE, "Connection refused");
         
         params.put("url", "jdbc:h2:tcp://localhost:1234/" + database);
         testDB(params, DBMode.REMOTE, "Connection refused");
@@ -77,6 +74,7 @@ public class TestH2 {
                 Connection connection = ds.getConnection();
                 PreparedStatement ps = connection.prepareStatement("SELECT X FROM SYSTEM_RANGE(1, 9);");
                 ResultSet rs = ps.executeQuery();) {
+            assertEquals(dbMode, ds.getMode());
             int i = 0;
             
             while (rs.next()) {
@@ -85,7 +83,6 @@ public class TestH2 {
             }
             
             assertEquals(i, 9);
-            assertEquals(dbMode, ds.getMode());
         } catch (AssertionError e) {
             throw e;
         } catch (Exception e) {
