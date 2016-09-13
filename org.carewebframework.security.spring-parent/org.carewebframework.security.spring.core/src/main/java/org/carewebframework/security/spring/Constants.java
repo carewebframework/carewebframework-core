@@ -49,9 +49,9 @@ public class Constants {
     
     public static final String SAVED_USER = "SPRING_SECURITY_SAVED_USER";
     
-    public static final String DEFAULT_SECURITY_DOMAIN = "@defaultDomain";
+    public static final String DEFAULT_SECURITY_DOMAIN = "cwf_defaultDomain";
     
-    public static final String DEFAULT_USERNAME = "@defaultUsername";
+    public static final String DEFAULT_USERNAME = "cwf_defaultUsername";
     
     public static final String DIALOG_ACCESS_DENIED = RESOURCE_PREFIX + "accessDenied.zul";
     
