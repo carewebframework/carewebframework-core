@@ -21,6 +21,7 @@
 			<groupId>org.carewebframework</groupId>
 			<artifactId>org.carewebframework.help.chm.test-jar</artifactId>
 			<version>${project.version}</version>
+			<type>test-jar</type>
 			<scope>system</scope>
 			<systemPath>${basedir}/src/test/resources/test-help.jar</systemPath>
 		</dependency>
