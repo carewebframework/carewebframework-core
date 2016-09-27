@@ -26,8 +26,7 @@
 package org.carewebframework.security.spring;
 
 import org.carewebframework.api.spring.ScopeContainer;
-import org.carewebframework.ui.spring.AbstractScope;
-
+import org.carewebframework.web.spring.AbstractScope;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 

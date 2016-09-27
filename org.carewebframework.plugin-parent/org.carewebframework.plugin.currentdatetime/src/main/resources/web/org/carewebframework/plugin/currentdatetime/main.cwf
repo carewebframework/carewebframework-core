@@ -1,0 +1,4 @@
+<div controller="${cwfCurrentDateTimeController}">
+	<label name="lblCurrentTime"/>
+	<timer name="timer" interval="60000" />
+</div>

@@ -33,31 +33,28 @@ import org.carewebframework.api.security.SecurityUtil;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.security.spring.Constants;
 import org.carewebframework.ui.zk.ZKUtil;
-
+import org.carewebframework.web.ancillary.IAutoWired;
+import org.carewebframework.web.client.ClientUtil;
+import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.component.BaseInputComponent;
+import org.carewebframework.web.component.Button;
+import org.carewebframework.web.component.Combobox;
+import org.carewebframework.web.component.Listbox;
+import org.carewebframework.web.component.Timer;
+import org.carewebframework.web.event.Event;
+import org.carewebframework.web.event.EventUtil;
+import org.carewebframework.web.event.IEventListener;
 import org.springframework.security.authentication.CredentialsExpiredException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.WebAttributes;
 import org.springframework.security.web.savedrequest.SavedRequest;
 
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.util.Clients;
-import org.zkoss.zk.ui.util.GenericForwardComposer;
-import org.zkoss.zul.Button;
-import org.zkoss.zul.Timer;
-import org.zkoss.zul.impl.InputElement;
-import org.zkoss.zul.impl.MeshElement;
-
 /**
  * Controller for the login component.
  */
-public class LoginWindowController extends GenericForwardComposer<Component> {
+public class LoginWindowController implements IAutoWired {
     
-    private static final long serialVersionUID = 1L;
-    
-    private Component loginForm;
+    private BaseComponent loginForm;
     
     private Timer timer;
     
@@ -67,10 +64,10 @@ public class LoginWindowController extends GenericForwardComposer<Component> {
     
     private final String passwordPaneUrl;
     
-    private final EventListener<Event> changeListener = new EventListener<Event>() {
+    private final IEventListener changeListener = new IEventListener() {
         
         @Override
-        public void onEvent(Event event) throws Exception {
+        public void onEvent(Event event) {
             resetTimer();
         }
         
@@ -108,8 +105,7 @@ public class LoginWindowController extends GenericForwardComposer<Component> {
      * @param comp The top level component.
      */
     @Override
-    public void doAfterCompose(Component comp) throws Exception {
-        super.doAfterCompose(comp);
+    public void afterInitialized(BaseComponent root) {
         timer.setDelay(execution.getSession().getMaxInactiveInterval() * 500);
         savedRequest = (SavedRequest) session.removeAttribute(org.carewebframework.security.spring.Constants.SAVED_REQUEST);
         AuthenticationException authError = (AuthenticationException) session
@@ -132,7 +128,7 @@ public class LoginWindowController extends GenericForwardComposer<Component> {
         }
         
         wireListener(ZKUtil.loadZulPage(form, loginForm, args));
-        getPage().setTitle(StrUtil.getLabel(title));
+        root.getPage().setTitle(StrUtil.getLabel(title));
         resetTimer();
     }
     
@@ -141,14 +137,14 @@ public class LoginWindowController extends GenericForwardComposer<Component> {
      * 
      * @param root Root element.
      */
-    private void wireListener(Component root) {
-        for (Component child : root.getChildren()) {
-            if (child instanceof MeshElement) {
-                child.addEventListener(Events.ON_SELECT, changeListener);
-            } else if (child instanceof InputElement) {
-                child.addEventListener(Events.ON_CHANGING, changeListener);
+    private void wireListener(BaseComponent root) {
+        for (BaseComponent child : root.getChildren()) {
+            if (child instanceof Combobox || child instanceof Listbox) {
+                child.registerEventListener("select", changeListener);
+            } else if (child instanceof BaseInputComponent) {
+                child.registerEventListener("changing", changeListener);
             } else if (child instanceof Button) {
-                child.addEventListener(Events.ON_CLICK, changeListener);
+                child.registerEventListener("click", changeListener);
             } else {
                 wireListener(child);
             }
@@ -178,7 +174,7 @@ public class LoginWindowController extends GenericForwardComposer<Component> {
     public void onSubmit() {
         timer.stop();
         timer = null;
-        Clients.submitForm(loginForm);
+        ClientUtil.submit(loginForm);
     }
     
     /**
@@ -205,7 +201,7 @@ public class LoginWindowController extends GenericForwardComposer<Component> {
     private void resetTimer() {
         if (timer != null) {
             timer.stop();
-            Events.echoEvent("onResetTimer", timer, null);
+            EventUtil.post("resetTimer", timer, null);
         }
     }
     
