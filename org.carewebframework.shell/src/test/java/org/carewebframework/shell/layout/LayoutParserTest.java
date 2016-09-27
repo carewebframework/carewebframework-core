@@ -38,9 +38,8 @@ import org.carewebframework.shell.plugins.TestPluginController;
 import org.carewebframework.shell.property.PropertyInfo;
 import org.carewebframework.ui.FrameworkController;
 import org.carewebframework.ui.test.CommonTest;
-
-import org.zkoss.zk.ui.event.Events;
-
+import org.carewebframework.web.event.ClickEvent;
+import org.carewebframework.web.event.EventUtil;
 import org.junit.Test;
 
 public class LayoutParserTest extends CommonTest {
@@ -73,15 +72,14 @@ public class LayoutParserTest extends CommonTest {
         UIElementBase ele = def.createElement(null, null);
         assertTrue(ele instanceof UIElementTreeView);
         CareWebShell shell = new CareWebShell();
-        shell.afterCompose();
         UIElementDesktop root = shell.getUIDesktop();
         UIElementBase element = layout.deserialize(root);
         assertTrue(element instanceof UIElementMenubar);
         assertTrue(element.hasAncestor(root));
         PluginContainer container1 = shell.getLoadedPlugin("testplugin1");
         assertNotNull(container1);
-        TestPluginController controller = (TestPluginController) FrameworkController.getController(container1
-                .getFirstChild());
+        TestPluginController controller = (TestPluginController) FrameworkController
+                .getController(container1.getFirstChild());
         assertNotNull(controller);
         assertEquals(container1, controller.getContainer());
         testPlugin(controller, 1, 1, 0, 0);
@@ -97,8 +95,8 @@ public class LayoutParserTest extends CommonTest {
         // Test auto-wire
         assertNotNull(controller.btnTest);
         assertNotNull(controller.mnuTest);
-        Events.sendEvent(Events.ON_CLICK, controller.btnTest, null);
-        Events.sendEvent(Events.ON_CLICK, controller.mnuTest, null);
+        EventUtil.send(ClickEvent.TYPE, controller.btnTest, null);
+        EventUtil.send(ClickEvent.TYPE, controller.mnuTest, null);
         assertEquals(1, controller.getClickButtonCount());
         assertEquals(1, controller.getClickMenuCount());
         assertEquals(controller.btnTest, container1.getAttribute("btnTest"));

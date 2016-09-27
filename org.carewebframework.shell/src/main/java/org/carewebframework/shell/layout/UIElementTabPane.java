@@ -27,16 +27,13 @@ package org.carewebframework.shell.layout;
 
 import org.carewebframework.ui.zk.Badge;
 import org.carewebframework.ui.zk.ZKUtil;
-
-import org.zkoss.zul.Menupopup;
-import org.zkoss.zul.Tab;
-import org.zkoss.zul.Tabbox;
-import org.zkoss.zul.Tabpanel;
+import org.carewebframework.web.component.Tab;
+import org.carewebframework.web.component.Tabbox;
 
 /**
  * Wraps the ZK Tab and Tabpanel components.
  */
-public class UIElementTabPane extends UIElementZKBase {
+public class UIElementTabPane extends UIElementCWFBase {
     
     static {
         registerAllowedParentClass(UIElementTabPane.class, UIElementTabView.class);
@@ -64,7 +61,7 @@ public class UIElementTabPane extends UIElementZKBase {
         @Override
         public boolean onNotification(UIElementBase sender, String eventName, Object eventData) {
             Badge badge = eventData == null ? new Badge() : (Badge) eventData;
-            badge.apply("#" + getUuid() + "-cnt");
+            badge.apply("#" + getId() + "-cnt");
             return false;
         }
     };
@@ -138,7 +135,7 @@ public class UIElementTabPane extends UIElementZKBase {
     @Override
     public void setEnabled(boolean enabled) {
         super.setEnabled(enabled);
-        ZKUtil.toggleSclass(tab, "cwf-tab", "cwf-tab-disabled", enabled);
+        tab.toggleClass("cwf-tab", "cwf-tab-disabled", enabled);
     }
     
     /**
@@ -148,7 +145,6 @@ public class UIElementTabPane extends UIElementZKBase {
     protected void applyColor() {
         super.applyColor();
         applyColor(tab);
-        tabPanel.invalidate();
     }
     
     @Override
@@ -209,6 +205,6 @@ public class UIElementTabPane extends UIElementZKBase {
      */
     @Override
     protected void applyHint() {
-        tab.setTooltiptext(getHint());
+        tab.setHint(getHint());
     }
 }

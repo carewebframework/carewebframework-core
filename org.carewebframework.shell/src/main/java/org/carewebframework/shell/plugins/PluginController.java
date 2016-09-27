@@ -27,17 +27,14 @@ package org.carewebframework.shell.plugins;
 
 import org.carewebframework.api.thread.IAbortable;
 import org.carewebframework.ui.FrameworkController;
-
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.util.Composer;
+import org.carewebframework.web.ancillary.IAutoWired;
+import org.carewebframework.web.component.BaseComponent;
 
 /**
  * Base controller for plugins. Offers convenience methods for determining activation state,
  * accessing the plugin container, and managing background threads.
  */
 public class PluginController extends FrameworkController implements IPluginEvent {
-    
-    private static final long serialVersionUID = 1L;
     
     private boolean isActive;
     
@@ -47,8 +44,8 @@ public class PluginController extends FrameworkController implements IPluginEven
      * Wire controller from toolbar components first, then from container.
      */
     @Override
-    public void doAfterCompose(Component comp) throws Exception {
-        super.doAfterCompose(comp);
+    public void afterInitialized(BaseComponent comp) {
+        super.afterInitialized(comp);
         container = PluginContainer.getContainer(comp);
     }
     
@@ -97,9 +94,9 @@ public class PluginController extends FrameworkController implements IPluginEven
      * @param controller Controller to attach.
      * @throws Exception Unspecified exception.
      */
-    public void attachController(Component comp, Composer<Component> controller) throws Exception {
+    public void attachController(BaseComponent comp, IAutoWired controller) throws Exception {
         container.tryRegisterListener(controller, true);
-        controller.doAfterCompose(comp);
+        controller.afterInitialized(comp);
     }
     
     /**

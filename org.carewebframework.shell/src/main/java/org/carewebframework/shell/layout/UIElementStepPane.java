@@ -26,21 +26,18 @@
 package org.carewebframework.shell.layout;
 
 import org.carewebframework.ui.zk.ZKUtil;
-
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zul.A;
-import org.zkoss.zul.Div;
-import org.zkoss.zul.Menupopup;
-import org.zkoss.zul.Span;
+import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.component.Div;
+import org.carewebframework.web.component.Hyperlink;
+import org.carewebframework.web.component.Span;
+import org.carewebframework.web.event.Event;
+import org.carewebframework.web.event.IEventListener;
 
 /**
  * A step-oriented UI Element. This is a composite element consisting of a button and its separator
  * with an associated pane. Clicking on a button activates its corresponding pane.
  */
-public class UIElementStepPane extends UIElementZKBase {
+public class UIElementStepPane extends UIElementCWFBase {
     
     static {
         registerAllowedParentClass(UIElementStepPane.class, UIElementStepView.class);
@@ -49,7 +46,7 @@ public class UIElementStepPane extends UIElementZKBase {
     
     private final Div pane = new Div();
     
-    private final A button = new A("New Step");
+    private final Hyperlink button = new Hyperlink();
     
     private final Span step = new Span();
     
@@ -60,18 +57,19 @@ public class UIElementStepPane extends UIElementZKBase {
      */
     public UIElementStepPane() {
         super();
+        button.setLabel("New Step");
         fullSize(pane);
         setOuterComponent(pane);
         associateComponent(button);
         associateComponent(step);
         pane.setVisible(false);
-        step.appendChild(button);
-        button.setZclass("cwf-step-button");
-        button.setSclass("btn btn-sm");
-        button.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
+        step.addChild(button);
+        button.addClass("cwf-step-button");
+        button.addClass("btn btn-sm");
+        button.registerEventListener("click", new IEventListener() {
             
             @Override
-            public void onEvent(Event event) throws Exception {
+            public void onEvent(Event event) {
                 ((UIElementStepView) getParent()).setActivePane(UIElementStepPane.this);
                 pane.setFocus(true);
             }
@@ -92,19 +90,19 @@ public class UIElementStepPane extends UIElementZKBase {
     /**
      * Add the ZK components of the child pane to their respective parent components in the view.
      * 
-     * @see org.carewebframework.shell.layout.UIElementZKBase#bind
+     * @see org.carewebframework.shell.layout.UIElementCWFBase#bind
      */
     @Override
     protected void bind() {
         super.bind();
-        Component root = ((UIElementStepView) getParent()).getToolbarRoot();
-        root.appendChild(step);
+        BaseComponent root = ((UIElementStepView) getParent()).getToolbarRoot();
+        root.addChild(step);
     }
     
     /**
      * Detach the ZK components of the child pane the UI.
      * 
-     * @see org.carewebframework.shell.layout.UIElementZKBase#unbind
+     * @see org.carewebframework.shell.layout.UIElementCWFBase#unbind
      */
     @Override
     protected void unbind() {
@@ -126,7 +124,7 @@ public class UIElementStepPane extends UIElementZKBase {
     /**
      * Changes the ordering of a button and its separator.
      * 
-     * @see org.carewebframework.shell.layout.UIElementZKBase#afterMoveTo(int)
+     * @see org.carewebframework.shell.layout.UIElementCWFBase#afterMoveTo(int)
      */
     @Override
     protected void afterMoveTo(int index) {
@@ -148,7 +146,7 @@ public class UIElementStepPane extends UIElementZKBase {
     /**
      * Apply color changes to button and pane only.
      * 
-     * @see org.carewebframework.shell.layout.UIElementZKBase#applyColor()
+     * @see org.carewebframework.shell.layout.UIElementCWFBase#applyColor()
      */
     @Override
     protected void applyColor() {
@@ -171,7 +169,7 @@ public class UIElementStepPane extends UIElementZKBase {
      * Updates the button's styling based on the current state.
      */
     private void updateButtonStyle() {
-        ZKUtil.updateSclass(button, "disabled", isEnabled());
+        button.addStyle("disabled", isEnabled() ? "true" : null);
         ZKUtil.toggleSclass(button, "btn-primary", "btn-default", isActivated());
     }
     
@@ -179,7 +177,7 @@ public class UIElementStepPane extends UIElementZKBase {
     protected void updateVisibility(boolean visible, boolean activated) {
         super.updateVisibility(visible, activated);
         step.setVisible(visible && !isHomePane);
-        step.setZclass(getNextSibling(true) != null ? "cwf-step-separator" : null);
+        step.addClass(getNextSibling(true) != null ? "cwf-step-separator" : null);
         updateButtonStyle();
     }
     
@@ -209,7 +207,7 @@ public class UIElementStepPane extends UIElementZKBase {
     
     @Override
     protected void applyHint() {
-        button.setTooltiptext(getHint());
+        button.setHint(getHint());
     }
     
     /**
@@ -228,6 +226,5 @@ public class UIElementStepPane extends UIElementZKBase {
      */
     public void setIcon(String value) {
         button.setImage(value);
-        button.invalidate();
     }
 }

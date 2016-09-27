@@ -26,26 +26,24 @@
 package org.carewebframework.shell.layout;
 
 import org.carewebframework.ui.zk.MenuUtil;
-
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.util.Clients;
-import org.zkoss.zul.Menubar;
+import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.component.Menu;
 
 /**
  * Base implementation of a menu bar.
  */
-public class UIElementMenuBase extends UIElementZKBase {
+public class UIElementMenuBase extends UIElementCWFBase {
     
-    private final Menubar menubar;
+    private final Menu menubar;
     
-    public UIElementMenuBase(Menubar menubar) {
+    public UIElementMenuBase(Menu menubar) {
         this(menubar, menubar);
     }
     
-    public UIElementMenuBase(Menubar menubar, Component root) {
+    public UIElementMenuBase(Menu menubar, BaseComponent root) {
         super();
         this.menubar = menubar;
-        menubar.setSclass("cwf-menubar");
+        menubar.addClass("cwf-menubar");
         setOuterComponent(menubar);
         setInnerComponent(root);
         maxChildren = Integer.MAX_VALUE;
@@ -57,7 +55,7 @@ public class UIElementMenuBase extends UIElementZKBase {
      * 
      * @return The menu bar.
      */
-    public Menubar getMenubar() {
+    public Menu getMenubar() {
         return menubar;
     }
     
@@ -75,6 +73,5 @@ public class UIElementMenuBase extends UIElementZKBase {
     
     protected void updateMenubar() {
         MenuUtil.updateStyles(menubar);
-        Clients.resize(menubar);
     }
 }

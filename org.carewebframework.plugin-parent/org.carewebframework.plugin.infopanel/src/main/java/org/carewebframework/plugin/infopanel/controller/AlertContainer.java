@@ -32,14 +32,13 @@ import org.carewebframework.plugin.infopanel.model.IInfoPanel.Action;
 import org.carewebframework.plugin.infopanel.service.InfoPanelService;
 import org.carewebframework.web.ancillary.INamespace;
 import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.component.Row;
 import org.carewebframework.web.event.EventUtil;
 
 /**
  * Container for receiving components rendered by drop renderer.
  */
 public class AlertContainer extends Row implements INamespace, IActionTarget {
-    
-    private static final long serialVersionUID = 1L;
     
     private final List<ActionListener> actionListeners;
     

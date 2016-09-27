@@ -26,10 +26,7 @@
 package org.carewebframework.shell.layout;
 
 import org.carewebframework.theme.ThemeUtil;
-import org.carewebframework.ui.zk.ZKUtil;
-
-import org.zkoss.zul.A;
-import org.zkoss.zul.impl.LabelImageElement;
+import org.carewebframework.web.component.Hyperlink;
 
 /**
  * Simple button stock object.
@@ -40,17 +37,17 @@ public class UIElementButton extends UIElementActionBase {
         registerAllowedParentClass(UIElementButton.class, UIElementBase.class);
     }
     
-    private final LabelImageElement component;
+    private final Hyperlink component;
     
     private ThemeUtil.ButtonSize size;
     
     private ThemeUtil.ButtonStyle style;
     
     public UIElementButton() {
-        this(new A(), ThemeUtil.ButtonSize.DEFAULT, ThemeUtil.ButtonStyle.DEFAULT);
+        this(new Hyperlink(), ThemeUtil.ButtonSize.DEFAULT, ThemeUtil.ButtonStyle.DEFAULT);
     }
     
-    public UIElementButton(LabelImageElement component, ThemeUtil.ButtonSize size, ThemeUtil.ButtonStyle style) {
+    public UIElementButton(Hyperlink component, ThemeUtil.ButtonSize size, ThemeUtil.ButtonStyle style) {
         this.component = component;
         this.size = size;
         this.style = style;
@@ -91,8 +88,7 @@ public class UIElementButton extends UIElementActionBase {
      * @param url Icon URL.
      */
     public void setIcon(String url) {
-        component.setImage(url);
-        component.invalidate();
+        //component.setImage(url);
     }
     
     /**
@@ -101,7 +97,7 @@ public class UIElementButton extends UIElementActionBase {
      * @return Icon URL.
      */
     public String getIcon() {
-        return component.getImage();
+        return null;//component.getImage();
     }
     
     public ThemeUtil.ButtonSize getSize() {
@@ -124,7 +120,7 @@ public class UIElementButton extends UIElementActionBase {
     
     @Override
     protected void applyColor() {
-        ZKUtil.updateStyle(component, "color", getColor());
+        component.addStyle("color", getColor());
     }
     
 }

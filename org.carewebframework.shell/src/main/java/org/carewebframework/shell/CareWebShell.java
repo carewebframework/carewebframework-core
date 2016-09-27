@@ -33,7 +33,6 @@ import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.carewebframework.api.AppFramework;
 import org.carewebframework.api.FrameworkUtil;
 import org.carewebframework.api.context.UserContext.IUserContextEvent;
@@ -49,13 +48,12 @@ import org.carewebframework.help.HelpSetCache;
 import org.carewebframework.help.IHelpSet;
 import org.carewebframework.help.viewer.HelpUtil;
 import org.carewebframework.shell.layout.UIElementDesktop;
-import org.carewebframework.shell.layout.UIElementZKBase;
+import org.carewebframework.shell.layout.UIElementCWFBase;
 import org.carewebframework.shell.layout.UILayout;
 import org.carewebframework.shell.plugins.PluginContainer;
 import org.carewebframework.shell.plugins.PluginDefinition;
 import org.carewebframework.shell.plugins.PluginResourceHelp;
 import org.carewebframework.ui.Application;
-import org.carewebframework.ui.FrameworkWebSupport;
 import org.carewebframework.ui.command.CommandEvent;
 import org.carewebframework.ui.command.CommandRegistry;
 import org.carewebframework.ui.command.CommandUtil;
@@ -63,30 +61,23 @@ import org.carewebframework.ui.zk.MessageWindow;
 import org.carewebframework.ui.zk.MessageWindow.MessageInfo;
 import org.carewebframework.ui.zk.PromptDialog;
 import org.carewebframework.ui.zk.ZKUtil;
-
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.event.ClientInfoEvent;
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.KeyEvent;
-import org.zkoss.zk.ui.ext.AfterCompose;
-import org.zkoss.zk.ui.util.Clients;
-import org.zkoss.zul.Div;
-import org.zkoss.zul.Menu;
-import org.zkoss.zul.Span;
-import org.zkoss.zul.Style;
-import org.zkoss.zul.impl.XulElement;
+import org.carewebframework.web.client.ClientUtil;
+import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.component.BaseUIComponent;
+import org.carewebframework.web.component.Div;
+import org.carewebframework.web.component.Menu;
+import org.carewebframework.web.component.Span;
+import org.carewebframework.web.component.Stylesheet;
+import org.carewebframework.web.core.WebUtil;
+import org.carewebframework.web.event.Event;
+import org.carewebframework.web.event.KeyEvent;
 
 /**
  * Implements a generic UI shell that can be dynamically extended with plug-ins.
  */
-public class CareWebShell extends Div implements AfterCompose {
-    
-    private static final long serialVersionUID = 1L;
+public class CareWebShell extends Div {
     
     protected static final Log log = LogFactory.getLog(CareWebShell.class);
-    
-    public final String LBL_CONFIRM_CLOSE = StrUtil.getLabel("cwf.shell.confirmclose.message");
     
     public final String LBL_NO_LAYOUT = StrUtil.getLabel("cwf.shell.nolayout.message");
     
@@ -112,7 +103,7 @@ public class CareWebShell extends Div implements AfterCompose {
     
     private UIElementDesktop desktop;
     
-    private final Component registeredStyles = new Span();
+    private final BaseComponent registeredStyles = new Span();
     
     private CareWebStartup startupRoutines;
     
@@ -170,30 +161,22 @@ public class CareWebShell extends Div implements AfterCompose {
     public CareWebShell() {
         super();
         CareWebUtil.setShell(this);
-        Executions.getCurrent().getDesktop().enableServerPush(true);
-    }
-    
-    /**
-     * Perform additional initializations.
-     */
-    @Override
-    public void afterCompose() {
+        
         try {
             CommandUtil.associateCommand("help", this);
             appendChild(registeredStyles);
             appendChild(messageWindow = new MessageWindow());
             desktop = new UIElementDesktop(this);
-            ZKUtil.suppressContextMenu(this);
             appFramework.registerObject(userContextListener);
-            String confirmClose = FrameworkWebSupport.getFrameworkProperty("confirmClose", "CAREWEB.CONFIRM.CLOSE");
+            String confirmClose = WebUtil.getFrameworkProperty("confirmClose", "CAREWEB.CONFIRM.CLOSE");
             
             if (StringUtils.isEmpty(confirmClose) || BooleanUtils.toBoolean(confirmClose)) {
-                Clients.confirmClose(LBL_CONFIRM_CLOSE);
+                ClientUtil.canClose(false);
             }
             
             String layout = defaultLayoutName != null ? defaultLayoutName
-                    : FrameworkWebSupport.getFrameworkProperty("layout", "CAREWEB.LAYOUT.DEFAULT");
-                    
+                    : WebUtil.getFrameworkProperty("layout", "CAREWEB.LAYOUT.DEFAULT");
+            
             if (!StringUtils.isEmpty(layout)) {
                 loadLayoutFromResource(layout);
             }
@@ -211,7 +194,7 @@ public class CareWebShell extends Div implements AfterCompose {
      */
     public void onCommand(CommandEvent event) {
         if ("help".equals(event.getCommandName())) {
-            Component ref = event.getReference();
+            BaseComponent ref = event.getReference();
             HelpUtil.showCSH(ref == null ? event.getTarget() : ref);
         }
     }
@@ -222,7 +205,7 @@ public class CareWebShell extends Div implements AfterCompose {
      * @return Client information.
      */
     public ClientInfoEvent getClientInformation() {
-        return Application.getDesktopInfo(getDesktop()).getClientInformation();
+        return Application.getDesktopInfo(getPage()).getClientInformation();
     }
     
     /**
@@ -231,9 +214,9 @@ public class CareWebShell extends Div implements AfterCompose {
      * @param event Control key event.
      */
     public void onCtrlKey(Event event) {
-        KeyEvent keyEvent = (KeyEvent) ZKUtil.getEventOrigin(event);
+        KeyEvent keyEvent = (KeyEvent) event;
         String shortcut = CommandUtil.getShortcut(keyEvent);
-        Collection<? extends XulElement> plugins = getActivatedPlugins(null);
+        Collection<? extends BaseUIComponent> plugins = getActivatedPlugins(null);
         
         if (!plugins.isEmpty()) {
             commandRegistry.fireCommands(shortcut, keyEvent, plugins);
@@ -324,7 +307,7 @@ public class CareWebShell extends Div implements AfterCompose {
      * @throws Exception Unspecified exception.
      */
     public void loadLayoutByAppId() throws Exception {
-        loadLayoutByAppId(FrameworkWebSupport.getFrameworkProperty("appId", "CAREWEB.APPID.DEFAULT"));
+        loadLayoutByAppId(WebUtil.getFrameworkProperty("appId", "CAREWEB.APPID.DEFAULT"));
     }
     
     /**
@@ -435,7 +418,7 @@ public class CareWebShell extends Div implements AfterCompose {
      * 
      * @param component Component to add
      */
-    public void addToolbarComponent(Component component) {
+    public void addToolbarComponent(BaseComponent component) {
         desktop.getToolbar().addToolbarComponent(component, null);
     }
     
@@ -472,19 +455,25 @@ public class CareWebShell extends Div implements AfterCompose {
      * @param url URL of style sheet.
      */
     public void registerStyleSheet(String url) {
-        if (findStyleSheet(url) == null)
-        registeredStyles.appendChild(new Style(url));
+        if (findStyleSheet(url) == null) {
+            Stylesheet ss = new Stylesheet();
+            ss.setHref(url);
+            registeredStyles.addChild(ss);
+        }
     }
     
     /**
      * Returns the style sheet associated with the specified URL.
+     * 
      * @param url URL of style sheet.
      * @return The associated style sheet, or null if not found.
      */
-    private Style findStyleSheet(String url) {
-        for (Style style : registeredStyles.<Style>getChildren()) {
-            if (style.getSrc().equals(url)) {
-                return style;
+    private Stylesheet findStyleSheet(String url) {
+        for (BaseComponent child : registeredStyles.getChildren()) {
+            Stylesheet ss = (Stylesheet) child;
+            
+            if (ss.getHref().equals(url)) {
+                return ss;
             }
         }
         
@@ -565,7 +554,7 @@ public class CareWebShell extends Div implements AfterCompose {
     public PluginContainer getActivatedPlugin(String id) {
         for (PluginContainer plugin : plugins) {
             if (id.equals(plugin.getPluginDefinition().getId())
-                    && UIElementZKBase.getAssociatedUIElement(plugin).isActivated()) {
+                    && UIElementCWFBase.getAssociatedUIElement(plugin).isActivated()) {
                 return plugin;
             }
         }
@@ -596,7 +585,7 @@ public class CareWebShell extends Div implements AfterCompose {
         }
         
         for (PluginContainer plugin : plugins) {
-            if (UIElementZKBase.getAssociatedUIElement(plugin).isActivated()) {
+            if (UIElementCWFBase.getAssociatedUIElement(plugin).isActivated()) {
                 list.add(plugin);
             }
         }

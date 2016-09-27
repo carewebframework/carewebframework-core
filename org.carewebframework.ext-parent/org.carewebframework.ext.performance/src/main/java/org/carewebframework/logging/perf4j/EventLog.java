@@ -30,8 +30,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.apache.commons.logging.Log;
-
-import org.zkoss.zk.ui.event.Event;
+import org.carewebframework.web.event.Event;
 
 /**
  * Map of logged events for a single request. Since using the Event as a key causes memory leaks
@@ -46,7 +45,7 @@ public class EventLog implements Serializable {
     
     private final Log log;
     
-    private final String desktopId;
+    private final String pageId;
     
     private final String requestId;
     
@@ -59,14 +58,14 @@ public class EventLog implements Serializable {
      * 
      * @param tag tag.
      * @param logger logger.
-     * @param desktopId desktop id.
+     * @param pageId page id.
      * @param requestId request id.
      */
-    public EventLog(String tag, Log logger, String desktopId, String requestId) {
+    public EventLog(String tag, Log logger, String pageId, String requestId) {
         super();
         this.tag = tag;
         this.log = logger;
-        this.desktopId = desktopId;
+        this.pageId = pageId;
         this.requestId = requestId;
     }
     
@@ -80,12 +79,12 @@ public class EventLog implements Serializable {
     }
     
     /**
-     * Returns the desktop id.
+     * Returns the page id.
      * 
-     * @return the desktop id.
+     * @return the page id.
      */
-    public String getDesktopId() {
-        return desktopId;
+    public String getPageId() {
+        return pageId;
     }
     
     /**

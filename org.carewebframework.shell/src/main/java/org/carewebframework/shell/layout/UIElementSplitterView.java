@@ -33,7 +33,7 @@ import org.carewebframework.ui.zk.SplitterView;
  * A splitter view has either a vertical or horizontal orientation and can contain any number of
  * splitter panes which are placed side-by-side with splitter bars in between for manual sizing.
  */
-public class UIElementSplitterView extends UIElementZKBase {
+public class UIElementSplitterView extends UIElementCWFBase {
     
     static {
         registerAllowedParentClass(UIElementSplitterView.class, UIElementBase.class);

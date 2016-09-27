@@ -26,8 +26,7 @@
 package org.carewebframework.shell.layout;
 
 import org.carewebframework.theme.ThemeUtil;
-
-import org.zkoss.zul.A;
+import org.carewebframework.web.component.Hyperlink;
 
 /**
  * Simple hyperlink stock object.
@@ -39,7 +38,7 @@ public class UIElementLink extends UIElementButton {
     }
     
     public UIElementLink() {
-        super(new A(), ThemeUtil.ButtonSize.DEFAULT, ThemeUtil.ButtonStyle.LINK);
+        super(new Hyperlink(), ThemeUtil.ButtonSize.DEFAULT, ThemeUtil.ButtonStyle.LINK);
     }
     
 }

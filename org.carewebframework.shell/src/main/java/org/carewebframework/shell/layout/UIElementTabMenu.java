@@ -29,19 +29,17 @@ import org.carewebframework.shell.designer.PropertyEditorTabMenu;
 import org.carewebframework.shell.property.PropertyTypeRegistry;
 import org.carewebframework.ui.zk.MenuUtil;
 import org.carewebframework.ui.zk.ZKUtil;
-
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zul.Div;
-import org.zkoss.zul.Menu;
-import org.zkoss.zul.Menupopup;
-import org.zkoss.zul.Tab;
+import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.component.Div;
+import org.carewebframework.web.component.Menu;
+import org.carewebframework.web.component.Tab;
 
 /**
  * Implements a tab-based menubar. When dropped on a tab pane, provides a drop-down menu on the
  * associated tab. By adding tab menu panes (UIElementTabMenuPane) as children, menu items may be
  * added to to the drop-down menu. Clicking on a menu item activates the associated tab menu pane.
  */
-public class UIElementTabMenu extends UIElementZKBase {
+public class UIElementTabMenu extends UIElementCWFBase {
     
     static {
         registerAllowedChildClass(UIElementTabMenu.class, UIElementTabMenuPane.class);
@@ -60,7 +58,7 @@ public class UIElementTabMenu extends UIElementZKBase {
         }
         
         @Override
-        public void open(Component ref, String position) {
+        public void open(BaseComponent ref, String position) {
             ref = ref == null ? tab : ref;
             
             if (getPage() == null) {
@@ -72,13 +70,13 @@ public class UIElementTabMenu extends UIElementZKBase {
         }
         
         @Override
-        public void onChildAdded(Component child) {
+        public void onChildAdded(BaseComponent child) {
             super.onChildAdded(child);
             tab.setClosable(true);
         }
         
         @Override
-        public void onChildRemoved(Component child) {
+        public void onChildRemoved(BaseComponent child) {
             super.onChildRemoved(child);
             tab.setClosable(getFirstChild() != null);
         }
@@ -114,7 +112,7 @@ public class UIElementTabMenu extends UIElementZKBase {
         super();
         setOuterComponent(menupopup);
         fullSize(paneAnchor);
-        paneAnchor.setSclass("cwf-tab-menu");
+        paneAnchor.addClass("cwf-tab-menu");
         associateComponent(paneAnchor);
         maxChildren = Integer.MAX_VALUE;
         setMaskMode(null);
@@ -143,7 +141,7 @@ public class UIElementTabMenu extends UIElementZKBase {
         ZKUtil.toggleSclass(menu, "cwf-tab-menu-seld", "cwf-tab-menu", selected);
     }
     
-    /*package*/Component getPaneAnchor() {
+    /*package*/BaseComponent getPaneAnchor() {
         return paneAnchor;
     }
     
@@ -177,7 +175,7 @@ public class UIElementTabMenu extends UIElementZKBase {
     protected void bind() {
         UIElementTabPane tabPane = (UIElementTabPane) getParent();
         menupopup.setTab(tabPane.getTab());
-        tabPane.getInnerComponent().appendChild(paneAnchor);
+        tabPane.getInnerComponent().addChild(paneAnchor);
     }
     
     @Override

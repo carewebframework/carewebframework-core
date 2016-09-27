@@ -29,12 +29,8 @@ import java.util.Date;
 
 import org.carewebframework.common.DateRange;
 import org.carewebframework.common.DateUtil;
-
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zul.Datebox;
-import org.zkoss.zul.Window;
+import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.component.Window;
 
 /**
  * Presents a date range dialog.
@@ -79,7 +75,7 @@ public class DateRangeDialog extends Window {
      * @return A date range reflecting the inputs from the dialog. This will be null if the input is
      *         cancelled or if an unexpected error occurs.
      */
-    public static DateRange show(Component parent) {
+    public static DateRange show(BaseComponent parent) {
         Date today = DateUtil.stripTime(new Date());
         return show(parent, today, today);
     }
@@ -93,7 +89,7 @@ public class DateRangeDialog extends Window {
      * @return A date range reflecting the inputs from the dialog. This will be null if the input is
      *         cancelled or if an unexpected error occurs.
      */
-    public static DateRange show(Component parent, Date startDefault, Date endDefault) {
+    public static DateRange show(BaseComponent parent, Date startDefault, Date endDefault) {
         DateRangeDialog dlg = null;
         
         try {
@@ -114,10 +110,8 @@ public class DateRangeDialog extends Window {
     
     /**
      * Entering return in the start date box sets focus to the end date box.
-     * 
-     * @param event The onOK event.
      */
-    public void onOK$startDate(Event event) {
+    public void onOK$startDate() {
         endDate.setFocus(true);
     }
     
@@ -126,26 +120,22 @@ public class DateRangeDialog extends Window {
      * 
      * @param event The onOK event.
      */
-    public void onOK$endDate(Event event) {
-        onClick$btnOK(event);
+    public void onOK$endDate() {
+        onClick$btnOK();
     }
     
     /**
      * Clicking the cancel button aborts the input.
-     * 
-     * @param event the onClick event.
      */
-    public void onClick$btnCancel(Event event) {
+    public void onClick$btnCancel() {
         detach();
     }
     
     /**
      * Clicking the OK button creates a DateRangeItem object with the responses from the dialog and
      * closes the dialog.
-     * 
-     * @param event The onClick event.
      */
-    public void onClick$btnOK(Event event) {
+    public void onClick$btnOK() {
         if (startDate.getValue().after(endDate.getValue())) {
             Datebox temp = startDate;
             startDate = endDate;
@@ -158,19 +148,15 @@ public class DateRangeDialog extends Window {
     
     /**
      * Sets the end date value equal to the start date value.
-     * 
-     * @param event The onClick event.
      */
-    public void onClick$btnSameAsStart(Event event) {
+    public void onClick$btnSameAsStart() {
         endDate.setValue(startDate.getValue());
     }
     
     /**
      * Sets the start date value equal to the end date value.
-     * 
-     * @param event The onClick event.
      */
-    public void onClick$btnSameAsEnd(Event event) {
+    public void onClick$btnSameAsEnd() {
         startDate.setValue(endDate.getValue());
     }
 }

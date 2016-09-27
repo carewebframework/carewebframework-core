@@ -26,7 +26,6 @@
 package org.carewebframework.shell.layout;
 
 import org.apache.commons.lang.StringUtils;
-
 import org.carewebframework.api.security.SecurityUtil;
 import org.carewebframework.help.viewer.HelpUtil;
 import org.carewebframework.help.viewer.HelpViewer.HelpViewerMode;
@@ -38,34 +37,27 @@ import org.carewebframework.theme.ThemeUtil;
 import org.carewebframework.ui.action.ActionListener;
 import org.carewebframework.ui.zk.MenuEx;
 import org.carewebframework.ui.zk.MenuUtil;
-import org.carewebframework.ui.zk.ZKUtil;
-
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.HtmlBasedComponent;
-import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.event.OpenEvent;
-import org.zkoss.zk.ui.util.Clients;
-import org.zkoss.zul.Image;
-import org.zkoss.zul.Label;
-import org.zkoss.zul.Menu;
-import org.zkoss.zul.Menubar;
-import org.zkoss.zul.Menupopup;
-import org.zkoss.zul.Menuseparator;
-import org.zkoss.zul.Toolbar;
+import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.component.BaseUIComponent;
+import org.carewebframework.web.component.Image;
+import org.carewebframework.web.component.Label;
+import org.carewebframework.web.component.Menu;
+import org.carewebframework.web.component.Menuitem;
+import org.carewebframework.web.component.Toolbar;
+import org.carewebframework.web.event.IEventListener;
 
 /**
  * This is the topmost component of the layout.
  */
-public class UIElementDesktop extends UIElementZKBase {
+public class UIElementDesktop extends UIElementCWFBase {
     
     static {
         registerAllowedChildClass(UIElementDesktop.class, UIElementBase.class);
     }
     
-    private final HtmlBasedComponent desktopOuter;
+    private final BaseUIComponent desktopOuter;
     
-    private HtmlBasedComponent desktopInner;
+    private BaseUIComponent desktopInner;
     
     private String appId;
     
@@ -73,17 +65,17 @@ public class UIElementDesktop extends UIElementZKBase {
     
     private Label title;
     
-    private HtmlBasedComponent titleCell;
+    private BaseUIComponent titleCell;
     
-    private Menubar menubar1;
+    private Menu menubar1;
     
-    private Menubar menubar2;
+    private Menu menubar2;
     
     private Toolbar toolbar1;
     
     private Image icon;
     
-    private Component titlebar;
+    private BaseComponent titlebar;
     
     private Menu helpMenu;
     
@@ -93,7 +85,7 @@ public class UIElementDesktop extends UIElementZKBase {
     
     private Menu mnuAbout;
     
-    private Menuseparator helpSeparator;
+    private Menuitem helpSeparator;
     
     private final int fixedHelpItems;
     
@@ -111,7 +103,7 @@ public class UIElementDesktop extends UIElementZKBase {
         super();
         this.shell = shell;
         maxChildren = Integer.MAX_VALUE;
-        desktopOuter = (HtmlBasedComponent) createFromTemplate();
+        desktopOuter = (BaseUIComponent) createFromTemplate();
         setOuterComponent(desktopOuter);
         setInnerComponent(desktopInner);
         menubar = new UIElementMenubar(menubar1);
@@ -120,7 +112,7 @@ public class UIElementDesktop extends UIElementZKBase {
         ActionListener.addAction(mnuTOC, "zscript:org.carewebframework.shell.help.HelpUtil.showTOC();");
         fixedHelpItems = helpMenuRoot.getChildren().size();
         sortHelpMenu = false;
-        helpMenuRoot.addEventListener(Events.ON_OPEN, new EventListener<OpenEvent>() {
+        helpMenuRoot.addEventListener(Events.ON_OPEN, new IEventListener() {
             
             @Override
             public void onEvent(OpenEvent event) throws Exception {
@@ -132,13 +124,13 @@ public class UIElementDesktop extends UIElementZKBase {
         
         if (SecurityUtil.isGrantedAny(DesignConstants.DESIGN_MODE_PRIVS)) {
             designMenu = DesignMenu.create(this);
-            menubar2.appendChild(designMenu);
+            menubar2.addChild(designMenu);
         }
         
         addChild(menubar);
         addChild(toolbar);
         setTitle(getTitle());
-        shell.appendChild(desktopOuter);
+        shell.addChild(desktopOuter);
     }
     
     /**
@@ -147,7 +139,7 @@ public class UIElementDesktop extends UIElementZKBase {
      * @return The title text.
      */
     public String getTitle() {
-        return title.getValue();
+        return title.getLabel();
     }
     
     /**
@@ -156,10 +148,9 @@ public class UIElementDesktop extends UIElementZKBase {
      * @param text The title text. Can be null;
      */
     public void setTitle(String text) {
-        title.setValue(text);
+        title.setLabel(text);
         desktopOuter.getPage().setTitle(text);
-        ZKUtil.toggleSclass(titleCell, "cwf-desktop-notitle", "cwf-desktop-title", StringUtils.isEmpty(text));
-        Clients.resize(titlebar);
+        titleCell.addClass("title:cwf-desktop-" + (StringUtils.isEmpty(text) ? "notitle" : "title"));
     }
     
     /**
@@ -178,7 +169,7 @@ public class UIElementDesktop extends UIElementZKBase {
      */
     public void setIcon(String url) {
         this.icon.setSrc(url);
-        icon.getParent().setVisible(!StringUtils.isEmpty(url));
+        ((BaseUIComponent) icon.getParent()).setVisible(!StringUtils.isEmpty(url));
     }
     
     /**
@@ -197,7 +188,7 @@ public class UIElementDesktop extends UIElementZKBase {
      */
     public void setStyle(ThemeUtil.PanelStyle style) {
         this.style = style;
-        desktopOuter.setSclass("cwf-desktop " + style.getThemeClass());
+        desktopOuter.addClass("cwf-desktop " + style.getThemeClass());
     }
     
     /**
@@ -275,21 +266,6 @@ public class UIElementDesktop extends UIElementZKBase {
     }
     
     /**
-     * Forces a recalculation of window size when activation state changes.
-     */
-    @Override
-    public void activate(boolean activate) {
-        Clients.resize(desktopOuter);
-        super.activate(activate);
-    }
-    
-    @Override
-    public void setDesignMode(boolean designMode) {
-        super.setDesignMode(designMode);
-        Clients.resize(titlebar);
-    }
-    
-    /**
      * Adds a ZK menu item to the main menu.
      * 
      * @param namePath Determines the position of the menu item in the menu tree by caption text.
@@ -299,7 +275,7 @@ public class UIElementDesktop extends UIElementZKBase {
      *         Otherwise, it is a reference to the newly created menu item.
      */
     public Menu addMenu(String namePath, String action, boolean fixed) {
-        Menubar menubar = fixed ? menubar2 : menubar1;
+        Menu menubar = fixed ? menubar2 : menubar1;
         Menu menu = MenuUtil.addMenuOrMenuItem(namePath, null, menubar, null, MenuEx.class);
         MenuUtil.updateStyles(menu);
         ActionListener.addAction(menu, action);

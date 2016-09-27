@@ -36,12 +36,15 @@ import org.carewebframework.common.StrUtil;
 import org.carewebframework.ui.Application.SessionInfo;
 import org.carewebframework.web.ancillary.IAutoWired;
 import org.carewebframework.web.annotation.WiredComponent;
+import org.carewebframework.web.client.ClientUtil;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.BaseUIComponent;
 import org.carewebframework.web.component.Button;
 import org.carewebframework.web.component.Label;
 import org.carewebframework.web.component.Textbox;
 import org.carewebframework.web.component.Window;
+import org.carewebframework.web.event.ClickEvent;
+import org.carewebframework.web.event.EventUtil;
 import org.springframework.core.ErrorCoded;
 import org.springframework.core.NestedCheckedException;
 import org.springframework.core.NestedRuntimeException;
@@ -84,7 +87,7 @@ public class ExceptionController implements IAutoWired {
      */
     @Override
     public void afterInitialized(BaseComponent comp) {
-        Clients.clearBusy();
+        ClientUtil.busy(null, null);
         this.root = comp.getAncestor(Window.class);
         HttpServletRequest req = (HttpServletRequest) this.execution.getNativeRequest();
         
@@ -128,7 +131,7 @@ public class ExceptionController implements IAutoWired {
         buffer.append("\nServletName: ").append(errServletName);
         buffer.append("\nReqURI: ").append(errReqURI);
         
-        SessionInfo sessionInfo = Application.getInstance().getSessionInfo(this.desktop);
+        SessionInfo sessionInfo = Application.getInstance().getSessionInfo(this.page);
         buffer.append(sessionInfo);
         
         buffer.append("\nThrowableContext: " + throwableContext);
@@ -141,7 +144,7 @@ public class ExceptionController implements IAutoWired {
         this.lblStatusCode.setLabel(String.valueOf(errStatusCode));
         
         if (SecurityUtil.isGrantedAny(StrUtil.getLabel("cwf.error.dialog.expanded"))) {
-            Events.echoEvent(Events.ON_CLICK, this.btnDetail, null);
+            EventUtil.post(ClickEvent.TYPE, this.btnDetail, null);
         }
     }
     

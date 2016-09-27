@@ -28,16 +28,15 @@ package org.carewebframework.plugin.infopanel.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.carewebframework.shell.layout.UIElementBase;
-import org.carewebframework.shell.layout.UIElementPlugin;
-import org.carewebframework.shell.layout.UIElementZKBase;
-import org.carewebframework.shell.plugins.PluginContainer;
-import org.carewebframework.ui.FrameworkController;
 import org.carewebframework.plugin.infopanel.controller.ActionListener;
 import org.carewebframework.plugin.infopanel.model.IInfoPanel;
 import org.carewebframework.plugin.infopanel.model.IInfoPanel.Action;
-
-import org.zkoss.zk.ui.Component;
+import org.carewebframework.shell.layout.UIElementBase;
+import org.carewebframework.shell.layout.UIElementPlugin;
+import org.carewebframework.shell.layout.UIElementCWFBase;
+import org.carewebframework.shell.plugins.PluginContainer;
+import org.carewebframework.ui.FrameworkController;
+import org.carewebframework.web.component.BaseComponent;
 
 /**
  * Static methods for interacting with an info panel.
@@ -54,7 +53,7 @@ public class InfoPanelService {
      * @return The nearest active info panel, or null if none found.
      */
     public static IInfoPanel findInfoPanel(PluginContainer container, boolean activeOnly) {
-        return findInfoPanel(UIElementZKBase.getAssociatedUIElement(container), activeOnly);
+        return findInfoPanel(UIElementCWFBase.getAssociatedUIElement(container), activeOnly);
     }
     
     /**
@@ -141,7 +140,7 @@ public class InfoPanelService {
                 && ((UIElementPlugin) element).getDefinition().getId().equals("infoPanelPlugin")) {
             PluginContainer container = ((UIElementPlugin) element).getContainer();
             container.load();
-            Component top = container.getFellow("infoPanelRoot");
+            BaseComponent top = container.getFellow("infoPanelRoot");
             return (IInfoPanel) FrameworkController.getController(top);
         }
         
@@ -155,7 +154,7 @@ public class InfoPanelService {
      * @param eventName The name of the generic event that will invoke the action.
      * @param action The action to be performed.
      */
-    public static void associateEvent(Component component, String eventName, Action action) {
+    public static void associateEvent(BaseComponent component, String eventName, Action action) {
         getActionListeners(component, true).add(new ActionListener(eventName, action));
     }
     
@@ -165,7 +164,7 @@ public class InfoPanelService {
      * @param component Component of interest.
      * @return The list of associated events (may be null).
      */
-    public static List<ActionListener> getActionListeners(Component component) {
+    public static List<ActionListener> getActionListeners(BaseComponent component) {
         return getActionListeners(component, false);
     }
     
@@ -176,7 +175,7 @@ public class InfoPanelService {
      * @param forceCreate If true and no current list exists, one will be created.
      * @return The list of associated events (may be null).
      */
-    private static List<ActionListener> getActionListeners(Component component, boolean forceCreate) {
+    private static List<ActionListener> getActionListeners(BaseComponent component, boolean forceCreate) {
         @SuppressWarnings("unchecked")
         List<ActionListener> ActionListeners = (List<ActionListener>) component.getAttribute(EVENT_LISTENER_ATTR);
         

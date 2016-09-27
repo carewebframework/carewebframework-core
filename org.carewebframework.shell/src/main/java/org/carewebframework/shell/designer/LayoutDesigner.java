@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.carewebframework.shell.layout.UIElementBase;
-import org.carewebframework.shell.layout.UIElementZKBase;
+import org.carewebframework.shell.layout.UIElementCWFBase;
 import org.carewebframework.shell.layout.UILayout;
 import org.carewebframework.ui.FrameworkWebSupport;
 import org.carewebframework.ui.zk.PopupDialog;
@@ -150,7 +150,7 @@ public class LayoutDesigner extends Window implements AfterCompose {
         }
         
         private void refreshIfNeeded(Component comp) {
-            if (!refreshPending && UIElementZKBase.getAssociatedUIElement(comp) != null) {
+            if (!refreshPending && UIElementCWFBase.getAssociatedUIElement(comp) != null) {
                 requestRefresh();
             }
         }

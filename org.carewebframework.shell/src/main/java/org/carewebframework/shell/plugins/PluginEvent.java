@@ -25,14 +25,12 @@
  */
 package org.carewebframework.shell.plugins;
 
-import org.zkoss.zk.ui.event.Event;
+import org.carewebframework.web.event.Event;
 
 /**
  * Event for all plugin-related actions.
  */
 public class PluginEvent extends Event {
-    
-    private static final long serialVersionUID = 1L;
     
     /**
      * Actions that may be performed on the container.

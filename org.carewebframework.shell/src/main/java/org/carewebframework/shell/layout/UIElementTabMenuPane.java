@@ -26,12 +26,9 @@
 package org.carewebframework.shell.layout;
 
 import org.carewebframework.ui.zk.MenuUtil;
-
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zul.Div;
-import org.zkoss.zul.Menupopup;
+import org.carewebframework.web.component.Div;
+import org.carewebframework.web.event.Event;
+import org.carewebframework.web.event.IEventListener;
 
 /**
  * Single menu item for the tab menu.
@@ -47,10 +44,10 @@ public class UIElementTabMenuPane extends UIElementMenuItemBase {
     /**
      * onClick listener for the associated menu. Action is to activate the associated tab menu pane.
      */
-    private final EventListener<Event> listener = new EventListener<Event>() {
+    private final IEventListener listener = new IEventListener() {
         
         @Override
-        public void onEvent(Event event) throws Exception {
+        public void onEvent(Event event) {
             MenuUtil.close(getMenu());
             bringToFront();
         }
@@ -63,7 +60,7 @@ public class UIElementTabMenuPane extends UIElementMenuItemBase {
         super();
         autoHide = true;
         fullSize(div);
-        div.setSclass("cwf-tab-menupane");
+        div.addClass("cwf-tab-menupane");
         setOuterComponent(getMenu());
         setInnerComponent(div);
         div.setVisible(false);
@@ -103,7 +100,7 @@ public class UIElementTabMenuPane extends UIElementMenuItemBase {
     protected void bind() {
         super.bind();
         UIElementTabMenu tabMenu = getAncestor(UIElementTabMenu.class);
-        tabMenu.getPaneAnchor().appendChild(div);
+        tabMenu.getPaneAnchor().addChild(div);
     }
     
     @Override

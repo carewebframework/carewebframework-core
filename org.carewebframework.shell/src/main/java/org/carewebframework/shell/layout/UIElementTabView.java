@@ -27,17 +27,14 @@ package org.carewebframework.shell.layout;
 
 import org.carewebframework.shell.designer.PropertyEditorTabView;
 import org.carewebframework.shell.property.PropertyTypeRegistry;
-
-import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.event.SelectEvent;
-import org.zkoss.zul.Tabbox;
+import org.carewebframework.web.component.Tabbox;
+import org.carewebframework.web.event.SelectEvent;
 
 /**
  * Wraps the ZK Tabbox component. This UI element can only accept UIElementTabPane elements as
  * children and only one of those can be active at a time.
  */
-public class UIElementTabView extends UIElementZKBase {
+public class UIElementTabView extends UIElementCWFBase {
     
     static {
         registerAllowedParentClass(UIElementTabView.class, UIElementBase.class);
@@ -54,7 +51,7 @@ public class UIElementTabView extends UIElementZKBase {
         maxChildren = Integer.MAX_VALUE;
         tabBox = (Tabbox) createFromTemplate();
         setOuterComponent(tabBox);
-        tabBox.setSclass("cwf-tabbox");
+        tabBox.addClass("cwf-tabbox");
         tabBox.addEventListener(Events.ON_SELECT, new EventListener<SelectEvent<?, ?>>() {
             
             @Override
@@ -126,7 +123,7 @@ public class UIElementTabView extends UIElementZKBase {
     @Override
     public void activateChildren(boolean activate) {
         if (activePane == null) {
-            activePane = (UIElementTabPane) getAssociatedUIElement(tabBox.getSelectedTab());
+            activePane = (UIElementTabPane) getAssociatedUIElement(tabBox.getActiveTab());
         }
         
         if (activePane != null) {

@@ -14,7 +14,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.carewebframework</groupId>
-			<artifactId>org.carewebframework.api.core</artifactId>
+			<artifactId>org.carewebframework.web.core</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>

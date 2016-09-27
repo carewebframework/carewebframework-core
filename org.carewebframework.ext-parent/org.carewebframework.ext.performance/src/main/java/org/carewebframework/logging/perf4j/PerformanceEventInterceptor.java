@@ -27,17 +27,15 @@ package org.carewebframework.logging.perf4j;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Desktop;
-import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.util.EventInterceptor;
+import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.component.Page;
+import org.carewebframework.web.core.ExecutionContext;
+import org.carewebframework.web.event.Event;
 
 /**
  * Performance event interceptor for timing events. The monitor copies event timing data into the
- * EventLog of the current PerformanceData object associated with the desktop making the request.
- * The monitor must be registered as a listener in the zk.xml configuration file as follows:
+ * EventLog of the current PerformanceData object associated with the page making the request. The
+ * monitor must be registered as a listener in the zk.xml configuration file as follows:
  * 
  * <pre>
  * {@literal
@@ -82,7 +80,7 @@ public class PerformanceEventInterceptor implements EventInterceptor {
         EventLog eventLog = getEventLog(event);
         
         if (eventLog != null) {
-            EventInfo ei = new EventInfo(event, eventLog.getTag(), eventLog.getDesktopId(), eventLog.getRequestId());
+            EventInfo ei = new EventInfo(event, eventLog.getTag(), eventLog.getPageId(), eventLog.getRequestId());
             eventLog.put(event, ei);
         }
         
@@ -105,14 +103,14 @@ public class PerformanceEventInterceptor implements EventInterceptor {
     }
     
     private EventLog getEventLog(Event event) {
-        Component target = event.getTarget();
+        BaseComponent target = event.getTarget();
         if (target != null) {
-            Desktop desktop = target.getDesktop();
-            if (desktop == null) {
-                desktop = Executions.getCurrent().getDesktop();
+            Page page = target.getPage();
+            if (page == null) {
+                page = ExecutionContext.getPage();
             }
-            if (desktop != null) {
-                PerformanceData pd = (PerformanceData) desktop.getAttribute(PerformanceData.ATTR_PERF_DATA);
+            if (page != null) {
+                PerformanceData pd = (PerformanceData) page.getAttribute(PerformanceData.ATTR_PERF_DATA);
                 if (pd != null) {
                     return pd.getEventLog(event);
                 }

@@ -28,14 +28,12 @@ package org.carewebframework.shell.plugins;
 import org.carewebframework.shell.CareWebShell;
 import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.ui.command.CommandUtil;
-
-import org.zkoss.zul.impl.XulElement;
+import org.carewebframework.web.component.BaseUIComponent;
 
 /**
  * Resource for declaring commands supported by a plugin.
  */
 public class PluginResourceCommand implements IPluginResource {
-    
     
     // The name of the command.
     private String name;
@@ -68,7 +66,7 @@ public class PluginResourceCommand implements IPluginResource {
     @Override
     public void register(CareWebShell shell, UIElementBase owner, boolean register) {
         if (register) {
-            CommandUtil.associateCommand(getName(), (XulElement) owner.getOuterComponent());
+            CommandUtil.associateCommand(getName(), (BaseUIComponent) owner.getOuterComponent());
         }
     }
     

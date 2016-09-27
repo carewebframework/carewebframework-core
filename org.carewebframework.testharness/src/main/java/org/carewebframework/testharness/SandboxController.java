@@ -31,27 +31,24 @@ import java.io.InputStream;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
-
 import org.carewebframework.common.MiscUtil;
 import org.carewebframework.shell.plugins.PluginController;
 import org.carewebframework.ui.zk.ZKUtil;
-
+import org.carewebframework.web.ancillary.INamespace;
+import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.component.Combobox;
+import org.carewebframework.web.component.Comboitem;
+import org.carewebframework.web.component.Label;
+import org.carewebframework.web.component.Textbox;
+import org.carewebframework.web.component.Window;
+import org.carewebframework.web.component.Window.Mode;
+import org.carewebframework.web.event.EventUtil;
+import org.carewebframework.web.model.IComponentRenderer;
+import org.carewebframework.web.model.ListModel;
+import org.carewebframework.web.model.ModelAndView;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.io.Resource;
-
-import org.zkoss.zk.au.out.AuInvoke;
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zul.Combobox;
-import org.zkoss.zul.Comboitem;
-import org.zkoss.zul.ComboitemRenderer;
-import org.zkoss.zul.Idspace;
-import org.zkoss.zul.Label;
-import org.zkoss.zul.ListModelList;
-import org.zkoss.zul.Textbox;
-import org.zkoss.zul.Window;
 
 /**
  * Plugin to facilitate testing of zul layouts.
@@ -60,15 +57,16 @@ public class SandboxController extends PluginController implements ApplicationCo
     
     private static final long serialVersionUID = 1L;
     
-    private static final String[] REPLACE_MODES = { "modal", "highlighted", "popup" };
+    private static final Mode[] REPLACE_MODES = { Mode.MODAL, Mode.POPUP };
     
-    private static ComboitemRenderer<Resource> zulRenderer = new ComboitemRenderer<Resource>() {
+    private static IComponentRenderer<Comboitem, Resource> zulRenderer = new IComponentRenderer<Comboitem, Resource>() {
         
         @Override
-        public void render(Comboitem item, Resource resource, int index) throws Exception {
-            item.setValue(resource);
+        public Comboitem render(Resource resource) {
+            Comboitem item = new Comboitem();
+            item.setData(resource);
             item.setLabel(resource.getFilename());
-            item.setTooltiptext(getPath(resource));
+            item.setHint(getPath(resource));
         }
         
         private String getPath(Resource resource) throws IOException {
@@ -90,26 +88,27 @@ public class SandboxController extends PluginController implements ApplicationCo
     
     private Combobox cboZul;
     
-    private Component contentParent;
+    private BaseComponent contentParent;
     
     // End of auto-wired section
     
-    private Component contentBase;
+    private BaseComponent contentBase;
     
     private String content;
     
-    private final ListModelList<Resource> model = new ListModelList<>();
+    private final ListModel<Resource> model = new ListModel<>();
     
     /**
      * Find the content base component. We can't assign it an id because of potential id collisions.
      */
     @Override
-    public void doAfterCompose(Component comp) throws Exception {
-        super.doAfterCompose(comp);
-        cboZul.setItemRenderer(zulRenderer);
-        cboZul.setModel(model);
+    public void afterInitialized(BaseComponent comp) {
+        super.afterInitialized(comp);
+        ModelAndView<Comboitem, Resource> mv = new ModelAndView<>(cboZul);
+        mv.setRenderer(zulRenderer);
+        mv.setModel(model);
         cboZul.setVisible(model.size() > 0);
-        contentBase = ZKUtil.findChild(contentParent, Idspace.class);
+        contentBase = ZKUtil.findChild(contentParent, INamespace.class);
     }
     
     /**
@@ -122,13 +121,12 @@ public class SandboxController extends PluginController implements ApplicationCo
         
         if (content != null && !content.isEmpty()) {
             try {
-                Events.echoEvent("onModeCheck", this.root, null);
+                EventUtil.post("onModeCheck", this.root, null);
                 Executions.createComponentsDirectly(content, null, contentBase, null);
             } catch (Exception e) {
-                ZKUtil.detachChildren(contentBase);
+                contentBase.destroyChildren();
                 Label label = new Label(ExceptionUtils.getStackTrace(e));
-                label.setMultiline(true);
-                contentBase.appendChild(label);
+                contentBase.addChild(label);
             }
         }
     }
@@ -146,16 +144,16 @@ public class SandboxController extends PluginController implements ApplicationCo
      * 
      * @param comp Current component in search.
      */
-    private void modeCheck(Component comp) {
+    private void modeCheck(BaseComponent comp) {
         if (comp instanceof Window) {
             Window win = (Window) comp;
             
             if (win.isVisible() && ArrayUtils.contains(REPLACE_MODES, win.getMode())) {
-                win.setMode("overlapped");
+                win.setMode(Mode.INLINE);
             }
         }
         
-        for (Component child : comp.getChildren()) {
+        for (BaseComponent child : comp.getChildren()) {
             modeCheck(child);
         }
     }
@@ -164,7 +162,7 @@ public class SandboxController extends PluginController implements ApplicationCo
      * Renders the updated zul content in the view pane.
      */
     public void onClick$btnRenderContent() {
-        content = txtContent.getText();
+        content = txtContent.getValue();
         refresh();
     }
     
@@ -172,9 +170,9 @@ public class SandboxController extends PluginController implements ApplicationCo
      * Clears combo box selection when content is cleared.
      */
     public void onClick$btnClearContent() {
-        txtContent.setText(null);
+        txtContent.setValue(null);
         cboZul.setSelectedItem(null);
-        cboZul.setTooltiptext(null);
+        cboZul.setHint(null);
     }
     
     /**
@@ -198,14 +196,14 @@ public class SandboxController extends PluginController implements ApplicationCo
      */
     public void onSelect$cboZul() throws IOException {
         Comboitem item = cboZul.getSelectedItem();
-        cboZul.setTooltiptext(null);
-        Resource resource = item == null ? null : (Resource) item.getValue();
+        cboZul.setHint(null);
+        Resource resource = item == null ? null : item.getData(Resource.class);
         
         if (resource != null) {
             try (InputStream is = resource.getInputStream()) {
                 content = IOUtils.toString(is);
-                cboZul.setTooltiptext(item.getTooltiptext());
-                txtContent.setText(content);
+                cboZul.setHint(item.getHint());
+                txtContent.setValue(content);
                 txtContent.setFocus(true);
                 execution.addAuResponse(new AuInvoke(txtContent, "resync"));
             }

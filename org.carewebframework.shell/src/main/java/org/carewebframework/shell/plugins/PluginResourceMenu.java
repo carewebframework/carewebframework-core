@@ -28,14 +28,12 @@ package org.carewebframework.shell.plugins;
 import org.carewebframework.shell.CareWebShell;
 import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.layout.UIElementPlugin;
-
-import org.zkoss.zul.Menu;
+import org.carewebframework.web.component.Menu;
 
 /**
  * Resource for declaring items to appear on the common menu.
  */
 public class PluginResourceMenu implements IPluginResource {
-    
     
     // Determines where the menu item will appear on the common menu.
     private String path;

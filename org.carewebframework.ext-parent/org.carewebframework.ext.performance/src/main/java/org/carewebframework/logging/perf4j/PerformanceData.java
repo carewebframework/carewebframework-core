@@ -33,14 +33,13 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Desktop;
-import org.zkoss.zk.ui.event.Event;
+import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.component.Page;
+import org.carewebframework.web.event.Event;
 
 /**
- * One instance of this class is associated with each desktop request. The performance monitor
- * updates timing data dynamically during request processing.
+ * One instance of this class is associated with each page request. The performance monitor updates
+ * timing data dynamically during request processing.
  */
 public class PerformanceData implements Serializable, Comparable<PerformanceData> {
     
@@ -57,7 +56,7 @@ public class PerformanceData implements Serializable, Comparable<PerformanceData
     
     private String requestId;
     
-    private final String desktopId;
+    private final String pageId;
     
     private String command;
     
@@ -89,15 +88,15 @@ public class PerformanceData implements Serializable, Comparable<PerformanceData
     }
     
     /**
-     * Creates a new performance data instance associated with the specified desktop.
+     * Creates a new performance data instance associated with the specified page.
      * 
-     * @param desktop desktop.
+     * @param page page.
      */
-    public PerformanceData(Desktop desktop) {
-        desktopId = desktop.getId();
+    public PerformanceData(Page page) {
+        pageId = page.getName();
     }
     
-    protected EventLog monitorEvent(Component target, String eventName, String tag, boolean displayElapsed) {
+    protected EventLog monitorEvent(BaseComponent target, String eventName, String tag, boolean displayElapsed) {
         return getEventLog(target, eventName, tag, true, displayElapsed);
     }
     
@@ -108,18 +107,19 @@ public class PerformanceData implements Serializable, Comparable<PerformanceData
      * @return the event log for the given event.
      */
     public EventLog getEventLog(Event event) {
-        return getEventLog(event.getTarget(), event.getName(), null, true, false);
+        return getEventLog(event.getTarget(), event.getType(), null, true, false);
     }
     
-    private EventLog getEventLog(Component target, String eventName, String tag, boolean autoCreate, boolean displayElapsed) {
-        if (target == null || target.getUuid() == null) {
+    private EventLog getEventLog(BaseComponent target, String eventName, String tag, boolean autoCreate,
+                                 boolean displayElapsed) {
+        if (target == null || target.getId() == null) {
             return null;
         }
         
         EventLog eventLog = eventLogs.get(requestId);
         
         if (eventLog == null && autoCreate) {
-            eventLog = new EventLog(tag, log, desktopId, requestId);
+            eventLog = new EventLog(tag, log, pageId, requestId);
             eventLogs.put(requestId, eventLog);
         }
         
@@ -176,16 +176,16 @@ public class PerformanceData implements Serializable, Comparable<PerformanceData
         switch (requestTime) {
             case SERVER:
                 return time[1];
-                
+            
             case CLIENT:
                 return time[3];
-                
+            
             case NETWORK:
                 return time[0];
-                
+            
             case TOTAL:
                 return time[0];
-                
+            
             default:
                 return 0;
         }
@@ -201,16 +201,16 @@ public class PerformanceData implements Serializable, Comparable<PerformanceData
         switch (requestTime) {
             case SERVER:
                 return time[2] - time[1];
-                
+            
             case CLIENT:
                 return time[4] - time[3];
-                
+            
             case NETWORK:
                 return time[3] - time[0] - time[2] + time[1];
-                
+            
             case TOTAL:
                 return time[4] - time[0];
-                
+            
             default:
                 return 0;
         }
@@ -346,7 +346,7 @@ public class PerformanceData implements Serializable, Comparable<PerformanceData
         if (logRequestPerformance) {
             for (RequestTime rt : RequestTime.values()) {
                 Map<String, Object> map = new LinkedHashMap<>();
-                map.put("dtid", desktopId);
+                map.put("dtid", pageId);
                 map.put("reqid", requestId);
                 map.put("cmd_0", command);
                 log.debug(Util.formatForLogging("zkau." + rt.toString(), getStartTime(rt), getElapsedTime(rt), map));
@@ -392,7 +392,7 @@ public class PerformanceData implements Serializable, Comparable<PerformanceData
     @Override
     public String toString() {
         Map<String, Object> map = new LinkedHashMap<>();
-        map.put("dtid", desktopId);
+        map.put("dtid", pageId);
         map.put("reqid", requestId);
         map.put("cmd_0", command);
         EventInfo eventInfo = getMaxElapsedEventInfo();

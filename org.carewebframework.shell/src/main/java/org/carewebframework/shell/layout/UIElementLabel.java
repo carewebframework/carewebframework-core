@@ -26,14 +26,12 @@
 package org.carewebframework.shell.layout;
 
 import org.carewebframework.theme.ThemeUtil;
-import org.carewebframework.ui.zk.ZKUtil;
-
-import org.zkoss.zul.Label;
+import org.carewebframework.web.component.Label;
 
 /**
  * Simple button stock object.
  */
-public class UIElementLabel extends UIElementZKBase {
+public class UIElementLabel extends UIElementCWFBase {
     
     static {
         registerAllowedParentClass(UIElementLabel.class, UIElementBase.class);
@@ -66,7 +64,7 @@ public class UIElementLabel extends UIElementZKBase {
      * @return The label text.
      */
     public String getLabel() {
-        return label.getValue();
+        return label.getLabel();
     }
     
     /**
@@ -75,7 +73,7 @@ public class UIElementLabel extends UIElementZKBase {
      * @param value The label text.
      */
     public void setLabel(String value) {
-        label.setValue(value);
+        label.setLabel(value);
     }
     
     public ThemeUtil.LabelSize getSize() {
@@ -98,7 +96,7 @@ public class UIElementLabel extends UIElementZKBase {
     
     @Override
     protected void applyColor() {
-        ZKUtil.updateStyle(label, "color", getColor());
+        label.addStyle("color", getColor());
     }
     
 }

@@ -31,7 +31,6 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-
 import org.carewebframework.shell.CareWebShellEx;
 import org.carewebframework.shell.plugins.PluginDefinition;
 import org.carewebframework.shell.plugins.PluginRegistry;
@@ -40,15 +39,12 @@ import org.carewebframework.ui.action.ActionRegistry;
 import org.carewebframework.ui.action.ActionRegistry.ActionScope;
 import org.carewebframework.ui.action.IAction;
 import org.carewebframework.ui.zk.ZKUtil;
-
-import org.zkoss.zk.ui.Component;
+import org.carewebframework.web.component.BaseComponent;
 
 /**
  * Creates a default UI based on all detected plugins.
  */
 public class TestHarnessController extends FrameworkController {
-    
-    private static final long serialVersionUID = 1L;
     
     private static final Comparator<PluginDefinition> pluginComparator = new Comparator<PluginDefinition>() {
         
@@ -71,8 +67,8 @@ public class TestHarnessController extends FrameworkController {
     private CareWebShellEx shell;
     
     @Override
-    public void doAfterCompose(Component comp) throws Exception {
-        super.doAfterCompose(comp);
+    public void afterInitialized(BaseComponent comp) {
+        super.afterInitialized(comp);
         shell = (CareWebShellEx) comp;
         
         if (shell.getLayout() == null) {

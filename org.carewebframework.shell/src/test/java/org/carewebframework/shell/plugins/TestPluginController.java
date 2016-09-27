@@ -25,12 +25,10 @@
  */
 package org.carewebframework.shell.plugins;
 
-import org.zkoss.zul.Button;
-import org.zkoss.zul.Menu;
+import org.carewebframework.web.component.Button;
+import org.carewebframework.web.component.Menu;
 
 public class TestPluginController extends PluginController {
-    
-    private static final long serialVersionUID = 1L;
     
     private int activateCount;
     

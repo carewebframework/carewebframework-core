@@ -28,8 +28,6 @@ package org.carewebframework.theme;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.commons.lang.StringUtils;
-
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -40,17 +38,11 @@ import org.springframework.core.io.Resource;
  */
 public class ThemeDefinition implements ApplicationContextAware {
     
-    public enum ThemeType {
-        ZK, CSS
-    };
-    
     private static final String URI_PREFIX = "~./";
     
     private String url;
     
     private String id;
-    
-    private ThemeType type = ThemeType.ZK;
     
     private String description;
     
@@ -65,7 +57,7 @@ public class ThemeDefinition implements ApplicationContextAware {
     private Set<String> files;
     
     public ThemeDefinition() {
-    
+        
     }
     
     public String getId() {
@@ -82,14 +74,6 @@ public class ThemeDefinition implements ApplicationContextAware {
     
     public void setUrl(String url) {
         this.url = url != null && url.startsWith(URI_PREFIX) ? url.substring(URI_PREFIX.length()) : url;
-    }
-    
-    public ThemeType getType() {
-        return type;
-    }
-    
-    public void setType(ThemeType type) {
-        this.type = type;
     }
     
     public String getDescription() {
@@ -130,26 +114,6 @@ public class ThemeDefinition implements ApplicationContextAware {
     
     public String getReleased() {
         return released;
-    }
-    
-    /**
-     * Maps a resource uri to its themed version if one exists. If no themed version exists, the
-     * original uri is returned.
-     * 
-     * @param uri The resource URI to map.
-     * @return Mapped resource uri.
-     */
-    public String themedURI(String uri) {
-        if (files == null || uri == null || !uri.startsWith(URI_PREFIX)) {
-            return uri;
-        }
-        
-        String mappedUri = uri.substring(URI_PREFIX.length());
-        return files.contains(mappedUri) ? expandURI(mappedUri) : uri;
-    }
-    
-    protected String expandURI(String uri) {
-        return "/zkau/web/" + (StringUtils.isEmpty(version) ? "" : "_zv" + version + "/") + url + uri;
     }
     
     /**

@@ -30,14 +30,12 @@ import org.carewebframework.shell.CareWebShell;
 import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.layout.UIElementPlugin;
 import org.carewebframework.ui.action.ActionListener;
-
-import org.zkoss.zul.Button;
+import org.carewebframework.web.component.Button;
 
 /**
  * Resource for declaring buttons to appear on common toolbar.
  */
 public class PluginResourceButton implements IPluginResource {
-    
     
     // The caption text for the button.
     private String caption;
@@ -46,13 +44,13 @@ public class PluginResourceButton implements IPluginResource {
     private String action;
     
     // Text to appear when the mouse cursor hovers over the button.
-    private String tooltip;
+    private String hint;
     
     // The url of the icon to appear on the button.
     private String icon;
     
-    // Optional component id.
-    private String id;
+    // Optional component name.
+    private String name;
     
     /**
      * Returns the value of the button's caption text.
@@ -96,17 +94,17 @@ public class PluginResourceButton implements IPluginResource {
      * 
      * @return The tool tip text.
      */
-    public String getTooltip() {
-        return tooltip;
+    public String getHint() {
+        return hint;
     }
     
     /**
      * Sets the text to appear when the mouse cursor hovers over the button.
      * 
-     * @param tooltip The tool tip text.
+     * @param hint The tool tip text.
      */
-    public void setTooltip(String tooltip) {
-        this.tooltip = tooltip;
+    public void setHint(String hint) {
+        this.hint = hint;
     }
     
     /**
@@ -128,21 +126,21 @@ public class PluginResourceButton implements IPluginResource {
     }
     
     /**
-     * Returns the id to be assigned to the newly created component.
+     * Returns the name to be assigned to the newly created component.
      * 
-     * @return Component id (may be null).
+     * @return Component name (may be null).
      */
-    public String getId() {
-        return id;
+    public String getName() {
+        return name;
     }
     
     /**
-     * Sets the id to be assigned to the newly created component.
+     * Sets the name to be assigned to the newly created component.
      * 
-     * @param id Component id (may be null).
+     * @param name Component name (may be null).
      */
-    public void setId(String id) {
-        this.id = id;
+    public void setName(String name) {
+        this.name = name;
     }
     
     /**
@@ -158,12 +156,12 @@ public class PluginResourceButton implements IPluginResource {
             UIElementPlugin plugin = (UIElementPlugin) owner;
             PluginContainer container = plugin.getContainer();
             Button button = new Button(getCaption());
-            button.setId(getId());
-            button.setTooltiptext(getTooltip());
-            button.setImage(getIcon());
+            button.setName(getName());
+            button.setHint(getHint());
+            //button.setImage(getIcon());
             ActionListener.addAction(button, getAction());
             container.addToolbarComponent(button);
-            container.registerId(getId(), button);
+            container.registerId(getName(), button);
         }
     }
     

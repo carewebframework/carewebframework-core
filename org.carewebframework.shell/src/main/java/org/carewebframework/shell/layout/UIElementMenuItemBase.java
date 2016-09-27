@@ -28,8 +28,6 @@ package org.carewebframework.shell.layout;
 import org.carewebframework.ui.zk.MenuEx;
 import org.carewebframework.ui.zk.MenuUtil;
 
-import org.zkoss.zul.Menu;
-
 /**
  * Base class for representing a single menu item. The Menu class has been subclassed (MenuEx) to
  * allow it to behave as a menu and a menu item. This simplifies the creation and manipulation of

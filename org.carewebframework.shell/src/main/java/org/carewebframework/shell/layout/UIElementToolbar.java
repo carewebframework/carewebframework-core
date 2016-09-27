@@ -28,16 +28,14 @@ package org.carewebframework.shell.layout;
 import org.carewebframework.shell.designer.PropertyEditorOrderedChildren;
 import org.carewebframework.shell.property.PropertyTypeRegistry;
 import org.carewebframework.ui.action.ActionListener;
-
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.HtmlBasedComponent;
-import org.zkoss.zk.ui.util.Clients;
-import org.zkoss.zul.Toolbar;
+import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.component.BaseUIComponent;
+import org.carewebframework.web.component.Toolbar;
 
 /**
  * Implements a shared toolbar.
  */
-public class UIElementToolbar extends UIElementZKBase {
+public class UIElementToolbar extends UIElementCWFBase {
     
     static {
         registerAllowedChildClass(UIElementToolbar.class, UIElementBase.class);
@@ -73,18 +71,18 @@ public class UIElementToolbar extends UIElementZKBase {
      *            added to the toolbar.
      * @param action The action to associate with the component.
      */
-    public void addToolbarComponent(Component component, String action) {
-        Component ref = toolbar.getFirstChild();
+    public void addToolbarComponent(BaseComponent component, String action) {
+        BaseComponent ref = toolbar.getFirstChild();
         
         if (component instanceof Toolbar) {
-            Component child;
+            BaseComponent child;
             
             while ((child = component.getFirstChild()) != null) {
-                toolbar.insertBefore(child, ref);
+                toolbar.insertChild(child, ref);
             }
             
         } else {
-            toolbar.insertBefore(component, ref);
+            toolbar.insertChild(component, ref);
             ActionListener.addAction(component, action);
         }
     }
@@ -94,17 +92,11 @@ public class UIElementToolbar extends UIElementZKBase {
         super.beforeAddChild(child);
         Object cmp = child.getOuterComponent();
         
-        if (cmp instanceof HtmlBasedComponent) {
-            HtmlBasedComponent comp = (HtmlBasedComponent) cmp;
+        if (cmp instanceof BaseUIComponent) {
+            BaseUIComponent comp = (BaseUIComponent) cmp;
             comp.setWidth(null);
             comp.setHeight(null);
         }
-    }
-    
-    @Override
-    protected void afterAddChild(UIElementBase child) {
-        super.afterAddChild(child);
-        Clients.resize(toolbar);
     }
     
     public boolean getAlignRight() {

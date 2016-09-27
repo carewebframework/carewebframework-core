@@ -38,22 +38,18 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.carewebframework.api.spring.SpringUtil;
-
+import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.component.Page;
+import org.carewebframework.web.core.ExecutionContext;
+import org.carewebframework.web.event.Event;
+import org.carewebframework.web.event.EventUtil;
 import org.springframework.jmx.export.MBeanExporter;
-
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Desktop;
-import org.zkoss.zk.ui.Execution;
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.util.PerformanceMeter;
 
 /**
  * Performance monitor for timing requests and events. The monitor copies request timing data
  * (captured via the PerformanceMeter interface) into the current PerformanceData object associated
- * with the desktop making the request. The monitor must be registered as a listener in the zk.xml
+ * with the page making the request. The monitor must be registered as a listener in the zk.xml
  * configuration file as follows:
  * 
  * <pre>
@@ -97,8 +93,8 @@ public class PerformanceMonitor implements PerformanceMeter, IPerformanceMonitor
      * @throws Exception initialization exception.
      */
     public PerformanceMonitor() throws Exception {
-        this(SpringUtil.getBean("mbeanExporter", MBeanExporter.class), SpringUtil.getBean("taskScheduler",
-            ScheduledExecutorService.class));
+        this(SpringUtil.getBean("mbeanExporter", MBeanExporter.class),
+                SpringUtil.getBean("taskScheduler", ScheduledExecutorService.class));
     }
     
     /**
@@ -123,8 +119,8 @@ public class PerformanceMonitor implements PerformanceMeter, IPerformanceMonitor
     @Override
     public synchronized void startExpirationTimer() {
         if (isExpirationTimerTaskStopped()) {
-            this.expirationTimerTaskFuture = this.scheduledExecutorService.scheduleAtFixedRate(new ExpirationTimerTask(),
-                0L, 1L, TimeUnit.MINUTES);
+            this.expirationTimerTaskFuture = this.scheduledExecutorService.scheduleAtFixedRate(new ExpirationTimerTask(), 0L,
+                1L, TimeUnit.MINUTES);
         } else {
             log.warn("PerformanceMonitorExpirationTimer already started");
         }
@@ -305,9 +301,8 @@ public class PerformanceMonitor implements PerformanceMeter, IPerformanceMonitor
      * @param tag The tag to be included in the log entry.
      * @param displayElapsed If true, the performance information will be sent to the display.
      */
-    public static void monitorEvent(Component target, String eventName, String tag,
-                                    boolean displayElapsed) {
-        Desktop dt = target.getDesktop();
+    public static void monitorEvent(BaseComponent target, String eventName, String tag, boolean displayElapsed) {
+        Page dt = target.getPage();
         PerformanceData pd = (PerformanceData) dt.getAttribute(PerformanceData.ATTR_PERF_DATA);
         if (pd == null) {
             pd = new PerformanceData(dt);
@@ -324,7 +319,7 @@ public class PerformanceMonitor implements PerformanceMeter, IPerformanceMonitor
      * @param tag The tag to be included in the log entry.
      * @param displayElapsed If true, the performance information will be sent to the display.
      */
-    public static void timeEcho(Component target, String tag, boolean displayElapsed) {
+    public static void timeEcho(BaseComponent target, String tag, boolean displayElapsed) {
         timeEcho(target, tag, displayElapsed, RequestTime.TOTAL);
     }
     
@@ -336,36 +331,36 @@ public class PerformanceMonitor implements PerformanceMeter, IPerformanceMonitor
      * @param displayElapsed If true, the performance information will be sent to the display.
      * @param rt The time segment to be logged.
      */
-    public static void timeEcho(Component target, String tag, boolean displayElapsed, RequestTime rt) {
+    public static void timeEcho(BaseComponent target, String tag, boolean displayElapsed, RequestTime rt) {
         monitorEvent(target, EVENT_TIME_ECHO, tag, displayElapsed);
         Event event = new Event(EVENT_TIME_ECHO, target, rt);
-        Events.echoEvent(event);
+        EventUtil.post(event);
     }
     
     /**
-     * Updates the performance data for the desktop associated with the specified execution. Note
-     * that a single performance data instance is associated with each unique desktop. When the
-     * unique request id changes, the current performance data is logged and then reset to receive
-     * the data for the new request id.
+     * Updates the performance data for the page associated with the specified execution. Note that
+     * a single performance data instance is associated with each unique page. When the unique
+     * request id changes, the current performance data is logged and then reset to receive the data
+     * for the new request id.
      * 
      * @param requestId The unique request id.
      * @param exec The current execution.
      * @param time The time being updated.
      * @param index The index of the time element being updated.
      */
-    private void logTime(String requestId, Execution exec, long time, int index) {
-        Desktop desktop = exec.getDesktop();
-        String command = exec.getParameter("cmd_0");
+    private void logTime(String requestId, ExecutionContext exec, long time, int index) {
+        Page page = exec.getPage();
+        String command = exec.get("cmd_0");
         if ("dummy".equals(command)) {
             return;
         }
         PerformanceData pd = this.performanceDataMap.get(requestId);
         if (pd == null) {
-            pd = new PerformanceData(desktop);
+            pd = new PerformanceData(page);
             pd.setCommand(command);
             pd.setRequestId(requestId);
             this.performanceDataMap.put(requestId, pd);
-            desktop.setAttribute(PerformanceData.ATTR_PERF_DATA, pd);
+            page.setAttribute(PerformanceData.ATTR_PERF_DATA, pd);
         }
         if (pd.isLogRequestPerformance() != this.logRequestPerformance) {
             pd.setLogRequestPerformance(this.logRequestPerformance);
@@ -390,7 +385,7 @@ public class PerformanceMonitor implements PerformanceMeter, IPerformanceMonitor
      *      org.zkoss.zk.ui.Execution, long)
      */
     @Override
-    public void requestStartAtClient(String requestId, Execution exec, long time) {
+    public void requestStartAtClient(String requestId, ExecutionContext exec, long time) {
         logTime(requestId, exec, time, 0);
     }
     
@@ -399,7 +394,7 @@ public class PerformanceMonitor implements PerformanceMeter, IPerformanceMonitor
      *      org.zkoss.zk.ui.Execution, long)
      */
     @Override
-    public void requestStartAtServer(String requestId, Execution exec, long time) {
+    public void requestStartAtServer(String requestId, ExecutionContext exec, long time) {
         logTime(requestId, exec, time, 1);
     }
     
@@ -408,7 +403,7 @@ public class PerformanceMonitor implements PerformanceMeter, IPerformanceMonitor
      *      org.zkoss.zk.ui.Execution, long)
      */
     @Override
-    public void requestCompleteAtServer(String requestId, Execution exec, long time) {
+    public void requestCompleteAtServer(String requestId, ExecutionContext exec, long time) {
         logTime(requestId, exec, time, 2);
     }
     
@@ -417,7 +412,7 @@ public class PerformanceMonitor implements PerformanceMeter, IPerformanceMonitor
      *      org.zkoss.zk.ui.Execution, long)
      */
     @Override
-    public void requestReceiveAtClient(String requestId, Execution exec, long time) {
+    public void requestReceiveAtClient(String requestId, ExecutionContext exec, long time) {
         logTime(requestId, exec, time, 3);
     }
     
@@ -426,7 +421,7 @@ public class PerformanceMonitor implements PerformanceMeter, IPerformanceMonitor
      *      org.zkoss.zk.ui.Execution, long)
      */
     @Override
-    public void requestCompleteAtClient(String requestId, Execution exec, long time) {
+    public void requestCompleteAtClient(String requestId, ExecutionContext exec, long time) {
         logTime(requestId, exec, time, 4);
     }
     
@@ -435,8 +430,8 @@ public class PerformanceMonitor implements PerformanceMeter, IPerformanceMonitor
      * This class is not thread-safe which should be fine because each request will be unique per
      * thread. However, setting the initial size to the performanceDataLimit and not allowing that
      * limit to be set above MAX_PERFORMANCE_DATA_LIMIT should prevent the race condition described
-     * in: <a
-     * href="https://tools.regenstrief.org/jira/browse/CWI-1459">https://tools.regenstrief.org
+     * in:
+     * <a href="https://tools.regenstrief.org/jira/browse/CWI-1459">https://tools.regenstrief.org
      * /jira/browse/CWI-1459</a>.
      * 
      * @param <K> Key class.
@@ -452,8 +447,7 @@ public class PerformanceMonitor implements PerformanceMeter, IPerformanceMonitor
         
         @Override
         protected boolean removeEldestEntry(Map.Entry<K, V> eldest) {
-            boolean b = !PerformanceMonitor.this.removePerformanceData
-                    && (PerformanceMonitor.this.performanceDataLimit > 0)
+            boolean b = !PerformanceMonitor.this.removePerformanceData && (PerformanceMonitor.this.performanceDataLimit > 0)
                     && (PerformanceMonitor.this.performanceDataLimit < size());
             if (b && log.isTraceEnabled()) {
                 log.trace("Evicting eldest entry: " + eldest.getKey());
@@ -478,9 +472,9 @@ public class PerformanceMonitor implements PerformanceMeter, IPerformanceMonitor
                         .hasNext();) {
                     PerformanceData pd = iter.next();
                     if (isExpired(pd)) {
-                        log.warn(String.format(
-                            "Removing PerformanceData for request id %s after %d milliseconds of inactivity",
-                            pd.getRequestId(), PerformanceMonitor.this.expirationTimeMs));
+                        log.warn(
+                            String.format("Removing PerformanceData for request id %s after %d milliseconds of inactivity",
+                                pd.getRequestId(), PerformanceMonitor.this.expirationTimeMs));
                         iter.remove();
                     }
                 }
@@ -496,7 +490,8 @@ public class PerformanceMonitor implements PerformanceMeter, IPerformanceMonitor
          * @return true if expired, false otherwise.
          */
         private boolean isExpired(PerformanceData pd) {
-            return pd.getStartTime(RequestTime.TOTAL) < (System.currentTimeMillis() - PerformanceMonitor.this.expirationTimeMs);
+            return pd.getStartTime(
+                RequestTime.TOTAL) < (System.currentTimeMillis() - PerformanceMonitor.this.expirationTimeMs);
         }
     }
 }

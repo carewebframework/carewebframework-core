@@ -25,8 +25,6 @@
  */
 package org.carewebframework.help.viewer;
 
-import java.io.IOException;
-
 import org.carewebframework.api.spring.SpringUtil;
 import org.carewebframework.help.HelpContext;
 import org.carewebframework.help.HelpModule;
@@ -35,19 +33,16 @@ import org.carewebframework.help.HelpSetCache;
 import org.carewebframework.help.IHelpSearch;
 import org.carewebframework.help.IHelpSet;
 import org.carewebframework.help.viewer.HelpViewer.HelpViewerMode;
-import org.carewebframework.ui.FrameworkWebSupport;
 import org.carewebframework.ui.command.CommandUtil;
 import org.carewebframework.ui.event.InvocationRequest;
 import org.carewebframework.ui.event.InvocationRequestQueue;
 import org.carewebframework.ui.zk.ZKUtil;
-
-import org.zkoss.image.AImage;
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Desktop;
-import org.zkoss.zk.ui.Execution;
-import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.util.Clients;
-import org.zkoss.zul.impl.XulElement;
+import org.carewebframework.web.client.ClientUtil;
+import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.component.BaseUIComponent;
+import org.carewebframework.web.component.Image;
+import org.carewebframework.web.component.Page;
+import org.carewebframework.web.core.ExecutionContext;
 
 /**
  * Utility class containing helper methods in support of online help infrastructure.
@@ -75,12 +70,12 @@ public class HelpUtil {
     /*package*/static final InvocationRequest closeRequest = InvocationRequestQueue.createRequest("close");
     
     /**
-     * Returns the desktop for the current execution.
+     * Returns the page for the current execution.
      * 
-     * @return The current desktop.
+     * @return The current page.
      */
-    protected static Desktop getDesktop() {
-        return FrameworkWebSupport.getDesktop();
+    protected static Page getPage() {
+        return ExecutionContext.getPage();
     }
     
     /**
@@ -93,57 +88,56 @@ public class HelpUtil {
     }
     
     /**
-     * Returns the help viewer mode for the specified desktop.
+     * Returns the help viewer mode for the specified page.
      * 
-     * @param desktop The desktop to check. If null, the global setting is returned.
+     * @param page The page to check. If null, the global setting is returned.
      * @return The help viewer mode.
      */
-    public static HelpViewerMode getViewerMode(Desktop desktop) {
-        return desktop == null || !desktop.hasAttribute(EMBEDDED_ATTRIB) ? defaultMode
-                : (HelpViewerMode) desktop.getAttribute(EMBEDDED_ATTRIB);
+    public static HelpViewerMode getViewerMode(Page page) {
+        return page == null || !page.hasAttribute(EMBEDDED_ATTRIB) ? defaultMode
+                : (HelpViewerMode) page.getAttribute(EMBEDDED_ATTRIB);
     }
     
     /**
-     * Sets the help viewer mode for the specified desktop. If different from the previous mode and
-     * a viewer for this desktop exists, the viewer will be removed and recreated on the next
-     * request.
+     * Sets the help viewer mode for the specified page. If different from the previous mode and a
+     * viewer for this page exists, the viewer will be removed and recreated on the next request.
      * 
-     * @param desktop The target desktop.
+     * @param page The target page.
      * @param mode The help viewer mode.
      */
-    public static void setViewerMode(Desktop desktop, HelpViewerMode mode) {
-        if (getViewerMode(desktop) != mode) {
-            desktop.removeAttribute(VIEWER_ATTRIB);
+    public static void setViewerMode(Page page, HelpViewerMode mode) {
+        if (getViewerMode(page) != mode) {
+            page.removeAttribute(VIEWER_ATTRIB);
         }
         
-        desktop.setAttribute(EMBEDDED_ATTRIB, mode);
+        page.setAttribute(EMBEDDED_ATTRIB, mode);
     }
     
     /**
-     * Returns an instance of the viewer for the current desktop. If no instance yet exists, one is
+     * Returns an instance of the viewer for the current page. If no instance yet exists, one is
      * created.
      * 
      * @return The help viewer.
      */
     public static IHelpViewer getViewer() {
-        Desktop desktop = getDesktop();
-        IHelpViewer viewer = (IHelpViewer) desktop.getAttribute(VIEWER_ATTRIB);
+        Page page = getPage();
+        IHelpViewer viewer = (IHelpViewer) page.getAttribute(VIEWER_ATTRIB);
         
         if (viewer != null) {
             return viewer;
         }
         
-        viewer = getViewerMode(desktop) == HelpViewerMode.POPUP ? new HelpViewerProxy(desktop)
+        viewer = getViewerMode(page) == HelpViewerMode.POPUP ? new HelpViewerProxy(page)
                 : (IHelpViewer) Executions.createComponents(VIEWER_URL, null, null);
-        desktop.setAttribute(VIEWER_ATTRIB, viewer);
+        page.setAttribute(VIEWER_ATTRIB, viewer);
         return viewer;
     }
     
     protected static void removeViewer(IHelpViewer viewer) {
-        Desktop desktop = getDesktop();
+        Page page = getPage();
         
-        if (desktop.getAttribute(VIEWER_ATTRIB) == viewer) {
-            desktop.removeAttribute(VIEWER_ATTRIB);
+        if (page.getAttribute(VIEWER_ATTRIB) == viewer) {
+            page.removeAttribute(VIEWER_ATTRIB);
         }
     }
     
@@ -154,7 +148,7 @@ public class HelpUtil {
      * @param windowName Name of browser window.
      */
     protected static void openWindow(String url, String windowName) {
-        Clients.evalJavaScript("window.open('" + url.replace("~./", "zkau/web/") + "', '" + windowName + "', 'dummy=1')");
+        ClientUtil.eval("window.open('" + url.replace("~./", "zkau/web/") + "', '" + windowName + "', 'dummy=1')");
     }
     
     /**
@@ -163,7 +157,7 @@ public class HelpUtil {
      * @return The base url.
      */
     public static String getBaseUrl() {
-        Execution e = Executions.getCurrent();
+        ServletContext sc = ExecutionContext.getServletContext();
         return e.getScheme() + "://" + e.getServerName() + ":" + e.getServerPort() + e.getContextPath();
     }
     
@@ -171,14 +165,10 @@ public class HelpUtil {
      * Returns image content for an embedded image resource.
      * 
      * @param image The name of the image file.
-     * @return An AImage instance, or null if the image resource was not found.
+     * @return An Image instance, or null if the image resource was not found.
      */
-    public static AImage getImageContent(String image) {
-        try {
-            return new AImage(Executions.encodeToURL(IMAGES_ROOT + image));
-        } catch (IOException e) {
-            return null;
-        }
+    public static Image getImageContent(String image) {
+        return new Image(IMAGES_ROOT + image);
     }
     
     /**
@@ -224,7 +214,7 @@ public class HelpUtil {
      * 
      * @param component Component whose CSH is to be displayed.
      */
-    public static void showCSH(Component component) {
+    public static void showCSH(BaseComponent component) {
         while (component != null) {
             HelpContext target = (HelpContext) component.getAttribute(CSH_TARGET);
             
@@ -244,7 +234,7 @@ public class HelpUtil {
      * @param helpContext The help target.
      * @param commandTarget The command target.
      */
-    public static void associateCSH(XulElement component, HelpContext helpContext, Component commandTarget) {
+    public static void associateCSH(BaseUIComponent component, HelpContext helpContext, BaseComponent commandTarget) {
         if (component != null) {
             component.setAttribute(CSH_TARGET, helpContext);
             CommandUtil.associateCommand("help", component, commandTarget);
@@ -256,7 +246,7 @@ public class HelpUtil {
      * 
      * @param component Component to dissociate.
      */
-    public static void dissociateCSH(XulElement component) {
+    public static void dissociateCSH(BaseUIComponent component) {
         if (component != null && component.hasAttribute(CSH_TARGET)) {
             CommandUtil.dissociateCommand("help", component);
             component.removeAttribute(CSH_TARGET);

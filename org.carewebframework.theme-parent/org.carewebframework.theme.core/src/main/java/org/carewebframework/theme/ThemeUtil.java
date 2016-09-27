@@ -25,7 +25,7 @@
  */
 package org.carewebframework.theme;
 
-import org.zkoss.zk.ui.HtmlBasedComponent;
+import org.carewebframework.web.component.BaseUIComponent;
 
 /**
  * Utility methods for manipulating theme styles.
@@ -44,11 +44,11 @@ public class ThemeUtil {
      * @param baseClass A base theme class (may be null).
      * @param themeClasses A list of theme classes to apply.
      */
-    public static void applyThemeClass(HtmlBasedComponent component, String baseClass, IThemeClass... themeClasses) {
+    public static void applyThemeClass(BaseUIComponent component, String baseClass, IThemeClass... themeClasses) {
         StringBuilder sb = new StringBuilder();
         
         if (baseClass != null) {
-            component.setZclass(baseClass);
+            component.addClass(baseClass);
         }
         
         for (IThemeClass themeClass : themeClasses) {
@@ -59,7 +59,7 @@ public class ThemeUtil {
             }
         }
         
-        component.setSclass(sb.toString());
+        component.addClass(sb.toString());
     }
     
     /**

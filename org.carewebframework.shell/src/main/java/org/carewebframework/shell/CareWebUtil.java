@@ -31,8 +31,7 @@ import org.carewebframework.help.HelpContext;
 import org.carewebframework.help.viewer.HelpUtil;
 import org.carewebframework.ui.action.ActionRegistry;
 import org.carewebframework.ui.zk.MessageWindow.MessageInfo;
-
-import org.zkoss.zul.impl.XulElement;
+import org.carewebframework.web.component.BaseUIComponent;
 
 /**
  * Static utility methods.
@@ -112,7 +111,7 @@ public class CareWebUtil {
      * @param topic The topic id.
      * @param label The topic label.
      */
-    public static void associateCSH(XulElement component, String module, String topic, String label) {
+    public static void associateCSH(BaseUIComponent component, String module, String topic, String label) {
         HelpContext context = new HelpContext(module, topic, label);
         HelpUtil.associateCSH(component, context, getShell());
     }
@@ -123,7 +122,7 @@ public class CareWebUtil {
      * @param component The component.
      * @param context The help context.
      */
-    public static void associateCSH(XulElement component, HelpContext context) {
+    public static void associateCSH(BaseUIComponent component, HelpContext context) {
         HelpUtil.associateCSH(component, context, getShell());
     }
     

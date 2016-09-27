@@ -28,8 +28,7 @@ package org.carewebframework.shell.layout;
 import org.carewebframework.shell.designer.PropertyEditorMenubar;
 import org.carewebframework.shell.property.PropertyTypeRegistry;
 import org.carewebframework.ui.zk.ZKUtil;
-
-import org.zkoss.zul.Menubar;
+import org.carewebframework.web.component.Menu;
 
 /**
  * Implements a shared menubar.
@@ -49,10 +48,10 @@ public class UIElementMenubar extends UIElementMenuBase {
      * just-in-time sorting of dynamically added items.
      */
     public UIElementMenubar() {
-        this(new Menubar());
+        this(new Menu());
     }
     
-    public UIElementMenubar(Menubar menubar) {
+    public UIElementMenubar(Menu menubar) {
         super(menubar);
     }
     

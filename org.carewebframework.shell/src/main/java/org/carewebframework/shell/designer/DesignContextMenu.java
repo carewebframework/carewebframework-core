@@ -30,7 +30,7 @@ import org.apache.commons.logging.LogFactory;
 
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.shell.layout.UIElementBase;
-import org.carewebframework.shell.layout.UIElementZKBase;
+import org.carewebframework.shell.layout.UIElementCWFBase;
 import org.carewebframework.shell.layout.UILayout;
 import org.carewebframework.ui.zk.ZKUtil;
 
@@ -224,7 +224,7 @@ public class DesignContextMenu extends Menupopup implements IdSpace {
     public void onOpen(Event event) {
         if (listener == null) {
             Component ref = ((OpenEvent) event).getReference();
-            setOwner(UIElementZKBase.getAssociatedUIElement(ref));
+            setOwner(UIElementCWFBase.getAssociatedUIElement(ref));
         }
         
         if (owner == null) {

@@ -29,8 +29,8 @@ import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.event.Event;
+import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.event.Event;
 
 /**
  * Tracks timing information for a specific event.
@@ -50,7 +50,7 @@ public class EventInfo implements Serializable {
     
     private RequestTime rt;
     
-    private final String desktopId;
+    private final String pageId;
     
     private final String requestId;
     
@@ -64,15 +64,15 @@ public class EventInfo implements Serializable {
      *            logged. If no RequestTime is specified, the time spent by the associated event
      *            listener is logged.
      * @param tag tag.
-     * @param desktopId desktop id.
+     * @param pageId page id.
      * @param requestId request id.
      */
-    public EventInfo(Event event, String tag, String desktopId, String requestId) {
-        this.eventName = event.getName();
+    public EventInfo(Event event, String tag, String pageId, String requestId) {
+        this.eventName = event.getType();
         this.tag = tag == null ? eventName : tag;
-        this.desktopId = desktopId;
+        this.pageId = pageId;
         this.requestId = requestId;
-        Component target = event.getTarget();
+        BaseComponent target = event.getTarget();
         if (target != null) {
             this.target = target.toString();
         }
@@ -139,7 +139,7 @@ public class EventInfo implements Serializable {
     @Override
     public String toString() {
         Map<String, Object> map = new LinkedHashMap<>();
-        map.put("dtid", desktopId);
+        map.put("dtid", pageId);
         map.put("reqid", requestId);
         map.put("target", target);
         map.put("event", eventName);

@@ -30,6 +30,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import org.carewebframework.web.component.Combobox;
+import org.carewebframework.web.component.Comboitem;
 import org.carewebframework.web.component.Listbox;
 import org.carewebframework.web.component.Listitem;
 
@@ -109,8 +111,8 @@ public class ListUtil {
      */
     public static int findComboboxItem(Combobox cbo, Object object, boolean useLabel) {
         if (object != null) {
-            for (int i = 0; i < cbo.getItemCount(); i++) {
-                Comboitem item = cbo.getItemAtIndex(i);
+            for (int i = 0; i < cbo.getChildCount(); i++) {
+                Comboitem item = (Comboitem) cbo.getChildAt(i);
                 Object value = useLabel ? item.getLabel().toLowerCase() : item.getValue();
                 
                 if (object == value || object.equals(value)) {
@@ -142,7 +144,7 @@ public class ListUtil {
      */
     public static int selectListboxItem(Listbox lb, String label) {
         int i = findListboxItem(lb, label);
-        lb.setSelected(i);
+        lb.setSelectedIndex(i);
         return i;
     }
     
@@ -166,7 +168,7 @@ public class ListUtil {
      */
     public static int selectListboxData(Listbox lb, Object data) {
         int i = findListboxData(lb, data);
-        lb.setSelected(i);
+        lb.setSelectedIndex(i);
         return i;
     }
     
@@ -181,9 +183,9 @@ public class ListUtil {
      */
     public static int findListboxItem(Listbox lb, Object object, boolean useLabel) {
         if (object != null) {
-            for (int i = 0; i < lb.getItemCount(); i++) {
-                Listitem item = lb.getItemAtIndex(i);
-                lb.renderItem(item);
+            for (int i = 0; i < lb.getChildCount(); i++) {
+                Listitem item = (Listitem) lb.getChildAt(i);
+                //lb.renderItem(item);
                 Object value = useLabel ? item.getLabel().toLowerCase() : item.getValue();
                 
                 if (object == value || object.equals(value)) {
@@ -203,11 +205,11 @@ public class ListUtil {
      * @return List of selected items; never null;
      */
     public static List<Listitem> getSelectedItems(Listbox lb) {
-        if (lb.getSelectedCount() == lb.getItemCount()) {
-            return lb.getItems();
+        if (lb.getSelectedCount() == lb.getChildCount()) {
+            return lb.getChildren();
         }
         
-        List<Listitem> items = new ArrayList<>(lb.getSelectedItems());
+        List<Listitem> items = new ArrayList<>(lb.getSelected());
         Collections.sort(items, listItemComparator);
         return items;
     }

@@ -37,9 +37,7 @@ import org.carewebframework.common.XMLUtil;
 import org.carewebframework.shell.designer.IClipboardAware;
 import org.carewebframework.shell.plugins.PluginDefinition;
 import org.carewebframework.shell.property.PropertyInfo;
-
-import org.zkoss.zk.ui.Executions;
-
+import org.carewebframework.web.core.ExecutionContext;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
@@ -115,8 +113,8 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
             log.error("Unrecognized tag '" + id + "' encountered in layout.");
         }
         
-        UIElementBase element = def == null ? null : ignoreInternal && def.isInternal() ? null : def.createElement(parent,
-            this);
+        UIElementBase element = def == null ? null
+                : ignoreInternal && def.isInternal() ? null : def.createElement(parent, this);
         
         if (element != null && moveDown()) {
             internalDeserialize(element, false);
@@ -270,11 +268,8 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
      * @throws Exception when problem retrieving resource via url.
      */
     public void loadFromUrl(String url) throws Exception {
-        InputStream strm = null;
-        
-        try {
+        try (InputStream strm = ExecutionContext.getServletContext().getResourceAsStream(url)) {
             reset();
-            strm = Executions.getCurrent().getDesktop().getWebApp().getResourceAsStream(url);
             
             if (strm == null) {
                 throw new UIException("Unable to locate layout resource: " + url);
@@ -285,10 +280,6 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
         } catch (Exception e) {
             reset();
             throw e;
-        } finally {
-            if (strm != null) {
-                strm.close();
-            }
         }
     }
     

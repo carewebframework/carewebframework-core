@@ -30,14 +30,12 @@ import org.carewebframework.shell.plugins.PluginContainer;
 import org.carewebframework.shell.plugins.PluginDefinition;
 import org.carewebframework.shell.property.IPropertyAccessor;
 import org.carewebframework.shell.property.PropertyInfo;
-
-import org.zkoss.zk.ui.ext.Disable;
+import org.carewebframework.web.ancillary.IDisable;
 
 /**
  * This class is used for all container-hosted plugins.
  */
-public class UIElementPlugin extends UIElementZKBase implements Disable, IPropertyAccessor {
-    
+public class UIElementPlugin extends UIElementCWFBase implements IDisable, IPropertyAccessor {
     
     static {
         registerAllowedParentClass(UIElementPlugin.class, UIElementBase.class);
@@ -128,7 +126,7 @@ public class UIElementPlugin extends UIElementZKBase implements Disable, IProper
     /**
      * Passes design mode setting to the container.
      * 
-     * @see org.carewebframework.shell.layout.UIElementZKBase#setDesignMode
+     * @see org.carewebframework.shell.layout.UIElementCWFBase#setDesignMode
      */
     @Override
     public void setDesignMode(boolean designMode) {

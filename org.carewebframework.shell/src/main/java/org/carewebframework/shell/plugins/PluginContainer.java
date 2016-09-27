@@ -33,34 +33,32 @@ import java.util.Map;
 import org.apache.commons.lang.WordUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.carewebframework.api.spring.SpringUtil;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.shell.CareWebShell;
 import org.carewebframework.shell.CareWebUtil;
 import org.carewebframework.shell.Constants;
 import org.carewebframework.shell.layout.UIElementBase;
-import org.carewebframework.shell.layout.UIElementZKBase;
+import org.carewebframework.shell.layout.UIElementCWFBase;
 import org.carewebframework.shell.plugins.PluginEvent.PluginAction;
 import org.carewebframework.shell.property.PropertyInfo;
 import org.carewebframework.ui.FrameworkController;
 import org.carewebframework.ui.command.CommandEvent;
 import org.carewebframework.ui.command.CommandUtil;
 import org.carewebframework.ui.zk.ZKUtil;
-
+import org.carewebframework.web.ancillary.IDisable;
+import org.carewebframework.web.client.ClientUtil;
+import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.component.BaseUIComponent;
+import org.carewebframework.web.component.Container;
+import org.carewebframework.web.event.EventUtil;
+import org.carewebframework.web.page.PageDefinitionCache;
 import org.springframework.util.StringUtils;
-
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.ext.Disable;
-import org.zkoss.zk.ui.util.Clients;
-import org.zkoss.zul.Idspace;
 
 /**
  * Container that manages CareWeb plugins
  */
-public class PluginContainer extends Idspace {
+public class PluginContainer extends Container {
     
     private static final long serialVersionUID = 1L;
     
@@ -94,9 +92,9 @@ public class PluginContainer extends Idspace {
     
     private List<IPluginEventListener> pluginEventListeners2;
     
-    private List<Component> registeredComponents;
+    private List<BaseUIComponent> registeredComponents;
     
-    private List<Disable> registeredActions;
+    private List<IDisable> registeredActions;
     
     private Map<String, Object> registeredProperties;
     
@@ -116,13 +114,13 @@ public class PluginContainer extends Idspace {
     
     private String color;
     
-    private class ToolbarContainer extends Idspace {
+    private class ToolbarContainer extends Container {
         
         private static final long serialVersionUID = 1L;
         
         public ToolbarContainer() {
             super();
-            setZclass("cwf-toolbar-container");
+            addClass("cwf-toolbar-container");
         }
     }
     
@@ -132,7 +130,7 @@ public class PluginContainer extends Idspace {
      * @param comp The component whose hosting container is sought.
      * @return The hosting plugin container, or null if no container hosts the component.
      */
-    public static PluginContainer getContainer(Component comp) {
+    public static PluginContainer getContainer(BaseComponent comp) {
         return ZKUtil.findAncestor(comp, PluginContainer.class);
     }
     
@@ -142,7 +140,7 @@ public class PluginContainer extends Idspace {
     public PluginContainer() {
         super();
         shell = CareWebUtil.getShell();
-        setZclass("cwf-plugin-container");
+        addClass("cwf-plugin-container");
         setVisible(false);
         setHeight("100%");
         setWidth("100%");
@@ -168,6 +166,7 @@ public class PluginContainer extends Idspace {
     /**
      * Release contained resources.
      */
+    @Override
     public void destroy() {
         if (!destroying) {
             destroying = true;
@@ -197,7 +196,7 @@ public class PluginContainer extends Idspace {
             }
             
             if (registeredComponents != null) {
-                for (Component component : registeredComponents) {
+                for (BaseComponent component : registeredComponents) {
                     component.detach();
                 }
                 
@@ -224,7 +223,7 @@ public class PluginContainer extends Idspace {
      * @return The hosting UI element (could be null).
      */
     public UIElementBase getHost() {
-        return UIElementZKBase.getAssociatedUIElement(this);
+        return UIElementCWFBase.getAssociatedUIElement(this);
     }
     
     /**
@@ -233,25 +232,26 @@ public class PluginContainer extends Idspace {
      * @param visible Visibility state to set
      */
     @Override
-    public boolean setVisible(boolean visible) {
-        boolean result = super.setVisible(visible);
-        
-        if (result != visible && registeredComponents != null) {
-            for (Component component : registeredComponents) {
-                if (!visible) {
-                    component.setAttribute(Constants.ATTR_VISIBLE, component.isVisible());
-                    component.setVisible(false);
-                } else {
-                    component.setVisible((Boolean) component.getAttribute(Constants.ATTR_VISIBLE));
+    public void setVisible(boolean visible) {
+        if (visible != isVisible()) {
+            super.setVisible(visible);
+            
+            if (registeredComponents != null) {
+                for (BaseUIComponent component : registeredComponents) {
+                    if (!visible) {
+                        component.setAttribute(Constants.ATTR_VISIBLE, component.isVisible());
+                        component.setVisible(false);
+                    } else {
+                        component.setVisible((Boolean) component.getAttribute(Constants.ATTR_VISIBLE));
+                    }
                 }
             }
+            
+            if (visible) {
+                checkBusy();
+            }
+            
         }
-        
-        if (visible) {
-            checkBusy();
-        }
-        
-        return result;
     }
     
     /**
@@ -285,7 +285,7 @@ public class PluginContainer extends Idspace {
             PluginEvent event = new PluginEvent(this, action, data);
             
             if (async) {
-                Events.postEvent(event);
+                EventUtil.post(event);
             } else {
                 onAction(event);
             }
@@ -314,15 +314,15 @@ public class PluginContainer extends Idspace {
                         case LOAD:
                             listener.onLoad(this);
                             continue;
-                            
+                        
                         case UNLOAD:
                             listener.onUnload();
                             continue;
-                            
+                        
                         case ACTIVATE:
                             listener.onActivate();
                             continue;
-                            
+                        
                         case INACTIVATE:
                             listener.onInactivate();
                             continue;
@@ -369,10 +369,10 @@ public class PluginContainer extends Idspace {
      */
     public void onCommand(CommandEvent event) {
         if (!disabled) {
-            for (Component child : this.getChildren()) {
-                Events.sendEvent(child, event);
+            for (BaseComponent child : this.getChildren()) {
+                EventUtil.send(event, child);
                 
-                if (!event.isPropagatable()) {
+                if (event.isStopped()) {
                     break;
                 }
             }
@@ -407,10 +407,10 @@ public class PluginContainer extends Idspace {
                 initialized = true;
                 
                 if (getFirstChild() == null) {
-                    ZKUtil.loadZulPage(definition.getUrl(), this);
+                    PageDefinitionCache.getInstance().get(definition.getUrl()).materialize(this);
                 }
             } catch (Throwable e) {
-                ZKUtil.detachChildren(this);
+                destroyChildren();
                 throw createChainedException("Initialize", e, null);
             }
             
@@ -423,10 +423,10 @@ public class PluginContainer extends Idspace {
      * Search the plugin's component tree for components (or their controllers) implementing the
      * IPluginEvent interface. Those that are found are registered as listeners.
      * 
-     * @param cmpt Component to search
+     * @param cmpt BaseComponent to search
      */
-    private void findListeners(Component cmpt) {
-        for (Component child : cmpt.getChildren()) {
+    private void findListeners(BaseComponent cmpt) {
+        for (BaseComponent child : cmpt.getChildren()) {
             tryRegisterListener(child, true);
             tryRegisterListener(FrameworkController.getController(child), true);
             findListeners(child);
@@ -437,25 +437,25 @@ public class PluginContainer extends Idspace {
      * Adds the specified component to the toolbar container. The component is registered to this
      * container and will visible only when the container is active.
      * 
-     * @param component Component to add.
+     * @param component BaseComponent to add.
      */
-    public void addToolbarComponent(Component component) {
+    public void addToolbarComponent(BaseComponent component) {
         if (tbarContainer == null) {
             tbarContainer = new ToolbarContainer();
             shell.addToolbarComponent(tbarContainer);
             registerComponent(tbarContainer);
         }
         
-        tbarContainer.appendChild(component);
+        tbarContainer.addChild(component);
     }
     
     /**
      * Register a component with the container. The container will control the visibility of the
      * component according to when it is active/inactive.
      * 
-     * @param component Component to register.
+     * @param component BaseComponent to register.
      */
-    public void registerComponent(Component component) {
+    public void registerComponent(BaseUIComponent component) {
         if (registeredComponents == null) {
             registeredComponents = new ArrayList<>();
         }
@@ -469,10 +469,10 @@ public class PluginContainer extends Idspace {
     /**
      * Allows auto-wire to work even if component is not a child of the container.
      * 
-     * @param id Component id.
-     * @param component Component to be registered.
+     * @param id BaseComponent id.
+     * @param component BaseComponent to be registered.
      */
-    public void registerId(String id, Component component) {
+    public void registerId(String id, BaseComponent component) {
         if (!StringUtils.isEmpty(id) && !hasAttribute(id)) {
             setAttribute(id, component);
         }
@@ -484,7 +484,7 @@ public class PluginContainer extends Idspace {
      * 
      * @param actionElement A component implementing the Disable interface.
      */
-    public void registerAction(Disable actionElement) {
+    public void registerAction(IDisable actionElement) {
         if (registeredActions == null) {
             registeredActions = new ArrayList<>();
         }
@@ -647,7 +647,7 @@ public class PluginContainer extends Idspace {
         Object bean = SpringUtil.getBean(beanId);
         
         if (bean == null && isRequired) {
-            throw new PluginLifecycleEventException(Executions.getCurrent(), "Required bean resouce not found: " + beanId);
+            throw new PluginException("Required bean resouce not found: " + beanId);
         }
         
         Object oldBean = getAssociatedBean(beanId);
@@ -743,7 +743,7 @@ public class PluginContainer extends Idspace {
             return;
         }
         
-        setSclass("cwf-plugin-" + definition.getId());
+        addClass("cwf-plugin-" + definition.getId());
         shell.registerPlugin(this);
     }
     
@@ -752,6 +752,7 @@ public class PluginContainer extends Idspace {
      * 
      * @param disabled Disable status.
      */
+    @Override
     public void setDisabled(boolean disabled) {
         this.disabled = disabled;
         disableActions(disabled);
@@ -766,7 +767,7 @@ public class PluginContainer extends Idspace {
      */
     public void disableActions(boolean disable) {
         if (registeredActions != null) {
-            for (Disable registeredAction : registeredActions) {
+            for (IDisable registeredAction : registeredActions) {
                 registeredAction.setDisabled(disable || disabled);
             }
         }
@@ -777,6 +778,7 @@ public class PluginContainer extends Idspace {
      * 
      * @return True if this plugin is disabled.
      */
+    @Override
     public boolean isDisabled() {
         return disabled;
     }
@@ -815,11 +817,11 @@ public class PluginContainer extends Idspace {
             busyPending = true;
         } else if (message != null) {
             disableActions(true);
-            Clients.showBusy(this, message);
+            ClientUtil.busy(this, message);
             busyPending = !isVisible();
         } else {
             disableActions(false);
-            Clients.clearBusy(this);
+            ClientUtil.busy(this, null);
             busyPending = false;
         }
     }

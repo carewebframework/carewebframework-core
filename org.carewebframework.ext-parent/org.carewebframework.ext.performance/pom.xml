@@ -10,15 +10,11 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.carewebframework</groupId>
-			<artifactId>org.carewebframework.api.core</artifactId>
+			<artifactId>org.carewebframework.web.core</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.carewebframework</groupId>
 			<artifactId>org.carewebframework.common</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.zkoss.zk</groupId>
-			<artifactId>zk</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>

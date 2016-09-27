@@ -25,15 +25,15 @@
  */
 package org.carewebframework.shell.layout;
 
-import org.zkoss.zk.ui.HtmlBasedComponent;
-import org.zkoss.zul.Div;
-import org.zkoss.zul.Iframe;
-import org.zkoss.zul.Include;
+import org.carewebframework.web.component.BaseUIComponent;
+import org.carewebframework.web.component.Div;
+import org.carewebframework.web.component.Iframe;
+import org.carewebframework.web.component.Import;
 
 /**
  * UI element that encapsulates an iframe or an include (as determined by URL).
  */
-public class UIElementFrame extends UIElementZKBase {
+public class UIElementFrame extends UIElementCWFBase {
     
     static {
         registerAllowedParentClass(UIElementFrame.class, UIElementBase.class);
@@ -41,13 +41,13 @@ public class UIElementFrame extends UIElementZKBase {
     
     private final Div root = new Div();
     
-    private HtmlBasedComponent child;
+    private BaseUIComponent child;
     
     private String url;
     
     public UIElementFrame() {
         super();
-        root.setZclass("cwf-plugin-container");
+        root.addClass("cwf-plugin-container");
         fullSize(root);
         setOuterComponent(root);
     }
@@ -70,12 +70,12 @@ public class UIElementFrame extends UIElementZKBase {
             child = new Iframe();
             ((Iframe) child).setSrc(url);
         } else {
-            child = new Include();
-            ((Include) child).setSrc(url);
+            child = new Import();
+            ((Import) child).setSrc(url);
         }
         
         fullSize(child);
-        root.appendChild(child);
+        root.addChild(child);
     }
     
     /**

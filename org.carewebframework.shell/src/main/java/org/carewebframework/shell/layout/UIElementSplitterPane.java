@@ -31,7 +31,7 @@ import org.carewebframework.ui.zk.ZKUtil;
 /**
  * A child of the UIElementSplitterView.
  */
-public class UIElementSplitterPane extends UIElementZKBase {
+public class UIElementSplitterPane extends UIElementCWFBase {
     
     static {
         registerAllowedParentClass(UIElementSplitterPane.class, UIElementSplitterView.class);

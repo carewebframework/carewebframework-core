@@ -29,19 +29,17 @@ import org.carewebframework.shell.designer.PropertyEditorStepView;
 import org.carewebframework.shell.property.PropertyTypeRegistry;
 import org.carewebframework.theme.ThemeUtil;
 import org.carewebframework.ui.zk.ZKUtil;
-
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.HtmlBasedComponent;
-import org.zkoss.zk.ui.util.Clients;
-import org.zkoss.zul.Label;
-import org.zkoss.zul.Toolbarbutton;
-import org.zkoss.zul.Window;
+import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.component.BaseUIComponent;
+import org.carewebframework.web.component.Button;
+import org.carewebframework.web.component.Label;
+import org.carewebframework.web.component.Window;
 
 /**
  * A step-oriented UI Element. This is implemented as a ZK panel component with a top toolbar
  * containing sequential steps as a sequence of buttons.
  */
-public class UIElementStepView extends UIElementZKBase {
+public class UIElementStepView extends UIElementCWFBase {
     
     static {
         registerAllowedParentClass(UIElementStepView.class, UIElementBase.class);
@@ -51,17 +49,17 @@ public class UIElementStepView extends UIElementZKBase {
     
     private final Window outer;
     
-    private HtmlBasedComponent inner;
+    private BaseUIComponent inner;
     
     private Label lblTitle;
     
-    private HtmlBasedComponent tbarCenter;
+    private BaseUIComponent tbarCenter;
     
-    private Toolbarbutton btnLeft;
+    private Button btnLeft;
     
-    private Toolbarbutton btnRight;
+    private Button btnRight;
     
-    private Toolbarbutton btnHome;
+    private Button btnHome;
     
     private UIElementStepPane activePane;
     
@@ -119,7 +117,7 @@ public class UIElementStepView extends UIElementZKBase {
      * @param caption The caption.
      */
     public void setCaption(String caption) {
-        lblTitle.setValue(caption);
+        lblTitle.setLabel(caption);
     }
     
     /**
@@ -128,7 +126,7 @@ public class UIElementStepView extends UIElementZKBase {
      * @return The panel caption.
      */
     public String getCaption() {
-        return lblTitle.getValue();
+        return lblTitle.getLabel();
     }
     
     /**
@@ -174,7 +172,7 @@ public class UIElementStepView extends UIElementZKBase {
         return activePane == null ? -1 : indexOfChild(activePane);
     }
     
-    /*package*/Component getToolbarRoot() {
+    /*package*/BaseComponent getToolbarRoot() {
         return tbarCenter;
     }
     
@@ -213,7 +211,6 @@ public class UIElementStepView extends UIElementZKBase {
         btnRight.setVisible(!noNavigation && anyVisible);
         btnLeft.setDisabled(nextVisiblePaneIndex(false, i) < (noHome ? 0 : 1));
         btnRight.setDisabled(nextVisiblePaneIndex(true, i) == -1);
-        Clients.resize(outer);
     }
     
     /**
@@ -339,11 +336,11 @@ public class UIElementStepView extends UIElementZKBase {
      */
     public void setStyle(ThemeUtil.PanelStyle style) {
         this.style = style;
-        outer.setSclass(style.getThemeClass());
+        outer.addClass(style.getThemeClass());
     }
     
     private void updateSclass() {
-        ZKUtil.updateSclass(outer.getCaption(), "cwf-step-nonav", !noNavigation);
-        ZKUtil.updateSclass(outer.getCaption(), "cwf-step-nohome", !noHome);
+        ZKUtil.updateSclass(outer.getTitle(), "cwf-step-nonav", !noNavigation);
+        ZKUtil.updateSclass(outer.getTitle(), "cwf-step-nohome", !noHome);
     }
 }

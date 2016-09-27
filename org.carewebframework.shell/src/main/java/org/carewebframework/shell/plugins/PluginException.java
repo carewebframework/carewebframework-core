@@ -28,12 +28,12 @@ package org.carewebframework.shell.plugins;
 import org.carewebframework.api.FrameworkRuntimeException;
 
 /**
- * Abstract superclass for all exceptions thrown due to a plugin-related error.
+ * Superclass for all exceptions thrown due to a plugin-related error.
  * <p>
  * Note that this is a runtime (unchecked) exception. Plugin exceptions are usually fatal; there is
  * no reason for them to be checked.
  */
-public abstract class PluginException extends FrameworkRuntimeException {
+public class PluginException extends FrameworkRuntimeException {
     
     private static final long serialVersionUID = 1L;
     

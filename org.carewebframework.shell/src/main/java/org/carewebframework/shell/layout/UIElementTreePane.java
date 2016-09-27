@@ -28,21 +28,16 @@ package org.carewebframework.shell.layout;
 import org.carewebframework.theme.ThemeUtil;
 import org.carewebframework.ui.zk.Badge;
 import org.carewebframework.ui.zk.ZKUtil;
-
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.event.MouseEvent;
-import org.zkoss.zul.A;
-import org.zkoss.zul.Div;
-import org.zkoss.zul.Menupopup;
-import org.zkoss.zul.Span;
+import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.component.Div;
+import org.carewebframework.web.component.Hyperlink;
+import org.carewebframework.web.component.Span;
 
 /**
  * A child of a UIElementTreeView, this UI element specifies the tree path where its associated tree
  * node is to reside in the parent's tree.
  */
-public class UIElementTreePane extends UIElementZKBase {
+public class UIElementTreePane extends UIElementCWFBase {
     
     static {
         registerAllowedParentClass(UIElementTreePane.class, UIElementTreeView.class);
@@ -72,7 +67,7 @@ public class UIElementTreePane extends UIElementZKBase {
         @Override
         public boolean onNotification(UIElementBase sender, String eventName, Object eventData) {
             Badge badge = eventData == null ? new Badge() : (Badge) eventData;
-            badge.apply("#" + anchor.getUuid());
+            badge.apply("#" + anchor.getId());
             return false;
         }
     };
@@ -81,7 +76,7 @@ public class UIElementTreePane extends UIElementZKBase {
     
     private final Span node;
     
-    private final A anchor;
+    private final Hyperlink anchor;
     
     private UIElementBase mainChild;
     
@@ -103,8 +98,8 @@ public class UIElementTreePane extends UIElementZKBase {
         setOuterComponent(pane);
         node = (Span) createFromTemplate();
         associateComponent(node);
-        anchor = (A) node.getFirstChild();
-        anchor.addEventListener(Events.ON_CLICK, clickListener);
+        anchor = (Hyperlink) node.getFirstChild();
+        anchor.registerEventListener("click", clickListener);
         associateComponent(anchor);
         listenToChild("badge", badgeListener);
     }
@@ -116,7 +111,7 @@ public class UIElementTreePane extends UIElementZKBase {
      */
     private void setSelected(boolean selected) {
         this.selected = selected;
-        ZKUtil.toggleSclass(anchor, treeView.getSelectionStyle().getThemeClass(), "btn-default", selected);
+        anchor.toggleClass(treeView.getSelectionStyle().getThemeClass(), "btn-default", selected);
     }
     
     /**
@@ -127,7 +122,7 @@ public class UIElementTreePane extends UIElementZKBase {
      */
     /* package */void updateSelectionStyle(ThemeUtil.ButtonStyle oldStyle, ThemeUtil.ButtonStyle newStyle) {
         if (selected) {
-            ZKUtil.toggleSclass(anchor, newStyle.getThemeClass(), oldStyle.getThemeClass(), true);
+            anchor.toggleClass(newStyle.getThemeClass(), oldStyle.getThemeClass(), true);
         }
     }
     
@@ -140,9 +135,9 @@ public class UIElementTreePane extends UIElementZKBase {
         this.open = open;
         
         if (!canOpen) {
-            node.setSclass(null);
+            node.setClasses(null);
         } else {
-            ZKUtil.toggleSclass(node, "cwf-treeview-node-exp", "cwf-treeview-node-col", open);
+            node.toggleClass("cwf-treeview-node-exp", "cwf-treeview-node-col", open);
         }
     }
     
@@ -255,14 +250,14 @@ public class UIElementTreePane extends UIElementZKBase {
     @Override
     public void bind() {
         setTreeView(getAncestor(UIElementTreeView.class));
-        treeView.getInnerComponent().appendChild(pane);
+        treeView.getInnerComponent().addChild(pane);
         getNodeParent().appendChild(node);
     }
     
     /**
      * Returns the parent component for this node.
      */
-    private Component getNodeParent() {
+    private BaseComponent getNodeParent() {
         UIElementBase parent = getParent();
         return parent == treeView ? treeView.getSelector() : ((UIElementTreePane) parent).node;
     }

@@ -28,15 +28,13 @@ package org.carewebframework.shell.layout;
 import java.util.Collections;
 
 import org.carewebframework.shell.plugins.PluginDefinition;
-
+import org.carewebframework.web.component.Div;
 import org.springframework.util.StringUtils;
-
-import org.zkoss.zul.Div;
 
 /**
  * Wrapper for a UI layout component.
  */
-public class UIElementLayout extends UIElementZKBase {
+public class UIElementLayout extends UIElementCWFBase {
     
     static {
         registerAllowedParentClass(UIElementLayout.class, UIElementBase.class);

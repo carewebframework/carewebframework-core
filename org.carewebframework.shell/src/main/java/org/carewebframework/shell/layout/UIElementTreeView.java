@@ -28,16 +28,14 @@ package org.carewebframework.shell.layout;
 import org.carewebframework.shell.designer.PropertyEditorTreeView;
 import org.carewebframework.shell.property.PropertyTypeRegistry;
 import org.carewebframework.theme.ThemeUtil;
-
-import org.zkoss.zul.Div;
-import org.zkoss.zul.LayoutRegion;
+import org.carewebframework.web.component.Div;
 
 /**
  * A tree view consists of a selector pane on the left containing a ZK tree component and a view
  * area on the right where tree panes are positioned. Clicking on a node in the tree activates the
  * associated tree pane.
  */
-public class UIElementTreeView extends UIElementZKBase {
+public class UIElementTreeView extends UIElementCWFBase {
     
     static {
         registerAllowedParentClass(UIElementTreeView.class, UIElementBase.class);

@@ -41,7 +41,7 @@ import org.carewebframework.shell.layout.UIElementTreeView;
 import org.carewebframework.shell.layout.UIException;
 import org.carewebframework.shell.layout.UILayout;
 import org.carewebframework.shell.plugins.PluginDefinition;
-import org.carewebframework.shell.plugins.PluginRegistrationException;
+import org.carewebframework.shell.plugins.PluginException;
 import org.carewebframework.shell.plugins.PluginRegistry;
 
 /**
@@ -170,7 +170,7 @@ public class CareWebShellEx extends CareWebShell {
         PluginDefinition def = pluginRegistry.get(id);
         
         if (def == null) {
-            throw new PluginRegistrationException(EXC_UNKNOWN_PLUGIN, id);
+            throw new PluginException(EXC_UNKNOWN_PLUGIN, null, null, id);
         }
         
         return def;

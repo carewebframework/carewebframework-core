@@ -26,25 +26,20 @@
 package org.carewebframework.shell.layout;
 
 import org.apache.commons.lang.StringUtils;
-
 import org.carewebframework.shell.designer.DesignContextMenu;
 import org.carewebframework.shell.designer.DesignMask;
 import org.carewebframework.shell.designer.DesignMask.MaskMode;
 import org.carewebframework.shell.designer.PropertyGrid;
 import org.carewebframework.ui.zk.PromptDialog;
 import org.carewebframework.ui.zk.ZKUtil;
-
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.HtmlBasedComponent;
-import org.zkoss.zul.Menupopup;
-import org.zkoss.zul.impl.XulElement;
+import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.component.BaseUIComponent;
+import org.carewebframework.web.page.PageDefinitionCache;
 
 /**
  * This is an abstract class from which all ZK-based UI elements must derive.
  */
-public abstract class UIElementZKBase extends UIElementBase {
-    
+public abstract class UIElementCWFBase extends UIElementBase {
     
     /**
      * Saves various states of a component prior to configuring it for design mode. The restore
@@ -52,29 +47,28 @@ public abstract class UIElementZKBase extends UIElementBase {
      */
     private static class SavedState {
         
-        
-        final XulElement component;
+        final BaseUIComponent component;
         
         final String tooltipText;
         
         final String contextMenu;
         
-        public SavedState(XulElement component) {
+        public SavedState(BaseUIComponent component) {
             this.component = component;
-            tooltipText = component.getTooltiptext();
+            tooltipText = component.getHint();
             contextMenu = component.getContext();
             component.setAttribute(SAVED_STATE, this);
-            ZKUtil.updateSclass(component, "cwf-designmode-active", false);
+            component.addClass("cwf-designmode-active");
         }
         
         private void restore() {
-            component.setTooltiptext(tooltipText);
+            component.setHint(tooltipText);
             component.setContext(contextMenu);
             component.removeAttribute(SAVED_STATE);
-            ZKUtil.updateSclass(component, "cwf-designmode-active", true);
+            component.removeClass("cwf-designmode-active");
         }
         
-        public static void restore(XulElement comp) {
+        public static void restore(BaseUIComponent comp) {
             SavedState ss = (SavedState) comp.getAttribute(SAVED_STATE);
             
             if (ss != null) {
@@ -83,7 +77,7 @@ public abstract class UIElementZKBase extends UIElementBase {
         }
     }
     
-    private static final String ATTR_PREFIX = UIElementZKBase.class.getName() + ".";
+    private static final String ATTR_PREFIX = UIElementCWFBase.class.getName() + ".";
     
     private static final String ASSOC_ELEMENT = ATTR_PREFIX + "AssociatedUIElement";
     
@@ -99,7 +93,7 @@ public abstract class UIElementZKBase extends UIElementBase {
      * @param component The ZK component of interest.
      * @return The associated UI element.
      */
-    public static UIElementBase getAssociatedUIElement(Component component) {
+    public static UIElementBase getAssociatedUIElement(BaseComponent component) {
         return component == null ? null : (UIElementBase) component.getAttribute(ASSOC_ELEMENT);
     }
     
@@ -109,11 +103,11 @@ public abstract class UIElementZKBase extends UIElementBase {
      * @param component The ZK component of interest.
      * @return The associated design context menu, or null if none.
      */
-    public static Menupopup getDesignContextMenu(Component component) {
+    public static Menupopup getDesignContextMenu(BaseComponent component) {
         return component == null ? null : (Menupopup) component.getAttribute(CONTEXT_MENU);
     }
     
-    public UIElementZKBase() {
+    public UIElementCWFBase() {
         mask = new DesignMask(this);
     }
     
@@ -122,7 +116,7 @@ public abstract class UIElementZKBase extends UIElementBase {
      * 
      * @param component ZK component to associate.
      */
-    public void associateComponent(Component component) {
+    public void associateComponent(BaseComponent component) {
         if (component != null) {
             component.setAttribute(ASSOC_ELEMENT, this);
         }
@@ -134,7 +128,7 @@ public abstract class UIElementZKBase extends UIElementBase {
     @Override
     public void setOuterComponent(Object value) {
         super.setOuterComponent(value);
-        associateComponent((Component) value);
+        associateComponent((BaseComponent) value);
     }
     
     /**
@@ -143,7 +137,7 @@ public abstract class UIElementZKBase extends UIElementBase {
     @Override
     public void setInnerComponent(Object value) {
         super.setInnerComponent(value);
-        associateComponent((Component) value);
+        associateComponent((BaseComponent) value);
     }
     
     /**
@@ -175,7 +169,7 @@ public abstract class UIElementZKBase extends UIElementBase {
      * 
      * @return Top level component.
      */
-    protected Component createFromTemplate() {
+    protected BaseComponent createFromTemplate() {
         return createFromTemplate(null);
     }
     
@@ -188,7 +182,7 @@ public abstract class UIElementZKBase extends UIElementBase {
      *            obtained from getTemplateUrl.
      * @return Top level component.
      */
-    protected Component createFromTemplate(String template) {
+    protected BaseComponent createFromTemplate(String template) {
         return createFromTemplate(template, null, this);
     }
     
@@ -201,17 +195,17 @@ public abstract class UIElementZKBase extends UIElementBase {
      * @param controller If specified, events and variables are autowired to the controller.
      * @return Top level component.
      */
-    protected Component createFromTemplate(String template, Component parent, Object controller) {
+    protected BaseComponent createFromTemplate(String template, BaseComponent parent, Object controller) {
         if (StringUtils.isEmpty(template)) {
             template = getTemplateUrl();
         } else if (!template.startsWith("~")) {
             template = ZKUtil.getResourcePath(getClass()) + template;
         }
         
-        Component top = null;
+        BaseComponent top = null;
         
         try {
-            top = Executions.createComponents(ZKUtil.loadCachedPageDefinition(template), parent, null);
+            top = PageDefinitionCache.getInstance().get(template).materialize(parent);
             ZKUtil.wireController(top, controller);
         } catch (Exception e) {
             raise("Error creating element from template.", e);
@@ -226,7 +220,7 @@ public abstract class UIElementZKBase extends UIElementBase {
      * @param child Child to move
      * @param index Move child to this position.
      */
-    protected void moveChild(Component child, int index) {
+    protected void moveChild(BaseComponent child, int index) {
         ZKUtil.moveChild(child, index);
     }
     
@@ -236,7 +230,7 @@ public abstract class UIElementZKBase extends UIElementBase {
      * @param child1 The first child.
      * @param child2 The second child.
      */
-    protected void swapChildren(Component child1, Component child2) {
+    protected void swapChildren(BaseComponent child1, BaseComponent child2) {
         ZKUtil.swapChildren(child1, child2);
     }
     
@@ -266,9 +260,9 @@ public abstract class UIElementZKBase extends UIElementBase {
     /**
      * Set width and height of a component to 100%.
      * 
-     * @param component Component
+     * @param component BaseComponent
      */
-    protected void fullSize(HtmlBasedComponent component) {
+    protected void fullSize(BaseUIComponent component) {
         component.setWidth("100%");
         component.setHeight("100%");
     }
@@ -317,12 +311,12 @@ public abstract class UIElementZKBase extends UIElementBase {
      * context menu, any existing context menu is saved. When removing the context menu, any saved
      * context menu is restored.
      * 
-     * @param component Component to which to apply/remove the design context menu.
+     * @param component BaseComponent to which to apply/remove the design context menu.
      * @param contextMenu The design menu if design mode is activated, or null if it is not.
      */
-    protected void setDesignContextMenu(Component component, Menupopup contextMenu) {
-        if (component instanceof XulElement) {
-            XulElement comp = (XulElement) component;
+    protected void setDesignContextMenu(BaseComponent component, Menupopup contextMenu) {
+        if (component instanceof BaseUIComponent) {
+            BaseUIComponent comp = (BaseUIComponent) component;
             comp.setAttribute(CONTEXT_MENU, contextMenu);
             
             if (contextMenu == null) {
@@ -331,7 +325,7 @@ public abstract class UIElementZKBase extends UIElementBase {
             } else {
                 new SavedState(comp);
                 comp.setContext(contextMenu);
-                comp.setTooltiptext(getDefinition().getName());
+                comp.setHint(getDefinition().getName());
             }
         }
     }
@@ -341,7 +335,7 @@ public abstract class UIElementZKBase extends UIElementBase {
      * 
      * @return The component that will receive the design mode mask.
      */
-    public Component getMaskTarget() {
+    public BaseComponent getMaskTarget() {
         return getOuterComponent();
     }
     
@@ -352,15 +346,15 @@ public abstract class UIElementZKBase extends UIElementBase {
         mask.update();
         
         for (UIElementBase child : getChildren()) {
-            if (child instanceof UIElementZKBase) {
-                ((UIElementZKBase) child).updateMasks();
+            if (child instanceof UIElementCWFBase) {
+                ((UIElementCWFBase) child).updateMasks();
             }
         }
     }
     
     @Override
     protected void bind() {
-        getParent().getInnerComponent().appendChild(getOuterComponent());
+        getParent().getInnerComponent().addChild(getOuterComponent());
     }
     
     @Override
@@ -386,8 +380,8 @@ public abstract class UIElementZKBase extends UIElementBase {
      * @return The inner ZK component.
      */
     @Override
-    public Component getInnerComponent() {
-        return (Component) super.getInnerComponent();
+    public BaseComponent getInnerComponent() {
+        return (BaseComponent) super.getInnerComponent();
     }
     
     /**
@@ -396,13 +390,13 @@ public abstract class UIElementZKBase extends UIElementBase {
      * @return The outer ZK component.
      */
     @Override
-    public Component getOuterComponent() {
-        return (Component) super.getOuterComponent();
+    public BaseComponent getOuterComponent() {
+        return (BaseComponent) super.getOuterComponent();
     }
     
     @Override
-    public UIElementZKBase getParent() {
-        return (UIElementZKBase) super.getParent();
+    public UIElementCWFBase getParent() {
+        return (UIElementCWFBase) super.getParent();
     }
     
     /**
@@ -410,24 +404,24 @@ public abstract class UIElementZKBase extends UIElementBase {
      * method for performing this operation, that method will be invoked. Otherwise, the background
      * color of the target is set. Override this method to provide alternate implementations.
      * 
-     * @param component Component to receive the color setting.
+     * @param component BaseComponent to receive the color setting.
      */
     @Override
     protected void applyColor(Object component) {
-        if (component instanceof HtmlBasedComponent) {
-            ZKUtil.applyColor((HtmlBasedComponent) component, getColor());
+        if (component instanceof BaseUIComponent) {
+            ZKUtil.applyColor((BaseUIComponent) component, getColor());
         }
     }
     
     /**
      * Applies the current hint text to the target component.
      * 
-     * @param component Component to receive the hint text.
+     * @param component BaseComponent to receive the hint text.
      */
     @Override
     protected void applyHint(Object component) {
-        if (component instanceof HtmlBasedComponent) {
-            ((HtmlBasedComponent) component).setTooltiptext(getHint());
+        if (component instanceof BaseUIComponent) {
+            ((BaseUIComponent) component).setHint(getHint());
         }
     }
     
@@ -453,11 +447,11 @@ public abstract class UIElementZKBase extends UIElementBase {
     /**
      * Returns true if any associated UI elements in the component subtree are visible.
      * 
-     * @param component Component subtree to examine.
+     * @param component BaseComponent subtree to examine.
      * @return True if any associated UI element in the subtree is visible.
      */
-    protected boolean hasVisibleElements(Component component) {
-        for (Component child : component.getChildren()) {
+    protected boolean hasVisibleElements(BaseComponent component) {
+        for (BaseComponent child : component.getChildren()) {
             UIElementBase ele = getAssociatedUIElement(child);
             
             if (ele != null && ele.isVisible()) {

@@ -25,7 +25,7 @@
  */
 package org.carewebframework.shell.designer;
 
-import org.carewebframework.shell.layout.UIElementZKBase;
+import org.carewebframework.shell.layout.UIElementCWFBase;
 import org.carewebframework.ui.zk.ZKUtil;
 
 import org.zkoss.zk.ui.Component;
@@ -43,7 +43,7 @@ public class DesignMask implements EventListener<Event> {
         AUTO, ENABLE, DISABLE
     };
     
-    private final UIElementZKBase element;
+    private final UIElementCWFBase element;
     
     private MaskMode mode = MaskMode.AUTO;
     
@@ -51,7 +51,7 @@ public class DesignMask implements EventListener<Event> {
     
     private boolean visible;
     
-    public DesignMask(UIElementZKBase element) {
+    public DesignMask(UIElementCWFBase element) {
         this.element = element;
     }
     
@@ -108,7 +108,7 @@ public class DesignMask implements EventListener<Event> {
     @Override
     public void onEvent(Event event) throws Exception {
         Component target = element.getMaskTarget();
-        Menupopup contextMenu = UIElementZKBase.getDesignContextMenu(target);
+        Menupopup contextMenu = UIElementCWFBase.getDesignContextMenu(target);
         String displayName = element.getDisplayName();
         ZKUtil.addMask(target, displayName, contextMenu, displayName);
     }

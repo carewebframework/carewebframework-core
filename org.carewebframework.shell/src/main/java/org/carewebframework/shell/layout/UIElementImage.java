@@ -25,13 +25,13 @@
  */
 package org.carewebframework.shell.layout;
 
-import org.zkoss.zul.Div;
-import org.zkoss.zul.Image;
+import org.carewebframework.web.component.Div;
+import org.carewebframework.web.component.Image;
 
 /**
  * Simple button stock object.
  */
-public class UIElementImage extends UIElementZKBase {
+public class UIElementImage extends UIElementCWFBase {
     
     static {
         registerAllowedParentClass(UIElementImage.class, UIElementBase.class);
@@ -45,9 +45,9 @@ public class UIElementImage extends UIElementZKBase {
     
     public UIElementImage() {
         setOuterComponent(root);
-        root.setZclass("cwf-plugin-container");
+        root.addClass("cwf-plugin-container");
         fullSize(root);
-        root.appendChild(image);
+        root.addChild(image);
         associateComponent(image);
     }
     
@@ -58,7 +58,6 @@ public class UIElementImage extends UIElementZKBase {
      */
     public void setUrl(String url) {
         image.setSrc(url);
-        image.invalidate();
     }
     
     /**
