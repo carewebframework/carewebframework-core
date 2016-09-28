@@ -21,6 +21,6 @@
 				<button zclass="btn" sclass="btn-default" id="btnLogout" label="Logout" if="${sec:isAuthenticated()}" href="/logout" />
 			</div>
 		</div>
-	</window>
+	</div>
 		
 </zk>
