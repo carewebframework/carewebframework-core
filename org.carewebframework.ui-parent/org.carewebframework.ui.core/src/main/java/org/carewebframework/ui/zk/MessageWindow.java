@@ -32,16 +32,12 @@ import org.carewebframework.api.event.EventManager;
 import org.carewebframework.api.event.IEventManager;
 import org.carewebframework.api.event.IGenericEvent;
 import org.carewebframework.common.StrUtil;
-
-import org.zkoss.zk.au.out.AuInvoke;
-import org.zkoss.zk.ui.Page;
-import org.zkoss.zk.ui.sys.ContentRenderer;
-import org.zkoss.zul.impl.XulElement;
+import org.carewebframework.web.component.BaseUIComponent;
 
 /**
  * Supports slide-down style message window.
  */
-public class MessageWindow extends XulElement {
+public class MessageWindow extends BaseUIComponent {
     
     private static final long serialVersionUID = 1L;
     
@@ -92,17 +88,12 @@ public class MessageWindow extends XulElement {
     
     public MessageWindow() {
         super();
-    }
-    
-    @Override
-    public void onPageAttached(Page newpage, Page oldpage) {
-        super.onPageAttached(newpage, oldpage);
         subscribe(true);
     }
     
     @Override
-    public void onPageDetached(Page page) {
-        super.onPageDetached(page);
+    public void onDestroy() {
+        super.onDestroy();
         subscribe(false);
     }
     

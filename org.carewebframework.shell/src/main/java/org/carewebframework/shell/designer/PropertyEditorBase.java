@@ -28,17 +28,16 @@ package org.carewebframework.shell.designer;
 import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.property.PropertyInfo;
 import org.carewebframework.ui.zk.ZKUtil;
-
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.util.Clients;
-import org.zkoss.zul.impl.XulElement;
+import org.carewebframework.web.component.BaseUIComponent;
+import org.carewebframework.web.event.ChangeEvent;
+import org.carewebframework.web.event.SelectEvent;
 
 /**
  * All property editors must descend from this abstract class.
  */
 public abstract class PropertyEditorBase {
     
-    protected final XulElement component;
+    protected final BaseUIComponent component;
     
     private Object value;
     
@@ -61,7 +60,7 @@ public abstract class PropertyEditorBase {
      * 
      * @param component The component used to edit the property.
      */
-    protected PropertyEditorBase(XulElement component) {
+    protected PropertyEditorBase(BaseUIComponent component) {
         this.component = component;
         component.setHeight("80%");
         component.setWidth("95%");
@@ -73,7 +72,7 @@ public abstract class PropertyEditorBase {
      * 
      * @return The editor component.
      */
-    public XulElement getComponent() {
+    public BaseUIComponent getComponent() {
         return component;
     }
     
@@ -143,8 +142,8 @@ public abstract class PropertyEditorBase {
     protected void init(UIElementBase target, PropertyInfo propInfo, PropertyGrid propGrid) {
         this.target = target;
         this.propInfo = propInfo;
-        component.addForward(Events.ON_CHANGE, propGrid, Events.ON_CHANGE);
-        component.addForward(Events.ON_FOCUS, propGrid, Events.ON_SELECT);
+        component.addForward(ChangeEvent.TYPE, propGrid, ChangeEvent.TYPE);
+        component.addForward("focus", propGrid, SelectEvent.TYPE);
     }
     
     /**

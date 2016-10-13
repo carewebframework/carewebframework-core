@@ -25,31 +25,28 @@
  */
 package org.carewebframework.shell.designer;
 
+import java.awt.Desktop;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.layout.UIElementCWFBase;
 import org.carewebframework.shell.layout.UILayout;
 import org.carewebframework.ui.zk.ZKUtil;
-
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Desktop;
-import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.HtmlBasedComponent;
-import org.zkoss.zk.ui.IdSpace;
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.OpenEvent;
-import org.zkoss.zk.ui.ext.Disable;
-import org.zkoss.zk.ui.metainfo.PageDefinition;
-import org.zkoss.zul.Menuitem;
-import org.zkoss.zul.Menupopup;
+import org.carewebframework.web.ancillary.IDisable;
+import org.carewebframework.web.ancillary.INamespace;
+import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.component.BaseUIComponent;
+import org.carewebframework.web.component.Menuitem;
+import org.carewebframework.web.event.Event;
+import org.carewebframework.web.page.PageDefinition;
+import org.carewebframework.web.page.PageParser;
 
 /**
  * Context menu for designer.
  */
-public class DesignContextMenu extends Menupopup implements IdSpace {
+public class DesignContextMenu extends Menupopup implements INamespace {
     
     private static final long serialVersionUID = 1L;
     
@@ -75,7 +72,7 @@ public class DesignContextMenu extends Menupopup implements IdSpace {
     
     private final Clipboard clipboard = Clipboard.getInstance();
     
-    private Component listener;
+    private BaseComponent listener;
     
     /**
      * Returns an instance of the design context menu. This is a singleton with the desktop scope
@@ -105,8 +102,8 @@ public class DesignContextMenu extends Menupopup implements IdSpace {
         DesignContextMenu contextMenu = null;
         
         try {
-            PageDefinition def = ZKUtil.loadCachedPageDefinition(DesignConstants.RESOURCE_PREFIX + "DesignContextMenu.zul");
-            contextMenu = (DesignContextMenu) Executions.createComponents(def, null, null);
+            PageDefinition def = PageParser.getInstance().parse(DesignConstants.RESOURCE_PREFIX + "DesignContextMenu.zul");
+            contextMenu = (DesignContextMenu) def.materialize(null);
             ZKUtil.wireController(contextMenu);
             contextMenu.mnuHeader.setImage(DesignConstants.DESIGN_ICON_ACTIVE);
             contextMenu.clipboard.addListener(contextMenu);
@@ -135,8 +132,8 @@ public class DesignContextMenu extends Menupopup implements IdSpace {
      * @param properties Properties input element.
      * @param about About input element.
      */
-    public static void updateStates(UIElementBase ele, Disable add, Disable delete, Disable copy, Disable cut,
-                                    Disable paste, Disable properties, Disable about) {
+    public static void updateStates(UIElementBase ele, IDisable add, IDisable delete, IDisable copy, IDisable cut,
+                                    IDisable paste, IDisable properties, IDisable about) {
         boolean isNull = ele == null;
         boolean isLocked = isNull || ele.isLocked();
         boolean noDelete = isLocked || ele.getDefinition().isInternal();
@@ -161,12 +158,12 @@ public class DesignContextMenu extends Menupopup implements IdSpace {
      * @param comp The component.
      * @param disabled The disabled state.
      */
-    private static void disable(Disable comp, boolean disabled) {
+    private static void disable(IDisable comp, boolean disabled) {
         if (comp != null) {
             comp.setDisabled(disabled);
             
-            if (comp instanceof HtmlBasedComponent) {
-                ((HtmlBasedComponent) comp).setStyle("opacity:" + (disabled ? ".2" : "1"));
+            if (comp instanceof BaseUIComponent) {
+                ((BaseUIComponent) comp).addStyle("opacity", disabled ? ".2" : "1");
             }
         }
     }
@@ -201,8 +198,8 @@ public class DesignContextMenu extends Menupopup implements IdSpace {
     public void setOwner(UIElementBase owner) {
         if (this.owner != owner) {
             this.owner = owner;
-            mnuHeader.setLabel(owner == null ? "" : StrUtil.formatMessage("@cwf.shell.designer.menu.title",
-                owner.getDisplayName()));
+            mnuHeader.setLabel(
+                owner == null ? "" : StrUtil.formatMessage("@cwf.shell.designer.menu.title", owner.getDisplayName()));
             updateControls();
         }
     }
@@ -212,7 +209,7 @@ public class DesignContextMenu extends Menupopup implements IdSpace {
      * 
      * @param listener Event listener.
      */
-    public void setListener(Component listener) {
+    public void setListener(BaseComponent listener) {
         this.listener = listener;
     }
     
@@ -223,7 +220,7 @@ public class DesignContextMenu extends Menupopup implements IdSpace {
      */
     public void onOpen(Event event) {
         if (listener == null) {
-            Component ref = ((OpenEvent) event).getReference();
+            BaseComponent ref = ((OpenEvent) event).getReference();
             setOwner(UIElementCWFBase.getAssociatedUIElement(ref));
         }
         

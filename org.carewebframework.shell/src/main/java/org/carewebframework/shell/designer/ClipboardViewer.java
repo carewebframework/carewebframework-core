@@ -28,14 +28,12 @@ package org.carewebframework.shell.designer;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.ui.zk.PopupDialog;
 import org.carewebframework.ui.zk.ZKUtil;
-
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.metainfo.PageDefinition;
-import org.zkoss.zk.ui.util.Clients;
-import org.zkoss.zk.ui.util.ConventionWires;
-import org.zkoss.zul.Button;
-import org.zkoss.zul.Textbox;
-import org.zkoss.zul.Window;
+import org.carewebframework.web.component.Button;
+import org.carewebframework.web.component.Textbox;
+import org.carewebframework.web.component.Window;
+import org.carewebframework.web.event.EventUtil;
+import org.carewebframework.web.page.PageDefinition;
+import org.carewebframework.web.page.PageParser;
 
 /**
  * Allows viewing and editing of clipboard contents.
@@ -65,14 +63,14 @@ public class ClipboardViewer extends Window {
      * @throws Exception Unspecified exception.
      */
     public static void execute(Clipboard clipboard) throws Exception {
-        PageDefinition def = ZKUtil.loadCachedPageDefinition(DesignConstants.RESOURCE_PREFIX + "ClipboardViewer.zul");
+        PageDefinition def = PageParser.getInstance().parse(DesignConstants.RESOURCE_PREFIX + "ClipboardViewer.zul");
         ClipboardViewer viewer = (ClipboardViewer) PopupDialog.popup(def, null, true, true, false);
         viewer.clipboard = clipboard;
         viewer.data = clipboard.getData();
         ConventionWires.wireVariables(viewer, viewer);
         viewer.restore();
         ConventionWires.addForwards(viewer, viewer);
-        Events.addEventListeners(viewer, viewer);
+        EventUtil.addEventListeners(viewer, viewer);
         viewer.doModal();
     }
     
@@ -83,10 +81,10 @@ public class ClipboardViewer extends Window {
      */
     private boolean commit() {
         if (modified) {
-            String text = txtData.getText();
+            String text = txtData.getValue();
             try {
-                clipboard.copy(data instanceof String ? text : data instanceof IClipboardAware ? ((IClipboardAware<?>) data)
-                        .fromClipboard(text) : null);
+                clipboard.copy(data instanceof String ? text
+                        : data instanceof IClipboardAware ? ((IClipboardAware<?>) data).fromClipboard(text) : null);
             } catch (Exception e) {
                 Clients.wrongValue(txtData, ZKUtil.formatExceptionForDisplay(e));
                 txtData.focus();
@@ -103,9 +101,9 @@ public class ClipboardViewer extends Window {
      * Restore changes from clipboard.
      */
     private void restore() {
-        String text = data == null ? MSG_EMPTY : data instanceof IClipboardAware ? ((IClipboardAware<?>) data).toClipboard()
-                : data.toString();
-        txtData.setText(text);
+        String text = data == null ? MSG_EMPTY
+                : data instanceof IClipboardAware ? ((IClipboardAware<?>) data).toClipboard() : data.toString();
+        txtData.setValue(text);
         txtData.setReadonly(!(data instanceof String || data instanceof IClipboardAware));
         modified = false;
         updateControls();

@@ -298,7 +298,7 @@ public class PluginContainer extends Container {
      * @param event The plugin event containing the action.
      */
     public void onAction(PluginEvent event) {
-        PluginLifecycleEventException exception = null;
+        PluginException exception = null;
         PluginAction action = event.getAction();
         boolean debug = log.isDebugEnabled();
         
@@ -387,12 +387,12 @@ public class PluginContainer extends Container {
      * @param previousException Previous exception (may be null).
      * @return Top level exception in chain.
      */
-    private PluginLifecycleEventException createChainedException(String action, Throwable newException,
-                                                                 PluginLifecycleEventException previousException) {
+    private PluginException createChainedException(String action, Throwable newException,
+                                                   PluginException previousException) {
         String msg = action + " event generated an error.";
         log.error(msg, newException);
-        PluginLifecycleEventException wrapper = new PluginLifecycleEventException(Executions.getCurrent(), msg,
-                previousException == null ? newException : previousException);
+        PluginException wrapper = new PluginException(msg, previousException == null ? newException : previousException,
+                null);
         wrapper.setStackTrace(newException.getStackTrace());
         return wrapper;
     }
@@ -861,7 +861,7 @@ public class PluginContainer extends Container {
      */
     public void setColor(String value) {
         color = value;
-        ZKUtil.updateStyle(this, "background-color", color);
+        addStyle("background-color", color);
     }
     
 }

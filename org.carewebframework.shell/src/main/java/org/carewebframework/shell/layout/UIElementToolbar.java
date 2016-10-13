@@ -54,8 +54,8 @@ public class UIElementToolbar extends UIElementCWFBase {
     public UIElementToolbar(Toolbar toolbar) {
         super();
         this.toolbar = toolbar;
-        toolbar.setAlign("end");
-        toolbar.setSclass("cwf-desktop-toolbar btn-toolbar");
+        toolbar.setAlign(Toolbar.Align.END);
+        toolbar.addClass("cwf-desktop-toolbar btn-toolbar");
         setOuterComponent(toolbar);
         maxChildren = Integer.MAX_VALUE;
     }
@@ -105,7 +105,7 @@ public class UIElementToolbar extends UIElementCWFBase {
     
     public void setAlignRight(boolean alignRight) {
         this.alignRight = alignRight;
-        toolbar.setAlign(alignRight ? "end" : "start");
+        toolbar.setAlign(alignRight ? Toolbar.Align.END : Toolbar.Align.START);
     }
     
 }

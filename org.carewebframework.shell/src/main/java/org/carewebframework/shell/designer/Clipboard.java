@@ -30,10 +30,8 @@ import java.util.Collections;
 import java.util.List;
 
 import org.carewebframework.ui.zk.ZKUtil;
-
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Sessions;
-import org.zkoss.zk.ui.event.Event;
+import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.event.Event;
 
 /**
  * Emulates a clipboard on the server. Clipboard is shared at the session level.
@@ -46,7 +44,7 @@ public class Clipboard {
     
     private Object data;
     
-    private final List<Component> listeners = Collections.synchronizedList(new ArrayList<Component>());
+    private final List<BaseComponent> listeners = Collections.synchronizedList(new ArrayList<>());
     
     public static Clipboard getInstance() {
         Clipboard clipboard = (Clipboard) Sessions.getCurrent().getAttribute(CLIPBOARD);
@@ -85,18 +83,18 @@ public class Clipboard {
         return data == null;
     }
     
-    public void addListener(Component listener) {
+    public void addListener(BaseComponent listener) {
         if (!listeners.contains(listener)) {
             listeners.add(listener);
         }
     }
     
-    public void removeListener(Component listener) {
+    public void removeListener(BaseComponent listener) {
         listeners.remove(listener);
     }
     
     private void fireChange() {
-        for (Component comp : new ArrayList<>(listeners)) {
+        for (BaseComponent comp : new ArrayList<>(listeners)) {
             ZKUtil.fireEvent(new Event(ON_CLIPBOARD_CHANGE, comp, data));
         }
     }

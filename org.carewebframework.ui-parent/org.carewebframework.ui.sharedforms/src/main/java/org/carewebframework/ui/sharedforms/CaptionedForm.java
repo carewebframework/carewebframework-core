@@ -28,12 +28,7 @@ package org.carewebframework.ui.sharedforms;
 import java.util.Arrays;
 
 import org.carewebframework.common.StrUtil;
-import org.carewebframework.ui.zk.ZKUtil;
-
-import org.zkoss.web.fn.ThemeFns;
-import org.zkoss.zk.ui.util.Clients;
-import org.zkoss.zul.Caption;
-import org.zkoss.zul.Panel;
+import org.carewebframework.web.component.Window;
 
 /**
  * Controller for captioned form.
@@ -53,13 +48,13 @@ public class CaptionedForm extends BaseForm {
     
     private CaptionStyle captionStyle = CaptionStyle.HIDDEN;
     
-    private Panel panel;
+    private Window panel;
+    
+    private String caption;
     
     private String color1;
     
     private String color2;
-    
-    private final Caption caption = new Caption();
     
     @Override
     protected void init() {
@@ -103,19 +98,17 @@ public class CaptionedForm extends BaseForm {
             case CENTER:
                 background = getGradValue(color1, color2, color1);
                 break;
-        
+            
         }
         
-        panel.setSclass("sharedForms-captioned sharedForms-captioned-caption-" + cs.name().toLowerCase());
-        ZKUtil.updateStyle(caption, "background", background);
+        panel.addClass("sharedForms-captioned sharedForms-captioned-caption-" + cs.name().toLowerCase());
+        //ZKUtil.updateStyle(caption, "background", background);
         
         if (cs == CaptionStyle.HIDDEN) {
-            caption.detach();
+            panel.setTitle(null);
         } else {
-            caption.setParent(panel);
+            panel.setTitle(caption);
         }
-        
-        Clients.resize(panel);
     }
     
     /**
@@ -172,7 +165,7 @@ public class CaptionedForm extends BaseForm {
      * @return Current caption.
      */
     public String getCaption() {
-        return caption.getLabel();
+        return caption;
     }
     
     /**
@@ -181,7 +174,7 @@ public class CaptionedForm extends BaseForm {
      * @param caption Current caption.
      */
     public void setCaption(String caption) {
-        this.caption.setLabel(caption);
+        this.caption = caption;
     }
     
     /**

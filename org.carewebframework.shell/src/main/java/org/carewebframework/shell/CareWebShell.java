@@ -47,8 +47,8 @@ import org.carewebframework.help.HelpModule;
 import org.carewebframework.help.HelpSetCache;
 import org.carewebframework.help.IHelpSet;
 import org.carewebframework.help.viewer.HelpUtil;
-import org.carewebframework.shell.layout.UIElementDesktop;
 import org.carewebframework.shell.layout.UIElementCWFBase;
+import org.carewebframework.shell.layout.UIElementDesktop;
 import org.carewebframework.shell.layout.UILayout;
 import org.carewebframework.shell.plugins.PluginContainer;
 import org.carewebframework.shell.plugins.PluginDefinition;
@@ -164,8 +164,8 @@ public class CareWebShell extends Div {
         
         try {
             CommandUtil.associateCommand("help", this);
-            appendChild(registeredStyles);
-            appendChild(messageWindow = new MessageWindow());
+            addChild(registeredStyles);
+            addChild(messageWindow = new MessageWindow());
             desktop = new UIElementDesktop(this);
             appFramework.registerObject(userContextListener);
             String confirmClose = WebUtil.getFrameworkProperty("confirmClose", "CAREWEB.CONFIRM.CLOSE");

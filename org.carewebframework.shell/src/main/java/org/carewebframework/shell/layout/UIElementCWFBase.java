@@ -390,8 +390,8 @@ public abstract class UIElementCWFBase extends UIElementBase {
      * @return The outer ZK component.
      */
     @Override
-    public BaseComponent getOuterComponent() {
-        return (BaseComponent) super.getOuterComponent();
+    public BaseUIComponent getOuterComponent() {
+        return (BaseUIComponent) super.getOuterComponent();
     }
     
     @Override

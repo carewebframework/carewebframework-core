@@ -30,7 +30,6 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.layout.UIException;
@@ -39,22 +38,20 @@ import org.carewebframework.shell.property.PropertyInfo;
 import org.carewebframework.shell.property.PropertyType;
 import org.carewebframework.ui.zk.PopupDialog;
 import org.carewebframework.ui.zk.ZKUtil;
-
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.IdSpace;
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.metainfo.PageDefinition;
-import org.zkoss.zk.ui.util.Clients;
-import org.zkoss.zul.Button;
-import org.zkoss.zul.Caption;
-import org.zkoss.zul.Cell;
-import org.zkoss.zul.Column;
-import org.zkoss.zul.Grid;
-import org.zkoss.zul.Label;
-import org.zkoss.zul.Row;
-import org.zkoss.zul.Rows;
-import org.zkoss.zul.Window;
+import org.carewebframework.web.ancillary.INamespace;
+import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.component.BaseUIComponent;
+import org.carewebframework.web.component.Button;
+import org.carewebframework.web.component.Column;
+import org.carewebframework.web.component.Label;
+import org.carewebframework.web.component.Row;
+import org.carewebframework.web.component.Table;
+import org.carewebframework.web.component.Table.Rows;
+import org.carewebframework.web.component.Window;
+import org.carewebframework.web.event.Event;
+import org.carewebframework.web.event.EventUtil;
+import org.carewebframework.web.page.PageDefinition;
+import org.carewebframework.web.page.PageParser;
 
 /**
  * Dialog for managing property values of UI elements within the designer. Each editable property of
@@ -93,13 +90,13 @@ public class PropertyGrid extends Window {
     }
     
     @SuppressWarnings("serial")
-    private static class RowEx extends Row implements IdSpace {};
+    private static class RowEx extends Row implements INamespace {};
     
     private static final PropertySorter propSortAscending = new PropertySorter(true);
     
     private static final PropertySorter propSortDescending = new PropertySorter(false);
     
-    private Grid gridProperties;
+    private Table gridProperties;
     
     private UIElementBase target;
     
@@ -117,7 +114,7 @@ public class PropertyGrid extends Window {
     
     private Button btnRestore;
     
-    private Component toolbar;
+    private BaseUIComponent toolbar;
     
     private Row selectedRow;
     
@@ -135,7 +132,7 @@ public class PropertyGrid extends Window {
      * @return Newly created PropertyGrid instance.
      * @throws Exception Unspecified exception.
      */
-    public static PropertyGrid create(UIElementBase target, Component parent) throws Exception {
+    public static PropertyGrid create(UIElementBase target, BaseComponent parent) throws Exception {
         return create(target, parent, false);
     }
     
@@ -148,8 +145,8 @@ public class PropertyGrid extends Window {
      * @return Newly created PropertyGrid instance.
      * @throws Exception Unspecified exception.
      */
-    public static PropertyGrid create(UIElementBase target, Component parent, boolean embedded) throws Exception {
-        PageDefinition def = ZKUtil.loadCachedPageDefinition(DesignConstants.RESOURCE_PREFIX + "PropertyGrid.zul");
+    public static PropertyGrid create(UIElementBase target, BaseComponent parent, boolean embedded) throws Exception {
+        PageDefinition def = PageParser.getInstance().parse(DesignConstants.RESOURCE_PREFIX + "PropertyGrid.zul");
         PropertyGrid propertyGrid = (PropertyGrid) PopupDialog.popup(def, null, !embedded, true, false);
         propertyGrid.init(target, parent, embedded);
         
@@ -167,7 +164,7 @@ public class PropertyGrid extends Window {
      * @param parent Parent component for property grid (may be null).
      * @param embedded If true, the property grid is embedded within another component.
      */
-    private void init(UIElementBase target, Component parent, boolean embedded) {
+    private void init(UIElementBase target, BaseComponent parent, boolean embedded) {
         this.embedded = embedded;
         ZKUtil.wireController(this);
         setTarget(target);
@@ -179,7 +176,7 @@ public class PropertyGrid extends Window {
             setWidth("100%");
             setHeight("100%");
             setSizable(false);
-            setSclass("panel-primary cwf-propertygrid-embedded");
+            addClass("panel-primary cwf-propertygrid-embedded");
             toolbar.setVisible(embedded);
             setParent(parent);
         }
@@ -199,13 +196,13 @@ public class PropertyGrid extends Window {
         ZKUtil.detachChildren(gridProperties.getRows());
         
         if (target == null) {
-            getFirstChild().setVisible(false);
+            ((BaseUIComponent) getFirstChild()).setVisible(false);
             setTitle(StrUtil.formatMessage("@cwf.shell.designer.property.grid.noselection"));
             disableButtons(true);
             return;
         }
         
-        getFirstChild().setVisible(true);
+        ((BaseUIComponent) getFirstChild()).setVisible(true);
         setTitle(StrUtil.formatMessage("@cwf.shell.designer.property.grid.title", target.getDisplayName()));
         PluginDefinition def = target.getDefinition();
         List<PropertyInfo> props = def.getProperties();
@@ -256,7 +253,7 @@ public class PropertyGrid extends Window {
         }
         
         if (editor != null) {
-            Component cmpt = editor.getComponent();
+            BaseComponent cmpt = editor.getComponent();
             Row row = new RowEx();
             row.setAttribute(LABEL_ATTR, propInfo.getName());
             Rows rows = gridProperties.getRows();
@@ -278,11 +275,11 @@ public class PropertyGrid extends Window {
                 editor.setValue(propInfo.getPropertyValue(target));
             } catch (Exception e) {
                 lbl = new Label(ZKUtil.formatExceptionForDisplay(e));
-                lbl.setTooltiptext(lbl.getValue());
+                lbl.setHint(lbl.getLabel());
                 cmpt = lbl;
             }
             
-            row.appendChild(cmpt);
+            row.addChild(cmpt);
         }
         
         return editor;
@@ -315,7 +312,7 @@ public class PropertyGrid extends Window {
         disableButtons(result);
         
         if (commit) {
-            Events.postEvent(new LayoutChangedEvent(null, target));
+            EventUtil.postEvent(new LayoutChangedEvent(null, target));
         }
         
         return result;
@@ -415,11 +412,11 @@ public class PropertyGrid extends Window {
      * Overrides the onClose method to prevent dialog closure when in embedded mode.
      */
     @Override
-    public void onClose() {
+    public void close() {
         if (embedded) {
             setVisible(false);
         } else if (inModal()) {
-            super.onClose();
+            super.close();
         }
     }
     
@@ -431,7 +428,7 @@ public class PropertyGrid extends Window {
      */
     private void setPropertyDescription(String propertyName, String propertyDescription) {
         capPropertyName.setLabel(StrUtil.formatMessage(propertyName));
-        lblPropertyInfo.setValue(StrUtil.formatMessage(propertyDescription));
+        lblPropertyInfo.setLabel(StrUtil.formatMessage(propertyDescription));
     }
     
     /**
@@ -445,7 +442,7 @@ public class PropertyGrid extends Window {
         }
         
         if (selectedRow != null) {
-            selectedRow.setSclass(null);
+            selectedRow.removeClass("cwf-propertygrid-selectedrow");
         }
         
         selectedRow = row;
@@ -457,7 +454,7 @@ public class PropertyGrid extends Window {
             propInfo == null ? " " : propInfo.getDescription());
         
         if (selectedRow != null) {
-            selectedRow.setSclass("cwf-propertygrid-selectedrow");
+            selectedRow.addClass("cwf-propertygrid-selectedrow");
         }
         
         if (editor != null) {
@@ -472,7 +469,6 @@ public class PropertyGrid extends Window {
      * @param event Row selection event.
      */
     public void onSelect(Event event) {
-        event = ZKUtil.getEventOrigin(event);
         setSelectedRow(ZKUtil.findAncestor(event.getTarget(), Row.class));
     }
     
@@ -482,7 +478,6 @@ public class PropertyGrid extends Window {
      * @param event Change event.
      */
     public void onChange(Event event) {
-        event = ZKUtil.getEventOrigin(event);
         Clients.clearWrongValue(event.getTarget());
         disableButtons(false);
     }

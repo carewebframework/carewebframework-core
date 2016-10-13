@@ -25,7 +25,6 @@
  */
 package org.carewebframework.ui.zk;
 
-import java.awt.Checkbox;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -45,16 +44,20 @@ import org.carewebframework.web.annotation.EventHandlerScanner;
 import org.carewebframework.web.annotation.WiredComponentScanner;
 import org.carewebframework.web.client.ClientUtil;
 import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.component.BaseInputComponent;
+import org.carewebframework.web.component.BaseInputboxComponent;
 import org.carewebframework.web.component.BaseUIComponent;
+import org.carewebframework.web.component.Checkbox;
+import org.carewebframework.web.component.Combobox;
 import org.carewebframework.web.component.Html;
 import org.carewebframework.web.component.Hyperlink;
 import org.carewebframework.web.component.Label;
 import org.carewebframework.web.component.Page;
 import org.carewebframework.web.core.ExecutionContext;
+import org.carewebframework.web.event.ChangeEvent;
 import org.carewebframework.web.event.Event;
 import org.carewebframework.web.event.EventUtil;
 import org.carewebframework.web.event.IEventListener;
+import org.carewebframework.web.event.SelectEvent;
 import org.carewebframework.web.page.PageDefinition;
 import org.carewebframework.web.page.PageDefinitionCache;
 import org.springframework.core.io.ClassPathResource;
@@ -376,12 +379,12 @@ public class ZKUtil {
      * @param select If true, select contents after setting focus.
      * @return The input element that received focus, or null if focus was not set.
      */
-    public static BaseInputComponent focusFirst(BaseComponent parent, boolean select) {
+    public static BaseInputboxComponent focusFirst(BaseComponent parent, boolean select) {
         for (BaseComponent child : parent.getChildren()) {
-            BaseInputComponent ele;
+            BaseInputboxComponent ele;
             
-            if (child instanceof BaseInputComponent) {
-                ele = (BaseInputComponent) child;
+            if (child instanceof BaseInputboxComponent) {
+                ele = (BaseInputboxComponent) child;
                 
                 if (ele.isVisible() && !ele.isDisabled() && !ele.isReadonly()) {
                     ele.focus();
@@ -426,8 +429,8 @@ public class ZKUtil {
         }
         
         if (child1 != child2) {
-            int idx1 = child1.getNextSibling().getIndex();
-            int idx2 = child2.getNextSibling().getIndex();
+            int idx1 = child1.getNextSibling().indexOf();
+            int idx2 = child2.getNextSibling().indexOf();
             parent.addChild(child1, idx2);
             parent.addChild(child2, idx1);
         }
@@ -871,22 +874,24 @@ public class ZKUtil {
             String sourceEvents = null;
             
             if (child instanceof Combobox) {
-                sourceEvents = Events.ON_CHANGING + "," + Events.ON_SELECT;
-            } else if (child instanceof BaseInputComponent) {
-                if (((BaseInputComponent) child).getInstant()) {
-                    sourceEvents = Events.ON_CHANGE;
-                } else {
-                    sourceEvents = Events.ON_CHANGE + "," + Events.ON_CHANGING;
-                }
+                sourceEvents = ChangeEvent.TYPE + "," + SelectEvent.TYPE;
+            } else if (child instanceof BaseInputboxComponent) {
+                sourceEvents = ChangeEvent.TYPE;
             } else if (child instanceof Checkbox) {
-                sourceEvents = Events.ON_CHECK;
-            } else if (child instanceof MeshElement) {
-                sourceEvents = Events.ON_SELECT;
+                sourceEvents = ChangeEvent.TYPE;
             }
             
             if (sourceEvents != null) {
                 for (String eventName : sourceEvents.split("\\,")) {
-                    child.registerEventHandler(eventName, targetComponent, targetEvent);
+                    child.registerEventListener(eventName, new IEventListener() {
+                        
+                        @Override
+                        public void onEvent(Event event) {
+                            event = new Event(targetEvent, targetComponent);
+                            EventUtil.post(event);
+                        }
+                        
+                    });
                 }
             }
             

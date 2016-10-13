@@ -30,7 +30,6 @@ import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 
 import org.apache.commons.lang.StringUtils;
-
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.plugins.PluginDefinition;
@@ -39,17 +38,16 @@ import org.carewebframework.ui.zk.ManifestViewer;
 import org.carewebframework.ui.zk.PopupDialog;
 import org.carewebframework.ui.zk.PromptDialog;
 import org.carewebframework.ui.zk.ZKUtil;
-
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.metainfo.PageDefinition;
+import org.carewebframework.web.annotation.EventHandler;
+import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.component.BaseUIComponent;
+import org.carewebframework.web.page.PageDefinition;
+import org.carewebframework.web.page.PageParser;
 
 /**
  * Displays an "about" dialog for a given UI element.
  */
 public class AboutDialog extends FrameworkController {
-    
-    private static final long serialVersionUID = 1L;
     
     /**
      * Internal class for passing about attributes to about dialog.
@@ -196,7 +194,7 @@ public class AboutDialog extends FrameworkController {
      */
     private static void showDialog(AboutParams params) {
         try {
-            PageDefinition pageDefinition = ZKUtil.loadCachedPageDefinition(Constants.RESOURCE_PREFIX + "aboutDialog.zul");
+            PageDefinition pageDefinition = PageParser.getInstance().parse(Constants.RESOURCE_PREFIX + "aboutDialog.zul");
             PopupDialog.popup(pageDefinition, params, true, false, true);
         } catch (Exception e) {
             PromptDialog.showError(ZKUtil.formatExceptionForDisplay(e));
@@ -209,27 +207,22 @@ public class AboutDialog extends FrameworkController {
     
     private String icon;
     
-    private Component cellDescription;
+    private BaseComponent cellDescription;
     
     @Override
-    public void doAfterCompose(Component comp) throws Exception {
-        super.doAfterCompose(comp);
+    public void afterInitialized(BaseComponent comp) {
+        super.afterInitialized(comp);
         
         if (!StringUtils.isEmpty(aboutParams.description)) {
-            cellDescription.appendChild(ZKUtil.getTextComponent(aboutParams.description));
-            cellDescription.getParent().setVisible(true);
+            cellDescription.addChild(ZKUtil.getTextComponent(aboutParams.description));
+            ((BaseUIComponent) cellDescription.getParent()).setVisible(true);
         }
-    }
-    
-    @Override
-    public void doBeforeComposeChildren(Component comp) throws Exception {
-        super.doBeforeComposeChildren(comp);
-        aboutParams = (AboutParams) Executions.getCurrent().getArg();
     }
     
     /**
      * Display the manifest viewer when detail button is clicked.
      */
+    @EventHandler(value = "click", target = "btnCustom")
     public void onClick$btnCustom() {
         ManifestViewer.execute();
     }

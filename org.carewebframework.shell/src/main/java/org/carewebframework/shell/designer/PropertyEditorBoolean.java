@@ -27,10 +27,8 @@ package org.carewebframework.shell.designer;
 
 import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.property.PropertyInfo;
-
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zul.Radio;
-import org.zkoss.zul.Radiogroup;
+import org.carewebframework.web.component.Radiobutton;
+import org.carewebframework.web.component.Radiogroup;
 
 /**
  * Editor for boolean values.
@@ -55,7 +53,7 @@ public class PropertyEditorBoolean extends PropertyEditorBase {
         radiogroup.addForward(Events.ON_CLICK, propGrid, Events.ON_SELECT);
         component.addForward(Events.ON_CLICK, propGrid, Events.ON_SELECT);
         
-        for (Radio radio : radiogroup.getItems()) {
+        for (Radiobutton radio : radiogroup.getItems()) {
             String label = propInfo.getConfigValue(radio.getLabel().trim());
             
             if (label != null) {
@@ -69,7 +67,7 @@ public class PropertyEditorBoolean extends PropertyEditorBase {
      */
     @Override
     public void setFocus() {
-        Radio radio = radiogroup.getSelectedItem();
+        Radiobutton radio = radiogroup.getSelectedItem();
         
         if (radio == null) {
             radio = radiogroup.getItems().get(0);

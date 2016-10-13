@@ -28,7 +28,6 @@ package org.carewebframework.shell.designer;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-
 import org.carewebframework.api.property.PropertyUtil;
 import org.carewebframework.common.MiscUtil;
 import org.carewebframework.common.StrUtil;
@@ -41,17 +40,15 @@ import org.carewebframework.shell.plugins.PluginRegistry;
 import org.carewebframework.ui.zk.PopupDialog;
 import org.carewebframework.ui.zk.TreeUtil;
 import org.carewebframework.ui.zk.ZKUtil;
-
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.HtmlBasedComponent;
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zul.Button;
-import org.zkoss.zul.Span;
-import org.zkoss.zul.Tree;
-import org.zkoss.zul.Treeitem;
-import org.zkoss.zul.Window;
+import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.component.BaseUIComponent;
+import org.carewebframework.web.component.Button;
+import org.carewebframework.web.component.Span;
+import org.carewebframework.web.component.Window;
+import org.carewebframework.web.event.ClickEvent;
+import org.carewebframework.web.event.Event;
+import org.carewebframework.web.event.EventUtil;
+import org.carewebframework.web.event.IEventListener;
 
 /**
  * Dialog for adding new component to UI.
@@ -91,10 +88,10 @@ public class AddComponent extends Window {
     /**
      * Handles click on item not under favorites category.
      */
-    private final EventListener<Event> favoriteListener1 = new EventListener<Event>() {
+    private final IEventListener favoriteListener1 = new IEventListener() {
         
         @Override
-        public void onEvent(Event event) throws Exception {
+        public void onEvent(Event event) {
             Treeitem item = (Treeitem) event.getTarget();
             String path = (String) item.getAttribute("path");
             boolean isFavorite = !(Boolean) item.getAttribute("favorite");
@@ -117,13 +114,13 @@ public class AddComponent extends Window {
     /**
      * Handles click on item under favorites category.
      */
-    private final EventListener<Event> favoriteListener2 = new EventListener<Event>() {
+    private final IEventListener favoriteListener2 = new IEventListener() {
         
         @Override
-        public void onEvent(Event event) throws Exception {
+        public void onEvent(Event event) {
             Treeitem item = (Treeitem) event.getTarget();
             Treeitem other = (Treeitem) item.getAttribute("other");
-            Events.sendEvent(ON_FAVORITE, other, null);
+            EventUtil.sendEvent(ON_FAVORITE, other, null);
         }
         
     };
@@ -272,11 +269,11 @@ public class AddComponent extends Window {
         
         if (favorites != null) {
             Span image = new Span();
-            image.setZclass("glyphicon");
-            image.setStyle("float:left");
-            Component cell = item.getTreerow().getFirstChild();
-            cell.insertBefore(image, cell.getFirstChild());
-            image.addForward(Events.ON_CLICK, item, ON_FAVORITE);
+            image.addClass("glyphicon");
+            image.addStyle("float", "left");
+            BaseComponent cell = item.getTreerow().getFirstChild();
+            cell.insertChild(image, cell.getFirstChild());
+            image.addForward(ClickEvent.TYPE, item, ON_FAVORITE);
             item.addEventListener(ON_FAVORITE, other == null ? favoriteListener1 : favoriteListener2);
             
             if (isFavorite && other == null) {
@@ -298,10 +295,10 @@ public class AddComponent extends Window {
      * @param isFavorite If true, the item is a favorite.
      * @return The original image.
      */
-    private HtmlBasedComponent setFavoriteStatus(Treeitem item, boolean isFavorite) {
-        HtmlBasedComponent image = (HtmlBasedComponent) item.getAttribute("image");
-        image.setSclass(isFavorite ? "glyphicon-star text-primary" : "glyphicon-star-empty text-muted");
-        image.setTooltiptext(isFavorite ? favoritesRemoveHint : favoritesAddHint);
+    private BaseUIComponent setFavoriteStatus(Treeitem item, boolean isFavorite) {
+        BaseUIComponent image = (BaseUIComponent) item.getAttribute("image");
+        image.addClass(isFavorite ? "glyphicon-star text-primary" : "glyphicon-star-empty text-muted");
+        image.setHint(isFavorite ? favoritesRemoveHint : favoritesAddHint);
         item.setAttribute("favorite", isFavorite);
         itmFavorites.setVisible(isFavorite || itmFavorites.getTreechildren().getFirstChild() != null);
         return image;
@@ -320,7 +317,7 @@ public class AddComponent extends Window {
      * Close dialog without further action.
      */
     public void onClick$btnCancel() {
-        onClose();
+        close();
     }
     
     /**
@@ -339,7 +336,7 @@ public class AddComponent extends Window {
                 childElement.bringToFront();
             }
             
-            onClose();
+            close();
         }
     }
     
@@ -347,8 +344,8 @@ public class AddComponent extends Window {
      * Close the dialog, saving any changes to favorites.
      */
     @Override
-    public void onClose() {
-        super.onClose();
+    public void close() {
+        super.close();
         
         if (favoritesChanged) {
             PropertyUtil.saveValues(DesignConstants.DESIGN_FAVORITES_PROPERTY, null, false, favorites);
