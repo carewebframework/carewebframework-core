@@ -167,7 +167,8 @@ public class DateRangeChooser extends Listbox {
      * @return A Listitem with a matching label., or null if not found.
      */
     public Listitem findMatchingItem(String label) {
-        for (BaseComponent item : getChildren()) {
+        Iterable<?> iter;
+        for (BaseComponent item : getChild) {
             if (label.equalsIgnoreCase(item.getLabel())) {
                 return item;
             }
