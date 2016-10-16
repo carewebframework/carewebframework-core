@@ -305,10 +305,10 @@ public class CommonTest {
         assertEquals(original, str);
         List<Object> iterList = new ArrayList<>();
         iterList.add(new Integer(1));
-        iterList.add("string");
+        iterList.add("string #1");
         iterList.add(new Integer(2));
         iterList.add(new Long(1));
-        iterList.add("another string");
+        iterList.add("string #2");
         Iterator<Integer> iter = MiscUtil.iteratorForType(iterList, Integer.class);
         assertTrue(iter.hasNext());
         assertEquals((Integer) 1, iter.next());
@@ -316,6 +316,14 @@ public class CommonTest {
         assertEquals((Integer) 2, iter.next());
         assertFalse(iter.hasNext());
         assertEquals(4, iterList.size());
+        int strCount = 0;
+        
+        for (String ele : MiscUtil.iterableForType(iterList, String.class)) {
+            strCount++;
+            assertTrue(ele.equals("string #" + strCount));
+        }
+        
+        assertEquals(2, strCount);
     }
     
     @Test

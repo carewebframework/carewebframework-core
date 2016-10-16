@@ -146,6 +146,24 @@ public class MiscUtil {
     }
     
     /**
+     * Returns an iterable that produces only list members of the specified type.
+     * 
+     * @param list List to iterate.
+     * @param type Type of element to return.
+     * @return An iterable.
+     */
+    public static <T, S extends T> Iterable<S> iterableForType(List<T> list, Class<S> type) {
+        return new Iterable<S>() {
+            
+            @Override
+            public Iterator<S> iterator() {
+                return iteratorForType(list, type);
+            }
+            
+        };
+    }
+    
+    /**
      * Converts a checked exception to unchecked. If the original exception is already unchecked, it
      * is simply returned.
      * 
