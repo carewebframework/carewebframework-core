@@ -34,6 +34,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -41,7 +42,6 @@ import java.util.TimeZone;
 
 import org.carewebframework.common.DateUtil.TimeUnit;
 import org.carewebframework.common.Version.VersionPart;
-
 import org.junit.Test;
 
 public class CommonTest {
@@ -303,6 +303,19 @@ public class CommonTest {
         assertEquals("1,2,4,5", str);
         str = StrUtil.fromList(intList, ",", "3");
         assertEquals(original, str);
+        List<Object> iterList = new ArrayList<>();
+        iterList.add(new Integer(1));
+        iterList.add("string");
+        iterList.add(new Integer(2));
+        iterList.add(new Long(1));
+        iterList.add("another string");
+        Iterator<Integer> iter = MiscUtil.iteratorForType(iterList, Integer.class);
+        assertTrue(iter.hasNext());
+        assertEquals((Integer) 1, iter.next());
+        iter.remove();
+        assertEquals((Integer) 2, iter.next());
+        assertFalse(iter.hasNext());
+        assertEquals(4, iterList.size());
     }
     
     @Test

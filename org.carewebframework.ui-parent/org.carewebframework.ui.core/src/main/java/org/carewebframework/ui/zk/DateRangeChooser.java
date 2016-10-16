@@ -30,12 +30,9 @@ import java.util.List;
 
 import org.carewebframework.api.property.PropertyUtil;
 import org.carewebframework.common.DateRange;
-
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zul.Listbox;
-import org.zkoss.zul.Listitem;
+import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.component.Listbox;
+import org.carewebframework.web.component.Listitem;
 
 /**
  * Generic component for choosing date ranges.
@@ -54,7 +51,7 @@ public class DateRangeChooser extends Listbox {
         super();
         customItem = new Listitem();
         customItem.setLabel("Custom...");
-        appendChild(customItem);
+        addChild(customItem);
         setAllowCustom(false);
         loadChoices(null);
     }
@@ -105,12 +102,12 @@ public class DateRangeChooser extends Listbox {
         
         item = new Listitem();
         item.setLabel(range.getLabel());
-        item.setValue(range);
+        item.setData(range);
         
         if (isCustom) {
-            appendChild(item);
+            addChild(item);
         } else {
-            insertBefore(item, customItem);
+            insertChild(item, customItem);
         }
         
         if (range.isDefault()) {
@@ -137,7 +134,7 @@ public class DateRangeChooser extends Listbox {
      * Removes all items (except for "custom") from the item list.
      */
     public void clear() {
-        List<Listitem> items = getItems();
+        List<Listitem> items = getChildren(Listitem.class);
         
         for (int i = items.size() - 1; i >= 0; i--) {
             if (items.get(i) != customItem) {
@@ -153,9 +150,9 @@ public class DateRangeChooser extends Listbox {
      * @return A Listitem containing the date range, or null if not found.
      */
     public Listitem findMatchingItem(DateRange range) {
-        for (Listitem item : getItems()) {
-            if (range.equals(item.getValue())) {
-                return item;
+        for (BaseComponent item : getChildren()) {
+            if (range.equals(item.getData())) {
+                return (Listitem) item;
             }
         }
         
@@ -170,7 +167,7 @@ public class DateRangeChooser extends Listbox {
      * @return A Listitem with a matching label., or null if not found.
      */
     public Listitem findMatchingItem(String label) {
-        for (Listitem item : getItems()) {
+        for (BaseComponent item : getChildren()) {
             if (label.equalsIgnoreCase(item.getLabel())) {
                 return item;
             }
