@@ -27,6 +27,7 @@ package org.carewebframework.common;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang.UnhandledException;
@@ -86,6 +87,62 @@ public class MiscUtil {
     @SuppressWarnings("unchecked")
     public static <T, E extends T> List<E> castList(List<T> list, Class<E> clazz) {
         return (List<E>) list;
+    }
+    
+    /**
+     * Returns a list iterator that produces only list members of the specified type.
+     * 
+     * @param list List to iterate.
+     * @param type Type of element to return.
+     * @return An iterator.
+     */
+    public static <T, S extends T> Iterator<S> iteratorForType(List<T> list, Class<S> type) {
+        
+        return new Iterator<S>() {
+            
+            Iterator<T> iter = list.iterator();
+            
+            S next;
+            
+            boolean needsNext = true;
+            
+            @Override
+            public boolean hasNext() {
+                return nxt() != null;
+            }
+            
+            @Override
+            public S next() {
+                S result = nxt();
+                needsNext = true;
+                return result;
+            }
+            
+            @Override
+            public void remove() {
+                iter.remove();
+            }
+            
+            @SuppressWarnings("unchecked")
+            private S nxt() {
+                if (needsNext) {
+                    next = null;
+                    needsNext = false;
+                    
+                    while (iter.hasNext()) {
+                        T nxt = iter.next();
+                        
+                        if (type.isInstance(nxt)) {
+                            next = (S) nxt;
+                            break;
+                        }
+                    }
+                }
+                
+                return next;
+            }
+            
+        };
     }
     
     /**
