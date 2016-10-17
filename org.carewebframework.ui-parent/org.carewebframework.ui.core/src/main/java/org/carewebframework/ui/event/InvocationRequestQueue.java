@@ -41,24 +41,6 @@ import org.carewebframework.web.event.IEventListener;
  */
 public class InvocationRequestQueue implements IEventListener {
     
-    /**
-     * Listens to page async requests.
-     */
-    private class PageListener implements AuService {
-        
-        /**
-         * Resets the keep alive timer.
-         * 
-         * @see org.zkoss.zk.au.AuService#service(org.zkoss.zk.au.AuRequest, boolean)
-         */
-        @Override
-        public boolean service(AuRequest request, boolean everError) {
-            resetKeepAlive();
-            return false;
-        }
-        
-    }
-    
     private static final Map<String, InvocationRequestQueue> messageQueues = new HashMap<>();
     
     private static final int TIMEOUT_INTERVAL = 10000; // Timeout interval in milliseconds
@@ -70,8 +52,6 @@ public class InvocationRequestQueue implements IEventListener {
     private final Page page;
     
     private final String queueName;
-    
-    private final PageListener pageListener = new PageListener();
     
     private final InvocationRequest onClose;
     

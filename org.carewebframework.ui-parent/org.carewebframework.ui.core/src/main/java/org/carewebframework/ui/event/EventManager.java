@@ -28,15 +28,14 @@ package org.carewebframework.ui.event;
 import org.carewebframework.ui.zk.ZKUtil;
 import org.carewebframework.web.component.Page;
 import org.carewebframework.web.event.Event;
+import org.carewebframework.web.event.EventUtil;
 import org.carewebframework.web.event.IEventListener;
 
 /**
  * Subclasses framework's event manager to ensure that events are delivered in page's event thread
  * and to support delivering events sent from the client.
  */
-public class EventManager extends org.carewebframework.api.event.EventManager implements AuService {
-    
-    private static final String GENERIC_EVENT = "onGenericEvent";
+public class EventManager extends org.carewebframework.api.event.EventManager {
     
     private Page page;
     
@@ -61,7 +60,7 @@ public class EventManager extends org.carewebframework.api.event.EventManager im
         if (ZKUtil.inEventThread(page)) {
             super.fireLocalEvent(eventName, eventData);
         } else {
-            Executions.schedule(page, eventListener, new Event(eventName, null, eventData));
+            EventUtil.post(new Event(eventName, null, eventData));
         }
     }
     
@@ -71,35 +70,7 @@ public class EventManager extends org.carewebframework.api.event.EventManager im
     
     public void setPage(Page page) {
         this.page = page;
-        page.addListener(this);
+        page.registerEventListener(this);
     }
     
-    /**
-     * Catch generic event requests from client and deliver them.
-     */
-    @Override
-    public boolean service(AuRequest request, boolean everError) {
-        String cmd = request.getCommand();
-        return GENERIC_EVENT.equals(cmd) ? doEvent(request) : false;
-    }
-    
-    /**
-     * Deliver a local or remote event from client.
-     * 
-     * @param request The request object.
-     * @return Always true.
-     */
-    private boolean doEvent(AuRequest request) {
-        String eventName = request.getData().get("eventName").toString();
-        Object eventData = request.getData().get("eventData");
-        Boolean asLocal = (Boolean) request.getData().get("asLocal");
-        
-        if (asLocal) {
-            fireLocalEvent(eventName, eventData);
-        } else {
-            fireRemoteEvent(eventName, eventData);
-        }
-        
-        return true;
-    }
 }

@@ -30,6 +30,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import org.carewebframework.common.MiscUtil;
 import org.carewebframework.web.component.Combobox;
 import org.carewebframework.web.component.Comboitem;
 import org.carewebframework.web.component.Listbox;
@@ -206,7 +207,7 @@ public class ListUtil {
      */
     public static List<Listitem> getSelectedItems(Listbox lb) {
         if (lb.getSelectedCount() == lb.getChildCount()) {
-            return lb.getChildren();
+            return MiscUtil.castList(lb.getChildren(), Listitem.class);
         }
         
         List<Listitem> items = new ArrayList<>(lb.getSelected());

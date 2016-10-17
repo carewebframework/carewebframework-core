@@ -29,34 +29,32 @@ import org.carewebframework.common.StrUtil;
 import org.carewebframework.security.spring.AbstractSecurityService;
 import org.carewebframework.security.spring.Constants;
 import org.carewebframework.ui.Application;
-
-import org.zkoss.zk.ui.HtmlBasedComponent;
-import org.zkoss.zk.ui.util.GenericAutowireComposer;
-import org.zkoss.zul.Button;
-import org.zkoss.zul.Label;
+import org.carewebframework.web.ancillary.IAutoWired;
+import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.component.Hyperlink;
+import org.carewebframework.web.component.Label;
 
 /**
  * Controller for logout page.
  */
-public class LogoutController extends GenericAutowireComposer<HtmlBasedComponent> {
+public class LogoutController implements IAutoWired {
     
     private static final long serialVersionUID = 1L;
     
     private Label lblMessage;
     
-    private Button btnLogin;
+    private Hyperlink btnLogin;
     
     /**
      * @see org.zkoss.zk.ui.util.GenericAutowireComposer#doAfterCompose(org.zkoss.zk.ui.Component)
      */
     @Override
-    public void doAfterCompose(HtmlBasedComponent comp) throws Exception {
-        super.doAfterCompose(comp);
-        lblMessage.setValue(AbstractSecurityService.getLogoutAttribute(Constants.LOGOUT_WARNING_ATTR,
+    public void afterInitialized(BaseComponent comp) {
+        lblMessage.setLabel(AbstractSecurityService.getLogoutAttribute(Constants.LOGOUT_WARNING_ATTR,
             StrUtil.getLabel(Constants.LBL_LOGOUT_MESSAGE_DEFAULT)));
         btnLogin.setHref(AbstractSecurityService.getLogoutAttribute(Constants.LOGOUT_TARGET_ATTR, "/"));
         // Unregister this desktop to allow session to auto-invalidate if appropriate.
-        Application.getInstance().register(desktop, false);
+        Application.getInstance().register(comp.getPage(), false);
     }
     
 }

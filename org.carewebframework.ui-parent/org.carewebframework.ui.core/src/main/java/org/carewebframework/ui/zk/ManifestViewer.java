@@ -34,25 +34,15 @@ import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 
 import org.apache.commons.lang.StringUtils;
-
 import org.carewebframework.api.ManifestIterator;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.ui.FrameworkController;
-
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.event.InputEvent;
-import org.zkoss.zk.ui.event.SortEvent;
-import org.zkoss.zul.Caption;
-import org.zkoss.zul.ListModelList;
-import org.zkoss.zul.Listbox;
-import org.zkoss.zul.Listcell;
-import org.zkoss.zul.Listheader;
-import org.zkoss.zul.Listitem;
-import org.zkoss.zul.ListitemRenderer;
-import org.zkoss.zul.Textbox;
+import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.component.Listbox;
+import org.carewebframework.web.component.Listitem;
+import org.carewebframework.web.component.Textbox;
+import org.carewebframework.web.event.Event;
+import org.carewebframework.web.event.InputEvent;
 
 /**
  * Displays a dialog showing all known manifests or details about a single manifest.
@@ -310,8 +300,8 @@ public class ManifestViewer extends FrameworkController {
      * Display the contents of a single manifest or all discovered manifests.
      */
     @Override
-    public void doAfterCompose(Component comp) throws Exception {
-        super.doAfterCompose(comp);
+    public void afterInitialized(BaseComponent comp) {
+        super.afterInitialized(comp);
         ManifestItem manifestItem = (ManifestItem) arg.get("manifestItem");
         BaseRenderer<?> renderer;
         

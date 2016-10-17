@@ -29,9 +29,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import org.carewebframework.common.DateUtil;
-
-import org.zkoss.zul.Datebox;
-import org.zkoss.zul.Timebox;
+import org.carewebframework.web.component.Datebox;
 
 /**
  * Utility functions related to datebox and timebox components.

@@ -31,21 +31,20 @@ import org.carewebframework.api.domain.IUser;
 import org.carewebframework.api.security.ISecurityService;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.ui.zk.PromptDialog;
-
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.util.GenericForwardComposer;
-import org.zkoss.zul.Label;
-import org.zkoss.zul.Textbox;
+import org.carewebframework.web.ancillary.IAutoWired;
+import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.component.BaseUIComponent;
+import org.carewebframework.web.component.Label;
+import org.carewebframework.web.component.Textbox;
 
 /**
  * Controller for the password change dialog.
  */
-public class PasswordChangeController extends GenericForwardComposer<Component> {
+public class PasswordChangeController implements IAutoWired {
     
     private static final long serialVersionUID = 1L;
     
-    private Component panel;
+    private BaseUIComponent panel;
     
     private Textbox txtUsername;
     
@@ -70,9 +69,8 @@ public class PasswordChangeController extends GenericForwardComposer<Component> 
     private final String MESSAGE_PASSWORD_RULES = StrUtil.getLabel("password.change.rules.label");
     
     @Override
-    public void doAfterCompose(Component comp) throws Exception {
-        super.doAfterCompose(comp);
-        panel = comp;
+    public void afterInitialized(BaseComponent comp) {
+        panel = (BaseUIComponent) comp;
         forced = !FrameworkUtil.isInitialized();
         String title;
         String label;
@@ -90,8 +88,8 @@ public class PasswordChangeController extends GenericForwardComposer<Component> 
         if (user == null) {
             doCancel();
         } else {
-            lblTitle.setValue(StrUtil.getLabel(title) + " - " + user.getFullName());
-            lblInfo.setValue(StrUtil.getLabel(label, MESSAGE_PASSWORD_RULES));
+            lblTitle.setLabel(StrUtil.getLabel(title) + " - " + user.getFullName());
+            lblInfo.setLabel(StrUtil.getLabel(label, MESSAGE_PASSWORD_RULES));
         }
     }
     
@@ -137,7 +135,7 @@ public class PasswordChangeController extends GenericForwardComposer<Component> 
      */
     private void doCancel() {
         if (!forced) {
-            panel.getRoot().detach();
+            panel.getPage().detach();
         } else {
             Events.sendEvent(Events.ON_CLOSE, panel.getRoot(),
                 StrUtil.getLabel("password.change.dialog.password.change.canceled"));
@@ -193,7 +191,7 @@ public class PasswordChangeController extends GenericForwardComposer<Component> 
      */
     private void showMessage(String text, Object... args) {
         text = StrUtil.formatMessage(text, args);
-        lblMessage.setValue(text);
+        lblMessage.setLabel(text);
     }
     
     /**

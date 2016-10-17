@@ -36,6 +36,7 @@ import org.carewebframework.ui.zk.ZKUtil;
 import org.carewebframework.web.component.Label;
 import org.carewebframework.web.component.Page;
 import org.carewebframework.web.component.Window;
+import org.carewebframework.web.component.Window.Mode;
 import org.carewebframework.web.core.ExecutionContext;
 import org.carewebframework.web.event.Event;
 import org.carewebframework.web.event.IEventListener;
@@ -129,12 +130,12 @@ public class PopupSupport implements IGenericEvent<Object>, IEventListener {
             window.setParent(currentPage);
             window.registerEventListener("move", new MoveEventListener());
             String pos = getPosition();
-            window.setLeft(pos);
-            window.setTop(pos);
-            window.addEventListener(Events.ON_CLOSE, this);
+            window.addStyle("left", pos);
+            window.addStyle("top", pos);
+            window.registerEventListener("close", this);
             Label label = window.findByName("messagetext", Label.class);
             label.setLabel(popupData.getMessage());
-            window.doOverlapped();
+            window.setMode(Mode.POPUP);
         } catch (Exception e) {}
     }
     

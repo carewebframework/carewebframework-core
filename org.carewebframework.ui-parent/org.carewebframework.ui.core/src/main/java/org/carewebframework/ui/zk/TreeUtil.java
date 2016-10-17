@@ -29,13 +29,9 @@ import java.util.Iterator;
 
 import org.carewebframework.common.MiscUtil;
 import org.carewebframework.ui.zk.ZKUtil.MatchMode;
-
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.HtmlBasedComponent;
-import org.zkoss.zk.ui.util.Clients;
-import org.zkoss.zul.Tree;
-import org.zkoss.zul.Treechildren;
-import org.zkoss.zul.Treeitem;
+import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.component.Treenode;
+import org.carewebframework.web.component.Treeview;
 
 /**
  * Useful ZK tree functions.
@@ -45,7 +41,7 @@ public class TreeUtil {
     /**
      * Interface for tree item search.
      */
-    public interface ITreeitemSearch {
+    public interface ITreenodeSearch {
         
         /**
          * Returns true if item matches the search text.
@@ -54,16 +50,16 @@ public class TreeUtil {
          * @param text Search text.
          * @return True if considered a match.
          */
-        boolean isMatch(Treeitem item, String text);
+        boolean isMatch(Treenode item, String text);
     }
     
     /**
      * Default logic for tree item search.
      */
-    private static final ITreeitemSearch defaultTreeitemSearch = new ITreeitemSearch() {
+    private static final ITreenodeSearch defaultTreenodeSearch = new ITreenodeSearch() {
         
         @Override
-        public boolean isMatch(Treeitem item, String text) {
+        public boolean isMatch(Treenode item, String text) {
             String label = item.getLabel();
             return label != null && label.toLowerCase().contains(text.toLowerCase());
         }
@@ -76,10 +72,10 @@ public class TreeUtil {
      * @param tree Tree to search.
      * @param path \-delimited path to search. Search is not case sensitive.
      * @param create If true, tree nodes are created if they do not already exist.
-     * @param clazz Class of Treeitem to create.
+     * @param clazz Class of Treenode to create.
      * @return The tree item corresponding to the specified path, or null if not found.
      */
-    public static Treeitem findNode(Tree tree, String path, boolean create, Class<? extends Treeitem> clazz) {
+    public static Treenode findNode(Tree tree, String path, boolean create, Class<? extends Treenode> clazz) {
         return findNode(tree, path, create, clazz, MatchMode.CASE_INSENSITIVE);
     }
     
@@ -89,11 +85,11 @@ public class TreeUtil {
      * @param tree Tree to search.
      * @param path \-delimited path to search.
      * @param create If true, tree nodes are created if they do not already exist.
-     * @param clazz Class of Treeitem to create.
+     * @param clazz Class of Treenode to create.
      * @param matchMode The match mode.
      * @return The tree item corresponding to the specified path, or null if not found.
      */
-    public static Treeitem findNode(Tree tree, String path, boolean create, Class<? extends Treeitem> clazz,
+    public static Treenode findNode(Tree tree, String path, boolean create, Class<? extends Treenode> clazz,
                                     MatchMode matchMode) {
         Treechildren tc = tree.getTreechildren();
         
@@ -116,8 +112,8 @@ public class TreeUtil {
      * @param create If true, tree nodes are created if they do not already exist.
      * @return The tree item corresponding to the specified path, or null if not found.
      */
-    public static Treeitem findNode(Tree tree, String path, boolean create) {
-        return findNode(tree, path, create, Treeitem.class);
+    public static Treenode findNode(Tree tree, String path, boolean create) {
+        return findNode(tree, path, create, Treenode.class);
     }
     
     /**
@@ -129,8 +125,8 @@ public class TreeUtil {
      * @param matchMode The match mode.
      * @return The tree item corresponding to the specified path, or null if not found.
      */
-    public static Treeitem findNode(Tree tree, String path, boolean create, MatchMode matchMode) {
-        return findNode(tree, path, create, Treeitem.class, matchMode);
+    public static Treenode findNode(Tree tree, String path, boolean create, MatchMode matchMode) {
+        return findNode(tree, path, create, Treenode.class, matchMode);
     }
     
     /**
@@ -144,13 +140,13 @@ public class TreeUtil {
      * @param caseSensitive If true, match by exact case.
      * @return The node whose label matches that specified.
      */
-    public static Treeitem findNodeByLabel(Treechildren parent, String label, boolean create,
-                                           Class<? extends Treeitem> clazz, boolean caseSensitive) {
-        Treeitem item = null;
+    public static Treenode findNodeByLabel(Treechildren parent, String label, boolean create,
+                                           Class<? extends Treenode> clazz, boolean caseSensitive) {
+        Treenode item = null;
         
         for (Component comp : parent.getChildren()) {
-            if (comp instanceof Treeitem) {
-                item = (Treeitem) comp;
+            if (comp instanceof Treenode) {
+                item = (Treenode) comp;
                 
                 if (caseSensitive ? item.getLabel().equals(label) : item.getLabel().equalsIgnoreCase(label)) {
                     return item;
@@ -181,8 +177,8 @@ public class TreeUtil {
      * @param caseSensitive If true, match is case-sensitive.
      * @return The matching tree item, or null if not found.
      */
-    public static Treeitem findNodeByLabel(Tree tree, String label, boolean caseSensitive) {
-        for (Treeitem item : tree.getItems()) {
+    public static Treenode findNodeByLabel(Tree tree, String label, boolean caseSensitive) {
+        for (Treenode item : tree.getItems()) {
             if (caseSensitive ? label.equals(item.getLabel()) : label.equalsIgnoreCase(item.getLabel())) {
                 return item;
             }
@@ -200,7 +196,7 @@ public class TreeUtil {
      * @param useLabels If true, use the labels as identifiers; otherwise, use indexes.
      * @return The path of the node as described.
      */
-    public static String getPath(Treeitem item, boolean useLabels) {
+    public static String getPath(Treenode item, boolean useLabels) {
         StringBuilder sb = new StringBuilder();
         boolean needsDelim = false;
         
@@ -230,7 +226,7 @@ public class TreeUtil {
     /**
      * Alphabetically sorts children under the specified parent.
      * 
-     * @param parent Parent node (Treechildren) whose child nodes (Treeitem) are to be sorted.
+     * @param parent Parent node (Treechildren) whose child nodes (Treenode) are to be sorted.
      * @param recurse If true, sorting is recursed through all children.
      */
     public static void sort(Treechildren parent, boolean recurse) {
@@ -242,8 +238,8 @@ public class TreeUtil {
         int size = parent.getChildren().size();
         
         while (i < size) {
-            Treeitem item1 = (Treeitem) parent.getChildren().get(i - 1);
-            Treeitem item2 = (Treeitem) parent.getChildren().get(i);
+            Treenode item1 = (Treenode) parent.getChildren().get(i - 1);
+            Treenode item2 = (Treenode) parent.getChildren().get(i);
             
             if (compare(item1, item2) > 0) {
                 item2.detach();
@@ -256,7 +252,7 @@ public class TreeUtil {
         
         if (recurse) {
             for (Object item : parent.getChildren()) {
-                sort(((Treeitem) item).getTreechildren(), recurse);
+                sort(((Treenode) item).getTreechildren(), recurse);
             }
         }
     }
@@ -268,7 +264,7 @@ public class TreeUtil {
      * @param item2 Second tree item.
      * @return Result of the comparison.
      */
-    private static int compare(Treeitem item1, Treeitem item2) {
+    private static int compare(Treenode item1, Treenode item2) {
         String label1 = item1.getLabel();
         String label2 = item2.getLabel();
         return label1 == label2 ? 0 : label1 == null ? -1 : label2 == null ? -1 : label1.compareToIgnoreCase(label2);
@@ -298,7 +294,7 @@ public class TreeUtil {
         depth--;
         
         for (Object object : parent.getChildren()) {
-            Treeitem item = (Treeitem) object;
+            Treenode item = (Treenode) object;
             item.getTree().renderItem(item);
             Treechildren tc = item.getTreechildren();
             
@@ -316,8 +312,8 @@ public class TreeUtil {
      * @param text Text to find.
      * @return The first matching tree item, or null if none found.
      */
-    public static Treeitem search(Tree tree, String text) {
-        return search(tree, null, text, defaultTreeitemSearch);
+    public static Treenode search(Tree tree, String text) {
+        return search(tree, null, text, defaultTreenodeSearch);
     }
     
     /**
@@ -328,7 +324,7 @@ public class TreeUtil {
      * @param search Search logic.
      * @return The first matching tree item, or null if none found.
      */
-    public static Treeitem search(Tree tree, String text, ITreeitemSearch search) {
+    public static Treenode search(Tree tree, String text, ITreenodeSearch search) {
         return search(tree, null, text, search);
     }
     
@@ -339,8 +335,8 @@ public class TreeUtil {
      * @param text Text to find.
      * @return The first matching tree item after the starting item, or null if none found.
      */
-    public static Treeitem search(Treeitem start, String text) {
-        return search(start.getTree(), start, text, defaultTreeitemSearch);
+    public static Treenode search(Treenode start, String text) {
+        return search(start.getTree(), start, text, defaultTreenodeSearch);
     }
     
     /**
@@ -351,7 +347,7 @@ public class TreeUtil {
      * @param search Search logic.
      * @return The first matching tree item after the starting item, or null if none found.
      */
-    public static Treeitem search(Treeitem start, String text, ITreeitemSearch search) {
+    public static Treenode search(Treenode start, String text, ITreenodeSearch search) {
         return search(start.getTree(), start, text, search);
     }
     
@@ -364,11 +360,11 @@ public class TreeUtil {
      * @param search Search logic.
      * @return The first matching tree item after the last item, or null if none found.
      */
-    private static Treeitem search(Tree tree, Treeitem last, String text, ITreeitemSearch search) {
-        Iterator<Treeitem> it = last == null ? new TreeIterator(tree) : new TreeIterator(last);
+    private static Treenode search(Treeview tree, Treenode last, String text, ITreenodeSearch search) {
+        Iterator<Treenode> it = last == null ? new TreeIterator(tree) : new TreeIterator(last);
         
         while (it.hasNext()) {
-            Treeitem item = it.next();
+            Treenode item = it.next();
             
             if (!item.isLoaded()) {
                 tree.renderItem(item);
@@ -386,7 +382,7 @@ public class TreeUtil {
      * 
      * @param item The tree item.
      */
-    public static void makeVisible(Treeitem item) {
+    public static void makeVisible(Treenode item) {
         if (item == null) {
             return;
         }
@@ -417,14 +413,14 @@ public class TreeUtil {
             boolean visibleChildren = parent.getVisibleItemCount() > 0;
             
             if (visibleChildren) {
-                for (Component item : parent.getChildren()) {
-                    adjustVisibility(((Treeitem) item).getTreechildren());
+                for (BaseComponent item : parent.getChildren()) {
+                    adjustVisibility(((Treenode) item).getTreechildren());
                 }
             }
             
-            if (parent.getParent() instanceof Treeitem) {
+            if (parent.getParent() instanceof Treenode) {
                 adjustVisibility(parent, visibleChildren);
-                adjustVisibility((Treeitem) parent.getParent(), visibleChildren);
+                adjustVisibility((Treenode) parent.getParent(), visibleChildren);
                 adjustVisibility(parent.getLinkedTreerow(), visibleChildren);
             }
         }

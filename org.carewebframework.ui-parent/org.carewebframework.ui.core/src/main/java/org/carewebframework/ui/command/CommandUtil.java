@@ -25,51 +25,19 @@
  */
 package org.carewebframework.ui.command;
 
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.carewebframework.ui.action.IAction;
 import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.event.KeyCode;
 import org.carewebframework.web.event.KeyEvent;
 
 /**
  * Static utility class.
  */
 public class CommandUtil {
-    
-    private static final Map<Integer, String> specialKeys = new HashMap<>();
-    
-    /*
-     * Initializes map for converting key code to symbolic form.
-     */
-    static {
-        specialKeys.put(KeyEvent.F1, "f1");
-        specialKeys.put(KeyEvent.F2, "f2");
-        specialKeys.put(KeyEvent.F3, "f3");
-        specialKeys.put(KeyEvent.F4, "f4");
-        specialKeys.put(KeyEvent.F5, "f5");
-        specialKeys.put(KeyEvent.F6, "f6");
-        specialKeys.put(KeyEvent.F7, "f7");
-        specialKeys.put(KeyEvent.F8, "f8");
-        specialKeys.put(KeyEvent.F9, "f9");
-        specialKeys.put(KeyEvent.F10, "f10");
-        specialKeys.put(KeyEvent.F11, "f11");
-        specialKeys.put(KeyEvent.F12, "f12");
-        specialKeys.put(8, "bak");
-        specialKeys.put(KeyEvent.DELETE, "del");
-        specialKeys.put(KeyEvent.DOWN, "down");
-        specialKeys.put(KeyEvent.END, "end");
-        specialKeys.put(KeyEvent.HOME, "home");
-        specialKeys.put(KeyEvent.INSERT, "ins");
-        specialKeys.put(KeyEvent.LEFT, "left");
-        specialKeys.put(KeyEvent.PAGE_DOWN, "pgdn");
-        specialKeys.put(KeyEvent.PAGE_UP, "pgup");
-        specialKeys.put(KeyEvent.RIGHT, "right");
-        specialKeys.put(KeyEvent.UP, "up");
-    }
     
     /**
      * Given a key event, returns the symbolic representation of the typed key.
@@ -92,15 +60,31 @@ public class CommandUtil {
             sb.append('$');
         }
         
-        String specialKey = specialKeys.get(event.getKeyCode());
+        if (event.isMetaKey()) {
+            sb.append('~');
+        }
         
-        if (specialKey != null) {
-            sb.append('#').append(specialKey);
+        String symbolicName = KeyCode.getSymbolicName(event.getKeyCode());
+        
+        if (symbolicName != null) {
+            sb.append('#').append(toShortcut(symbolicName));
         } else {
             sb.append(Character.toLowerCase(event.getKeyCode()));
         }
         
         return sb.toString();
+    }
+    
+    private static String toShortcut(String symbolicName) {
+        if (symbolicName.startsWith("VK_")) {
+            symbolicName = symbolicName.substring(3);
+        }
+        
+        return symbolicName.toLowerCase();
+    }
+    
+    private static String toSymbolicName(String shortcut) {
+        return "VK_" + shortcut.toUpperCase();
     }
     
     /**
@@ -165,7 +149,7 @@ public class CommandUtil {
         }
         
         shortcut = shortcut.substring(1);
-        return specialKeys.values().contains(shortcut);
+        return KeyCode.getCode(toSymbolicName(shortcut)) > -1;
     }
     
     /**

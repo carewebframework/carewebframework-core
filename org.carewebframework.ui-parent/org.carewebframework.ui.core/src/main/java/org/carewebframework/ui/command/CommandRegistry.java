@@ -25,7 +25,6 @@
  */
 package org.carewebframework.ui.command;
 
-import java.awt.event.KeyEvent;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -33,6 +32,7 @@ import java.util.Map;
 import org.carewebframework.api.spring.SpringUtil;
 import org.carewebframework.web.component.BaseUIComponent;
 import org.carewebframework.web.event.Event;
+import org.carewebframework.web.event.KeyEvent;
 
 /**
  * Registry for commands.
@@ -113,9 +113,9 @@ public class CommandRegistry implements Iterable<Command> {
     }
     
     public void process(KeyEvent event) {
-        if (event.getReference() instanceof BaseUIComponent) {
+        if (event.getTarget() instanceof BaseUIComponent) {
             String shortcut = CommandUtil.getShortcut(event);
-            fireCommands(shortcut, event, (BaseUIComponent) event.getReference());
+            fireCommands(shortcut, event, (BaseUIComponent) event.getTarget());
         }
     }
     

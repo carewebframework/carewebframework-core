@@ -27,27 +27,26 @@ package org.carewebframework.ui.zk;
 
 import java.util.Iterator;
 
-import org.zkoss.zul.Tree;
-import org.zkoss.zul.Treechildren;
-import org.zkoss.zul.Treeitem;
+import org.carewebframework.web.component.Treenode;
+import org.carewebframework.web.component.Treeview;
 
 /**
  * Iterates over items in a tree in a depth first search. Is not susceptible to concurrent
  * modification errors if tree composition changes during iteration and can be started at any
  * arbitrary position within the tree.
  */
-public class TreeIterator implements Iterator<Treeitem> {
+public class TreeIterator implements Iterator<Treenode> {
     
-    private Treeitem last;
+    private Treenode last;
     
-    private Treeitem next;
+    private Treenode next;
     
     /**
      * Starts iterator at top of tree.
      * 
      * @param tree The tree.
      */
-    public TreeIterator(Tree tree) {
+    public TreeIterator(Treeview tree) {
         this(tree.getTreechildren());
     }
     
@@ -57,7 +56,7 @@ public class TreeIterator implements Iterator<Treeitem> {
      * @param treeChildren The tree children node.
      */
     public TreeIterator(Treechildren treeChildren) {
-        this.next = treeChildren == null ? null : (Treeitem) treeChildren.getFirstChild();
+        this.next = treeChildren == null ? null : (Treenode) treeChildren.getFirstChild();
     }
     
     /**
@@ -65,7 +64,7 @@ public class TreeIterator implements Iterator<Treeitem> {
      * 
      * @param last The last tree item.
      */
-    public TreeIterator(Treeitem last) {
+    public TreeIterator(Treenode last) {
         this.last = last;
     }
     
@@ -75,12 +74,12 @@ public class TreeIterator implements Iterator<Treeitem> {
      * @param item The reference tree item.
      * @return Next tree item or null if no more.
      */
-    private Treeitem nextItem(Treeitem item) {
+    private Treenode nextItem(Treenode item) {
         if (item == null) {
             return null;
         }
         
-        Treeitem next;
+        Treenode next;
         
         if (!item.isLoaded()) {
             item.getTree().renderItem(item);
@@ -89,17 +88,17 @@ public class TreeIterator implements Iterator<Treeitem> {
         Treechildren tc = item.getTreechildren();
         
         if (tc != null) {
-            next = (Treeitem) tc.getFirstChild();
+            next = (Treenode) tc.getFirstChild();
             
             if (next != null) {
                 return next;
             }
         }
         
-        next = (Treeitem) item.getNextSibling();
+        next = (Treenode) item.getNextSibling();
         
         while (next == null && (item = item.getParentItem()) != null) {
-            next = (Treeitem) item.getNextSibling();
+            next = (Treenode) item.getNextSibling();
         }
         
         return next;
@@ -110,7 +109,7 @@ public class TreeIterator implements Iterator<Treeitem> {
      * 
      * @return The next tree item.
      */
-    private Treeitem nextItem() {
+    private Treenode nextItem() {
         if (next == null) {
             next = nextItem(last);
         }
@@ -130,7 +129,7 @@ public class TreeIterator implements Iterator<Treeitem> {
      * Returns next tree item, advancing internal state to next item.
      */
     @Override
-    public Treeitem next() {
+    public Treenode next() {
         last = nextItem();
         next = null;
         return last;

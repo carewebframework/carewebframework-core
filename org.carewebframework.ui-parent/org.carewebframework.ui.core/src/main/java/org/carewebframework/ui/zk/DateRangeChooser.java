@@ -33,13 +33,13 @@ import org.carewebframework.common.DateRange;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.Listbox;
 import org.carewebframework.web.component.Listitem;
+import org.carewebframework.web.event.Event;
+import org.carewebframework.web.event.EventUtil;
 
 /**
  * Generic component for choosing date ranges.
  */
 public class DateRangeChooser extends Listbox {
-    
-    private static final long serialVersionUID = 1L;
     
     public static final String ON_SELECT_RANGE = "onSelectRange";
     
@@ -134,7 +134,7 @@ public class DateRangeChooser extends Listbox {
      * Removes all items (except for "custom") from the item list.
      */
     public void clear() {
-        List<Listitem> items = getChildren(Listitem.class);
+        List<?> items = getChildren();
         
         for (int i = items.size() - 1; i >= 0; i--) {
             if (items.get(i) != customItem) {
@@ -167,8 +167,7 @@ public class DateRangeChooser extends Listbox {
      * @return A Listitem with a matching label., or null if not found.
      */
     public Listitem findMatchingItem(String label) {
-        Iterable<?> iter;
-        for (BaseComponent item : getChild) {
+        for (Listitem item : getChildren(Listitem.class)) {
             if (label.equalsIgnoreCase(item.getLabel())) {
                 return item;
             }
@@ -199,7 +198,7 @@ public class DateRangeChooser extends Listbox {
         customItem.setVisible(allowCustom);
         
         if (!allowCustom) {
-            Component sibling;
+            BaseComponent sibling;
             
             while ((sibling = customItem.getNextSibling()) != null) {
                 removeChild(sibling);
@@ -223,7 +222,7 @@ public class DateRangeChooser extends Listbox {
      */
     public DateRange getSelectedRange() {
         Listitem selected = getSelectedItem();
-        return selected == null ? null : (DateRange) selected.getValue();
+        return selected == null ? null : (DateRange) selected.getData();
     }
     
     /**
@@ -264,7 +263,7 @@ public class DateRangeChooser extends Listbox {
             lastSelectedItem = selectedItem;
             
             if (!suppressEvent) {
-                Events.sendEvent(new Event(ON_SELECT_RANGE, this));
+                EventUtil.send(new Event(ON_SELECT_RANGE, this));
             }
         }
         

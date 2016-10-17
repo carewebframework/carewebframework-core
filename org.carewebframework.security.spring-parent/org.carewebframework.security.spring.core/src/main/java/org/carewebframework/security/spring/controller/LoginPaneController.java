@@ -31,35 +31,31 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-
 import org.carewebframework.api.security.ISecurityDomain;
 import org.carewebframework.api.security.SecurityDomainRegistry;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.security.spring.Constants;
-import org.carewebframework.ui.FrameworkWebSupport;
 import org.carewebframework.ui.zk.ZKUtil;
-
+import org.carewebframework.web.ancillary.IAutoWired;
+import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.component.BaseUIComponent;
+import org.carewebframework.web.component.Html;
+import org.carewebframework.web.component.Image;
+import org.carewebframework.web.component.Label;
+import org.carewebframework.web.component.Listbox;
+import org.carewebframework.web.component.Listitem;
+import org.carewebframework.web.component.Textbox;
+import org.carewebframework.web.core.WebUtil;
+import org.carewebframework.web.event.EventUtil;
 import org.springframework.security.authentication.CredentialsExpiredException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.savedrequest.SavedRequest;
 
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.HtmlBasedComponent;
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.util.GenericForwardComposer;
-import org.zkoss.zul.Html;
-import org.zkoss.zul.Image;
-import org.zkoss.zul.Label;
-import org.zkoss.zul.Listbox;
-import org.zkoss.zul.Listcell;
-import org.zkoss.zul.Listitem;
-import org.zkoss.zul.Textbox;
-
 /**
  * Controller for the login component.
  */
-public class LoginPaneController extends GenericForwardComposer<Component> {
+public class LoginPaneController implements IAutoWired {
     
     private enum DomainSelectionMode {
         ALLOW, DISALLOW, OPTIONAL
@@ -83,11 +79,11 @@ public class LoginPaneController extends GenericForwardComposer<Component> {
     
     private Label lblDomain;
     
-    private Component cmpDomainList;
+    private BaseUIComponent cmpDomainList;
     
-    private Component divDomain;
+    private BaseUIComponent divDomain;
     
-    private Component divInfo;
+    private BaseUIComponent divInfo;
     
     private Label lblHeader;
     
@@ -97,9 +93,9 @@ public class LoginPaneController extends GenericForwardComposer<Component> {
     
     private Html htmlInfo;
     
-    private Component loginPrompts;
+    private BaseUIComponent loginPrompts;
     
-    private Component loginRoot;
+    private BaseUIComponent loginRoot;
     
     private SecurityDomainRegistry securityDomainRegistry;
     
@@ -115,7 +111,7 @@ public class LoginPaneController extends GenericForwardComposer<Component> {
     
     private boolean autoLogin;
     
-    private Component pane;
+    private BaseUIComponent pane;
     
     /**
      * Initialize the login form.
@@ -123,9 +119,8 @@ public class LoginPaneController extends GenericForwardComposer<Component> {
      * @param comp The root component
      */
     @Override
-    public void doAfterCompose(Component comp) throws Exception {
-        super.doAfterCompose(comp);
-        pane = comp;
+    public void afterInitialized(BaseComponent comp) {
+        pane = (BaseUIComponent) comp;
         savedRequest = (SavedRequest) arg.get("savedRequest");
         AuthenticationException authError = (AuthenticationException) arg.get("authError");
         String loginFailureMessage = StrUtil.getLabel(Constants.LBL_LOGIN_ERROR);//reset back to default
@@ -139,8 +134,8 @@ public class LoginPaneController extends GenericForwardComposer<Component> {
         String username = (String) session.removeAttribute(Constants.DEFAULT_USERNAME);
         username = authError == null ? defaultUsername : username;
         showMessage(authError == null ? null : loginFailureMessage);
-        txtUsername.setText(username);
-        txtPassword.setText(defaultPassword);
+        txtUsername.setValue(username);
+        txtPassword.setValue(defaultPassword);
         
         if (StringUtils.isEmpty(username)) {
             txtUsername.setFocus(true);
@@ -184,11 +179,11 @@ public class LoginPaneController extends GenericForwardComposer<Component> {
             case 0:
                 showStatus(StrUtil.getLabel(Constants.LBL_LOGIN_NO_VALID_DOMAINS));
                 return;
-                
+            
             case 1:
                 setDomainSelectionMode(DomainSelectionMode.DISALLOW);
                 break;
-                
+            
             default:
                 setDomainSelectionMode(DomainSelectionMode.OPTIONAL);
                 break;
@@ -198,8 +193,8 @@ public class LoginPaneController extends GenericForwardComposer<Component> {
         
         for (ISecurityDomain securityDomain : securityDomains) {
             Listitem li = new Listitem();
-            li.setValue(securityDomain);
-            lstDomain.appendChild(li);
+            li.setData(securityDomain);
+            lstDomain.addChild(li);
             li.appendChild(new Listcell(securityDomain.getName()));
             
             if (!defaultSet) {
@@ -220,8 +215,8 @@ public class LoginPaneController extends GenericForwardComposer<Component> {
         
         if (authError == null && autoLogin) {
             // Do not use setVisible here as it prevents posting of credentials with some versions of ZK.
-            ((HtmlBasedComponent) comp).setStyle("display: none");
-            Events.echoEvent("onSubmit", comp, null);
+            ((BaseUIComponent) comp).addStyle("display", "none");
+            EventUtil.post("onSubmit", comp, null);
         }
         
     }
@@ -277,7 +272,7 @@ public class LoginPaneController extends GenericForwardComposer<Component> {
      */
     protected ISecurityDomain getSelectedSecurityDomain() {
         Listitem item = lstDomain.getSelectedItem();
-        return item == null ? null : (ISecurityDomain) item.getValue();
+        return item == null ? null : (ISecurityDomain) item.getData();
     }
     
     /**
@@ -298,12 +293,12 @@ public class LoginPaneController extends GenericForwardComposer<Component> {
         
         if (!username.isEmpty() && !password.isEmpty() && !securityDomainId.isEmpty()) {
             session.setAttribute(Constants.DEFAULT_SECURITY_DOMAIN, securityDomainId);
-            FrameworkWebSupport.setCookie(Constants.DEFAULT_SECURITY_DOMAIN, securityDomainId);
+            WebUtil.setCookie(Constants.DEFAULT_SECURITY_DOMAIN, securityDomainId);
             session.setAttribute(Constants.DEFAULT_USERNAME, username);
             txtUsername.setValue(securityDomainId + "\\" + username);
             showStatus(StrUtil.getLabel(Constants.LBL_LOGIN_PROGRESS));
             session.setAttribute(org.carewebframework.security.spring.Constants.SAVED_REQUEST, savedRequest);
-            Events.sendEvent("onSubmit", loginRoot.getRoot(), null);
+            EventUtil.send("onSubmit", loginRoot.getPage(), null);
         } else {
             showMessage(StrUtil.getLabel(Constants.LBL_LOGIN_REQUIRED_FIELDS));
             pane.setVisible(true);
@@ -316,8 +311,8 @@ public class LoginPaneController extends GenericForwardComposer<Component> {
      * @param text Message text to display.
      */
     private void showMessage(String text) {
-        lblMessage.setValue(text);
-        lblMessage.getParent().setVisible(!StringUtils.isEmpty(text));
+        lblMessage.setLabel(text);
+        ((BaseUIComponent) lblMessage.getParent()).setVisible(!StringUtils.isEmpty(text));
     }
     
     /**
@@ -326,7 +321,7 @@ public class LoginPaneController extends GenericForwardComposer<Component> {
      * @param text Status text to display.
      */
     private void showStatus(String text) {
-        lblStatus.setValue(text);
+        lblStatus.setLabel(text);
         loginPrompts.setVisible(false);
         lblStatus.setVisible(true);
     }
@@ -336,7 +331,7 @@ public class LoginPaneController extends GenericForwardComposer<Component> {
      */
     private void domainChanged() {
         ISecurityDomain securityDomain = getSelectedSecurityDomain();
-        lblDomain.setValue(securityDomain.getName());
+        lblDomain.setData(securityDomain.getName());
         String logoUrl = securityDomain.getAttribute(Constants.PROP_LOGIN_LOGO);
         imgDomain.setSrc(logoUrl == null ? defaultLogoUrl : logoUrl);
         setMessageText(securityDomain.getAttribute(Constants.PROP_LOGIN_HEADER), lblHeader, htmlHeader, null);
@@ -352,7 +347,7 @@ public class LoginPaneController extends GenericForwardComposer<Component> {
      * @param htmlText Component to display html.
      * @param parent If not null, parent will be hidden if text is empty.
      */
-    private void setMessageText(String value, Label plainText, Html htmlText, Component parent) {
+    private void setMessageText(String value, Label plainText, Html htmlText, BaseUIComponent parent) {
         value = StringUtils.trimToEmpty(value);
         boolean isHtml = StringUtils.startsWithIgnoreCase(value, "<html>");
         boolean notEmpty = !value.isEmpty();
@@ -366,7 +361,7 @@ public class LoginPaneController extends GenericForwardComposer<Component> {
         if (isHtml) {
             htmlText.setContent(value);
         } else {
-            plainText.setValue(value);
+            plainText.setLabel(value);
         }
     }
     
