@@ -345,29 +345,20 @@ public class CommonTest {
     @Test
     public void testObservedList() {
         List<String> list = new ArrayList<>();
-        final int[] ops = { 0, 0, 0, 0 };
+        final int[] ops = { 0, 0 };
         
         ObservedCollection<String> col = new ObservedCollection<>(list, new IObservedCollectionListener<String>() {
             
             @Override
-            public void afterAddElement(String element) {
+            public void onAddElement(String element) {
                 ops[0]++;
             }
             
             @Override
-            public void afterRemoveElement(String element) {
+            public void onRemoveElement(String element) {
                 ops[1]++;
             }
             
-            @Override
-            public void beforeAddElement(String element) {
-                ops[2]++;
-            }
-            
-            @Override
-            public void beforeRemoveElement(String element) {
-                ops[3]++;
-            }
         });
         
         col.add("ele1"); // ele1
@@ -381,8 +372,6 @@ public class CommonTest {
         col.clear();
         assertEquals("Add count does not match.", 5, ops[0]);
         assertEquals("Remove count does not match.", 5, ops[1]);
-        assertEquals("Before and after add counts don't match.", ops[0], ops[2]);
-        assertEquals("Before and after remove counts don't match.", ops[1], ops[3]);
     }
     
     @Test
