@@ -12,9 +12,13 @@ public class ObservedCollection<T> implements Collection<T> {
     
     public interface IObservedCollectionListener<T> {
         
-        void onAddElement(T element);
+        void beforeAddElement(T element);
         
-        void onRemoveElement(T element);
+        void afterAddElement(T element);
+        
+        void beforeRemoveElement(T element);
+        
+        void afterRemoveElement(T element);
     }
     
     private final Collection<T> delegate;
@@ -61,8 +65,9 @@ public class ObservedCollection<T> implements Collection<T> {
             
             @Override
             public void remove() {
+                listener.beforeRemoveElement(current);
                 iterator.remove();
-                listener.onRemoveElement(current);
+                listener.afterRemoveElement(current);
             }
             
         };
@@ -80,8 +85,10 @@ public class ObservedCollection<T> implements Collection<T> {
     
     @Override
     public boolean add(T e) {
+        listener.beforeAddElement(e);
+        
         if (delegate.add(e)) {
-            listener.onAddElement(e);
+            listener.afterAddElement(e);
             return true;
         }
         
@@ -91,8 +98,12 @@ public class ObservedCollection<T> implements Collection<T> {
     @SuppressWarnings("unchecked")
     @Override
     public boolean remove(Object o) {
+        if (delegate.contains(o)) {
+            listener.beforeRemoveElement((T) o);
+        }
+        
         if (delegate.remove(o)) {
-            listener.onRemoveElement((T) o);
+            listener.afterRemoveElement((T) o);
             return true;
         }
         
