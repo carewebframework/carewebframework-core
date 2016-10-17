@@ -41,6 +41,7 @@ import java.util.Map;
 import java.util.TimeZone;
 
 import org.carewebframework.common.DateUtil.TimeUnit;
+import org.carewebframework.common.ObservedCollection.IObservedCollectionListener;
 import org.carewebframework.common.Version.VersionPart;
 import org.junit.Test;
 
@@ -339,6 +340,38 @@ public class CommonTest {
         }
         
         assertEquals(2, strCount);
+    }
+    
+    @Test
+    public void testObservedList() {
+        List<String> list = new ArrayList<>();
+        final int[] ops = { 0, 0 };
+        
+        ObservedCollection<String> col = new ObservedCollection<>(list, new IObservedCollectionListener<String>() {
+            
+            @Override
+            public void onAddElement(String element) {
+                ops[0]++;
+            }
+            
+            @Override
+            public void onRemoveElement(String element) {
+                ops[1]++;
+            }
+            
+        });
+        
+        col.add("ele1"); // ele1
+        col.add("ele2"); // ele1, ele2
+        col.remove("ele1"); // ele2
+        col.addAll(Arrays.asList(new String[] { "ele3", "ele4", "ele5" })); // ele2, ele3, ele4, ele5
+        col.removeAll(Arrays.asList(new String[] { "ele1", "ele4" })); // ele2, ele3, ele5
+        col.retainAll(Arrays.asList(new String[] { "ele1", "ele3" })); // ele3
+        assertEquals("Add count does not match.", 5, ops[0]);
+        assertEquals("Remove count does not match.", 4, ops[1]);
+        col.clear();
+        assertEquals("Add count does not match.", 5, ops[0]);
+        assertEquals("Remove count does not match.", 5, ops[1]);
     }
     
     @Test
