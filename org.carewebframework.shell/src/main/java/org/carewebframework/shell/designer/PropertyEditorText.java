@@ -45,7 +45,7 @@ public class PropertyEditorText extends PropertyEditorBase {
     private Textbox textbox;
     
     public PropertyEditorText() throws Exception {
-        super(DesignConstants.RESOURCE_PREFIX + "PropertyEditorText.zul");
+        super(DesignConstants.RESOURCE_PREFIX + "PropertyEditorText.cwf");
     }
     
     @Override

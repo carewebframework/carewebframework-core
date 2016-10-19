@@ -55,7 +55,7 @@ public class HelpUtil {
     
     protected static final String IMAGES_ROOT = RESOURCE_PREFIX + "images/";
     
-    protected static final String VIEWER_URL = RESOURCE_PREFIX + "helpViewer.zul";
+    protected static final String VIEWER_URL = RESOURCE_PREFIX + "helpViewer.cwf";
     
     protected static final String VIEWER_ATTRIB = VIEWER_URL;
     

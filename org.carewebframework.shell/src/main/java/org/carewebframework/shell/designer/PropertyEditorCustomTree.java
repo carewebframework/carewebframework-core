@@ -233,7 +233,7 @@ public abstract class PropertyEditorCustomTree<T extends UIElementBase> extends 
      * @throws Exception Unspecified exception.
      */
     public PropertyEditorCustomTree(Class<T> childClass, String labelProperty, boolean hierarchical) throws Exception {
-        super(DesignConstants.RESOURCE_PREFIX + "PropertyEditorCustomTree.zul");
+        super(DesignConstants.RESOURCE_PREFIX + "PropertyEditorCustomTree.cwf");
         this.childClass = childClass;
         this.labelProperty = labelProperty;
         this.hierarchical = hierarchical;

@@ -43,7 +43,7 @@ public class TestForms extends CommonTest {
     
     @Test
     public void testForm() throws Exception {
-        Component root = ZKUtil.loadZulPage("~./org/carewebframework/ui/sharedforms/testForm.zul", null);
+        Component root = ZKUtil.loadZulPage("~./org/carewebframework/ui/sharedforms/testForm.cwf", null);
         TestController controller = (TestController) FrameworkController.getController(root);
         PluginContainer dummy = new PluginContainer();
         controller.onLoad(dummy);

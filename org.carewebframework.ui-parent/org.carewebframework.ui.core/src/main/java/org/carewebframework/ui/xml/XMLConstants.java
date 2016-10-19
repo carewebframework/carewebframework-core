@@ -34,7 +34,7 @@ public class XMLConstants {
     
     protected static final String RESOURCE_PATH = ZKUtil.getResourcePath(XMLConstants.class);
     
-    protected static final String VIEW_DIALOG = RESOURCE_PATH + "XMLViewer.zul";
+    protected static final String VIEW_DIALOG = RESOURCE_PATH + "XMLViewer.cwf";
     
     protected static final String STYLE_TAG = "cwf-xml-tag";
     

@@ -93,7 +93,7 @@ public class DateRangeDialog extends Window {
         DateRangeDialog dlg = null;
         
         try {
-            dlg = (DateRangeDialog) ZKUtil.loadZulPage(Constants.RESOURCE_PREFIX + "dateRangeDialog.zul", null);
+            dlg = (DateRangeDialog) ZKUtil.loadZulPage(Constants.RESOURCE_PREFIX + "dateRangeDialog.cwf", null);
             dlg.startDefault = startDefault;
             dlg.endDefault = endDefault;
             dlg.setPage(parent.getPage());

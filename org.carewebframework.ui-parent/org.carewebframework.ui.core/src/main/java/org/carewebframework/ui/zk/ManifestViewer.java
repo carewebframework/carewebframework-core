@@ -295,7 +295,7 @@ public class ManifestViewer extends FrameworkController {
     private static void execute(ManifestItem manifestItem) {
         Map<Object, Object> args = new HashMap<>();
         args.put("manifestItem", manifestItem);
-        PopupDialog.popup(Constants.RESOURCE_PREFIX + "manifestViewer.zul", args, true, false, true);
+        PopupDialog.popup(Constants.RESOURCE_PREFIX + "manifestViewer.cwf", args, true, false, true);
     }
     
     /**

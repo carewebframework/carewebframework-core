@@ -45,7 +45,7 @@ import org.carewebframework.web.component.Window;
  */
 public class LayoutPrompt extends Window {
     
-    private static final String DIALOG = DesignConstants.RESOURCE_PREFIX + "LayoutPrompt.zul";
+    private static final String DIALOG = DesignConstants.RESOURCE_PREFIX + "LayoutPrompt.cwf";
     
     private Radiogroup radioGroup;
     

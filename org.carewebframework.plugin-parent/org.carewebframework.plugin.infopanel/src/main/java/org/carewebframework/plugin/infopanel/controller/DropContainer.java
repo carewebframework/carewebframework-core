@@ -30,11 +30,12 @@ import java.util.List;
 import org.carewebframework.plugin.infopanel.model.IActionTarget;
 import org.carewebframework.plugin.infopanel.model.IInfoPanel.Action;
 import org.carewebframework.plugin.infopanel.service.InfoPanelService;
-import org.carewebframework.ui.zk.DropUtil;
-import org.carewebframework.ui.zk.IDropRenderer;
 import org.carewebframework.ui.zk.ZKUtil;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.Window;
+import org.carewebframework.web.dragdrop.DropUtil;
+import org.carewebframework.web.dragdrop.IDropRenderer;
+import org.carewebframework.web.event.DropEvent;
 
 /**
  * Container for receiving components rendered by drop renderer.
@@ -43,7 +44,7 @@ public class DropContainer extends Window implements IActionTarget {
     
     private static final String SCLASS = "cwf-infopanel-container";
     
-    private static final String TEMPLATE = "~./org/carewebframework/plugin/infopanel/dropContainer.zul";
+    private static final String TEMPLATE = "~./org/carewebframework/plugin/infopanel/dropContainer.cwf";
     
     private List<ActionListener> actionListeners;
     
@@ -96,9 +97,9 @@ public class DropContainer extends Window implements IActionTarget {
         DropContainer dc = (DropContainer) ZKUtil.loadZulPage(TEMPLATE, null);
         dc.actionListeners = actionListeners;
         dc.setTitle(title);
-        dc.setDroppable(SCLASS);
-        dc.setDraggable(SCLASS);
-        dc.getPanelchildren().appendChild(cmpt);
+        dc.setDropid(SCLASS);
+        dc.setDragid(SCLASS);
+        dc.addChild(cmpt);
         dc.moveToTop(dropRoot);
         ActionListener.bindActionListeners(dc, actionListeners);
         return dc;
@@ -113,7 +114,7 @@ public class DropContainer extends Window implements IActionTarget {
     public void doAction(Action action) {
         switch (action) {
             case REMOVE:
-                onClose();
+                close();
                 break;
             
             case HIDE:
@@ -153,7 +154,7 @@ public class DropContainer extends Window implements IActionTarget {
     public void moveToTop(BaseComponent dropRoot) {
         if (dropRoot != null) {
             dropRoot.addChild(this, 0);
-            Clients.scrollIntoView(this);
+            this.scrollIntoView(false);
         }
     }
     
@@ -163,7 +164,7 @@ public class DropContainer extends Window implements IActionTarget {
      * @param event The drop event.
      */
     public void onDrop(DropEvent event) {
-        BaseComponent dragged = event.getDragged();
+        BaseComponent dragged = event.getRelatedTarget();
         
         if (dragged instanceof DropContainer) {
             getParent().addChild(dragged, this.indexOf());

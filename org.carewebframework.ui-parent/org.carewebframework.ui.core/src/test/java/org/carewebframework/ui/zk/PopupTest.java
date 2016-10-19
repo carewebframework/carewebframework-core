@@ -34,7 +34,7 @@ public class PopupTest extends Window {
     public void onTest() throws Exception {
         PopupDialog popup = new PopupDialog(null, "Test Popup");
         setSizable(false);
-        ZKUtil.loadZulPage(ZKUtil.getResourcePath(PopupTest.class) + "testPopup2.zul", popup);
+        ZKUtil.loadZulPage(ZKUtil.getResourcePath(PopupTest.class) + "testPopup2.cwf", popup);
         popup.addForward("onTest", this, null);
         popup.show();
     }

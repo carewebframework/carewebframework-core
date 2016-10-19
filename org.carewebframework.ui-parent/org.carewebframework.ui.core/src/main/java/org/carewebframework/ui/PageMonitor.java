@@ -109,7 +109,7 @@ public class PageMonitor extends Thread {
      * Path to the zul code that will be used to display the count down.
      */
     private static final String DESKTOP_TIMEOUT_ZUL = org.carewebframework.ui.zk.Constants.RESOURCE_PREFIX
-            + "pageTimeoutWarning.zul";
+            + "pageTimeoutWarning.cwf";
     
     /**
      * Events that will not reset keepalive timer.

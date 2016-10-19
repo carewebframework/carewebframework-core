@@ -31,6 +31,8 @@ import org.apache.commons.lang.time.FastDateFormat;
 import org.carewebframework.common.DateUtil;
 import org.carewebframework.shell.plugins.PluginContainer;
 import org.carewebframework.shell.plugins.PluginController;
+import org.carewebframework.web.annotation.EventHandler;
+import org.carewebframework.web.annotation.WiredComponent;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.Label;
 import org.carewebframework.web.component.Timer;
@@ -40,8 +42,10 @@ import org.carewebframework.web.component.Timer;
  */
 public class MainController extends PluginController {
     
+    @WiredComponent
     private Label lblCurrentTime;
     
+    @WiredComponent
     private Timer timer;
     
     private String format;
@@ -56,7 +60,8 @@ public class MainController extends PluginController {
         timer.start();
     }
     
-    public void onTimer$timer() {
+    @EventHandler(value = "timer", target = "@timer")
+    public void onTimer() {
         updateTime();
     }
     

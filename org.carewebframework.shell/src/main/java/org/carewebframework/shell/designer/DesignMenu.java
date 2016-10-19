@@ -72,7 +72,7 @@ public class DesignMenu extends Menu implements INamespace {
         
         try {
             designMenu = null;
-            PageDefinition def = ZKUtil.loadCachedPageDefinition(DesignConstants.RESOURCE_PREFIX + "DesignMenu.zul");
+            PageDefinition def = ZKUtil.loadCachedPageDefinition(DesignConstants.RESOURCE_PREFIX + "DesignMenu.cwf");
             designMenu = (DesignMenu) Executions.createComponents(def, null, null);
             designMenu.init(owner);
         } catch (Exception e) {

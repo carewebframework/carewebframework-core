@@ -72,7 +72,7 @@ public class HelpIndexTab extends HelpTab implements ListitemRenderer<HelpTopic>
      * @param viewType The help view type.
      */
     public HelpIndexTab(HelpViewer viewer, HelpViewType viewType) {
-        super(viewer, viewType, "helpIndexTab.zul");
+        super(viewer, viewType, "helpIndexTab.cwf");
         lstTopics.setItemRenderer(this);
     }
     

@@ -160,7 +160,7 @@ public class AddComponent extends Window {
         
         try {
             dlg = (AddComponent) PopupDialog.popup(
-                ZKUtil.loadCachedPageDefinition(DesignConstants.RESOURCE_PREFIX + "AddComponent.zul"), null, true, true,
+                ZKUtil.loadCachedPageDefinition(DesignConstants.RESOURCE_PREFIX + "AddComponent.cwf"), null, true, true,
                 false);
             dlg.init(parentElement, createChild);
             dlg.doModal();

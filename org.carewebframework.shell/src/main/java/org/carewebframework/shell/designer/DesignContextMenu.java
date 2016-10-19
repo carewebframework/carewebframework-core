@@ -103,7 +103,7 @@ public class DesignContextMenu extends Menupopup implements INamespace {
         DesignContextMenu contextMenu = null;
         
         try {
-            PageDefinition def = PageParser.getInstance().parse(DesignConstants.RESOURCE_PREFIX + "DesignContextMenu.zul");
+            PageDefinition def = PageParser.getInstance().parse(DesignConstants.RESOURCE_PREFIX + "DesignContextMenu.cwf");
             contextMenu = (DesignContextMenu) def.materialize(null);
             WiredComponentScanner.wire(contextMenu, contextMenu);
             contextMenu.mnuHeader.setImage(DesignConstants.DESIGN_ICON_ACTIVE);

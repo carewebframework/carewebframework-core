@@ -225,7 +225,7 @@ public class SandboxController extends PluginController implements ApplicationCo
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) {
         try {
-            for (Resource resource : applicationContext.getResources("classpath*:**/*.zul")) {
+            for (Resource resource : applicationContext.getResources("classpath*:**/*.cwf")) {
                 model.add(resource);
             }
         } catch (Exception e) {

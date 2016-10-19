@@ -53,7 +53,7 @@ public class SessionController extends FrameworkController implements ISessionUp
     
     private static final long serialVersionUID = 1L;
     
-    private static final String DIALOG = ZKUtil.getResourcePath(SessionController.class) + "session.zul";
+    private static final String DIALOG = ZKUtil.getResourcePath(SessionController.class) + "session.cwf";
     
     private String sessionId;
     

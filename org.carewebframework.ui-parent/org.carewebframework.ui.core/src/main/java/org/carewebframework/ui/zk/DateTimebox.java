@@ -308,7 +308,7 @@ public class DateTimebox extends Bandbox implements IdSpace {
     public void onCreate() {
         Bandpopup bp = new Bandpopup();
         appendChild(bp);
-        PageDefinition def = ZKUtil.loadCachedPageDefinition(Constants.RESOURCE_PREFIX + "dateTimebox.zul");
+        PageDefinition def = ZKUtil.loadCachedPageDefinition(Constants.RESOURCE_PREFIX + "dateTimebox.cwf");
         Executions.createComponents(def, bp, null);
         ZKUtil.wireController(this);
         datebox.setTimeZone(timezone);

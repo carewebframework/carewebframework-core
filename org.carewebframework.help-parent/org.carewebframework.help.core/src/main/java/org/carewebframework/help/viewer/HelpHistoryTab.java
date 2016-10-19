@@ -52,7 +52,7 @@ public class HelpHistoryTab extends HelpTab implements ListitemRenderer<HelpTopi
      * @param viewType The view type.
      */
     public HelpHistoryTab(HelpViewer viewer, HelpViewType viewType) {
-        super(viewer, viewType, "helpHistoryTab.zul");
+        super(viewer, viewType, "helpHistoryTab.cwf");
         history = viewer.getHistory();
         lstHistory.setItemRenderer(this);
         lstHistory.setModel(history.getItems());

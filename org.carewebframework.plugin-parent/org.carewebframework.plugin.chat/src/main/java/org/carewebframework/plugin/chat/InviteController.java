@@ -34,7 +34,6 @@ import javax.swing.ListModel;
 import org.carewebframework.api.messaging.IPublisherInfo;
 import org.carewebframework.ui.FrameworkController;
 import org.carewebframework.ui.zk.PopupDialog;
-import org.carewebframework.ui.zk.RowComparator;
 import org.carewebframework.ui.zk.ZKUtil;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.Button;
@@ -48,7 +47,7 @@ public class InviteController extends FrameworkController {
     
     private static final long serialVersionUID = 1L;
     
-    private static final String DIALOG = ZKUtil.getResourcePath(InviteController.class) + "invite.zul";
+    private static final String DIALOG = ZKUtil.getResourcePath(InviteController.class) + "invite.cwf";
     
     private static final String ATTR_HIDE = InviteController.class.getName() + ".HIDE_ACTIVE";
     

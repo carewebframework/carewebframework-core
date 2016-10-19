@@ -102,7 +102,7 @@ public class HelpSearchTab extends HelpTab implements ListitemRenderer<HelpSearc
      * @param viewType The view type.
      */
     public HelpSearchTab(HelpViewer viewer, HelpViewType viewType) {
-        super(viewer, viewType, "helpSearchTab.zul");
+        super(viewer, viewType, "helpSearchTab.cwf");
         lstSrchResults.setItemRenderer(this);
     }
     

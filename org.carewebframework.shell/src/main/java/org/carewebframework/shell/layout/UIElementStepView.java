@@ -108,7 +108,7 @@ public class UIElementStepView extends UIElementCWFBase {
      */
     @Override
     protected String getTemplateUrl() {
-        return LayoutConstants.RESOURCE_PREFIX + "UIElementStepView.zul";
+        return LayoutConstants.RESOURCE_PREFIX + "UIElementStepView.cwf";
     }
     
     /**

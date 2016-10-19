@@ -194,7 +194,7 @@ public class AboutDialog extends FrameworkController {
      */
     private static void showDialog(AboutParams params) {
         try {
-            PageDefinition pageDefinition = PageParser.getInstance().parse(Constants.RESOURCE_PREFIX + "aboutDialog.zul");
+            PageDefinition pageDefinition = PageParser.getInstance().parse(Constants.RESOURCE_PREFIX + "aboutDialog.cwf");
             PopupDialog.popup(pageDefinition, params, true, false, true);
         } catch (Exception e) {
             PromptDialog.showError(ZKUtil.formatExceptionForDisplay(e));

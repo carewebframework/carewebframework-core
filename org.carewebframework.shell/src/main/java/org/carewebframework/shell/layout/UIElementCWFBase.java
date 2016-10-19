@@ -158,14 +158,14 @@ public abstract class UIElementCWFBase extends UIElementBase {
      * @return The template URL.
      */
     protected String getTemplateUrl() {
-        return "~./" + getClass().getName().replace(".", "/") + ".zul";
+        return "~./" + getClass().getName().replace(".", "/") + ".cwf";
     }
     
     /**
      * Create wrapped component(s) from a template (a zul page). Performs autowiring of variables
      * and events. The template URL is derived from the class name. For example, if the class is
      * "org.carewebframework.xxx.Clazz", the template URL is assumed to be
-     * "~./org/carewebframework/xxx/Clazz.zul".
+     * "~./org/carewebframework/xxx/Clazz.cwf".
      * 
      * @return Top level component.
      */

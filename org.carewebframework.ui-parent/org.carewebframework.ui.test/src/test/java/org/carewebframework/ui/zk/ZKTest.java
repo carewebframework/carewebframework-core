@@ -44,7 +44,7 @@ public class ZKTest extends CommonTest {
     
     @Test
     public void focusFirstTest() {
-        Component root = ZKUtil.loadZulPage(RESOURCE_PATH + "testFocusFirst.zul", null);
+        Component root = ZKUtil.loadZulPage(RESOURCE_PATH + "testFocusFirst.cwf", null);
         focusFirstTest(root, "test1", "test1_correct");
         focusFirstTest(root, "test2", "test2_correct");
         focusFirstTest(root, "test3", null);

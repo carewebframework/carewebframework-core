@@ -136,7 +136,7 @@ public class LayoutManager extends Window {
         LayoutManager dlg = null;
         
         try {
-            dlg = (LayoutManager) PopupDialog.popup(ZKUtil.loadCachedPageDefinition(RESOURCE_PREFIX + "LayoutManager.zul"),
+            dlg = (LayoutManager) PopupDialog.popup(ZKUtil.loadCachedPageDefinition(RESOURCE_PREFIX + "LayoutManager.cwf"),
                 null, true, true, false);
             return dlg.show(manage, deflt);
         } catch (Exception e) {

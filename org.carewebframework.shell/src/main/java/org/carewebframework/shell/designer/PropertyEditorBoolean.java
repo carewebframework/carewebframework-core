@@ -43,7 +43,7 @@ public class PropertyEditorBoolean extends PropertyEditorBase {
      * @throws Exception Unspecified exception.
      */
     public PropertyEditorBoolean() throws Exception {
-        super(DesignConstants.RESOURCE_PREFIX + "PropertyEditorBoolean.zul");
+        super(DesignConstants.RESOURCE_PREFIX + "PropertyEditorBoolean.cwf");
     }
     
     @Override

@@ -63,7 +63,7 @@ public class LoginPaneController implements IAutoWired {
     
     private static final long serialVersionUID = 1L;
     
-    protected static final String DIALOG_LOGIN_PANE = ZKUtil.getResourcePath(LoginPaneController.class) + "loginPane.zul";
+    protected static final String DIALOG_LOGIN_PANE = ZKUtil.getResourcePath(LoginPaneController.class) + "loginPane.cwf";
     
     protected Listbox lstDomain;
     

@@ -53,7 +53,7 @@ public class Constants {
     
     public static final String DEFAULT_USERNAME = "@defaultUsername";
     
-    public static final String DIALOG_ACCESS_DENIED = RESOURCE_PREFIX + "accessDenied.zul";
+    public static final String DIALOG_ACCESS_DENIED = RESOURCE_PREFIX + "accessDenied.cwf";
     
     // Logout constants
     

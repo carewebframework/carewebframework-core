@@ -146,7 +146,7 @@ public class PropertyGrid extends Window {
      * @throws Exception Unspecified exception.
      */
     public static PropertyGrid create(UIElementBase target, BaseComponent parent, boolean embedded) throws Exception {
-        PageDefinition def = PageParser.getInstance().parse(DesignConstants.RESOURCE_PREFIX + "PropertyGrid.zul");
+        PageDefinition def = PageParser.getInstance().parse(DesignConstants.RESOURCE_PREFIX + "PropertyGrid.cwf");
         PropertyGrid propertyGrid = (PropertyGrid) PopupDialog.popup(def, null, !embedded, true, false);
         propertyGrid.init(target, parent, embedded);
         

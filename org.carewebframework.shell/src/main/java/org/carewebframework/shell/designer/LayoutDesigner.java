@@ -48,7 +48,7 @@ import org.carewebframework.web.event.EventUtil;
  */
 public class LayoutDesigner extends Window implements IAutoWired {
     
-    private static final String ZUL_PAGE = DesignConstants.RESOURCE_PREFIX + "LayoutDesigner.zul";
+    private static final String ZUL_PAGE = DesignConstants.RESOURCE_PREFIX + "LayoutDesigner.cwf";
     
     private static final String ATTR_BRING_TO_FRONT = ZUL_PAGE + ".BTF";
     

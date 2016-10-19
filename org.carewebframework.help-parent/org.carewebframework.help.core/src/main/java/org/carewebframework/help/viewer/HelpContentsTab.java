@@ -56,7 +56,7 @@ public class HelpContentsTab extends HelpTab {
      * @param viewType The view type.
      */
     public HelpContentsTab(HelpViewer viewer, HelpViewType viewType) {
-        super(viewer, viewType, "helpContentsTab.zul");
+        super(viewer, viewType, "helpContentsTab.cwf");
     }
     
     /**
