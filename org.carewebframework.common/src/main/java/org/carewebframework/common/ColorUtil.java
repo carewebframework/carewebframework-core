@@ -75,7 +75,7 @@ public class ColorUtil {
             { "SeaShell", "#FFF5EE" }, { "Cornsilk", "#FFF8DC" }, { "LemonChiffon", "#FFFACD" },
             { "FloralWhite", "#FFFAF0" }, { "Snow", "#FFFAFA" }, { "Yellow", "#FFFF00" }, { "LightYellow", "#FFFFE0" },
             { "Ivory", "#FFFFF0" }, { "White", "#FFFFFF" } };
-            
+    
     private static final Map<String, String> name2color = new HashMap<>(NAMED_COLORS.length);
     
     private static final Map<String, String> color2name = new HashMap<>(NAMED_COLORS.length);
@@ -140,6 +140,18 @@ public class ColorUtil {
         } catch (Exception e) {
             return dflt;
         }
+    }
+    
+    /**
+     * Converts a color to a web-friendly string format.
+     * 
+     * @param value The color value to convert.
+     * @return The converted value.
+     */
+    public static String toString(Color value) {
+        String rgb = "#" + Integer.toHexString(value.getRGB() | 0xFF000000).substring(2);
+        String name = getNameFromRGB(rgb);
+        return name == null ? rgb : name;
     }
     
     /**
