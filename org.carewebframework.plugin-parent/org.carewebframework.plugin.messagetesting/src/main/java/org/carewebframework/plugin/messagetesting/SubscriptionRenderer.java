@@ -25,16 +25,17 @@
  */
 package org.carewebframework.plugin.messagetesting;
 
-import org.carewebframework.ui.zk.AbstractListitemRenderer;
-import org.zkoss.zul.Listitem;
+import org.carewebframework.web.component.Listitem;
+import org.carewebframework.web.model.IComponentRenderer;
 
-public class SubscriptionRenderer extends AbstractListitemRenderer<String, Object> {
+public class SubscriptionRenderer implements IComponentRenderer<Listitem, String> {
     
     @Override
-    protected void renderItem(Listitem item, String channel) {
-        item.setLabel(channel);
-        item.setSelectable(true);
+    public Listitem render(String channel) {
+        Listitem item = new Listitem(channel);
+        //item.setSelectable(true);
         item.setSelected(true);
+        return item;
     }
     
 }

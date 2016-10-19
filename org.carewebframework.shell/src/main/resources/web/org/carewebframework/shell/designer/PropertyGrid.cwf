@@ -7,13 +7,13 @@
 		use="org.carewebframework.shell.designer.PropertyGrid">
 		<splitterview horizontal="false" vflex="1">
 			<splitterpane relativeSize="75">
-				<grid id="gridProperties" width="100%" vflex="true"
+				<grid name="gridProperties" width="100%" vflex="true"
 					sclass="cwf-propertygrid-grid">
 					<columns sizable="true">
-						<column id="colProperty"
+						<column name="colProperty"
 							label="${labels.cwf.shell.designer.property.grid.column.name}"
 							style="text-align:center" width="50%" />
-						<column id="colValue"
+						<column name="colValue"
 							label="${labels.cwf.shell.designer.property.grid.column.value}"
 							style="text-align:center" width="50%" />
 					</columns>
@@ -22,27 +22,27 @@
 			</splitterpane>
 			<splitterpane sclass="cwf-propertygrid-info">
 				<groupbox closable="false" hflex="1" vflex="1">
-					<caption id="capPropertyName"
+					<caption name="capPropertyName"
 						label="${labels.cwf.shell.designer.property.grid.gbox.caption}" />
 					<span zclass="help-block" style="margin:0">
-						<label id="lblPropertyInfo" multiline="true" />
+						<label name="lblPropertyInfo" multiline="true" />
 					</span>
 				</groupbox>
 			</splitterpane>
 		</splitterview>
 		<div zclass="panel-footer">
-			<div zclass="btn-toolbar" id="toolbar" align="end">
-				<button id="btnApply" zclass="btn"
+			<div zclass="btn-toolbar" name="toolbar" align="end">
+				<button name="btnApply" zclass="btn"
 					sclass="btn-default btn-sm"
 					label="${labels.cwf.shell.designer.property.grid.btn.apply.label}" />
-				<button id="btnRestore" zclass="btn"
+				<button name="btnRestore" zclass="btn"
 					sclass="btn-default btn-sm"
 					label="${labels.cwf.shell.designer.property.grid.btn.restore.label}" />
 				<space />
-				<button id="btnOK" zclass="btn"
+				<button name="btnOK" zclass="btn"
 					sclass="btn-success btn-sm"
 					label="${labels.cwf.shell.designer.property.grid.btn.ok.label}" />
-				<button id="btnCancel" zclass="btn"
+				<button name="btnCancel" zclass="btn"
 					sclass="btn-danger btn-sm"
 					label="${labels.cwf.shell.designer.property.grid.btn.cancel.label}" />
 			</div>

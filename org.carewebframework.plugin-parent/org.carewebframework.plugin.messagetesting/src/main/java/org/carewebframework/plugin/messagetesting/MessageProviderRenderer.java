@@ -26,17 +26,17 @@
 package org.carewebframework.plugin.messagetesting;
 
 import org.carewebframework.api.messaging.IMessageProducer;
-import org.carewebframework.ui.zk.AbstractListitemRenderer;
-import org.zkoss.zul.Listitem;
+import org.carewebframework.web.component.Listitem;
+import org.carewebframework.web.model.IComponentRenderer;
 
-public class MessageProviderRenderer extends AbstractListitemRenderer<IMessageProducer, Object> {
+public class MessageProviderRenderer implements IComponentRenderer<Listitem, IMessageProducer> {
     
     @Override
-    protected void renderItem(Listitem item, IMessageProducer producer) {
-        String name = producer.getClass().getName();
-        item.setLabel(name);
-        item.setSelectable(true);
+    public Listitem render(IMessageProducer producer) {
+        Listitem item = new Listitem(producer.getClass().getName());
+        //item.setSelectable(true);
         item.setSelected(true);
+        return item;
     }
     
 }

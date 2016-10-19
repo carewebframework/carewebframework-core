@@ -4,17 +4,17 @@
 	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
 
 	<window width="700px" title="${labels.cwf.manifest.viewer.title}"
-		mold="bootstrap" apply="${manifestViewer}">
-		<caption id="caption" />
-		<div id="printRoot" zclass="panel-body">
-			<listbox id="list" sclass="cwf-manifest-viewer" vflex="1">
+		mold="bootstrap" controller="${manifestViewer}">
+		<caption name="caption" />
+		<div name="printRoot" zclass="panel-body">
+			<listbox name="list" sclass="cwf-manifest-viewer" vflex="1">
 				<listhead sizable="true" />
 			</listbox>
 		</div>
 		<div zclass="panel-footer">
 			<div zclass="btn-toolbar">
 				<span style="float:left">
-					<textbox id="txtSearch"
+					<textbox name="txtSearch"
 						placeholder="${labels.cwf.manifest.viewer.txt.search.placeholder}"
 						focus="true" width="300px" />
 				</span>

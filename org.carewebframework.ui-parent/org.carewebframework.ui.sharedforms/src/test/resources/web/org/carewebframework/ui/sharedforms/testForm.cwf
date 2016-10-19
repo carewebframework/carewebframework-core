@@ -6,5 +6,5 @@
 	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
 
 	<div self="@insert(sharedFormsRoot)" height="100%" width="100%"
-		apply="org.carewebframework.ui.sharedforms.TestController" />
+		controller="org.carewebframework.ui.sharedforms.TestController" />
 </zk>

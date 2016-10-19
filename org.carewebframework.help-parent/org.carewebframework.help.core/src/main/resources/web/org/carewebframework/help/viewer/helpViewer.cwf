@@ -1,39 +1,39 @@
-<window xmlns:c="client" id="win" border="none" height="80%"
+<window xmlns:c="client" name="win" border="none" height="80%"
 	mold="bootstrap" use="org.carewebframework.help.viewer.HelpViewer">
 	<borderlayout>
 		<west size="33%" splittable="true">
 			<div height="100%" width="100%">
-				<tabbox id="tbxNavigator" height="100%"
+				<tabbox name="tbxNavigator" height="100%"
 					visible="false">
-					<tabs id="tbViews" />
-					<tabpanels id="tpViews" />
+					<tabs name="tbViews" />
+					<tabpanels name="tpViews" />
 				</tabbox>
-				<label id="lblLoading"
+				<label name="lblLoading"
 					sclass="z-toolbar cwf-help-viewer-loading" value="Loading..." />
 			</div>
 		</west>
 		<center>
 			<div width="100%" height="100%">
 				<toolbar sclass="cwf-help-viewer-navbar">
-					<toolbarbutton id="btnPrevious" zclass="btn"
+					<toolbarbutton name="btnPrevious" zclass="btn"
 						sclass="btn-sm btn-default"
 						iconSclass="glyphicon glyphicon-chevron-left"
 						tooltiptext="${labels.cwf.help.viewer.btn.previous.hint}" />
-					<toolbarbutton id="btnNext" zclass="btn"
+					<toolbarbutton name="btnNext" zclass="btn"
 						sclass="btn-sm btn-default"
 						iconSclass="glyphicon glyphicon-chevron-right"
 						tooltiptext="${labels.cwf.help.viewer.btn.next.hint}" />
 					<space />
-					<toolbarbutton id="btnOpen" zclass="btn"
+					<toolbarbutton name="btnOpen" zclass="btn"
 						sclass="btn-sm btn-default"
 						iconSclass="glyphicon glyphicon-new-window"
 						tooltiptext="${labels.cwf.help.viewer.btn.open.hint}" />
-					<toolbarbutton id="btnPrint" zclass="btn"
+					<toolbarbutton name="btnPrint" zclass="btn"
 						sclass="btn-sm btn-default" iconSclass="glyphicon glyphicon-print"
 						tooltiptext="${labels.cwf.help.viewer.btn.print.hint}"
 						c:onClick="jq(this.$f('iframe')).get(0).contentWindow.print();" />
 				</toolbar>
-				<iframe xmlns:ca="client/attribute" id="iframe" name="help_frame" 
+				<iframe xmlns:ca="client/attribute" name="iframe" name="help_frame" 
 					vflex="1" width="100%" ca:onload="zk.Widget.$(event.target.id).fire('onURLChange', this.src, {toServer:true})">
 				</iframe>
 			</div>

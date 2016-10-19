@@ -27,31 +27,26 @@ package org.carewebframework.plugin.userheader;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.carewebframework.api.context.UserContext;
 import org.carewebframework.api.context.UserContext.IUserContextEvent;
 import org.carewebframework.api.domain.IUser;
 import org.carewebframework.api.security.SecurityUtil;
 import org.carewebframework.shell.CareWebUtil;
 import org.carewebframework.shell.plugins.PluginController;
-
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.util.Clients;
-import org.zkoss.zul.A;
-import org.zkoss.zul.Label;
+import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.component.Hyperlink;
+import org.carewebframework.web.component.Label;
 
 /**
  * Controller for user header plugin.
  */
 public class MainController extends PluginController implements IUserContextEvent {
     
-    private static final long serialVersionUID = 1L;
-    
     private static final Log log = LogFactory.getLog(MainController.class);
     
     private Label userHeader;
     
-    private A password;
+    private Hyperlink password;
     
     private IUser currentUser;
     
@@ -80,8 +75,8 @@ public class MainController extends PluginController implements IUserContextEven
      * @see org.carewebframework.ui.FrameworkController#doAfterCompose(org.zkoss.zk.ui.Component)
      */
     @Override
-    public void doAfterCompose(Component comp) throws Exception {
-        super.doAfterCompose(comp);
+    public void afterInitialized(BaseComponent comp) {
+        super.afterInitialized(comp);
         committed();
     }
     
@@ -114,9 +109,8 @@ public class MainController extends PluginController implements IUserContextEven
             text += "@" + user.getSecurityDomain().getName();
         }
         
-        userHeader.setValue(text);
+        userHeader.setLabel(text);
         password.setVisible(SecurityUtil.getSecurityService().canChangePassword());
-        Clients.resize(root);
     }
     
     /**

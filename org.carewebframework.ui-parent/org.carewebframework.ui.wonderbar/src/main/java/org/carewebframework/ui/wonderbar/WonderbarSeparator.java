@@ -31,20 +31,8 @@ package org.carewebframework.ui.wonderbar;
  */
 public class WonderbarSeparator extends WonderbarAbstractItem {
     
-    private static final long serialVersionUID = 1L;
-    
     public WonderbarSeparator() {
         super();
-    }
-    
-    @Override
-    public String getWidgetClass() {
-        return "wonderbar.ext.WonderbarSeparator";
-    }
-    
-    @Override
-    public String getZclass() {
-        return _zclass == null ? "cwf-wonderbar-separator" : _zclass;
     }
     
 }

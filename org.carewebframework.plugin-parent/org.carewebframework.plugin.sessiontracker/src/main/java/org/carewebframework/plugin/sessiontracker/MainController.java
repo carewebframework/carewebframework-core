@@ -25,24 +25,19 @@
  */
 package org.carewebframework.plugin.sessiontracker;
 
-import java.util.List;
+import java.util.Collection;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.carewebframework.api.context.UserContext;
 import org.carewebframework.api.domain.IUser;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.shell.plugins.PluginContainer;
 import org.carewebframework.shell.plugins.PluginController;
-import org.carewebframework.ui.Application;
-import org.carewebframework.ui.Application.SessionInfo;
-
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zul.Grid;
-import org.zkoss.zul.Label;
-import org.zkoss.zul.ListModelList;
-import org.zkoss.zul.RowRenderer;
+import org.carewebframework.web.component.Label;
+import org.carewebframework.web.component.Page;
+import org.carewebframework.web.component.Table;
+import org.carewebframework.web.page.PageRegistry;
 
 /**
  * Controller class for session tracker.
@@ -62,24 +57,23 @@ public class MainController extends PluginController {
     
     private Label lblMessage;
     
-    private Grid grid;
+    private Table grid;
     
     private void doDelegationToModel() {
-        log.trace("Delegating work to model");
         IUser user = UserContext.getActiveUser();
         showMessage(null);
         
         if (user != null) {
             log.trace("Establishing ListModelList for Grid");
-            //TODO: service to getActiveSessions and return DTO.  To store a serializable listModel
-            List<SessionInfo> sessions = Application.getInstance().getActiveSessions();
             
-            if (!sessions.isEmpty()) {
+            Collection<Page> pages = PageRegistry.getPages();
+            
+            if (!pages.isEmpty()) {
                 grid.setModel(new ListModelList<>(sessions));
                 grid.setRowRenderer(sessionTrackerRowRenderer);
                 lblSessionSummary.setVisible(true);
-                int size = sessions.size();
-                lblSessionSummary.setValue(StrUtil.formatMessage("@cwf.sessiontracker.msg.sessions.total", size));
+                int size = pages.size();
+                lblSessionSummary.setLabel(StrUtil.formatMessage("@cwf.sessiontracker.msg.sessions.total", size));
                 
             } else { //shouldn't happen
                 String message = StrUtil.formatMessage("@cwf.sessiontracker.msg.session.none");
@@ -111,7 +105,7 @@ public class MainController extends PluginController {
             lblMessage.setVisible(false);
         } else {
             lblMessage.setVisible(true);
-            lblMessage.setValue(StrUtil.formatMessage(message, params));
+            lblMessage.setLabel(StrUtil.formatMessage(message, params));
         }
     }
     

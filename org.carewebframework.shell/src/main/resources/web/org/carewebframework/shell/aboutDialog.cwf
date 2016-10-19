@@ -1,7 +1,7 @@
 <zk>
 	<window title="${labels.cwf.shell.about.title}"
 		width="500px" mold="bootstrap"
-		apply="${aboutDialogController}">
+		controller="${aboutDialogController}">
 		<caption label="${$composer.title}" />
 		<grid style="border:none">
 			<columns>
@@ -9,17 +9,17 @@
 					<image src="${$composer.icon}" />
 				</column>
 				<column width="50%" style="text-align:center">
-					<label value="${$composer.source}"
+					<label label="${$composer.source}"
 						sclass="cwf-about-header" />
 				</column>
 			</columns>
 			<rows>
 				<row forEach="${arg}">
-					<label value="${each.key}" />
-					<label value="${each.value}" />
+					<label label="${each.key}" />
+					<label label="${each.value}" />
 				</row>
 				<row visible="false">
-					<cell id="cellDescription" colspan="2"
+					<cell name="cellDescription" colspan="2"
 						sclass="cwf-about-description" />
 				</row>
 			</rows>

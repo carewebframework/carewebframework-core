@@ -27,7 +27,7 @@ package org.carewebframework.shell.layout;
 
 import org.carewebframework.shell.designer.PropertyEditorSplitterView;
 import org.carewebframework.shell.property.PropertyTypeRegistry;
-import org.carewebframework.ui.zk.SplitterView;
+import org.carewebframework.ui.cwf.SplitterView;
 
 /**
  * A splitter view has either a vertical or horizontal orientation and can contain any number of

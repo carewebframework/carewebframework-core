@@ -11,16 +11,16 @@
 	xmlns:w="http://www.zkoss.org/2005/zk/client"
 	w:onClose="this.cancel()" w:max="${arg.max}">
     <caption label="${arg.title}" />
-	<label value="${arg.message}" />
+	<label label="${arg.message}" />
     <separator />
-	<fileupload id="fileupload" forward="onUpload=" 
+	<fileupload name="fileupload" forward="onUpload=" 
 		label="${c:l('mesg:org.zkoss.zul.mesg.MZul:UPLOAD_BROWSE')}"
 		zclass="btn" sclass="btn-xs btn-primary"
 		upload="zul.fud.ModalFileViewer,maxsize=${arg.maxsize}${arg['accept'] != null ? c:cat(',accept=', arg['accept']) :''}${arg['native'] ? ',native':''}" />
-	<div id="uploaded" visible="false" />
+	<div name="uploaded" visible="false" />
 	<separator bar="true" />
-	<toolbar id="btns" align="end">
-		<submit id="submit" label="${c:l('mesg:org.zkoss.zul.mesg.MZul:UPLOAD_SUBMIT')}"
+	<toolbar name="btns" align="end">
+		<submit name="submit" label="${c:l('mesg:org.zkoss.zul.mesg.MZul:UPLOAD_SUBMIT')}"
 			zclass="btn" sclass="btn-sm btn-success"
 			w:onClick="this.submit()" />
 		<button label="${c:l('mesg:org.zkoss.zul.mesg.MZul:UPLOAD_CANCEL')}" 

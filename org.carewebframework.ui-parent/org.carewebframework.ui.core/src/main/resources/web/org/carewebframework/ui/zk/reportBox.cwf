@@ -4,8 +4,8 @@
 	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
 
 	<window title="${arg.title}" mold="bootstrap">
-		<div id="printRoot" zclass="panel-body" style="overflow:auto;max-height:400px">
-			<label id="lblText" multiline="true"
+		<div name="printRoot" zclass="panel-body" style="overflow:auto;max-height:400px">
+			<label name="lblText" multiline="true"
 				visible="${arg.text!=null}" value="${arg.text}"
 				style="font-family: monospace; white-space: pre" />
 			<html vflex="1" hflex="1" visible="${arg.html!=null}"
@@ -13,10 +13,10 @@
 		</div>
 		<div zclass="panel-footer">
 			<div zclass="btn-toolbar" align="end">
-				<button id="btnClose" forward="onClick=onClose"
+				<button name="btnClose" forward="onClick=onClose"
 					zclass="btn" sclass="btn-danger btn-sm"
 					label="${labels.cwf.btn.close.label}" width="60px" />
-				<button id="btnPrint" visible="${arg.allowPrint}"
+				<button name="btnPrint" visible="${arg.allowPrint}"
 					zclass="btn" sclass="btn-info btn-sm"
 					label="${labels.cwf.btn.print.label}" width="60px"
 					w:onClick="cwf.print(this.$f('printRoot'))" />

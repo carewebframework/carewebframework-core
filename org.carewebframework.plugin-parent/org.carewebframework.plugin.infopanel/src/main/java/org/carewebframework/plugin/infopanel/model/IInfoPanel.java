@@ -25,9 +25,9 @@
  */
 package org.carewebframework.plugin.infopanel.model;
 
-import org.carewebframework.ui.zk.IDropHandler;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.Menuitem;
+import org.carewebframework.web.dragdrop.IDropHandler;
 
 /**
  * Interface for interacting with an information panel.

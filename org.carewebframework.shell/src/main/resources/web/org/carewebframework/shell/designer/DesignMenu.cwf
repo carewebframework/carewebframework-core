@@ -1,31 +1,31 @@
 <menu use="org.carewebframework.shell.designer.DesignMenu">
-	<menupopup id="menupopup">
-		<menuitem id="mnuDesignMode" checkmark="true"
+	<menupopup name="menupopup">
+		<menuitem name="mnuDesignMode" checkmark="true"
 			label="${labels.cwf.shell.designer.menu.designmode.label}"
 			tooltiptext="${labels.cwf.shell.designer.menu.designmode.hint}" />
-		<menuitem id="mnuDesktopProperties"
+		<menuitem name="mnuDesktopProperties"
 			label="${labels.cwf.shell.designer.menu.desktop.properties.label}"
 			tooltiptext="${labels.cwf.shell.designer.menu.desktop.properties.hint}" />
-		<menuitem id="mnuClearDesktop"
+		<menuitem name="mnuClearDesktop"
 			label="${labels.cwf.shell.designer.menu.desktop.clear.label}"
 			tooltiptext="${labels.cwf.shell.designer.menu.desktop.clear.hint}" />
-		<menuitem id="mnuLayoutDesigner"
+		<menuitem name="mnuLayoutDesigner"
 			label="${labels.cwf.shell.designer.menu.layout.designer.label}"
 			tooltiptext="${labels.cwf.shell.designer.menu.layout.designer.hint}" />
-		<menuitem id="mnuLayoutManager"
+		<menuitem name="mnuLayoutManager"
 			label="${labels.cwf.shell.designer.menu.layout.manager.label}"
 			tooltiptext="${labels.cwf.shell.designer.menu.layout.manager.hint}" />
-		<menuitem id="mnuLoadLayout"
+		<menuitem name="mnuLoadLayout"
 			label="${labels.cwf.shell.designer.menu.layout.load.label}"
 			tooltiptext="${labels.cwf.shell.designer.menu.layout.load.hint}" />
-		<menuitem id="mnuSaveLayout"
+		<menuitem name="mnuSaveLayout"
 			label="${labels.cwf.shell.designer.menu.layout.save.label}"
 			tooltiptext="${labels.cwf.shell.designer.menu.layout.save.hint}" />
-		<menuitem id="mnuShowZul"
+		<menuitem name="mnuShowZul"
 			label="${labels.cwf.shell.designer.menu.zk.viewer.label}"
 			tooltiptext="${labels.cwf.shell.designer.menu.zk.viewer.hint}" />
 		<menuseparator />
-		<menuitem id="mnuLogout"
+		<menuitem name="mnuLogout"
 			label="${labels.cwf.shell.designer.menu.logout.label}"
 			tooltiptext="${labels.cwf.shell.designer.menu.logout.hint}" />
 	</menupopup>

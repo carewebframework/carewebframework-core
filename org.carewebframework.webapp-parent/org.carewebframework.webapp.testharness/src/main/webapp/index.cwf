@@ -1,4 +1,4 @@
 <zk>
-	<cwfShellEx id="testHarness" height="100%" width="100%" layout="/layout.xml"
-		apply="org.carewebframework.testharness.TestHarnessController"  />
+	<cwfShellEx name="testHarness" height="100%" width="100%" layout="/layout.xml"
+		controller="org.carewebframework.testharness.TestHarnessController"  />
 </zk>

@@ -25,7 +25,7 @@
  */
 package org.carewebframework.shell.layout;
 
-import org.carewebframework.ui.zk.SplitterPane;
+import org.carewebframework.ui.cwf.SplitterPane;
 import org.carewebframework.ui.zk.ZKUtil;
 
 /**

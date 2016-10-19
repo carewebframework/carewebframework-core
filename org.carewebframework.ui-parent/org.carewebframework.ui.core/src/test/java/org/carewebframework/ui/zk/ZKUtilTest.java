@@ -35,61 +35,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.zkoss.zul.A;
-import org.zkoss.zul.Div;
-import org.zkoss.zul.Html;
-import org.zkoss.zul.Label;
-import org.zkoss.zul.impl.XulElement;
-
+import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.component.Div;
+import org.carewebframework.web.component.Html;
+import org.carewebframework.web.component.Hyperlink;
+import org.carewebframework.web.component.Label;
 import org.junit.Test;
 
 public class ZKUtilTest {
-    
-    @Test
-    public void updateStyleTest() {
-        updateStyleTest("background:red;font-weight:bold;width:20%", "background:red;font-weight:normal;width:20%;",
-            "font-weight", "bold", "normal");
-        updateStyleTest("background:red;font-weight:bold;width:20%", "background:red;font-weight:bold;", "width", "20%",
-            null);
-        updateStyleTest("background:red;font-weight:bold;width:20%;",
-            "background:red;font-weight:bold;width:20%;height:30%;", "height", null, "30%");
-        updateStyleTest(null, "font-weight:bold;", "font-weight", null, "bold");
-        updateStyleTest(null, null, "font-weight", null, null);
-        updateStyleTest("font-weight:bold", null, "font-weight", "bold", null);
-    }
-    
-    private void updateStyleTest(String oldStyle, String newStyle, String styleName, String oldValue, String newValue) {
-        Div cmpt = new Div();
-        cmpt.setStyle(oldStyle);
-        String result = ZKUtil.updateStyle(cmpt, styleName, newValue);
-        assertEquals(newStyle, cmpt.getStyle());
-        assertEquals(oldValue, result);
-    }
-    
-    @Test
-    public void updateSclassTest() {
-        updateSclassTest("cwf-orig1 cwf-orig2", "cwf-new1", "cwf-new2");
-        updateSclassTest(null, "cwf-new1", "cwf-new2");
-    }
-    
-    private void updateSclassTest(String initialClass, String class1, String class2) {
-        Div cmpt = new Div();
-        String pfx = initialClass == null || initialClass.isEmpty() ? "" : initialClass + " ";
-        cmpt.setSclass(initialClass);
-        String old1 = ZKUtil.updateSclass(cmpt, class1, false);
-        assertEquals(pfx + class1, cmpt.getSclass());
-        assertEquals(initialClass, old1);
-        old1 = cmpt.getSclass();
-        String old2 = ZKUtil.updateSclass(cmpt, class2, false);
-        assertEquals(pfx + class1 + " " + class2, cmpt.getSclass());
-        assertEquals(old1, old2);
-        cmpt.setSclass(initialClass);
-        old1 = ZKUtil.toggleSclass(cmpt, class1, class2, true);
-        assertEquals(initialClass, old1);
-        assertEquals(pfx + class1, cmpt.getSclass());
-        ZKUtil.toggleSclass(cmpt, class1, class2, false);
-        assertEquals(pfx + class2, cmpt.getSclass());
-    }
     
     private static final String ATTR_TEST = "ATTR_TEST";
     
@@ -125,9 +78,6 @@ public class ZKUtilTest {
         cmpt.setAttribute(ATTR_TEST, cmpt);
         assertSame(cmpt, ZKUtil.getAttributeComponent(cmpt, ATTR_TEST));
         assertNull(ZKUtil.getAttributeComponent(cmpt, ATTR_DUMMY));
-        assertSame(cmpt, ZKUtil.getAttributeXulElement(cmpt, ATTR_TEST));
-        assertNull(ZKUtil.getAttributeXulElement(cmpt, ATTR_DUMMY));
-        assertNull(ZKUtil.getAttributeXulElement(cmpt, ATTR_NULL));
     }
     
     public interface ArgumentMapTest {
@@ -166,15 +116,15 @@ public class ZKUtilTest {
     
     @Test
     public void getTextComponentTest() {
-        XulElement cmp;
+        BaseComponent cmp;
         cmp = ZKUtil.getTextComponent("general text");
         assertTrue(cmp instanceof Label);
         cmp = ZKUtil.getTextComponent("<html>html text</html>");
         assertTrue(cmp instanceof Html);
         cmp = ZKUtil.getTextComponent("https://url");
-        assertTrue(cmp instanceof A);
+        assertTrue(cmp instanceof Hyperlink);
         cmp = ZKUtil.getTextComponent("http://url");
-        assertTrue(cmp instanceof A);
+        assertTrue(cmp instanceof Hyperlink);
     }
     
     @Test

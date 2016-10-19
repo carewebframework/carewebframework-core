@@ -26,23 +26,25 @@
 package org.carewebframework.plugin.messagetesting;
 
 import org.carewebframework.api.messaging.Message;
-import org.carewebframework.ui.zk.AbstractListitemRenderer;
 import org.carewebframework.ui.zk.ZKUtil;
-import org.zkoss.zul.Label;
-import org.zkoss.zul.Listcell;
-import org.zkoss.zul.Listitem;
+import org.carewebframework.web.component.Label;
+import org.carewebframework.web.component.Listitem;
+import org.carewebframework.web.event.DblclickEvent;
+import org.carewebframework.web.model.IComponentRenderer;
 
-public class ReceivedMessageRenderer extends AbstractListitemRenderer<Message, Object> {
+public class ReceivedMessageRenderer implements IComponentRenderer<Listitem, Message> {
     
     @Override
-    protected void renderItem(Listitem item, Message message) {
+    public Listitem render(Message message) {
+        Listitem item = new Listitem();
         createCell(item, message.getCreated());
         createCell(item, message.getMetadata("cwf.pub.channel"));
         createCell(item, message.getType());
         createCell(item, message.getId());
         Listcell cell = createCell(item, message.getPayload());
-        cell.setTooltiptext(ZKUtil.findChild(cell, Label.class).getValue());
-        item.addForward("onDoubleClick", item.getListbox(), null);
+        cell.setHint(ZKUtil.findChild(cell, Label.class).getValue());
+        item.registerEventForward(DblclickEvent.TYPE, item.getListbox(), null);
+        return item;
     }
     
 }

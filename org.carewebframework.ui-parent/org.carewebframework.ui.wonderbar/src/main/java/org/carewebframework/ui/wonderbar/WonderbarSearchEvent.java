@@ -25,30 +25,26 @@
  */
 package org.carewebframework.ui.wonderbar;
 
-import java.util.Map;
-
-import org.zkoss.zk.au.AuRequest;
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.event.Event;
+import org.carewebframework.web.client.ClientRequest;
+import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.event.Event;
 
 /**
  * Fired when a search request is received from the client.
  */
 public class WonderbarSearchEvent extends Event {
     
-    public static final String ON_WONDERBAR_SEARCH = "onWonderbarSearch";
-    
-    private static final long serialVersionUID = 1L;
+    public static final String TYPE = "wonderbarSearch";
     
     private final String term;
     
-    public static final WonderbarSearchEvent getSearchEvent(AuRequest request) {
-        Map<String, Object> data = request.getData();
-        return new WonderbarSearchEvent(request.getComponent(), (String) data.get("term"));
+    public WonderbarSearchEvent(ClientRequest request) {
+        super(request);
+        term = (String) getParam(request, "term");
     }
     
-    public WonderbarSearchEvent(Component target, String term) {
-        super(ON_WONDERBAR_SEARCH, target);
+    public WonderbarSearchEvent(BaseComponent target, String term) {
+        super(TYPE, target);
         this.term = term;
     }
     

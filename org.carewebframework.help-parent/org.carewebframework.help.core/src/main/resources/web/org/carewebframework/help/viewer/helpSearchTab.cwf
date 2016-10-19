@@ -1,14 +1,14 @@
 <zk>
 	<toolbar>
 		<hbox width="100%">
-			<textbox id="txtSearch" hflex="1" />
-			<toolbarbutton id="btnSearch" width="16px"
+			<textbox name="txtSearch" hflex="1" />
+			<toolbarbutton name="btnSearch" width="16px"
 				iconSclass="glyphicon glyphicon-search" />
 		</hbox>
 	</toolbar>
-	<label id="lblNoResultsFound" visible="false"
+	<label name="lblNoResultsFound" visible="false"
 		value="${labels.cwf.help.tab.search.noresults}" />
-	<listbox id="lstSrchResults" visible="false" vflex="1">
+	<listbox name="lstSrchResults" visible="false" vflex="1">
 		<listhead sizable="true">
 			<listheader label="" width="30px" sort="auto(confidence)"/>
 			<listheader label="${labels.cwf.help.tab.search.topic.header}" sort="auto(topic)" />

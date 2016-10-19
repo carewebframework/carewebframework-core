@@ -3,7 +3,7 @@
 	xmlns:h="http://www.w3.org/1999/xhtml"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
-	<hbox apply="${infoPanelTestController}" width="100%"
+	<hbox controller="${infoPanelTestController}" width="100%"
 		height="100%">
 		<cell hflex="1">
 			<groupbox>
@@ -11,30 +11,30 @@
 				<label
 					value="Double-click or drag to add to info panel." />
 				<separator />
-				<label value="* means action event subscriber." />
-				<listbox id="listbox" rows="5" />
+				<label label="* means action event subscriber." />
+				<listbox name="listbox" rows="5" />
 			</groupbox>
 			<groupbox>
 				<caption label="Push Tests" />
 				<toolbar>
-					<button id="btnPushAlert" label="Push Alert" />
-					<button id="btnPushDrop" label="Push Drop" />
+					<button name="btnPushAlert" label="Push Alert" />
+					<button name="btnPushDrop" label="Push Drop" />
 					<separator />
-					<checkbox id="chkEvents" label="Send as Events" />
-					<checkbox id="chkAssociate" label="Subscribe to action events." />
+					<checkbox name="chkEvents" label="Send as Events" />
+					<checkbox name="chkAssociate" label="Subscribe to action events." />
 				</toolbar>
 			</groupbox>
 			<groupbox>
 				<caption label="Misc Functions" />
 				<toolbar>
-					<button id="btnAddMenu" label="Add Menu Item" />
-					<button id="btnDisable" label="Disable Drop" />
-					<button id="btnClearAlerts" label="Clear Alerts" />
+					<button name="btnAddMenu" label="Add Menu Item" />
+					<button name="btnDisable" label="Disable Drop" />
+					<button name="btnClearAlerts" label="Clear Alerts" />
 				</toolbar>
 			</groupbox>
 			<groupbox>
 				<caption label="Test Events" />
-				<listbox id="actions" rows="6">
+				<listbox name="actions" rows="6">
 					<listitem label="REMOVE" />
 					<listitem label="HIDE" />
 					<listitem label="SHOW" />
@@ -43,13 +43,13 @@
 					<listitem label="TOP" />
 				</listbox>
 				<toolbar>
-					<button id="btnSendEvent" label="Send Action Event" />
+					<button name="btnSendEvent" label="Send Action Event" />
 				</toolbar>
 			</groupbox>
 		</cell>
 		<splitter />
 		<cell hflex="1">
-			<include id="include"
+			<include name="include"
 				src="~./org/carewebframework/plugin/infopanel/infoPanel.zul" />
 		</cell>
 	</hbox>

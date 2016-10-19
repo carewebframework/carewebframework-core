@@ -1,29 +1,29 @@
 <zk xmlns:w="client">
 	<borderlayout height="100%" width="100%" sclass="cwf-sandbox"
-		apply="${cwfSandboxController}">
+		controller="${cwfSandboxController}">
 		<west size="50%" splittable="true" collapsible="true">
 			<panel mold="bootstrap" vflex="1">
 		        <caption hflex="1" >
 		          <label zclass="z-caption-content"
 		                 value="${labels.cwf.sandbox.title.left}" />
 		          <space hflex="10" />
-		          <combobox id="cboZul" readonly="true" width="200px" 
+		          <combobox name="cboZul" readonly="true" width="200px" 
 		                    placeholder="${labels.cwf.sandbox.combobox.placeholder}"/>
 		          <space hflex="10" />
-		          <button id="btnFormatContent" zclass="btn btn-xs btn-info"
+		          <button name="btnFormatContent" zclass="btn btn-xs btn-info"
 		                  w:onClick="this.$f('txtContent').format();"
 		                  label="${labels.cwf.sandbox.btn.format.label}" />
 		          <space hflex="10" />
-		          <button id="btnClearContent" zclass="btn btn-xs btn-danger"
+		          <button name="btnClearContent" zclass="btn btn-xs btn-danger"
 		                  w:onClick="this.$f('txtContent').clear();"
 		                  label="${labels.cwf.btn.clear.label}" />
 		          <space hflex="1" />
-		          <button id="btnRenderContent"
+		          <button name="btnRenderContent"
 		                  onClick="txtContent.focus();"
 		                  zclass="btn btn-xs btn-success" label="${labels.cwf.btn.view.label}" />
 		        </caption>
 				<panelchildren style="padding:0">
-					<textbox id="txtContent" multiline="true" />
+					<textbox name="txtContent" multiline="true" />
 					<script type="text/javascript" defer="true">
 						<![CDATA[
 						var txtContent = this.$f('txtContent');
@@ -83,17 +83,17 @@
 		<center>
 			<panel mold="bootstrap" vflex="1">
 		        <caption hflex="1">
-		          <button id="btnClearView" zclass="btn btn-xs btn-danger"
+		          <button name="btnClearView" zclass="btn btn-xs btn-danger"
 		                  onClick="txtContent.focus();"
 		                  label="${labels.cwf.btn.clear.label}" />
 		          <space hflex="1" />
-		          <button id="btnRefreshView" zclass="btn btn-xs btn-success"
+		          <button name="btnRefreshView" zclass="btn btn-xs btn-success"
 		                  label="${labels.cwf.btn.refresh.label}" />
 		          <space hflex="10" />
 		          <label zclass="z-caption-content" style="float:right"
 		                 value="${labels.cwf.sandbox.title.right}" />
 		        </caption>
-				<panelchildren id="contentParent" style="padding:0">
+				<panelchildren name="contentParent" style="padding:0">
 					<idspace vflex="1" width="100%"
 						style="overflow:auto" />
 				</panelchildren>

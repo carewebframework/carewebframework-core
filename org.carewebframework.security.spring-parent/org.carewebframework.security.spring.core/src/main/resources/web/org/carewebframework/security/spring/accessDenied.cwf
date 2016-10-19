@@ -16,9 +16,9 @@
 		</div>
 		<div zclass="panel-footer">
 			<div zclass="btn-toolbar" align="center">
-				<button zclass="btn" sclass="btn-default" id="btnLogin" label="Login" href="/login/loginWindow.zul" unless="${sec:isAuthenticated()}"/>
-				<button zclass="btn" sclass="btn-default" id="btnHome" label="Home" href="/" if="${sec:isAuthenticated()}"/>
-				<button zclass="btn" sclass="btn-default" id="btnLogout" label="Logout" if="${sec:isAuthenticated()}" href="/logout" />
+				<button zclass="btn" sclass="btn-default" name="btnLogin" label="Login" href="/login/loginWindow.zul" unless="${sec:isAuthenticated()}"/>
+				<button zclass="btn" sclass="btn-default" name="btnHome" label="Home" href="/" if="${sec:isAuthenticated()}"/>
+				<button zclass="btn" sclass="btn-default" name="btnLogout" label="Logout" if="${sec:isAuthenticated()}" href="/logout" />
 			</div>
 		</div>
 	</window>

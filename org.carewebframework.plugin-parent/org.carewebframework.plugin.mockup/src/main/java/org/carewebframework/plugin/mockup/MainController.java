@@ -28,18 +28,14 @@ package org.carewebframework.plugin.mockup;
 import java.io.IOException;
 
 import org.apache.commons.lang.StringUtils;
-
 import org.carewebframework.shell.plugins.PluginContainer;
 import org.carewebframework.shell.plugins.PluginController;
-
-import org.zkoss.zul.Iframe;
+import org.carewebframework.web.component.Iframe;
 
 /**
  * Simple component to display third-party UI mockups.
  */
 public class MainController extends PluginController {
-    
-    private static final long serialVersionUID = 1L;
     
     private Iframe iframe;
     
@@ -70,7 +66,7 @@ public class MainController extends PluginController {
         String url = mockupTypes.getUrl(mockupType);
         
         if (mockupId == null || url == null) {
-            iframe.setContent(null);
+            iframe.setSrc(null);
             return;
         }
         

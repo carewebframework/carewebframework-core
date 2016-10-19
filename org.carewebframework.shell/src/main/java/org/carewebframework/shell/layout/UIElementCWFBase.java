@@ -205,7 +205,7 @@ public abstract class UIElementCWFBase extends UIElementBase {
         BaseComponent top = null;
         
         try {
-            top = PageDefinitionCache.getInstance().get(template).materialize(parent);
+            top = PageUtil.createPage(template, parent);
             ZKUtil.wireController(top, controller);
         } catch (Exception e) {
             raise("Error creating element from template.", e);

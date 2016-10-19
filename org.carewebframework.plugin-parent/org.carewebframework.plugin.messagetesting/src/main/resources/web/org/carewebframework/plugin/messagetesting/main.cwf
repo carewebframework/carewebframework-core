@@ -18,26 +18,26 @@
 	</style>
 
 	<window title="Messaging Test Plugin - Warning:  Do not use this in a production system."
-		sclass="panel-danger" mold="bootstrap" height="100%" width="100%"
-		apply="${cwfMessageTestingController}">
-		<borderlayout sclass="cwf-messagetesting-root" height="100%">
+		class="flavor:panel-danger" height="100%" width="100%"
+		controller="${cwfMessageTestingController}">
+		<borderlayout class="cwf-messagetesting-root" height="100%">
 			<center>
 				<hbox vflex="1">
 					<cell width="50%">
 						<toolbar height="30px">
-							<label value="Messaging Providers" />
+							<label label="Messaging Providers" />
 						</toolbar>
-						<listbox id="lboxProviders" checkmark="true" multiple="true"
+						<listbox name="lboxProviders" checkmark="true" multiple="true"
 							width="100%" vflex="1" />
 					</cell>
 					<splitter />
 					<cell width="50%">
 						<toolbar height="30px">
-							<label value="Subscriptions" />
-							<button id="btnAddSubscription" label="Add"
-								zclass="btn" sclass="btn-xs btn-primary" />
+							<label label="Subscriptions" />
+							<button name="btnAddSubscription" label="Add"
+								class="size:btn-xs flavor:btn-primary" />
 						</toolbar>
-						<listbox id="lboxSubscriptions" checkmark="true" multiple="true"
+						<listbox name="lboxSubscriptions" checkmark="true" multiple="true"
 							width="100%" vflex="1" />
 					</cell>
 				</hbox>
@@ -46,27 +46,27 @@
 				<hbox vflex="1">
 					<cell width="50%">
 						<toolbar>
-							<label value="Enter Message" />
-							<button id="btnSendMessage" label="Send" disabled="true"
-								zclass="btn" sclass="btn-xs btn-success" />
-							<button id="btnClearMessage" label="Clear"
-								zclass="btn" sclass="btn-xs btn-danger" />
-							<combobox id="cboxChannels" readonly="true" />
-							<checkbox id="chkAsEvent" label="Send as event" style="padding-top:5px" />
+							<label label="Enter Message" />
+							<button name="btnSendMessage" label="Send" disabled="true"
+								zclass="btn" class="size:btn-xs flavor:btn-success" />
+							<button name="btnClearMessage" label="Clear"
+								zclass="btn" class="size:btn-xs flavor:btn-danger" />
+							<combobox name="cboxChannels" readonly="true" />
+							<checkbox name="chkAsEvent" label="Send as event" style="padding-top:5px" />
 						</toolbar>
-						<textbox id="tboxMessage" multiline="true" vflex="1"
+						<textbox name="tboxMessage" multiline="true" vflex="1"
 							width="100%" />
 					</cell>
 					<splitter />
 					<cell width="50%">
 						<toolbar>
-							<label value="Received" />
+							<label label="Received" />
 							<separator orient="vertical" width="20px" />
-							<button id="btnClearReceived" label="Clear"
-								zclass="btn" sclass="btn-xs btn-danger" />
-							<checkbox id="chkScrollLock" label="Scroll Lock" style="padding-top:5px" />
+							<button name="btnClearReceived" label="Clear"
+								class="size:btn-xs flavor:btn-danger" />
+							<checkbox name="chkScrollLock" label="Scroll Lock" style="padding-top:5px" />
 						</toolbar>
-						<listbox id="lboxReceived" width="100%" vflex="1">
+						<listbox name="lboxReceived" width="100%" vflex="1">
 							<listhead>
 								<listheader label="Time" />
 								<listheader label="Channel" />

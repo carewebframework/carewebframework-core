@@ -2,30 +2,30 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd ">
 
-	<div id="loginRoot" width="600px"
-		apply="${securityLoginPaneController}"
+	<div name="loginRoot" width="600px"
+		controller="${securityLoginPaneController}"
 		style="margin-left:auto;margin-right:auto;border:2px solid black">
 		<div width="100%" height="90px">
-			<image id="imgDomain" style="padding:5px;float:left"
+			<image name="imgDomain" style="padding:5px;float:left"
 				align="right" src="${labels.login.form.title.image}" />
 			<vbox height="100%" pack="middle"
 				sclass="cwf-login-domain">
-				<label id="lblDomain"
+				<label name="lblDomain"
 					value="${labels.login.form.domain.name.label}"
 					style="font-size:1.2em;font-weight:bold;display:block" />
-				<label id="lblTitle"
+				<label name="lblTitle"
 					value="${labels.login.form.title.label}" />
 			</vbox>
 		</div>
 		<vbox width="100%" align="center" spacing="10px"
 			style="border-top:solid 2px" sclass="bg-success">
-			<vlayout id="loginPrompts" hflex="1"
+			<vlayout name="loginPrompts" hflex="1"
 				sclass="cwf-login-banner" style="margin: 30px 80px 0 80px">
-				<hlayout id="cmpDomainList" visible="false" valign="middle">
+				<hlayout name="cmpDomainList" visible="false" valign="middle">
 					<div hflex="1" align="right">
 						${labels.login.form.domain.label}
 					</div>
-					<listbox id="lstDomain" name="domain" hflex="2"
+					<listbox name="lstDomain" name="domain" hflex="2"
 						mold="select" />
 					<div hflex="1" />
 				</hlayout>
@@ -33,7 +33,7 @@
 					<div hflex="1" align="right">
 						${labels.login.form.username.label}
 					</div>
-					<textbox id="txtUsername" name="username"
+					<textbox name="txtUsername" name="username"
 						focus="true" hflex="2" />
 					<div hflex="1" />
 				</hlayout>
@@ -41,49 +41,49 @@
 					<div hflex="1" align="right">
 						${labels.login.form.password.label}
 					</div>
-					<textbox id="txtPassword" name="password"
+					<textbox name="txtPassword" name="password"
 						type="password" hflex="2" />
 					<div hflex="1">
-						<button id="btnLogin" zclass="btn"
+						<button name="btnLogin" zclass="btn"
 							sclass="btn-success btn-sm"
 							label="${labels.login.form.button.login.label}" />
 					</div>
 				</hlayout>
-				<div id="divDomain" hflex="1">
-					<button id="btnDomain" zclass="btn"
+				<div name="divDomain" hflex="1">
+					<button name="btnDomain" zclass="btn"
 						sclass="btn-link btn-sm"
 						label="${labels.login.form.domain.alternate.label}" />
 				</div>
 			</vlayout>
-			<label id="lblStatus" visible="false" />
+			<label name="lblStatus" visible="false" />
 			<div hflex="1" zclass="panel panel-danger"
 				align="center" visible="false">
-				<label id="lblMessage" multiline="true"
+				<label name="lblMessage" multiline="true"
 					zclass="text-danger" />
 			</div>
-			<label id="lblHeader" multiline="true" visible="false"
+			<label name="lblHeader" multiline="true" visible="false"
 				style="margin: 20px" />
-			<html id="htmlHeader" visible="false" style="margin: 20px" />
+			<html name="htmlHeader" visible="false" style="margin: 20px" />
 			<separator height="20px" bar="true" />
-			<div id="divInfo" sclass="cwf-login-banner">
-				<label id="lblInfoTitle"
+			<div name="divInfo" sclass="cwf-login-banner">
+				<label name="lblInfoTitle"
 					style="font-weight:bold;font-size:1.1em;display:block"
 					value="${labels.login.form.info.title.label}" />
 				<separator height="10px" bar="true" />
-				<label id="lblInfo" style="padding: 20px"
+				<label name="lblInfo" style="padding: 20px"
 					multiline="true" value="${labels.login.form.info.label}" />
-				<html id="htmlInfo" style="padding: 20px"
+				<html name="htmlInfo" style="padding: 20px"
 					visible="false" />
 			</div>
-			<label value="${labels.login.form.footer.label}" />
+			<label label="${labels.login.form.footer.label}" />
 			<hlayout sclass="panel-footer" hflex="1" valign="middle"
 				style="text-align: left; padding-left: 20px">
-				<label value="${labels.login.form.copyright.prefix}"
+				<label label="${labels.login.form.copyright.prefix}"
 					style="font-style:italic" />
 				<image width="30px" height="30px" align="center"
 					style="background:transparent;margin:1px 5px 1px 5px"
 					src="${labels.login.form.copyright.image}" />
-				<label value="${labels.login.form.copyright.label}"
+				<label label="${labels.login.form.copyright.label}"
 					style="font-weight:bold" />
 			</hlayout>
 		</vbox>

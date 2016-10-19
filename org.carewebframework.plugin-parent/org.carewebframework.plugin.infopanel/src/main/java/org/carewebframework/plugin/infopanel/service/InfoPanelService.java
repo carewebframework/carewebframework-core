@@ -32,8 +32,8 @@ import org.carewebframework.plugin.infopanel.controller.ActionListener;
 import org.carewebframework.plugin.infopanel.model.IInfoPanel;
 import org.carewebframework.plugin.infopanel.model.IInfoPanel.Action;
 import org.carewebframework.shell.layout.UIElementBase;
-import org.carewebframework.shell.layout.UIElementPlugin;
 import org.carewebframework.shell.layout.UIElementCWFBase;
+import org.carewebframework.shell.layout.UIElementPlugin;
 import org.carewebframework.shell.plugins.PluginContainer;
 import org.carewebframework.ui.FrameworkController;
 import org.carewebframework.web.component.BaseComponent;
@@ -140,7 +140,7 @@ public class InfoPanelService {
                 && ((UIElementPlugin) element).getDefinition().getId().equals("infoPanelPlugin")) {
             PluginContainer container = ((UIElementPlugin) element).getContainer();
             container.load();
-            BaseComponent top = container.getFellow("infoPanelRoot");
+            BaseComponent top = container.findByName("infoPanelRoot");
             return (IInfoPanel) FrameworkController.getController(top);
         }
         

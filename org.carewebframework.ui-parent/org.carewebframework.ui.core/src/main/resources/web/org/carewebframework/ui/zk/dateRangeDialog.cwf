@@ -6,28 +6,28 @@
 			<label zclass="label" sclass="label-info"
 				value="${labels.cwf.date.range.start.date.label}" />
 			<div zclass="btn-group btn-xs" width="100%">
-				<datebox id="startDate" hflex="1" sclass="btn"
+				<datebox name="startDate" hflex="1" sclass="btn"
 					tooltiptext="${labels.cwf.date.range.start.date.dbx.hint}" />
-				<toolbarbutton id="btnSameAsEnd" zclass="btn"
+				<toolbarbutton name="btnSameAsEnd" zclass="btn"
 					sclass="btn-link glyphicon glyphicon-chevron-left"
 					tooltiptext="${labels.cwf.date.range.start.date.btn.hint}" />
 			</div>
 			<label zclass="label" sclass="label-info"
 				value="${labels.cwf.date.range.end.date.label}" />
 			<div zclass="btn-group btn-xs" width="100%">
-				<datebox id="endDate" hflex="1" sclass="btn"
+				<datebox name="endDate" hflex="1" sclass="btn"
 					tooltiptext="${labels.cwf.date.range.end.date.dbx.hint}" />
-				<toolbarbutton id="btnSameAsStart" zclass="btn"
+				<toolbarbutton name="btnSameAsStart" zclass="btn"
 					sclass="btn-link glyphicon glyphicon-chevron-left"
 					tooltiptext="${labels.cwf.date.range.end.date.btn.hint}" />
 			</div>
 		</div>
 		<div zclass="panel-footer">
 			<div zclass="btn-toolbar" align="center">
-				<button id="btnOK" zclass="btn"
+				<button name="btnOK" zclass="btn"
 					sclass="btn-success btn-sm"
 					label="${labels.cwf.date.range.btn.ok.label}" />
-				<button id="btnCancel" zclass="btn"
+				<button name="btnCancel" zclass="btn"
 					sclass="btn-danger btn-sm"
 					label="${labels.cwf.date.range.btn.cancel.label}" />
 			</div>

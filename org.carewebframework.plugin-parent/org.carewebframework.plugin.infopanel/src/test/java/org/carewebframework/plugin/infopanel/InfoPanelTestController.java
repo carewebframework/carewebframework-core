@@ -27,32 +27,30 @@ package org.carewebframework.plugin.infopanel;
 
 import org.carewebframework.api.event.EventManager;
 import org.carewebframework.api.event.IEventManager;
-import org.carewebframework.ui.FrameworkController;
 import org.carewebframework.plugin.infopanel.model.IInfoPanel;
 import org.carewebframework.plugin.infopanel.model.IInfoPanel.Action;
 import org.carewebframework.plugin.infopanel.service.InfoPanelService;
-import org.carewebframework.ui.zk.DropUtil;
-
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zul.Button;
-import org.zkoss.zul.Checkbox;
-import org.zkoss.zul.Include;
-import org.zkoss.zul.Label;
-import org.zkoss.zul.Listbox;
-import org.zkoss.zul.Listitem;
-import org.zkoss.zul.Menuitem;
-import org.zkoss.zul.Vbox;
+import org.carewebframework.ui.FrameworkController;
+import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.component.Button;
+import org.carewebframework.web.component.Checkbox;
+import org.carewebframework.web.component.Div;
+import org.carewebframework.web.component.Import;
+import org.carewebframework.web.component.Label;
+import org.carewebframework.web.component.Listbox;
+import org.carewebframework.web.component.Listitem;
+import org.carewebframework.web.component.Menuitem;
+import org.carewebframework.web.dragdrop.DropUtil;
+import org.carewebframework.web.event.ClickEvent;
+import org.carewebframework.web.event.DblclickEvent;
+import org.carewebframework.web.event.Event;
+import org.carewebframework.web.event.IEventListener;
 
 /**
  * Controller for the test component. This component provides a list box of draggable list items for
  * testing and buttons for exercising other capabilities of the info panel.
  */
 public class InfoPanelTestController extends FrameworkController {
-    
-    private static final long serialVersionUID = 1L;
     
     private static final String TEST_EVENT = "INFOPANELTEST";
     
@@ -66,7 +64,7 @@ public class InfoPanelTestController extends FrameworkController {
     
     private Checkbox chkAssociate;
     
-    private Include include;
+    private Import include;
     
     private final InfoPanelTestDropRenderer dropRenderer = new InfoPanelTestDropRenderer();
     
@@ -86,16 +84,16 @@ public class InfoPanelTestController extends FrameworkController {
      * Populate list box with some draggable items.
      */
     @Override
-    public void doAfterCompose(Component comp) throws Exception {
-        super.doAfterCompose(comp);
+    public void afterInitialized(BaseComponent comp) {
+        super.afterInitialized(comp);
         
         while (itemCount < 11) {
             Listitem item = newListitem(itemCount % 2 == 1);
-            item.addForward(Events.ON_DOUBLE_CLICK, listbox, null);
-            listbox.appendChild(item);
+            item.registerEventForward(DblclickEvent.TYPE, listbox, null);
+            listbox.addChild(item);
         }
         
-        infoPanel = (IInfoPanel) getController(include.getFellow("infoPanelRoot"));
+        infoPanel = (IInfoPanel) getController(include.findByName("infoPanelRoot"));
         eventManager = EventManager.getInstance();
     }
     
@@ -115,10 +113,10 @@ public class InfoPanelTestController extends FrameworkController {
         String label = "Drop item #" + ++itemCount + (associateEvents ? " *" : "");
         item.setLabel(label);
         // Set to info panel drop id.
-        item.setDraggable(IInfoPanel.DROP_ID);
+        item.setDragid(IInfoPanel.DROP_ID);
         // Create and attach the object to be rendered.
         DroppedItem dropped = new DroppedItem(label, "This is the detail for drop item #" + itemCount);
-        item.setValue(dropped);
+        item.setData(dropped);
         // Associate the drop renderer with the item.
         DropUtil.setDropRenderer(item, dropRenderer);
         return item;
@@ -130,17 +128,17 @@ public class InfoPanelTestController extends FrameworkController {
      * @param associateEvents If true, associate events with this item.
      * @return Test alert item.
      */
-    private Component newAlertitem(boolean associateEvents) {
-        Vbox root = new Vbox();
+    private BaseComponent newAlertitem(boolean associateEvents) {
+        Div root = new Div(); // was vbox
         
         if (associateEvents) {
             associateEvents(root);
         }
         
-        root.appendChild(new Label("This is test alert #" + ++alertCount + (associateEvents ? " *" : "") + "."));
+        root.addChild(new Label("This is test alert #" + ++alertCount + (associateEvents ? " *" : "") + "."));
         
         for (int i = 0; i < 10; i++) {
-            root.appendChild(new Label("This is line #" + i));
+            root.addChild(new Label("This is line #" + i));
         }
         
         return root;
@@ -151,7 +149,7 @@ public class InfoPanelTestController extends FrameworkController {
      * 
      * @param cmp The component.
      */
-    private void associateEvents(Component cmp) {
+    private void associateEvents(BaseComponent cmp) {
         for (Action action : Action.values()) {
             InfoPanelService.associateEvent(cmp, getEvent(action), action);
         }
@@ -167,10 +165,10 @@ public class InfoPanelTestController extends FrameworkController {
     public void onClick$btnAddMenu() {
         Menuitem menuitem = new Menuitem();
         menuitem.setLabel(++menuCount + ". Click Me!");
-        menuitem.addEventListener(Events.ON_CLICK, new EventListener<Event>() {
+        menuitem.registerEventListener(ClickEvent.TYPE, new IEventListener() {
             
             @Override
-            public void onEvent(Event event) throws Exception {
+            public void onEvent(Event event) {
                 System.out.println("Menu was clicked!");
             }
             
@@ -238,7 +236,7 @@ public class InfoPanelTestController extends FrameworkController {
      * 
      * @param root The root component.
      */
-    private void pushAlert(Component root) {
+    private void pushAlert(BaseComponent root) {
         if (chkEvents.isChecked()) {
             eventManager.fireLocalEvent(IInfoPanel.ALERT_EVENT_NAME, root);
         } else {

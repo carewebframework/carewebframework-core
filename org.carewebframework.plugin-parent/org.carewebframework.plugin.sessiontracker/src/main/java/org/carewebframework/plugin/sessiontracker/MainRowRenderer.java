@@ -38,9 +38,8 @@ import org.carewebframework.common.StrUtil;
 import org.carewebframework.ui.Application;
 import org.carewebframework.ui.Application.DesktopInfo;
 import org.carewebframework.ui.Application.SessionInfo;
+import org.carewebframework.ui.cwf.AbstractRowRenderer;
 import org.carewebframework.ui.spring.FrameworkAppContext;
-import org.carewebframework.ui.zk.AbstractRowRenderer;
-
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.event.ClientInfoEvent;

@@ -407,7 +407,7 @@ public class PluginContainer extends Container {
                 initialized = true;
                 
                 if (getFirstChild() == null) {
-                    PageDefinitionCache.getInstance().get(definition.getUrl()).materialize(this);
+                    PageUtil.createPage(definition.getUrl(), this);
                 }
             } catch (Throwable e) {
                 destroyChildren();

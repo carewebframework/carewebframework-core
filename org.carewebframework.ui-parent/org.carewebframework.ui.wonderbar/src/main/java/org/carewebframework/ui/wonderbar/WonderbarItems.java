@@ -25,28 +25,11 @@
  */
 package org.carewebframework.ui.wonderbar;
 
-import java.util.List;
-
-import org.zkoss.zul.impl.XulElement;
+import org.carewebframework.web.component.BaseUIComponent;
 
 /**
  * Wonder bar component that serves as a parent for all search results.
  */
-public class WonderbarItems extends XulElement {
+public class WonderbarItems extends BaseUIComponent {
     
-    private static final long serialVersionUID = 1L;
-    
-    @Override
-    public String getZclass() {
-        return _zclass == null ? "cwf-wonderbar-items" : _zclass;
-    }
-    
-    @SuppressWarnings("unchecked")
-    public List<WonderbarAbstractItem> getItems() {
-        return (List<WonderbarAbstractItem>) (List<?>) getChildren();
-    }
-    
-    public void clear() {
-        getChildren().clear();
-    }
 }

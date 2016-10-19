@@ -38,7 +38,10 @@ import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.BaseUIComponent;
 import org.carewebframework.web.component.Label;
 import org.carewebframework.web.component.Menuitem;
+import org.carewebframework.web.component.Table;
+import org.carewebframework.web.component.Table.Rows;
 import org.carewebframework.web.component.Toolbar;
+import org.carewebframework.web.event.DropEvent;
 import org.carewebframework.web.event.Event;
 
 /**
@@ -48,9 +51,7 @@ public class MainController extends PluginController implements IInfoPanel {
     
     private static final Log log = LogFactory.getLog(MainController.class);
     
-    private static final long serialVersionUID = 1L;
-    
-    protected static final String ALERT_ACTION_EVENT = "onAlertAction";
+    protected static final String ALERT_ACTION_EVENT = "alertAction";
     
     private Toolbar menubar;
     
@@ -58,11 +59,11 @@ public class MainController extends PluginController implements IInfoPanel {
     
     private BaseUIComponent alertIcon;
     
-    private LayoutRegion alertPanel;
+    private BaseUIComponent alertPanel;
     
     private BaseUIComponent menuPanel;
     
-    private Grid alertGrid;
+    private Table alertGrid;
     
     private Rows alertRoot;
     
@@ -104,8 +105,8 @@ public class MainController extends PluginController implements IInfoPanel {
     @Override
     public void afterInitialized(BaseComponent comp) {
         super.afterInitialized(comp);
-        ((BaseUIComponent) comp).setDroppable(getDropId());
-        this.collapsedAlertPanelHeight = this.alertPanel.getHeight();
+        ((BaseUIComponent) comp).setDropid(getDropId());
+        this.collapsedAlertPanelHeight = alertPanel.getHeight();
         this.alertTitlePrefix = this.alertTitle.getLabel();
         openAlertPanel(false);
     }
@@ -156,7 +157,7 @@ public class MainController extends PluginController implements IInfoPanel {
      * @param event The drop event.
      */
     public void onDrop(DropEvent event) {
-        drop(event.getDragged());
+        drop(event.getRelatedTarget());
     }
     
     /**
@@ -177,7 +178,6 @@ public class MainController extends PluginController implements IInfoPanel {
         
         if (action == Action.TOP) {
             alertGrid.setActivePage(0);
-            alertGrid.invalidate();
         }
     }
     
@@ -189,7 +189,7 @@ public class MainController extends PluginController implements IInfoPanel {
      */
     private void openAlertPanel(Boolean open) {
         if (this.alertPanelOpen) {
-            this.openAlertPanelHeight = this.alertPanel.getHeight();
+            this.openAlertPanelHeight = alertPanel.getHeight();
         }
         
         int alertCount = 0;

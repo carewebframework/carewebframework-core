@@ -1,35 +1,35 @@
 <zk>
-	<borderlayout id="infoPanelRoot" width="100%" height="100%"
-		sclass="cwf-infopanel" apply="${cwfInfoPanelController}">
-		<center id="infoPanel" autoscroll="true" border="none">
+	<borderlayout name="infoPanelRoot" width="100%" height="100%"
+		sclass="cwf-infopanel" controller="${cwfInfoPanelController}">
+		<center name="infoPanel" autoscroll="true" border="none">
 			<div zclass="panel panel-primary cwf-infopanel-panel"
 				height="100%">
-				<div id="menuPanel" zclass="panel-heading" visible="false">
-					<menubar id="menubar"
+				<div name="menuPanel" zclass="panel-heading" visible="false">
+					<menubar name="menubar"
 						style="background: none; border: none" height="20px" />
 				</div>
 				<div vflex="1" style="overflow:auto">
-					<div id="dropRoot" style="padding:5px" hflex="1"
+					<div name="dropRoot" style="padding:5px" hflex="1"
 						vflex="1" />
 				</div>
 			</div>
 		</center>
-		<south id="alertPanel" size="30px" border="none"
+		<south name="alertPanel" size="30px" border="none"
 			visible="false">
 			<div zclass="panel panel-danger cwf-infopanel-panel"
 				height="100%">
 				<div zclass="panel-heading"
 					forward="onDoubleClick=alertIcon.onClick">
-					<label id="alertTitle" zclass="panel-title"
+					<label name="alertTitle" zclass="panel-title"
 						value="${labels.cwf.infopanel.alert.title}" />
-					<span id="alertIcon"
+					<span name="alertIcon"
 						zclass="panel-icons panel-icon glyphicon"
 						sclass="glyphicon-chevron-down" />
 				</div>
-				<grid id="alertGrid" mold="paging" vflex="1"
+				<grid name="alertGrid" mold="paging" vflex="1"
 					pagingPosition="top" sclass="cwf-infopanel-alertgrid"
 					pageSize="1">
-					<rows id="alertRoot" />
+					<rows name="alertRoot" />
 				</grid>
 			</div>
 		</south>

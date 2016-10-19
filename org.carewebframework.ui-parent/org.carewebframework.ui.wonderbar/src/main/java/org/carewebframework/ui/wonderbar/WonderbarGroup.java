@@ -31,24 +31,12 @@ package org.carewebframework.ui.wonderbar;
  */
 public class WonderbarGroup extends WonderbarAbstractItem {
     
-    private static final long serialVersionUID = 1L;
-    
     public WonderbarGroup() {
         super();
     }
     
     public WonderbarGroup(String label) {
         super(label);
-    }
-    
-    @Override
-    public String getWidgetClass() {
-        return "wonderbar.ext.WonderbarGroup";
-    }
-    
-    @Override
-    public String getZclass() {
-        return _zclass == null ? "cwf-wonderbar-group" : _zclass;
     }
     
     @Override
@@ -61,4 +49,13 @@ public class WonderbarGroup extends WonderbarAbstractItem {
         super.setLabel(label);
     }
     
+    @Override
+    public String getValue() {
+        return super.getValue();
+    }
+    
+    @Override
+    public void setValue(String value) {
+        super.setValue(value);
+    }
 }

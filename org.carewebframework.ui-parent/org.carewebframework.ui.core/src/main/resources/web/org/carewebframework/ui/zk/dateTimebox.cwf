@@ -1,5 +1,5 @@
 <zk>
-	<grid id="grid" sclass="cwf-grid-nohover" oddRowSclass="none" sizedByContent="true"
+	<grid name="grid" sclass="cwf-grid-nohover" oddRowSclass="none" sizedByContent="true"
 		width="350px" style="border-radius:6px">
 		<columns>
 			<column hflex="10" />
@@ -8,23 +8,23 @@
 		</columns>
 		<rows>
 			<row>
-				<datebox id="datebox" hflex="1" />
-				<timebox id="timebox" hflex="1" />
-				<button id="btnOK" hflex="1"
+				<datebox name="datebox" hflex="1" />
+				<timebox name="timebox" hflex="1" />
+				<button name="btnOK" hflex="1"
 					label="${labels.cwf.datetime.btn.ok.label}"
 					zclass="btn" sclass="btn-sm btn-success" />
 			</row>
 			<row>
-				<a id="btnToday"
+				<a name="btnToday"
 					label="${labels.cwf.datetime.btn.today.label}" />
 				<div width="100%">
-					<a id="btnNow"
+					<a name="btnNow"
 						label="${labels.cwf.datetime.btn.now.label}" />
 					<space hflex="1" />
-					<a id="btnTimeClear"
+					<a name="btnTimeClear"
 						label="${labels.cwf.datetime.btn.clear.label}" />
 				</div>
-				<button id="btnCancel" hflex="1"
+				<button name="btnCancel" hflex="1"
 					label="${labels.cwf.datetime.btn.cancel.label}"
 					zclass="btn" sclass="btn-sm btn-danger" />
 			</row>

@@ -46,25 +46,26 @@ import org.carewebframework.web.component.Listbox;
 import org.carewebframework.web.component.Listitem;
 import org.carewebframework.web.component.Textbox;
 import org.carewebframework.web.event.Event;
+import org.carewebframework.web.event.IEventListener;
 import org.carewebframework.web.event.SelectEvent;
+import org.carewebframework.web.model.ListModel;
+import org.carewebframework.web.model.ModelAndView;
 
 /**
  * Controller class for ActiveMQ Tester.
  */
 public class MainController extends PluginController {
     
-    private static final long serialVersionUID = 1L;
-    
     private final IMessageCallback messageCallback = new IMessageCallback() {
         
-        private final EventListener<Event> eventListener = new EventListener<Event>() {
+        private final IEventListener eventListener = new IEventListener() {
             
             @Override
-            public void onEvent(Event event) throws Exception {
+            public void onEvent(Event event) {
                 received.add((Message) event.getData());
                 
                 if (!chkScrollLock.isChecked()) {
-                    Events.echoEvent("onScrollToBottom", root, null);
+                    org.carewebframework.web.event.EventUtil.post("onScrollToBottom", root, null);
                 }
             }
             
@@ -97,11 +98,11 @@ public class MainController extends PluginController {
     
     private final ProducerService producerService;
     
-    private final ListModelList<String> channels = new ListModelList<>();
+    private final ListModel<String> channels = new ListModel<>();
     
-    private final ListModelList<String> channels2 = new ListModelList<>();
+    private final ListModel<String> channels2 = new ListModel<>();
     
-    private final ListModelList<Message> received = new ListModelList<>();
+    private final ListModel<Message> received = new ListModel<>();
     
     public MainController(ConsumerService consumerService, ProducerService producerService) {
         this.consumerService = consumerService;
@@ -111,15 +112,12 @@ public class MainController extends PluginController {
     @Override
     public void onLoad(PluginContainer container) {
         super.onLoad(container);
-        lboxProviders.setItemRenderer(new MessageProviderRenderer());
-        ListModelList<IMessageProducer> providers = new ListModelList<>(getProviders());
-        providers.setMultiple(true);
-        lboxProviders.setModel(providers);
-        lboxReceived.setItemRenderer(new ReceivedMessageRenderer());
-        lboxReceived.setModel(received);
-        channels.setMultiple(true);
-        lboxSubscriptions.setModel(channels);
-        lboxSubscriptions.setItemRenderer(new SubscriptionRenderer());
+        ListModel<IMessageProducer> providers = new ListModel<>(getProviders());
+        //providers.setMultiple(true);
+        new ModelAndView<Listitem, IMessageProducer>(lboxProviders, providers, new MessageProviderRenderer());
+        new ModelAndView<Listitem, Message>(lboxReceived, received, new ReceivedMessageRenderer());
+        //channels.setMultiple(true);
+        new ModelAndView<Listitem, String>(lboxSubscriptions, channels, new SubscriptionRenderer());
         cboxChannels.setModel(channels2);
     }
     
@@ -131,9 +129,9 @@ public class MainController extends PluginController {
     public void onUnload() {
         super.onUnload();
         
-        for (String channel : channels) {
-            if (channels.isSelected(channel)) {
-                subscribe(channel, false);
+        for (Listitem item : lboxSubscriptions.getChildren(Listitem.class)) {
+            if (item.isSelected()) {
+                subscribe(item.getLabel(), false);
             }
         }
     }
@@ -161,7 +159,7 @@ public class MainController extends PluginController {
     }
     
     public void onClick$btnClearMessage() {
-        tboxMessage.setText(null);
+        tboxMessage.setValue(null);
     }
     
     public void onClick$btnSendMessage() {
@@ -170,8 +168,8 @@ public class MainController extends PluginController {
         if (item != null) {
             String type = item.getLabel();
             String channel = chkAsEvent.isChecked() ? EventUtil.getChannelName(type) : type;
-            Message message = chkAsEvent.isChecked() ? new EventMessage(type, tboxMessage.getText())
-                    : new Message(channel, tboxMessage.getText());
+            Message message = chkAsEvent.isChecked() ? new EventMessage(type, tboxMessage.getValue())
+                    : new Message(channel, tboxMessage.getValue());
             producerService.publish(channel, message);
         }
     }
@@ -185,12 +183,12 @@ public class MainController extends PluginController {
     }
     
     public void onSelect$lboxSubscriptions(SelectEvent event) {
-        Listitem item = event.getReference();
+        Listitem item = (Listitem) event.getTarget();
         subscribe(item.getLabel(), item.isSelected());
     }
     
     public void onSelect$lboxProviders(SelectEvent event) {
-        Listitem item = event.getReference();
+        Listitem item = (Listitem) event.getTarget();
         IMessageProducer producer = (IMessageProducer) item.getData();
         
         if (item.isSelected()) {
@@ -201,8 +199,8 @@ public class MainController extends PluginController {
     }
     
     public void onScrollToBottom() {
-        Listitem item = lboxReceived.getItemAtIndex(lboxReceived.getChildCount() - 1);
-        Clients.scrollIntoView(item);
+        Listitem item = (Listitem) lboxReceived.getChildAt(lboxReceived.getChildCount() - 1);
+        item.scrollIntoView(false);
     }
     
     private void subscribe(String channel, boolean subscribe) {

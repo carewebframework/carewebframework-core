@@ -6,11 +6,11 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
 
-	<panel self="@define(sharedFormsBase)" id="panel" closable="false"
+	<panel self="@define(sharedFormsBase)" name="panel" closable="false"
 		height="100%" width="100%" border="none"
 		sclass="sharedForms-captioned">
 		<panelchildren self="@insert(sharedFormsCaptioned)" style="border:none" />
-		<toolbar self="@insert(sharedFormsToolbar)" id="toolbar"
+		<toolbar self="@insert(sharedFormsToolbar)" name="toolbar"
 			visible="false" />
 	</panel>
 </zk>

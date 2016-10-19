@@ -4,36 +4,36 @@
 	<splitterpane relativeSize="30">
 		<div height="100%" width="100%">
 			<div zclass="btn-toolbar btn-group btn-group-xs" style="min-height:33px;padding:5px">
-				<button id="btnUp" zclass="btn" sclass="btn-link"
+				<button name="btnUp" zclass="btn" sclass="btn-link"
 					tooltiptext="${labels.cwf.shell.designer.propedit.custom.btn.up.hint}"
 					style="background:transparent"
 					image="${rc:getIconPath('carewebframework:16x16:arrowU.png')}" />
-				<button id="btnDown" zclass="btn" sclass="btn-link"
+				<button name="btnDown" zclass="btn" sclass="btn-link"
 					tooltiptext="${labels.cwf.shell.designer.propedit.custom.btn.down.hint}"
 					style="background:transparent"
 					image="${rc:getIconPath('carewebframework:16x16:arrowD.png')}" />
-				<button id="btnLeft" zclass="btn" sclass="btn-link"
+				<button name="btnLeft" zclass="btn" sclass="btn-link"
 					tooltiptext="${labels.cwf.shell.designer.propedit.custom.btn.promote.hint}"
 					style="background:transparent"
 					image="${rc:getIconPath('carewebframework:16x16:arrowL.png')}" />
-				<button id="btnRight" zclass="btn" sclass="btn-link"
+				<button name="btnRight" zclass="btn" sclass="btn-link"
 					tooltiptext="${labels.cwf.shell.designer.propedit.custom.btn.demote.hint}"
 					style="background:transparent"
 					image="${rc:getIconPath('carewebframework:16x16:arrowR.png')}" />
-				<button id="btnAdd" zclass="btn" sclass="btn-link"
+				<button name="btnAdd" zclass="btn" sclass="btn-link"
 					tooltiptext="${labels.cwf.shell.designer.propedit.custom.btn.add.hint}"
 					style="background:transparent"
 					image="${rc:getIconPath('carewebframework:16x16:add.png')}" />
-				<button id="btnDelete" zclass="btn" sclass="btn-link"
+				<button name="btnDelete" zclass="btn" sclass="btn-link"
 					tooltiptext="${labels.cwf.shell.designer.propedit.custom.btn.delete.hint}"
 					style="background:transparent"
 					image="${rc:getIconPath('carewebframework:16x16:delete.png')}" />
 			</div>
-			<tree id="tree" vflex="1"
+			<tree name="tree" vflex="1"
 				style="text-overflow:ellipsis;white-space:nowrap">
-				<treechildren id="root" />
+				<treechildren name="root" />
 			</tree>
 		</div>
 	</splitterpane>
-	<splitterpane id="gridParent" relativeSize="70" />
+	<splitterpane name="gridParent" relativeSize="70" />
 </splitterview>

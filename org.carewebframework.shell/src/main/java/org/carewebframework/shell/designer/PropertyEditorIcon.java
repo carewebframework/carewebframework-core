@@ -27,11 +27,10 @@ package org.carewebframework.shell.designer;
 
 import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.property.PropertyInfo;
+import org.carewebframework.ui.cwf.IconPicker;
 import org.carewebframework.ui.icons.IconLibraryRegistry;
 import org.carewebframework.ui.icons.IconPickerEx;
 import org.carewebframework.ui.icons.IconUtil;
-import org.carewebframework.ui.zk.IconPicker;
-
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;

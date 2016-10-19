@@ -29,14 +29,13 @@ import static org.junit.Assert.assertEquals;
 
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.ui.test.CommonTest;
-
 import org.junit.Test;
 
 public class SpringTest extends CommonTest {
     
     @Test
     public void test() {
-        TestBean bean = desktopContext.getBean(TestBean.class);
+        TestBean bean = pageContext.getBean(TestBean.class);
         //Test ZK LabelPropertySource and DomainPropertySource
         assertEquals("Label injection failed.", StrUtil.getLabel("cwf.ui.test.label"), bean.getLabel());
         assertEquals("Property injection failed.", "Default property1", bean.getProperty1());

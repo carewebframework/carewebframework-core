@@ -37,8 +37,6 @@ import org.carewebframework.web.component.BaseComponent;
  */
 public class MainController extends PluginController {
     
-    private static final long serialVersionUID = 1L;
-    
     private PropertyGrid propertyGrid;
     
     private ISettingsProvider provider;
@@ -51,8 +49,8 @@ public class MainController extends PluginController {
      * Connects an embedded instance of the property grid to the plug-in's root component.
      */
     @Override
-    public void doAfterCompose(BaseComponent comp) throws Exception {
-        super.doAfterCompose(comp);
+    public void afterInitialized(BaseComponent comp) {
+        super.afterInitialized(comp);
         propertyGrid = PropertyGrid.create(null, comp, true);
         getContainer().registerProperties(this, "provider", "group");
     }

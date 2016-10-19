@@ -45,7 +45,7 @@ public class XMLViewer {
      */
     public static void showXML(Document document) {
         try {
-            BaseComponent dlg = PageParser.getInstance().parse(XMLConstants.VIEW_DIALOG).materialize(null);
+            BaseComponent dlg = PageUtil.createPage(XMLConstants.VIEW_DIALOG, null);
             EventUtil.send(new Event("modal", dlg, document));
         } catch (Exception e) {
             throw MiscUtil.toUnchecked(e);

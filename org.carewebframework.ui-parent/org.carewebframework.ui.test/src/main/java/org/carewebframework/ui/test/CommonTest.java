@@ -34,12 +34,10 @@ import java.io.StringWriter;
 import java.io.Writer;
 
 import org.carewebframework.common.StrUtil;
-
-import org.springframework.context.ApplicationContext;
-import org.springframework.core.io.Resource;
-
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.springframework.context.ApplicationContext;
+import org.springframework.core.io.Resource;
 
 /**
  * Base class for tests using mock environment.
@@ -54,7 +52,7 @@ public class CommonTest {
     
     public static ApplicationContext rootContext;
     
-    public static ApplicationContext desktopContext;
+    public static ApplicationContext pageContext;
     
     @BeforeClass
     public static void beforeClass$CommonTest() throws Exception {
@@ -63,7 +61,7 @@ public class CommonTest {
             mockEnvironment = mockEnvironmentClass.newInstance();
             mockEnvironment.init(configLocations);
             rootContext = mockEnvironment.getRootContext();
-            desktopContext = mockEnvironment.getDesktopContext();
+            pageContext = mockEnvironment.getPageContext();
         }
     }
     
@@ -74,7 +72,7 @@ public class CommonTest {
             mockEnvironment.close();
             mockEnvironment = null;
             rootContext = null;
-            desktopContext = null;
+            pageContext = null;
         }
     }
     
@@ -86,7 +84,7 @@ public class CommonTest {
      * @throws IOException IO exception.
      */
     public static String getTextFromResource(String resourceName) throws IOException {
-        Resource resource = desktopContext.getResource("classpath:" + resourceName);
+        Resource resource = pageContext.getResource("classpath:" + resourceName);
         InputStream is = resource.getInputStream();
         Writer writer = new StringWriter();
         char[] buffer = new char[1024];

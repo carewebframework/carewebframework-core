@@ -1,5 +1,5 @@
-<bandbox id="bandbox" autodrop="false" width="100%">
-	<bandpopup id="bandpopup" width="100%">
-		<textbox id="textbox" width="99%"/>
+<bandbox name="bandbox" autodrop="false" width="100%">
+	<bandpopup name="bandpopup" width="100%">
+		<textbox name="textbox" width="99%"/>
 	</bandpopup>
 </bandbox>

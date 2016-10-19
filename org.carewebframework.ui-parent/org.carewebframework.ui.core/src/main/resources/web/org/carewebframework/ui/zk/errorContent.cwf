@@ -1,37 +1,37 @@
 <?variable-resolver class="org.carewebframework.ui.FrameworkVariableResolver"?>
 
-<vlayout id="errorContent" apply="${exceptionController}" spacing="0">
+<vlayout name="errorContent" controller="${exceptionController}" spacing="0">
 	<html content="${labels.cwf.error.dialog.message}" hflex="1" />
 	<div zclass="btn-toolbar" style="text-align:center" hflex="1">
-		<button id="btnDetail" zclass="btn" sclass="btn-info btn-xs"
+		<button name="btnDetail" zclass="btn" sclass="btn-info btn-xs"
 			style="margin-top: 20px"
 			label="${labels.cwf.error.dialog.btn.detail.label}" />
 	</div>
-	<grid id="detail" fixedLayout="true" visible="false">
+	<grid name="detail" fixedLayout="true" visible="false">
 		<columns sizable="false" visible="false">
 			<column width="20%" />
 			<column width="80%" />
 		</columns>
 		<rows>
 			<row>
-				<label value="${labels.cwf.error.dialog.cls.label}" />
-				<label id="lblExceptionClass" />
+				<label label="${labels.cwf.error.dialog.cls.label}" />
+				<label name="lblExceptionClass" />
 			</row>
 			<row>
-				<label value="${labels.cwf.error.dialog.msg.label}" />
-				<label id="lblMessage" />
+				<label label="${labels.cwf.error.dialog.msg.label}" />
+				<label name="lblMessage" />
 			</row>
 			<row>
-				<label value="${labels.cwf.error.dialog.code.label}" />
-				<label id="lblCode" />
+				<label label="${labels.cwf.error.dialog.code.label}" />
+				<label name="lblCode" />
 			</row>
 			<row>
-				<label value="${labels.cwf.error.dialog.status.label}" />
-				<label id="lblStatusCode" />
+				<label label="${labels.cwf.error.dialog.status.label}" />
+				<label name="lblStatusCode" />
 			</row>
 			<row valign="top">
-				<label value="${labels.cwf.error.dialog.trace.label}" />
-				<textbox id="txtStackTrace" rows="15" hflex="1"
+				<label label="${labels.cwf.error.dialog.trace.label}" />
+				<textbox name="txtStackTrace" rows="15" hflex="1"
 					readonly="true" />
 			</row>
 		</rows>

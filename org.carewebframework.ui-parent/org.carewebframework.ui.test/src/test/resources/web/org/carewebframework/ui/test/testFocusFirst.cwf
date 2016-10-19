@@ -1,27 +1,27 @@
 <zk>
-	<div id="root">
-		<idspace id="test1">
+	<div name="root">
+		<idspace name="test1">
 			<label />
-			<textbox id="ele1" readonly="true" />
-			<textbox id="ele2" visible="false" />
+			<textbox name="ele1" readonly="true" />
+			<textbox name="ele2" visible="false" />
 			<label />
-			<textbox id="ele3" disabled="true" />
-			<textbox id="test1_correct" />
+			<textbox name="ele3" disabled="true" />
+			<textbox name="test1_correct" />
 		</idspace>
 		
-		<idspace id="test2">
-			<datebox id="ele1" readonly="true" />
+		<idspace name="test2">
+			<datebox name="ele1" readonly="true" />
 			<label />
-			<datebox id="test2_correct" />
-			<textbox id="ele2" visible="false" />
-			<textbox id="ele3" disabled="true" />
+			<datebox name="test2_correct" />
+			<textbox name="ele2" visible="false" />
+			<textbox name="ele3" disabled="true" />
 		</idspace>
 		
-		<idspace id="test3">
-			<textbox id="ele1" readonly="true" />
+		<idspace name="test3">
+			<textbox name="ele1" readonly="true" />
 			<label />
-			<textbox id="ele2" visible="false" />
-			<textbox id="ele3" disabled="true" />
+			<textbox name="ele2" visible="false" />
+			<textbox name="ele3" disabled="true" />
 			<label />
 		</idspace>
 	</div>

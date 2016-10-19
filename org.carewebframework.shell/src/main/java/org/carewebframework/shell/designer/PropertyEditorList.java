@@ -28,15 +28,16 @@ package org.carewebframework.shell.designer;
 import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.property.PropertyInfo;
 import org.carewebframework.ui.zk.ListUtil;
-
+import org.carewebframework.web.component.Combobox;
+import org.carewebframework.web.component.Comboitem;
+import org.carewebframework.web.event.ChangeEvent;
+import org.carewebframework.web.event.DblclickEvent;
+import org.carewebframework.web.event.Event;
+import org.carewebframework.web.event.EventUtil;
+import org.carewebframework.web.event.IEventListener;
+import org.carewebframework.web.event.KeyCode;
+import org.carewebframework.web.event.KeyEvent;
 import org.springframework.util.StringUtils;
-
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.event.KeyEvent;
-import org.zkoss.zul.Combobox;
-import org.zkoss.zul.Comboitem;
 
 /**
  * Base class for combobox-based property editors.
@@ -47,7 +48,7 @@ public class PropertyEditorList extends PropertyEditorBase {
     
     private String delimiter;
     
-    private final EventListener<KeyEvent> deleteListener = new EventListener<KeyEvent>() {
+    private final IEventListener deleteListener = new IEventListener() {
         
         /**
          * Pressing delete key or control-X will clear combo box selection.
@@ -56,14 +57,16 @@ public class PropertyEditorList extends PropertyEditorBase {
          * @throws Exception Unspecified exception.
          */
         @Override
-        public void onEvent(KeyEvent event) throws Exception {
-            if (event.getKeyCode() == KeyEvent.DELETE || event.getKeyCode() == 88) {
+        public void onEvent(Event event) {
+            KeyEvent evt = (KeyEvent) event;
+            
+            if (evt.getKeyCode() == KeyCode.VK_DELETE || evt.getKeyCode() == 88) {
                 boolean changed = !StringUtils.isEmpty(combobox.getValue());
                 combobox.setValue(null);
                 combobox.close();
                 
                 if (changed) {
-                    Events.postEvent(Events.ON_CHANGE, combobox, null);
+                    EventUtil.post(ChangeEvent.TYPE, combobox, null);
                 }
             }
         }
@@ -85,10 +88,10 @@ public class PropertyEditorList extends PropertyEditorBase {
         delimiter = propInfo.getConfigValue("delimiter");
         
         if (!combobox.isReadonly()) {
-            combobox.addForward(Events.ON_CHANGING, propGrid, Events.ON_CHANGE);
+            combobox.registerEventForward(ChangeEvent.TYPE, propGrid, null);
         }
         
-        combobox.addEventListener(Events.ON_DOUBLE_CLICK, new EventListener<Event>() {
+        combobox.addEventListener(DblclickEvent.TYPE, new IEventListener() {
             
             /**
              * Double-clicking a combo item will select the item and close the combo box.
@@ -97,10 +100,10 @@ public class PropertyEditorList extends PropertyEditorBase {
              * @throws Exception Unspecified exception.
              */
             @Override
-            public void onEvent(Event event) throws Exception {
+            public void onEvent(Event event) {
                 int i = combobox.getSelectedIndex() + 1;
-                combobox.setSelectedIndex(i >= combobox.getItemCount() ? 0 : i);
-                Events.sendEvent(Events.ON_CHANGE, propGrid, null);
+                combobox.setSelectedIndex(i >= combobox.getChildCount() ? 0 : i);
+                EventUtil.send(ChangeEvent.TYPE, propGrid, null);
                 combobox.close();
             }
             
@@ -146,8 +149,9 @@ public class PropertyEditorList extends PropertyEditorBase {
      * @return The newly created combo item.
      */
     protected Comboitem appendItem(String label, Object value) {
-        Comboitem item = combobox.appendItem(label);
-        item.setValue(value);
+        Comboitem item = new Comboitem(label);
+        combobox.addChild(item);
+        item.setData(value);
         return item;
     }
     

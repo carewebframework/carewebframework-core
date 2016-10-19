@@ -25,10 +25,16 @@
  */
 package org.carewebframework.ui.wonderbar;
 
-import java.awt.Component;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.carewebframework.common.StrUtil;
+import org.carewebframework.web.ancillary.ComponentException;
+import org.carewebframework.web.annotation.Component.PropertyGetter;
+import org.carewebframework.web.annotation.Component.PropertySetter;
+import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.component.BaseInputboxComponent;
+import org.carewebframework.web.event.EventUtil;
 
 /**
  * This is the main ZK component for the wonder bar. It supports both server-side searching for
@@ -37,24 +43,17 @@ import java.util.List;
  * 
  * @param <T> Type returned by search provider.
  */
-public class Wonderbar<T> extends InputElement {
+public class Wonderbar<T> extends BaseInputboxComponent<String> {
     
     /**
      * Controls behavior of client-side searches.
      */
-    public enum MatchMode implements JSONAware {
+    public enum MatchMode {
         ANY_ORDER, // May match any any order
         SAME_ORDER, // Must match in same order, not necessarily contiguous
         ADJACENT, // Must match in same contiguous order, not necessarily at start
-        FROM_START; // Must match in same order at the start
-        
-        @Override
-        public String toJSONString() {
-            return Integer.toString(ordinal());
-        }
+        FROM_START // Must match in same order at the start
     };
-    
-    private static final long serialVersionUID = 1L;
     
     private final String MESSAGE_TOO_MANY = StrUtil.getLabel("cwf.wonderbar.items.truncated",
         "<< More than {0} items were found for the current input.  Please enter more characters. >>");
@@ -87,109 +86,46 @@ public class Wonderbar<T> extends InputElement {
     
     private MatchMode clientMatchMode = MatchMode.ANY_ORDER;
     
-    static {
-        addClientEvent(Wonderbar.class, WonderbarSelectEvent.ON_WONDERBAR_SELECT, CE_IMPORTANT | CE_NON_DEFERRABLE);
-        addClientEvent(Wonderbar.class, WonderbarSearchEvent.ON_WONDERBAR_SEARCH, CE_IMPORTANT | CE_NON_DEFERRABLE);
-        addClientEvent(Wonderbar.class, Events.ON_FOCUS, CE_DUPLICATE_IGNORE);
-        addClientEvent(Wonderbar.class, Events.ON_BLUR, CE_DUPLICATE_IGNORE);
-        addClientEvent(Wonderbar.class, Events.ON_ERROR, CE_DUPLICATE_IGNORE | CE_IMPORTANT);
-    }
-    
     public Wonderbar() {
         super();
         truncItem = new WonderbarGroup();
-        truncItem.setZclass("cwf-wonderbar-item-more");
+        truncItem.addClass("cwf-wonderbar-item-more");
         setMaxSearchResults(100);
-    }
-    
-    @Override
-    public void renderProperties(ContentRenderer renderer) throws IOException {
-        super.renderProperties(renderer);
-        renderer.render("_minLength", minSearchCharacters);
-        renderer.render("_maxResults", maxSearchResults);
-        renderer.render("_openOnFocus", openOnFocus);
-        renderer.render("_skipTab", changeOnOKOnly);
-        renderer.render("_selectFirst", selectFirstItem);
-        renderer.render("_clientMode", isClient);
-        renderer.render("_matchMode", clientMatchMode);
-        renderer.render("_truncItem", truncItem);
-    }
-    
-    @Override
-    public String getZclass() {
-        return _zclass == null ? "cwf-wonderbar" : _zclass;
     }
     
     /**
      * Processes the onWonderbarSelect and onWonderbarSearch events.
+     * 
+     * @Override public void service(AuRequest request, boolean everError) { String cmd =
+     *           request.getCommand(); if (cmd.equals(WonderbarSelectEvent.ON_WONDERBAR_SELECT)) {
+     *           WonderbarSelectEvent event = WonderbarSelectEvent.getSelectEvent(request); if
+     *           (selectedItem != event.getSelectedItem()) { selectedItem = event.getSelectedItem();
+     *           Events.postEvent(event); } } else if
+     *           (cmd.equals(WonderbarSearchEvent.ON_WONDERBAR_SEARCH)) { WonderbarSearchEvent event
+     *           = WonderbarSearchEvent.getSearchEvent(request); Events.postEvent(event); } else {
+     *           super.service(request, everError); } }
      */
-    @Override
-    public void service(AuRequest request, boolean everError) {
-        String cmd = request.getCommand();
-        
-        if (cmd.equals(WonderbarSelectEvent.ON_WONDERBAR_SELECT)) {
-            WonderbarSelectEvent event = WonderbarSelectEvent.getSelectEvent(request);
-            
-            if (selectedItem != event.getSelectedItem()) {
-                selectedItem = event.getSelectedItem();
-                Events.postEvent(event);
-            }
-        } else if (cmd.equals(WonderbarSearchEvent.ON_WONDERBAR_SEARCH)) {
-            WonderbarSearchEvent event = WonderbarSearchEvent.getSearchEvent(request);
-            Events.postEvent(event);
-        } else {
-            super.service(request, everError);
-        }
-    }
-    
-    /**
-     * Validates attempt to add a child.
-     */
-    @Override
-    public void beforeChildAdded(Component child, Component insertBefore) {
-        super.beforeChildAdded(child, insertBefore);
-        
-        if (child instanceof WonderbarDefaults) {
-            if (defaultItems != null && defaultItems != child) {
-                throw new UiException("Default items already specified.");
-            }
-        } else if (child instanceof WonderbarItems) {
-            if (items != null && items != child) {
-                throw new UiException("Items already specified.");
-            }
-        } else {
-            throw new UiException("Unsupported child for Wonderbar: " + child);
-        }
-    }
     
     /**
      * Updates defaultItems and items when a child is added.
      */
     @Override
-    public boolean insertBefore(Component child, Component refChild) {
-        if (child instanceof WonderbarDefaults) {
-            if (super.insertBefore(child, refChild)) {
-                defaultItems = (WonderbarDefaults) child;
-                return true;
-            }
-        } else if (child instanceof WonderbarItems) {
-            if (super.insertBefore(child, refChild)) {
-                items = (WonderbarItems) child;
-                return true;
-            }
-        } else {
-            return super.insertBefore(child, refChild);
-        }
+    public void insertChild(BaseComponent child, BaseComponent refChild) {
+        super.insertChild(child, refChild);
         
-        return false;
+        if (child instanceof WonderbarDefaults) {
+            defaultItems = (WonderbarDefaults) child;
+        } else if (child instanceof WonderbarItems) {
+            items = (WonderbarItems) child;
+        }
     }
     
     /**
      * Updates defaultItems and items when a child is removed.
      */
     @Override
-    public void beforeChildRemoved(Component child) {
-        super.beforeChildRemoved(child);
+    public void beforeRemoveChild(BaseComponent child) {
+        super.beforeRemoveChild(child);
         
         if (defaultItems == child) {
             defaultItems = null;
@@ -199,20 +135,21 @@ public class Wonderbar<T> extends InputElement {
     }
     
     @Override
-    protected Object coerceFromString(String value) throws WrongValueException {
+    protected String _toValue(String value) {
         return value == null ? "" : value;
     }
     
     @Override
-    protected String coerceToString(Object value) {
-        return value == null ? "" : value.toString();
+    protected String _toString(String value) {
+        return value == null ? "" : value;
     }
     
     /**
      * Clear the current selection.
      */
+    @Override
     public void clear() {
-        setText("");
+        super.clear();
         initItems(null, false, false);
     }
     
@@ -235,7 +172,7 @@ public class Wonderbar<T> extends InputElement {
         term = term == null ? "" : term.trim();
         
         if (!fromClient) {
-            setText(term);
+            setValue(term);
             invoke("search", term);
             focus();
         } else {
@@ -273,34 +210,8 @@ public class Wonderbar<T> extends InputElement {
         invoke("_close");
     }
     
-    /**
-     * Invokes a function on the client.
-     * 
-     * @param fnc Function name.
-     * @param args Function arguments.
-     */
-    private void invoke(String fnc, Object... args) {
-        response(new AuInvoke(this, fnc, args));
-    }
-    
-    @Override
-    public String getWidgetClass() {
-        return "wonderbar.ext.Wonderbar";
-    }
-    
-    @Override
-    protected boolean isChildable() {
-        return true;
-    }
-    
     public WonderbarDefaults getDefaultItems() {
         return this.defaultItems;
-    }
-    
-    @Override
-    public void onPageAttached(Page newpage, Page oldpage) {
-        super.onPageAttached(newpage, oldpage);
-        truncItem.setPage(newpage);
     }
     
     /**
@@ -317,7 +228,7 @@ public class Wonderbar<T> extends InputElement {
         }
         
         this.isClient = value;
-        smartUpdate("_clientMode", value);
+        sync("_clientMode", value);
         initItems(searchProvider.getDefaultItems(), false, true);
         initItems(value ? ((IWonderbarClientSearchProvider<T>) searchProvider).getAllItems() : null, false, false);
     }
@@ -335,15 +246,15 @@ public class Wonderbar<T> extends InputElement {
         
         if (list != null) {
             if (parent != null) {
-                parent.clear();
+                parent.destroyChildren();
             } else {
                 parent = defaults ? new WonderbarDefaults() : new WonderbarItems();
-                appendChild(parent);
+                addChild(parent);
             }
             
             for (T data : list) {
                 WonderbarItem item = new WonderbarItem();
-                parent.appendChild(item);
+                parent.addChild(item);
                 
                 if (renderer != null) {
                     renderer.render(item, data, parent.getChildren().size() - 1);
@@ -355,10 +266,10 @@ public class Wonderbar<T> extends InputElement {
             }
             
             if (tooMany) {
-                parent.appendChild(truncItem);
+                parent.addChild(truncItem);
             }
         } else if (parent != null) {
-            parent.clear();
+            parent.destroyChildren();
         }
         
         selectedItem = null;
@@ -370,6 +281,7 @@ public class Wonderbar<T> extends InputElement {
      * 
      * @return Change-on-OK setting.
      */
+    @PropertyGetter("changeOnOKOnly")
     public boolean getChangeOnOKOnly() {
         return changeOnOKOnly;
     }
@@ -378,11 +290,13 @@ public class Wonderbar<T> extends InputElement {
      * Sets item selection behavior. Set to true if item selection occurs only when the enter key is
      * pressed, or false if item selection also occurs when tabbing away from the component.
      * 
-     * @param value Change-on-OK setting.
+     * @param changeOnOKOnly Change-on-OK setting.
      */
-    public void setChangeOnOKOnly(boolean value) {
-        this.changeOnOKOnly = value;
-        smartUpdate("_skipTab", value);
+    @PropertySetter("changeOnOKOnly")
+    public void setChangeOnOKOnly(boolean changeOnOKOnly) {
+        if (changeOnOKOnly != this.changeOnOKOnly) {
+            sync("_skipTab", this.changeOnOKOnly = changeOnOKOnly);
+        }
     }
     
     /**
@@ -390,6 +304,7 @@ public class Wonderbar<T> extends InputElement {
      * 
      * @return The open-on-focus setting.
      */
+    @PropertyGetter("openOnFocus")
     public boolean getOpenOnFocus() {
         return openOnFocus;
     }
@@ -397,11 +312,13 @@ public class Wonderbar<T> extends InputElement {
     /**
      * Set to true if the wonder bar menu should appear when the component receives focus.
      * 
-     * @param value The open-on-focus setting.
+     * @param openOnFocus The open-on-focus setting.
      */
-    public void setOpenOnFocus(boolean value) {
-        this.openOnFocus = value;
-        smartUpdate("_openOnFocus", value);
+    @PropertySetter("openOnFocus")
+    public void setOpenOnFocus(boolean openOnFocus) {
+        if (openOnFocus != this.openOnFocus) {
+            sync("_openOnFocus", this.openOnFocus = openOnFocus);
+        }
     }
     
     /**
@@ -409,6 +326,7 @@ public class Wonderbar<T> extends InputElement {
      * 
      * @return The max number of search results to return.
      */
+    @PropertyGetter("maxSearchResults")
     public int getMaxSearchResults() {
         return this.maxSearchResults;
     }
@@ -416,12 +334,14 @@ public class Wonderbar<T> extends InputElement {
     /**
      * Sets the maximum search results to be returned by the search provider.
      * 
-     * @param value The max number of search results to return.
+     * @param maxSearchResults The max number of search results to return.
      */
-    public void setMaxSearchResults(int value) {
-        this.maxSearchResults = value;
-        smartUpdate("_maxResults", value);
-        truncItem.setLabel(MessageFormats.format(MESSAGE_TOO_MANY, new Object[] { value }));
+    @PropertySetter("maxSearchResults")
+    public void setMaxSearchResults(int maxSearchResults) {
+        if (maxSearchResults != this.maxSearchResults) {
+            sync("_maxResults", this.maxSearchResults = maxSearchResults);
+            truncItem.setLabel(StrUtil.formatMessage(MESSAGE_TOO_MANY, maxSearchResults));
+        }
     }
     
     /**
@@ -430,6 +350,7 @@ public class Wonderbar<T> extends InputElement {
      * 
      * @return Minimum search characters.
      */
+    @PropertyGetter("minSearchCharacters")
     public int getMinSearchCharacters() {
         return this.minSearchCharacters;
     }
@@ -437,11 +358,13 @@ public class Wonderbar<T> extends InputElement {
     /**
      * Set the minimum number of characters that must be typed before search results are displayed
      * 
-     * @param value Minimum search characters.
+     * @param minSearchCharacters Minimum search characters.
      */
-    public void setMinSearchCharacters(int value) {
-        this.minSearchCharacters = value;
-        smartUpdate("_minLength", value);
+    @PropertySetter("minSearchCharacters")
+    public void setMinSearchCharacters(int minSearchCharacters) {
+        if (minSearchCharacters != this.minSearchCharacters) {
+            sync("_minLength", this.minSearchCharacters = minSearchCharacters);
+        }
     }
     
     /**
@@ -452,6 +375,7 @@ public class Wonderbar<T> extends InputElement {
      * 
      * @return The client search threshold.
      */
+    @PropertyGetter("clientThreshold")
     public int getClientThreshold() {
         return clientThreshold;
     }
@@ -462,11 +386,12 @@ public class Wonderbar<T> extends InputElement {
      * When the number of searchable items exceeds this threshold, the server-based strategy is
      * employed.
      * 
-     * @param value The client search threshold.
+     * @param clientThreshold The client search threshold.
      */
-    public void setClientThreshold(int value) {
-        if (this.clientThreshold != value) {
-            this.clientThreshold = value;
+    @PropertySetter("clientThreshold")
+    public void setClientThreshold(int clientThreshold) {
+        if (this.clientThreshold != clientThreshold) {
+            this.clientThreshold = clientThreshold;
             
             if (searchProvider != null) {
                 init(false);
@@ -479,6 +404,7 @@ public class Wonderbar<T> extends InputElement {
      * 
      * @return The client match mode.
      */
+    @PropertyGetter("clientMatchMode")
     public MatchMode getClientMatchMode() {
         return clientMatchMode;
     }
@@ -488,17 +414,11 @@ public class Wonderbar<T> extends InputElement {
      * 
      * @param clientMatchMode The client match mode.
      */
+    @PropertySetter("clientMatchMode")
     public void setClientMatchMode(MatchMode clientMatchMode) {
-        this.clientMatchMode = clientMatchMode;
-        smartUpdate("_matchMode", clientMatchMode);
-    }
-    
-    public String getValue() throws WrongValueException {
-        return getText();
-    }
-    
-    public void setValue(String value) throws WrongValueException {
-        setText(value);
+        if (clientMatchMode != this.clientMatchMode) {
+            sync("_matchMode", this.clientMatchMode = clientMatchMode);
+        }
     }
     
     /**
@@ -537,14 +457,14 @@ public class Wonderbar<T> extends InputElement {
     public void setSelectedItem(WonderbarItem selectedItem, boolean fireEvent) {
         if (selectedItem != this.selectedItem) {
             if (selectedItem != null && (selectedItem.getParent() == null || selectedItem.getParent().getParent() != this)) {
-                throw new UiException("Item does not belong to this parent.");
+                throw new ComponentException("Item does not belong to this parent.");
             }
             
             this.selectedItem = selectedItem;
             invoke("_selectItem", selectedItem);
             
             if (fireEvent) {
-                Events.postEvent(WonderbarSelectEvent.ON_WONDERBAR_SELECT, this, null);
+                EventUtil.post(WonderbarSelectEvent.TYPE, this, null);
             }
         }
     }
@@ -570,10 +490,10 @@ public class Wonderbar<T> extends InputElement {
         WonderbarItem item = new WonderbarItem(label, null, data);
         
         if (this.items == null) {
-            appendChild(new WonderbarItems());
+            addChild(new WonderbarItems());
         }
         
-        this.items.appendChild(item);
+        this.items.addChild(item);
         setSelectedItem(item, fireEvent);
     }
     
@@ -640,6 +560,7 @@ public class Wonderbar<T> extends InputElement {
      * 
      * @return The select first item setting.
      */
+    @PropertyGetter("selectFirstItem")
     public boolean isSelectFirstItem() {
         return selectFirstItem;
     }
@@ -648,11 +569,13 @@ public class Wonderbar<T> extends InputElement {
      * Set to true if the first selectable item in the wonder bar menu should be selected by
      * default.
      * 
-     * @param value The select first item setting.
+     * @param selectFirstItem The select first item setting.
      */
-    public void setSelectFirstItem(boolean value) {
-        this.selectFirstItem = value;
-        smartUpdate("_selectFirst", value);
+    @PropertySetter("selectFirstItem")
+    public void setSelectFirstItem(boolean selectFirstItem) {
+        if (selectFirstItem != this.selectFirstItem) {
+            sync("_selectFirst", this.selectFirstItem = selectFirstItem);
+        }
     }
     
 }

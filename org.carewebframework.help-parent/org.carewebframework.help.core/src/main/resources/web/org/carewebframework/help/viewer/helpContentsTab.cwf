@@ -1,5 +1,5 @@
 <zk>
-	<tree id="tree" vflex="true" hflex="1" sclass="cwf-help-toc-tree">
+	<tree name="tree" vflex="true" hflex="1" sclass="cwf-help-toc-tree">
 		<treechildren />
 	</tree>
 	

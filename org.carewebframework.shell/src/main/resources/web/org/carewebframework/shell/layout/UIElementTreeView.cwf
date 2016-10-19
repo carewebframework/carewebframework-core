@@ -2,13 +2,13 @@
 	
 	<idspace width="100%" height="100%">
 		<borderlayout>
-			<west id="selectorPane" splittable="true" collapsible="true"
+			<west name="selectorPane" splittable="true" collapsible="true"
 				width="200px"
 				w:onClick="jq(this).find('.z-west-colpsd').trigger('click');">
-				<div id="selector" height="100%" width="100%" zclass="cwf-treeview" />
+				<div name="selector" height="100%" width="100%" zclass="cwf-treeview" />
 			</west>
 			<center zindex="99">
-				<div id="innerPane" height="100%" width="100%" />
+				<div name="innerPane" height="100%" width="100%" />
 			</center>
 		</borderlayout>
 	</idspace>

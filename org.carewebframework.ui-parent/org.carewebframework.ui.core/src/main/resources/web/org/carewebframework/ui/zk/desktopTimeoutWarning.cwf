@@ -1,38 +1,38 @@
 <zk>
 	<window zclass="cwf-timeout">
 		<vlayout>
-			<div id="timeoutPanel" zclass="cwf-timeout-panel alert">
-				<label id="lblDuration" style="font-weight:bold"
+			<div name="timeoutPanel" zclass="cwf-timeout-panel alert">
+				<label name="lblDuration" style="font-weight:bold"
 					sclass="alert-link" />
 				<separator orient="vertical" width="40px" />
-				<button id="btnKeepOpen" sclass="alert-link"
+				<button name="btnKeepOpen" sclass="alert-link"
 					label="${labels.cwf.timeout.keepalive.label}" />
 			</div>
 			<div zclass="cwf-timeout-lock-panel">
-				<panel id="lockPanel" mold="bootstrap"
+				<panel name="lockPanel" mold="bootstrap"
 					title="${labels.cwf.timeout.lock.title}">
 					<panelchildren>
 						<hlayout>
 							<span
 								zclass="glyphicon glyphicon-lock text-danger"
 								style="font-size:300%;margin:20px 30px 0 0" />
-							<label id="lblLocked" />
+							<label name="lblLocked" />
 							<span
 								zclass="glyphicon glyphicon-lock text-danger"
 								style="font-size:300%;margin:20px 0 0 30px" />
 						</hlayout>
 					</panelchildren>
 					<toolbar align="center">
-						<textbox id="txtPassword" type="password"
+						<textbox name="txtPassword" type="password"
 							forward="onOK=btnUnlock.onClick" />
-						<button id="btnUnlock" zclass="btn"
+						<button name="btnUnlock" zclass="btn"
 							sclass="btn-success btn-sm"
 							label="${labels.cwf.timeout.unlock.label}" />
 						<space />
-						<button id="btnLogout" zclass="btn"
+						<button name="btnLogout" zclass="btn"
 							sclass="btn-danger btn-sm"
 							label="${labels.cwf.timeout.logout.label}" />
-						<label id="lblInfo"
+						<label name="lblInfo"
 							style="display:block;color:red;font-weight:bold;padding-top:5px" />
 					</toolbar>
 				</panel>

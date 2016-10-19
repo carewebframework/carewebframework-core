@@ -1,4 +1,4 @@
-<radiogroup id="radiogroup">
+<radiogroup name="radiogroup">
 	<radio
 		label=" ${labels.cwf.shell.designer.propedit.bool.radio.true_.label}"
 		forward="onFocus=onSelect" />

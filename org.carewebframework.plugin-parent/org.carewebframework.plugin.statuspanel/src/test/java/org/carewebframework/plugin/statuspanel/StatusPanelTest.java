@@ -33,9 +33,9 @@ import org.carewebframework.shell.CareWebShell;
 import org.carewebframework.shell.plugins.PluginContainer;
 import org.carewebframework.ui.FrameworkController;
 import org.carewebframework.ui.test.CommonTest;
+import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.component.Label;
 import org.junit.Test;
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zul.Label;
 
 public class StatusPanelTest extends CommonTest {
     
@@ -43,11 +43,11 @@ public class StatusPanelTest extends CommonTest {
     public void test() throws Exception {
         CareWebShell shell = new CareWebShell();
         shell.setLayout("/StatusPanelTest.xml");
-        shell.setPage(mockEnvironment.getDesktop().getFirstPage());
-        shell.afterCompose();
+        shell.setPage(mockEnvironment.getPage());
+        //TODO: shell.afterCompose();
         mockEnvironment.flushEvents();
         PluginContainer plugin = shell.getActivatedPlugin("cwfStatusPanel");
-        Component root = plugin.getFirstChild();
+        BaseComponent root = plugin.getFirstChild();
         StatusPanel controller = (StatusPanel) FrameworkController.getController(root);
         assertNotNull("Controller must not be null.", controller);
         assertEquals(1, root.getChildren().size());
@@ -58,11 +58,11 @@ public class StatusPanelTest extends CommonTest {
         test(root, "STATUS.TEST2", 2, 5);
     }
     
-    private void test(Component root, String eventName, int eventData, int expectedSize) {
+    private void test(BaseComponent root, String eventName, int eventData, int expectedSize) {
         String labelText = eventName + "." + eventData;
         EventManager.getInstance().fireLocalEvent(eventName, labelText);
         assertEquals(expectedSize, root.getChildren().size());
         Label label = (Label) root.getChildren().get(expectedSize - 1).getFirstChild();
-        assertEquals(labelText, label.getValue());
+        assertEquals(labelText, label.getLabel());
     }
 }

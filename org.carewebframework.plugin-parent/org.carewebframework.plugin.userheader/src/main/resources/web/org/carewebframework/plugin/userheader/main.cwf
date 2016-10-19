@@ -3,19 +3,19 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
 
-	<vlayout apply="${cwfUserHeaderController}" spacing="0" height="100%"
+	<vlayout controller="${cwfUserHeaderController}" spacing="0" height="100%"
 		width="100%">
 		<hlayout sclass="cwf-header-row" hflex="1" vflex="1">
-			<label id="userHeader" />
+			<label name="userHeader" />
 		</hlayout>
 		<hlayout sclass="cwf-header-row" hflex="1" vflex="1">
-			<a id="password" label="${labels.cwf.userheader.password.label}"
+			<a name="password" label="${labels.cwf.userheader.password.label}"
 				tooltiptext="${labels.cwf.userheader.password.hint}" visible="true" />
 			<space hflex="1" />
-			<a id="lock" label="${labels.cwf.userheader.lock.label}"
+			<a name="lock" label="${labels.cwf.userheader.lock.label}"
 				tooltiptext="${labels.cwf.userheader.lock.hint}" />
 			<space />
-			<a id="logout" label="${labels.cwf.userheader.logout.label}"
+			<a name="logout" label="${labels.cwf.userheader.logout.label}"
 				tooltiptext="${labels.cwf.userheader.logout.hint}" />
 		</hlayout>
 	</vlayout>

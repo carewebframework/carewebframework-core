@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://www.zkoss.org/2005/zul 
 		http://www.zkoss.org/2005/zul/zul.xsd">
 
-	<vlayout apply="${cwfFileTailerController}" vflex="1">
+	<vlayout controller="${cwfFileTailerController}" vflex="1">
 		<hlayout sclass="z-toolbar">
 			<combobox name="cboLogFiles" readonly="true" hflex="1" />
 			<span style="float:right">

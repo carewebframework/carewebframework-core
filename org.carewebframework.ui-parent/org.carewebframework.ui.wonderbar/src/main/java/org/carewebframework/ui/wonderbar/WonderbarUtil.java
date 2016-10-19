@@ -153,13 +153,13 @@ public class WonderbarUtil {
         WonderbarDefaults defaultItems = wonderbar.getDefaultItems();
         
         if (defaultItems == null) {
-            wonderbar.appendChild(defaultItems = new WonderbarDefaults());
+            wonderbar.addChild(defaultItems = new WonderbarDefaults());
         }
         
-        defaultItems.getItems().clear();
+        defaultItems.destroyChildren();
         
         if (items != null) {
-            defaultItems.getItems().addAll(items);
+            defaultItems.addChildren(items);
         }
     }
     

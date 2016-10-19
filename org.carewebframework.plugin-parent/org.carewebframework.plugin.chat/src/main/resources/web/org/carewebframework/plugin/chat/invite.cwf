@@ -4,9 +4,9 @@
 	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
 
 	<window title="${labels.cwf.chat.invite.title}" width="500px" mold="bootstrap"
-		apply="${cwfChatInviteController}" contentSclass="chat-invite">
+		controller="${cwfChatInviteController}" contentSclass="chat-invite">
 		<style src="~./org/carewebframework/plugin/chat/chat.css" />
-		<listbox id="lstSessions" rows="10" checkmark="true" vflex="1"
+		<listbox name="lstSessions" rows="10" checkmark="true" vflex="1"
 			multiple="true">
 			<listhead>
 				<listheader width="30px" />
@@ -16,13 +16,13 @@
 		</listbox>
 		<toolbar>
 			<span style="float:left;margin-top:5px">
-				<checkbox id="chkHideActive"
+				<checkbox name="chkHideActive"
 					label="${labels.cwf.chat.invite.check.hide.label}" />
 			</span>
 			<span style="float:right">
-				<button id="btnInvite" zclass="btn" sclass="btn-default btn-sm"
+				<button name="btnInvite" zclass="btn" sclass="btn-default btn-sm"
 					label="${labels.cwf.chat.invite.button.invite.label}" />
-				<button id="btnCancel" zclass="btn" sclass="btn-danger btn-sm"
+				<button name="btnCancel" zclass="btn" sclass="btn-danger btn-sm"
 					label="${labels.cwf.chat.invite.button.cancel.label}"
 					forward="onClick=onClose" />
 			</span>

@@ -4,25 +4,25 @@
 	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd ">
 	<menupopup
 		use="org.carewebframework.shell.designer.DesignContextMenu">
-		<menuitem id="mnuHeader" sclass="cwf-menu-header"
+		<menuitem name="mnuHeader" sclass="cwf-menu-header"
 			disabled="true" />
-		<menuitem id="mnuAdd"
+		<menuitem name="mnuAdd"
 			label="${labels.cwf.shell.designer.menu.add.label}" />
-		<menuitem id="mnuDelete"
+		<menuitem name="mnuDelete"
 			label="${labels.cwf.shell.designer.menu.delete.label}" />
 		<menuseparator />
-		<menuitem id="mnuCopy"
+		<menuitem name="mnuCopy"
 			label="${labels.cwf.shell.designer.menu.copy.label}" />
-		<menuitem id="mnuCut"
+		<menuitem name="mnuCut"
 			label="${labels.cwf.shell.designer.menu.cut.label}" />
-		<menuitem id="mnuPaste"
+		<menuitem name="mnuPaste"
 			label="${labels.cwf.shell.designer.menu.paste.label}" />
-		<menuitem id="mnuView"
+		<menuitem name="mnuView"
 			label="${labels.cwf.shell.designer.menu.view.label}" />
 		<menuseparator />
-		<menuitem id="mnuProperties"
+		<menuitem name="mnuProperties"
 			label="${labels.cwf.shell.designer.menu.properties.label}" />
-		<menuitem id="mnuAbout"
+		<menuitem name="mnuAbout"
 			label="${labels.cwf.shell.designer.menu.about.label}" />
 	</menupopup>
 

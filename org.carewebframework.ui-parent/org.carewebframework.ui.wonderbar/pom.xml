@@ -12,8 +12,8 @@
 	
 	<dependencies>
 		<dependency>
-			<groupId>org.zkoss.zk</groupId>
-			<artifactId>zul</artifactId>
+			<groupId>org.carewebframework</groupId>
+			<artifactId>org.carewebframework.web.core</artifactId>
 		</dependency>
 		<!-- Tests -->
 		<dependency>

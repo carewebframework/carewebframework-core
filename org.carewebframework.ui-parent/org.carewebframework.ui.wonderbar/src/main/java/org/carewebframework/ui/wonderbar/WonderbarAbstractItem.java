@@ -25,23 +25,18 @@
  */
 package org.carewebframework.ui.wonderbar;
 
-import java.io.IOException;
-
-import org.zkoss.zk.ui.sys.ContentRenderer;
-import org.zkoss.zul.impl.XulElement;
+import org.carewebframework.web.annotation.Component.PropertyGetter;
+import org.carewebframework.web.annotation.Component.PropertySetter;
+import org.carewebframework.web.component.BaseUIComponent;
 
 /**
  * Base class for wonder bar item and group.
  */
-public abstract class WonderbarAbstractItem extends XulElement {
-    
-    private static final long serialVersionUID = 1L;
+public abstract class WonderbarAbstractItem extends BaseUIComponent {
     
     private String value;
     
     private String label;
-    
-    private Object data;
     
     protected WonderbarAbstractItem() {
     }
@@ -56,16 +51,9 @@ public abstract class WonderbarAbstractItem extends XulElement {
     
     protected WonderbarAbstractItem(String label, String value, Object data) {
         this();
-        this.label = label;
-        this.value = value;
-        this.data = data;
-    }
-    
-    @Override
-    public void renderProperties(ContentRenderer renderer) throws IOException {
-        super.renderProperties(renderer);
-        renderer.render("label", label);
-        renderer.render("value", value);
+        setLabel(label);
+        setValue(value);
+        setData(data);
     }
     
     @Override
@@ -79,6 +67,7 @@ public abstract class WonderbarAbstractItem extends XulElement {
      * 
      * @return The value property
      */
+    @PropertyGetter("value")
     protected String getValue() {
         return value;
     }
@@ -89,9 +78,11 @@ public abstract class WonderbarAbstractItem extends XulElement {
      * 
      * @param value The value property
      */
+    @PropertySetter("value")
     protected void setValue(String value) {
-        this.value = value;
-        smartUpdate("value", value);
+        if (!areEqual(value, this.value)) {
+            sync("value", this.value = value);
+        }
     }
     
     /**
@@ -101,6 +92,7 @@ public abstract class WonderbarAbstractItem extends XulElement {
      * 
      * @return The label text.
      */
+    @PropertyGetter("label")
     protected String getLabel() {
         return label;
     }
@@ -112,27 +104,11 @@ public abstract class WonderbarAbstractItem extends XulElement {
      * 
      * @param label The label text.
      */
+    @PropertySetter("label")
     protected void setLabel(String label) {
-        this.label = label;
-        smartUpdate("label", label);
-    }
-    
-    /**
-     * Returns the data associated with the item.
-     * 
-     * @return Data associated with the item.
-     */
-    public Object getData() {
-        return data;
-    }
-    
-    /**
-     * Set the data associated with the item.
-     * 
-     * @param data Data associated with the item.
-     */
-    public void setData(Object data) {
-        this.data = data;
+        if (!areEqual(label, this.label)) {
+            sync("label", this.label = label);
+        }
     }
     
 }

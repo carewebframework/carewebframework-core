@@ -1,6 +1,6 @@
 <!-- Layout for testing help sets and help viewer. -->
 <borderlayout height="100%" width="100%">
-	<center id="helpTestFrame" hflex="1">
+	<center name="helpTestFrame" hflex="1">
 		<zscript>
 			<![CDATA[
 				import org.carewebframework.help.HelpModuleRegistry;

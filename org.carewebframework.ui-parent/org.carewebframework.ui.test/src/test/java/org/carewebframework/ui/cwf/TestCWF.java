@@ -23,37 +23,37 @@
  *
  * #L%
  */
-package org.carewebframework.ui.zk;
+package org.carewebframework.ui.cwf;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import org.carewebframework.ui.test.CommonTest;
-
-import org.zkoss.zk.ui.Component;
-
+import org.carewebframework.ui.zk.ZKUtil;
+import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.page.PageUtil;
 import org.junit.Test;
 
 /**
  * Unit tests for ZK functions that require mock framework.
  */
-public class ZKTest extends CommonTest {
+public class TestCWF extends CommonTest {
     
     private static String RESOURCE_PATH = "~./org/carewebframework/ui/test/";
     
     @Test
     public void focusFirstTest() {
-        Component root = ZKUtil.loadZulPage(RESOURCE_PATH + "testFocusFirst.cwf", null);
+        BaseComponent root = PageUtil.createPage(RESOURCE_PATH + "testFocusFirst.cwf", null);
         focusFirstTest(root, "test1", "test1_correct");
         focusFirstTest(root, "test2", "test2_correct");
         focusFirstTest(root, "test3", null);
     }
     
-    private void focusFirstTest(Component root, String testId, String expectedId) {
-        Component test = root.getFellow(testId);
+    private void focusFirstTest(BaseComponent root, String testId, String expectedId) {
+        BaseComponent test = root.findByName(testId);
         assertNotNull(test);
-        Component focus = ZKUtil.focusFirst(test, true);
+        BaseComponent focus = ZKUtil.focusFirst(test, true);
         
         if (expectedId == null) {
             assertNull(focus);

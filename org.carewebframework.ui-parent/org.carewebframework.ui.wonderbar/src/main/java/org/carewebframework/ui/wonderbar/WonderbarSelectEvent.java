@@ -25,39 +25,25 @@
  */
 package org.carewebframework.ui.wonderbar;
 
-import java.util.Map;
-
-import org.zkoss.zk.au.AuRequest;
-import org.zkoss.zk.au.AuRequests;
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Desktop;
-import org.zkoss.zk.ui.event.Event;
+import org.carewebframework.web.client.ClientRequest;
+import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.event.Event;
 
 /**
  * Fired when an item is selected from the wonder bar.
  */
 public class WonderbarSelectEvent extends Event {
     
-    public static final String ON_WONDERBAR_SELECT = "onWonderbarSelect";
-    
-    private static final long serialVersionUID = 1L;
+    public static final String TYPE = "wonderbarSelect";
     
     private final WonderbarItem selectedItem;
     
     private final int keys;
     
-    /**
-     * Extracts a select event from the au request.
-     * 
-     * @param request The AU request.
-     * @return The select event.
-     */
-    public static final WonderbarSelectEvent getSelectEvent(AuRequest request) {
-        Map<String, Object> data = request.getData();
-        Desktop desktop = request.getDesktop();
-        return new WonderbarSelectEvent(request.getComponent(),
-                (WonderbarItem) desktop.getComponentByUuidIfAny((String) data.get("reference")), null,
-                AuRequests.parseKeys(data));
+    public WonderbarSelectEvent(ClientRequest request) {
+        super(request);
+        selectedItem = (WonderbarItem) getParam(request, "reference");
+        keys = (int) getParam(request, "keys", 0);
     }
     
     /**
@@ -68,8 +54,8 @@ public class WonderbarSelectEvent extends Event {
      * @param data Arbitrary data to associate with event.
      * @param keys Keypress states at the time of selection.
      */
-    public WonderbarSelectEvent(Component target, WonderbarItem selectedItem, Object data, int keys) {
-        super(ON_WONDERBAR_SELECT, target, data);
+    public WonderbarSelectEvent(BaseComponent target, WonderbarItem selectedItem, Object data, int keys) {
+        super(TYPE, target, data);
         this.selectedItem = selectedItem;
         this.keys = keys;
     }

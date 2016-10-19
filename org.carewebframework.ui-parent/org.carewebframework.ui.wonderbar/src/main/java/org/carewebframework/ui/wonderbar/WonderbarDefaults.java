@@ -30,10 +30,4 @@ package org.carewebframework.ui.wonderbar;
  */
 public class WonderbarDefaults extends WonderbarItems {
     
-    private static final long serialVersionUID = 1L;
-    
-    @Override
-    public String getZclass() {
-        return _zclass == null ? "cwf-wonderbar-defaults" : _zclass;
-    }
 }

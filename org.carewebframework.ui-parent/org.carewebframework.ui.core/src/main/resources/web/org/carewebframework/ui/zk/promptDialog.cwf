@@ -9,16 +9,16 @@
 				value="${arg.message}" vflex="1" multiline="true"
 				style="white-space:pre-wrap" />
 			<div style="margin-top:10px">
-				<textbox id="textBox" value="${arg.input}"
+				<textbox name="textBox" value="${arg.input}"
 					visible="${arg.input!=null}" width="200pt"
 					focus="${arg.input!=null}" forward="onOK=promptDialog.onOK" />
-				<listbox id="listBox" visible="${arg.list!=null}"
+				<listbox name="listBox" visible="${arg.list!=null}"
 					width="200pt" focus="${arg.list!=null}" rows="${arg.size}">
 					<listitem forEach="${arg.list}" label="${each.name}"
 						value="${each.item}" selected="${each.name eq arg.selected}"
 						forward="onOK=promptDialog.onOK,onDoubleClick=promptDialog.onOK" />
 				</listbox>
-				<checkbox id="chkRemember"
+				<checkbox name="chkRemember"
 					label="${labels.cwf.prompt.chx.reminder.label}"
 					visible="${arg.remember}" />
 			</div>

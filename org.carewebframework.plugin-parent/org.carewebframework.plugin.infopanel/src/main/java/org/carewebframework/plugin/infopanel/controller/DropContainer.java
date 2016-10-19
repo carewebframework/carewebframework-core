@@ -36,6 +36,7 @@ import org.carewebframework.web.component.Window;
 import org.carewebframework.web.dragdrop.DropUtil;
 import org.carewebframework.web.dragdrop.IDropRenderer;
 import org.carewebframework.web.event.DropEvent;
+import org.carewebframework.web.page.PageUtil;
 
 /**
  * Container for receiving components rendered by drop renderer.
@@ -94,7 +95,7 @@ public class DropContainer extends Window implements IActionTarget {
      */
     private static DropContainer create(BaseComponent dropRoot, BaseComponent cmpt, String title,
                                         List<ActionListener> actionListeners) {
-        DropContainer dc = (DropContainer) ZKUtil.loadZulPage(TEMPLATE, null);
+        DropContainer dc = (DropContainer) PageUtil.createPage(TEMPLATE, null);
         dc.actionListeners = actionListeners;
         dc.setTitle(title);
         dc.setDropid(SCLASS);

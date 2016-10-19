@@ -25,11 +25,10 @@
  */
 package org.carewebframework.plugin.infopanel;
 
-import org.carewebframework.ui.zk.IDropRenderer;
-
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zul.Label;
-import org.zkoss.zul.Listitem;
+import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.component.Label;
+import org.carewebframework.web.component.Listitem;
+import org.carewebframework.web.dragdrop.IDropRenderer;
 
 /**
  * This is the drop renderer for the test component. It expects a list item whose value is set to a
@@ -45,8 +44,8 @@ public class InfoPanelTestDropRenderer implements IDropRenderer {
      * @param comp The component (a list item) that was dropped.
      * @return The associated drop item.
      */
-    private DroppedItem getDroppedItem(Component comp) {
-        return (DroppedItem) ((Listitem) comp).getValue();
+    private DroppedItem getDroppedItem(BaseComponent comp) {
+        return (DroppedItem) ((Listitem) comp).getData();
     }
     
     /**
@@ -56,7 +55,7 @@ public class InfoPanelTestDropRenderer implements IDropRenderer {
      * @return The top level component of the rendering.
      */
     @Override
-    public Component renderDroppedItem(Component droppedItem) {
+    public BaseComponent renderDroppedItem(BaseComponent droppedItem) {
         DroppedItem item = getDroppedItem(droppedItem);
         return new Label(item.getItemDetail());
     }
@@ -68,7 +67,7 @@ public class InfoPanelTestDropRenderer implements IDropRenderer {
      * @return The text to display in association with the rendered item.
      */
     @Override
-    public String getDisplayText(Component droppedItem) {
+    public String getDisplayText(BaseComponent droppedItem) {
         return getDroppedItem(droppedItem).getItemName();
     }
     
