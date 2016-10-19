@@ -29,32 +29,25 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.carewebframework.ui.zk.ZKUtil;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.event.Event;
+import org.carewebframework.web.event.EventUtil;
 
 /**
- * Emulates a clipboard on the server. Clipboard is shared at the session level.
+ * Emulates a clipboard on the server.
  */
 public class Clipboard {
     
-    private static final String CLIPBOARD = DesignConstants.RESOURCE_PREFIX + "Clipboard";
+    public static final String ON_CLIPBOARD_CHANGE = "clipboardChange";
     
-    public static final String ON_CLIPBOARD_CHANGE = "onClipboardChange";
+    private static final Clipboard instance = new Clipboard();
     
     private Object data;
     
     private final List<BaseComponent> listeners = Collections.synchronizedList(new ArrayList<>());
     
     public static Clipboard getInstance() {
-        Clipboard clipboard = (Clipboard) Sessions.getCurrent().getAttribute(CLIPBOARD);
-        
-        if (clipboard == null) {
-            clipboard = new Clipboard();
-            Sessions.getCurrent().setAttribute(CLIPBOARD, clipboard);
-        }
-        
-        return clipboard;
+        return instance;
     }
     
     private Clipboard() {
@@ -95,7 +88,7 @@ public class Clipboard {
     
     private void fireChange() {
         for (BaseComponent comp : new ArrayList<>(listeners)) {
-            ZKUtil.fireEvent(new Event(ON_CLIPBOARD_CHANGE, comp, data));
+            EventUtil.post(new Event(ON_CLIPBOARD_CHANGE, comp, data));
         }
     }
 }

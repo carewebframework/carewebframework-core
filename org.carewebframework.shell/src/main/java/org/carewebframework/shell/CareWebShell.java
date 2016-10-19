@@ -53,7 +53,6 @@ import org.carewebframework.shell.layout.UILayout;
 import org.carewebframework.shell.plugins.PluginContainer;
 import org.carewebframework.shell.plugins.PluginDefinition;
 import org.carewebframework.shell.plugins.PluginResourceHelp;
-import org.carewebframework.ui.Application;
 import org.carewebframework.ui.command.CommandEvent;
 import org.carewebframework.ui.command.CommandRegistry;
 import org.carewebframework.ui.command.CommandUtil;
@@ -197,15 +196,6 @@ public class CareWebShell extends Div {
             BaseComponent ref = event.getReference();
             HelpUtil.showCSH(ref == null ? event.getTarget() : ref);
         }
-    }
-    
-    /**
-     * Return information about the browser client.
-     * 
-     * @return Client information.
-     */
-    public ClientInfoEvent getClientInformation() {
-        return Application.getDesktopInfo(getPage()).getClientInformation();
     }
     
     /**

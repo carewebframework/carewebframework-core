@@ -126,13 +126,9 @@ public class CWF2XML {
         ComponentDefinition def = root.getDefinition();
         String cmpname = def.getTag();
         
-        if (def.getClazz() != clazz) {
+        if (def.getComponentClass() != clazz) {
             properties.put("use", clazz.getName());
         }
-        
-        //if (root.getController() != null) {
-        //    properties.put("apply", def.getApply());
-        //}
         
         Node child = doc.createElement(cmpname);
         parent.appendChild(child);

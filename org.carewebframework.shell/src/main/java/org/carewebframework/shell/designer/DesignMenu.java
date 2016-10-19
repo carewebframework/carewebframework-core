@@ -27,7 +27,6 @@ package org.carewebframework.shell.designer;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.carewebframework.api.security.SecurityUtil;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.shell.CareWebShell;
@@ -37,20 +36,16 @@ import org.carewebframework.shell.layout.UILayout;
 import org.carewebframework.ui.xml.XMLViewer;
 import org.carewebframework.ui.zk.PromptDialog;
 import org.carewebframework.ui.zk.ZKUtil;
-
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.IdSpace;
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.metainfo.PageDefinition;
-import org.zkoss.zul.Menu;
-import org.zkoss.zul.Menuitem;
-import org.zkoss.zul.Menupopup;
+import org.carewebframework.web.ancillary.INamespace;
+import org.carewebframework.web.component.BaseUIComponent;
+import org.carewebframework.web.component.Menu;
+import org.carewebframework.web.component.Menuitem;
+import org.carewebframework.web.page.PageDefinition;
 
 /**
  * This is the design menu that appears in the desktop's menu bar.
  */
-public class DesignMenu extends Menu implements IdSpace {
+public class DesignMenu extends Menu implements INamespace {
     
     private static final long serialVersionUID = 1L;
     
@@ -177,8 +172,8 @@ public class DesignMenu extends Menu implements IdSpace {
      * @throws Exception Unspecified exception.
      */
     public void onClick$mnuSaveLayout() throws Exception {
-        LayoutManager.saveLayout(UILayout.serialize(owner), new LayoutIdentifier(shell.getUILayout().getName(),
-                LayoutManager.defaultIsShared()), false);
+        LayoutManager.saveLayout(UILayout.serialize(owner),
+            new LayoutIdentifier(shell.getUILayout().getName(), LayoutManager.defaultIsShared()), false);
     }
     
     /**
@@ -210,14 +205,13 @@ public class DesignMenu extends Menu implements IdSpace {
      */
     private void updateMenus(boolean enabled) {
         setImage(enabled ? DesignConstants.DESIGN_ICON_ACTIVE : DesignConstants.DESIGN_ICON_INACTIVE);
-        ZKUtil.updateStyle(mnuDesignMode, "border-bottom", enabled ? "2px solid lightgray" : null);
-        setTooltiptext(StrUtil.formatMessage(enabled ? DesignConstants.DESIGN_HINT_ACTIVE
-                : DesignConstants.DESIGN_HINT_INACTIVE));
-        Component child = menupopup.getFirstChild();
+        mnuDesignMode.addStyle("border-bottom", enabled ? "2px solid lightgray" : null);
+        setHint(StrUtil.formatMessage(enabled ? DesignConstants.DESIGN_HINT_ACTIVE : DesignConstants.DESIGN_HINT_INACTIVE));
+        BaseUIComponent child = menupopup.getFirstChild();
         
         while (child != null) {
             child.setVisible(enabled || child == mnuDesignMode);
-            child = child.getNextSibling();
+            child = (BaseUIComponent) child.getNextSibling();
         }
     }
 }

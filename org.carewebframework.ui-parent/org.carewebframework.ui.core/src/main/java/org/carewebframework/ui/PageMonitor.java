@@ -30,7 +30,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
@@ -243,35 +242,6 @@ public class PageMonitor extends Thread {
     };
     
     /**
-     * Monitors Ajax traffic to determine client activity.
-     */
-    private final AuService pageActivityMonitor = new AuService() {
-        
-        /**
-         * Tracks page activity.
-         * 
-         * @param request The asynchronous update request
-         * @param everError Whether error occurred prior to processing request
-         * @return whether the process has completed (always returns false)
-         */
-        @Override
-        public boolean service(AuRequest request, boolean everError) {
-            resetActivity(isKeepAliveRequest(request));
-            return false;
-        }
-        
-        /**
-         * Determines if request is a 'keep alive' request.
-         * 
-         * @param request The inbound request.
-         * @return keepAlive True if request should reset inactivity timeout.
-         */
-        private boolean isKeepAliveRequest(AuRequest request) {
-            return !ArrayUtils.contains(ignore, request.getCommand());
-        }
-    };
-    
-    /**
      * Event listener to handle page actions in event thread.
      */
     private final IEventListener actionHandler = new IEventListener() {
@@ -392,21 +362,6 @@ public class PageMonitor extends Thread {
     }
     
     /**
-     * Resets the activity timer. Note that we always keep the session alive since the page monitor
-     * is responsible for handling the session timeout.
-     * 
-     * @param resetKeepAlive If true, the keepalive timer is reset.
-     */
-    private synchronized void resetActivity(boolean resetKeepAlive) {
-        lastActivity = System.currentTimeMillis();
-        ((SessionCtrl) page.getSession()).notifyClientRequest(true);
-        
-        if (resetKeepAlive) {
-            lastKeepAlive = lastActivity;
-        }
-    }
-    
-    /**
      * Processes a polling request.
      * 
      * @throws Exception Unspecified exception.
@@ -524,16 +479,16 @@ public class PageMonitor extends Thread {
     }
     
     public void onClick$btnUnlock() {
-        String s = txtPassword.getText();
-        txtPassword.setText(null);
-        lblInfo.setValue(null);
+        String s = txtPassword.getValue();
+        txtPassword.setValue(null);
+        lblInfo.setLabel(null);
         txtPassword.focus();
         
         if (!StringUtils.isEmpty(s)) {
             if (securityService.validatePassword(s)) {
                 setMode(Mode.BASELINE);
             } else {
-                lblInfo.setValue(StrUtil.getLabel("cwf.timeout.lock.badpassword.message"));
+                lblInfo.setLabel(StrUtil.getLabel("cwf.timeout.lock.badpassword.message"));
             }
         }
     }

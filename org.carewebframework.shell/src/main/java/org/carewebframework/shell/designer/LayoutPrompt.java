@@ -35,19 +35,15 @@ import org.carewebframework.shell.layout.LayoutIdentifier;
 import org.carewebframework.shell.layout.LayoutUtil;
 import org.carewebframework.ui.zk.PromptDialog;
 import org.carewebframework.ui.zk.ZKUtil;
-
-import org.zkoss.zk.ui.util.Clients;
-import org.zkoss.zul.Label;
-import org.zkoss.zul.Radiogroup;
-import org.zkoss.zul.Textbox;
-import org.zkoss.zul.Window;
+import org.carewebframework.web.component.Label;
+import org.carewebframework.web.component.Radiogroup;
+import org.carewebframework.web.component.Textbox;
+import org.carewebframework.web.component.Window;
 
 /**
  * Supports selection and management of existing layouts.
  */
 public class LayoutPrompt extends Window {
-    
-    private static final long serialVersionUID = 1L;
     
     private static final String DIALOG = DesignConstants.RESOURCE_PREFIX + "LayoutPrompt.zul";
     
@@ -77,8 +73,8 @@ public class LayoutPrompt extends Window {
             LayoutPrompt lp = (LayoutPrompt) ZKUtil.loadZulPage(DIALOG, null);
             ZKUtil.wireController(lp);
             lp.setTitle(StrUtil.formatMessage(title));
-            lp.lblPrompt.setValue(StrUtil.formatMessage(prompt));
-            lp.txtLayout.setText(dflt == null ? null : dflt.name);
+            lp.lblPrompt.setLabel(StrUtil.formatMessage(prompt));
+            lp.txtLayout.setValue(dflt == null ? null : dflt.name);
             boolean shared = dflt == null ? LayoutManager.defaultIsShared() : dflt.shared;
             lp.radioGroup.setSelectedIndex(shared ? 0 : 1);
             lp.radioGroup.setVisible(!hideScope);
@@ -95,7 +91,7 @@ public class LayoutPrompt extends Window {
     }
     
     public void onClick$btnOK() {
-        String name = txtLayout.getText().trim();
+        String name = txtLayout.getValue().trim();
         
         if (!LayoutUtil.validateName(name)) {
             showError(MSG_LAYOUT_BADNAME);

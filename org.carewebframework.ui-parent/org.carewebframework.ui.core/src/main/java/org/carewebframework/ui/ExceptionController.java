@@ -33,7 +33,6 @@ import org.apache.commons.logging.LogFactory;
 import org.carewebframework.api.IThrowableContext;
 import org.carewebframework.api.security.SecurityUtil;
 import org.carewebframework.common.StrUtil;
-import org.carewebframework.ui.Application.SessionInfo;
 import org.carewebframework.web.ancillary.IAutoWired;
 import org.carewebframework.web.annotation.WiredComponent;
 import org.carewebframework.web.client.ClientUtil;

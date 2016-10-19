@@ -53,8 +53,6 @@ public class CareWebShellEx extends CareWebShell {
     
     public static final String TOOLBAR_PATH = "@toolbar";
     
-    private static final long serialVersionUID = 1L;
-    
     private static final String delim = "\\\\";
     
     private static final Log log = LogFactory.getLog(CareWebShellEx.class);

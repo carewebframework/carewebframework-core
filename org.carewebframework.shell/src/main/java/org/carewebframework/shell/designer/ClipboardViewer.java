@@ -28,10 +28,10 @@ package org.carewebframework.shell.designer;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.ui.zk.PopupDialog;
 import org.carewebframework.ui.zk.ZKUtil;
+import org.carewebframework.web.annotation.WiredComponentScanner;
 import org.carewebframework.web.component.Button;
 import org.carewebframework.web.component.Textbox;
 import org.carewebframework.web.component.Window;
-import org.carewebframework.web.event.EventUtil;
 import org.carewebframework.web.page.PageDefinition;
 import org.carewebframework.web.page.PageParser;
 
@@ -63,14 +63,12 @@ public class ClipboardViewer extends Window {
      * @throws Exception Unspecified exception.
      */
     public static void execute(Clipboard clipboard) throws Exception {
-        PageDefinition def = PageParser.getInstance().parse(DesignConstants.RESOURCE_PREFIX + "ClipboardViewer.zul");
+        PageDefinition def = PageParser.getInstance().parse(DesignConstants.RESOURCE_PREFIX + "ClipboardViewer.cwf");
         ClipboardViewer viewer = (ClipboardViewer) PopupDialog.popup(def, null, true, true, false);
         viewer.clipboard = clipboard;
         viewer.data = clipboard.getData();
-        ConventionWires.wireVariables(viewer, viewer);
+        WiredComponentScanner.wire(viewer, viewer);
         viewer.restore();
-        ConventionWires.addForwards(viewer, viewer);
-        EventUtil.addEventListeners(viewer, viewer);
         viewer.doModal();
     }
     

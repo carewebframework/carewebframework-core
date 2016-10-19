@@ -37,7 +37,7 @@ import org.carewebframework.web.component.Window;
  */
 public class ReportBox {
     
-    private static final String DIALOG = ZKUtil.getResourcePath(ReportBox.class) + "reportBox.zul";
+    private static final String DIALOG = ZKUtil.getResourcePath(ReportBox.class) + "reportBox.cwf";
     
     /**
      * Displays the dialog amodally.

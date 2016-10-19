@@ -26,7 +26,9 @@
 package org.carewebframework.ui.zk;
 
 import java.util.Iterator;
+import java.util.List;
 
+import org.carewebframework.common.MiscUtil;
 import org.carewebframework.web.component.Treenode;
 import org.carewebframework.web.component.Treeview;
 
@@ -47,16 +49,16 @@ public class TreeIterator implements Iterator<Treenode> {
      * @param tree The tree.
      */
     public TreeIterator(Treeview tree) {
-        this(tree.getTreechildren());
+        this(MiscUtil.castList(tree.getChildren(), Treenode.class));
     }
     
     /**
      * Starts iterator at tree children node.
      * 
-     * @param treeChildren The tree children node.
+     * @param children The child nodes.
      */
-    public TreeIterator(Treechildren treeChildren) {
-        this.next = treeChildren == null ? null : (Treenode) treeChildren.getFirstChild();
+    public TreeIterator(List<Treenode> children) {
+        this.next = children.isEmpty() ? null : children.get(0);
     }
     
     /**
@@ -133,13 +135,6 @@ public class TreeIterator implements Iterator<Treenode> {
         last = nextItem();
         next = null;
         return last;
-    }
-    
-    /**
-     * Not supported.
-     */
-    @Override
-    public void remove() {
     }
     
 };

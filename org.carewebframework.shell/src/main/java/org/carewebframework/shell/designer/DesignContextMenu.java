@@ -25,8 +25,6 @@
  */
 package org.carewebframework.shell.designer;
 
-import java.awt.Desktop;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.carewebframework.common.StrUtil;
@@ -36,9 +34,12 @@ import org.carewebframework.shell.layout.UILayout;
 import org.carewebframework.ui.zk.ZKUtil;
 import org.carewebframework.web.ancillary.IDisable;
 import org.carewebframework.web.ancillary.INamespace;
+import org.carewebframework.web.annotation.WiredComponentScanner;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.BaseUIComponent;
 import org.carewebframework.web.component.Menuitem;
+import org.carewebframework.web.component.Page;
+import org.carewebframework.web.core.ExecutionContext;
 import org.carewebframework.web.event.Event;
 import org.carewebframework.web.page.PageDefinition;
 import org.carewebframework.web.page.PageParser;
@@ -81,12 +82,12 @@ public class DesignContextMenu extends Menupopup implements INamespace {
      * @return The design context menu for the active destkop.
      */
     public static DesignContextMenu getInstance() {
-        Desktop desktop = Executions.getCurrent().getDesktop();
-        DesignContextMenu contextMenu = (DesignContextMenu) desktop.getAttribute(DesignConstants.ATTR_DESIGN_MENU);
+        Page page = ExecutionContext.getPage();
+        DesignContextMenu contextMenu = (DesignContextMenu) page.getAttribute(DesignConstants.ATTR_DESIGN_MENU);
         
         if (contextMenu == null) {
             contextMenu = create();
-            desktop.setAttribute(DesignConstants.ATTR_DESIGN_MENU, contextMenu);
+            page.setAttribute(DesignConstants.ATTR_DESIGN_MENU, contextMenu);
             ZKUtil.suppressContextMenu(contextMenu);
         }
         
@@ -104,7 +105,7 @@ public class DesignContextMenu extends Menupopup implements INamespace {
         try {
             PageDefinition def = PageParser.getInstance().parse(DesignConstants.RESOURCE_PREFIX + "DesignContextMenu.zul");
             contextMenu = (DesignContextMenu) def.materialize(null);
-            ZKUtil.wireController(contextMenu);
+            WiredComponentScanner.wire(contextMenu, contextMenu);
             contextMenu.mnuHeader.setImage(DesignConstants.DESIGN_ICON_ACTIVE);
             contextMenu.clipboard.addListener(contextMenu);
         } catch (Exception e) {

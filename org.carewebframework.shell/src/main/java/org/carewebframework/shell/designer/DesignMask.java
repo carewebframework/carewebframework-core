@@ -27,17 +27,15 @@ package org.carewebframework.shell.designer;
 
 import org.carewebframework.shell.layout.UIElementCWFBase;
 import org.carewebframework.ui.zk.ZKUtil;
-
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zul.Menupopup;
+import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.event.Event;
+import org.carewebframework.web.event.EventUtil;
+import org.carewebframework.web.event.IEventListener;
 
 /**
  * Implements the mask that covers components when design mode is active.
  */
-public class DesignMask implements EventListener<Event> {
+public class DesignMask implements IEventListener {
     
     public enum MaskMode {
         AUTO, ENABLE, DISABLE
@@ -88,26 +86,26 @@ public class DesignMask implements EventListener<Event> {
         
         if (visible != shouldShow) {
             visible = shouldShow;
-            Component target = element.getMaskTarget();
+            BaseComponent target = element.getMaskTarget();
             
             if (visible) {
-                target.addEventListener("onMask", this);
+                target.registerEventListener("onMask", this);
                 maskEvent = new Event("onMask", target);
             } else {
                 maskEvent = null;
-                target.removeEventListener("onMask", this);
+                target.unregisterEventListener("onMask", this);
                 ZKUtil.removeMask(target);
             }
         }
         
         if (maskEvent != null && element.isActivated()) {
-            Events.postEvent(-9999, maskEvent);
+            EventUtil.post(maskEvent);
         }
     }
     
     @Override
-    public void onEvent(Event event) throws Exception {
-        Component target = element.getMaskTarget();
+    public void onEvent(Event event) {
+        BaseComponent target = element.getMaskTarget();
         Menupopup contextMenu = UIElementCWFBase.getDesignContextMenu(target);
         String displayName = element.getDisplayName();
         ZKUtil.addMask(target, displayName, contextMenu, displayName);

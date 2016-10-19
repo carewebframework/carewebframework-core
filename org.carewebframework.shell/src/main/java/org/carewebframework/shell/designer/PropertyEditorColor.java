@@ -27,9 +27,7 @@ package org.carewebframework.shell.designer;
 
 import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.property.PropertyInfo;
-import org.carewebframework.ui.zk.ColorPicker;
-
-import org.zkoss.zk.ui.event.Events;
+import org.carewebframework.web.component.ColorPicker;
 
 /**
  * Property editor for color properties. If the associated property has defined choices, the color
@@ -50,7 +48,7 @@ public class PropertyEditorColor extends PropertyEditorBase {
     @Override
     protected void init(UIElementBase target, PropertyInfo propInfo, PropertyGrid propGrid) {
         super.init(target, propInfo, propGrid);
-        component.addForward(ColorPicker.ON_SELECT_ITEM, propGrid, Events.ON_CHANGE);
+        component.registerEventForward(ColorPicker.ON_SELECT_ITEM, propGrid, Events.ON_CHANGE);
         String[] values = propInfo.getConfigValueArray("values");
         
         if (values == null) {
@@ -68,7 +66,7 @@ public class PropertyEditorColor extends PropertyEditorBase {
     
     @Override
     protected String getValue() {
-        return colorPicker.getSelectedValue();
+        return colorPicker.getValue().toString();
     }
     
     @Override

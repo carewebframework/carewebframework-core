@@ -49,11 +49,11 @@ public class PropertyEditorBoolean extends PropertyEditorBase {
     @Override
     protected void init(UIElementBase target, PropertyInfo propInfo, PropertyGrid propGrid) {
         super.init(target, propInfo, propGrid);
-        radiogroup.addForward(Events.ON_CHECK, propGrid, Events.ON_CHANGE);
-        radiogroup.addForward(Events.ON_CLICK, propGrid, Events.ON_SELECT);
+        radiogroup.registerEventForward(Events.ON_CHECK, propGrid, Events.ON_CHANGE);
+        radiogroup.registerEventForward(Events.ON_CLICK, propGrid, Events.ON_SELECT);
         component.addForward(Events.ON_CLICK, propGrid, Events.ON_SELECT);
         
-        for (Radiobutton radio : radiogroup.getItems()) {
+        for (Radiobutton radio : radiogroup.getChildren(Radiobutton.class)) {
             String label = propInfo.getConfigValue(radio.getLabel().trim());
             
             if (label != null) {
@@ -67,10 +67,10 @@ public class PropertyEditorBoolean extends PropertyEditorBase {
      */
     @Override
     public void setFocus() {
-        Radiobutton radio = radiogroup.getSelectedItem();
+        Radiobutton radio = radiogroup.getSelected();
         
         if (radio == null) {
-            radio = radiogroup.getItems().get(0);
+            radio = (Radiobutton) radiogroup.getChildren().get(0);
         }
         
         radio.setFocus(true);

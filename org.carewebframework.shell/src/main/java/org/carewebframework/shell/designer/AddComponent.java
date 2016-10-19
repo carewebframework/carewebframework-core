@@ -44,6 +44,8 @@ import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.BaseUIComponent;
 import org.carewebframework.web.component.Button;
 import org.carewebframework.web.component.Span;
+import org.carewebframework.web.component.Treenode;
+import org.carewebframework.web.component.Treeview;
 import org.carewebframework.web.component.Window;
 import org.carewebframework.web.event.ClickEvent;
 import org.carewebframework.web.event.Event;
@@ -55,8 +57,6 @@ import org.carewebframework.web.event.IEventListener;
  */
 public class AddComponent extends Window {
     
-    private static final long serialVersionUID = 1L;
-    
     private static final String ON_FAVORITE = "onFavorite";
     
     private UIElementBase parentElement;
@@ -65,13 +65,13 @@ public class AddComponent extends Window {
     
     private PluginDefinition definition;
     
-    private Tree tree;
+    private Treeview tree;
     
     private Button btnOK;
     
     private boolean createChild;
     
-    private Treeitem itmFavorites;
+    private Treenode itmFavorites;
     
     private List<String> favorites;
     
@@ -92,15 +92,15 @@ public class AddComponent extends Window {
         
         @Override
         public void onEvent(Event event) {
-            Treeitem item = (Treeitem) event.getTarget();
+            Treenode item = (Treenode) event.getTarget();
             String path = (String) item.getAttribute("path");
             boolean isFavorite = !(Boolean) item.getAttribute("favorite");
-            Treeitem other = (Treeitem) item.getAttribute("other");
+            Treenode other = (Treenode) item.getAttribute("other");
             favoritesChanged = true;
             
             if (isFavorite) {
                 favorites.add(path);
-                other = addTreeitem((PluginDefinition) item.getValue(), item);
+                other = addTreenode((PluginDefinition) item.getData(), item);
                 item.setAttribute("other", other);
             } else {
                 favorites.remove(path);
@@ -118,9 +118,9 @@ public class AddComponent extends Window {
         
         @Override
         public void onEvent(Event event) {
-            Treeitem item = (Treeitem) event.getTarget();
-            Treeitem other = (Treeitem) item.getAttribute("other");
-            EventUtil.sendEvent(ON_FAVORITE, other, null);
+            Treenode item = (Treenode) event.getTarget();
+            Treenode other = (Treenode) item.getAttribute("other");
+            EventUtil.send(ON_FAVORITE, other, null);
         }
         
     };
@@ -182,7 +182,7 @@ public class AddComponent extends Window {
         this.parentElement = parentElement;
         this.createChild = createChild;
         ZKUtil.wireController(this);
-        Treeitem defaultItem = null;
+        Treenode defaultItem = null;
         boolean useDefault = true;
         loadFavorites();
         
@@ -197,7 +197,7 @@ public class AddComponent extends Window {
                 continue;
             }
             
-            Treeitem item = addTreeitem(def, null);
+            Treenode item = addTreenode(def, null);
             
             if (item == null) {
                 continue;
@@ -239,11 +239,11 @@ public class AddComponent extends Window {
     private void addLayouts(boolean shared) {
         for (String layout : LayoutUtil.getLayouts(shared)) {
             UIElementLayout ele = new UIElementLayout(layout, shared);
-            addTreeitem(ele.getDefinition(), null);
+            addTreenode(ele.getDefinition(), null);
         }
     }
     
-    private Treeitem addTreeitem(PluginDefinition def, Treeitem other) {
+    private Treenode addTreenode(PluginDefinition def, Treenode other) {
         String category = other != null ? favoritesCategory : def.getCategory();
         
         if (StringUtils.isEmpty(category)) {
@@ -257,14 +257,14 @@ public class AddComponent extends Window {
         String path = category + (category.endsWith("\\") ? "" : "\\") + def.getName();
         boolean isFavorite = other != null || (favorites != null && favorites.contains(path));
         boolean disabled = def.isDisabled() || def.isForbidden();
-        Treeitem item = TreeUtil.findNode(tree, path, true);
-        item.setValue(def);
-        item.setTooltiptext(StringUtils.defaultString(def.getDescription(), noDescriptionHint));
+        Treenode item = TreeUtil.findNode(tree, path, true);
+        item.setData(def);
+        item.setHint(StringUtils.defaultString(def.getDescription(), noDescriptionHint));
         
         if (disabled) {
             item.setDisabled(true);
         } else {
-            item.getTreerow().addForward(Events.ON_DOUBLE_CLICK, btnOK, Events.ON_CLICK);
+            item.getTreerow().registerEventForward(Events.ON_DOUBLE_CLICK, btnOK, ClickEvent.TYPE);
         }
         
         if (favorites != null) {
@@ -273,11 +273,11 @@ public class AddComponent extends Window {
             image.addStyle("float", "left");
             BaseComponent cell = item.getTreerow().getFirstChild();
             cell.insertChild(image, cell.getFirstChild());
-            image.addForward(ClickEvent.TYPE, item, ON_FAVORITE);
-            item.addEventListener(ON_FAVORITE, other == null ? favoriteListener1 : favoriteListener2);
+            image.registerEventForward(ClickEvent.TYPE, item, ON_FAVORITE);
+            item.registerEventListener(ON_FAVORITE, other == null ? favoriteListener1 : favoriteListener2);
             
             if (isFavorite && other == null) {
-                other = addTreeitem(def, item);
+                other = addTreenode(def, item);
             }
             
             item.setAttribute("other", other);
@@ -295,12 +295,12 @@ public class AddComponent extends Window {
      * @param isFavorite If true, the item is a favorite.
      * @return The original image.
      */
-    private BaseUIComponent setFavoriteStatus(Treeitem item, boolean isFavorite) {
+    private BaseUIComponent setFavoriteStatus(Treenode item, boolean isFavorite) {
         BaseUIComponent image = (BaseUIComponent) item.getAttribute("image");
         image.addClass(isFavorite ? "glyphicon-star text-primary" : "glyphicon-star-empty text-muted");
         image.setHint(isFavorite ? favoritesRemoveHint : favoritesAddHint);
         item.setAttribute("favorite", isFavorite);
-        itmFavorites.setVisible(isFavorite || itmFavorites.getTreechildren().getFirstChild() != null);
+        itmFavorites.setVisible(isFavorite || itmFavorites.getFirstChild() != null);
         return image;
     }
     
@@ -310,7 +310,7 @@ public class AddComponent extends Window {
      * @return Definition of the currently selected plugin.
      */
     private PluginDefinition selectedPluginDefinition() {
-        return (PluginDefinition) (tree.getSelectedItem() == null ? null : tree.getSelectedItem().getValue());
+        return (PluginDefinition) (tree.getSelectedNode() == null ? null : tree.getSelectedNode().getData());
     }
     
     /**

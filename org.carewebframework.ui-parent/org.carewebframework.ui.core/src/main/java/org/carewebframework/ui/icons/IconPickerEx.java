@@ -25,16 +25,20 @@
  */
 package org.carewebframework.ui.icons;
 
-import org.carewebframework.ui.zk.IconPicker;
 import org.carewebframework.ui.zk.ListUtil;
+import org.carewebframework.web.component.Combobox;
+import org.carewebframework.web.component.Comboitem;
+import org.carewebframework.web.component.ImagePicker;
 import org.carewebframework.web.component.Toolbar;
+import org.carewebframework.web.event.Event;
+import org.carewebframework.web.event.EventUtil;
+import org.carewebframework.web.event.IEventListener;
+import org.carewebframework.web.event.SelectEvent;
 
 /**
  * Extends the icon picker by adding the ability to pick an icon library from which to choose.
  */
-public class IconPickerEx extends IconPicker {
-    
-    private static final long serialVersionUID = 1L;
+public class IconPickerEx extends ImagePicker {
     
     private IIconLibrary iconLibrary;
     
@@ -53,11 +57,11 @@ public class IconPickerEx extends IconPicker {
         cboLibrary = new Combobox();
         cboLibrary.setWidth("100%");
         cboLibrary.setReadonly(true);
-        cboLibrary.addEventListener(Events.ON_SELECT, new EventListener<Event>() {
+        cboLibrary.registerEventListener(SelectEvent.TYPE, new IEventListener() {
             
             @Override
-            public void onEvent(Event event) throws Exception {
-                iconLibrary = (IIconLibrary) cboLibrary.getSelectedItem().getValue();
+            public void onEvent(Event event) {
+                iconLibrary = (IIconLibrary) cboLibrary.getSelectedItem().getData();
                 libraryChanged();
             }
             
@@ -65,12 +69,12 @@ public class IconPickerEx extends IconPicker {
         
         toolbar = new Toolbar();
         panel.addToolbar("tbar", toolbar);
-        toolbar.appendChild(cboLibrary);
+        toolbar.addChild(cboLibrary);
         
         for (IIconLibrary lib : iconRegistry) {
             Comboitem item = new Comboitem(lib.getId());
-            item.setValue(lib);
-            cboLibrary.appendChild(item);
+            item.setData(lib);
+            cboLibrary.addChild(item);
         }
         
         setSelectorVisible(true);
@@ -106,16 +110,20 @@ public class IconPickerEx extends IconPicker {
     
     public void setSelectorVisible(boolean visible) {
         selectorVisible = visible;
-        toolbar.setVisible(visible && cboLibrary.getItemCount() > 1);
+        toolbar.setVisible(visible && cboLibrary.getChildCount() > 1);
     }
     
     private void libraryChanged() {
-        Events.postEvent("onLibraryChanged", this, iconLibrary);
+        EventUtil.post("onLibraryChanged", this, iconLibrary);
     }
     
     public void onLibraryChanged() {
         clear();
-        addIconsByUrl(iconLibrary.getMatching("*", dimensions));
+        destroyChildren();
+        
+        for (String lib : iconLibrary.getMatching("*", dimensions)) {
+            addChild(new Imagepickeritem(lib));
+        }
     }
     
 }

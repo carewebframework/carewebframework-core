@@ -36,8 +36,8 @@ import org.carewebframework.api.event.IGenericEvent;
 import org.carewebframework.api.spring.SpringUtil;
 import org.carewebframework.api.thread.IAbortable;
 import org.carewebframework.ui.LifecycleEventListener.ILifecycleCallback;
-import org.carewebframework.ui.thread.ZKThread;
-import org.carewebframework.ui.thread.ZKThread.ZKRunnable;
+import org.carewebframework.ui.thread.ThreadEx;
+import org.carewebframework.ui.thread.ThreadEx.IRunnable;
 import org.carewebframework.web.ancillary.IAutoWired;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.event.Event;
@@ -74,7 +74,7 @@ public class FrameworkController implements IAutoWired {
          */
         @Override
         public void onEvent(Event event) {
-            ZKThread thread = (ZKThread) event.getData();
+            ThreadEx thread = (ThreadEx) event.getData();
             
             if (thread != null) {
                 removeThread(thread);
@@ -179,12 +179,10 @@ public class FrameworkController implements IAutoWired {
         root = comp;
         this.comp = comp;
         comp.setAttribute(Constants.ATTR_COMPOSER, this);
-        comp.registerEventListener(ZKThread.ON_THREAD_COMPLETE, threadCompletionListener);
+        comp.registerEventListener(ThreadEx.ON_THREAD_COMPLETE, threadCompletionListener);
         appContext = SpringUtil.getAppContext();
         appFramework = FrameworkUtil.getAppFramework();
         eventManager = EventManager.getInstance();
-        LifecycleEventDispatcher.addComponentCallback(comp, lifecycleListener);
-        lifecycleListener.onInit(comp);
     }
     
     /**
@@ -263,8 +261,8 @@ public class FrameworkController implements IAutoWired {
      * @param runnable The runnable to be executed in the background thread.
      * @return The new thread.
      */
-    protected ZKThread startBackgroundThread(ZKRunnable runnable) {
-        ZKThread thread = new ZKThread(runnable, comp);
+    protected ThreadEx startBackgroundThread(IRunnable runnable) {
+        ThreadEx thread = new ThreadEx(runnable, comp);
         addThread(thread);
         thread.start();
         return thread;
@@ -275,7 +273,7 @@ public class FrameworkController implements IAutoWired {
      * 
      * @param thread The background thread.
      */
-    protected void threadFinished(ZKThread thread) {
+    protected void threadFinished(ThreadEx thread) {
         removeThread(thread);
     }
     
@@ -284,7 +282,7 @@ public class FrameworkController implements IAutoWired {
      * 
      * @param thread The background thread.
      */
-    protected void threadAborted(ZKThread thread) {
+    protected void threadAborted(ThreadEx thread) {
         removeThread(thread);
     }
     

@@ -33,12 +33,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.carewebframework.api.thread.IAbortable;
 import org.carewebframework.api.thread.ThreadUtil;
-import org.carewebframework.ui.FrameworkWebSupport;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.Page;
 import org.carewebframework.web.event.Event;
-import org.springframework.web.context.request.RequestAttributes;
-import org.springframework.web.context.request.RequestContextHolder;
 
 /**
  * Used to run long operations in the background. Uses events to notify the requester of completion.
@@ -48,9 +45,9 @@ import org.springframework.web.context.request.RequestContextHolder;
  * ensure that the task successfully completed.</i>
  * </p>
  */
-public class ZKThread implements IAbortable {
+public class ThreadEx implements IAbortable {
     
-    private static final Log log = LogFactory.getLog(ZKThread.class);
+    private static final Log log = LogFactory.getLog(ThreadEx.class);
     
     public static final String ON_THREAD_COMPLETE = "onThreadComplete";
     
@@ -58,7 +55,7 @@ public class ZKThread implements IAbortable {
      * Adds an abort method to the traditional Runnable interface. The target is responsible for
      * implementing this method so as to terminate its operation ASAP when this is called.
      */
-    public interface ZKRunnable extends IAbortable {
+    public interface IRunnable extends IAbortable {
         
         /**
          * Run method
@@ -66,7 +63,7 @@ public class ZKThread implements IAbortable {
          * @param thread The thread.
          * @throws Exception Unspecified exception.
          */
-        void run(ZKThread thread) throws Exception;
+        void run(ThreadEx thread) throws Exception;
         
         /**
          * Abort the running thread.
@@ -78,24 +75,22 @@ public class ZKThread implements IAbortable {
     /**
      * Subclasses the Thread class, notifying the requester when the target operation completes.
      */
-    private class ThreadEx extends Thread {
+    private class ThreadInternal extends Thread {
         
         /**
          * Executes the target operation with timings.
          */
         @Override
         public void run() {
-            associateThread(page, requestAttributes);
             watch.start();
             
             try {
-                target.run(ZKThread.this);
+                target.run(ThreadEx.this);
             } catch (Throwable e) {
                 exception = e;
             }
             watch.stop();
-            disassociateThread();
-            ZKThread.this.done();
+            ThreadEx.this.done();
         }
         
     }
@@ -106,7 +101,7 @@ public class ZKThread implements IAbortable {
     
     private final StopWatch watch = new StopWatch();
     
-    private final ZKRunnable target;
+    private final IRunnable target;
     
     private final Event event;
     
@@ -114,32 +109,7 @@ public class ZKThread implements IAbortable {
     
     private final Thread thread;
     
-    private final RequestAttributes requestAttributes;
-    
     private final Map<String, Object> attribute = new HashMap<>();
-    
-    /**
-     * Associates a page and request attributes with a background thread and notifies any thread
-     * listeners.
-     * 
-     * @param page The page to associate.
-     * @param requestAttributes The Spring request attributes to associate.
-     */
-    public static void associateThread(Page page, RequestAttributes requestAttributes) {
-        RequestContextHolder.setRequestAttributes(requestAttributes, true);
-        FrameworkWebSupport.associatePage(page);
-        ThreadListenerRegistry.notifyListeners(true);
-    }
-    
-    /**
-     * Disassociates a desktop and request attributes from a background thread and notifies any
-     * thread listeners.
-     */
-    public static void disassociateThread() {
-        ThreadListenerRegistry.notifyListeners(false);
-        FrameworkWebSupport.associatePage(null);
-        RequestContextHolder.setRequestAttributes(null);
-    }
     
     /**
      * Creates a thread for executing a background operation, using the default event name for
@@ -148,7 +118,7 @@ public class ZKThread implements IAbortable {
      * @param target Target operation.
      * @param requester ZK component requesting the operation.
      */
-    public ZKThread(ZKRunnable target, BaseComponent requester) {
+    public ThreadEx(IRunnable target, BaseComponent requester) {
         this(target, requester, ON_THREAD_COMPLETE);
     }
     
@@ -161,12 +131,11 @@ public class ZKThread implements IAbortable {
      *            data associated with the event will be a reference to this instance and may be
      *            interrogated to determine the outcome of the operation.
      */
-    public ZKThread(ZKRunnable target, BaseComponent requester, String eventName) {
+    public ThreadEx(IRunnable target, BaseComponent requester, String eventName) {
         this.target = target;
         this.event = new Event(eventName, requester, this);
         this.page = requester.getPage();
-        this.requestAttributes = RequestContextHolder.getRequestAttributes();
-        this.thread = new ThreadEx();
+        this.thread = new ThreadInternal();
     }
     
     /**

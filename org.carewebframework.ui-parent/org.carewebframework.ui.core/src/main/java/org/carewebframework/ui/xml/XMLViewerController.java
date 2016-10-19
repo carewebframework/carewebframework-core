@@ -30,6 +30,8 @@ import org.carewebframework.ui.zk.TreeUtil;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.Label;
 import org.carewebframework.web.component.Textbox;
+import org.carewebframework.web.component.Treenode;
+import org.carewebframework.web.component.Treeview;
 import org.carewebframework.web.event.Event;
 import org.w3c.dom.Document;
 
@@ -38,20 +40,18 @@ import org.w3c.dom.Document;
  */
 public class XMLViewerController extends FrameworkController {
     
-    private static final long serialVersionUID = 1L;
-    
     /**
      * Renderer for tree.
      */
     private static final XMLViewerRenderer renderer = new XMLViewerRenderer();
     
-    private Tree tree;
+    private Treeview tree;
     
     private Textbox textbox;
     
     private Label lblNotFound;
     
-    private Treeitem lastItem;
+    private Treenode lastItem;
     
     /**
      * Sets the renderer.
@@ -79,7 +79,7 @@ public class XMLViewerController extends FrameworkController {
                 TreeUtil.makeVisible(lastItem);
                 lastItem.setSelected(true);
             } else {
-                lastItem = tree.getSelectedItem();
+                lastItem = tree.getSelectedNode();
             }
             
             textbox.setFocus(true);
@@ -100,6 +100,6 @@ public class XMLViewerController extends FrameworkController {
      * Selecting an item sets it as the starting point for a search.
      */
     public void onSelect$tree() {
-        lastItem = tree.getSelectedItem();
+        lastItem = tree.getSelectedNode();
     }
 }

@@ -41,6 +41,8 @@ import static org.carewebframework.shell.designer.DesignConstants.MSG_LAYOUT_REN
 import static org.carewebframework.shell.designer.DesignConstants.MSG_LAYOUT_SAVE;
 import static org.carewebframework.shell.designer.DesignConstants.RESOURCE_PREFIX;
 
+import javax.print.attribute.standard.Media;
+
 import org.carewebframework.api.FrameworkUtil;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.shell.layout.LayoutIdentifier;
@@ -50,27 +52,18 @@ import org.carewebframework.ui.zk.ListUtil;
 import org.carewebframework.ui.zk.PopupDialog;
 import org.carewebframework.ui.zk.PromptDialog;
 import org.carewebframework.ui.zk.ZKUtil;
-
-import org.zkoss.util.media.Media;
-import org.zkoss.zk.ui.HtmlBasedComponent;
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zul.Button;
-import org.zkoss.zul.Filedownload;
-import org.zkoss.zul.Fileupload;
-import org.zkoss.zul.Label;
-import org.zkoss.zul.ListModelList;
-import org.zkoss.zul.Listbox;
-import org.zkoss.zul.Listitem;
-import org.zkoss.zul.ListitemRenderer;
-import org.zkoss.zul.Radiogroup;
-import org.zkoss.zul.Window;
+import org.carewebframework.web.component.BaseUIComponent;
+import org.carewebframework.web.component.Button;
+import org.carewebframework.web.component.Label;
+import org.carewebframework.web.component.Listbox;
+import org.carewebframework.web.component.Listitem;
+import org.carewebframework.web.component.Radiogroup;
+import org.carewebframework.web.component.Window;
 
 /**
  * Supports selection and management of existing layouts.
  */
 public class LayoutManager extends Window {
-    
-    private static final long serialVersionUID = 1L;
     
     private static final String ATTR_DEFAULT_SCOPE = LayoutUtil.class.getName() + ".default_scope";
     
@@ -90,11 +83,11 @@ public class LayoutManager extends Window {
     
     private Radiogroup radioGroup;
     
-    private HtmlBasedComponent pnlManage;
+    private BaseUIComponent pnlManage;
     
-    private HtmlBasedComponent pnlSelect;
+    private BaseUIComponent pnlSelect;
     
-    private HtmlBasedComponent pnlScope;
+    private BaseUIComponent pnlScope;
     
     private boolean shared;
     
@@ -180,7 +173,7 @@ public class LayoutManager extends Window {
             try {
                 Media media = Fileupload.get(StrUtil.formatMessage(MSG_LAYOUT_IMPORT),
                     StrUtil.formatMessage(CAP_LAYOUT_IMPORT), false);
-                    
+                
                 if (media == null) {
                     break;
                 }
@@ -218,12 +211,12 @@ public class LayoutManager extends Window {
         this.shared = defaultIsShared();
         ZKUtil.wireController(this);
         setTitle(StrUtil.formatMessage(manage ? CAP_LAYOUT_MANAGE : CAP_LAYOUT_LOAD));
-        lblPrompt.setValue(StrUtil.formatMessage(manage ? MSG_LAYOUT_MANAGE : MSG_LAYOUT_LOAD));
+        lblPrompt.setLabel(StrUtil.formatMessage(manage ? MSG_LAYOUT_MANAGE : MSG_LAYOUT_LOAD));
         lstLayouts.setItemRenderer(renderer);
         pnlSelect.setVisible(!manage);
         pnlManage.setVisible(manage);
         radioGroup.setSelectedIndex(shared ? 0 : 1);
-        pnlScope.setSclass(manage ? "pull-right" : "pull-left");
+        pnlScope.addClass(manage ? "pull-right" : "pull-left");
         refresh(deflt);
         doModal();
         return manage || selectedLayout == null ? null : selectedLayout;
@@ -259,7 +252,7 @@ public class LayoutManager extends Window {
      */
     private LayoutIdentifier getSelectedLayout() {
         Listitem item = lstLayouts.getSelectedItem();
-        return item == null ? null : (LayoutIdentifier) item.getValue();
+        return item == null ? null : (LayoutIdentifier) item.getData();
     }
     
     /**

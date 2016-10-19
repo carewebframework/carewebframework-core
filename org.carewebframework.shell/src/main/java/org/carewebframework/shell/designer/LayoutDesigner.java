@@ -25,39 +25,28 @@
  */
 package org.carewebframework.shell.designer;
 
-import java.util.ArrayList;
+import java.awt.Desktop;
 import java.util.Collection;
 
 import org.carewebframework.shell.layout.UIElementBase;
-import org.carewebframework.shell.layout.UIElementCWFBase;
 import org.carewebframework.shell.layout.UILayout;
-import org.carewebframework.ui.FrameworkWebSupport;
 import org.carewebframework.ui.zk.PopupDialog;
 import org.carewebframework.ui.zk.ZKUtil;
-
-import org.zkoss.zk.au.out.AuInvoke;
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Desktop;
-import org.zkoss.zk.ui.Page;
-import org.zkoss.zk.ui.ShadowElement;
-import org.zkoss.zk.ui.event.DropEvent;
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.ext.AfterCompose;
-import org.zkoss.zk.ui.util.UiLifeCycle;
-import org.zkoss.zul.Button;
-import org.zkoss.zul.Tree;
-import org.zkoss.zul.Treechildren;
-import org.zkoss.zul.Treeitem;
-import org.zkoss.zul.Treerow;
-import org.zkoss.zul.Window;
+import org.carewebframework.web.ancillary.IAutoWired;
+import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.component.Button;
+import org.carewebframework.web.component.Page;
+import org.carewebframework.web.component.Treenode;
+import org.carewebframework.web.component.Treeview;
+import org.carewebframework.web.component.Window;
+import org.carewebframework.web.core.ExecutionContext;
+import org.carewebframework.web.event.DropEvent;
+import org.carewebframework.web.event.EventUtil;
 
 /**
  * Dialog for managing the current layout.
  */
-public class LayoutDesigner extends Window implements AfterCompose {
-    
-    private static final long serialVersionUID = 1L;
+public class LayoutDesigner extends Window implements IAutoWired {
     
     private static final String ZUL_PAGE = DesignConstants.RESOURCE_PREFIX + "LayoutDesigner.zul";
     
@@ -70,7 +59,7 @@ public class LayoutDesigner extends Window implements AfterCompose {
         RELOCATE // Move to a different parent
     }
     
-    private Tree tree;
+    private Treeview tree;
     
     private UIElementBase rootElement;
     
@@ -111,52 +100,6 @@ public class LayoutDesigner extends Window implements AfterCompose {
     private boolean bringToFront;
     
     /**
-     * Listens for changes to the UI and refreshes the component tree view when a change affecting a
-     * UI element is detected.
-     */
-    private final UiLifeCycle layoutListener = new UiLifeCycle() {
-        
-        @Override
-        public void afterComponentAttached(Component comp, Page page) {
-            refreshIfNeeded(comp);
-        }
-        
-        @Override
-        public void afterComponentDetached(Component comp, Page prevpage) {
-            refreshIfNeeded(comp);
-        }
-        
-        @Override
-        public void afterComponentMoved(Component parent, Component child, Component prevparent) {
-            refreshIfNeeded(parent);
-            refreshIfNeeded(child);
-            refreshIfNeeded(prevparent);
-        }
-        
-        @Override
-        public void afterShadowAttached(ShadowElement shadow, Component host) {
-        }
-        
-        @Override
-        public void afterShadowDetached(ShadowElement shadow, Component prevhost) {
-        }
-        
-        @Override
-        public void afterPageAttached(Page page, Desktop desktop) {
-        }
-        
-        @Override
-        public void afterPageDetached(Page page, Desktop prevdesktop) {
-        }
-        
-        private void refreshIfNeeded(Component comp) {
-            if (!refreshPending && UIElementCWFBase.getAssociatedUIElement(comp) != null) {
-                requestRefresh();
-            }
-        }
-    };
-    
-    /**
      * Display the Layout Manager dialog
      * 
      * @param rootElement The root UI element.
@@ -171,12 +114,12 @@ public class LayoutDesigner extends Window implements AfterCompose {
     /**
      * Close the dialog if it is open.
      */
-    public static void close() {
+    public static void closeDialog() {
         try {
             LayoutDesigner dlg = getInstance(false);
             
             if (dlg != null) {
-                dlg.onClose();
+                dlg.close();
             }
         } catch (Exception e) {}
     }
@@ -190,19 +133,19 @@ public class LayoutDesigner extends Window implements AfterCompose {
      * @throws Exception Unspecified exception.
      */
     private static LayoutDesigner getInstance(boolean autoCreate) throws Exception {
-        Desktop desktop = FrameworkWebSupport.getDesktop();
-        LayoutDesigner dlg = (LayoutDesigner) desktop.getAttribute(ZUL_PAGE);
+        Page page = ExecutionContext.getPage();
+        LayoutDesigner dlg = (LayoutDesigner) page.getAttribute(ZUL_PAGE);
         
         if (autoCreate && dlg == null) {
             dlg = (LayoutDesigner) PopupDialog.popup(ZKUtil.loadCachedPageDefinition(ZUL_PAGE), null, true, true, false);
-            desktop.setAttribute(ZUL_PAGE, dlg);
+            page.setAttribute(ZUL_PAGE, dlg);
         }
         
         return dlg;
     }
     
     @Override
-    public void afterCompose() {
+    public void afterInitialized(BaseComponent comp) {
         ZKUtil.wireController(this);
         setWidgetOverride("_cwf_highlight", "function(comp) {jq(comp).effect('pulsate',{times:1}).effect('highlight');}");
         Boolean btf = (Boolean) getDesktop().getAttribute(ATTR_BRING_TO_FRONT);
@@ -231,7 +174,7 @@ public class LayoutDesigner extends Window implements AfterCompose {
      * 
      * @param comp Component to highlight.
      */
-    private void highlight(Component comp) {
+    private void highlight(BaseComponent comp) {
         response(new AuInvoke(this, "_cwf_highlight", comp));
     }
     
@@ -241,7 +184,7 @@ public class LayoutDesigner extends Window implements AfterCompose {
     public void requestRefresh() {
         if (!refreshPending) {
             refreshPending = true;
-            Events.echoEvent(layoutChangedEvent);
+            EventUtil.post(layoutChangedEvent);
         }
     }
     
@@ -265,9 +208,9 @@ public class LayoutDesigner extends Window implements AfterCompose {
      * @param parentNode Tree item that will be the parent node of the subtree.
      * @param selectedElement The currently selected element.
      */
-    private void buildTree(UIElementBase root, Treeitem parentNode, UIElementBase selectedElement) {
+    private void buildTree(UIElementBase root, Treenode parentNode, UIElementBase selectedElement) {
         Treechildren treechildren = parentNode == null ? tree.getTreechildren() : getTreechildren(parentNode);
-        Treeitem item = createItem(root);
+        Treenode item = createItem(root);
         treechildren.appendChild(item);
         
         if (root == selectedElement) {
@@ -285,7 +228,7 @@ public class LayoutDesigner extends Window implements AfterCompose {
      * @param ele UI element
      * @return Newly created tree item.
      */
-    private Treeitem createItem(UIElementBase ele) {
+    private Treenode createItem(UIElementBase ele) {
         String label = ele.getDisplayName();
         String instanceName = ele.getInstanceName();
         
@@ -293,8 +236,8 @@ public class LayoutDesigner extends Window implements AfterCompose {
             label += " - " + instanceName;
         }
         
-        Treeitem item = new Treeitem();
-        item.setValue(ele);
+        Treenode item = new Treenode();
+        item.setData(ele);
         Treerow row = new Treerow(label);
         row.setParent(item);
         row.addForward(Events.ON_DROP, this, null);
@@ -308,30 +251,13 @@ public class LayoutDesigner extends Window implements AfterCompose {
     }
     
     /**
-     * Returns the tree children component belonging to the specified tree item, creating it if one
-     * does not exist.
-     * 
-     * @param item Tree item
-     * @return The tree children component belonging to the tree item.
-     */
-    private Treechildren getTreechildren(Treeitem item) {
-        Treechildren result = item.getTreechildren();
-        
-        if (result == null) {
-            item.appendChild(result = new Treechildren());
-        }
-        
-        return result;
-    }
-    
-    /**
      * Returns the tree item containing the component.
      * 
      * @param cmpt The component whose containing tree item is sought.
      * @return The tree item.
      */
-    private Treeitem getTreeitem(Component cmpt) {
-        return (Treeitem) (cmpt instanceof Treeitem ? cmpt : ZKUtil.findAncestor(cmpt, Treeitem.class));
+    private Treenode getTreenode(BaseComponent cmpt) {
+        return (Treenode) (cmpt instanceof Treenode ? cmpt : cmpt.getAncestor(Treenode.class));
     }
     
     /**
@@ -340,7 +266,7 @@ public class LayoutDesigner extends Window implements AfterCompose {
      * @return Currently selected item (may be null).
      */
     private UIElementBase selectedElement() {
-        return getElement(tree.getSelectedItem());
+        return getElement(tree.getSelectedNode());
     }
     
     /**
@@ -349,27 +275,27 @@ public class LayoutDesigner extends Window implements AfterCompose {
      * @param item A tree item.
      * @return The UI element associated with the tree item.
      */
-    private UIElementBase getElement(Treeitem item) {
-        return (UIElementBase) (item == null ? null : item.getValue());
+    private UIElementBase getElement(Treenode item) {
+        return (UIElementBase) (item == null ? null : item.getData());
     }
     
     /**
      * Update control states for current selection.
      */
     private void updateControls() {
-        Treeitem selectedItem = tree.getSelectedItem();
+        Treenode selectedItem = tree.getSelectedNode();
         UIElementBase selectedElement = getElement(selectedItem);
         DesignContextMenu.updateStates(selectedElement, btnAdd, btnDelete, btnCopy, btnCut, btnPaste, btnProperties,
             btnAbout);
-        Treeitem target = selectedItem == null ? null : selectedItem.getParentItem();
+        Treenode target = selectedItem == null ? null : selectedItem.getParentItem();
         target = target == null ? null : target.getParentItem();
         btnLeft.setDisabled(movementType(selectedItem, target, false) == MovementType.INVALID);
-        target = selectedItem == null ? null : (Treeitem) selectedItem.getPreviousSibling();
+        target = selectedItem == null ? null : (Treenode) selectedItem.getPreviousSibling();
         btnRight.setDisabled(movementType(selectedItem, target, false) == MovementType.INVALID);
         btnUp.setDisabled(movementType(selectedItem, target, true) == MovementType.INVALID);
-        target = selectedItem == null ? null : (Treeitem) selectedItem.getNextSibling();
+        target = selectedItem == null ? null : (Treenode) selectedItem.getNextSibling();
         btnDown.setDisabled(movementType(selectedItem, target, true) == MovementType.INVALID);
-        ZKUtil.updateStyle(btnToFront, "opacity", bringToFront ? null : "0.5");
+        btnToFront.addStyle("opacity", bringToFront ? null : "0.5");
         
         if (selectedElement == null) {
             ZKUtil.suppressContextMenu(this);
@@ -393,7 +319,7 @@ public class LayoutDesigner extends Window implements AfterCompose {
      *            Otherwise, it will be evaluated as a potential relocation.
      * @return The movement type.
      */
-    private MovementType movementType(Treeitem child, Treeitem target, boolean allowExchange) {
+    private MovementType movementType(Treenode child, Treenode target, boolean allowExchange) {
         if (!canMove(child) || target == null) {
             return MovementType.INVALID;
         }
@@ -420,7 +346,7 @@ public class LayoutDesigner extends Window implements AfterCompose {
         return MovementType.INVALID;
     }
     
-    private boolean canMove(Treeitem item) {
+    private boolean canMove(Treenode item) {
         return item != null && !"false".equals(item.getTreerow().getDraggable());
     }
     
@@ -428,9 +354,9 @@ public class LayoutDesigner extends Window implements AfterCompose {
      * Updates the drop ids for all tree items.
      */
     private void updateDroppable() {
-        Collection<Treeitem> items = new ArrayList<>(tree.getItems());
+        Iterable<Treenode> items = tree.getChildren(Treenode.class);
         
-        for (Treeitem item : items) {
+        for (Treenode item : items) {
             updateDroppable(item, items);
         }
     }
@@ -441,19 +367,19 @@ public class LayoutDesigner extends Window implements AfterCompose {
      * @param target Target tree item.
      * @param items Item list.
      */
-    private void updateDroppable(Treeitem target, Collection<Treeitem> items) {
+    private void updateDroppable(Treenode target, Collection<Treenode> items) {
         StringBuilder sb = new StringBuilder();
         
         if (canMove(target)) {
-            for (Treeitem dragged : items) {
+            for (Treenode dragged : items) {
                 if (movementType(dragged, target, true) != MovementType.INVALID) {
-                    String id = dragged.getTreerow().getDraggable();
+                    String id = dragged.getDragid();
                     sb.append(sb.length() > 0 ? "," : "").append(id);
                 }
             }
         }
         
-        target.getTreerow().setDroppable(sb.toString());
+        target.setDropid(sb.toString());
     }
     
     /**
@@ -474,8 +400,8 @@ public class LayoutDesigner extends Window implements AfterCompose {
             ele.bringToFront();
         }
         
-        if (obj instanceof Component) {
-            highlight((Component) obj);
+        if (obj instanceof BaseComponent) {
+            highlight((BaseComponent) obj);
         }
         updateControls();
     }
@@ -564,28 +490,28 @@ public class LayoutDesigner extends Window implements AfterCompose {
         UIElementBase child = selectedElement();
         UIElementBase parent = child.getParent();
         parent.removeChild(child, true);
-        tree.getSelectedItem().detach();
+        tree.getSelectedNode().detach();
         updateDroppable();
         updateControls();
     }
     
     public void onClick$btnUp() {
-        Treeitem item = tree.getSelectedItem();
-        doDrop(item, (Treeitem) item.getPreviousSibling(), true);
+        Treenode item = tree.getSelectedNode();
+        doDrop(item, (Treenode) item.getPreviousSibling(), true);
     }
     
     public void onClick$btnDown() {
-        Treeitem item = tree.getSelectedItem();
-        doDrop((Treeitem) item.getNextSibling(), item, true);
+        Treenode item = tree.getSelectedNode();
+        doDrop((Treenode) item.getNextSibling(), item, true);
     }
     
     public void onClick$btnRight() {
-        Treeitem item = tree.getSelectedItem();
-        doDrop(item, (Treeitem) item.getPreviousSibling(), false);
+        Treenode item = tree.getSelectedNode();
+        doDrop(item, (Treenode) item.getPreviousSibling(), false);
     }
     
     public void onClick$btnLeft() {
-        Treeitem item = tree.getSelectedItem();
+        Treenode item = tree.getSelectedNode();
         doDrop(item, item.getParentItem().getParentItem(), false);
     }
     
@@ -610,32 +536,31 @@ public class LayoutDesigner extends Window implements AfterCompose {
      * 
      * @param event The drop event.
      */
-    public void onDrop(Event event) {
-        DropEvent dropEvent = (DropEvent) ZKUtil.getEventOrigin(event);
-        Treeitem target = getTreeitem(dropEvent.getTarget());
-        Treeitem dragged = getTreeitem(dropEvent.getDragged());
+    public void onDrop(DropEvent event) {
+        Treenode target = getTreenode(event.getTarget());
+        Treenode dragged = getTreenode(event.getRelatedTarget());
         doDrop(dragged, target, true);
     }
     
-    private void doDrop(Treeitem dragged, Treeitem target, boolean allowExchange) {
+    private void doDrop(Treenode dragged, Treenode target, boolean allowExchange) {
         UIElementBase eleTarget = getElement(target);
         UIElementBase eleDragged = getElement(dragged);
         
         switch (movementType(dragged, target, allowExchange)) {
             case INVALID:
                 return;
-                
+            
             case EXCHANGE:
                 eleDragged.setIndex(eleTarget.getIndex());
-                target.getParent().insertBefore(dragged, target);
+                target.getParent().insertChild(dragged, target);
                 break;
-                
+            
             case FIRST:
                 eleDragged.setIndex(0);
                 Treechildren tc = target.getTreechildren();
                 tc.insertBefore(dragged, tc.getFirstChild());
                 break;
-                
+            
             case RELOCATE:
                 eleDragged.setParent(eleTarget);
                 getTreechildren(target).appendChild(dragged);
@@ -649,12 +574,12 @@ public class LayoutDesigner extends Window implements AfterCompose {
      * Remove all listeners upon close.
      */
     @Override
-    public void onClose() {
+    public void close() {
         Desktop desktop = getDesktop();
         desktop.removeListener(layoutListener);
         desktop.removeAttribute(ZUL_PAGE);
         desktop.setAttribute(ATTR_BRING_TO_FRONT, bringToFront);
         clipboard.removeListener(this);
-        super.onClose();
+        super.close();
     }
 }

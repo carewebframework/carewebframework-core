@@ -38,8 +38,10 @@ import org.carewebframework.api.ManifestIterator;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.ui.FrameworkController;
 import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.component.Label;
 import org.carewebframework.web.component.Listbox;
 import org.carewebframework.web.component.Listitem;
+import org.carewebframework.web.component.Span;
 import org.carewebframework.web.component.Textbox;
 import org.carewebframework.web.event.Event;
 import org.carewebframework.web.event.InputEvent;
@@ -167,10 +169,10 @@ public class ManifestViewer extends FrameworkController {
          * @param label Content for cell. Auto-detects type of content.
          * @return Newly created cell.
          */
-        public Listcell addContent(Listitem item, String label) {
-            Listcell cell = new Listcell();
-            cell.appendChild(ZKUtil.getTextComponent(label));
-            item.appendChild(cell);
+        public Span addContent(Listitem item, String label) {
+            Span cell = new Span();
+            cell.addChild(ZKUtil.getTextComponent(label));
+            item.addChild(cell);
             return cell;
         }
         
@@ -181,9 +183,9 @@ public class ManifestViewer extends FrameworkController {
          * @param label Label text for cell.
          * @return Newly created cell.
          */
-        public Listcell addLabel(Listitem item, String label) {
-            Listcell cell = new Listcell(label);
-            item.appendChild(cell);
+        public Label addLabel(Listitem item, String label) {
+            Label cell = new Label(label);
+            item.addChild(cell);
             return cell;
         }
         

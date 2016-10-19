@@ -75,7 +75,7 @@ public class TreeUtil {
      * @param clazz Class of Treenode to create.
      * @return The tree item corresponding to the specified path, or null if not found.
      */
-    public static Treenode findNode(Tree tree, String path, boolean create, Class<? extends Treenode> clazz) {
+    public static Treenode findNode(Treeview tree, String path, boolean create, Class<? extends Treenode> clazz) {
         return findNode(tree, path, create, clazz, MatchMode.CASE_INSENSITIVE);
     }
     
@@ -89,7 +89,7 @@ public class TreeUtil {
      * @param matchMode The match mode.
      * @return The tree item corresponding to the specified path, or null if not found.
      */
-    public static Treenode findNode(Tree tree, String path, boolean create, Class<? extends Treenode> clazz,
+    public static Treenode findNode(Treeview tree, String path, boolean create, Class<? extends Treenode> clazz,
                                     MatchMode matchMode) {
         Treechildren tc = tree.getTreechildren();
         
@@ -112,7 +112,7 @@ public class TreeUtil {
      * @param create If true, tree nodes are created if they do not already exist.
      * @return The tree item corresponding to the specified path, or null if not found.
      */
-    public static Treenode findNode(Tree tree, String path, boolean create) {
+    public static Treenode findNode(Treeview tree, String path, boolean create) {
         return findNode(tree, path, create, Treenode.class);
     }
     
@@ -125,7 +125,7 @@ public class TreeUtil {
      * @param matchMode The match mode.
      * @return The tree item corresponding to the specified path, or null if not found.
      */
-    public static Treenode findNode(Tree tree, String path, boolean create, MatchMode matchMode) {
+    public static Treenode findNode(Treeview tree, String path, boolean create, MatchMode matchMode) {
         return findNode(tree, path, create, Treenode.class, matchMode);
     }
     
@@ -158,7 +158,7 @@ public class TreeUtil {
             try {
                 item = clazz.newInstance();
                 item.setLabel(label);
-                item.setTooltiptext(label);
+                item.setHint(label);
                 parent.appendChild(item);
                 return item;
             } catch (Exception e) {
@@ -177,7 +177,7 @@ public class TreeUtil {
      * @param caseSensitive If true, match is case-sensitive.
      * @return The matching tree item, or null if not found.
      */
-    public static Treenode findNodeByLabel(Tree tree, String label, boolean caseSensitive) {
+    public static Treenode findNodeByLabel(Treeview tree, String label, boolean caseSensitive) {
         for (Treenode item : tree.getItems()) {
             if (caseSensitive ? label.equals(item.getLabel()) : label.equalsIgnoreCase(item.getLabel())) {
                 return item;
@@ -219,8 +219,8 @@ public class TreeUtil {
      * 
      * @param tree Tree to be sorted.
      */
-    public static void sort(Tree tree) {
-        sort(tree.getTreechildren(), true);
+    public static void sort(Treeview tree) {
+        sort(tree.getChildren(), true);
     }
     
     /**
@@ -276,7 +276,7 @@ public class TreeUtil {
      * @param tree Tree whose tree items are to be expanded / collapsed.
      * @param depth Expand tree items to this depth. Tree items below this depth are collapsed.
      */
-    public static void expand(Tree tree, int depth) {
+    public static void expand(Treeview tree, int depth) {
         expand(tree.getTreechildren(), depth);
     }
     
@@ -312,7 +312,7 @@ public class TreeUtil {
      * @param text Text to find.
      * @return The first matching tree item, or null if none found.
      */
-    public static Treenode search(Tree tree, String text) {
+    public static Treenode search(Treeview tree, String text) {
         return search(tree, null, text, defaultTreenodeSearch);
     }
     
@@ -324,7 +324,7 @@ public class TreeUtil {
      * @param search Search logic.
      * @return The first matching tree item, or null if none found.
      */
-    public static Treenode search(Tree tree, String text, ITreenodeSearch search) {
+    public static Treenode search(Treeview tree, String text, ITreenodeSearch search) {
         return search(tree, null, text, search);
     }
     
@@ -348,7 +348,7 @@ public class TreeUtil {
      * @return The first matching tree item after the starting item, or null if none found.
      */
     public static Treenode search(Treenode start, String text, ITreenodeSearch search) {
-        return search(start.getTree(), start, text, search);
+        return search(start.getTreeView(), start, text, search);
     }
     
     /**
@@ -365,10 +365,6 @@ public class TreeUtil {
         
         while (it.hasNext()) {
             Treenode item = it.next();
-            
-            if (!item.isLoaded()) {
-                tree.renderItem(item);
-            }
             
             if (search.isMatch(item, text)) {
                 return item;
@@ -388,8 +384,8 @@ public class TreeUtil {
         }
         
         makeVisible(item.getParentItem());
-        item.setOpen(true);
-        Clients.scrollIntoView(item);
+        item.setCollapsed(false);
+        item.scrollIntoView(false);
     }
     
     /**
@@ -423,18 +419,6 @@ public class TreeUtil {
                 adjustVisibility((Treenode) parent.getParent(), visibleChildren);
                 adjustVisibility(parent.getLinkedTreerow(), visibleChildren);
             }
-        }
-    }
-    
-    /**
-     * Shows or hides the expand/collapse icon.
-     * 
-     * @param comp Component of the tree hierarchy.
-     * @param visible If true, show the icon.
-     */
-    private static void adjustVisibility(HtmlBasedComponent comp, boolean visible) {
-        if (comp != null) {
-            ZKUtil.updateSclass(comp, "cwf-treerow-hidebtn", visible);
         }
     }
     

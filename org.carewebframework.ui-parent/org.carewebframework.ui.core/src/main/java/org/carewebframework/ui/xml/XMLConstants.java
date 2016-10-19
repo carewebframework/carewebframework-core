@@ -44,8 +44,7 @@ public class XMLConstants {
     
     protected static final String STYLE_CONTENT = "cwf-xml-content";
     
-    public static final String[] EXCLUDED_PROPERTIES = { "stubonly=inherit", "mold=default", "renderdefer=-1",
-            "draggable=false", "droppable=false", "zindex=-1", "ZIndex=-1", "widgetClass", "menu.src" };
+    public static final String[] EXCLUDED_PROPERTIES = {};
     
     /**
      * Enforce static class.

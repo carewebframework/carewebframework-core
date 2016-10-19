@@ -26,20 +26,17 @@
 package org.carewebframework.shell.designer;
 
 import org.carewebframework.shell.layout.UIElementBase;
-
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.event.Event;
+import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.event.Event;
 
 /**
  * Event signaling that a change to the layout has occurred.
  */
 public class LayoutChangedEvent extends Event {
     
-    private static final long serialVersionUID = 1L;
+    public static final String ON_LAYOUT_CHANGED = "layoutChanged";
     
-    public static final String ON_LAYOUT_CHANGED = "onLayoutChanged";
-    
-    public LayoutChangedEvent(Component target, UIElementBase element) {
+    public LayoutChangedEvent(BaseComponent target, UIElementBase element) {
         super(ON_LAYOUT_CHANGED, target, element);
     }
     
