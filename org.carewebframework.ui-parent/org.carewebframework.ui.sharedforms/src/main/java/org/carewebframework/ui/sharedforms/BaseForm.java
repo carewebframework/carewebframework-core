@@ -33,8 +33,6 @@ import org.carewebframework.shell.plugins.PluginController;
  */
 public class BaseForm extends PluginController {
     
-    private static final long serialVersionUID = 1L;
-    
     @Override
     public void onLoad(PluginContainer container) {
         super.onLoad(container);

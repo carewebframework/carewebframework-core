@@ -31,7 +31,6 @@ import java.util.List;
 
 import org.carewebframework.api.event.EventManager;
 import org.carewebframework.api.event.IGenericEvent;
-import org.carewebframework.ui.zk.MoveEventListener;
 import org.carewebframework.ui.zk.ZKUtil;
 import org.carewebframework.web.component.Label;
 import org.carewebframework.web.component.Page;
@@ -128,7 +127,6 @@ public class PopupSupport implements IGenericEvent<Object>, IEventListener {
             Window window = getPopupWindow();
             window.setTitle(popupData.getTitle());
             window.setParent(currentPage);
-            window.registerEventListener("move", new MoveEventListener());
             String pos = getPosition();
             window.addStyle("left", pos);
             window.addStyle("top", pos);

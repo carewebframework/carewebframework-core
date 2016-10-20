@@ -35,8 +35,6 @@ import org.carewebframework.web.component.Window;
  */
 public class CaptionedForm extends BaseForm {
     
-    private static final long serialVersionUID = 1L;
-    
     public enum CaptionStyle {
         HIDDEN, TITLE, FRAME, LEFT, RIGHT, CENTER;
         
@@ -49,8 +47,6 @@ public class CaptionedForm extends BaseForm {
     private CaptionStyle captionStyle = CaptionStyle.HIDDEN;
     
     private Window panel;
-    
-    private String caption;
     
     private String color1;
     
@@ -102,23 +98,25 @@ public class CaptionedForm extends BaseForm {
         }
         
         panel.addClass("sharedForms-captioned sharedForms-captioned-caption-" + cs.name().toLowerCase());
-        //ZKUtil.updateStyle(caption, "background", background);
+        String css = "##{id}-titlebar ";
         
         if (cs == CaptionStyle.HIDDEN) {
-            panel.setTitle(null);
+            css += "{display:none}";
         } else {
-            panel.setTitle(caption);
+            css += "{background: " + background + "}";
         }
+        
+        panel.setCss(css);
     }
     
     /**
-     * Returns css gradient specifier for current browser.
+     * Returns css gradient specifier.
      * 
      * @param colors List of colors for gradient.
      * @return The gradient specifier.
      */
     private String getGradValue(String... colors) {
-        return ThemeFns.gradValue("hor", StrUtil.fromList(Arrays.asList(colors), ";", "none"));
+        return "linear-gradient(to right," + StrUtil.fromList(Arrays.asList(colors), ", ", "none") + ")";
     }
     
     /**
@@ -165,7 +163,7 @@ public class CaptionedForm extends BaseForm {
      * @return Current caption.
      */
     public String getCaption() {
-        return caption;
+        return panel.getTitle();
     }
     
     /**
@@ -174,7 +172,7 @@ public class CaptionedForm extends BaseForm {
      * @param caption Current caption.
      */
     public void setCaption(String caption) {
-        this.caption = caption;
+        panel.setTitle(caption);
     }
     
     /**
@@ -183,16 +181,16 @@ public class CaptionedForm extends BaseForm {
      * @return Caption icon URL.
      */
     public String getIcon() {
-        return caption.getImage();
+        return panel.getImage();
     }
     
     /**
      * Set the caption icon.
      * 
-     * @param url URL of icon.
+     * @param image URL of icon.
      */
-    public void setIcon(String url) {
-        caption.setImage(url);
+    public void setIcon(String image) {
+        panel.setImage(image);
     }
     
 }
