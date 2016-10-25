@@ -31,8 +31,6 @@ import org.carewebframework.ui.sharedforms.TestController.TestItem;
 
 public class TestController extends ListViewForm<TestItem> {
     
-    private static final long serialVersionUID = 1L;
-    
     public class TestItem {
         
         String item1, item2, item3;

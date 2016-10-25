@@ -27,7 +27,6 @@ package org.carewebframework.shell.layout;
 
 import org.carewebframework.theme.ThemeUtil;
 import org.carewebframework.ui.zk.Badge;
-import org.carewebframework.ui.zk.ZKUtil;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.Div;
 import org.carewebframework.web.component.Hyperlink;
@@ -178,7 +177,7 @@ public class UIElementTreePane extends UIElementCWFBase {
     @Override
     public void setEnabled(boolean enabled) {
         super.setEnabled(enabled);
-        ZKUtil.updateSclass(anchor, "cwf-treeview-node-disabled", enabled);
+        anchor.toggleClass(null, "cwf-treeview-node-disabled", enabled);
     }
     
     /**
@@ -251,7 +250,7 @@ public class UIElementTreePane extends UIElementCWFBase {
     public void bind() {
         setTreeView(getAncestor(UIElementTreeView.class));
         treeView.getInnerComponent().addChild(pane);
-        getNodeParent().appendChild(node);
+        getNodeParent().addChild(node);
     }
     
     /**

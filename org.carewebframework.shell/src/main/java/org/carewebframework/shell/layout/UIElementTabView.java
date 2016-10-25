@@ -27,11 +27,14 @@ package org.carewebframework.shell.layout;
 
 import org.carewebframework.shell.designer.PropertyEditorTabView;
 import org.carewebframework.shell.property.PropertyTypeRegistry;
-import org.carewebframework.web.component.Tabbox;
+import org.carewebframework.web.component.Tabview;
+import org.carewebframework.web.component.Tabview.TabPosition;
+import org.carewebframework.web.event.Event;
+import org.carewebframework.web.event.IEventListener;
 import org.carewebframework.web.event.SelectEvent;
 
 /**
- * Wraps the ZK Tabbox component. This UI element can only accept UIElementTabPane elements as
+ * Wraps the Tabview component. This UI element can only accept UIElementTabPane elements as
  * children and only one of those can be active at a time.
  */
 public class UIElementTabView extends UIElementCWFBase {
@@ -42,20 +45,20 @@ public class UIElementTabView extends UIElementCWFBase {
         PropertyTypeRegistry.register("tabs", PropertyEditorTabView.class);
     }
     
-    private final Tabbox tabBox;
+    private final Tabview tabview;
     
     private UIElementTabPane activePane;
     
     public UIElementTabView() throws Exception {
         super();
         maxChildren = Integer.MAX_VALUE;
-        tabBox = (Tabbox) createFromTemplate();
-        setOuterComponent(tabBox);
-        tabBox.addClass("cwf-tabbox");
-        tabBox.addEventListener(Events.ON_SELECT, new EventListener<SelectEvent<?, ?>>() {
+        tabview = (Tabview) createFromTemplate();
+        setOuterComponent(tabview);
+        tabview.addClass("cwf-tabview");
+        tabview.registerEventListener(SelectEvent.TYPE, new IEventListener() {
             
             @Override
-            public void onEvent(SelectEvent<?, ?> event) throws Exception {
+            public void onEvent(Event event) {
                 setActivePane((UIElementTabPane) getAssociatedUIElement(event.getTarget()));
             }
             
@@ -68,22 +71,16 @@ public class UIElementTabView extends UIElementCWFBase {
      * @param orientation Orientation setting.
      */
     public void setOrientation(String orientation) {
-        if ("accordion".equals(orientation)) {
-            tabBox.setOrient("top");
-            tabBox.setMold("accordion");
-        } else {
-            tabBox.setMold("default");
-            tabBox.setOrient(orientation);
-        }
+        tabview.setTabPosition(TabPosition.valueOf(orientation.toUpperCase()));
     }
     
     /**
-     * Returns the orientation (horizontal, vertical or accordion).
+     * Returns the orientation (horizontal, vertical, top, or bottom).
      * 
      * @return Orientation setting.
      */
     public String getOrientation() {
-        return "accordion".equals(tabBox.getMold()) ? "accordion" : tabBox.getOrient();
+        return tabview.getTabPosition().name().toLowerCase();
     }
     
     /**
@@ -123,7 +120,7 @@ public class UIElementTabView extends UIElementCWFBase {
     @Override
     public void activateChildren(boolean activate) {
         if (activePane == null) {
-            activePane = (UIElementTabPane) getAssociatedUIElement(tabBox.getActiveTab());
+            activePane = (UIElementTabPane) getAssociatedUIElement(tabview.getSelectedTab());
         }
         
         if (activePane != null) {

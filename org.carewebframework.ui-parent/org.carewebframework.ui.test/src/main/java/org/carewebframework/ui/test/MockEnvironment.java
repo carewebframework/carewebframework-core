@@ -119,10 +119,10 @@ public class MockEnvironment {
     }
     
     protected void initExecutionContext() {
-        ExecutionContext.put(ExecutionContext.WS_ATTRIBUTE, session);
-        ExecutionContext.put(ExecutionContext.SYNC_ATTRIBUTE, synchronizer);
-        ExecutionContext.put(ExecutionContext.SCTX_ATTRIBUTE, servletContext);
-        ExecutionContext.put(ExecutionContext.REQ_ATTRIBUTE, clientRequest);
+        ExecutionContext.put(ExecutionContext.ATTR_WS, session);
+        ExecutionContext.put(ExecutionContext.ATTR_SYNC, synchronizer);
+        ExecutionContext.put(ExecutionContext.ATTR_SCTX, servletContext);
+        ExecutionContext.put(ExecutionContext.ATTR_REQ, clientRequest);
     }
     
     protected void initClientRequestMap(Map<String, Object> map) {

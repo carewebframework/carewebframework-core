@@ -31,8 +31,7 @@ import java.util.List;
 import org.carewebframework.help.IHelpSet;
 import org.carewebframework.ui.event.InvocationRequest;
 import org.carewebframework.ui.event.InvocationRequestQueue;
-
-import org.zkoss.zk.ui.Desktop;
+import org.carewebframework.web.component.Page;
 
 /**
  * Acts as a proxy for a help viewer instance residing in another browser window. Uses event queues
@@ -57,11 +56,11 @@ public class HelpViewerProxy implements IHelpViewer {
     private final InvocationRequest mergeRequest = InvocationRequestQueue.createRequest("mergeHelpSet", helpSets);
     
     /**
-     * Creates a proxy for the help viewer with the specified desktop as owner.
+     * Creates a proxy for the help viewer with the specified page as owner.
      * 
-     * @param owner Desktop that will own this proxy.
+     * @param owner Page that will own this proxy.
      */
-    public HelpViewerProxy(Desktop owner) {
+    public HelpViewerProxy(Page owner) {
         super();
         ownerId = owner.getId();
         remoteWindowName = new InvocationRequestQueue(owner, this, HelpUtil.HELP_QUEUE_PREFIX, HelpUtil.closeRequest)
@@ -184,7 +183,8 @@ public class HelpViewerProxy implements IHelpViewer {
     }
     
     /**
-     * @see org.carewebframework.help.viewer.IHelpViewer#show(IHelpSet, java.lang.String, java.lang.String)
+     * @see org.carewebframework.help.viewer.IHelpViewer#show(IHelpSet, java.lang.String,
+     *      java.lang.String)
      */
     @Override
     public void show(IHelpSet helpSet, String topicId, String topicLabel) {

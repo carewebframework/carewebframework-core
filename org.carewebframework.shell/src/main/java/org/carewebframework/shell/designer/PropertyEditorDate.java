@@ -30,9 +30,7 @@ import java.util.Date;
 import org.carewebframework.common.DateUtil;
 import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.property.PropertyInfo;
-
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zul.Datebox;
+import org.carewebframework.web.component.Datebox;
 
 /**
  * Editor for dates.
@@ -50,7 +48,6 @@ public class PropertyEditorDate extends PropertyEditorBase {
     protected void init(UIElementBase target, PropertyInfo propInfo, PropertyGrid propGrid) {
         super.init(target, propInfo, propGrid);
         datebox.setConstraint(propInfo.getConfigValue("constraint"));
-        datebox.addForward(Events.ON_CHANGING, propGrid, Events.ON_CHANGE);
     }
     
     @Override

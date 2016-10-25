@@ -33,13 +33,19 @@ import org.apache.commons.lang.math.NumberUtils;
 import org.carewebframework.common.NumUtil;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.ui.command.CommandUtil;
-import org.carewebframework.ui.cwf.AbstractListitemRenderer;
 import org.carewebframework.ui.cwf.SplitterPane;
 import org.carewebframework.ui.cwf.SplitterView;
 import org.carewebframework.ui.zk.ZKUtil;
+import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.Listbox;
 import org.carewebframework.web.component.Listitem;
+import org.carewebframework.web.event.ClickEvent;
+import org.carewebframework.web.event.Event;
+import org.carewebframework.web.event.IEventListener;
 import org.carewebframework.web.event.SelectEvent;
+import org.carewebframework.web.model.IComponentRenderer;
+import org.carewebframework.web.model.ListModel;
+import org.carewebframework.web.model.ModelAndView;
 
 /**
  * Controller for list view based forms.
@@ -84,24 +90,27 @@ public abstract class ListViewForm<DAO> extends CaptionedForm {
     
     private boolean sortAscending;
     
-    protected final ListModelList<DAO> model = new ListModelList<>();
+    protected final ListModel<DAO> model = new ListModel<>();
     
-    private final AbstractListitemRenderer<DAO, Object> renderer = new AbstractListitemRenderer<DAO, Object>() {
+    protected ModelAndView<Listitem, DAO> modelAndView;
+    
+    private final IComponentRenderer<Listitem, DAO> renderer = new IComponentRenderer<Listitem, DAO>() {
         
         @Override
-        protected void renderItem(Listitem item, DAO object) {
-            item.addForward(Events.ON_CLICK, listbox, Events.ON_SELECT);
+        public Listitem render(DAO object) {
+            Listitem item = new Listitem();
+            item.registerEventForward(ClickEvent.TYPE, listbox, SelectEvent.TYPE);
             ListViewForm.this.renderItem(item, object);
         }
         
     };
     
-    private final EventListener<SortEvent> sortListener = new EventListener<SortEvent>() {
+    private final IEventListener sortListener = new IEventListener() {
         
         @Override
-        public void onEvent(SortEvent event) throws Exception {
-            sortAscending = event.isAscending();
-            sortColumn = (Integer) event.getTarget().getAttribute(COL_INDEX_ATTR);
+        public void onEvent(Event event) {
+            //TODO: sortAscending = event.isAscending();
+            //sortColumn = (Integer) event.getTarget().getAttribute(COL_INDEX_ATTR);
         }
         
     };
@@ -119,8 +128,7 @@ public abstract class ListViewForm<DAO> extends CaptionedForm {
     @Override
     protected void init() {
         super.init();
-        listbox.setItemRenderer(renderer);
-        listbox.setModel(model);
+        modelAndView = new ModelAndView<Listitem, DAO>(listbox, model, renderer);
         root = detailPane;
         setSize(50);
         CommandUtil.associateCommand("REFRESH", listbox);
@@ -159,7 +167,7 @@ public abstract class ListViewForm<DAO> extends CaptionedForm {
                 lhdr.setWidth(defWidth);
             }
             
-            lhdr.addEventListener(Events.ON_SORT, sortListener);
+            lhdr.addEventListener("sort", sortListener);
         }
         
         sortColumn = Math.abs(sortBy) - 1;
@@ -229,7 +237,7 @@ public abstract class ListViewForm<DAO> extends CaptionedForm {
         StringBuilder sb = new StringBuilder();
         sb.append(NumUtil.toString(getSize())).append(':').append(sortColumn).append(':').append(sortAscending);
         
-        for (Component comp : listhead.getChildren()) {
+        for (BaseComponent comp : listhead.getChildren()) {
             Listheader lhdr = (Listheader) comp;
             sb.append(';').append(lhdr.getAttribute(COL_INDEX_ATTR)).append(':').append(lhdr.getWidth());
         }
@@ -284,7 +292,7 @@ public abstract class ListViewForm<DAO> extends CaptionedForm {
      * @return List header at index.
      */
     private Listheader getColumnByIndex(int index) {
-        for (Component comp : listhead.getChildren()) {
+        for (BaseComponent comp : listhead.getChildren()) {
             if (((Integer) comp.getAttribute(COL_INDEX_ATTR)).intValue() == index) {
                 return (Listheader) comp;
             }
@@ -297,8 +305,8 @@ public abstract class ListViewForm<DAO> extends CaptionedForm {
      * Clears the list and status.
      */
     protected void reset() {
+        modelAndView.setModel(null);
         model.clear();
-        listbox.setModel((ListModelList<?>) null);
         status(null);
     }
     
@@ -311,7 +319,6 @@ public abstract class ListViewForm<DAO> extends CaptionedForm {
         Listitem item = getSelectedItem();
         
         if (item != null) {
-            listbox.renderItem(item);
             return (DAO) item.getValue();
         }
         
@@ -391,7 +398,7 @@ public abstract class ListViewForm<DAO> extends CaptionedForm {
         } else {
             status(null);
             alphaSort();
-            listbox.setModel(model);
+            modelAndView.setModel(model);
         }
     }
     
@@ -419,7 +426,7 @@ public abstract class ListViewForm<DAO> extends CaptionedForm {
     protected void status(String message) {
         if (message != null) {
             status.setLabel(StrUtil.piece(message, StrUtil.U));
-            status.setTooltiptext(StrUtil.piece(message, StrUtil.U, 2, 999));
+            status.setHint(StrUtil.piece(message, StrUtil.U, 2, 999));
             status.getParent().setVisible(true);
             listhead.setVisible(false);
         } else {
@@ -437,8 +444,6 @@ public abstract class ListViewForm<DAO> extends CaptionedForm {
     }
     
     public void onSelect$listbox(Event event) {
-        event = ZKUtil.getEventOrigin(event);
-        
         if (getShowDetailPane() == (event instanceof SelectEvent)) {
             itemSelected(getSelectedItem());
         }

@@ -89,8 +89,8 @@ public class InviteController extends FrameworkController {
     @Override
     public void afterInitialized(BaseComponent comp) {
         super.afterInitialized(comp);
-        sessionId = (String) arg.get("sessionId");
-        Collection<IPublisherInfo> exclusions = (Collection<IPublisherInfo>) arg.get("exclusions");
+        sessionId = (String) comp.findAttribute("sessionId");
+        Collection<IPublisherInfo> exclusions = (Collection<IPublisherInfo>) comp.findAttribute("exclusions");
         model.setMultiple(lstSessions.isMultiple());
         renderer = new ParticipantRenderer(chatService.getSelf(), exclusions);
         lstSessions.setItemRenderer(renderer);
@@ -117,7 +117,7 @@ public class InviteController extends FrameworkController {
      * Updates controls to reflect the current selection state.
      */
     private void updateControls() {
-        btnInvite.setDisabled(model.isSelectionEmpty());
+        btnInvite.setDisabled(lstSessions.getSelectedCount() == 0);
     }
     
     /**

@@ -235,7 +235,7 @@ public abstract class PropertyEditorCustomTree<T extends UIElementBase> extends 
         btnLeft.setVisible(hierarchical);
         propertyGrid = PropertyGrid.create(null, gridParent);
         propertyGrid.setClosable(true);
-        Events.addEventListeners(propertyGrid, this);
+        propertyGrid.registerEventListener(eventType, this);
         txtLabel.setWidth("95%");
         txtLabel.setConstraint(new LabelConstraint());
         bandpopup.setHeight("400px");

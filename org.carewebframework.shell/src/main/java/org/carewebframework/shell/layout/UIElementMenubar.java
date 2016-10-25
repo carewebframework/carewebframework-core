@@ -27,7 +27,6 @@ package org.carewebframework.shell.layout;
 
 import org.carewebframework.shell.designer.PropertyEditorMenubar;
 import org.carewebframework.shell.property.PropertyTypeRegistry;
-import org.carewebframework.ui.zk.ZKUtil;
 import org.carewebframework.web.component.Menu;
 
 /**
@@ -58,7 +57,7 @@ public class UIElementMenubar extends UIElementMenuBase {
     @Override
     public void setDesignMode(boolean designMode) {
         super.setDesignMode(designMode);
-        ZKUtil.updateStyle(getMenubar(), "min-width", designMode ? "40px" : null);
+        getMenubar().addStyle("min-width", designMode ? "40px" : null);
     }
     
 }

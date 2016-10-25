@@ -31,31 +31,26 @@ import java.util.List;
 
 import org.apache.commons.beanutils.MethodUtils;
 import org.apache.commons.lang.StringUtils;
-
 import org.carewebframework.common.MiscUtil;
 import org.carewebframework.help.HelpTopic;
 import org.carewebframework.help.IHelpSet;
 import org.carewebframework.help.viewer.HelpHistory.ITopicListener;
 import org.carewebframework.ui.event.InvocationRequestQueue;
 import org.carewebframework.ui.zk.ZKUtil;
-
-import org.zkoss.zk.au.out.AuInvoke;
-import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.Page;
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zk.ui.event.SizeEvent;
-import org.zkoss.zk.ui.ext.AfterCompose;
-import org.zkoss.zul.Button;
-import org.zkoss.zul.Iframe;
-import org.zkoss.zul.Label;
-import org.zkoss.zul.Tabbox;
-import org.zkoss.zul.Window;
+import org.carewebframework.web.client.ClientUtil;
+import org.carewebframework.web.component.Button;
+import org.carewebframework.web.component.Iframe;
+import org.carewebframework.web.component.Label;
+import org.carewebframework.web.component.Tabview;
+import org.carewebframework.web.component.Window;
+import org.carewebframework.web.event.Event;
+import org.carewebframework.web.event.IEventListener;
+import org.carewebframework.web.event.ResizeEvent;
 
 /**
  * ZK-based viewer for viewing help content. Supports multiple help formats.
  */
-public class HelpViewer extends Window implements IHelpViewer, AfterCompose, ITopicListener, EventListener<Event> {
+public class HelpViewer extends Window implements IHelpViewer, AfterCompose, ITopicListener, IEventListener {
     
     public enum HelpViewerMode {
         EMBEDDED, POPUP;
@@ -68,7 +63,7 @@ public class HelpViewer extends Window implements IHelpViewer, AfterCompose, ITo
     
     private static final long serialVersionUID = 1L;
     
-    private Tabbox tbxNavigator;
+    private Tabview tbxNavigator;
     
     private Iframe iframe;
     
@@ -94,14 +89,8 @@ public class HelpViewer extends Window implements IHelpViewer, AfterCompose, ITo
     
     private String lastWidth = "1000px";
     
-    private final AuInvoke auFocusWindow;
-    
-    private final AuInvoke auCloseWindow;
-    
     public HelpViewer() {
         super();
-        auFocusWindow = new AuInvoke(this, "_cwf_focus");
-        auCloseWindow = new AuInvoke(this, "_cwf_close");
     }
     
     /**
@@ -111,11 +100,11 @@ public class HelpViewer extends Window implements IHelpViewer, AfterCompose, ITo
     public void show() {
         try {
             if (mode == HelpViewerMode.EMBEDDED) {
-                doModal();
+                setMode(Mode.MODAL);
                 setHeight(lastHeight);
                 setWidth(lastWidth);
             } else {
-                response(auFocusWindow);
+                ClientUtil.invoke("window.focus");
             }
         } catch (Exception e) {}
     }
@@ -195,7 +184,7 @@ public class HelpViewer extends Window implements IHelpViewer, AfterCompose, ITo
         if (mode == HelpViewerMode.EMBEDDED) {
             setVisible(false);
         } else {
-            response(auCloseWindow);
+            ClientUtil.invoke("window.close");
         }
     }
     
@@ -206,8 +195,7 @@ public class HelpViewer extends Window implements IHelpViewer, AfterCompose, ITo
     private void reset() {
         tbxNavigator.setVisible(false);
         lblLoading.setVisible(true);
-        tbxNavigator.getTabpanels().getChildren().clear();
-        tbxNavigator.getTabs().getChildren().clear();
+        tbxNavigator.destroyChildren();
         helpSets.clear();
         history.clear();
     }
@@ -238,7 +226,7 @@ public class HelpViewer extends Window implements IHelpViewer, AfterCompose, ITo
      * @param tab Tab to select.
      */
     private void selectTab(HelpTab tab) {
-        tbxNavigator.setSelectedPanel(tab);
+        tbxNavigator.setSelectedTab(tab);
         tab.onSelect();
     }
     
@@ -292,7 +280,7 @@ public class HelpViewer extends Window implements IHelpViewer, AfterCompose, ITo
      */
     @SuppressWarnings("unchecked")
     private List<HelpTab> getTabs() {
-        return (List<HelpTab>) (List<?>) tbxNavigator.getTabpanels().getChildren();
+        return (List<HelpTab>) (List<?>) tbxNavigator.getChildren();
     }
     
     /**
@@ -362,7 +350,6 @@ public class HelpViewer extends Window implements IHelpViewer, AfterCompose, ITo
      * @param event The change event.
      */
     public void onURLChange$iframe(Event event) {
-        event = ZKUtil.getEventOrigin(event);
         String url = (String) event.getData();
         
         if (url.equals(lastURL)) {
@@ -405,7 +392,7 @@ public class HelpViewer extends Window implements IHelpViewer, AfterCompose, ITo
      * 
      * @return The tab box.
      */
-    protected Tabbox getTabbox() {
+    protected Tabview getTabview() {
         return tbxNavigator;
     }
     
@@ -458,22 +445,13 @@ public class HelpViewer extends Window implements IHelpViewer, AfterCompose, ITo
     }
     
     /**
-     * @see org.zkoss.zul.Window#onClose()
-     */
-    @Override
-    public void onClose() {
-        close();
-    }
-    
-    /**
      * Save height and width to use next time window is shown.
      * 
      * @param event The size event.
      */
-    public void onSize(Event event) {
-        SizeEvent size = (SizeEvent) ZKUtil.getEventOrigin(event);
-        lastHeight = size.getHeight();
-        lastWidth = size.getWidth();
+    public void onSize(ResizeEvent event) {
+        lastHeight = event.getHeight();
+        lastWidth = event.getWidth();
     }
     
     /**
@@ -482,9 +460,9 @@ public class HelpViewer extends Window implements IHelpViewer, AfterCompose, ITo
      * @see org.zkoss.zul.Window#onPageDetached(org.zkoss.zk.ui.Page)
      */
     @Override
-    public void onPageDetached(Page page) {
+    public void onDestroy() {
         HelpUtil.removeViewer(this);
-        super.onPageDetached(page);
+        super.onDestroy();
     }
     
     /**
@@ -528,9 +506,9 @@ public class HelpViewer extends Window implements IHelpViewer, AfterCompose, ITo
      * @throws Exception Unspecified exception.
      */
     @Override
-    public void onEvent(Event event) throws Exception {
+    public void onEvent(Event event) {
         try {
-            MethodUtils.invokeMethod(this, event.getName(), (Object[]) event.getData());
+            MethodUtils.invokeMethod(this, event.getType(), (Object[]) event.getData());
         } catch (Exception e) {}
     }
 }

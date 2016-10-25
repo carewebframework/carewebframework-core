@@ -25,22 +25,24 @@
  */
 package org.carewebframework.ui.wonderbar;
 
-import org.carewebframework.web.client.ClientRequest;
+import org.carewebframework.web.annotation.EventType;
+import org.carewebframework.web.annotation.EventType.EventParameter;
+import org.carewebframework.web.annotation.OnFailure;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.event.Event;
 
 /**
  * Fired when a search request is received from the client.
  */
+@EventType(WonderbarSearchEvent.TYPE)
 public class WonderbarSearchEvent extends Event {
     
     public static final String TYPE = "wonderbarSearch";
     
-    private final String term;
+    @EventParameter(onFailure = OnFailure.IGNORE)
+    private String term;
     
-    public WonderbarSearchEvent(ClientRequest request) {
-        super(request);
-        term = (String) getParam(request, "term");
+    public WonderbarSearchEvent() {
     }
     
     public WonderbarSearchEvent(BaseComponent target, String term) {

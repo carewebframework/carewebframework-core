@@ -28,10 +28,6 @@ package org.carewebframework.shell.designer;
 import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.property.PropertyInfo;
 
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zul.Intbox;
-import org.zkoss.zul.SimpleSpinnerConstraint;
-
 /**
  * Editor for integer values.
  */
@@ -48,7 +44,6 @@ public class PropertyEditorInteger extends PropertyEditorBase {
     protected void init(UIElementBase target, PropertyInfo propInfo, PropertyGrid propGrid) {
         super.init(target, propInfo, propGrid);
         intbox.setMaxlength(9);
-        intbox.addForward(Events.ON_CHANGING, propGrid, Events.ON_CHANGE);
         Integer min = propInfo.getConfigValueInt("min", null);
         Integer max = propInfo.getConfigValueInt("max", null);
         

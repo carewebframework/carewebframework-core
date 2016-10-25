@@ -30,18 +30,13 @@ import org.carewebframework.common.StrUtil;
 import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.property.PropertyInfo;
 import org.carewebframework.ui.zk.ZKUtil;
-
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.event.OpenEvent;
-import org.zkoss.zul.Bandbox;
-import org.zkoss.zul.Bandpopup;
+import org.carewebframework.web.event.Event;
+import org.carewebframework.web.event.IEventListener;
 
 /**
  * Allows registration of custom editors for complex property types.
  */
-public class PropertyEditorCustom extends PropertyEditorBase implements EventListener<Event> {
+public class PropertyEditorCustom extends PropertyEditorBase implements IEventListener {
     
     protected final Bandbox bandbox;
     
@@ -117,9 +112,7 @@ public class PropertyEditorCustom extends PropertyEditorBase implements EventLis
      * state.
      */
     @Override
-    public void onEvent(Event event) throws Exception {
-        event = ZKUtil.getEventOrigin(event);
-        
+    public void onEvent(Event event) {
         if (event instanceof OpenEvent) {
             OpenEvent openEvent = (OpenEvent) event;
             

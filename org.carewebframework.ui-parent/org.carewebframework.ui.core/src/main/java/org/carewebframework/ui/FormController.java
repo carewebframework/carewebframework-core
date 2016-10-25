@@ -101,7 +101,7 @@ public abstract class FormController<T> extends FrameworkController {
     @Override
     public void afterInitialized(BaseComponent comp) {
         super.afterInitialized(comp);
-        domainObject = (T) arg.get("domainObject");
+        domainObject = (T) comp.getAttribute("domainObject");
         btnOK.setDisabled(true);
         initControls();
         EventUtil.post(new Event("onDeferredInit", root, null));

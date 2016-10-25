@@ -29,7 +29,7 @@ import org.carewebframework.common.MiscUtil;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.event.Event;
 import org.carewebframework.web.event.EventUtil;
-import org.carewebframework.web.page.PageParser;
+import org.carewebframework.web.page.PageUtil;
 import org.w3c.dom.Document;
 
 /**
@@ -45,7 +45,7 @@ public class XMLViewer {
      */
     public static void showXML(Document document) {
         try {
-            BaseComponent dlg = PageUtil.createPage(XMLConstants.VIEW_DIALOG, null);
+            BaseComponent dlg = PageUtil.createPage(XMLConstants.VIEW_DIALOG, null).get(0);
             EventUtil.send(new Event("modal", dlg, document));
         } catch (Exception e) {
             throw MiscUtil.toUnchecked(e);

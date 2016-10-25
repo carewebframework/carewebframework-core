@@ -42,14 +42,17 @@ import org.carewebframework.web.ancillary.INamespace;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.BaseUIComponent;
 import org.carewebframework.web.component.Button;
+import org.carewebframework.web.component.Cell;
 import org.carewebframework.web.component.Column;
 import org.carewebframework.web.component.Label;
 import org.carewebframework.web.component.Row;
 import org.carewebframework.web.component.Table;
 import org.carewebframework.web.component.Table.Rows;
 import org.carewebframework.web.component.Window;
+import org.carewebframework.web.event.ClickEvent;
 import org.carewebframework.web.event.Event;
 import org.carewebframework.web.event.EventUtil;
+import org.carewebframework.web.event.SelectEvent;
 import org.carewebframework.web.page.PageDefinition;
 import org.carewebframework.web.page.PageParser;
 
@@ -151,7 +154,7 @@ public class PropertyGrid extends Window {
         propertyGrid.init(target, parent, embedded);
         
         if (parent == null) {
-            propertyGrid.doModal();
+            propertyGrid.setMode(Mode.MODAL);
         }
         
         return propertyGrid;
@@ -259,16 +262,16 @@ public class PropertyGrid extends Window {
             Rows rows = gridProperties.getRows();
             
             if (append) {
-                rows.appendChild(row);
+                rows.addChild(row);
             } else {
-                rows.insertBefore(row, rows.getFirstChild());
+                rows.insertChild(row, rows.getFirstChild());
             }
             
             Cell cell = new Cell();
-            row.appendChild(cell);
-            cell.addForward(Events.ON_CLICK, this, Events.ON_SELECT);
+            row.addChild(cell);
+            cell.registerEventForward(ClickEvent.TYPE, this, SelectEvent.TYPE);
             Label lbl = new Label(propInfo.getName());
-            cell.appendChild(lbl);
+            cell.addChild(lbl);
             row.setAttribute(EDITOR_ATTR, editor);
             
             try {
@@ -312,7 +315,7 @@ public class PropertyGrid extends Window {
         disableButtons(result);
         
         if (commit) {
-            EventUtil.postEvent(new LayoutChangedEvent(null, target));
+            EventUtil.post(new LayoutChangedEvent(null, target));
         }
         
         return result;
@@ -381,7 +384,7 @@ public class PropertyGrid extends Window {
         if (embedded) {
             commitChanges(false);
         } else {
-            onClose();
+            close();
         }
     }
     
@@ -404,7 +407,7 @@ public class PropertyGrid extends Window {
      */
     public void onClick$btnOK() {
         if (commitChanges(true)) {
-            onClose();
+            close();
         }
     }
     
@@ -415,7 +418,7 @@ public class PropertyGrid extends Window {
     public void close() {
         if (embedded) {
             setVisible(false);
-        } else if (inModal()) {
+        } else if (getMode() == Mode.MODAL) {
             super.close();
         }
     }

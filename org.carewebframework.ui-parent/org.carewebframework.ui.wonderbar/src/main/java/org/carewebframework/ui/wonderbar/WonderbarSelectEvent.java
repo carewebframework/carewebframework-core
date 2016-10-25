@@ -25,25 +25,27 @@
  */
 package org.carewebframework.ui.wonderbar;
 
-import org.carewebframework.web.client.ClientRequest;
+import org.carewebframework.web.annotation.EventType;
+import org.carewebframework.web.annotation.EventType.EventParameter;
+import org.carewebframework.web.annotation.OnFailure;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.event.Event;
 
 /**
  * Fired when an item is selected from the wonder bar.
  */
+@EventType(WonderbarSelectEvent.TYPE)
 public class WonderbarSelectEvent extends Event {
     
     public static final String TYPE = "wonderbarSelect";
     
-    private final WonderbarItem selectedItem;
+    @EventParameter(onFailure = OnFailure.IGNORE)
+    private WonderbarItem selectedItem;
     
-    private final int keys;
+    @EventParameter(onFailure = OnFailure.IGNORE)
+    private int keys;
     
-    public WonderbarSelectEvent(ClientRequest request) {
-        super(request);
-        selectedItem = (WonderbarItem) getParam(request, "reference");
-        keys = (int) getParam(request, "keys", 0);
+    public WonderbarSelectEvent() {
     }
     
     /**

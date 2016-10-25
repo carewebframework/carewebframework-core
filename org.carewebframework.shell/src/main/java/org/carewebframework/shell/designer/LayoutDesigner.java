@@ -25,9 +25,6 @@
  */
 package org.carewebframework.shell.designer;
 
-import java.awt.Desktop;
-import java.util.Collection;
-
 import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.layout.UILayout;
 import org.carewebframework.ui.zk.PopupDialog;
@@ -40,17 +37,20 @@ import org.carewebframework.web.component.Treenode;
 import org.carewebframework.web.component.Treeview;
 import org.carewebframework.web.component.Window;
 import org.carewebframework.web.core.ExecutionContext;
+import org.carewebframework.web.event.ClickEvent;
+import org.carewebframework.web.event.DblclickEvent;
 import org.carewebframework.web.event.DropEvent;
 import org.carewebframework.web.event.EventUtil;
+import org.carewebframework.web.page.PageUtil;
 
 /**
  * Dialog for managing the current layout.
  */
 public class LayoutDesigner extends Window implements IAutoWired {
     
-    private static final String ZUL_PAGE = DesignConstants.RESOURCE_PREFIX + "LayoutDesigner.cwf";
+    private static final String CWF_PAGE = DesignConstants.RESOURCE_PREFIX + "LayoutDesigner.cwf";
     
-    private static final String ATTR_BRING_TO_FRONT = ZUL_PAGE + ".BTF";
+    private static final String ATTR_BRING_TO_FRONT = CWF_PAGE + ".BTF";
     
     private enum MovementType {
         INVALID, // Invalid movement type
@@ -108,7 +108,7 @@ public class LayoutDesigner extends Window implements IAutoWired {
     public static void execute(UIElementBase rootElement) throws Exception {
         LayoutDesigner dlg = getInstance(true);
         dlg.init(rootElement);
-        dlg.doOverlapped();
+        dlg.setMode(Mode.POPUP);
     }
     
     /**
@@ -134,11 +134,11 @@ public class LayoutDesigner extends Window implements IAutoWired {
      */
     private static LayoutDesigner getInstance(boolean autoCreate) throws Exception {
         Page page = ExecutionContext.getPage();
-        LayoutDesigner dlg = (LayoutDesigner) page.getAttribute(ZUL_PAGE);
+        LayoutDesigner dlg = (LayoutDesigner) page.getAttribute(CWF_PAGE);
         
         if (autoCreate && dlg == null) {
-            dlg = (LayoutDesigner) PopupDialog.popup(ZKUtil.loadCachedPageDefinition(ZUL_PAGE), null, true, true, false);
-            page.setAttribute(ZUL_PAGE, dlg);
+            dlg = (LayoutDesigner) PopupDialog.popup(PageUtil.getPageDefinition(CWF_PAGE), null, true, true, false);
+            page.setAttribute(CWF_PAGE, dlg);
         }
         
         return dlg;
@@ -148,13 +148,13 @@ public class LayoutDesigner extends Window implements IAutoWired {
     public void afterInitialized(BaseComponent comp) {
         ZKUtil.wireController(this);
         setWidgetOverride("_cwf_highlight", "function(comp) {jq(comp).effect('pulsate',{times:1}).effect('highlight');}");
-        Boolean btf = (Boolean) getDesktop().getAttribute(ATTR_BRING_TO_FRONT);
+        Boolean btf = (Boolean) getPage().getAttribute(ATTR_BRING_TO_FRONT);
         bringToFront = btf == null || btf;
         layoutChangedEvent = new LayoutChangedEvent(this, null);
         contextMenu.setParent(this);
         contextMenu.setListener(this);
         clipboard.addListener(this);
-        getDesktop().addListener(layoutListener);
+        getPage().registerEventListener(layoutListener);
     }
     
     /**
@@ -194,7 +194,7 @@ public class LayoutDesigner extends Window implements IAutoWired {
     private void refresh() {
         refreshPending = false;
         UIElementBase selectedElement = selectedElement();
-        ZKUtil.detachChildren(tree.getTreechildren());
+        tree.destroyChildren();
         dragId = 0;
         buildTree(rootElement, null, selectedElement);
         updateDroppable();
@@ -209,12 +209,11 @@ public class LayoutDesigner extends Window implements IAutoWired {
      * @param selectedElement The currently selected element.
      */
     private void buildTree(UIElementBase root, Treenode parentNode, UIElementBase selectedElement) {
-        Treechildren treechildren = parentNode == null ? tree.getTreechildren() : getTreechildren(parentNode);
         Treenode item = createItem(root);
-        treechildren.appendChild(item);
+        parentNode.addChild(item);
         
         if (root == selectedElement) {
-            tree.selectItem(item);
+            tree.setSelectedNode(item);
         }
         
         for (UIElementBase child : root.getChildren()) {
@@ -240,8 +239,8 @@ public class LayoutDesigner extends Window implements IAutoWired {
         item.setData(ele);
         Treerow row = new Treerow(label);
         row.setParent(item);
-        row.addForward(Events.ON_DROP, this, null);
-        row.addForward(Events.ON_DOUBLE_CLICK, btnProperties, Events.ON_CLICK);
+        row.registerEventForward(DropEvent.TYPE, this);
+        row.registerEventForward(DblclickEvent.TYPE, btnProperties, ClickEvent.TYPE);
         
         if (!ele.isLocked() && !ele.getDefinition().isInternal()) {
             row.setDraggable("d" + dragId++);
@@ -287,8 +286,8 @@ public class LayoutDesigner extends Window implements IAutoWired {
         UIElementBase selectedElement = getElement(selectedItem);
         DesignContextMenu.updateStates(selectedElement, btnAdd, btnDelete, btnCopy, btnCut, btnPaste, btnProperties,
             btnAbout);
-        Treenode target = selectedItem == null ? null : selectedItem.getParentItem();
-        target = target == null ? null : target.getParentItem();
+        Treenode target = selectedItem == null ? null : selectedItem.getParent();
+        target = target == null ? null : target.getParent();
         btnLeft.setDisabled(movementType(selectedItem, target, false) == MovementType.INVALID);
         target = selectedItem == null ? null : (Treenode) selectedItem.getPreviousSibling();
         btnRight.setDisabled(movementType(selectedItem, target, false) == MovementType.INVALID);
@@ -297,9 +296,7 @@ public class LayoutDesigner extends Window implements IAutoWired {
         btnDown.setDisabled(movementType(selectedItem, target, true) == MovementType.INVALID);
         btnToFront.addStyle("opacity", bringToFront ? null : "0.5");
         
-        if (selectedElement == null) {
-            ZKUtil.suppressContextMenu(this);
-        } else {
+        if (selectedElement == null) {} else {
             setContext(contextMenu);
             contextMenu.setOwner(selectedElement);
         }
@@ -347,7 +344,7 @@ public class LayoutDesigner extends Window implements IAutoWired {
     }
     
     private boolean canMove(Treenode item) {
-        return item != null && !"false".equals(item.getTreerow().getDraggable());
+        return item != null && item.getDragid() != null;
     }
     
     /**
@@ -367,7 +364,7 @@ public class LayoutDesigner extends Window implements IAutoWired {
      * @param target Target tree item.
      * @param items Item list.
      */
-    private void updateDroppable(Treenode target, Collection<Treenode> items) {
+    private void updateDroppable(Treenode target, Iterable<Treenode> items) {
         StringBuilder sb = new StringBuilder();
         
         if (canMove(target)) {
@@ -512,7 +509,7 @@ public class LayoutDesigner extends Window implements IAutoWired {
     
     public void onClick$btnLeft() {
         Treenode item = tree.getSelectedNode();
-        doDrop(item, item.getParentItem().getParentItem(), false);
+        doDrop(item, item.getParent().getParent(), false);
     }
     
     /**
@@ -575,10 +572,10 @@ public class LayoutDesigner extends Window implements IAutoWired {
      */
     @Override
     public void close() {
-        Desktop desktop = getDesktop();
-        desktop.removeListener(layoutListener);
-        desktop.removeAttribute(ZUL_PAGE);
-        desktop.setAttribute(ATTR_BRING_TO_FRONT, bringToFront);
+        Page page = getPage();
+        page.removeEventListener(layoutListener);
+        page.removeAttribute(CWF_PAGE);
+        page.setAttribute(ATTR_BRING_TO_FRONT, bringToFront);
         clipboard.removeListener(this);
         super.close();
     }

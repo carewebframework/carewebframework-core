@@ -41,7 +41,6 @@ import org.carewebframework.api.domain.IUser;
 import org.carewebframework.api.security.ISecurityService;
 import org.carewebframework.api.security.SecurityUtil;
 import org.carewebframework.common.StrUtil;
-import org.carewebframework.ui.Application;
 import org.carewebframework.ui.zk.PopupDialog;
 import org.carewebframework.ui.zk.PromptDialog;
 import org.carewebframework.web.client.ClientUtil;
@@ -130,7 +129,7 @@ public abstract class AbstractSecurityService implements ISecurityService {
         if (result) {
             if (target == null) {
                 try {
-                    target = WebUtil.addQueryString(WebUtil.getRequestUrl(), WebUtil.getRequestParams());
+                    target = WebUtil.getRequestUrl();
                 } catch (Exception e) {}
             }
             
@@ -139,7 +138,6 @@ public abstract class AbstractSecurityService implements ISecurityService {
             log.debug("Redirecting Page to logout filter URI: " + contextPage);
             String queryParam = replaceParam(replaceParam(logoutTarget, "%target%", target), "%message%", message);
             ClientUtil.redirect(Constants.LOGOUT_URI + queryParam, null);
-            Application.getInstance().register(contextPage, false);
         }
         
         return result;

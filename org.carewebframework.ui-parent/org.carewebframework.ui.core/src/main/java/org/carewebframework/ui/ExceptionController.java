@@ -25,6 +25,8 @@
  */
 package org.carewebframework.ui;
 
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
@@ -42,6 +44,8 @@ import org.carewebframework.web.component.Button;
 import org.carewebframework.web.component.Label;
 import org.carewebframework.web.component.Textbox;
 import org.carewebframework.web.component.Window;
+import org.carewebframework.web.core.ExecutionContext;
+import org.carewebframework.web.core.RequestUtil;
 import org.carewebframework.web.event.ClickEvent;
 import org.carewebframework.web.event.EventUtil;
 import org.springframework.core.ErrorCoded;
@@ -88,7 +92,7 @@ public class ExceptionController implements IAutoWired {
     public void afterInitialized(BaseComponent comp) {
         ClientUtil.busy(null, null);
         this.root = comp.getAncestor(Window.class);
-        HttpServletRequest req = (HttpServletRequest) this.execution.getNativeRequest();
+        HttpServletRequest req = RequestUtil.getRequest();
         
         Class<?> errClass = (Class<?>) req.getAttribute(WebUtils.ERROR_EXCEPTION_TYPE_ATTRIBUTE);
         String errMsg = (String) req.getAttribute(WebUtils.ERROR_MESSAGE_ATTRIBUTE);
@@ -130,8 +134,8 @@ public class ExceptionController implements IAutoWired {
         buffer.append("\nServletName: ").append(errServletName);
         buffer.append("\nReqURI: ").append(errReqURI);
         
-        SessionInfo sessionInfo = Application.getInstance().getSessionInfo(this.page);
-        buffer.append(sessionInfo);
+        Map<String, Object> browserInfo = ExecutionContext.getPage().getBrowserInfo();
+        buffer.append(browserInfo);
         
         buffer.append("\nThrowableContext: " + throwableContext);
         buffer.append("\nStackTrace: ");

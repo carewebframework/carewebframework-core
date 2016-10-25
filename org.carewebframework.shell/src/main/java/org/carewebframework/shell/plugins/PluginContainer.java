@@ -52,15 +52,13 @@ import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.BaseUIComponent;
 import org.carewebframework.web.component.Container;
 import org.carewebframework.web.event.EventUtil;
-import org.carewebframework.web.page.PageDefinitionCache;
+import org.carewebframework.web.page.PageUtil;
 import org.springframework.util.StringUtils;
 
 /**
  * Container that manages CareWeb plugins
  */
 public class PluginContainer extends Container {
-    
-    private static final long serialVersionUID = 1L;
     
     private static final Log log = LogFactory.getLog(PluginContainer.class);
     

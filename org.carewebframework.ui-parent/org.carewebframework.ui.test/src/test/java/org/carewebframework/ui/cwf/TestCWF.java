@@ -44,7 +44,7 @@ public class TestCWF extends CommonTest {
     
     @Test
     public void focusFirstTest() {
-        BaseComponent root = PageUtil.createPage(RESOURCE_PATH + "testFocusFirst.cwf", null);
+        BaseComponent root = PageUtil.createPage(RESOURCE_PATH + "testFocusFirst.cwf", null).get(0);
         focusFirstTest(root, "test1", "test1_correct");
         focusFirstTest(root, "test2", "test2_correct");
         focusFirstTest(root, "test3", null);

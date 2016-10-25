@@ -121,7 +121,7 @@ public class InvocationRequestQueue implements IEventListener {
         this.onClose = onClose;
         resetKeepAlive();
         eventQueue = createQueue();
-        page.addListener(new PageCleanup() {
+        page.registerEventListener(new PageCleanup() {
             
             /**
              * Closes the invocation request queue when the owning page is destroyed.

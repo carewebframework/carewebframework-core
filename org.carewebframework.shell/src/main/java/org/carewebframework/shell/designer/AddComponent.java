@@ -48,9 +48,11 @@ import org.carewebframework.web.component.Treenode;
 import org.carewebframework.web.component.Treeview;
 import org.carewebframework.web.component.Window;
 import org.carewebframework.web.event.ClickEvent;
+import org.carewebframework.web.event.DblclickEvent;
 import org.carewebframework.web.event.Event;
 import org.carewebframework.web.event.EventUtil;
 import org.carewebframework.web.event.IEventListener;
+import org.carewebframework.web.page.PageUtil;
 
 /**
  * Dialog for adding new component to UI.
@@ -160,10 +162,9 @@ public class AddComponent extends Window {
         
         try {
             dlg = (AddComponent) PopupDialog.popup(
-                ZKUtil.loadCachedPageDefinition(DesignConstants.RESOURCE_PREFIX + "AddComponent.cwf"), null, true, true,
-                false);
+                PageUtil.getPageDefinition(DesignConstants.RESOURCE_PREFIX + "AddComponent.cwf"), null, true, true, false);
             dlg.init(parentElement, createChild);
-            dlg.doModal();
+            dlg.setMode(Mode.MODAL);
         } catch (Exception e) {
             throw MiscUtil.toUnchecked(e);
         }
@@ -264,14 +265,14 @@ public class AddComponent extends Window {
         if (disabled) {
             item.setDisabled(true);
         } else {
-            item.getTreerow().registerEventForward(Events.ON_DOUBLE_CLICK, btnOK, ClickEvent.TYPE);
+            item.registerEventForward(DblclickEvent.TYPE, btnOK, ClickEvent.TYPE);
         }
         
         if (favorites != null) {
             Span image = new Span();
             image.addClass("glyphicon");
             image.addStyle("float", "left");
-            BaseComponent cell = item.getTreerow().getFirstChild();
+            BaseComponent cell = item.getFirstChild();
             cell.insertChild(image, cell.getFirstChild());
             image.registerEventForward(ClickEvent.TYPE, item, ON_FAVORITE);
             item.registerEventListener(ON_FAVORITE, other == null ? favoriteListener1 : favoriteListener2);

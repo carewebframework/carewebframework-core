@@ -27,7 +27,6 @@ package org.carewebframework.shell.designer;
 
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.ui.zk.PopupDialog;
-import org.carewebframework.ui.zk.ZKUtil;
 import org.carewebframework.web.annotation.WiredComponentScanner;
 import org.carewebframework.web.component.Button;
 import org.carewebframework.web.component.Textbox;
@@ -39,8 +38,6 @@ import org.carewebframework.web.page.PageParser;
  * Allows viewing and editing of clipboard contents.
  */
 public class ClipboardViewer extends Window {
-    
-    private static final long serialVersionUID = 1L;
     
     private Clipboard clipboard;
     
@@ -69,7 +66,7 @@ public class ClipboardViewer extends Window {
         viewer.data = clipboard.getData();
         WiredComponentScanner.wire(viewer, viewer);
         viewer.restore();
-        viewer.doModal();
+        viewer.setMode(Mode.MODAL);
     }
     
     /**
@@ -84,7 +81,7 @@ public class ClipboardViewer extends Window {
                 clipboard.copy(data instanceof String ? text
                         : data instanceof IClipboardAware ? ((IClipboardAware<?>) data).fromClipboard(text) : null);
             } catch (Exception e) {
-                Clients.wrongValue(txtData, ZKUtil.formatExceptionForDisplay(e));
+                //TODO: Clients.wrongValue(txtData, ZKUtil.formatExceptionForDisplay(e));
                 txtData.focus();
                 return false;
             }
@@ -113,7 +110,7 @@ public class ClipboardViewer extends Window {
     private void updateControls() {
         btnSave.setDisabled(!modified);
         btnRestore.setDisabled(!modified);
-        Clients.clearWrongValue(txtData);
+        //TODO: Clients.clearWrongValue(txtData);
     }
     
     /**

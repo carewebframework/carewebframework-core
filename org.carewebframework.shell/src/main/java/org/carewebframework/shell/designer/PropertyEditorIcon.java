@@ -27,14 +27,13 @@ package org.carewebframework.shell.designer;
 
 import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.property.PropertyInfo;
-import org.carewebframework.ui.cwf.IconPicker;
 import org.carewebframework.ui.icons.IconLibraryRegistry;
 import org.carewebframework.ui.icons.IconPickerEx;
 import org.carewebframework.ui.icons.IconUtil;
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zul.Image;
+import org.carewebframework.web.component.Image;
+import org.carewebframework.web.event.Event;
+import org.carewebframework.web.event.EventUtil;
+import org.carewebframework.web.event.IEventListener;
 
 /**
  * Property editor for icon properties. If the associated property has defined choices, the icon
@@ -47,14 +46,13 @@ public class PropertyEditorIcon extends PropertyEditorBase {
     public PropertyEditorIcon() {
         super(new IconPickerEx());
         iconPicker = (IconPickerEx) component;
-        iconPicker.setAutoAdd(false);
-        iconPicker.addEventListener("onSetValue", new EventListener<Event>() {
+        iconPicker.registerEventListener("setValue", new IEventListener() {
             
             @Override
-            public void onEvent(Event event) throws Exception {
+            public void onEvent(Event event) {
                 Object value = event.getData();
                 Image icon = value == null ? null : iconPicker.findIcon(value.toString());
-                iconPicker.setSelectedItem(icon);
+                iconPicker.setSelected(icon);
                 updateValue();
             }
             
@@ -95,6 +93,6 @@ public class PropertyEditorIcon extends PropertyEditorBase {
     
     @Override
     protected void setValue(Object value) {
-        Events.postEvent("onSetValue", iconPicker, value);
+        EventUtil.post("setValue", iconPicker, value);
     }
 }

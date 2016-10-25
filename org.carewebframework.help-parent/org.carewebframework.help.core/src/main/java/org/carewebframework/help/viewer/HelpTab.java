@@ -30,25 +30,16 @@ import java.util.List;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.help.HelpTopic;
 import org.carewebframework.help.viewer.HelpHistory.ITopicListener;
-import org.carewebframework.ui.zk.ZKUtil;
-
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.IdSpace;
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zul.Tab;
-import org.zkoss.zul.Tabbox;
-import org.zkoss.zul.Tabpanel;
+import org.carewebframework.web.ancillary.INamespace;
+import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.component.Tab;
+import org.carewebframework.web.component.Tabview;
+import org.carewebframework.web.page.PageUtil;
 
 /**
- * Abstract base class for all help tabs. It descends from Tabpanel and also creates and manages the
- * associated Tab component.
+ * Abstract base class for all help tabs. It descends from Tab.
  */
-public abstract class HelpTab extends Tabpanel implements IdSpace, ITopicListener {
-    
-    private static final long serialVersionUID = 1L;
-    
-    private final Tab tab = new Tab();
+public abstract class HelpTab extends Tab implements INamespace, ITopicListener {
     
     private final HelpViewType viewType;
     
@@ -88,15 +79,14 @@ public abstract class HelpTab extends Tabpanel implements IdSpace, ITopicListene
         super();
         this.viewer = viewer;
         this.viewType = viewType;
-        setStyle("overflow:auto");
+        addStyle("overflow", "auto");
         addToTabbox();
         String label = StrUtil.getLabel("cwf.help.tab." + viewType.name().toLowerCase() + ".label");
-        tab.setLabel(label == null ? viewType.name() : label);
-        tab.addForward(Events.ON_SELECT, this, null);
+        setLabel(label == null ? viewType.name() : label);
         
         if (zulTemplate != null) {
-            Executions.createComponents(HelpUtil.RESOURCE_PREFIX + zulTemplate, this, null);
-            ZKUtil.wireController(this);
+            PageUtil.createPage(HelpUtil.RESOURCE_PREFIX + zulTemplate, this);
+            wireController(this);
         }
     }
     
@@ -106,8 +96,8 @@ public abstract class HelpTab extends Tabpanel implements IdSpace, ITopicListene
      */
     private void addToTabbox() {
         int pos = -1;
-        Tabbox parent = viewer.getTabbox();
-        List<Component> children = parent.getTabpanels().getChildren();
+        Tabview parent = viewer.getTabview();
+        List<BaseComponent> children = parent.getChildren();
         
         for (int i = 0; i < children.size(); i++) {
             Object child = children.get(i);
@@ -120,8 +110,7 @@ public abstract class HelpTab extends Tabpanel implements IdSpace, ITopicListene
             }
         }
         
-        insertChild(parent.getTabpanels(), this, pos);
-        insertChild(parent.getTabs(), tab, pos);
+        insertChild(parent, this, pos);
     }
     
     /**
@@ -132,11 +121,11 @@ public abstract class HelpTab extends Tabpanel implements IdSpace, ITopicListene
      * @param pos Position for the child component relative to its siblings. If negative, the child
      *            is added after its siblings.
      */
-    private void insertChild(Component parent, Component child, int pos) {
+    private void insertChild(BaseComponent parent, BaseComponent child, int pos) {
         if (pos < 0) {
-            parent.appendChild(child);
+            parent.addChild(child);
         } else {
-            parent.insertBefore(child, parent.getChildren().get(pos));
+            parent.insertChild(child, parent.getChildren().get(pos));
         }
     }
     
@@ -194,17 +183,7 @@ public abstract class HelpTab extends Tabpanel implements IdSpace, ITopicListene
      */
     @Override
     public void onTopicSelected(HelpTopic topic) {
-    
+        
     }
     
-    /**
-     * Overridden to propagate visibility changes to the associated tab.
-     * 
-     * @see org.zkoss.zk.ui.AbstractComponent#setVisible(boolean)
-     */
-    @Override
-    public boolean setVisible(boolean visible) {
-        tab.setVisible(visible);
-        return super.setVisible(visible);
-    }
 }

@@ -30,33 +30,29 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.help.HelpSearchHit;
 import org.carewebframework.help.HelpTopic;
 import org.carewebframework.help.IHelpSearch.IHelpSearchListener;
 import org.carewebframework.help.IHelpSet;
-
-import org.zkoss.image.AImage;
-import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zul.Label;
-import org.zkoss.zul.ListModelList;
-import org.zkoss.zul.Listbox;
-import org.zkoss.zul.Listcell;
-import org.zkoss.zul.Listitem;
-import org.zkoss.zul.ListitemRenderer;
-import org.zkoss.zul.Textbox;
+import org.carewebframework.web.component.Cell;
+import org.carewebframework.web.component.Image;
+import org.carewebframework.web.component.Label;
+import org.carewebframework.web.component.Listbox;
+import org.carewebframework.web.component.Listitem;
+import org.carewebframework.web.component.Textbox;
+import org.carewebframework.web.event.Event;
+import org.carewebframework.web.event.IEventListener;
+import org.carewebframework.web.model.IComponentRenderer;
+import org.carewebframework.web.model.ListModel;
+import org.carewebframework.web.model.ModelAndView;
 
 /**
  * Tab supporting the help system search function. Consists of a text box into which the user may
  * enter a search expression (including boolean operators) and a list box to display the results of
  * the search.
  */
-public class HelpSearchTab extends HelpTab implements ListitemRenderer<HelpSearchHit>, IHelpSearchListener {
-    
-    private static final long serialVersionUID = 1L;
+public class HelpSearchTab extends HelpTab implements IComponentRenderer<Listitem, HelpSearchHit>, IHelpSearchListener {
     
     private Textbox txtSearch;
     
@@ -64,18 +60,20 @@ public class HelpSearchTab extends HelpTab implements ListitemRenderer<HelpSearc
     
     private Label lblNoResultsFound;
     
-    private final AImage[] icons = new AImage[3];
+    private final Image[] icons = new Image[3];
     
     private final List<IHelpSet> helpSets = new ArrayList<>();
+    
+    private final ModelAndView<Listitem, HelpSearchHit> modelAndView;
     
     private double tertile1;
     
     private double tertile2;
     
-    private final EventListener<Event> searchListener = new EventListener<Event>() {
+    private final IEventListener searchListener = new IEventListener() {
         
         @Override
-        public void onEvent(Event event) throws Exception {
+        public void onEvent(Event event) {
             @SuppressWarnings("unchecked")
             List<HelpSearchHit> searchResults = (List<HelpSearchHit>) event.getData();
             Collections.sort(searchResults);
@@ -90,7 +88,7 @@ public class HelpSearchTab extends HelpTab implements ListitemRenderer<HelpSearc
             double interval = (highscore - lowscore) / 3;
             tertile1 = lowscore + interval;
             tertile2 = tertile1 + interval;
-            lstSrchResults.setModel(new ListModelList<>(searchResults));
+            modelAndView.setModel(new ListModel<>(searchResults));
         }
         
     };
@@ -103,7 +101,7 @@ public class HelpSearchTab extends HelpTab implements ListitemRenderer<HelpSearc
      */
     public HelpSearchTab(HelpViewer viewer, HelpViewType viewType) {
         super(viewer, viewType, "helpSearchTab.cwf");
-        lstSrchResults.setItemRenderer(this);
+        modelAndView = new ModelAndView<>(lstSrchResults, null, this);
     }
     
     /**
@@ -123,8 +121,7 @@ public class HelpSearchTab extends HelpTab implements ListitemRenderer<HelpSearc
      */
     public void onSelect$lstSrchResults() {
         Listitem item = lstSrchResults.getSelectedItem();
-        lstSrchResults.renderItem(item);
-        setTopic((HelpTopic) item.getValue());
+        setTopic((HelpTopic) item.getData());
     }
     
     /**
@@ -138,8 +135,8 @@ public class HelpSearchTab extends HelpTab implements ListitemRenderer<HelpSearc
      * Perform the search and display the results.
      */
     public void onClick$btnSearch() {
-        lstSrchResults.setModel((ListModelList<?>) null);
-        lstSrchResults.getItems().clear();
+        modelAndView.setModel(null);
+        lstSrchResults.destroyChildren();
         String query = txtSearch.getValue();
         showMessage(null);
         
@@ -157,9 +154,9 @@ public class HelpSearchTab extends HelpTab implements ListitemRenderer<HelpSearc
      * @param score The relevancy score.
      * @return Image to represent relevancy.
      */
-    private AImage toImage(double score) {
+    private Image toImage(double score) {
         int tertile = score >= tertile2 ? 2 : score >= tertile1 ? 1 : 0;
-        AImage aimage = icons[tertile];
+        Image aimage = icons[tertile];
         
         if (aimage == null) {
             String img = tertile <= 0 ? "empty" : tertile == 1 ? "half" : "full";
@@ -177,7 +174,7 @@ public class HelpSearchTab extends HelpTab implements ListitemRenderer<HelpSearc
      */
     private void showMessage(String message) {
         message = message == null ? null : StrUtil.getLabel(message);
-        lblNoResultsFound.setValue(message);
+        lblNoResultsFound.setLabel(message);
         lblNoResultsFound.setVisible(!StringUtils.isEmpty(message));
         lstSrchResults.setVisible(!lblNoResultsFound.isVisible());
     }
@@ -188,23 +185,25 @@ public class HelpSearchTab extends HelpTab implements ListitemRenderer<HelpSearc
      * @see org.zkoss.zul.ListitemRenderer#render
      */
     @Override
-    public void render(Listitem item, HelpSearchHit qr, int index) throws Exception {
+    public Listitem render(HelpSearchHit qr) {
+        Listitem item = new Listitem();
         double score = qr.getConfidence();
-        item.setValue(qr.getTopic());
-        Listcell lc = new Listcell();
+        item.setData(qr.getTopic());
+        Cell lc = new Cell();
         lc.setImageContent(toImage(score));
         String tt = StrUtil.formatMessage("@cwf.help.tab.search.score", score);
         lc.setTooltiptext(tt);
         item.appendChild(lc);
-        lc = new Listcell(qr.getTopic().getLabel());
+        lc = new Cell(qr.getTopic().getLabel());
         item.appendChild(lc);
-        lc = new Listcell(qr.getTopic().getSource());
+        lc = new Cell(qr.getTopic().getSource());
         item.appendChild(lc);
+        return item;
     }
     
     @Override
     public void onSearchComplete(List<HelpSearchHit> results) {
-        Executions.schedule(getDesktop(), searchListener, new Event("onSearchComplete", this, results));
+        searchListener.onEvent(new Event("searchComplete", this, results));
     }
     
     public void mergeHelpSet(IHelpSet helpSet) {

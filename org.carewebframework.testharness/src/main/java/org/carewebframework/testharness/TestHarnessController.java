@@ -31,6 +31,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.carewebframework.common.MiscUtil;
 import org.carewebframework.shell.CareWebShellEx;
 import org.carewebframework.shell.plugins.PluginDefinition;
 import org.carewebframework.shell.plugins.PluginRegistry;
@@ -69,34 +70,39 @@ public class TestHarnessController extends FrameworkController {
     @Override
     public void afterInitialized(BaseComponent comp) {
         super.afterInitialized(comp);
-        shell = (CareWebShellEx) comp;
         
-        if (shell.getLayout() == null) {
-            shell.setLayout(ZKUtil.getResourcePath(TestHarnessController.class) + "testharness-layout.xml");
-        }
-        
-        List<PluginDefinition> plugins = new ArrayList<>();
-        
-        for (PluginDefinition plugin : PluginRegistry.getInstance()) {
-            if (!StringUtils.isEmpty(plugin.getUrl()) && shell.getLoadedPlugin(plugin.getId()) == null) {
-                plugins.add(plugin);
+        try {
+            shell = (CareWebShellEx) comp;
+            
+            if (shell.getLayout() == null) {
+                shell.setLayout(ZKUtil.getResourcePath(TestHarnessController.class) + "testharness-layout.xml");
             }
+            
+            List<PluginDefinition> plugins = new ArrayList<>();
+            
+            for (PluginDefinition plugin : PluginRegistry.getInstance()) {
+                if (!StringUtils.isEmpty(plugin.getUrl()) && shell.getLoadedPlugin(plugin.getId()) == null) {
+                    plugins.add(plugin);
+                }
+            }
+            
+            Collections.sort(plugins, pluginComparator);
+            
+            for (PluginDefinition plugin : plugins) {
+                shell.register("Test Harness\\" + plugin.getName(), plugin);
+            }
+            
+            List<IAction> actions = new ArrayList<IAction>(ActionRegistry.getRegisteredActions(ActionScope.BOTH));
+            Collections.sort(actions, actionComparator);
+            
+            for (IAction action : actions) {
+                shell.registerMenu("Actions\\" + action, action.getScript()).setHint(action.getScript());
+            }
+            
+            shell.start();
+        } catch (Exception e) {
+            throw MiscUtil.toUnchecked(e);
         }
-        
-        Collections.sort(plugins, pluginComparator);
-        
-        for (PluginDefinition plugin : plugins) {
-            shell.register("Test Harness\\" + plugin.getName(), plugin);
-        }
-        
-        List<IAction> actions = new ArrayList<IAction>(ActionRegistry.getRegisteredActions(ActionScope.BOTH));
-        Collections.sort(actions, actionComparator);
-        
-        for (IAction action : actions) {
-            shell.registerMenu("Actions\\" + action, action.getScript()).setHint(action.getScript());
-        }
-        
-        shell.start();
     }
     
 }

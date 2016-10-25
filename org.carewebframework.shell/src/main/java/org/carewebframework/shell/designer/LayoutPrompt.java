@@ -34,11 +34,11 @@ import org.carewebframework.common.StrUtil;
 import org.carewebframework.shell.layout.LayoutIdentifier;
 import org.carewebframework.shell.layout.LayoutUtil;
 import org.carewebframework.ui.zk.PromptDialog;
-import org.carewebframework.ui.zk.ZKUtil;
 import org.carewebframework.web.component.Label;
 import org.carewebframework.web.component.Radiogroup;
 import org.carewebframework.web.component.Textbox;
 import org.carewebframework.web.component.Window;
+import org.carewebframework.web.page.PageUtil;
 
 /**
  * Supports selection and management of existing layouts.
@@ -70,8 +70,8 @@ public class LayoutPrompt extends Window {
     public static LayoutIdentifier promptLayout(LayoutIdentifier dflt, boolean hideScope, boolean allowDups, String title,
                                                 String prompt) {
         try {
-            LayoutPrompt lp = (LayoutPrompt) ZKUtil.loadZulPage(DIALOG, null);
-            ZKUtil.wireController(lp);
+            LayoutPrompt lp = (LayoutPrompt) PageUtil.createPage(DIALOG, null);
+            lp.wireController(lp);
             lp.setTitle(StrUtil.formatMessage(title));
             lp.lblPrompt.setLabel(StrUtil.formatMessage(prompt));
             lp.txtLayout.setValue(dflt == null ? null : dflt.name);
@@ -79,7 +79,7 @@ public class LayoutPrompt extends Window {
             lp.radioGroup.setSelectedIndex(shared ? 0 : 1);
             lp.radioGroup.setVisible(!hideScope);
             lp.allowDups = allowDups;
-            lp.doModal();
+            lp.setMode(Mode.MODAL);
             return lp.layoutId;
         } catch (Exception e) {
             return null;
@@ -116,9 +116,9 @@ public class LayoutPrompt extends Window {
     
     private void showError(String message) {
         if (message == null) {
-            Clients.clearWrongValue(txtLayout);
+            //TODO: Clients.clearWrongValue(txtLayout);
         } else {
-            Clients.wrongValue(txtLayout, StrUtil.formatMessage(message));
+            //TODO: Clients.wrongValue(txtLayout, StrUtil.formatMessage(message));
             txtLayout.focus();
         }
     }

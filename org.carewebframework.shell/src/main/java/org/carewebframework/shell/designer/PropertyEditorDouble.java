@@ -28,10 +28,6 @@ package org.carewebframework.shell.designer;
 import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.property.PropertyInfo;
 
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zul.Doublebox;
-import org.zkoss.zul.SimpleDoubleSpinnerConstraint;
-
 /**
  * Editor for double values.
  */

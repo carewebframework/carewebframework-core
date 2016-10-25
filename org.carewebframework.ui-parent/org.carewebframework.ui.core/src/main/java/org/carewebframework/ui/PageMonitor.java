@@ -44,7 +44,6 @@ import org.carewebframework.api.thread.ThreadUtil;
 import org.carewebframework.common.DateUtil;
 import org.carewebframework.common.DateUtil.TimeUnit;
 import org.carewebframework.common.StrUtil;
-import org.carewebframework.ui.Application.Command;
 import org.carewebframework.ui.zk.MessageWindow;
 import org.carewebframework.ui.zk.ZKUtil;
 import org.carewebframework.web.component.BaseUIComponent;
@@ -455,14 +454,10 @@ public class PageMonitor extends Thread {
     private void queuePageAction(Action action) {
         Event actionEvent = new Event("onAction", null, action);
         
-        if (Events.inEventListener()) {
-            try {
-                actionHandler.onEvent(actionEvent);
-            } catch (Exception e) {
-                log.error("Error executing page action.", e);
-            }
-        } else {
-            Executions.schedule(page, actionHandler, actionEvent);
+        try {
+            actionHandler.onEvent(actionEvent);
+        } catch (Exception e) {
+            log.error("Error executing page action.", e);
         }
     }
     

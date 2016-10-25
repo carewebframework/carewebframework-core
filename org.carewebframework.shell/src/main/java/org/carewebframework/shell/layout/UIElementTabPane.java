@@ -28,10 +28,10 @@ package org.carewebframework.shell.layout;
 import org.carewebframework.ui.zk.Badge;
 import org.carewebframework.ui.zk.ZKUtil;
 import org.carewebframework.web.component.Tab;
-import org.carewebframework.web.component.Tabbox;
+import org.carewebframework.web.component.Tabview;
 
 /**
- * Wraps the ZK Tab and Tabpanel components.
+ * Wraps the Tab component.
  */
 public class UIElementTabPane extends UIElementCWFBase {
     
@@ -49,7 +49,7 @@ public class UIElementTabPane extends UIElementCWFBase {
         
         public TabEx() {
             super();
-            setSclass("cwf-tab");
+            addClass("cwf-tab");
             ZKUtil.setCustomColorLogic(this, "jq(this).find('.z-tab-text').css('color',value?value:'');");
         }
         
@@ -68,18 +68,13 @@ public class UIElementTabPane extends UIElementCWFBase {
     
     private final TabEx tab = new TabEx();
     
-    private final Tabpanel tabPanel = new Tabpanel();
-    
     /**
      * Set up the tab and tab panel ZK components. Note that we use a custom widget override to
      * allow setting the color of the caption text.
      */
     public UIElementTabPane() {
         super();
-        setOuterComponent(tabPanel);
-        associateComponent(tab);
-        tabPanel.setSclass("cwf-tab-panel");
-        tabPanel.setHeight("100%");
+        setOuterComponent(tab);
         listenToChild("badge", tab);
     }
     
@@ -90,15 +85,6 @@ public class UIElementTabPane extends UIElementCWFBase {
     public void bringToFront() {
         super.bringToFront();
         ((UIElementTabView) getParent()).setActivePane(this);
-    }
-    
-    /**
-     * Requires moving both ZK components.
-     */
-    @Override
-    protected void afterMoveTo(int index) {
-        moveChild(tab, index);
-        moveChild(tabPanel, index);
     }
     
     /**
@@ -116,17 +102,6 @@ public class UIElementTabPane extends UIElementCWFBase {
     protected void updateVisibility(boolean visible, boolean activated) {
         tab.setVisible(visible);
         tab.setSelected(visible && activated);
-    }
-    
-    /**
-     * Apply/remove the design context menu both tab and tab panel.
-     * 
-     * @param contextMenu The design menu if design mode is activated, or null if it is not.
-     */
-    @Override
-    protected void setDesignContextMenu(Menupopup contextMenu) {
-        setDesignContextMenu(tabPanel, contextMenu);
-        setDesignContextMenu(tab, contextMenu);
     }
     
     /**
@@ -149,15 +124,8 @@ public class UIElementTabPane extends UIElementCWFBase {
     
     @Override
     protected void bind() {
-        Tabbox tabbox = (Tabbox) getParent().getOuterComponent();
-        tabbox.getTabs().appendChild(tab);
-        tabbox.getTabpanels().appendChild(tabPanel);
-    }
-    
-    @Override
-    protected void unbind() {
-        tab.detach();
-        tabPanel.detach();
+        Tabview tabview = (Tabview) getParent().getOuterComponent();
+        tabview.addChild(tab);
     }
     
     /*package*/Tab getTab() {

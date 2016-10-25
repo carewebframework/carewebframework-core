@@ -28,20 +28,21 @@ package org.carewebframework.ui.xml;
 import org.carewebframework.common.XMLUtil;
 import org.carewebframework.common.XMLUtil.TagFormat;
 import org.carewebframework.ui.xml.XMLTreeModel.XMLTreeNode;
-import org.carewebframework.ui.zk.TreeUtil.ITreeitemSearch;
+import org.carewebframework.ui.zk.TreeUtil.ITreenodeSearch;
 import org.carewebframework.web.component.Label;
+import org.carewebframework.web.component.Treenode;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
 /**
  * Renderer for xml tree.
  */
-class XMLViewerRenderer implements TreeitemRenderer<XMLTreeNode> {
+class XMLViewerRenderer implements TreenodeRenderer<XMLTreeNode> {
     
     /**
      * Value associated with each tree item.
      */
-    private class TreeitemValue {
+    private class TreenodeValue {
         
         private Treecell cell;
         
@@ -58,11 +59,11 @@ class XMLViewerRenderer implements TreeitemRenderer<XMLTreeNode> {
         
         @Override
         public void onEvent(OpenEvent event) throws Exception {
-            Treeitem item = (Treeitem) event.getTarget();
+            Treenode item = (Treenode) event.getTarget();
             boolean open = event.isOpen();
-            TreeitemValue itemValue = (TreeitemValue) item.getValue();
+            TreenodeValue itemValue = (TreenodeValue) item.getValue();
             itemValue.closingTag.setVisible(!open);
-            Treeitem sib = (Treeitem) item.getNextSibling();
+            Treenode sib = (Treenode) item.getNextSibling();
             
             if (sib != null) {
                 sib.setVisible(item.isOpen());
@@ -74,22 +75,22 @@ class XMLViewerRenderer implements TreeitemRenderer<XMLTreeNode> {
     /**
      * Search logic for tree.
      */
-    protected final ITreeitemSearch treeitemSearch = new ITreeitemSearch() {
+    protected final ITreenodeSearch treeitemSearch = new ITreenodeSearch() {
         
         @Override
-        public boolean isMatch(Treeitem item, String text) {
-            String label = ((TreeitemValue) item.getValue()).text;
+        public boolean isMatch(Treenode item, String text) {
+            String label = ((TreenodeValue) item.getData()).text;
             return label != null && label.contains(text.toLowerCase());
         }
         
     };
     
     @Override
-    public void render(Treeitem item, XMLTreeNode data, int index) throws Exception {
+    public void render(Treenode item, XMLTreeNode data, int index) throws Exception {
         Node node = data.getData();
         item.setLabel(null);
-        TreeitemValue itemValue = new TreeitemValue();
-        item.setValue(itemValue);
+        TreenodeValue itemValue = new TreenodeValue();
+        item.setData(itemValue);
         itemValue.cell = (Treecell) item.getTreerow().getFirstChild();
         
         if (node.getNodeType() == Node.TEXT_NODE) {
@@ -126,7 +127,7 @@ class XMLViewerRenderer implements TreeitemRenderer<XMLTreeNode> {
         }
     }
     
-    private Label addLabel(TreeitemValue itemValue, String text, String sclass) {
+    private Label addLabel(TreenodeValue itemValue, String text, String sclass) {
         Label label = new Label(text);
         label.addClass(sclass);
         label.setParent(itemValue.cell);

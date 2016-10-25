@@ -27,13 +27,9 @@ package org.carewebframework.shell.designer;
 
 import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.property.PropertyInfo;
-import org.carewebframework.ui.zk.ZKUtil;
-
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zk.ui.event.InputEvent;
-import org.zkoss.zul.Bandbox;
-import org.zkoss.zul.Textbox;
+import org.carewebframework.web.component.Textbox;
+import org.carewebframework.web.event.Event;
+import org.carewebframework.web.event.InputEvent;
 
 /**
  * Editor for simple text.
@@ -72,7 +68,7 @@ public class PropertyEditorText extends PropertyEditorBase {
     @Override
     protected void setValue(Object value) {
         bandbox.setText((String) value);
-        textbox.setText((String) value);
+        textbox.setValue((String) value);
         updateValue();
     }
     
@@ -99,6 +95,6 @@ public class PropertyEditorText extends PropertyEditorBase {
     }
     
     public void onDelayedFocus$bandbox(Event event) {
-        ((Textbox) ZKUtil.getEventOrigin(event).getData()).setFocus(true);
+        ((Textbox) event.getData()).setFocus(true);
     }
 }

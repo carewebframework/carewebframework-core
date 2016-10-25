@@ -46,6 +46,7 @@ import org.carewebframework.web.event.EventUtil;
 import org.carewebframework.web.model.IComponentRenderer;
 import org.carewebframework.web.model.ListModel;
 import org.carewebframework.web.model.ModelAndView;
+import org.carewebframework.web.page.PageUtil;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.io.Resource;
@@ -54,8 +55,6 @@ import org.springframework.core.io.Resource;
  * Plugin to facilitate testing of zul layouts.
  */
 public class SandboxController extends PluginController implements ApplicationContextAware {
-    
-    private static final long serialVersionUID = 1L;
     
     private static final Mode[] REPLACE_MODES = { Mode.MODAL, Mode.POPUP };
     
@@ -67,17 +66,22 @@ public class SandboxController extends PluginController implements ApplicationCo
             item.setData(resource);
             item.setLabel(resource.getFilename());
             item.setHint(getPath(resource));
+            return item;
         }
         
-        private String getPath(Resource resource) throws IOException {
-            String[] pcs = resource.getURL().toString().split("!", 2);
-            
-            if (pcs.length == 1) {
-                return pcs[0];
+        private String getPath(Resource resource) {
+            try {
+                String[] pcs = resource.getURL().toString().split("!", 2);
+                
+                if (pcs.length == 1) {
+                    return pcs[0];
+                }
+                
+                int i = pcs[0].lastIndexOf('/') + 1;
+                return pcs[0].substring(i) + ":\n\n" + pcs[1];
+            } catch (Exception e) {
+                throw MiscUtil.toUnchecked(e);
             }
-            
-            int i = pcs[0].lastIndexOf('/') + 1;
-            return pcs[0].substring(i) + ":\n\n" + pcs[1];
         }
         
     };
@@ -108,7 +112,23 @@ public class SandboxController extends PluginController implements ApplicationCo
         mv.setRenderer(zulRenderer);
         mv.setModel(model);
         cboZul.setVisible(model.size() > 0);
-        contentBase = ZKUtil.findChild(contentParent, INamespace.class);
+        contentBase = findNamespace(contentParent);
+    }
+    
+    private BaseComponent findNamespace(BaseComponent comp) {
+        for (BaseComponent child : comp.getChildren()) {
+            if (child instanceof INamespace) {
+                return child;
+            }
+            
+            child = findNamespace(child);
+            
+            if (child != null) {
+                return child;
+            }
+        }
+        
+        return null;
     }
     
     /**
@@ -122,7 +142,7 @@ public class SandboxController extends PluginController implements ApplicationCo
         if (content != null && !content.isEmpty()) {
             try {
                 EventUtil.post("onModeCheck", this.root, null);
-                Executions.createComponentsDirectly(content, null, contentBase, null);
+                PageUtil.createPageFromContent(content, contentBase);
             } catch (Exception e) {
                 contentBase.destroyChildren();
                 Label label = new Label(ExceptionUtils.getStackTrace(e));
@@ -205,7 +225,7 @@ public class SandboxController extends PluginController implements ApplicationCo
                 cboZul.setHint(item.getHint());
                 txtContent.setValue(content);
                 txtContent.setFocus(true);
-                execution.addAuResponse(new AuInvoke(txtContent, "resync"));
+                //TODO: execution.addAuResponse(new AuInvoke(txtContent, "resync"));
             }
         }
     }

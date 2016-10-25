@@ -25,6 +25,8 @@
  */
 package org.carewebframework.help.viewer;
 
+import javax.servlet.ServletContext;
+
 import org.carewebframework.api.spring.SpringUtil;
 import org.carewebframework.help.HelpContext;
 import org.carewebframework.help.HelpModule;
@@ -43,6 +45,7 @@ import org.carewebframework.web.component.BaseUIComponent;
 import org.carewebframework.web.component.Image;
 import org.carewebframework.web.component.Page;
 import org.carewebframework.web.core.ExecutionContext;
+import org.carewebframework.web.page.PageUtil;
 
 /**
  * Utility class containing helper methods in support of online help infrastructure.
@@ -128,7 +131,7 @@ public class HelpUtil {
         }
         
         viewer = getViewerMode(page) == HelpViewerMode.POPUP ? new HelpViewerProxy(page)
-                : (IHelpViewer) Executions.createComponents(VIEWER_URL, null, null);
+                : (IHelpViewer) PageUtil.createPage(VIEWER_URL, null);
         page.setAttribute(VIEWER_ATTRIB, viewer);
         return viewer;
     }
@@ -158,7 +161,7 @@ public class HelpUtil {
      */
     public static String getBaseUrl() {
         ServletContext sc = ExecutionContext.getServletContext();
-        return e.getScheme() + "://" + e.getServerName() + ":" + e.getServerPort() + e.getContextPath();
+        return null; // TODO: e.getScheme() + "://" + e.getServerName() + ":" + e.getServerPort() + e.getContextPath();
     }
     
     /**
