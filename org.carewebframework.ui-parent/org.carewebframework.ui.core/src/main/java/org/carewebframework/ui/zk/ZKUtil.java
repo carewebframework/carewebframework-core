@@ -40,9 +40,8 @@ import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.lang.reflect.FieldUtils;
 import org.carewebframework.common.MiscUtil;
 import org.carewebframework.common.StrUtil;
-import org.carewebframework.web.annotation.EventHandlerScanner;
-import org.carewebframework.web.annotation.WiredComponentScanner;
 import org.carewebframework.web.client.ClientUtil;
+import org.carewebframework.web.client.ExecutionContext;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.BaseInputboxComponent;
 import org.carewebframework.web.component.BaseUIComponent;
@@ -52,7 +51,6 @@ import org.carewebframework.web.component.Html;
 import org.carewebframework.web.component.Hyperlink;
 import org.carewebframework.web.component.Label;
 import org.carewebframework.web.component.Page;
-import org.carewebframework.web.core.ExecutionContext;
 import org.carewebframework.web.event.ChangeEvent;
 import org.carewebframework.web.event.Event;
 import org.carewebframework.web.event.EventUtil;
@@ -596,29 +594,6 @@ public class ZKUtil {
      */
     public static void setBadge(String selector, String label, String classes) {
         ClientUtil.invoke("cwf.setBadge", new Object[] { selector, label, classes });
-    }
-    
-    /**
-     * Wires a controller (events and component references) for the specified component where the
-     * component serves as its own controller.
-     * 
-     * @param component The source component.
-     */
-    public static void wireController(BaseComponent component) {
-        wireController(component, component);
-    }
-    
-    /**
-     * Wires a controller (events and component references) for the specified component.
-     * 
-     * @param component The source component.
-     * @param controller The controller to be wired.
-     */
-    public static void wireController(BaseComponent component, Object controller) {
-        if (controller != null) {
-            WiredComponentScanner.wire(controller, component);
-            EventHandlerScanner.wire(controller, component);
-        }
     }
     
     /**

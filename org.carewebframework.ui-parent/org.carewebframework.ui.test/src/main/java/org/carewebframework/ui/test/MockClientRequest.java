@@ -6,8 +6,8 @@ import org.carewebframework.web.client.ClientRequest;
 
 public class MockClientRequest extends ClientRequest {
     
-    public MockClientRequest(Map<String, Object> map) {
-        super(map);
+    public MockClientRequest(MockSession session, Map<String, Object> map) {
+        super(session, map);
     }
     
 }

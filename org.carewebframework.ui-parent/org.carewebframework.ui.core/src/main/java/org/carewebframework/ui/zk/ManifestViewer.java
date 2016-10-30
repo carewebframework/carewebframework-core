@@ -43,8 +43,12 @@ import org.carewebframework.web.component.Listbox;
 import org.carewebframework.web.component.Listitem;
 import org.carewebframework.web.component.Span;
 import org.carewebframework.web.component.Textbox;
-import org.carewebframework.web.event.Event;
+import org.carewebframework.web.event.DblclickEvent;
+import org.carewebframework.web.event.EventUtil;
 import org.carewebframework.web.event.InputEvent;
+import org.carewebframework.web.model.IComponentRenderer;
+import org.carewebframework.web.model.ListModel;
+import org.carewebframework.web.model.ModelAndView;
 
 /**
  * Displays a dialog showing all known manifests or details about a single manifest.
@@ -158,9 +162,9 @@ public class ManifestViewer extends FrameworkController {
      * 
      * @param <T> Class of rendered object.
      */
-    private static abstract class BaseRenderer<T> implements ListitemRenderer<T> {
+    private static abstract class BaseRenderer<T> implements IComponentRenderer<Listitem, T> {
         
-        public abstract void init(Listbox list);
+        public abstract ModelAndView<Listitem, T> init(Listbox list);
         
         /**
          * Adds a cell with the specified content to the list item.
@@ -214,7 +218,7 @@ public class ManifestViewer extends FrameworkController {
                 
                 @Override
                 public void onEvent(SortEvent event) throws Exception {
-                    Events.postEvent("onAfterSort", list, event);
+                    EventUtil.post("afterSort", list, event);
                 }
                 
             });
@@ -229,17 +233,19 @@ public class ManifestViewer extends FrameworkController {
     private static final BaseRenderer<ManifestItem> manifestItemRenderer = new BaseRenderer<ManifestItem>() {
         
         @Override
-        public void render(Listitem item, ManifestItem manifestItem, int index) throws Exception {
-            item.setValue(manifestItem);
+        public Listitem render(ManifestItem manifestItem) {
+            Listitem item = new Listitem();
+            item.setData(manifestItem);
             addLabel(item, manifestItem.implModule);
             addLabel(item, manifestItem.implVersion);
             addLabel(item, manifestItem.implVendor);
+            return item;
         }
         
         @Override
-        public void init(Listbox list) {
-            list.setItemRenderer(this);
-            list.addForward(Events.ON_DOUBLE_CLICK, list, "onShowManifest");
+        public ModelAndView<Listitem, ManifestItem> init(Listbox list) {
+            ModelAndView<Listitem, ManifestItem> modelAndView = new ModelAndView<>(list, null, this);
+            list.registerEventForward(DblclickEvent.TYPE, list, "onShowManifest");
             addHeader(list, "Module", "40%", "implModule");
             addHeader(list, "Version", "20%", "implVersion");
             addHeader(list, "Author", "40%", "implVendor");
@@ -253,20 +259,24 @@ public class ManifestViewer extends FrameworkController {
     private static final BaseRenderer<AttributeItem> attributeItemRenderer = new BaseRenderer<AttributeItem>() {
         
         @Override
-        public void render(Listitem item, AttributeItem attributeItem, int index) throws Exception {
-            item.setValue(attributeItem);
+        public Listitem render(AttributeItem attributeItem) {
+            Listitem item = new Listitem();
+            item.setData(attributeItem);
             addLabel(item, attributeItem.name);
             addContent(item, attributeItem.value);
+            return item;
         }
         
         @Override
-        public void init(Listbox list) {
-            list.setItemRenderer(this);
+        public void init(Listbox list, ModelAndView<Listitem, ?> modelAndView) {
+            modelAndView.setRenderer(this);
             addHeader(list, "Attribute", "30%", "name");
             addHeader(list, "Value", "70%", "value");
         }
         
     };
+    
+    private ModelAndView<Listitem, Matchable<?>> modelAndView;
     
     private Listbox list;
     
@@ -278,7 +288,7 @@ public class ManifestViewer extends FrameworkController {
     
     private final List<Matchable<?>> items = new ArrayList<>();
     
-    private final ListModelList<Matchable<?>> model = new ListModelList<>();
+    private final ListModel<Matchable<?>> model = new ListModel<>();
     
     /**
      * Display a summary dialog of all known manifests.
@@ -304,7 +314,8 @@ public class ManifestViewer extends FrameworkController {
     @Override
     public void afterInitialized(BaseComponent comp) {
         super.afterInitialized(comp);
-        ManifestItem manifestItem = (ManifestItem) arg.get("manifestItem");
+        modelAndView = new ModelAndView<>(list);
+        ManifestItem manifestItem = (ManifestItem) comp.getAttribute("manifestItem");
         BaseRenderer<?> renderer;
         
         if (manifestItem != null) {
@@ -337,7 +348,7 @@ public class ManifestViewer extends FrameworkController {
      */
     public void onShowManifest$list() {
         Listitem item = list.getSelectedItem();
-        ManifestItem manifestItem = item == null ? null : (ManifestItem) item.getValue();
+        ManifestItem manifestItem = item == null ? null : (ManifestItem) item.getData();
         
         if (manifestItem != null) {
             execute(manifestItem);
@@ -349,9 +360,8 @@ public class ManifestViewer extends FrameworkController {
      * 
      * @param event The sort event.
      */
-    public void onAfterSort$list(Event event) {
-        sortEvent = (SortEvent) ZKUtil.getEventOrigin(event).getData();
-        list.renderAll();
+    public void onAfterSort$list(SortEvent event) {
+        sortEvent = event;
     }
     
     /**
@@ -369,7 +379,7 @@ public class ManifestViewer extends FrameworkController {
     }
     
     public void filterChanged(String filter) {
-        list.setModel((ListModelList<?>) null);
+        modelAndView.setModel(null);
         model.clear();
         
         if (StringUtils.isEmpty(filter)) {
@@ -383,17 +393,15 @@ public class ManifestViewer extends FrameworkController {
         }
         
         if (sortEvent == null) {
-            model.sort(null, true);
+            model.sort(true);
         }
         
-        list.setModel(model);
+        modelAndView.setModel(model);
         
         if (sortEvent != null) {
             Listheader lh = (Listheader) sortEvent.getTarget();
             lh.sort(sortEvent.isAscending(), true);
         }
-        
-        list.renderAll();
     }
     
 }

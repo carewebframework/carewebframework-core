@@ -30,30 +30,17 @@ import java.util.TimeZone;
 
 import org.apache.commons.lang.time.DateUtils;
 import org.apache.commons.lang.time.FastDateFormat;
-
 import org.carewebframework.common.DateUtil;
 import org.carewebframework.common.StrUtil;
-
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.IdSpace;
-import org.zkoss.zk.ui.WrongValueException;
-import org.zkoss.zk.ui.event.OpenEvent;
-import org.zkoss.zk.ui.metainfo.PageDefinition;
-import org.zkoss.zk.ui.util.Clients;
-import org.zkoss.zul.Bandbox;
-import org.zkoss.zul.Bandpopup;
-import org.zkoss.zul.Constraint;
-import org.zkoss.zul.Datebox;
-import org.zkoss.zul.SimpleDateConstraint;
-import org.zkoss.zul.Timebox;
-import org.zkoss.zul.impl.InputElement;
-import org.zkoss.zul.mesg.MZul;
+import org.carewebframework.web.ancillary.INamespace;
+import org.carewebframework.web.component.Datebox;
+import org.carewebframework.web.component.Popupbox;
+import org.carewebframework.web.page.PageDefinition;
 
 /**
  * Presents a date/time input element.
  */
-public class DateTimebox extends Bandbox implements IdSpace {
+public class DateTimebox extends Popupbox implements INamespace {
     
     private static final long serialVersionUID = 1L;
     
@@ -268,6 +255,7 @@ public class DateTimebox extends Bandbox implements IdSpace {
         showError(null, null);
     }
     
+    @Override
     private boolean validate() {
         ok = true;
         boolean hasTime = timebox.getValue() != null;
@@ -440,8 +428,8 @@ public class DateTimebox extends Bandbox implements IdSpace {
         Date date = DateUtil.parseDate(value);
         
         if (date == null) {
-            throw showCustomError(new WrongValueException(this, MZul.DATE_REQUIRED, new Object[] { value,
-                    datebox.getFormat() }));
+            throw showCustomError(
+                new WrongValueException(this, MZul.DATE_REQUIRED, new Object[] { value, datebox.getFormat() }));
         }
         
         return date;

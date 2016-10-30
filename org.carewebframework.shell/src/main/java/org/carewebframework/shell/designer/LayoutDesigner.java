@@ -30,13 +30,13 @@ import org.carewebframework.shell.layout.UILayout;
 import org.carewebframework.ui.zk.PopupDialog;
 import org.carewebframework.ui.zk.ZKUtil;
 import org.carewebframework.web.ancillary.IAutoWired;
+import org.carewebframework.web.client.ExecutionContext;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.Button;
 import org.carewebframework.web.component.Page;
 import org.carewebframework.web.component.Treenode;
 import org.carewebframework.web.component.Treeview;
 import org.carewebframework.web.component.Window;
-import org.carewebframework.web.core.ExecutionContext;
 import org.carewebframework.web.event.ClickEvent;
 import org.carewebframework.web.event.DblclickEvent;
 import org.carewebframework.web.event.DropEvent;
@@ -147,7 +147,7 @@ public class LayoutDesigner extends Window implements IAutoWired {
     @Override
     public void afterInitialized(BaseComponent comp) {
         ZKUtil.wireController(this);
-        setWidgetOverride("_cwf_highlight", "function(comp) {jq(comp).effect('pulsate',{times:1}).effect('highlight');}");
+        //TODO: setWidgetOverride("_cwf_highlight", "function(comp) {jq(comp).effect('pulsate',{times:1}).effect('highlight');}");
         Boolean btf = (Boolean) getPage().getAttribute(ATTR_BRING_TO_FRONT);
         bringToFront = btf == null || btf;
         layoutChangedEvent = new LayoutChangedEvent(this, null);
@@ -175,7 +175,7 @@ public class LayoutDesigner extends Window implements IAutoWired {
      * @param comp Component to highlight.
      */
     private void highlight(BaseComponent comp) {
-        response(new AuInvoke(this, "_cwf_highlight", comp));
+        //TODO: response(new AuInvoke(this, "_cwf_highlight", comp));
     }
     
     /**

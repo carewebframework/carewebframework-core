@@ -36,6 +36,7 @@ import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.BaseUIComponent;
 import org.carewebframework.web.component.Label;
 import org.carewebframework.web.component.Textbox;
+import org.carewebframework.web.event.EventUtil;
 
 /**
  * Controller for the password change dialog.
@@ -80,7 +81,7 @@ public class PasswordChangeController implements IAutoWired {
             title = "password.change.dialog.panel.title";
             label = "password.change.dialog.label";
         } else {
-            user = (IUser) arg.get("user");
+            user = (IUser) comp.getAttribute("user");
             title = "password.change.dialog.expired.panel.title";
             label = "password.change.dialog.expired.label";
         }
@@ -98,7 +99,7 @@ public class PasswordChangeController implements IAutoWired {
      */
     public void onOK$txtPassword() {
         txtPassword1.setFocus(true);
-        txtPassword1.select();
+        txtPassword1.selectAll();
     }
     
     /**
@@ -106,7 +107,7 @@ public class PasswordChangeController implements IAutoWired {
      */
     public void onOK$txtPassword1() {
         txtPassword2.setFocus(true);
-        txtPassword2.select();
+        txtPassword2.selectAll();
     }
     
     /**
@@ -137,8 +138,7 @@ public class PasswordChangeController implements IAutoWired {
         if (!forced) {
             panel.getPage().detach();
         } else {
-            Events.sendEvent(Events.ON_CLOSE, panel.getRoot(),
-                StrUtil.getLabel("password.change.dialog.password.change.canceled"));
+            EventUtil.send("close", panel.getPage(), StrUtil.getLabel("password.change.dialog.password.change.canceled"));
         }
     }
     
@@ -166,7 +166,7 @@ public class PasswordChangeController implements IAutoWired {
                 } else if (forced) {
                     String inst = user.getSecurityDomain().getLogicalId();
                     txtUsername.setValue(inst + "\\" + user.getLoginName());
-                    Events.sendEvent("onSubmit", panel.getRoot(), null);
+                    EventUtil.send("submit", panel.getPage(), null);
                 } else {
                     doCancel();
                     PromptDialog.showInfo("@password.change.dialog.password.changed",

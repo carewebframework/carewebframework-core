@@ -42,9 +42,12 @@ import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.Button;
 import org.carewebframework.web.component.Label;
 import org.carewebframework.web.component.Listbox;
+import org.carewebframework.web.component.Listitem;
 import org.carewebframework.web.component.Textbox;
 import org.carewebframework.web.component.Window;
 import org.carewebframework.web.event.InputEvent;
+import org.carewebframework.web.model.ListModel;
+import org.carewebframework.web.model.ModelAndView;
 
 /**
  * Controller for an individual chat session.
@@ -67,9 +70,11 @@ public class SessionController extends FrameworkController implements ISessionUp
     
     private Button btnSendMessage;
     
-    private final ListModelSet<IPublisherInfo> model = new ListModelSet<>();
+    private final ListModel<IPublisherInfo> model = new ListModel<>();
     
     private final Set<IPublisherInfo> outstandingInvitations = new HashSet<>();
+    
+    private ModelAndView<Listitem, IPublisherInfo> modelAndView;
     
     private SessionService sessionService;
     
@@ -92,7 +97,7 @@ public class SessionController extends FrameworkController implements ISessionUp
             return null;
         }
         
-        dlg.doOverlapped();
+        dlg.popup(null);
         return (SessionController) FrameworkController.getController(dlg);
     }
     
@@ -102,13 +107,14 @@ public class SessionController extends FrameworkController implements ISessionUp
     @Override
     public void afterInitialized(BaseComponent comp) {
         super.afterInitialized(comp);
-        sessionId = (String) arg.get("id");
-        lstParticipants.setItemRenderer(new ParticipantRenderer(chatService.getSelf(), null));
+        sessionId = (String) comp.getAttribute("id");
+        modelAndView = new ModelAndView<Listitem, IPublisherInfo>(lstParticipants);
+        modelAndView.setRenderer(new ParticipantRenderer(chatService.getSelf(), null));
         model.add(chatService.getSelf());
-        lstParticipants.setModel(model);
+        modelAndView.setModel(model);
         clearMessage();
         
-        if (arg.get("originator") != null && !invite()) {
+        if (comp.getAttribute("originator") != null && !invite()) {
             close();
         }
     }
@@ -236,10 +242,10 @@ public class SessionController extends FrameworkController implements ISessionUp
     private void newLabel(String text, String sclass) {
         Label lbl = new Label(text);
         lbl.addClass(sclass);
-        lbl.setMultiline(true);
-        lbl.setPre(true);
+        //lbl.setMultiline(true);
+        //lbl.setPre(true);
         pnlDialog.addChild(lbl);
-        Clients.scrollIntoView(lbl);
+        lbl.scrollIntoView(true);
     }
     
     /**

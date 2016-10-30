@@ -43,9 +43,12 @@ import org.carewebframework.api.security.ISecurityService;
 import org.carewebframework.api.thread.ThreadUtil;
 import org.carewebframework.common.DateUtil;
 import org.carewebframework.common.DateUtil.TimeUnit;
+import org.carewebframework.common.MiscUtil;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.ui.zk.MessageWindow;
 import org.carewebframework.ui.zk.ZKUtil;
+import org.carewebframework.web.client.ISessionTracker;
+import org.carewebframework.web.client.Session;
 import org.carewebframework.web.component.BaseUIComponent;
 import org.carewebframework.web.component.Label;
 import org.carewebframework.web.component.Page;
@@ -181,17 +184,14 @@ public class PageMonitor extends Thread {
     
     private final Object monitor = new Object();
     
-    private final UiLifeCycle uiLifeCycle = new UiLifeCycle() {
+    private final ISessionTracker tracker = new ISessionTracker() {
         
         /**
          * Attaches the time out warning zul to the page root. This markup remains hidden until the
          * timeout count down commences.
-         * 
-         * @see org.zkoss.zk.ui.util.UiLifeCycle#afterPageAttached(org.zkoss.zk.ui.Page,
-         *      org.zkoss.zk.ui.Page)
          */
         @Override
-        public void afterPageAttached(Page page, Page page) {
+        public void onSessionCreate(Session session) {
             page.removeListener(this);
             timeoutWindow = (Window) page.getExecution().createComponents(DESKTOP_TIMEOUT_ZUL, null, null);
             ZKUtil.wireController(timeoutWindow, PageMonitor.this);
@@ -202,42 +202,10 @@ public class PageMonitor extends Thread {
             ThreadUtil.startThread(PageMonitor.this);
         }
         
-        /*
-         * Not used.
-         */
         @Override
-        public void afterComponentAttached(Component cmp, Page page) {
+        public void onSessionDestroy(Session session) {
+            // NOP
         }
-        
-        /*
-         * Not used.
-         */
-        @Override
-        public void afterComponentDetached(Component cmp, Page page) {
-        }
-        
-        /*
-         * Not used.
-         */
-        @Override
-        public void afterComponentMoved(Component cmp1, Component cmp2, Component cmp3) {
-        }
-        
-        /*
-         * Not used.
-         */
-        @Override
-        public void afterPageDetached(Page page, Page page) {
-        }
-        
-        @Override
-        public void afterShadowAttached(ShadowElement shadow, Component host) {
-        }
-        
-        @Override
-        public void afterShadowDetached(ShadowElement shadow, Component prevhost) {
-        }
-        
     };
     
     /**
@@ -523,30 +491,23 @@ public class PageMonitor extends Thread {
         setMode(Mode.BASELINE);
         
         synchronized (monitor) {
-            while (!terminate && page.isAlive() && page.isServerPushEnabled() && !Thread.currentThread().isInterrupted()) {
+            while (!terminate && !page.isDead() && !Thread.currentThread().isInterrupted()) {
                 try {
                     process();
                     monitor.wait(pollingInterval);
-                } catch (PageUnavailableException e) {
-                    log.warn(page + " PageUnavailableException: " + e.getMessage());
                 } catch (InterruptedException e) {
                     log.warn(String.format("%s interrupted. Terminating.", this.getClass().getName()));
                     terminate = true;
                     Thread.currentThread().interrupt();
                 } catch (Exception e) {
                     log.error(page + " : " + e.getMessage(), e);
-                    throw UiException.Aide.wrap(e);
+                    throw MiscUtil.toUnchecked(e);
                 }
             }
         }
         
         if (log.isTraceEnabled()) {
             trace("The PageMonitor terminated", getName());
-        }
-        
-        if (pageDead && page.isAlive()) {
-            log.warn("Page presumed dead due to prolonged inactivity: " + this.page);
-            Application.getInstance().register(this.page, false);
         }
     }
     
@@ -571,7 +532,6 @@ public class PageMonitor extends Thread {
      * Called by the IOC container after all properties have been set.
      */
     public void init() {
-        page.addListener(uiLifeCycle);
         eventManager.subscribe(Constants.DESKTOP_EVENT, pageEventListener);
         String path = page.getRequestPath();
         path = path.startsWith("/") ? path.substring(1) : path;
@@ -583,7 +543,6 @@ public class PageMonitor extends Thread {
      */
     public void tearDown() {
         eventManager.unsubscribe(Constants.DESKTOP_EVENT, pageEventListener);
-        page.removeListener(uiLifeCycle);
         terminate = true;
         wakeup();
     }

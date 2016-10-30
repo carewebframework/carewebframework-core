@@ -39,6 +39,7 @@ import org.carewebframework.ui.zk.ZKUtil;
 import org.carewebframework.web.ancillary.IAutoWired;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.BaseUIComponent;
+import org.carewebframework.web.component.Cell;
 import org.carewebframework.web.component.Html;
 import org.carewebframework.web.component.Image;
 import org.carewebframework.web.component.Label;
@@ -121,8 +122,8 @@ public class LoginPaneController implements IAutoWired {
     @Override
     public void afterInitialized(BaseComponent comp) {
         pane = (BaseUIComponent) comp;
-        savedRequest = (SavedRequest) arg.get("savedRequest");
-        AuthenticationException authError = (AuthenticationException) arg.get("authError");
+        savedRequest = (SavedRequest) comp.getAttribute("savedRequest");
+        AuthenticationException authError = (AuthenticationException) comp.getAttribute("authError");
         String loginFailureMessage = StrUtil.getLabel(Constants.LBL_LOGIN_ERROR);//reset back to default
         
         if (LoginWindowController.getException(authError, CredentialsExpiredException.class) != null) {
@@ -195,7 +196,7 @@ public class LoginPaneController implements IAutoWired {
             Listitem li = new Listitem();
             li.setData(securityDomain);
             lstDomain.addChild(li);
-            li.appendChild(new Listcell(securityDomain.getName()));
+            li.addChild(new Cell(securityDomain.getName()));
             
             if (!defaultSet) {
                 if ((securityDomainId != null && securityDomainId.equals(securityDomain.getLogicalId()))
@@ -352,7 +353,7 @@ public class LoginPaneController implements IAutoWired {
         boolean isHtml = StringUtils.startsWithIgnoreCase(value, "<html>");
         boolean notEmpty = !value.isEmpty();
         plainText.setVisible(notEmpty && !isHtml);
-        htmlText.setVisible(notEmpty && isHtml);
+        //htmlText.setVisible(notEmpty && isHtml);
         
         if (parent != null) {
             parent.setVisible(notEmpty);

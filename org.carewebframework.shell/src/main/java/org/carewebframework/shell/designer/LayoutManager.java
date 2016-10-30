@@ -51,7 +51,6 @@ import org.carewebframework.shell.layout.UILayout;
 import org.carewebframework.ui.zk.ListUtil;
 import org.carewebframework.ui.zk.PopupDialog;
 import org.carewebframework.ui.zk.PromptDialog;
-import org.carewebframework.ui.zk.ZKUtil;
 import org.carewebframework.web.component.BaseUIComponent;
 import org.carewebframework.web.component.Button;
 import org.carewebframework.web.component.Label;
@@ -59,6 +58,12 @@ import org.carewebframework.web.component.Listbox;
 import org.carewebframework.web.component.Listitem;
 import org.carewebframework.web.component.Radiogroup;
 import org.carewebframework.web.component.Window;
+import org.carewebframework.web.event.ClickEvent;
+import org.carewebframework.web.event.DblclickEvent;
+import org.carewebframework.web.model.IComponentRenderer;
+import org.carewebframework.web.model.ListModel;
+import org.carewebframework.web.model.ModelAndView;
+import org.carewebframework.web.page.PageUtil;
 
 /**
  * Supports selection and management of existing layouts.
@@ -92,17 +97,21 @@ public class LayoutManager extends Window {
     private boolean shared;
     
     private LayoutIdentifier selectedLayout;
+
+    private ModelAndView<Listitem, String> modelAndView;
     
-    private final ListitemRenderer<String> renderer = new ListitemRenderer<String>() {
+    private final IComponentRenderer<Listitem, String> renderer = new IComponentRenderer<Listitem, String>() {
         
         @Override
-        public void render(Listitem item, String data, int index) throws Exception {
-            item.setLabel(data);
-            item.setValue(new LayoutIdentifier(data, shared));
+        public Listitem render(String data) {
+            Listitem item = new Listitem(data);
+            item.setData(new LayoutIdentifier(data, shared));
             
             if (pnlSelect.isVisible()) {
-                item.addForward(Events.ON_DOUBLE_CLICK, btnOK, Events.ON_CLICK);
+                item.registerEventForward(DblclickEvent.TYPE, btnOK, ClickEvent.TYPE);
             }
+            
+            return item;
         }
         
     };
@@ -136,8 +145,8 @@ public class LayoutManager extends Window {
         LayoutManager dlg = null;
         
         try {
-            dlg = (LayoutManager) PopupDialog.popup(ZKUtil.loadCachedPageDefinition(RESOURCE_PREFIX + "LayoutManager.cwf"),
-                null, true, true, false);
+            dlg = (LayoutManager) PopupDialog.popup(PageUtil.getPageDefinition(RESOURCE_PREFIX + "LayoutManager.cwf"), null,
+                true, true, false);
             return dlg.show(manage, deflt);
         } catch (Exception e) {
             return null;
@@ -209,16 +218,16 @@ public class LayoutManager extends Window {
      */
     private LayoutIdentifier show(boolean manage, String deflt) {
         this.shared = defaultIsShared();
-        ZKUtil.wireController(this);
+        this.wireController(this);
         setTitle(StrUtil.formatMessage(manage ? CAP_LAYOUT_MANAGE : CAP_LAYOUT_LOAD));
         lblPrompt.setLabel(StrUtil.formatMessage(manage ? MSG_LAYOUT_MANAGE : MSG_LAYOUT_LOAD));
-        lstLayouts.setItemRenderer(renderer);
+        modelAndView = new ModelAndView<>(lstLayouts, null, renderer);
         pnlSelect.setVisible(!manage);
         pnlManage.setVisible(manage);
         radioGroup.setSelectedIndex(shared ? 0 : 1);
         pnlScope.addClass(manage ? "pull-right" : "pull-left");
         refresh(deflt);
-        doModal();
+        modal(null);
         return manage || selectedLayout == null ? null : selectedLayout;
     }
     
@@ -228,7 +237,7 @@ public class LayoutManager extends Window {
      * @param deflt The layout to select initially.
      */
     private void refresh(String deflt) {
-        lstLayouts.setModel(new ListModelList<>(LayoutUtil.getLayouts(shared)));
+        modelAndView.setModel(new ListModel<>(LayoutUtil.getLayouts(shared)));
         lstLayouts.setSelectedIndex(deflt == null ? -1 : ListUtil.findListboxItem(lstLayouts, deflt));
         updateControls();
     }
@@ -284,7 +293,7 @@ public class LayoutManager extends Window {
         selectedLayout = getSelectedLayout();
         
         if (selectedLayout != null) {
-            onClose();
+            close();
         }
     }
     

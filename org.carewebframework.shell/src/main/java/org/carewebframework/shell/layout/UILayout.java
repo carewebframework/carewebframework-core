@@ -37,7 +37,7 @@ import org.carewebframework.common.XMLUtil;
 import org.carewebframework.shell.designer.IClipboardAware;
 import org.carewebframework.shell.plugins.PluginDefinition;
 import org.carewebframework.shell.property.PropertyInfo;
-import org.carewebframework.web.core.ExecutionContext;
+import org.carewebframework.web.client.ExecutionContext;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 

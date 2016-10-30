@@ -40,14 +40,13 @@ import org.carewebframework.web.ancillary.INamespace;
 import org.carewebframework.web.component.BaseUIComponent;
 import org.carewebframework.web.component.Menu;
 import org.carewebframework.web.component.Menuitem;
-import org.carewebframework.web.page.PageDefinition;
+import org.carewebframework.web.component.Menupopup;
+import org.carewebframework.web.page.PageUtil;
 
 /**
  * This is the design menu that appears in the desktop's menu bar.
  */
 public class DesignMenu extends Menu implements INamespace {
-    
-    private static final long serialVersionUID = 1L;
     
     private static final Log log = LogFactory.getLog(DesignMenu.class);
     
@@ -72,8 +71,7 @@ public class DesignMenu extends Menu implements INamespace {
         
         try {
             designMenu = null;
-            PageDefinition def = ZKUtil.loadCachedPageDefinition(DesignConstants.RESOURCE_PREFIX + "DesignMenu.cwf");
-            designMenu = (DesignMenu) Executions.createComponents(def, null, null);
+            designMenu = (DesignMenu) PageUtil.createPage(DesignConstants.RESOURCE_PREFIX + "DesignMenu.cwf", null);
             designMenu.init(owner);
         } catch (Exception e) {
             log.error("Error creating design menu.", e);
@@ -207,7 +205,7 @@ public class DesignMenu extends Menu implements INamespace {
         setImage(enabled ? DesignConstants.DESIGN_ICON_ACTIVE : DesignConstants.DESIGN_ICON_INACTIVE);
         mnuDesignMode.addStyle("border-bottom", enabled ? "2px solid lightgray" : null);
         setHint(StrUtil.formatMessage(enabled ? DesignConstants.DESIGN_HINT_ACTIVE : DesignConstants.DESIGN_HINT_INACTIVE));
-        BaseUIComponent child = menupopup.getFirstChild();
+        BaseUIComponent child = (BaseUIComponent) menupopup.getFirstChild();
         
         while (child != null) {
             child.setVisible(enabled || child == mnuDesignMode);

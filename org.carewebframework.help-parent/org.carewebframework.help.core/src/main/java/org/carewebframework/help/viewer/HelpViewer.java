@@ -36,7 +36,6 @@ import org.carewebframework.help.HelpTopic;
 import org.carewebframework.help.IHelpSet;
 import org.carewebframework.help.viewer.HelpHistory.ITopicListener;
 import org.carewebframework.ui.event.InvocationRequestQueue;
-import org.carewebframework.ui.zk.ZKUtil;
 import org.carewebframework.web.client.ClientUtil;
 import org.carewebframework.web.component.Button;
 import org.carewebframework.web.component.Iframe;
@@ -50,7 +49,7 @@ import org.carewebframework.web.event.ResizeEvent;
 /**
  * ZK-based viewer for viewing help content. Supports multiple help formats.
  */
-public class HelpViewer extends Window implements IHelpViewer, AfterCompose, ITopicListener, IEventListener {
+public class HelpViewer extends Window implements IHelpViewer, ITopicListener, IEventListener {
     
     public enum HelpViewerMode {
         EMBEDDED, POPUP;
@@ -60,8 +59,6 @@ public class HelpViewer extends Window implements IHelpViewer, AfterCompose, ITo
             return name().toLowerCase();
         }
     };
-    
-    private static final long serialVersionUID = 1L;
     
     private Tabview tbxNavigator;
     
@@ -85,9 +82,9 @@ public class HelpViewer extends Window implements IHelpViewer, AfterCompose, ITo
     
     private String lastURL;
     
-    private String lastHeight = "400px";
+    private double lastHeight = 400;
     
-    private String lastWidth = "1000px";
+    private double lastWidth = 1000;
     
     public HelpViewer() {
         super();
@@ -101,8 +98,8 @@ public class HelpViewer extends Window implements IHelpViewer, AfterCompose, ITo
         try {
             if (mode == HelpViewerMode.EMBEDDED) {
                 setMode(Mode.MODAL);
-                setHeight(lastHeight);
-                setWidth(lastWidth);
+                setHeight(lastHeight + "px");
+                setWidth(lastWidth + "px");
             } else {
                 ClientUtil.invoke("window.focus");
             }
@@ -407,25 +404,24 @@ public class HelpViewer extends Window implements IHelpViewer, AfterCompose, ITo
     
     /**
      * Initializes the UI after initial loading.
-     * 
-     * @see org.zkoss.zk.ui.ext.AfterCompose#afterCompose()
      */
     @Override
-    public void afterCompose() {
-        String proxyId = Executions.getCurrent().getParameter("proxy");
+    public void _init() {
+        super._init();
+        String proxyId = null; //TODO: Executions.getCurrent().getParameter("proxy");
         boolean proxied = proxyId != null;
         mode = proxied ? HelpViewerMode.POPUP : HelpViewerMode.EMBEDDED;
-        setWidth(proxied ? "100%" : lastWidth);
-        setHeight(proxied ? "100%" : lastHeight);
+        setWidth(proxied ? "100%" : lastWidth + "px");
+        setHeight(proxied ? "100%" : lastHeight + "px");
         setSizable(!proxied);
         setClosable(!proxied);
         setMaximizable(!proxied);
         setMinimizable(!proxied);
         setTitle(proxied ? null : "Help");
         setVisible(proxied);
-        ZKUtil.wireController(this);
-        setWidgetOverride("_cwf_focus", "function() {window.focus();}");
-        setWidgetOverride("_cwf_close", "function() {window.close();}");
+        wireController(this);
+        //TODO: setWidgetOverride("_cwf_focus", "function() {window.focus();}");
+        //TODO: setWidgetOverride("_cwf_close", "function() {window.close();}");
         history.addTopicListener(this);
         reset();
         

@@ -31,25 +31,21 @@ import org.carewebframework.common.StrUtil;
 import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.layout.UIElementCWFBase;
 import org.carewebframework.shell.layout.UILayout;
-import org.carewebframework.ui.zk.ZKUtil;
 import org.carewebframework.web.ancillary.IDisable;
 import org.carewebframework.web.ancillary.INamespace;
-import org.carewebframework.web.annotation.WiredComponentScanner;
+import org.carewebframework.web.client.ExecutionContext;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.BaseUIComponent;
 import org.carewebframework.web.component.Menuitem;
+import org.carewebframework.web.component.Menupopup;
 import org.carewebframework.web.component.Page;
-import org.carewebframework.web.core.ExecutionContext;
 import org.carewebframework.web.event.Event;
-import org.carewebframework.web.page.PageDefinition;
-import org.carewebframework.web.page.PageParser;
+import org.carewebframework.web.page.PageUtil;
 
 /**
  * Context menu for designer.
  */
 public class DesignContextMenu extends Menupopup implements INamespace {
-    
-    private static final long serialVersionUID = 1L;
     
     private static final Log log = LogFactory.getLog(DesignContextMenu.class);
     
@@ -88,7 +84,6 @@ public class DesignContextMenu extends Menupopup implements INamespace {
         if (contextMenu == null) {
             contextMenu = create();
             page.setAttribute(DesignConstants.ATTR_DESIGN_MENU, contextMenu);
-            ZKUtil.suppressContextMenu(contextMenu);
         }
         
         return contextMenu;
@@ -103,8 +98,9 @@ public class DesignContextMenu extends Menupopup implements INamespace {
         DesignContextMenu contextMenu = null;
         
         try {
-            contextMenu = (DesignContextMenu) PageUtil.createPage(DesignConstants.RESOURCE_PREFIX + "DesignContextMenu.cwf");
-            WiredComponentScanner.wire(contextMenu, contextMenu);
+            contextMenu = (DesignContextMenu) PageUtil.createPage(DesignConstants.RESOURCE_PREFIX + "DesignContextMenu.cwf",
+                null);
+            contextMenu.wireController(contextMenu);
             contextMenu.mnuHeader.setImage(DesignConstants.DESIGN_ICON_ACTIVE);
             contextMenu.clipboard.addListener(contextMenu);
         } catch (Exception e) {
@@ -176,16 +172,6 @@ public class DesignContextMenu extends Menupopup implements INamespace {
             close();
         } else {
             updateStates(owner, mnuAdd, mnuDelete, mnuCopy, mnuCut, mnuPaste, mnuProperties, mnuAbout);
-        }
-    }
-    
-    /**
-     * Avoid exception if menu not attached to a desktop.
-     */
-    @Override
-    public void close() {
-        if (getDesktop() != null) {
-            super.close();
         }
     }
     

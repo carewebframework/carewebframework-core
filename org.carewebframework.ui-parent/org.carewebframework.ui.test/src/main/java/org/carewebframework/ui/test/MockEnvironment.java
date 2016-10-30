@@ -28,11 +28,8 @@ package org.carewebframework.ui.test;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.ServletContext;
-
-import org.apache.commons.io.IOUtils;
+import org.carewebframework.web.client.ExecutionContext;
 import org.carewebframework.web.component.Page;
-import org.carewebframework.web.core.ExecutionContext;
 import org.carewebframework.web.spring.FrameworkAppContext;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -43,15 +40,11 @@ import org.springframework.web.context.WebApplicationContext;
  */
 public class MockEnvironment {
     
-    private Page page;
-    
-    private MockSynchronizer synchronizer;
-    
-    private MockWebSocketSession session;
+    private MockSession session;
     
     private MockClientRequest clientRequest;
     
-    private ServletContext servletContext;
+    private MockServletContext servletContext;
     
     private FrameworkAppContext rootContext;
     
@@ -81,16 +74,16 @@ public class MockEnvironment {
         servletContext.setAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE, rootContext);
         rootContext.refresh();
         // Create mock session
-        session = new MockWebSocketSession();
-        synchronizer = new MockSynchronizer(session);
-        // Create the page
+        MockWebSocketSession socket = new MockWebSocketSession();
+        session = new MockSession(servletContext, socket);
+        // Initialize the page
         initBrowserInfoMap(browserInfo);
-        page = Page._create("mockpage");
-        Page._init(page, browserInfo, synchronizer);
+        Page page = session.getPage();
+        Page._init(page, browserInfo, session.getSynchronizer());
         page = initPage(page);
         // Create the mock request
         initClientRequestMap(clientRequestMap);
-        clientRequest = new MockClientRequest(clientRequestMap);
+        clientRequest = new MockClientRequest(session, clientRequestMap);
         // Create the mock execution
         initExecutionContext();
         // Create the desktop Spring context
@@ -103,8 +96,7 @@ public class MockEnvironment {
      */
     public void close() {
         pageContext.close();
-        page.destroy();
-        IOUtils.closeQuietly(session);
+        session.destroy();
         rootContext.close();
     }
     
@@ -119,14 +111,11 @@ public class MockEnvironment {
     }
     
     protected void initExecutionContext() {
-        ExecutionContext.put(ExecutionContext.ATTR_WS, session);
-        ExecutionContext.put(ExecutionContext.ATTR_SYNC, synchronizer);
-        ExecutionContext.put(ExecutionContext.ATTR_SCTX, servletContext);
-        ExecutionContext.put(ExecutionContext.ATTR_REQ, clientRequest);
+        ExecutionContext.put(ExecutionContext.ATTR_REQUEST, clientRequest);
     }
     
     protected void initClientRequestMap(Map<String, Object> map) {
-        map.put("pid", page.getId());
+        map.put("pid", session.getPage().getId());
         map.put("type", "mock");
     }
     

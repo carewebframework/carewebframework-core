@@ -28,13 +28,13 @@ package org.carewebframework.plugin.chat;
 import java.util.Collection;
 
 import org.carewebframework.api.messaging.IPublisherInfo;
-import org.carewebframework.ui.cwf.AbstractListitemRenderer;
 import org.carewebframework.web.component.Listitem;
+import org.carewebframework.web.model.IComponentRenderer;
 
 /**
  * Renderer for participant list.
  */
-public class ParticipantRenderer extends AbstractListitemRenderer<IPublisherInfo, Object> {
+public class ParticipantRenderer implements IComponentRenderer<Listitem, IPublisherInfo> {
     
     private final Collection<IPublisherInfo> exclusions;
     
@@ -55,10 +55,8 @@ public class ParticipantRenderer extends AbstractListitemRenderer<IPublisherInfo
     }
     
     @Override
-    protected void renderItem(Listitem item, IPublisherInfo participant) {
-        if (item.getListbox().isCheckmark()) {
-            createCell(item, null);
-        }
+    public Listitem render(IPublisherInfo participant) {
+        Listitem item = new Listitem();
         
         createCell(item, participant.getUserName());
         

@@ -28,7 +28,6 @@ package org.carewebframework.security.spring.controller;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.security.spring.AbstractSecurityService;
 import org.carewebframework.security.spring.Constants;
-import org.carewebframework.ui.Application;
 import org.carewebframework.web.ancillary.IAutoWired;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.Hyperlink;
@@ -38,8 +37,6 @@ import org.carewebframework.web.component.Label;
  * Controller for logout page.
  */
 public class LogoutController implements IAutoWired {
-    
-    private static final long serialVersionUID = 1L;
     
     private Label lblMessage;
     
@@ -53,8 +50,6 @@ public class LogoutController implements IAutoWired {
         lblMessage.setLabel(AbstractSecurityService.getLogoutAttribute(Constants.LOGOUT_WARNING_ATTR,
             StrUtil.getLabel(Constants.LBL_LOGOUT_MESSAGE_DEFAULT)));
         btnLogin.setHref(AbstractSecurityService.getLogoutAttribute(Constants.LOGOUT_TARGET_ATTR, "/"));
-        // Unregister this desktop to allow session to auto-invalidate if appropriate.
-        Application.getInstance().register(comp.getPage(), false);
     }
     
 }

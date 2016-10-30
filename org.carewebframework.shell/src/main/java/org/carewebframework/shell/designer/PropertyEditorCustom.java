@@ -30,6 +30,8 @@ import org.carewebframework.common.StrUtil;
 import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.property.PropertyInfo;
 import org.carewebframework.ui.zk.ZKUtil;
+import org.carewebframework.web.component.Popup;
+import org.carewebframework.web.component.Popupbox;
 import org.carewebframework.web.event.Event;
 import org.carewebframework.web.event.IEventListener;
 
@@ -38,34 +40,34 @@ import org.carewebframework.web.event.IEventListener;
  */
 public class PropertyEditorCustom extends PropertyEditorBase implements IEventListener {
     
-    protected final Bandbox bandbox;
+    protected final Popupbox popupbox;
     
-    protected final Bandpopup bandpopup;
+    protected final Popup popup;
     
     protected PropertyEditorCustom() {
-        super(new Bandbox());
-        bandbox = (Bandbox) component;
-        bandbox.setAutodrop(false);
-        bandbox.setReadonly(true);
-        bandbox.setText(StrUtil.getLabel("cwf.shell.designer.propedit.custom.bandbox.prompt"));
-        bandbox.addEventListener(Events.ON_OPEN, this);
-        bandpopup = new Bandpopup();
-        bandbox.appendChild(bandpopup);
+        super(new Popupbox());
+        popupbox = (Popupbox) component;
+        //popupbox.setAutodrop(false);
+        popupbox.setReadonly(true);
+        popupbox.setValue(StrUtil.getLabel("cwf.shell.designer.propedit.custom.popupbox.prompt"));
+        popupbox.addEventListener(Events.ON_OPEN, this);
+        popup = new Bandpopup();
+        popupbox.appendChild(popup);
     }
     
     protected PropertyEditorCustom(String template) throws Exception {
         this();
-        ZKUtil.wireController(ZKUtil.loadZulPage(template, bandpopup), this);
+        ZKUtil.wireController(ZKUtil.loadZulPage(template, popup), this);
     }
     
     /**
-     * Invoked when the associated bandbox is opened.
+     * Invoked when the associated popupbox is opened.
      */
     protected void doOpen() {
     }
     
     /**
-     * Invoked when the associated bandbox is closed;
+     * Invoked when the associated popupbox is closed;
      */
     protected void doClose() {
     }
@@ -94,7 +96,7 @@ public class PropertyEditorCustom extends PropertyEditorBase implements IEventLi
     
     @Override
     public void setFocus() {
-        bandbox.open();
+        popupbox.open();
         doOpen();
     }
     
@@ -108,7 +110,7 @@ public class PropertyEditorCustom extends PropertyEditorBase implements IEventLi
     }
     
     /**
-     * Capture the bandbox onOpen event and invokes doOpen or doClose depending on the bandbox
+     * Capture the popupbox onOpen event and invokes doOpen or doClose depending on the popupbox
      * state.
      */
     @Override
