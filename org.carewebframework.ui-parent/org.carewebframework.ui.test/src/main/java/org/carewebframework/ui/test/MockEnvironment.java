@@ -28,9 +28,9 @@ package org.carewebframework.ui.test;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.carewebframework.api.spring.FrameworkAppContext;
 import org.carewebframework.web.client.ExecutionContext;
 import org.carewebframework.web.component.Page;
-import org.carewebframework.web.spring.FrameworkAppContext;
 import org.springframework.web.context.WebApplicationContext;
 
 /**

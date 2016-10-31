@@ -23,10 +23,5 @@
 			<groupId>org.carewebframework</groupId>
 			<artifactId>org.carewebframework.help.core</artifactId>
 		</dependency>
-		<!-- Tests -->
-		<dependency>
-			<groupId>org.carewebframework</groupId>
-			<artifactId>org.carewebframework.ui.test</artifactId>
-		</dependency>
 	</dependencies>
 </project>
