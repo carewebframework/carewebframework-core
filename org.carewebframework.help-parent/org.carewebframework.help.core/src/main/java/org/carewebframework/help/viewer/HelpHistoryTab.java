@@ -26,10 +26,8 @@
 package org.carewebframework.help.viewer;
 
 import org.carewebframework.help.HelpTopic;
-
-import org.zkoss.zul.Listbox;
-import org.zkoss.zul.Listitem;
-import org.zkoss.zul.ListitemRenderer;
+import org.carewebframework.web.component.Listbox;
+import org.carewebframework.web.model.ModelAndView;
 
 /**
  * Tab that implements a view of the current topic selection history. Unlike other help tabs, this
@@ -37,9 +35,7 @@ import org.zkoss.zul.ListitemRenderer;
  * the current contents of the history list. Because the list box uses the history list directly as
  * its list model, the list box contents changes dynamically as the history changes.
  */
-public class HelpHistoryTab extends HelpTab implements ListitemRenderer<HelpTopic> {
-    
-    private static final long serialVersionUID = 1L;
+public class HelpHistoryTab extends HelpTab {
     
     private Listbox lstHistory;
     
@@ -54,8 +50,7 @@ public class HelpHistoryTab extends HelpTab implements ListitemRenderer<HelpTopi
     public HelpHistoryTab(HelpViewer viewer, HelpViewType viewType) {
         super(viewer, viewType, "helpHistoryTab.cwf");
         history = viewer.getHistory();
-        lstHistory.setItemRenderer(this);
-        lstHistory.setModel(history.getItems());
+        new ModelAndView<>(lstHistory, history.getItems(), new HelpTopicRenderer());
     }
     
     /**
@@ -85,18 +80,6 @@ public class HelpHistoryTab extends HelpTab implements ListitemRenderer<HelpTopi
     public void onTopicSelected(HelpTopic topic) {
         lstHistory.setSelectedIndex(history.getPosition());
         setVisible(!history.getItems().isEmpty());
-    }
-    
-    /**
-     * Render method for the history list box. The list item label is the topic label and its value
-     * is the topic itself.
-     * 
-     * @see org.zkoss.zul.ListitemRenderer#render
-     */
-    @Override
-    public void render(Listitem item, HelpTopic topic, int index) throws Exception {
-        item.setLabel(topic.getLabel());
-        item.setValue(topic);
     }
     
 }

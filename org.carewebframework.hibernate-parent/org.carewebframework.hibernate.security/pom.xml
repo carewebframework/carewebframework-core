@@ -23,7 +23,7 @@
 		<!-- Unit testing -->
 		<dependency>
 			<groupId>org.carewebframework</groupId>
-			<artifactId>org.carewebframework.ui.test</artifactId>
+			<artifactId>org.carewebframework.api.test</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.carewebframework</groupId>

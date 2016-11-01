@@ -30,6 +30,7 @@ import org.carewebframework.api.event.IGenericEvent;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.ui.FrameworkController;
 import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.component.Cell;
 import org.carewebframework.web.component.Label;
 
 /**
@@ -95,11 +96,11 @@ public class StatusPanel extends FrameworkController implements IGenericEvent<Ob
         }
         
         cell.setVflex("1");
-        cell.setSclass("cwf-header-cell");
-        root.appendChild(cell);
+        cell.addClass("cwf-header-cell");
+        root.addChild(cell);
         Label lbl = new Label();
         lbl.setName(pane);
-        cell.appendChild(lbl);
+        cell.addChild(lbl);
         return lbl;
     }
 }

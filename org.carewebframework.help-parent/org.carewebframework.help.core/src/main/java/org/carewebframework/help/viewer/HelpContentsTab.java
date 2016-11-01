@@ -31,23 +31,20 @@ import java.util.Map;
 import org.carewebframework.help.HelpTopic;
 import org.carewebframework.help.HelpTopicNode;
 import org.carewebframework.ui.zk.TreeUtil;
-
-import org.zkoss.zul.Tree;
-import org.zkoss.zul.Treechildren;
-import org.zkoss.zul.Treeitem;
+import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.component.Treenode;
+import org.carewebframework.web.component.Treeview;
 
 /**
  * Tab for displaying the table of contents. This is displayed as a tree of topics.
  */
 public class HelpContentsTab extends HelpTab {
     
-    private static final long serialVersionUID = 1L;
-    
-    private Tree tree;
+    private Treeview tree;
     
     private HelpTopic selectedTopic;
     
-    private final Map<HelpTopic, Treeitem> topics = new HashMap<>();
+    private final Map<HelpTopic, Treenode> topics = new HashMap<>();
     
     /**
      * Create the help tab for the specified viewer and viewType.
@@ -63,8 +60,8 @@ public class HelpContentsTab extends HelpTab {
      * Change the viewer's active topic when a tree item is selected.
      */
     public void onSelect$tree() {
-        Treeitem item = tree.getSelectedItem();
-        selectedTopic = item == null ? null : (HelpTopic) item.getValue();
+        Treenode item = tree.getSelectedNode();
+        selectedTopic = item == null ? null : (HelpTopic) item.getData();
         setTopic(selectedTopic);
     }
     
@@ -76,7 +73,7 @@ public class HelpContentsTab extends HelpTab {
     @Override
     public void init() {
         super.init();
-        TreeUtil.sort(tree.getTreechildren(), false);
+        TreeUtil.sort(tree, false);
     }
     
     /**
@@ -88,7 +85,7 @@ public class HelpContentsTab extends HelpTab {
     public void onTopicSelected(HelpTopic topic) {
         if (topic != selectedTopic) {
             selectedTopic = topic;
-            tree.setSelectedItem(topics.get(topic));
+            tree.setSelectedNode(topics.get(topic));
         }
     }
     
@@ -103,34 +100,30 @@ public class HelpContentsTab extends HelpTab {
         HelpTopicNode topNode = view.getTopicTree();
         
         for (HelpTopicNode node : topNode.getChildren()) {
-            addNode(tree.getTreechildren(), node).getTreerow().setSclass("cwf-help-toc-top");
+            addNode(tree, node); //TODO: .getTreerow().setSclass("cwf-help-toc-top");
         }
     }
     
     /**
      * Recursively create tree items that correspond to the topic tree from the help view.
      * 
-     * @param tc The treechildren component to receive newly created tree items.
+     * @param tc The root node to receive newly created tree nodes.
      * @param node A topic tree node.
-     * @return Newly created tree item.
+     * @return Newly created tree node.
      */
-    private Treeitem addNode(Treechildren tc, HelpTopicNode node) {
+    private Treenode addNode(BaseComponent tc, HelpTopicNode node) {
         HelpTopic topic = node.getTopic();
-        Treeitem parent = new Treeitem(topic.getLabel(), topic);
+        Treenode parent = new Treenode();
+        parent.setLabel(topic.getLabel());
+        parent.setData(topic);
         topics.put(topic, parent);
-        tc.appendChild(parent);
-        tc = null;
+        tc.addChild(parent);
         
         for (HelpTopicNode child : node.getChildren()) {
-            if (tc == null) {
-                tc = new Treechildren();
-                parent.appendChild(tc);
-            }
-            
             addNode(tc, child);
         }
         
-        parent.setOpen(true);
+        parent.setCollapsed(false);
         return parent;
     }
     

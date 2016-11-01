@@ -140,10 +140,6 @@ public class DropContainer extends Window implements IActionTarget {
         }
     }
     
-    private void setOpen(boolean open) {
-        setSize(open ? Size.NORMAL : Size.MINIMIZED);
-    }
-    
     /**
      * Moves an existing entry to the beginning of the stream.
      */

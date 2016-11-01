@@ -160,8 +160,8 @@ public class HelpUtil {
      * @return The base url.
      */
     public static String getBaseUrl() {
-        ServletContext sc = ExecutionContext.getServletContext();
-        return null; // TODO: e.getScheme() + "://" + e.getServerName() + ":" + e.getServerPort() + e.getContextPath();
+        ServletContext sc = ExecutionContext.getSession().getServletContext();
+        return sc.getRealPath("");
     }
     
     /**

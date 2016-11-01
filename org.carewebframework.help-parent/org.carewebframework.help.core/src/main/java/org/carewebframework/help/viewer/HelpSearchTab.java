@@ -112,7 +112,7 @@ public class HelpSearchTab extends HelpTab implements IComponentRenderer<Listite
     @Override
     public void onSelect() {
         super.onSelect();
-        txtSearch.select();
+        txtSearch.selectAll();
         txtSearch.setFocus(true);
     }
     
@@ -190,14 +190,14 @@ public class HelpSearchTab extends HelpTab implements IComponentRenderer<Listite
         double score = qr.getConfidence();
         item.setData(qr.getTopic());
         Cell lc = new Cell();
-        lc.setImageContent(toImage(score));
+        lc.addChild(toImage(score));
         String tt = StrUtil.formatMessage("@cwf.help.tab.search.score", score);
-        lc.setTooltiptext(tt);
-        item.appendChild(lc);
+        lc.setHint(tt);
+        item.addChild(lc);
         lc = new Cell(qr.getTopic().getLabel());
-        item.appendChild(lc);
+        item.addChild(lc);
         lc = new Cell(qr.getTopic().getSource());
-        item.appendChild(lc);
+        item.addChild(lc);
         return item;
     }
     

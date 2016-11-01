@@ -220,16 +220,16 @@ public class TreeUtil {
      * @param tree Tree to be sorted.
      */
     public static void sort(Treeview tree) {
-        sort(tree.getChildren(), true);
+        sort(tree, true);
     }
     
     /**
      * Alphabetically sorts children under the specified parent.
      * 
-     * @param parent Parent node (Treechildren) whose child nodes (Treenode) are to be sorted.
+     * @param parent Parent whose child nodes (Treenode) are to be sorted.
      * @param recurse If true, sorting is recursed through all children.
      */
-    public static void sort(Treechildren parent, boolean recurse) {
+    public static void sort(BaseComponent parent, boolean recurse) {
         if (parent == null || parent.getChildren().size() < 2) {
             return;
         }
@@ -243,7 +243,7 @@ public class TreeUtil {
             
             if (compare(item1, item2) > 0) {
                 item2.detach();
-                parent.insertBefore(item2, item1);
+                parent.insertChild(item2, item1);
                 i = i == 1 ? 2 : i - 1;
             } else {
                 i++;
@@ -251,8 +251,8 @@ public class TreeUtil {
         }
         
         if (recurse) {
-            for (Object item : parent.getChildren()) {
-                sort(((Treenode) item).getTreechildren(), recurse);
+            for (BaseComponent child : parent.getChildren()) {
+                sort(child, recurse);
             }
         }
     }
@@ -336,7 +336,7 @@ public class TreeUtil {
      * @return The first matching tree item after the starting item, or null if none found.
      */
     public static Treenode search(Treenode start, String text) {
-        return search(start.getTree(), start, text, defaultTreenodeSearch);
+        return search(start.getTreeview(), start, text, defaultTreenodeSearch);
     }
     
     /**
@@ -348,7 +348,7 @@ public class TreeUtil {
      * @return The first matching tree item after the starting item, or null if none found.
      */
     public static Treenode search(Treenode start, String text, ITreenodeSearch search) {
-        return search(start.getTreeView(), start, text, search);
+        return search(start.getTreeview(), start, text, search);
     }
     
     /**
@@ -394,7 +394,7 @@ public class TreeUtil {
      * 
      * @param tree Tree component
      */
-    public static void adjustVisibility(Tree tree) {
+    public static void adjustVisibility(Treeview tree) {
         adjustVisibility(tree.getTreechildren());
     }
     

@@ -29,8 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.carewebframework.help.HelpTopic;
-
-import org.zkoss.zul.ListModelList;
+import org.carewebframework.web.model.ListModel;
 
 /**
  * This class manages the history of selected topics. There are methods for adding new topics,
@@ -51,23 +50,8 @@ public class HelpHistory {
      * model list for a list box) mainly to introduce some convenience methods without any
      * significant new functionality.
      */
-    public class HistoryList extends ListModelList<HelpTopic> {
+    public class HistoryList extends ListModel<HelpTopic> {
         
-        private static final long serialVersionUID = 1L;
-        
-        /**
-         * Overrides the removeRange method to suppress unwanted exceptions.
-         * 
-         * @see org.zkoss.zul.ListModelList#removeRange(int, int)
-         */
-        @Override
-        public void removeRange(int fromIndex, int toIndex) {
-            if (fromIndex > toIndex || toIndex <= 0) {
-                return;
-            }
-            
-            super.removeRange(fromIndex, toIndex);
-        }
     }
     
     private final HistoryList history = new HistoryList();

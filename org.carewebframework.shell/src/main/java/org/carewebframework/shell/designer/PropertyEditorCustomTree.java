@@ -159,7 +159,7 @@ public abstract class PropertyEditorCustomTree<T extends UIElementBase> extends 
         private String getDefaultInstanceName() {
             String name = getDefinition().getName() + " #";
             int i = 0;
-            Treeview tree = item.getTreeView();
+            Treeview tree = item.getTreeview();
             
             while (TreeUtil.findNodeByLabel(tree, name + ++i, false) != null) {}
             return name + i;

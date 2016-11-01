@@ -30,22 +30,20 @@ import static org.junit.Assert.assertNull;
 
 import org.carewebframework.api.domain.IUser;
 import org.carewebframework.api.security.SecurityDomainRegistry;
-import org.carewebframework.ui.test.CommonTest;
-
+import org.carewebframework.api.test.CommonTest;
 import org.junit.Test;
 
 public class TestSecurity extends CommonTest {
-    
     
     @Test
     public void testService() throws Exception {
         String dir = System.getProperty("java.io.tmpdir") + "cwf";
         System.out.println("Test database is at: " + dir);
-        SecurityDomainDAO sdao = rootContext.getBean(SecurityDomainDAO.class);
+        SecurityDomainDAO sdao = appContext.getBean(SecurityDomainDAO.class);
         setupDomains(sdao);
         sdao.init();
         assertEquals(3, SecurityDomainRegistry.getInstance().getAll().size());
-        UserDAO udao = rootContext.getBean(UserDAO.class);
+        UserDAO udao = appContext.getBean(UserDAO.class);
         setupUsers(udao);
         SecurityDomain domain = getSecurityDomain("1");
         authenticate(domain, "DOCTOR123", "DOCTOR321$", "1");

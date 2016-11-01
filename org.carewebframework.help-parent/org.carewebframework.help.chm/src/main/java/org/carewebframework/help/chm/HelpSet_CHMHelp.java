@@ -40,9 +40,9 @@ import org.carewebframework.help.HelpModule;
 import org.carewebframework.help.HelpSetBase;
 import org.carewebframework.help.HelpTopic;
 import org.carewebframework.help.HelpTopicNode;
-import org.carewebframework.help.viewer.HelpUtil;
 import org.carewebframework.help.viewer.HelpViewType;
 import org.carewebframework.help.viewer.IHelpView;
+import org.carewebframework.web.client.ExecutionContext;
 import org.w3c.dom.Node;
 
 public class HelpSet_CHMHelp extends HelpSetBase {
@@ -120,8 +120,8 @@ public class HelpSet_CHMHelp extends HelpSetBase {
     }
     
     protected URL getURL(String file) throws Exception {
-        String root = jar && Executions.getCurrent() != null ? HelpUtil.getBaseUrl() + "/zkau" : "file:";
-        return new URL(root + baseURL + file);
+        String path = ExecutionContext.getSession().getServletContext().getRealPath(file);
+        return new URL(path);
     }
     
     protected InputStream openStream(String file) throws Exception {

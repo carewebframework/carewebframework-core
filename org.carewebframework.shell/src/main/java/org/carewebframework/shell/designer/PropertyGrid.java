@@ -107,7 +107,7 @@ public class PropertyGrid extends Window {
     
     private Column colProperty;
     
-    private Caption capPropertyName;
+    private Label capPropertyName;
     
     private Button btnOK;
     
@@ -169,7 +169,7 @@ public class PropertyGrid extends Window {
      */
     private void init(UIElementBase target, BaseComponent parent, boolean embedded) {
         this.embedded = embedded;
-        ZKUtil.wireController(this);
+        wireController(this);
         setTarget(target);
         colProperty.setSortAscending(propSortAscending);
         colProperty.setSortDescending(propSortDescending);

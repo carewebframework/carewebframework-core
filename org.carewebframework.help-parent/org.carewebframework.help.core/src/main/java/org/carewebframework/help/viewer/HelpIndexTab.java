@@ -32,27 +32,23 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import org.apache.commons.lang.StringUtils;
-
 import org.carewebframework.help.HelpTopic;
 import org.carewebframework.help.HelpTopicNode;
-import org.carewebframework.ui.zk.ZKUtil;
-
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.InputEvent;
-import org.zkoss.zul.ListModelList;
-import org.zkoss.zul.Listbox;
-import org.zkoss.zul.Listitem;
-import org.zkoss.zul.ListitemRenderer;
-import org.zkoss.zul.Textbox;
+import org.carewebframework.web.annotation.EventHandler;
+import org.carewebframework.web.component.Listbox;
+import org.carewebframework.web.component.Listitem;
+import org.carewebframework.web.component.Textbox;
+import org.carewebframework.web.event.ChangeEvent;
+import org.carewebframework.web.model.IComponentRenderer;
+import org.carewebframework.web.model.ListModel;
+import org.carewebframework.web.model.ModelAndView;
 
 /**
  * Tab for displaying the keyword index. This tab consists of two list boxes: one that displays the
  * keywords and one the displays the topics associated with the selected keyword. There is also a
  * quick find feature that allows locating a keyword by entering the first letters of the keyword.
  */
-public class HelpIndexTab extends HelpTab implements ListitemRenderer<HelpTopic> {
-    
-    private static final long serialVersionUID = 1L;
+public class HelpIndexTab extends HelpTab {
     
     private Listbox lstKeywords;
     
@@ -60,10 +56,20 @@ public class HelpIndexTab extends HelpTab implements ListitemRenderer<HelpTopic>
     
     private Textbox txtFind;
     
-    private final Map<String, List<HelpTopic>> topicIndex = new TreeMap<>(
-            String.CASE_INSENSITIVE_ORDER);
-            
-    private ListModelList<String> keywordList;
+    private final Map<String, List<HelpTopic>> topicIndex = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+    
+    private ListModel<String> keywordList;
+    
+    private final ModelAndView<Listitem, HelpTopic> modelAndView;
+    
+    private final IComponentRenderer<Listitem, String> keywordRenderer = new IComponentRenderer<Listitem, String>() {
+        
+        @Override
+        public Listitem render(String term) {
+            return new Listitem(term);
+        }
+        
+    };
     
     /**
      * Create the help tab for the specified viewer and viewType.
@@ -73,7 +79,7 @@ public class HelpIndexTab extends HelpTab implements ListitemRenderer<HelpTopic>
      */
     public HelpIndexTab(HelpViewer viewer, HelpViewType viewType) {
         super(viewer, viewType, "helpIndexTab.cwf");
-        lstTopics.setItemRenderer(this);
+        modelAndView = new ModelAndView<>(lstTopics, null, new HelpTopicRenderer());
     }
     
     /**
@@ -84,7 +90,7 @@ public class HelpIndexTab extends HelpTab implements ListitemRenderer<HelpTopic>
         Listitem item = lstKeywords.getSelectedItem();
         
         if (item == null) {
-            lstTopics.getItems().clear();
+            lstTopics.destroyChildren();
             setTopic(null);
             return;
         }
@@ -96,8 +102,7 @@ public class HelpIndexTab extends HelpTab implements ListitemRenderer<HelpTopic>
             Collections.sort(topics);
         }
         
-        lstTopics.setModel(new ListModelList<>(topics));
-        lstTopics.renderAll();
+        modelAndView.setModel(new ListModel<>(topics));
         onSelect$lstTopics();
     }
     
@@ -110,13 +115,13 @@ public class HelpIndexTab extends HelpTab implements ListitemRenderer<HelpTopic>
         
         if (item == null) {
             int i = keywordItem.hasAttribute("last") ? (Integer) keywordItem.getAttribute("last") : 0;
-            item = lstTopics.getItemAtIndex(i);
-            lstTopics.selectItem(item);
+            item = (Listitem) lstTopics.getChildAt(i);
+            lstTopics.setSelectedItem(item);
         }
         
         if (item != null) {
             keywordItem.setAttribute("last", lstTopics.getSelectedIndex());
-            setTopic((HelpTopic) item.getValue());
+            setTopic((HelpTopic) item.getData());
         } else {
             setTopic(null);
         }
@@ -127,8 +132,9 @@ public class HelpIndexTab extends HelpTab implements ListitemRenderer<HelpTopic>
      * 
      * @param event The input event.
      */
-    public void onChanging$txtFind(Event event) {
-        String find = ((InputEvent) ZKUtil.getEventOrigin(event)).getValue().toLowerCase();
+    @EventHandler(value = "change", target = "txtFind")
+    public void onChange$txtFind(ChangeEvent event) {
+        String find = event.getValue().toLowerCase();
         
         if (StringUtils.isEmpty(find)) {
             return;
@@ -144,8 +150,7 @@ public class HelpIndexTab extends HelpTab implements ListitemRenderer<HelpTopic>
         }
         
         if (match != lstKeywords.getSelectedIndex()) {
-            Listitem item = match == -1 ? null : lstKeywords.getItemAtIndex(match);
-            lstKeywords.renderItem(item);
+            Listitem item = match == -1 ? null : (Listitem) lstKeywords.getChildAt(match);
             lstKeywords.setSelectedItem(item);
             onSelect$lstKeywords();
         }
@@ -160,8 +165,8 @@ public class HelpIndexTab extends HelpTab implements ListitemRenderer<HelpTopic>
     @Override
     protected void init() {
         super.init();
-        keywordList = new ListModelList<>(topicIndex.keySet());
-        lstKeywords.setModel(keywordList);
+        keywordList = new ListModel<>(topicIndex.keySet());
+        new ModelAndView<Listitem, String>(lstKeywords, keywordList, keywordRenderer);
     }
     
     /**
@@ -173,7 +178,7 @@ public class HelpIndexTab extends HelpTab implements ListitemRenderer<HelpTopic>
     public void onSelect() {
         super.onSelect();
         txtFind.setFocus(true);
-        txtFind.select();
+        txtFind.selectAll();
     }
     
     /**
@@ -230,14 +235,4 @@ public class HelpIndexTab extends HelpTab implements ListitemRenderer<HelpTopic>
         return topics;
     }
     
-    /**
-     * This is the renderer for the topic list.
-     * 
-     * @see org.zkoss.zul.ListitemRenderer#render
-     */
-    @Override
-    public void render(Listitem item, HelpTopic topic, int index) throws Exception {
-        item.setLabel(topic.getLabel());
-        item.setValue(topic);
-    }
 }

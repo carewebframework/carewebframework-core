@@ -3,30 +3,31 @@
 	
 	<parent>
 		<groupId>org.carewebframework</groupId>
-		<artifactId>org.carewebframework.ui-parent</artifactId>
+		<artifactId>org.carewebframework.api-parent</artifactId>
 		<version>6.0.0-SNAPSHOT</version>
 	</parent>
 	
-	<name>CWF SharedForms</name>
-	<artifactId>org.carewebframework.ui.sharedforms</artifactId>
+	<artifactId>org.carewebframework.api.test</artifactId>
+	<name>CWF API Test Framework</name>
 	
 	<dependencies>
 		<dependency>
 			<groupId>org.carewebframework</groupId>
-			<artifactId>org.carewebframework.shell</artifactId>
-		</dependency>
-		<!-- Tests -->
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
+			<artifactId>org.carewebframework.api.security.mock</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-test</artifactId>
+			<groupId>org.carewebframework</groupId>
+			<artifactId>org.carewebframework.api.property.mock</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<scope>compile</scope>
 		</dependency>
 	</dependencies>
 </project>
