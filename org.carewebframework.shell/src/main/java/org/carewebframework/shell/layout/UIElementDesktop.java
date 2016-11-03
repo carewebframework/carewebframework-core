@@ -43,6 +43,7 @@ import org.carewebframework.web.component.Image;
 import org.carewebframework.web.component.Label;
 import org.carewebframework.web.component.Menu;
 import org.carewebframework.web.component.Menuitem;
+import org.carewebframework.web.component.Menupopup;
 import org.carewebframework.web.component.Toolbar;
 import org.carewebframework.web.event.IEventListener;
 
@@ -337,7 +338,7 @@ public class UIElementDesktop extends UIElementCWFBase {
      * @return The help viewer display mode.
      */
     public HelpViewerMode getHelpViewerMode() {
-        return HelpUtil.getViewerMode(desktopOuter.getDesktop());
+        return HelpUtil.getViewerMode(desktopOuter.getPage());
     }
     
     /**
@@ -346,7 +347,7 @@ public class UIElementDesktop extends UIElementCWFBase {
      * @param mode The new help viewer display mode.
      */
     public void setHelpViewerMode(HelpViewerMode mode) {
-        HelpUtil.setViewerMode(desktopOuter.getDesktop(), mode);
+        HelpUtil.setViewerMode(desktopOuter.getPage(), mode);
     }
     
 }

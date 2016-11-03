@@ -35,12 +35,12 @@ import org.carewebframework.shell.layout.UIElementDesktop;
 import org.carewebframework.shell.layout.UILayout;
 import org.carewebframework.ui.xml.XMLViewer;
 import org.carewebframework.ui.zk.PromptDialog;
-import org.carewebframework.ui.zk.ZKUtil;
 import org.carewebframework.web.ancillary.INamespace;
 import org.carewebframework.web.component.BaseUIComponent;
 import org.carewebframework.web.component.Menu;
 import org.carewebframework.web.component.Menuitem;
 import org.carewebframework.web.component.Menupopup;
+import org.carewebframework.web.event.EventUtil;
 import org.carewebframework.web.page.PageUtil;
 
 /**
@@ -92,7 +92,7 @@ public class DesignMenu extends Menu implements INamespace {
     private void init(UIElementDesktop owner) {
         this.owner = owner;
         shell = owner.getShell();
-        ZKUtil.wireController(this);
+        wireController(this);
         
         if (!SecurityUtil.hasDebugRole()) {
             mnuShowZul.detach();
@@ -111,9 +111,9 @@ public class DesignMenu extends Menu implements INamespace {
         updateMenus(enabled);
         
         if (enabled) {
-            Events.echoEvent("onAfterEnabled", this, null);
+            EventUtil.post("afterEnabled", this, null);
         } else {
-            LayoutDesigner.close();
+            LayoutDesigner.closeDialog();
         }
     }
     

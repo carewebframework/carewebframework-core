@@ -64,8 +64,6 @@ public class PropertyGrid extends Window {
     
     private static final Log log = LogFactory.getLog(PropertyGrid.class);
     
-    private static final long serialVersionUID = 1L;
-    
     private static final String EDITOR_ATTR = "@editor";
     
     private static final String LABEL_ATTR = "@label";

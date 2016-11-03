@@ -27,7 +27,8 @@ package org.carewebframework.shell.designer;
 
 import org.carewebframework.shell.layout.UIElementCWFBase;
 import org.carewebframework.ui.zk.ZKUtil;
-import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.component.BaseUIComponent;
+import org.carewebframework.web.component.Menupopup;
 import org.carewebframework.web.event.Event;
 import org.carewebframework.web.event.EventUtil;
 import org.carewebframework.web.event.IEventListener;
@@ -86,7 +87,7 @@ public class DesignMask implements IEventListener {
         
         if (visible != shouldShow) {
             visible = shouldShow;
-            BaseComponent target = element.getMaskTarget();
+            BaseUIComponent target = element.getMaskTarget();
             
             if (visible) {
                 target.registerEventListener("onMask", this);
@@ -105,9 +106,10 @@ public class DesignMask implements IEventListener {
     
     @Override
     public void onEvent(Event event) {
-        BaseComponent target = element.getMaskTarget();
+        BaseUIComponent target = element.getMaskTarget();
         Menupopup contextMenu = UIElementCWFBase.getDesignContextMenu(target);
         String displayName = element.getDisplayName();
-        ZKUtil.addMask(target, displayName, contextMenu, displayName);
+        target.addMask(displayName);
+        //TODO: ZKUtil.addMask(target, displayName, contextMenu, displayName);
     }
 }

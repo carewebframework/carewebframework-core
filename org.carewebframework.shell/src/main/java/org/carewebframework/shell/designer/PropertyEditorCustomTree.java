@@ -100,7 +100,7 @@ public abstract class PropertyEditorCustomTree<T extends UIElementBase> extends 
         }
         
         public UIElementBase realize() throws Exception {
-            Treenode parentItem = item.getParentItem();
+            Treenode parentItem = (Treenode) item.getParent();
             UIElementBase parentElement = parentItem == null ? getTarget() : getProxy(parentItem).realize();
             realize(parentElement);
             return getTarget();
@@ -740,7 +740,7 @@ public abstract class PropertyEditorCustomTree<T extends UIElementBase> extends 
         
         if (!selectionChanging && !hasChanged) {
             hasChanged = true;
-            Events.sendEvent(changeEvent);
+            EventUtil.send(changeEvent);
         }
     }
     

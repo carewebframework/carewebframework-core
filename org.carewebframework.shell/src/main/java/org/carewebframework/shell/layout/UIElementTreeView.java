@@ -29,6 +29,7 @@ import org.carewebframework.shell.designer.PropertyEditorTreeView;
 import org.carewebframework.shell.property.PropertyTypeRegistry;
 import org.carewebframework.theme.ThemeUtil;
 import org.carewebframework.web.component.Div;
+import org.carewebframework.web.component.Pane;
 
 /**
  * A tree view consists of a selector pane on the left containing a ZK tree component and a view
@@ -47,7 +48,7 @@ public class UIElementTreeView extends UIElementCWFBase {
     
     private Div selector;
     
-    private LayoutRegion selectorPane;
+    private Pane selectorPane;
     
     private UIElementTreePane activePane;
     

@@ -28,7 +28,6 @@ package org.carewebframework.shell.designer;
 import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.layout.UILayout;
 import org.carewebframework.ui.zk.PopupDialog;
-import org.carewebframework.ui.zk.ZKUtil;
 import org.carewebframework.web.ancillary.IAutoWired;
 import org.carewebframework.web.client.ExecutionContext;
 import org.carewebframework.web.component.BaseComponent;
@@ -146,7 +145,7 @@ public class LayoutDesigner extends Window implements IAutoWired {
     
     @Override
     public void afterInitialized(BaseComponent comp) {
-        ZKUtil.wireController(this);
+        wireController(this);
         //TODO: setWidgetOverride("_cwf_highlight", "function(comp) {jq(comp).effect('pulsate',{times:1}).effect('highlight');}");
         Boolean btf = (Boolean) getPage().getAttribute(ATTR_BRING_TO_FRONT);
         bringToFront = btf == null || btf;
@@ -286,8 +285,8 @@ public class LayoutDesigner extends Window implements IAutoWired {
         UIElementBase selectedElement = getElement(selectedItem);
         DesignContextMenu.updateStates(selectedElement, btnAdd, btnDelete, btnCopy, btnCut, btnPaste, btnProperties,
             btnAbout);
-        Treenode target = selectedItem == null ? null : selectedItem.getParent();
-        target = target == null ? null : target.getParent();
+        Treenode target = selectedItem == null ? null : (Treenode) selectedItem.getParent();
+        target = target == null ? null : (Treenode) target.getParent();
         btnLeft.setDisabled(movementType(selectedItem, target, false) == MovementType.INVALID);
         target = selectedItem == null ? null : (Treenode) selectedItem.getPreviousSibling();
         btnRight.setDisabled(movementType(selectedItem, target, false) == MovementType.INVALID);

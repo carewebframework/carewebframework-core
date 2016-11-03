@@ -25,8 +25,7 @@
  */
 package org.carewebframework.shell.layout;
 
-import org.carewebframework.ui.cwf.SplitterPane;
-import org.carewebframework.ui.zk.ZKUtil;
+import org.carewebframework.web.component.Pane;
 
 /**
  * A child of the UIElementSplitterView.
@@ -38,7 +37,7 @@ public class UIElementSplitterPane extends UIElementCWFBase {
         registerAllowedChildClass(UIElementSplitterPane.class, UIElementBase.class);
     }
     
-    private final SplitterPane pane = new SplitterPane();
+    private final Pane pane = new Pane();
     
     private double size;
     
@@ -50,7 +49,6 @@ public class UIElementSplitterPane extends UIElementCWFBase {
         super();
         setRelative(true);
         setOuterComponent(pane);
-        ZKUtil.setMaskAnchor(pane, "real");
     }
     
     public void setSize(double size) {

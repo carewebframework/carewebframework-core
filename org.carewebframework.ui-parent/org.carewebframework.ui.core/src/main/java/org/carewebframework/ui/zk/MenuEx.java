@@ -25,39 +25,24 @@
  */
 package org.carewebframework.ui.zk;
 
-import org.zkoss.zk.ui.event.Events;
-import org.zkoss.zul.Menu;
-import org.zkoss.zul.Menupopup;
+import org.carewebframework.web.component.Menu;
+import org.carewebframework.web.component.Menupopup;
+import org.carewebframework.web.event.ClickEvent;
 
 /**
- * Extends ZK menu component by logically pruning menu items with no visible children.
+ * Extends menu component by logically pruning menu items with no visible children.
  */
 public class MenuEx extends Menu {
     
-    private static final long serialVersionUID = 1L;
-    
     public MenuEx() {
         super();
-        ZKUtil.setCustomColorLogic(this, "this.setColor(value ? value : '');");
+        //TODO: ZKUtil.setCustomColorLogic(this, "this.setColor(value ? value : '');");
     }
     
     @Override
-    public boolean setVisible(boolean visible) {
-        boolean result = super.setVisible(visible);
+    public void setVisible(boolean visible) {
+        super.setVisible(visible);
         adjustVisibility(visible);
-        return result;
-    }
-    
-    @Override
-    public Menupopup getMenupopup() {
-        Menupopup menupopup = super.getMenupopup();
-        
-        if (menupopup == null) {
-            menupopup = new Menupopup();
-            appendChild(menupopup);
-        }
-        
-        return menupopup;
     }
     
     /**
@@ -77,7 +62,7 @@ public class MenuEx extends Menu {
             }
             
             menu = (Menu) menuPopup.getParent();
-            visible |= menu.isListenerAvailable(Events.ON_CLICK, false);
+            visible |= menu.isListenerAvailable(ClickEvent.TYPE, false);
             
             if (visible == menu.setVisible(visible)) {
                 break;

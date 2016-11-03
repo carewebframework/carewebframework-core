@@ -31,6 +31,7 @@ import org.carewebframework.ui.zk.ZKUtil;
 import org.carewebframework.web.component.BaseUIComponent;
 import org.carewebframework.web.event.ChangeEvent;
 import org.carewebframework.web.event.SelectEvent;
+import org.carewebframework.web.page.PageUtil;
 
 /**
  * All property editors must descend from this abstract class.
@@ -52,7 +53,7 @@ public abstract class PropertyEditorBase {
      * @throws Exception Unspecified exception.
      */
     protected PropertyEditorBase(String template) throws Exception {
-        this((XulElement) ZKUtil.loadZulPage(template, null));
+        this((BaseUIComponent) PageUtil.createPage(template, null).get(0));
     }
     
     /**
@@ -64,7 +65,7 @@ public abstract class PropertyEditorBase {
         this.component = component;
         component.setHeight("80%");
         component.setWidth("95%");
-        ZKUtil.wireController(component, this);
+        component.wireController(this);
     }
     
     /**
@@ -197,9 +198,9 @@ public abstract class PropertyEditorBase {
      */
     public void setWrongValueMessage(String message) {
         if (message == null) {
-            Clients.clearWrongValue(component);
+            //TODO: Clients.clearWrongValue(component);
         } else {
-            Clients.wrongValue(component, message);
+            //TODO: Clients.wrongValue(component, message);
         }
     }
 }

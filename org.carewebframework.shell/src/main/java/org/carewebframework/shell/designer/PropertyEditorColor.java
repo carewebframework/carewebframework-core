@@ -25,9 +25,13 @@
  */
 package org.carewebframework.shell.designer;
 
+import java.awt.Color;
+
+import org.carewebframework.common.ColorUtil;
 import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.property.PropertyInfo;
 import org.carewebframework.web.component.ColorPicker;
+import org.carewebframework.web.component.ColorPicker.Colorpickeritem;;
 
 /**
  * Property editor for color properties. If the associated property has defined choices, the color
@@ -42,7 +46,7 @@ public class PropertyEditorColor extends PropertyEditorBase {
         super(new ColorPicker());
         colorPicker = (ColorPicker) component;
         colorPicker.setShowText(true);
-        colorPicker.setAutoAdd(true);
+        //colorPicker.setAutoAdd(true);
     }
     
     @Override
@@ -52,14 +56,18 @@ public class PropertyEditorColor extends PropertyEditorBase {
         String[] values = propInfo.getConfigValueArray("values");
         
         if (values == null) {
-            colorPicker.setAutoAdd(true);
+            //colorPicker.setAutoAdd(true);
         } else {
-            colorPicker.setAutoAdd(false);
+            //colorPicker.setAutoAdd(false);
             colorPicker.clear();
             
             for (String choice : values) {
                 String[] color = choice.split("\\:", 2);
-                colorPicker.addColor(color[0], color.length == 2 ? color[1] : "");
+                
+                for (int i = 0; i < color.length; i++) {
+                    Colorpickeritem item = new Colorpickeritem(ColorUtil.toColor(color[i]));
+                    colorPicker.addChild(item);
+                }
             }
         }
     }
@@ -71,7 +79,7 @@ public class PropertyEditorColor extends PropertyEditorBase {
     
     @Override
     protected void setValue(Object value) {
-        colorPicker.setSelectedColor(value == null ? "" : value.toString());
+        colorPicker.setValue((Color) value);
         updateValue();
     }
 }

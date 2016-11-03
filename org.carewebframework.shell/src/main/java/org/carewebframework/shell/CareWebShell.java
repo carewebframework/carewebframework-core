@@ -67,7 +67,6 @@ import org.carewebframework.web.component.Div;
 import org.carewebframework.web.component.Menu;
 import org.carewebframework.web.component.Span;
 import org.carewebframework.web.component.Stylesheet;
-import org.carewebframework.web.core.WebUtil;
 import org.carewebframework.web.event.Event;
 import org.carewebframework.web.event.KeyEvent;
 
@@ -167,14 +166,14 @@ public class CareWebShell extends Div {
             addChild(messageWindow = new MessageWindow());
             desktop = new UIElementDesktop(this);
             appFramework.registerObject(userContextListener);
-            String confirmClose = WebUtil.getFrameworkProperty("confirmClose", "CAREWEB.CONFIRM.CLOSE");
+            String confirmClose = getAppProperty("confirmClose", "CAREWEB.CONFIRM.CLOSE");
             
             if (StringUtils.isEmpty(confirmClose) || BooleanUtils.toBoolean(confirmClose)) {
                 ClientUtil.canClose(false);
             }
             
             String layout = defaultLayoutName != null ? defaultLayoutName
-                    : WebUtil.getFrameworkProperty("layout", "CAREWEB.LAYOUT.DEFAULT");
+                    : getAppProperty("layout", "CAREWEB.LAYOUT.DEFAULT");
             
             if (!StringUtils.isEmpty(layout)) {
                 loadLayoutFromResource(layout);
@@ -297,7 +296,7 @@ public class CareWebShell extends Div {
      * @throws Exception Unspecified exception.
      */
     public void loadLayoutByAppId() throws Exception {
-        loadLayoutByAppId(WebUtil.getFrameworkProperty("appId", "CAREWEB.APPID.DEFAULT"));
+        loadLayoutByAppId(getAppProperty("appId", "CAREWEB.APPID.DEFAULT"));
     }
     
     /**
@@ -612,6 +611,11 @@ public class CareWebShell extends Div {
      */
     public List<String> getPropertyGroups() {
         return propertyGroups;
+    }
+    
+    public String getAppProperty(String queryParam, String propName) {
+        String result = getPage().getQueryParam(queryParam);
+        return result == null ? PropertyUtil.getValue(propName) : result;
     }
     
     /**

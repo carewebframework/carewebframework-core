@@ -37,18 +37,18 @@ import org.carewebframework.shell.plugins.PluginDefinition;
 import org.carewebframework.shell.plugins.TestPluginController;
 import org.carewebframework.shell.property.PropertyInfo;
 import org.carewebframework.ui.FrameworkController;
-import org.carewebframework.ui.test.CommonTest;
 import org.carewebframework.web.event.ClickEvent;
 import org.carewebframework.web.event.EventUtil;
+import org.carewebframework.web.test.MockTest;
 import org.junit.Test;
 
-public class LayoutParserTest extends CommonTest {
+public class LayoutParserTest extends MockTest {
     
     private final UILayout layout = new UILayout();
     
     @Test
     public void ParserTest() throws Exception {
-        String xml = CommonTest.getTextFromResource("LayoutParserTest1.xml");
+        String xml = getTextFromResource("LayoutParserTest1.xml");
         layout.loadFromText(xml);
         assertFalse(layout.isEmpty());
         testNode(1, "_menubar");

@@ -27,6 +27,8 @@ package org.carewebframework.shell.layout;
 
 import org.carewebframework.ui.zk.MenuUtil;
 import org.carewebframework.web.component.Div;
+import org.carewebframework.web.component.Menupopup;
+import org.carewebframework.web.event.ClickEvent;
 import org.carewebframework.web.event.Event;
 import org.carewebframework.web.event.IEventListener;
 
@@ -64,7 +66,7 @@ public class UIElementTabMenuPane extends UIElementMenuItemBase {
         setOuterComponent(getMenu());
         setInnerComponent(div);
         div.setVisible(false);
-        getMenu().addEventListener(Events.ON_CLICK, listener);
+        getMenu().registerEventListener(ClickEvent.TYPE, listener);
     }
     
     @Override

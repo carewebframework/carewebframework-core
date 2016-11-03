@@ -27,6 +27,7 @@ package org.carewebframework.shell.layout;
 
 import org.carewebframework.ui.zk.MenuEx;
 import org.carewebframework.ui.zk.MenuUtil;
+import org.carewebframework.web.component.Menu;
 
 /**
  * Base class for representing a single menu item. The Menu class has been subclassed (MenuEx) to
@@ -86,7 +87,7 @@ public class UIElementMenuItemBase extends UIElementActionBase {
     @Override
     protected void bind() {
         if (getParent() instanceof UIElementMenuItemBase) {
-            ((UIElementMenuItemBase) getParent()).menu.getMenupopup().appendChild(menu);
+            ((UIElementMenuItemBase) getParent()).menu.getParent().addChild(menu);
         } else {
             super.bind();
         }

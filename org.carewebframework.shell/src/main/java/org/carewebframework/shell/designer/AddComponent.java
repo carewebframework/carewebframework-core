@@ -182,7 +182,7 @@ public class AddComponent extends Window {
     private void init(UIElementBase parentElement, boolean createChild) {
         this.parentElement = parentElement;
         this.createChild = createChild;
-        ZKUtil.wireController(this);
+        wireController(this);
         Treenode defaultItem = null;
         boolean useDefault = true;
         loadFavorites();

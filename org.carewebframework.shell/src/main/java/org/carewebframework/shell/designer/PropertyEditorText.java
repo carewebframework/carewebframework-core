@@ -27,8 +27,10 @@ package org.carewebframework.shell.designer;
 
 import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.property.PropertyInfo;
+import org.carewebframework.web.component.Popupbox;
 import org.carewebframework.web.component.Textbox;
 import org.carewebframework.web.event.Event;
+import org.carewebframework.web.event.EventUtil;
 import org.carewebframework.web.event.InputEvent;
 
 /**
@@ -36,7 +38,7 @@ import org.carewebframework.web.event.InputEvent;
  */
 public class PropertyEditorText extends PropertyEditorBase {
     
-    private Bandbox bandbox;
+    private Popupbox popupbox;
     
     private Textbox textbox;
     
@@ -50,51 +52,51 @@ public class PropertyEditorText extends PropertyEditorBase {
         Integer maxLength = propInfo.getConfigValueInt("max", null);
         
         if (maxLength != null) {
-            bandbox.setMaxlength(maxLength);
-            textbox.setMaxlength(maxLength);
+            popupbox.setMaxLength(maxLength);
+            textbox.setMaxLength(maxLength);
         }
         
-        bandbox.addForward(Events.ON_CHANGING, propGrid, Events.ON_CHANGE);
-        textbox.addForward(Events.ON_CHANGING, bandbox, Events.ON_CHANGE);
-        bandbox.addForward(Events.ON_FOCUS, propGrid, Events.ON_SELECT);
-        textbox.addForward(Events.ON_FOCUS, bandbox, Events.ON_SELECT);
+        popupbox.addForward(Events.ON_CHANGING, propGrid, Events.ON_CHANGE);
+        textbox.addForward(Events.ON_CHANGING, popupbox, Events.ON_CHANGE);
+        popupbox.addForward(Events.ON_FOCUS, propGrid, Events.ON_SELECT);
+        textbox.addForward(Events.ON_FOCUS, popupbox, Events.ON_SELECT);
     }
     
     @Override
     protected String getValue() {
-        return bandbox.getText();
+        return popupbox.getValue();
     }
     
     @Override
     protected void setValue(Object value) {
-        bandbox.setText((String) value);
+        popupbox.setValue((String) value);
         textbox.setValue((String) value);
         updateValue();
     }
     
     public void onChanging$textbox(InputEvent event) {
-        bandbox.setRawValue(event.getValue());
+        popupbox.setValue(event.getValue());
     }
     
     public void onBlur$textbox() {
-        bandbox.close();
-        Events.echoEvent("onDelayedFocus", bandbox, bandbox);
+        popupbox.close();
+        EventUtil.post("onDelayedFocus", popupbox, popupbox);
     }
     
     public void onOK$textbox() {
-        bandbox.close();
-        Events.echoEvent("onDelayedFocus", bandbox, bandbox);
+        popupbox.close();
+        EventUtil.post("onDelayedFocus", popupbox, popupbox);
     }
     
-    public void onChanging$bandbox(InputEvent event) {
-        textbox.setRawValue(event.getValue());
+    public void onChanging$popupbox(InputEvent event) {
+        textbox.setValue(event.getValue());
     }
     
-    public void onOpen$bandbox() {
-        Events.echoEvent("onDelayedFocus", bandbox, bandbox.isOpen() ? textbox : bandbox);
+    public void onOpen$popupbox() {
+        Events.echoEvent("onDelayedFocus", popupbox, popupbox.isOpen() ? textbox : popupbox);
     }
     
-    public void onDelayedFocus$bandbox(Event event) {
+    public void onDelayedFocus$popupbox(Event event) {
         ((Textbox) event.getData()).setFocus(true);
     }
 }

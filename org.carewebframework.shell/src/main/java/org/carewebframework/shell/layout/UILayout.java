@@ -268,7 +268,7 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
      * @throws Exception when problem retrieving resource via url.
      */
     public void loadFromUrl(String url) throws Exception {
-        try (InputStream strm = ExecutionContext.getServletContext().getResourceAsStream(url)) {
+        try (InputStream strm = ExecutionContext.getSession().getServletContext().getResourceAsStream(url)) {
             reset();
             
             if (strm == null) {

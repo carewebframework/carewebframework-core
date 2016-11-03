@@ -27,7 +27,8 @@ package org.carewebframework.shell.layout;
 
 import org.carewebframework.shell.designer.PropertyEditorSplitterView;
 import org.carewebframework.shell.property.PropertyTypeRegistry;
-import org.carewebframework.ui.cwf.SplitterView;
+import org.carewebframework.web.component.Paneview;
+import org.carewebframework.web.component.Paneview.Orientation;
 
 /**
  * A splitter view has either a vertical or horizontal orientation and can contain any number of
@@ -41,11 +42,7 @@ public class UIElementSplitterView extends UIElementCWFBase {
         PropertyTypeRegistry.register("panes", PropertyEditorSplitterView.class);
     }
     
-    public enum Orientation {
-        horizontal, vertical
-    };
-    
-    private final SplitterView root = new SplitterView();
+    private final Paneview root = new Paneview();
     
     private Orientation orientation;
     
@@ -58,7 +55,7 @@ public class UIElementSplitterView extends UIElementCWFBase {
     
     public void setOrientation(String orientation) {
         this.orientation = Orientation.valueOf(orientation);
-        root.setHorizontal(this.orientation == Orientation.horizontal);
+        root.setOrientation(this.orientation);
     }
     
     public String getOrientation() {
@@ -66,7 +63,7 @@ public class UIElementSplitterView extends UIElementCWFBase {
     }
     
     public boolean isHorizontal() {
-        return orientation == Orientation.horizontal;
+        return orientation == Orientation.HORIZONTAL;
     }
     
     /**

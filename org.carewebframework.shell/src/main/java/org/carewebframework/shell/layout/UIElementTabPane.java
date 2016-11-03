@@ -45,8 +45,6 @@ public class UIElementTabPane extends UIElementCWFBase {
      */
     public static class TabEx extends Tab implements INotificationListener {
         
-        private static final long serialVersionUID = 1L;
-        
         public TabEx() {
             super();
             addClass("cwf-tab");

@@ -30,7 +30,6 @@ import org.carewebframework.shell.property.PropertyInfo;
 import org.carewebframework.ui.icons.IconLibraryRegistry;
 import org.carewebframework.ui.icons.IconPickerEx;
 import org.carewebframework.ui.icons.IconUtil;
-import org.carewebframework.web.component.Image;
 import org.carewebframework.web.event.Event;
 import org.carewebframework.web.event.EventUtil;
 import org.carewebframework.web.event.IEventListener;
@@ -51,8 +50,7 @@ public class PropertyEditorIcon extends PropertyEditorBase {
             @Override
             public void onEvent(Event event) {
                 Object value = event.getData();
-                Image icon = value == null ? null : iconPicker.findIcon(value.toString());
-                iconPicker.setSelected(icon);
+                iconPicker.setValue((String) value);
                 updateValue();
             }
             
@@ -87,8 +85,7 @@ public class PropertyEditorIcon extends PropertyEditorBase {
     
     @Override
     protected String getValue() {
-        Image icon = iconPicker.getSelectedItem();
-        return icon == null ? null : icon.getSrc();
+        return iconPicker.getValue();
     }
     
     @Override

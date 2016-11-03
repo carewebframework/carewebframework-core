@@ -28,7 +28,6 @@ package org.carewebframework.shell.layout;
 import org.carewebframework.shell.designer.PropertyEditorStepView;
 import org.carewebframework.shell.property.PropertyTypeRegistry;
 import org.carewebframework.theme.ThemeUtil;
-import org.carewebframework.ui.zk.ZKUtil;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.BaseUIComponent;
 import org.carewebframework.web.component.Button;
@@ -159,7 +158,7 @@ public class UIElementStepView extends UIElementCWFBase {
             activePane.activate(true);
         }
         
-        ZKUtil.updateSclass(btnHome, "z-toolbarbutton-checked", activePane == null || activePane.getIndex() != 0);
+        btnHome.toggleClass("z-toolbarbutton-checked", null, activePane == null || activePane.getIndex() != 0);
         updateNavigationElements();
     }
     
@@ -340,7 +339,7 @@ public class UIElementStepView extends UIElementCWFBase {
     }
     
     private void updateSclass() {
-        ZKUtil.updateSclass(outer.getTitle(), "cwf-step-nonav", !noNavigation);
-        ZKUtil.updateSclass(outer.getTitle(), "cwf-step-nohome", !noHome);
+        //TODO: ZKUtil.updateSclass(outer.getTitle(), "cwf-step-nonav", !noNavigation);
+        //TODO: ZKUtil.updateSclass(outer.getTitle(), "cwf-step-nohome", !noHome);
     }
 }

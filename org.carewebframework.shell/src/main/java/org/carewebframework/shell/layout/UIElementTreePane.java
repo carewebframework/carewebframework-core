@@ -30,7 +30,11 @@ import org.carewebframework.ui.zk.Badge;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.Div;
 import org.carewebframework.web.component.Hyperlink;
+import org.carewebframework.web.component.Menupopup;
 import org.carewebframework.web.component.Span;
+import org.carewebframework.web.event.Event;
+import org.carewebframework.web.event.IEventListener;
+import org.carewebframework.web.event.MouseEvent;
 
 /**
  * A child of a UIElementTreeView, this UI element specifies the tree path where its associated tree
@@ -48,11 +52,11 @@ public class UIElementTreePane extends UIElementCWFBase {
      * Handler for node click events. Click will either select the node or toggle its drop down
      * state, depending on the click position and presence of child panes.
      */
-    private final EventListener<MouseEvent> clickListener = new EventListener<MouseEvent>() {
+    private final IEventListener clickListener = new IEventListener() {
         
         @Override
-        public void onEvent(MouseEvent event) throws Exception {
-            if (canOpen && event.getX() < 20) {
+        public void onEvent(Event event) {
+            if (canOpen && ((MouseEvent) event).getPageX() < 20) {
                 setOpen(!open);
             } else {
                 treeView.setActivePane(UIElementTreePane.this);

@@ -29,11 +29,12 @@ import org.carewebframework.common.MiscUtil;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.property.PropertyInfo;
-import org.carewebframework.ui.zk.ZKUtil;
+import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.Popup;
 import org.carewebframework.web.component.Popupbox;
 import org.carewebframework.web.event.Event;
 import org.carewebframework.web.event.IEventListener;
+import org.carewebframework.web.page.PageUtil;
 
 /**
  * Allows registration of custom editors for complex property types.
@@ -51,13 +52,14 @@ public class PropertyEditorCustom extends PropertyEditorBase implements IEventLi
         popupbox.setReadonly(true);
         popupbox.setValue(StrUtil.getLabel("cwf.shell.designer.propedit.custom.popupbox.prompt"));
         popupbox.addEventListener(Events.ON_OPEN, this);
-        popup = new Bandpopup();
-        popupbox.appendChild(popup);
+        popup = new Popup();
+        popupbox.addChild(popup);
     }
     
     protected PropertyEditorCustom(String template) throws Exception {
         this();
-        ZKUtil.wireController(ZKUtil.loadZulPage(template, popup), this);
+        BaseComponent root = PageUtil.createPage(template, popup).get(0);
+        root.wireController(this);
     }
     
     /**

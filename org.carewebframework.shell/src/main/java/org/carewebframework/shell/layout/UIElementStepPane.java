@@ -25,10 +25,10 @@
  */
 package org.carewebframework.shell.layout;
 
-import org.carewebframework.ui.zk.ZKUtil;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.Div;
 import org.carewebframework.web.component.Hyperlink;
+import org.carewebframework.web.component.Menupopup;
 import org.carewebframework.web.component.Span;
 import org.carewebframework.web.event.Event;
 import org.carewebframework.web.event.IEventListener;
@@ -150,8 +150,8 @@ public class UIElementStepPane extends UIElementCWFBase {
      */
     @Override
     protected void applyColor() {
-        ZKUtil.updateStyle(button, "color", getColor());
-        ZKUtil.updateStyle(pane, "background", getColor());
+        button.addStyle("color", getColor());
+        pane.addStyle("background", getColor());
     }
     
     /**
@@ -170,7 +170,7 @@ public class UIElementStepPane extends UIElementCWFBase {
      */
     private void updateButtonStyle() {
         button.addStyle("disabled", isEnabled() ? "true" : null);
-        ZKUtil.toggleSclass(button, "btn-primary", "btn-default", isActivated());
+        button.addClass(isActivated() ? "flavor:btn-primary" : "flavor:btn-default");
     }
     
     @Override

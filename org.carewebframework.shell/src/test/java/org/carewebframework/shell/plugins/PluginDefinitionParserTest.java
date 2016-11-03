@@ -28,11 +28,10 @@ package org.carewebframework.shell.plugins;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import org.carewebframework.ui.test.CommonTest;
-
+import org.carewebframework.web.test.MockTest;
 import org.junit.Test;
 
-public class PluginDefinitionParserTest extends CommonTest {
+public class PluginDefinitionParserTest extends MockTest {
     
     @Test
     public void ParserTest() throws Exception {

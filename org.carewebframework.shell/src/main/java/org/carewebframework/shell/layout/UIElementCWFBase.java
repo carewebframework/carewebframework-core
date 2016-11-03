@@ -34,7 +34,9 @@ import org.carewebframework.ui.zk.PromptDialog;
 import org.carewebframework.ui.zk.ZKUtil;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.BaseUIComponent;
-import org.carewebframework.web.page.PageDefinitionCache;
+import org.carewebframework.web.component.Menupopup;
+import org.carewebframework.web.component.Popup;
+import org.carewebframework.web.page.PageUtil;
 
 /**
  * This is an abstract class from which all ZK-based UI elements must derive.
@@ -51,7 +53,7 @@ public abstract class UIElementCWFBase extends UIElementBase {
         
         final String tooltipText;
         
-        final String contextMenu;
+        final Popup contextMenu;
         
         public SavedState(BaseUIComponent component) {
             this.component = component;
@@ -205,8 +207,8 @@ public abstract class UIElementCWFBase extends UIElementBase {
         BaseComponent top = null;
         
         try {
-            top = PageUtil.createPage(template, parent);
-            ZKUtil.wireController(top, controller);
+            top = PageUtil.createPage(template, parent).get(0);
+            top.wireController(controller);
         } catch (Exception e) {
             raise("Error creating element from template.", e);
         }
@@ -335,7 +337,7 @@ public abstract class UIElementCWFBase extends UIElementBase {
      * 
      * @return The component that will receive the design mode mask.
      */
-    public BaseComponent getMaskTarget() {
+    public BaseUIComponent getMaskTarget() {
         return getOuterComponent();
     }
     
@@ -409,7 +411,7 @@ public abstract class UIElementCWFBase extends UIElementBase {
     @Override
     protected void applyColor(Object component) {
         if (component instanceof BaseUIComponent) {
-            ZKUtil.applyColor((BaseUIComponent) component, getColor());
+            //TODO: ZKUtil.applyColor((BaseUIComponent) component, getColor());
         }
     }
     

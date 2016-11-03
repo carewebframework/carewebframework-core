@@ -28,10 +28,10 @@ package org.carewebframework.shell.layout;
 import org.carewebframework.shell.designer.PropertyEditorTabMenu;
 import org.carewebframework.shell.property.PropertyTypeRegistry;
 import org.carewebframework.ui.zk.MenuUtil;
-import org.carewebframework.ui.zk.ZKUtil;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.Div;
 import org.carewebframework.web.component.Menu;
+import org.carewebframework.web.component.Menupopup;
 import org.carewebframework.web.component.Tab;
 
 /**
@@ -48,8 +48,6 @@ public class UIElementTabMenu extends UIElementCWFBase {
     }
     
     public static class MenupopupEx extends Menupopup {
-        
-        private static final long serialVersionUID = 1L;
         
         private Tab tab;
         
@@ -70,14 +68,14 @@ public class UIElementTabMenu extends UIElementCWFBase {
         }
         
         @Override
-        public void onChildAdded(BaseComponent child) {
-            super.onChildAdded(child);
+        public void afterAddChild(BaseComponent child) {
+            super.afterAddChild(child);
             tab.setClosable(true);
         }
         
         @Override
-        public void onChildRemoved(BaseComponent child) {
-            super.onChildRemoved(child);
+        public void afterRemoveChild(BaseComponent child) {
+            super.afterRemoveChild(child);
             tab.setClosable(getFirstChild() != null);
         }
         
@@ -88,14 +86,14 @@ public class UIElementTabMenu extends UIElementCWFBase {
          */
         public void setTab(Tab tab) {
             if (this.tab != null) {
-                this.tab.removeForward("onClose", this, "onOpenMenu");
+                this.tab.unregisterEventForward("onClose", this, "onOpenMenu");
                 this.tab.setClosable(false);
             }
             
             this.tab = tab;
             
             if (this.tab != null) {
-                this.tab.addForward("onClose", this, "onOpenMenu");
+                this.tab.registerEventForward("onClose", this, "onOpenMenu");
                 this.tab.setClosable(getFirstChild() != null);
             }
             
@@ -138,7 +136,7 @@ public class UIElementTabMenu extends UIElementCWFBase {
     }
     
     private void updateMenuStyle(Menu menu, boolean selected) {
-        ZKUtil.toggleSclass(menu, "cwf-tab-menu-seld", "cwf-tab-menu", selected);
+        menu.toggleClass("cwf-tab-menu-seld", "cwf-tab-menu", selected);
     }
     
     /*package*/BaseComponent getPaneAnchor() {
