@@ -27,13 +27,11 @@ package org.carewebframework.shell.designer;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.layout.UIElementZKBase;
 import org.carewebframework.shell.layout.UILayout;
 import org.carewebframework.ui.zk.ZKUtil;
-
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
 import org.zkoss.zk.ui.Executions;
@@ -90,7 +88,6 @@ public class DesignContextMenu extends Menupopup implements IdSpace {
         if (contextMenu == null) {
             contextMenu = create();
             desktop.setAttribute(DesignConstants.ATTR_DESIGN_MENU, contextMenu);
-            ZKUtil.suppressContextMenu(contextMenu);
         }
         
         return contextMenu;
@@ -135,8 +132,8 @@ public class DesignContextMenu extends Menupopup implements IdSpace {
      * @param properties Properties input element.
      * @param about About input element.
      */
-    public static void updateStates(UIElementBase ele, Disable add, Disable delete, Disable copy, Disable cut,
-                                    Disable paste, Disable properties, Disable about) {
+    public static void updateStates(UIElementBase ele, Disable add, Disable delete, Disable copy, Disable cut, Disable paste,
+                                    Disable properties, Disable about) {
         boolean isNull = ele == null;
         boolean isLocked = isNull || ele.isLocked();
         boolean noDelete = isLocked || ele.getDefinition().isInternal();
@@ -201,8 +198,8 @@ public class DesignContextMenu extends Menupopup implements IdSpace {
     public void setOwner(UIElementBase owner) {
         if (this.owner != owner) {
             this.owner = owner;
-            mnuHeader.setLabel(owner == null ? "" : StrUtil.formatMessage("@cwf.shell.designer.menu.title",
-                owner.getDisplayName()));
+            mnuHeader.setLabel(
+                owner == null ? "" : StrUtil.formatMessage("@cwf.shell.designer.menu.title", owner.getDisplayName()));
             updateControls();
         }
     }

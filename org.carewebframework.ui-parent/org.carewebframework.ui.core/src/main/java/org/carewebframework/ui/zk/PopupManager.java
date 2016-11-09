@@ -29,7 +29,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.carewebframework.api.spring.SpringUtil;
-
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
@@ -109,7 +108,6 @@ public class PopupManager {
     public void registerPopup(Window window) {
         window.addEventListener(Events.ON_MOVE, new PopupMoveEventListener());
         window.addEventListener(Events.ON_CLOSE, new PopupCloseEventListener());
-        ZKUtil.suppressContextMenu(window, true);
     }
     
     /**

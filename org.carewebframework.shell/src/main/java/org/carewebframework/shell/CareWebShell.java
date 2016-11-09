@@ -33,7 +33,6 @@ import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.carewebframework.api.AppFramework;
 import org.carewebframework.api.FrameworkUtil;
 import org.carewebframework.api.context.UserContext.IUserContextEvent;
@@ -63,7 +62,6 @@ import org.carewebframework.ui.zk.MessageWindow;
 import org.carewebframework.ui.zk.MessageWindow.MessageInfo;
 import org.carewebframework.ui.zk.PromptDialog;
 import org.carewebframework.ui.zk.ZKUtil;
-
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.event.ClientInfoEvent;
@@ -183,7 +181,6 @@ public class CareWebShell extends Div implements AfterCompose {
             appendChild(registeredStyles);
             appendChild(messageWindow = new MessageWindow());
             desktop = new UIElementDesktop(this);
-            ZKUtil.suppressContextMenu(this);
             appFramework.registerObject(userContextListener);
             String confirmClose = FrameworkWebSupport.getFrameworkProperty("confirmClose", "CAREWEB.CONFIRM.CLOSE");
             
@@ -193,7 +190,7 @@ public class CareWebShell extends Div implements AfterCompose {
             
             String layout = defaultLayoutName != null ? defaultLayoutName
                     : FrameworkWebSupport.getFrameworkProperty("layout", "CAREWEB.LAYOUT.DEFAULT");
-                    
+            
             if (!StringUtils.isEmpty(layout)) {
                 loadLayoutFromResource(layout);
             }
@@ -472,17 +469,19 @@ public class CareWebShell extends Div implements AfterCompose {
      * @param url URL of style sheet.
      */
     public void registerStyleSheet(String url) {
-        if (findStyleSheet(url) == null)
-        registeredStyles.appendChild(new Style(url));
+        if (findStyleSheet(url) == null) {
+            registeredStyles.appendChild(new Style(url));
+        }
     }
     
     /**
      * Returns the style sheet associated with the specified URL.
+     * 
      * @param url URL of style sheet.
      * @return The associated style sheet, or null if not found.
      */
     private Style findStyleSheet(String url) {
-        for (Style style : registeredStyles.<Style>getChildren()) {
+        for (Style style : registeredStyles.<Style> getChildren()) {
             if (style.getSrc().equals(url)) {
                 return style;
             }

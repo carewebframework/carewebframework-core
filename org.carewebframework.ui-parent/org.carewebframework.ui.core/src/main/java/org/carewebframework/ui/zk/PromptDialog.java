@@ -34,10 +34,8 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.carewebframework.api.property.PropertyUtil;
 import org.carewebframework.common.StrUtil;
-
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
@@ -55,7 +53,6 @@ import org.zkoss.zul.Window;
  * Implements a simple, generic dialog for prompting for arbitrary responses.
  */
 public class PromptDialog extends Window {
-    
     
     private static final long serialVersionUID = 1L;
     
@@ -88,7 +85,6 @@ public class PromptDialog extends Window {
      * response.
      */
     public static class Response {
-        
         
         private final int index;
         
@@ -420,7 +416,6 @@ public class PromptDialog extends Window {
             dlg.addEventListener(Events.ON_MOVE, new MoveEventListener());
             dlg._listener = useInputListener ? dlg.new InputListener() : eventListener;
             ConventionWires.wireVariables(dlg, dlg);
-            ZKUtil.suppressContextMenu(dlg, true);
             dlg.doModal();
             return dlg;
         } catch (Exception e) {
@@ -727,7 +722,6 @@ public class PromptDialog extends Window {
      */
     public static class InputItem {
         
-        
         private final String name;
         
         private final Object item;
@@ -811,7 +805,6 @@ public class PromptDialog extends Window {
      * Used by input dialogs to disable closure if input is incomplete.
      */
     private class InputListener implements EventListener<Event> {
-        
         
         @Override
         public void onEvent(Event event) throws Exception {

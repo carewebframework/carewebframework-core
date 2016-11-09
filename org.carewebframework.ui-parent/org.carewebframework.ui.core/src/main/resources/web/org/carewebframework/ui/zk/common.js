@@ -277,9 +277,15 @@ cwf.setBadge = function(selector, text, classes) {
 
 /**
  * Prevent backspace key from invoking browser back function.
+ * Suppress default context popup menu.
  */
 jq(document).ready(function() {
-	jq(document).keydown(function(event) {cwf.cancelNavigation(event);});
+	jq('body').on('keydown', function(event) {
+		cwf.cancelNavigation(event);
+	});
+    jq('body').on('contextmenu', function(event) {
+    	cwf.debug ? null : event.preventDefault();
+    });
 });
 
 /**

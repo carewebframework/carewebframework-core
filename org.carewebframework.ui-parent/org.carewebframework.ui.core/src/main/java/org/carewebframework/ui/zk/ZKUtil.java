@@ -398,36 +398,6 @@ public class ZKUtil {
     }
     
     /**
-     * Provides a means to suppress the display of the default browser context menu when
-     * right-clicking on a xul element that has not specified its own context menu. It sets the xul
-     * element's context to a dummy popup component with no children and styled to be invisible.
-     * 
-     * @param component Element to receive dummy context menu.
-     */
-    public static void suppressContextMenu(XulElement component) {
-        suppressContextMenu(component, false);
-    }
-    
-    /**
-     * Provides a means to suppress the display of the default browser context menu when
-     * right-clicking on a xul element that has not specified its own context menu. It sets the xul
-     * element's context to a dummy popup component with no children and styled to be invisible.
-     * 
-     * @param component Element to receive dummy context menu.
-     * @param noReplace If true and a context menu exists for the component, do not replace it.
-     */
-    public static void suppressContextMenu(XulElement component, boolean noReplace) {
-        if (noReplace && component.getContext() != null) {
-            return;
-        }
-        
-        Popup popup = new Popup();
-        popup.setPage(component.getPage());
-        popup.setStyle("height:0;width:0;overflow:hidden");
-        component.setContext(popup);
-    }
-    
-    /**
      * Returns the original event. Walks the chain of forwarded events until it encounters the
      * original event.
      * 

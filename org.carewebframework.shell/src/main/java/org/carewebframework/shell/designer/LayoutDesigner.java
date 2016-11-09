@@ -34,7 +34,6 @@ import org.carewebframework.shell.layout.UILayout;
 import org.carewebframework.ui.FrameworkWebSupport;
 import org.carewebframework.ui.zk.PopupDialog;
 import org.carewebframework.ui.zk.ZKUtil;
-
 import org.zkoss.zk.au.out.AuInvoke;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
@@ -46,6 +45,7 @@ import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.ext.AfterCompose;
 import org.zkoss.zk.ui.util.UiLifeCycle;
 import org.zkoss.zul.Button;
+import org.zkoss.zul.Popup;
 import org.zkoss.zul.Tree;
 import org.zkoss.zul.Treechildren;
 import org.zkoss.zul.Treeitem;
@@ -372,7 +372,7 @@ public class LayoutDesigner extends Window implements AfterCompose {
         ZKUtil.updateStyle(btnToFront, "opacity", bringToFront ? null : "0.5");
         
         if (selectedElement == null) {
-            ZKUtil.suppressContextMenu(this);
+            setContext((Popup) null);
         } else {
             setContext(contextMenu);
             contextMenu.setOwner(selectedElement);
@@ -624,18 +624,18 @@ public class LayoutDesigner extends Window implements AfterCompose {
         switch (movementType(dragged, target, allowExchange)) {
             case INVALID:
                 return;
-                
+            
             case EXCHANGE:
                 eleDragged.setIndex(eleTarget.getIndex());
                 target.getParent().insertBefore(dragged, target);
                 break;
-                
+            
             case FIRST:
                 eleDragged.setIndex(0);
                 Treechildren tc = target.getTreechildren();
                 tc.insertBefore(dragged, tc.getFirstChild());
                 break;
-                
+            
             case RELOCATE:
                 eleDragged.setParent(eleTarget);
                 getTreechildren(target).appendChild(dragged);
