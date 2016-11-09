@@ -1,8 +1,1 @@
-<zk xmlns="http://www.zkoss.org/2005/zul"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
-
-	<hbox controller="${cwfStatusPanelController}" width="100%" height="100%"
-		align="middle" sizedByContent="false" style="padding-left: 2px; padding-right: 2px"/>
-
-</zk>
+<paneview controller="${cwfStatusPanelController}" width="100%" height="100%"/>

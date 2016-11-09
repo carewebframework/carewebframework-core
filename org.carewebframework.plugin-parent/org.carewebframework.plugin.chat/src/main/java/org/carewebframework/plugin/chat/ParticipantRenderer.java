@@ -28,6 +28,7 @@ package org.carewebframework.plugin.chat;
 import java.util.Collection;
 
 import org.carewebframework.api.messaging.IPublisherInfo;
+import org.carewebframework.web.component.Cell;
 import org.carewebframework.web.component.Listitem;
 import org.carewebframework.web.model.IComponentRenderer;
 
@@ -61,7 +62,6 @@ public class ParticipantRenderer implements IComponentRenderer<Listitem, IPublis
         createCell(item, participant.getUserName());
         
         if (exclusions != null && exclusions.contains(participant)) {
-            item.setSelectable(false);
             item.setDisabled(true);
             item.addClass("chat-participant-active");
             item.setVisible(!hideExclusions);
@@ -70,6 +70,12 @@ public class ParticipantRenderer implements IComponentRenderer<Listitem, IPublis
         if (participant.equals(self)) {
             item.addClass("chat-participant-self");
         }
+        
+        return item;
+    }
+    
+    private void createCell(Listitem item, String userName) {
+        item.addChild(new Cell(userName));
     }
     
     public boolean getHideExclusions() {

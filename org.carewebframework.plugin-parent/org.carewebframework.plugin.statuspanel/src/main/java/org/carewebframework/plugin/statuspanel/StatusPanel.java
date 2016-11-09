@@ -30,8 +30,8 @@ import org.carewebframework.api.event.IGenericEvent;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.ui.FrameworkController;
 import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.component.Cell;
 import org.carewebframework.web.component.Label;
+import org.carewebframework.web.component.Pane;
 
 /**
  * Controller for status panel plugin.
@@ -77,30 +77,15 @@ public class StatusPanel extends FrameworkController implements IGenericEvent<Ob
     /**
      * Create a new status pane and associated label.
      * 
-     * @param pane Name of pane (becomes the id of the label).
+     * @param label Name of pane (becomes the id of the label).
      * @return The newly created label.
      */
-    private Label createLabel(String pane) {
-        boolean first = root.getFirstChild() == null;
-        
-        if (!first) {
-            root.appendChild(new Splitter());
-        }
-        
-        Cell cell = new Cell();
-        
-        if (first) {
-            cell.setHflex("1");
-        } else {
-            cell.setAlign("center");
-        }
-        
-        cell.setVflex("1");
-        cell.addClass("cwf-header-cell");
-        root.addChild(cell);
+    private Label createLabel(String label) {
+        Pane pane = new Pane();
+        root.addChild(pane);
         Label lbl = new Label();
-        lbl.setName(pane);
-        cell.addChild(lbl);
+        lbl.setName(label);
+        pane.addChild(lbl);
         return lbl;
     }
 }

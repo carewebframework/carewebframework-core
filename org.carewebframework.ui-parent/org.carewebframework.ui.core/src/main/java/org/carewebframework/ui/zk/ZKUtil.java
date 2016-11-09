@@ -196,21 +196,6 @@ public class ZKUtil {
     }
     
     /**
-     * Loads a cwf page. May contain a query string which is passed as an argument map.
-     * 
-     * @param filename File name pointing to the cwf page.
-     * @param parent BaseComponent to become the parent of the created page.
-     * @return The top level component of the created cwf page.
-     */
-    public static BaseComponent loadPage(String filename, BaseComponent parent) {
-        try {
-            return loadPageDefinition(filename).materialize(parent);
-        } catch (Exception e) {
-            throw MiscUtil.toUnchecked(e);
-        }
-    }
-    
-    /**
      * Detaches all children from a parent.
      * 
      * @param parent Parent component.
@@ -377,18 +362,18 @@ public class ZKUtil {
      * @param select If true, select contents after setting focus.
      * @return The input element that received focus, or null if focus was not set.
      */
-    public static BaseInputboxComponent focusFirst(BaseComponent parent, boolean select) {
+    public static BaseInputboxComponent<?> focusFirst(BaseComponent parent, boolean select) {
         for (BaseComponent child : parent.getChildren()) {
-            BaseInputboxComponent ele;
+            BaseInputboxComponent<?> ele;
             
             if (child instanceof BaseInputboxComponent) {
-                ele = (BaseInputboxComponent) child;
+                ele = (BaseInputboxComponent<?>) child;
                 
                 if (ele.isVisible() && !ele.isDisabled() && !ele.isReadonly()) {
                     ele.focus();
                     
                     if (select) {
-                        ele.select();
+                        ele.selectAll();
                     }
                     
                     return ele;
@@ -633,8 +618,8 @@ public class ZKUtil {
     }
     
     /**
-     * Fires an event to the specified listener, deferring delivery if the desktop of the target is
-     * not currently active.
+     * Fires an event to the specified listener, deferring delivery if the page of the target is not
+     * currently active.
      * 
      * @param event The event to fire.
      * @param listener The listener to receive the event.
@@ -642,8 +627,8 @@ public class ZKUtil {
     public static void fireEvent(Event event, IEventListener listener) {
         Page page = event.getTarget() == null ? null : event.getTarget().getPage();
         
-        if (page != null && !inEventThread(page)) {
-            Executions.schedule(dtp, listener, event);
+        if (page != null && page != ExecutionContext.getPage()) {
+            page.getEventQueue().queue(event);
         } else {
             try {
                 listener.onEvent(event);

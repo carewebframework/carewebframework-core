@@ -25,7 +25,6 @@
  */
 package org.carewebframework.ui.zk;
 
-import java.awt.Checkbox;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -39,6 +38,7 @@ import org.carewebframework.api.property.PropertyUtil;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.web.annotation.WiredComponentScanner;
 import org.carewebframework.web.component.Button;
+import org.carewebframework.web.component.Checkbox;
 import org.carewebframework.web.component.Listbox;
 import org.carewebframework.web.component.Listitem;
 import org.carewebframework.web.component.Textbox;
@@ -68,13 +68,13 @@ public class PromptDialog extends Window {
     
     private static final String LABEL_IDS_OK_CANCEL = LABEL_ID_OK + "|" + LABEL_ID_CANCEL;
     
-    private static final String STYLES_INFO = Messagebox.INFORMATION + "||panel-info";
+    private static final String STYLES_INFO = "panel-info";
     
-    private static final String STYLES_WARNING = Messagebox.EXCLAMATION + "||panel-warning";
+    private static final String STYLES_WARNING = "panel-warning";
     
-    private static final String STYLES_ERROR = Messagebox.ERROR + "||panel-danger";
+    private static final String STYLES_ERROR = "panel-danger";
     
-    private static final String STYLES_QUESTION = Messagebox.QUESTION + "||panel-primary";
+    private static final String STYLES_QUESTION = "panel-primary";
     
     /**
      * A response object that will be associated the button that, when clicked, will generate the
@@ -409,10 +409,9 @@ public class PromptDialog extends Window {
         
         try {
             dlg = (PromptDialog) ZKUtil.loadPage(RESOURCE_PREFIX + "promptDialog.cwf", null);
-            dlg.addEventListener(Events.ON_MOVE, new MoveEventListener());
             dlg._listener = useInputListener ? dlg.new InputListener() : eventListener;
             WiredComponentScanner.wire(dlg, dlg);
-            dlg.doModal();
+            dlg.modal(null);
             return dlg;
         } catch (Exception e) {
             log.error("Error Displaying Dialog", e);
@@ -470,7 +469,6 @@ public class PromptDialog extends Window {
      * @param title Title of dialog
      */
     public static void showError(String message, String title) {
-        Clients.clearBusy();
         show(message, title, LABEL_ID_OK, STYLES_ERROR);
     }
     
@@ -823,11 +821,11 @@ public class PromptDialog extends Window {
      */
     public void onShow() {
         if (btnOK != null) {
-            btnOK.addForward(Events.ON_OK, this, null);
+            //TODO: btnOK.registerEventForward(Events.ON_OK, this, null);
         }
         
         if (textBox.isVisible()) {
-            textBox.select();
+            textBox.selectAll();
         }
         
         if (listBox.isVisible()) {

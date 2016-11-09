@@ -25,7 +25,6 @@
  */
 package org.carewebframework.ui.zk;
 
-import java.io.IOException;
 import java.util.HashMap;
 
 import org.carewebframework.api.event.EventManager;
@@ -38,8 +37,6 @@ import org.carewebframework.web.component.BaseUIComponent;
  * Supports slide-down style message window.
  */
 public class MessageWindow extends BaseUIComponent {
-    
-    private static final long serialVersionUID = 1L;
     
     private static final String EVENT_ROOT = "CAREWEB.INFO";
     
@@ -135,7 +132,7 @@ public class MessageWindow extends BaseUIComponent {
         
         if (duration != _duration) {
             _duration = duration;
-            smartUpdate("duration", _duration);
+            sync("duration", _duration);
         }
     }
     
@@ -236,30 +233,4 @@ public class MessageWindow extends BaseUIComponent {
         invoke("_clear", tag);
     }
     
-    /**
-     * Invokes the specified widget function with the provided argument.
-     * 
-     * @param func Widget function name.
-     * @param arg Function argument (may be null);
-     */
-    private void invoke(String func, Object arg) {
-        response(new AuInvoke(this, func, arg));
-    }
-    
-    @Override
-    public String getWidgetClass() {
-        return "cwf.ext.MessageWindow";
-    }
-    
-    @Override
-    public String getZclass() {
-        String zclass = super.getZclass();
-        return zclass == null ? "cwf-messagewindow" : zclass;
-    }
-    
-    @Override
-    protected void renderProperties(ContentRenderer renderer) throws IOException {
-        super.renderProperties(renderer);
-        renderer.render("duration", _duration);
-    }
 }

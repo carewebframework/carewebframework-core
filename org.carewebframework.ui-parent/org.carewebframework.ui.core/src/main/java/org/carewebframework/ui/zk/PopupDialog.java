@@ -36,6 +36,9 @@ import org.carewebframework.web.client.ExecutionContext;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.Page;
 import org.carewebframework.web.component.Window;
+import org.carewebframework.web.event.Event;
+import org.carewebframework.web.event.IEventListener;
+import org.carewebframework.web.event.ResizeEvent;
 import org.carewebframework.web.page.PageDefinition;
 import org.springframework.context.ApplicationContext;
 
@@ -104,10 +107,9 @@ public class PopupDialog extends Window {
             
             window.setClosable(closable);
             window.setSizable(sizable);
-            PopupManager.getInstance().registerPopup(window);
             
             if (show) {
-                window.doModal();
+                window.modal(null);
             }
         } catch (Exception e) {
             if (window != null) {
@@ -230,12 +232,11 @@ public class PopupDialog extends Window {
         setClosable(true);
         setSizable(true);
         setMaximizable(true);
-        PopupManager.getInstance().registerPopup(this);
-        addEventListener(Events.ON_SIZE, new EventListener<Event>() {
+        registerEventListener(ResizeEvent.TYPE, new IEventListener() {
             
             @Override
-            public void onEvent(Event event) throws Exception {
-                SizeEvent sizeEvent = (SizeEvent) event;
+            public void onEvent(Event event) {
+                ResizeEvent sizeEvent = (ResizeEvent) event;
                 onResize(sizeEvent.getHeight(), sizeEvent.getWidth());
             }
             
@@ -244,10 +245,12 @@ public class PopupDialog extends Window {
     
     /**
      * Show the window modally.
+     * 
+     * @param closeListener The close listener.
      */
-    public void show() {
+    public void show(IEventListener closeListener) {
         try {
-            doModal();
+            modal(closeListener);
         } catch (Exception e) {}
     }
     
@@ -266,7 +269,7 @@ public class PopupDialog extends Window {
      * @param newHeight New height of window.
      * @param newWidth New width of window.
      */
-    public void onResize(String newHeight, String newWidth) {
+    public void onResize(double newHeight, double newWidth) {
     }
     
     /**

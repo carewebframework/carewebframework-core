@@ -25,8 +25,6 @@
  */
 package org.carewebframework.ui.zk;
 
-import java.util.Iterator;
-
 import org.carewebframework.common.MiscUtil;
 import org.carewebframework.ui.zk.ZKUtil.MatchMode;
 import org.carewebframework.web.component.BaseComponent;
@@ -91,17 +89,11 @@ public class TreeUtil {
      */
     public static Treenode findNode(Treeview tree, String path, boolean create, Class<? extends Treenode> clazz,
                                     MatchMode matchMode) {
-        Treechildren tc = tree.getTreechildren();
-        
-        if (tc == null) {
-            if (create) {
-                tree.appendChild(tc = new Treechildren());
-            } else {
-                return null;
-            }
+        if (tree.getChildCount() == 0 && !create) {
+            return null;
         }
         
-        return ZKUtil.findNode(tc, Treechildren.class, clazz, path, create, matchMode);
+        return ZKUtil.findNode(tree, Treenode.class, clazz, path, create, matchMode);
     }
     
     /**
@@ -133,18 +125,18 @@ public class TreeUtil {
      * Finds the node (tree item) with the specified label under the specified parent. If no node
      * matches the label, one will be created.
      * 
-     * @param parent Tree children object whose children are to be searched.
+     * @param parent Tree node whose children are to be searched.
      * @param label Label being sought (case-insensitive).
      * @param create If true and the matching tree item is not found, it will be created.
      * @param clazz Class of tree item to be created.
      * @param caseSensitive If true, match by exact case.
      * @return The node whose label matches that specified.
      */
-    public static Treenode findNodeByLabel(Treechildren parent, String label, boolean create,
-                                           Class<? extends Treenode> clazz, boolean caseSensitive) {
+    public static Treenode findNodeByLabel(Treenode parent, String label, boolean create, Class<? extends Treenode> clazz,
+                                           boolean caseSensitive) {
         Treenode item = null;
         
-        for (Component comp : parent.getChildren()) {
+        for (BaseComponent comp : parent.getChildren()) {
             if (comp instanceof Treenode) {
                 item = (Treenode) comp;
                 
@@ -159,7 +151,7 @@ public class TreeUtil {
                 item = clazz.newInstance();
                 item.setLabel(label);
                 item.setHint(label);
-                parent.appendChild(item);
+                parent.addChild(item);
                 return item;
             } catch (Exception e) {
                 throw MiscUtil.toUnchecked(e);
@@ -178,7 +170,7 @@ public class TreeUtil {
      * @return The matching tree item, or null if not found.
      */
     public static Treenode findNodeByLabel(Treeview tree, String label, boolean caseSensitive) {
-        for (Treenode item : tree.getItems()) {
+        for (Treenode item : tree.getChildren(Treenode.class)) {
             if (caseSensitive ? label.equals(item.getLabel()) : label.equalsIgnoreCase(item.getLabel())) {
                 return item;
             }
@@ -207,8 +199,8 @@ public class TreeUtil {
                 needsDelim = true;
             }
             
-            sb.insert(0, useLabels ? item.getLabel() : item.getIndex());
-            item = item.getParentItem();
+            sb.insert(0, useLabels ? item.getLabel() : item.indexOf());
+            item = (Treenode) item.getParent();
         }
         
         return sb.toString();
@@ -277,7 +269,7 @@ public class TreeUtil {
      * @param depth Expand tree items to this depth. Tree items below this depth are collapsed.
      */
     public static void expand(Treeview tree, int depth) {
-        expand(tree.getTreechildren(), depth);
+        expandChildren(tree, depth);
     }
     
     /**
@@ -286,7 +278,7 @@ public class TreeUtil {
      * @param parent Tree children whose tree items are to be expanded / collapsed.
      * @param depth Expand tree items to this depth. Tree items below this depth are collapsed.
      */
-    public static void expand(Treechildren parent, int depth) {
+    private static void expandChildren(BaseComponent parent, int depth) {
         if (parent == null || depth <= 0) {
             return;
         }
@@ -295,13 +287,8 @@ public class TreeUtil {
         
         for (Object object : parent.getChildren()) {
             Treenode item = (Treenode) object;
-            item.getTree().renderItem(item);
-            Treechildren tc = item.getTreechildren();
-            
-            if (tc != null) {
-                item.setOpen(depth > 0);
-                expand(tc, depth);
-            }
+            item.setCollapsed(depth <= 0);
+            expandChildren(item, depth);
         }
     }
     
@@ -313,19 +300,7 @@ public class TreeUtil {
      * @return The first matching tree item, or null if none found.
      */
     public static Treenode search(Treeview tree, String text) {
-        return search(tree, null, text, defaultTreenodeSearch);
-    }
-    
-    /**
-     * Search the tree for a tree item whose label contains the specified text.
-     * 
-     * @param tree Tree to search.
-     * @param text Text to find.
-     * @param search Search logic.
-     * @return The first matching tree item, or null if none found.
-     */
-    public static Treenode search(Treeview tree, String text, ITreenodeSearch search) {
-        return search(tree, null, text, search);
+        return search(tree, text, defaultTreenodeSearch);
     }
     
     /**
@@ -336,7 +311,7 @@ public class TreeUtil {
      * @return The first matching tree item after the starting item, or null if none found.
      */
     public static Treenode search(Treenode start, String text) {
-        return search(start.getTreeview(), start, text, defaultTreenodeSearch);
+        return search(start.getTreeview(), text, defaultTreenodeSearch);
     }
     
     /**
@@ -348,64 +323,35 @@ public class TreeUtil {
      * @return The first matching tree item after the starting item, or null if none found.
      */
     public static Treenode search(Treenode start, String text, ITreenodeSearch search) {
-        return search(start.getTreeview(), start, text, search);
+        return search(start.getTreeview(), text, search);
     }
     
     /**
      * Search the tree for a tree item whose label contains the specified text.
      * 
      * @param tree Tree to search.
-     * @param last Last item found.
      * @param text Text to find.
      * @param search Search logic.
      * @return The first matching tree item after the last item, or null if none found.
      */
-    private static Treenode search(Treeview tree, Treenode last, String text, ITreenodeSearch search) {
-        Iterator<Treenode> it = last == null ? new TreeIterator(tree) : new TreeIterator(last);
-        
-        while (it.hasNext()) {
-            Treenode item = it.next();
-            
-            if (search.isMatch(item, text)) {
-                return item;
+    private static Treenode search(Iterable<Treenode> root, String text, ITreenodeSearch search) {
+        for (Treenode node : root) {
+            if (search.isMatch(node, text)) {
+                return node;
             }
         }
         return null;
     }
     
     /**
-     * Makes certain a tree item is visible.
-     * 
-     * @param item The tree item.
-     */
-    public static void makeVisible(Treenode item) {
-        if (item == null) {
-            return;
-        }
-        
-        makeVisible(item.getParentItem());
-        item.setCollapsed(false);
-        item.scrollIntoView(false);
-    }
-    
-    /**
      * Recursively adjusts the visibility of tree expand/collapse icons based on the visibility of
      * the child nodes.
      * 
-     * @param tree Tree component
+     * @param nodes Treenode components
      */
-    public static void adjustVisibility(Treeview tree) {
-        adjustVisibility(tree.getTreechildren());
-    }
-    
-    /**
-     * Recursively adjusts the visibility of tree expand/collapse icons based on the visibility of
-     * the child nodes.
-     * 
-     * @param parent Treechildren component
-     */
-    public static void adjustVisibility(Treechildren parent) {
-        if (parent != null) {
+    /*TODO:
+    public static void adjustVisibility(Iterable<Treenode> nodes) {
+        if (nodes != null) {
             boolean visibleChildren = parent.getVisibleItemCount() > 0;
             
             if (visibleChildren) {
@@ -421,6 +367,7 @@ public class TreeUtil {
             }
         }
     }
+    */
     
     /**
      * Enforces static class.

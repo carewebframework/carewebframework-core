@@ -32,18 +32,18 @@ import org.carewebframework.api.event.EventManager;
 import org.carewebframework.shell.CareWebShell;
 import org.carewebframework.shell.plugins.PluginContainer;
 import org.carewebframework.ui.FrameworkController;
-import org.carewebframework.ui.test.CommonTest;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.Label;
+import org.carewebframework.web.test.MockTest;
 import org.junit.Test;
 
-public class StatusPanelTest extends CommonTest {
+public class StatusPanelTest extends MockTest {
     
     @Test
     public void test() throws Exception {
         CareWebShell shell = new CareWebShell();
         shell.setLayout("/StatusPanelTest.xml");
-        shell.setPage(mockEnvironment.getPage());
+        //shell.setPage(mockEnvironment.getSession().getPage());
         //TODO: shell.afterCompose();
         mockEnvironment.flushEvents();
         PluginContainer plugin = shell.getActivatedPlugin("cwfStatusPanel");

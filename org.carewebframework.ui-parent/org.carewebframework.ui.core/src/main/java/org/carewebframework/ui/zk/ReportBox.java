@@ -113,7 +113,7 @@ public class ReportBox {
         args.put("title", title);
         args.put("allowPrint", allowPrint);
         Window window = PopupDialog.popup(DIALOG, args, true, true, false);
-        window.setPosition("center");
+        //TODO: window.setPosition("center");
         window.setMode(mode);
         return window;
     }

@@ -1,9 +1,5 @@
-<zk xmlns="http://www.zkoss.org/2005/zul"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.zkoss.org/2005/zul 
-		http://www.zkoss.org/2005/zul/zul.xsd">
-		
-	<vlayout controller="${cwfSessionTrackerController}">
+<paneview orientation="vertical" controller="${cwfSessionTrackerController}">
+	<pane>
 		<toolbar>
 			<span style="float:left;padding-top:5px">
 				<label name="lblSessionSummary" style="font-weight:bold" />
@@ -12,10 +8,14 @@
 				<button name="btnRefreshSessionView" label="${labels.cwf.btn.refresh.label}" />
 			</span>
 		</toolbar>
+	</pane>
+	<pane>
 		<label name="lblMessage" style="color: red;font-weight: bold;"
 			visible="false" />
-		<grid name="grid" sizedByContent="false" hflex="1" mold="paging"
-			pageSize="5" pagingPosition="both">
+	</pane>
+	<pane>
+	</pane>
+		<table name="grid">
 			<columns sizable="true">
 				<column width="20px" label="${labels.cwf.sessiontracker.master.col1.label}" />
 				<column hflex="1" label="${labels.cwf.sessiontracker.master.col2.label}" />
@@ -26,6 +26,5 @@
 				<column hflex="min" label="${labels.cwf.sessiontracker.master.col7.label}" />
 			</columns>
 			<rows />
-		</grid>
-	</vlayout>
-</zk>
+		</table>
+</paneview>

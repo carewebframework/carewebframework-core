@@ -33,12 +33,14 @@ import org.apache.commons.lang.math.NumberUtils;
 import org.carewebframework.common.NumUtil;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.ui.command.CommandUtil;
-import org.carewebframework.ui.cwf.SplitterPane;
-import org.carewebframework.ui.cwf.SplitterView;
 import org.carewebframework.ui.zk.ZKUtil;
 import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.component.Cell;
 import org.carewebframework.web.component.Listbox;
 import org.carewebframework.web.component.Listitem;
+import org.carewebframework.web.component.Pane;
+import org.carewebframework.web.component.Paneview;
+import org.carewebframework.web.component.Paneview.Orientation;
 import org.carewebframework.web.event.ClickEvent;
 import org.carewebframework.web.event.Event;
 import org.carewebframework.web.event.IEventListener;
@@ -62,15 +64,15 @@ public abstract class ListViewForm<DAO> extends CaptionedForm {
     
     private static final String SIZE_ATTR = "@size";
     
-    private SplitterView mainView;
+    private Paneview mainView;
     
     private Listbox listbox;
     
     private Listhead listhead;
     
-    private SplitterPane detailPane;
+    private Pane detailPane;
     
-    private SplitterPane listPane;
+    private Pane listPane;
     
     private Auxheader status;
     
@@ -176,11 +178,11 @@ public abstract class ListViewForm<DAO> extends CaptionedForm {
     }
     
     public boolean getHorizontal() {
-        return mainView.isHorizontal();
+        return mainView.getOrientation() == Orientation.HORIZONTAL;
     }
     
     public void setHorizontal(boolean value) {
-        mainView.setHorizontal(value);
+        mainView.setOrientation(value ? Orientation.HORIZONTAL : Orientation.VERTICAL);
     }
     
     public String getAlternateColor() {
@@ -370,8 +372,8 @@ public abstract class ListViewForm<DAO> extends CaptionedForm {
         item.setVisible(!columns.isEmpty());
         
         for (Object colData : columns) {
-            Listcell cell = renderer.createCell(item, transformData(colData));
-            cell.setValue(colData);
+            Cell cell = renderer.createCell(item, transformData(colData));
+            cell.setData(colData);
             
             if (error) {
                 cell.setSpan(colCount);

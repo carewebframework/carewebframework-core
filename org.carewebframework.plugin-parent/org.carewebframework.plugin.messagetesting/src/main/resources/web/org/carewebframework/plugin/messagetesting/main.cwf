@@ -1,7 +1,4 @@
-<zk xmlns="http://www.zkoss.org/2005/zul"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.zkoss.org/2005/zul 
-		http://www.zkoss.org/2005/zul/zul.xsd">
+<page>
 
 	<style>
 		.cwf-messagetesting-root .z-toolbar-content>* { 
@@ -20,8 +17,8 @@
 	<window title="Messaging Test Plugin - Warning:  Do not use this in a production system."
 		class="flavor:panel-danger" height="100%" width="100%"
 		controller="${cwfMessageTestingController}">
-		<borderlayout class="cwf-messagetesting-root" height="100%">
-			<center>
+		<paneview orientation="vertical" class="cwf-messagetesting-root" height="100%">
+			<pane splittable="true">
 				<hbox vflex="1">
 					<cell width="50%">
 						<toolbar height="30px">
@@ -41,8 +38,8 @@
 							width="100%" vflex="1" />
 					</cell>
 				</hbox>
-			</center>
-			<south splittable="true" height="50%">
+			</pane>
+			<pane height="50%">
 				<hbox vflex="1">
 					<cell width="50%">
 						<toolbar>
@@ -77,7 +74,7 @@
 						</listbox>
 					</cell>
 				</hbox>
-			</south>
-		</borderlayout>
+			</pane>
+		</paneview>
 	</window>
-</zk>
+</page>

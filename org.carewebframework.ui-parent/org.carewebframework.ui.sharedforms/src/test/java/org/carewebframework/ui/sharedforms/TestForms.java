@@ -29,14 +29,14 @@ import static org.junit.Assert.assertEquals;
 
 import org.carewebframework.shell.plugins.PluginContainer;
 import org.carewebframework.ui.FrameworkController;
-import org.carewebframework.ui.test.CommonTest;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.Label;
 import org.carewebframework.web.component.Listbox;
 import org.carewebframework.web.page.PageUtil;
+import org.carewebframework.web.test.MockTest;
 import org.junit.Test;
 
-public class TestForms extends CommonTest {
+public class TestForms extends MockTest {
     
     @Test
     public void testForm() throws Exception {

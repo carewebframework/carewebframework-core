@@ -169,7 +169,7 @@ public class DesignContextMenu extends Menupopup implements INamespace {
      */
     private void updateControls() {
         if (owner == null) {
-            close();
+            setVisible(false);
         } else {
             updateStates(owner, mnuAdd, mnuDelete, mnuCopy, mnuCut, mnuPaste, mnuProperties, mnuAbout);
         }
@@ -212,7 +212,7 @@ public class DesignContextMenu extends Menupopup implements INamespace {
         
         if (owner == null) {
             event.stopPropagation();
-            this.close();
+            hide();
         }
     }
     

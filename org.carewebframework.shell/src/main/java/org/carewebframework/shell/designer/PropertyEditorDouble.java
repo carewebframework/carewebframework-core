@@ -27,6 +27,7 @@ package org.carewebframework.shell.designer;
 
 import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.property.PropertyInfo;
+import org.carewebframework.web.component.Doublebox;
 
 /**
  * Editor for double values.

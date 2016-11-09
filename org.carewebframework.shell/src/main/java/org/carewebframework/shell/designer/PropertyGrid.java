@@ -144,9 +144,8 @@ public class PropertyGrid extends Window {
      * @param parent Parent component for property grid (may be null).
      * @param embedded If true, the property grid is embedded within another component.
      * @return Newly created PropertyGrid instance.
-     * @throws Exception Unspecified exception.
      */
-    public static PropertyGrid create(UIElementBase target, BaseComponent parent, boolean embedded) throws Exception {
+    public static PropertyGrid create(UIElementBase target, BaseComponent parent, boolean embedded) {
         PageDefinition def = PageParser.getInstance().parse(DesignConstants.RESOURCE_PREFIX + "PropertyGrid.cwf");
         PropertyGrid propertyGrid = (PropertyGrid) PopupDialog.popup(def, null, !embedded, true, false);
         propertyGrid.init(target, parent, embedded);

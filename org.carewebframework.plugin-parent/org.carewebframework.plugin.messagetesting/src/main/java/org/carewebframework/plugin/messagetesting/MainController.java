@@ -118,7 +118,7 @@ public class MainController extends PluginController {
         new ModelAndView<Listitem, Message>(lboxReceived, received, new ReceivedMessageRenderer());
         //channels.setMultiple(true);
         new ModelAndView<Listitem, String>(lboxSubscriptions, channels, new SubscriptionRenderer());
-        cboxChannels.setModel(channels2);
+        //TODO: cboxChannels.setModel(channels2);
     }
     
     private Collection<IMessageProducer> getProviders() {

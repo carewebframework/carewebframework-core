@@ -34,9 +34,16 @@ import org.carewebframework.api.domain.IUser;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.shell.plugins.PluginContainer;
 import org.carewebframework.shell.plugins.PluginController;
+import org.carewebframework.web.client.Session;
+import org.carewebframework.web.client.WebSocketHandler;
 import org.carewebframework.web.component.Label;
 import org.carewebframework.web.component.Page;
+import org.carewebframework.web.component.Row;
 import org.carewebframework.web.component.Table;
+import org.carewebframework.web.event.Event;
+import org.carewebframework.web.model.IComponentRenderer;
+import org.carewebframework.web.model.ListModel;
+import org.carewebframework.web.model.ModelAndView;
 import org.carewebframework.web.page.PageRegistry;
 
 /**
@@ -44,14 +51,12 @@ import org.carewebframework.web.page.PageRegistry;
  */
 public class MainController extends PluginController {
     
-    private static final long serialVersionUID = 1L;
-    
     private static final Log log = LogFactory.getLog(MainController.class);
     
     //members
     private boolean isDelegationToModelDeferred;
     
-    private RowRenderer<SessionInfo> sessionTrackerRowRenderer;
+    private IComponentRenderer<Row, Session> sessionTrackerRowRenderer;
     
     private Label lblSessionSummary;
     
@@ -69,8 +74,8 @@ public class MainController extends PluginController {
             Collection<Page> pages = PageRegistry.getPages();
             
             if (!pages.isEmpty()) {
-                grid.setModel(new ListModelList<>(sessions));
-                grid.setRowRenderer(sessionTrackerRowRenderer);
+                ListModel<Session> model = new ListModel<>(WebSocketHandler.getActiveSessions());
+                new ModelAndView<Row, Session>(grid.getRows(), model, sessionTrackerRowRenderer);
                 lblSessionSummary.setVisible(true);
                 int size = pages.size();
                 lblSessionSummary.setLabel(StrUtil.formatMessage("@cwf.sessiontracker.msg.sessions.total", size));
@@ -138,7 +143,7 @@ public class MainController extends PluginController {
      * 
      * @param sessionTrackerRowRenderer RowRenderer
      */
-    public void setSessionTrackerRowRenderer(RowRenderer<SessionInfo> sessionTrackerRowRenderer) {
+    public void setSessionTrackerRowRenderer(IComponentRenderer<Row, Session> sessionTrackerRowRenderer) {
         this.sessionTrackerRowRenderer = sessionTrackerRowRenderer;
     }
     
