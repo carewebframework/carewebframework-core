@@ -46,7 +46,6 @@ import org.carewebframework.common.DateUtil.TimeUnit;
 import org.carewebframework.common.MiscUtil;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.ui.zk.MessageWindow;
-import org.carewebframework.ui.zk.ZKUtil;
 import org.carewebframework.web.client.ISessionTracker;
 import org.carewebframework.web.client.Session;
 import org.carewebframework.web.component.BaseUIComponent;
@@ -194,7 +193,7 @@ public class PageMonitor extends Thread {
         public void onSessionCreate(Session session) {
             page.removeListener(this);
             timeoutWindow = (Window) page.getExecution().createComponents(DESKTOP_TIMEOUT_ZUL, null, null);
-            ZKUtil.wireController(timeoutWindow, PageMonitor.this);
+            timeoutWindow.wireController(PageMonitor.this);
             IUser user = securityService.getAuthenticatedUser();
             lblLocked.setLabel(
                 Mode.BASELINE.getLabel(TIMEOUT_EXPIRATION, user.getFullName() + "@" + user.getSecurityDomain().getName()));

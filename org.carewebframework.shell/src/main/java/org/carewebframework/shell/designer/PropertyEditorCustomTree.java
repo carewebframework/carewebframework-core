@@ -40,6 +40,7 @@ import org.carewebframework.shell.property.PropertyInfo;
 import org.carewebframework.ui.zk.TreeUtil;
 import org.carewebframework.ui.zk.ZKUtil;
 import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.component.BaseUIComponent;
 import org.carewebframework.web.component.Button;
 import org.carewebframework.web.component.Textbox;
 import org.carewebframework.web.component.Treenode;
@@ -62,22 +63,22 @@ public abstract class PropertyEditorCustomTree<T extends UIElementBase> extends 
     
     private static class LabelConstraint implements Constraint {
         
-        private BaseComponent lastTarget;
+        private BaseUIComponent lastTarget;
         
         @Override
         public void validate(BaseComponent comp, Object value) throws WrongValueException {
             clearMessage();
             String realValue = value == null ? null : ((String) value).trim();
-            lastTarget = (BaseComponent) comp.getAttribute(ITEM_ATTR);
+            lastTarget = (BaseUIComponent) comp.getAttribute(ITEM_ATTR);
             
             if (StringUtils.isEmpty(realValue)) {
-                throw new WrongValueException(lastTarget, "Label cannot be blank.");
+                throw new IllegalArgumentException("Label cannot be blank.");
             }
         }
         
         public void clearMessage() {
             if (lastTarget != null) {
-                Clients.clearWrongValue(lastTarget);
+                lastTarget.setBalloon(null);
                 lastTarget = null;
             }
         }

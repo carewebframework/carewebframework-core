@@ -28,64 +28,14 @@ package org.carewebframework.ui.command;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.commons.lang.StringUtils;
 import org.carewebframework.ui.action.IAction;
-import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.component.BaseUIComponent;
 import org.carewebframework.web.event.KeyCode;
-import org.carewebframework.web.event.KeyEvent;
 
 /**
  * Static utility class.
  */
 public class CommandUtil {
-    
-    /**
-     * Given a key event, returns the symbolic representation of the typed key.
-     * 
-     * @param event The key press event.
-     * @return The symbolic representation of the typed key.
-     */
-    public static String getShortcut(KeyEvent event) {
-        StringBuilder sb = new StringBuilder();
-        
-        if (event.isAltKey()) {
-            sb.append('@');
-        }
-        
-        if (event.isCtrlKey()) {
-            sb.append('^');
-        }
-        
-        if (event.isShiftKey()) {
-            sb.append('$');
-        }
-        
-        if (event.isMetaKey()) {
-            sb.append('~');
-        }
-        
-        String symbolicName = KeyCode.getSymbolicName(event.getKeyCode());
-        
-        if (symbolicName != null) {
-            sb.append('#').append(toShortcut(symbolicName));
-        } else {
-            sb.append(Character.toLowerCase(event.getKeyCode()));
-        }
-        
-        return sb.toString();
-    }
-    
-    private static String toShortcut(String symbolicName) {
-        if (symbolicName.startsWith("VK_")) {
-            symbolicName = symbolicName.substring(3);
-        }
-        
-        return symbolicName.toLowerCase();
-    }
-    
-    private static String toSymbolicName(String shortcut) {
-        return "VK_" + shortcut.toUpperCase();
-    }
     
     /**
      * Updates a components associated shortcuts by adding or removing the specified set of
@@ -96,7 +46,7 @@ public class CommandUtil {
      * @param remove If true, the specified shortcuts are removed from the component's ctrlKeys
      *            property. If false, they are added.
      */
-    /*package*/static void updateShortcuts(BaseComponent component, String shortcuts, boolean remove) {
+    /*package*/static void updateShortcuts(BaseUIComponent component, String shortcuts, boolean remove) {
         updateShortcuts(component, parseShortcuts(shortcuts, null), remove);
     }
     
@@ -109,8 +59,8 @@ public class CommandUtil {
      * @param remove If true, the specified shortcuts are removed from the component's ctrlKeys
      *            property. If false, they are added.
      */
-    /*package*/static void updateShortcuts(BaseComponent component, Set<String> shortcuts, boolean remove) {
-        Set<String> currentShortcuts = CommandUtil.parseShortcuts(component.getCtrlKeys(), null);
+    /*package*/static void updateShortcuts(BaseUIComponent component, Set<String> shortcuts, boolean remove) {
+        Set<String> currentShortcuts = CommandUtil.parseShortcuts(component.getKeycapture(), null);
         
         if (remove) {
             currentShortcuts.removeAll(shortcuts);
@@ -118,38 +68,23 @@ public class CommandUtil {
             currentShortcuts.addAll(shortcuts);
         }
         
-        component.setCtrlKeys(CommandUtil.concatShortcuts(currentShortcuts));
+        component.setKeycapture(CommandUtil.concatShortcuts(currentShortcuts));
     }
     
     /**
-     * Returns true if the shortcut is a valid symbolic representation of a supported key press.
+     * Returns a normalized version of the shortcut, or null if it is not a valid shortcut.
      * 
      * @param shortcut Symbolic representation of a shortcut.
-     * @return True if the shortcut is valid.
+     * @return The normalized shortcut, or null if not valid.
      */
-    /*package*/static boolean validateShortcut(String shortcut) {
-        if (shortcut.startsWith("$")) {
-            if (shortcut.startsWith("$#")) {
-                shortcut = shortcut.substring(1);
-            } else {
-                return false;
-            }
+    /*package*/static String validateShortcut(String shortcut) {
+        try {
+            shortcut = KeyCode.normalizeKeyCapture(shortcut);
+        } catch (Exception e) {
+            shortcut = null;
         }
         
-        if (shortcut.startsWith("^") || shortcut.startsWith("@")) {
-            shortcut = shortcut.substring(1);
-            
-            if (shortcut.length() == 1 && StringUtils.isAlphanumeric(shortcut)) {
-                return true;
-            }
-        }
-        
-        if (!shortcut.startsWith("#")) {
-            return false;
-        }
-        
-        shortcut = shortcut.substring(1);
-        return KeyCode.getCode(toSymbolicName(shortcut)) > -1;
+        return shortcut;
     }
     
     /**
@@ -162,7 +97,9 @@ public class CommandUtil {
         StringBuilder sb = new StringBuilder();
         
         for (String shortcut : result) {
-            if (validateShortcut(shortcut)) {
+            shortcut = validateShortcut(shortcut);
+            
+            if (shortcut != null) {
                 sb.append(shortcut);
             }
         }
@@ -236,8 +173,8 @@ public class CommandUtil {
      * @param commandName Name of the command.
      * @param component Component to be associated.
      */
-    public static void associateCommand(String commandName, BaseComponent component) {
-        associateCommand(commandName, component, (BaseComponent) null);
+    public static void associateCommand(String commandName, BaseUIComponent component) {
+        associateCommand(commandName, component, (BaseUIComponent) null);
     }
     
     /**
@@ -248,7 +185,7 @@ public class CommandUtil {
      * @param commandTarget The target of the command event. A null value indicates that the
      *            component itself will be the target.
      */
-    public static void associateCommand(String commandName, BaseComponent component, BaseComponent commandTarget) {
+    public static void associateCommand(String commandName, BaseUIComponent component, BaseUIComponent commandTarget) {
         getCommand(commandName, true).bind(component, commandTarget);
     }
     
@@ -259,7 +196,7 @@ public class CommandUtil {
      * @param component Component to be associated.
      * @param action Action to be executed when the command is invoked.
      */
-    public static void associateCommand(String commandName, BaseComponent component, IAction action) {
+    public static void associateCommand(String commandName, BaseUIComponent component, IAction action) {
         getCommand(commandName, true).bind(component, action);
     }
     
@@ -269,7 +206,7 @@ public class CommandUtil {
      * @param commandName Name of the command.
      * @param component Component to be associated.
      */
-    public static void dissociateCommand(String commandName, BaseComponent component) {
+    public static void dissociateCommand(String commandName, BaseUIComponent component) {
         Command command = getCommand(commandName, false);
         
         if (command != null) {
@@ -282,7 +219,7 @@ public class CommandUtil {
      * 
      * @param component The component.
      */
-    public static void dissociateAll(BaseComponent component) {
+    public static void dissociateAll(BaseUIComponent component) {
         for (Command command : CommandRegistry.getInstance()) {
             command.unbind(component);
         }
@@ -308,9 +245,9 @@ public class CommandUtil {
      */
     private static void addShortcut(StringBuilder sb, Set<String> shortcuts) {
         if (sb.length() > 0) {
-            String shortcut = sb.toString();
+            String shortcut = validateShortcut(sb.toString());
             
-            if (validateShortcut(shortcut)) {
+            if (shortcut != null) {
                 shortcuts.add(shortcut);
             }
             
@@ -322,5 +259,5 @@ public class CommandUtil {
      * Enforces static class.
      */
     private CommandUtil() {
-    };
+    }
 }

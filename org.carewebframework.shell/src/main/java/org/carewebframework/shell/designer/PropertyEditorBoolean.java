@@ -29,6 +29,8 @@ import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.property.PropertyInfo;
 import org.carewebframework.web.component.Radiobutton;
 import org.carewebframework.web.component.Radiogroup;
+import org.carewebframework.web.event.ClickEvent;
+import org.carewebframework.web.event.SelectEvent;
 
 /**
  * Editor for boolean values.
@@ -49,9 +51,9 @@ public class PropertyEditorBoolean extends PropertyEditorBase {
     @Override
     protected void init(UIElementBase target, PropertyInfo propInfo, PropertyGrid propGrid) {
         super.init(target, propInfo, propGrid);
-        radiogroup.registerEventForward(Events.ON_CHECK, propGrid, Events.ON_CHANGE);
-        radiogroup.registerEventForward(Events.ON_CLICK, propGrid, Events.ON_SELECT);
-        component.addForward(Events.ON_CLICK, propGrid, Events.ON_SELECT);
+        //radiogroup.registerEventForward(Events.ON_CHECK, propGrid, Events.ON_CHANGE);
+        radiogroup.registerEventForward(ClickEvent.TYPE, propGrid, SelectEvent.TYPE);
+        component.registerEventForward(ClickEvent.TYPE, propGrid, SelectEvent.TYPE);
         
         for (Radiobutton radio : radiogroup.getChildren(Radiobutton.class)) {
             String label = propInfo.getConfigValue(radio.getLabel().trim());
@@ -78,13 +80,22 @@ public class PropertyEditorBoolean extends PropertyEditorBase {
     
     @Override
     protected Boolean getValue() {
-        int i = radiogroup.getSelectedIndex();
-        return i < 0 ? null : i == 0;
+        return radiogroup.getSelected() != null;
     }
     
     @Override
     protected void setValue(Object value) {
         int i = value == null ? -1 : (Boolean) value ? 0 : 1;
-        radiogroup.setSelectedIndex(i);
+        Radiobutton rb = radiogroup.getSelected();
+        
+        if (rb != null) {
+            rb.setChecked(false);
+        }
+        
+        rb = (Radiobutton) radiogroup.getChildAt(i);
+        
+        if (rb != null) {
+            rb.setChecked(true);
+        }
     }
 }

@@ -114,7 +114,7 @@ public class CommandRegistry implements Iterable<Command> {
     
     public void process(KeyEvent event) {
         if (event.getTarget() instanceof BaseUIComponent) {
-            String shortcut = CommandUtil.getShortcut(event);
+            String shortcut = event.getKeycapture();
             fireCommands(shortcut, event, (BaseUIComponent) event.getTarget());
         }
     }

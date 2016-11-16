@@ -36,6 +36,7 @@ import org.carewebframework.ui.zk.PromptDialog;
 import org.carewebframework.ui.zk.ZKUtil;
 import org.carewebframework.web.annotation.WiredComponent;
 import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.component.BaseUIComponent;
 import org.carewebframework.web.component.Button;
 import org.carewebframework.web.event.Event;
 import org.carewebframework.web.event.EventUtil;
@@ -62,7 +63,7 @@ public abstract class FormController<T> extends FrameworkController {
     
     private T domainObject;
     
-    private BaseComponent wrongValueTarget;
+    private BaseUIComponent wrongValueTarget;
     
     private final Set<BaseComponent> changeSet = new HashSet<>();
     
@@ -149,7 +150,7 @@ public abstract class FormController<T> extends FrameworkController {
      * @param target The target input element.
      * @return Always false.
      */
-    protected boolean isMissing(BaseComponent target) {
+    protected boolean isMissing(BaseUIComponent target) {
         wrongValue(target, label_required_message);
         return false;
     }
@@ -161,15 +162,15 @@ public abstract class FormController<T> extends FrameworkController {
      * @param target The target input element.
      * @param message The validation error message.
      */
-    protected void wrongValue(BaseComponent target, String message) {
+    protected void wrongValue(BaseUIComponent target, String message) {
         if (wrongValueTarget != null) {
-            Clients.clearWrongValue(wrongValueTarget);
+            wrongValueTarget.setBalloon(null);
         }
         
         wrongValueTarget = target;
         
         if (target != null && message != null) {
-            Clients.wrongValue(target, StrUtil.formatMessage(message));
+            target.setBalloon(StrUtil.formatMessage(message));
         }
     }
     

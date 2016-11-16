@@ -65,7 +65,7 @@ public class Command {
         @Override
         public void onEvent(Event event) {
             KeyEvent keyEvent = (KeyEvent) event;
-            String shortcut = CommandUtil.getShortcut(keyEvent);
+            String shortcut = keyEvent.getKeycapture();
             
             if (isBound(shortcut)) {
                 fire(keyEvent.getTarget(), keyEvent);
@@ -85,7 +85,7 @@ public class Command {
     
     private final Set<String> shortcutBindings = new HashSet<>();
     
-    private final Set<BaseComponent> componentBindings = new HashSet<>();
+    private final Set<BaseUIComponent> componentBindings = new HashSet<>();
     
     private final CtrlKeyListener keyEventListener = new CtrlKeyListener();
     
@@ -114,7 +114,7 @@ public class Command {
      * @param commandTarget Optional component that will be the target of the onCommand event. If
      *            null, the bound component will be the target.
      */
-    /*package*/void bind(BaseComponent component, BaseComponent commandTarget) {
+    /*package*/void bind(BaseUIComponent component, BaseUIComponent commandTarget) {
         if (componentBindings.add(component)) {
             setCommandTarget(component, commandTarget);
             CommandUtil.updateShortcuts(component, shortcutBindings, false);
@@ -128,7 +128,7 @@ public class Command {
      * @param component The component to be bound.
      * @param action The action to be executed when the command is invoked.
      */
-    /*package*/void bind(BaseComponent component, IAction action) {
+    /*package*/void bind(BaseUIComponent component, IAction action) {
         BaseUIComponent dummy = new Div();
         dummy.setAttribute(ATTR_DUMMY, true);
         dummy.setVisible(false);
@@ -140,15 +140,17 @@ public class Command {
     /**
      * Bind a keyboard shortcut to this command.
      * 
-     * @param shortcut Shortcut specifier in ZK format.
+     * @param shortcut Shortcut specifier in key capture format.
      */
     /*package*/void bind(String shortcut) {
-        if (!CommandUtil.validateShortcut(shortcut)) {
+        String normalized = CommandUtil.validateShortcut(shortcut);
+        
+        if (normalized == null) {
             throw new IllegalArgumentException("Invalid shortcut specifier: " + shortcut);
         }
         
-        if (shortcutBindings.add(shortcut)) {
-            shortcutChanged(shortcut, false);
+        if (shortcutBindings.add(normalized)) {
+            shortcutChanged(normalized, false);
         }
     }
     
@@ -157,7 +159,7 @@ public class Command {
      * 
      * @param component The component to unbind.
      */
-    public void unbind(BaseComponent component) {
+    public void unbind(BaseUIComponent component) {
         if (componentBindings.remove(component)) {
             keyEventListener.registerComponent(component, false);
             CommandUtil.updateShortcuts(component, shortcutBindings, true);
@@ -186,7 +188,7 @@ public class Command {
         Set<String> bindings = new HashSet<>();
         bindings.add(shortcut);
         
-        for (BaseComponent component : componentBindings) {
+        for (BaseUIComponent component : componentBindings) {
             CommandUtil.updateShortcuts(component, bindings, unbind);
         }
     }
@@ -225,7 +227,7 @@ public class Command {
      * 
      * @return Iterable of component bindings.
      */
-    public Iterable<BaseComponent> getComponentBindings() {
+    public Iterable<BaseUIComponent> getComponentBindings() {
         return componentBindings;
     }
     
