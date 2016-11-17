@@ -51,11 +51,6 @@ public enum ActionType {
      * <td><i>j[ava]script:&lt;script&gt;</i></td>
      * <td>Executable JavaScript code.</td>
      * </tr>
-     * <tr>
-     * <td><b>ZUL</b></td>
-     * <td><i>~./&lt;path&gt;</i></td>
-     * <td>Zul page containing zscript.</td>
-     * </tr>
      * </table>
      * <p>
      * 

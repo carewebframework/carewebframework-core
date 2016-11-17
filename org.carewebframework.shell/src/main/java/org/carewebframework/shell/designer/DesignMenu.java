@@ -118,7 +118,7 @@ public class DesignMenu extends Menu implements INamespace {
     }
     
     public void onAfterEnabled() {
-        this.open();
+        setOpen(true);
     }
     
     /**

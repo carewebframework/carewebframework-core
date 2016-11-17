@@ -29,10 +29,8 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 
 import org.apache.commons.codec.binary.Base64;
-
 import org.carewebframework.common.StrUtil;
-import org.carewebframework.ui.FrameworkWebSupport;
-
+import org.carewebframework.web.core.WebUtil;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -70,7 +68,7 @@ public class SecurityTest {
         String urlEncoded = URLEncoder.encode(base64Encoded, StrUtil.CHARSET);
         String decoded = new String(Base64.decodeBase64(URLDecoder.decode(urlEncoded, StrUtil.CHARSET)));
         Assert.assertEquals(plainText, decoded);
-        String encodedByAPI = FrameworkWebSupport.encodeCookieValue(plainText);
-        Assert.assertEquals(plainText, FrameworkWebSupport.decodeCookieValue(encodedByAPI));
+        String encodedByAPI = WebUtil.encodeCookieValue(plainText);
+        Assert.assertEquals(plainText, WebUtil.decodeCookieValue(encodedByAPI));
     }
 }

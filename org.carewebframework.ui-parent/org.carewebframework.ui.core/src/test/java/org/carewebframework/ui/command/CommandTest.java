@@ -35,7 +35,7 @@ import org.junit.Test;
 
 public class CommandTest {
     
-    private static final String[] VALID_SHORTCUTS = { "@#f1", "#up", "^a" };
+    private static final String[] VALID_SHORTCUTS = { "@f1", "up", "^a" };
     
     private static final String[] INVALID_SHORTCUTS = { "$a", "#xyz", "123", "$", "#$", "@" };
     
@@ -47,7 +47,7 @@ public class CommandTest {
     
     private void testShortcutValidation(String[] shortcuts, boolean areValid) {
         for (String shortcut : shortcuts) {
-            assertTrue(CommandUtil.validateShortcut(shortcut) == areValid);
+            assertTrue(CommandUtil.validateShortcut(shortcut) != null == areValid);
         }
     }
     

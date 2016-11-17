@@ -46,8 +46,8 @@ import org.carewebframework.web.component.Cell;
 import org.carewebframework.web.component.Column;
 import org.carewebframework.web.component.Label;
 import org.carewebframework.web.component.Row;
+import org.carewebframework.web.component.Rows;
 import org.carewebframework.web.component.Table;
-import org.carewebframework.web.component.Table.Rows;
 import org.carewebframework.web.component.Window;
 import org.carewebframework.web.event.ClickEvent;
 import org.carewebframework.web.event.Event;
@@ -68,34 +68,22 @@ public class PropertyGrid extends Window {
     
     private static final String LABEL_ATTR = "@label";
     
+    private static class RowEx extends Row implements INamespace {};
+    
     /**
      * Used to sort the properties column alphabetically. We store the property name in an attribute
      * on the corresponding row to make it simpler.
      */
-    private static class PropertySorter implements Comparator<Row> {
-        
-        private final boolean ascending;
-        
-        private PropertySorter(boolean ascending) {
-            this.ascending = ascending;
-        }
+    private static final Comparator<Row> propSort = new Comparator<Row>() {
         
         @Override
         public int compare(Row r1, Row r2) {
             String label1 = (String) r1.getAttribute(LABEL_ATTR);
             String label2 = (String) r2.getAttribute(LABEL_ATTR);
-            int cmp = label1.compareToIgnoreCase(label2);
-            return ascending ? cmp : -cmp;
+            return label1.compareToIgnoreCase(label2);
         }
         
-    }
-    
-    @SuppressWarnings("serial")
-    private static class RowEx extends Row implements INamespace {};
-    
-    private static final PropertySorter propSortAscending = new PropertySorter(true);
-    
-    private static final PropertySorter propSortDescending = new PropertySorter(false);
+    };
     
     private Table gridProperties;
     
@@ -168,8 +156,7 @@ public class PropertyGrid extends Window {
         this.embedded = embedded;
         wireController(this);
         setTarget(target);
-        colProperty.setSortAscending(propSortAscending);
-        colProperty.setSortDescending(propSortDescending);
+        colProperty.setSortAscending(propSort);
         
         if (parent != null) {
             setClosable(false);

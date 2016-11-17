@@ -29,15 +29,14 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.Map;
 
-import org.carewebframework.ui.FrameworkWebSupport;
-
+import org.carewebframework.web.core.WebUtil;
 import org.junit.Test;
 
 public class UtilTest {
     
     @Test
     public void queryStringToMapTest() {
-        Map<String, String> map = FrameworkWebSupport.queryStringToMap("name1=value1&name2=value2&name3=value3");
+        Map<String, String> map = WebUtil.queryStringToMap("name1=value1&name2=value2&name3=value3");
         
         assert (map.size() == 3);
         
@@ -45,8 +44,8 @@ public class UtilTest {
             assertEquals(map.get("name" + i), "value" + i);
         }
         
-        map = FrameworkWebSupport.queryStringToMap(
-            "?name1=value1&name2=value2&name3=value3&name1=value4&name2=value5&name3=value6", "; ");
+        map = WebUtil.queryStringToMap("?name1=value1&name2=value2&name3=value3&name1=value4&name2=value5&name3=value6",
+            "; ");
         
         assert (map.size() == 3);
         
@@ -54,7 +53,7 @@ public class UtilTest {
             assertEquals(map.get("name" + i), "value" + i + "; value" + (i + 3));
         }
         
-        map = FrameworkWebSupport.queryStringToMap("name=this+is+a+test%26");
+        map = WebUtil.queryStringToMap("name=this+is+a+test%26");
         
         assert (map.size() == 1);
         assertEquals(map.get("name"), "this is a test&");

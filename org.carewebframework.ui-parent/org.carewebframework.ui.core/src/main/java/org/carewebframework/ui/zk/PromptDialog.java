@@ -46,6 +46,7 @@ import org.carewebframework.web.component.Window;
 import org.carewebframework.web.event.Event;
 import org.carewebframework.web.event.EventUtil;
 import org.carewebframework.web.event.IEventListener;
+import org.carewebframework.web.page.PageUtil;
 
 /**
  * Implements a simple, generic dialog for prompting for arbitrary responses.
@@ -408,7 +409,7 @@ public class PromptDialog extends Window {
         PromptDialog dlg = null;
         
         try {
-            dlg = (PromptDialog) ZKUtil.loadPage(RESOURCE_PREFIX + "promptDialog.cwf", null);
+            dlg = (PromptDialog) PageUtil.createPage(RESOURCE_PREFIX + "promptDialog.cwf", null).get(0);
             dlg._listener = useInputListener ? dlg.new InputListener() : eventListener;
             WiredComponentScanner.wire(dlg, dlg);
             dlg.modal(null);

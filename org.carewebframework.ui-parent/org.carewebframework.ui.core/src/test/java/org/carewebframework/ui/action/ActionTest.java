@@ -33,12 +33,10 @@ public class ActionTest {
     
     @Test
     public void testActionFormats() {
-        assertEquals(ActionType.ZSCRIPT, ActionType.getType("zscript: xyz"));
         assertEquals(ActionType.JSCRIPT, ActionType.getType("jscript: alert('hi');"));
         assertEquals(ActionType.JSCRIPT, ActionType.getType("javascript: alert('hi');"));
         assertEquals(ActionType.URL, ActionType.getType("http://www.regenstrief.org"));
         assertEquals(ActionType.URL, ActionType.getType("https://www.regenstrief.org"));
-        assertEquals(ActionType.ZUL, ActionType.getType("~./org/regenstrief/test/test.cwf"));
         assertEquals(ActionType.UNKNOWN, ActionType.getType("unknown type"));
     }
     

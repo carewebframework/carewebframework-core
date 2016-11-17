@@ -153,7 +153,7 @@ public class LayoutDesigner extends Window implements IAutoWired {
         contextMenu.setParent(this);
         contextMenu.setListener(this);
         clipboard.addListener(this);
-        getPage().registerEventListener(layoutListener);
+        //TODO: getPage().registerEventListener(layoutListener);
     }
     
     /**
@@ -235,14 +235,13 @@ public class LayoutDesigner extends Window implements IAutoWired {
         }
         
         Treenode item = new Treenode();
+        item.setLabel(label);
         item.setData(ele);
-        Treerow row = new Treerow(label);
-        row.setParent(item);
-        row.registerEventForward(DropEvent.TYPE, this);
-        row.registerEventForward(DblclickEvent.TYPE, btnProperties, ClickEvent.TYPE);
+        item.registerEventForward(DropEvent.TYPE, this, null);
+        item.registerEventForward(DblclickEvent.TYPE, btnProperties, ClickEvent.TYPE);
         
         if (!ele.isLocked() && !ele.getDefinition().isInternal()) {
-            row.setDraggable("d" + dragId++);
+            item.setDragid("d" + dragId++);
         }
         
         return item;
@@ -508,7 +507,7 @@ public class LayoutDesigner extends Window implements IAutoWired {
     
     public void onClick$btnLeft() {
         Treenode item = tree.getSelectedNode();
-        doDrop(item, item.getParent().getParent(), false);
+        doDrop(item, (Treenode) item.getParent().getParent(), false);
     }
     
     /**
@@ -553,13 +552,12 @@ public class LayoutDesigner extends Window implements IAutoWired {
             
             case FIRST:
                 eleDragged.setIndex(0);
-                Treechildren tc = target.getTreechildren();
-                tc.insertBefore(dragged, tc.getFirstChild());
+                target.addChild(dragged, 0);
                 break;
             
             case RELOCATE:
                 eleDragged.setParent(eleTarget);
-                getTreechildren(target).appendChild(dragged);
+                getTreenode(target).addChild(dragged);
                 break;
         }
         updateDroppable();
@@ -572,7 +570,7 @@ public class LayoutDesigner extends Window implements IAutoWired {
     @Override
     public void close() {
         Page page = getPage();
-        page.removeEventListener(layoutListener);
+        //TODO: page.removeEventListener(layoutListener);
         page.removeAttribute(CWF_PAGE);
         page.setAttribute(ATTR_BRING_TO_FRONT, bringToFront);
         clipboard.removeListener(this);

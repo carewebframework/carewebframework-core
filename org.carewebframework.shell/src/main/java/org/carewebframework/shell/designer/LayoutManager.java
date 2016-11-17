@@ -26,22 +26,17 @@
 package org.carewebframework.shell.designer;
 
 import static org.carewebframework.shell.designer.DesignConstants.CAP_LAYOUT_CLONE;
-import static org.carewebframework.shell.designer.DesignConstants.CAP_LAYOUT_IMPORT;
 import static org.carewebframework.shell.designer.DesignConstants.CAP_LAYOUT_LOAD;
 import static org.carewebframework.shell.designer.DesignConstants.CAP_LAYOUT_MANAGE;
 import static org.carewebframework.shell.designer.DesignConstants.CAP_LAYOUT_RENAME;
 import static org.carewebframework.shell.designer.DesignConstants.CAP_LAYOUT_SAVE;
-import static org.carewebframework.shell.designer.DesignConstants.ERR_LAYOUT_IMPORT;
 import static org.carewebframework.shell.designer.DesignConstants.MSG_LAYOUT_CLONE;
 import static org.carewebframework.shell.designer.DesignConstants.MSG_LAYOUT_DELETE;
-import static org.carewebframework.shell.designer.DesignConstants.MSG_LAYOUT_IMPORT;
 import static org.carewebframework.shell.designer.DesignConstants.MSG_LAYOUT_LOAD;
 import static org.carewebframework.shell.designer.DesignConstants.MSG_LAYOUT_MANAGE;
 import static org.carewebframework.shell.designer.DesignConstants.MSG_LAYOUT_RENAME;
 import static org.carewebframework.shell.designer.DesignConstants.MSG_LAYOUT_SAVE;
 import static org.carewebframework.shell.designer.DesignConstants.RESOURCE_PREFIX;
-
-import javax.print.attribute.standard.Media;
 
 import org.carewebframework.api.FrameworkUtil;
 import org.carewebframework.common.StrUtil;
@@ -51,11 +46,13 @@ import org.carewebframework.shell.layout.UILayout;
 import org.carewebframework.ui.zk.ListUtil;
 import org.carewebframework.ui.zk.PopupDialog;
 import org.carewebframework.ui.zk.PromptDialog;
+import org.carewebframework.web.client.ClientUtil;
 import org.carewebframework.web.component.BaseUIComponent;
 import org.carewebframework.web.component.Button;
 import org.carewebframework.web.component.Label;
 import org.carewebframework.web.component.Listbox;
 import org.carewebframework.web.component.Listitem;
+import org.carewebframework.web.component.Radiobutton;
 import org.carewebframework.web.component.Radiogroup;
 import org.carewebframework.web.component.Window;
 import org.carewebframework.web.event.ClickEvent;
@@ -97,7 +94,7 @@ public class LayoutManager extends Window {
     private boolean shared;
     
     private LayoutIdentifier selectedLayout;
-
+    
     private ModelAndView<Listitem, String> modelAndView;
     
     private final IComponentRenderer<Listitem, String> renderer = new IComponentRenderer<Listitem, String>() {
@@ -178,6 +175,7 @@ public class LayoutManager extends Window {
      * @return The layout identifier if the import was successful, null otherwise.
      */
     public static LayoutIdentifier importLayout(boolean shared) {
+        /*TODO:
         while (true) {
             try {
                 Media media = Fileupload.get(StrUtil.formatMessage(MSG_LAYOUT_IMPORT),
@@ -200,13 +198,13 @@ public class LayoutManager extends Window {
                 PromptDialog.showError(e);
             }
         }
-        
+        */
         return null;
     }
     
     public static void exportLayout(LayoutIdentifier layout) {
         String content = LayoutUtil.getLayoutContent(layout);
-        Filedownload.save(content, "text/xml", layout.name + ".xml");
+        ClientUtil.saveToFile(content, "text/xml", layout.name + ".xml");
     }
     
     /**
@@ -217,14 +215,14 @@ public class LayoutManager extends Window {
      * @return The selected layout name (if in selection mode).
      */
     private LayoutIdentifier show(boolean manage, String deflt) {
-        this.shared = defaultIsShared();
-        this.wireController(this);
+        shared = defaultIsShared();
+        wireController(this);
         setTitle(StrUtil.formatMessage(manage ? CAP_LAYOUT_MANAGE : CAP_LAYOUT_LOAD));
         lblPrompt.setLabel(StrUtil.formatMessage(manage ? MSG_LAYOUT_MANAGE : MSG_LAYOUT_LOAD));
         modelAndView = new ModelAndView<>(lstLayouts, null, renderer);
         pnlSelect.setVisible(!manage);
         pnlManage.setVisible(manage);
-        radioGroup.setSelectedIndex(shared ? 0 : 1);
+        ((Radiobutton) radioGroup.getChildAt(shared ? 0 : 1)).setChecked(true);
         pnlScope.addClass(manage ? "pull-right" : "pull-left");
         refresh(deflt);
         modal(null);
@@ -350,7 +348,7 @@ public class LayoutManager extends Window {
      * Refresh when shared/private toggled.
      */
     public void onCheck$radioGroup() {
-        shared = radioGroup.getSelectedIndex() == 0;
+        shared = radioGroup.getSelected().indexOf() == 0;
         defaultIsShared(shared);
         refresh(null);
     }

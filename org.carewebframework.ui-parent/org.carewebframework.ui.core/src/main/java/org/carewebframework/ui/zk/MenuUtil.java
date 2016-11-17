@@ -30,8 +30,10 @@ import java.util.List;
 import org.carewebframework.common.MiscUtil;
 import org.carewebframework.ui.zk.ZKUtil.MatchMode;
 import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.component.BaseLabeledImageComponent;
 import org.carewebframework.web.component.Menu;
 import org.carewebframework.web.component.Menuitem;
+import org.carewebframework.web.component.Menupopup;
 import org.carewebframework.web.component.Toolbar;
 
 /**
@@ -86,8 +88,8 @@ public class MenuUtil {
      * @param clazz Class of the element to be added.
      * @return The element that was added.
      */
-    public static <T extends LabelImageElement> T addMenuOrMenuItem(String path, T ele, Toolbar menubar,
-                                                                    BaseComponent insertBefore, Class<T> clazz) {
+    public static <T extends BaseLabeledImageComponent> T addMenuOrMenuItem(String path, T ele, Toolbar menubar,
+                                                                            BaseComponent insertBefore, Class<T> clazz) {
         String pcs[] = path == null ? NULL_PATH : path.split(Constants.PATH_DELIMITER_REGEX);
         int last = pcs.length - 1;
         BaseComponent parent = menubar;
@@ -108,7 +110,7 @@ public class MenuUtil {
         parent = getRealParent(parent);
         
         if (insertBefore != null && parent == insertBefore.getParent()) {
-            parent.addChild(ele, insertBefore.getIndex());
+            parent.addChild(ele, insertBefore.indexOf());
         } else {
             parent.addChild(ele);
         }
@@ -127,7 +129,7 @@ public class MenuUtil {
             return parent;
         }
         
-        Menupopup menuPopup = ZKUtil.findChild(parent, Menupopup.class);
+        Menupopup menuPopup = parent.getChild(Menupopup.class);
         
         if (menuPopup == null) {
             menuPopup = new Menupopup();
@@ -214,12 +216,13 @@ public class MenuUtil {
         int bottom = startIndex + 1;
         
         for (int i = startIndex; i < endIndex;) {
-            Object item1 = items.get(i++);
-            Object item2 = items.get(i);
+            BaseComponent item1 = items.get(i++);
+            BaseComponent item2 = items.get(i);
             
-            if (item1 instanceof LabelImageElement && item2 instanceof LabelImageElement && ((LabelImageElement) item1)
-                    .getLabel().compareToIgnoreCase(((LabelImageElement) item2).getLabel()) > 0) {
-                parent.insertBefore((LabelImageElement) item2, (LabelImageElement) item1);
+            if (item1 instanceof BaseLabeledImageComponent && item2 instanceof BaseLabeledImageComponent
+                    && ((BaseLabeledImageComponent) item1).getLabel()
+                            .compareToIgnoreCase(((BaseLabeledImageComponent) item2).getLabel()) > 0) {
+                parent.addChild(item2, item1.indexOf());
                 
                 if (i > bottom) {
                     i -= 2;
@@ -234,7 +237,7 @@ public class MenuUtil {
      * @param comp A menu or menu item.
      * @return The full path of the menu item.
      */
-    public static String getPath(LabelImageElement comp) {
+    public static String getPath(BaseLabeledImageComponent comp) {
         StringBuilder sb = new StringBuilder();
         getPath(comp, sb);
         return sb.toString();
@@ -253,8 +256,8 @@ public class MenuUtil {
         
         getPath(comp.getParent(), sb);
         
-        if (comp instanceof LabelImageElement) {
-            sb.append(Constants.PATH_DELIMITER).append(((LabelImageElement) comp).getLabel());
+        if (comp instanceof BaseLabeledImageComponent) {
+            sb.append(Constants.PATH_DELIMITER).append(((BaseLabeledImageComponent) comp).getLabel());
         }
     }
     
@@ -333,11 +336,11 @@ public class MenuUtil {
         if (comp instanceof Menupopup) {
             menupopup = (Menupopup) comp;
             boolean hasChildren = ZKUtil.firstVisibleChild(menupopup, false) != null;
-            menupopup.setZclass(hasChildren ? null : "cwf-menupopup-empty");
+            //TODO: menupopup.setZclass(hasChildren ? null : "cwf-menupopup-empty");
         } else if (comp instanceof Menu) {
             Menupopup child = ((Menu) comp).getMenupopup();
             boolean hasChildren = child != null && ZKUtil.firstVisibleChild(child, false) != null;
-            ZKUtil.toggleSclass((Menu) comp, "cwf-menu", "cwf-menuitem", hasChildren);
+            //TODO: ZKUtil.toggleSclass((Menu) comp, "cwf-menu", "cwf-menuitem", hasChildren);
         }
         
         boolean hasImages = menupopup == null;
@@ -348,7 +351,7 @@ public class MenuUtil {
         }
         
         if (menupopup != null) {
-            ZKUtil.updateSclass(menupopup, "cwf-menupopup-noimages", hasImages);
+            //TODO: ZKUtil.updateSclass(menupopup, "cwf-menupopup-noimages", hasImages);
         }
     }
     

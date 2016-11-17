@@ -25,17 +25,16 @@
  */
 package org.carewebframework.ui.zk;
 
-import org.zkoss.zul.Window;
+import org.carewebframework.web.component.Window;
+import org.carewebframework.web.page.PageUtil;
 
 public class PopupTest extends Window {
-    
-    private static final long serialVersionUID = 1L;
     
     public void onTest() throws Exception {
         PopupDialog popup = new PopupDialog(null, "Test Popup");
         setSizable(false);
-        ZKUtil.loadZulPage(ZKUtil.getResourcePath(PopupTest.class) + "testPopup2.cwf", popup);
-        popup.addForward("onTest", this, null);
+        PageUtil.createPage(ZKUtil.getResourcePath(PopupTest.class) + "testPopup2.cwf", popup);
+        popup.registerEventForward("test", this, null);
         popup.show();
     }
 }
