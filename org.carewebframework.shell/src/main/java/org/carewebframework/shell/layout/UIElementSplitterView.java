@@ -66,31 +66,4 @@ public class UIElementSplitterView extends UIElementCWFBase {
         return orientation == Orientation.HORIZONTAL;
     }
     
-    /**
-     * Adjust panes with relative dimensions after adding or removing a pane.
-     */
-    /*package*/void adjustPanes() {
-        int relCount = 0;
-        
-        for (UIElementBase child : getChildren()) {
-            UIElementSplitterPane splitterPane = (UIElementSplitterPane) child;
-            
-            if (splitterPane.isRelative()) {
-                relCount++;
-            }
-        }
-        
-        if (relCount > 0) {
-            double size = 100.0 / relCount;
-            
-            for (UIElementBase child : getChildren()) {
-                UIElementSplitterPane splitterPane = (UIElementSplitterPane) child;
-                
-                if (splitterPane.isRelative()) {
-                    splitterPane.setSize(size);
-                }
-            }
-        }
-    }
-    
 }

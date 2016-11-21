@@ -405,9 +405,7 @@ public class HelpViewer extends Window implements IHelpViewer, ITopicListener, I
     /**
      * Initializes the UI after initial loading.
      */
-    @Override
     public void _init() {
-        super._init();
         String proxyId = null; //TODO: Executions.getCurrent().getParameter("proxy");
         boolean proxied = proxyId != null;
         mode = proxied ? HelpViewerMode.POPUP : HelpViewerMode.EMBEDDED;

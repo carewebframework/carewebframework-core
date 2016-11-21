@@ -29,8 +29,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.swing.ListModel;
-
 import org.carewebframework.api.messaging.IPublisherInfo;
 import org.carewebframework.ui.FrameworkController;
 import org.carewebframework.ui.zk.PopupDialog;
@@ -39,6 +37,7 @@ import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.Button;
 import org.carewebframework.web.component.Checkbox;
 import org.carewebframework.web.component.Listbox;
+import org.carewebframework.web.model.ListModel;
 
 /**
  * Controller for inviting participants to a chat session.
@@ -59,7 +58,7 @@ public class InviteController extends FrameworkController {
     
     private Checkbox chkHideActive;
     
-    private final ListModelSet<IPublisherInfo> model = new ListModelSet<>();
+    private final ListModel<IPublisherInfo> model = new ListModel<>();
     
     private String sessionId;
     
@@ -93,7 +92,7 @@ public class InviteController extends FrameworkController {
         Collection<IPublisherInfo> exclusions = (Collection<IPublisherInfo>) comp.findAttribute("exclusions");
         model.setMultiple(lstSessions.isMultiple());
         renderer = new ParticipantRenderer(chatService.getSelf(), exclusions);
-        lstSessions.setItemRenderer(renderer);
+        lstSessions.getModelAndView(IPublisherInfo.class).setRenderer(renderer);
         RowComparator.autowireColumnComparators(lstSessions.getListhead().getChildren());
         chkHideActive.setChecked(getAppFramework().getAttribute(ATTR_HIDE) != null);
         refresh();
@@ -104,11 +103,11 @@ public class InviteController extends FrameworkController {
      */
     @Override
     public void refresh() {
-        lstSessions.setModel((ListModel<?>) null);
+        lstSessions.getModelAndView(IPublisherInfo.class).setModel(null);
         model.clear();
         model.addAll(chatService.getChatCandidates());
         renderer.setHideExclusions(chkHideActive.isChecked());
-        lstSessions.setModel(model);
+        lstSessions.getModelAndView(IPublisherInfo.class).setModel(model);
         getUserName.sort(true);
         updateControls();
     }

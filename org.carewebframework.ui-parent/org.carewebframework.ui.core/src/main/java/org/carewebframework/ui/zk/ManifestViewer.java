@@ -38,26 +38,28 @@ import org.carewebframework.api.ManifestIterator;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.ui.FrameworkController;
 import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.component.Column;
 import org.carewebframework.web.component.Label;
-import org.carewebframework.web.component.Listbox;
-import org.carewebframework.web.component.Listitem;
+import org.carewebframework.web.component.Row;
 import org.carewebframework.web.component.Span;
+import org.carewebframework.web.component.Table;
 import org.carewebframework.web.component.Textbox;
 import org.carewebframework.web.event.DblclickEvent;
-import org.carewebframework.web.event.EventUtil;
+import org.carewebframework.web.event.Event;
 import org.carewebframework.web.event.InputEvent;
 import org.carewebframework.web.model.IComponentRenderer;
+import org.carewebframework.web.model.IListModel;
+import org.carewebframework.web.model.IModelAndView;
 import org.carewebframework.web.model.ListModel;
 import org.carewebframework.web.model.ModelAndView;
+import org.carewebframework.web.model.Sorting.SortOrder;
 
 /**
  * Displays a dialog showing all known manifests or details about a single manifest.
  */
 public class ManifestViewer extends FrameworkController {
     
-    private static final long serialVersionUID = 1L;
-    
-    private interface Matchable<T> extends Comparable<T> {
+    private interface Matchable<M> extends Comparable<M> {
         
         boolean matches(String filter);
     }
@@ -132,7 +134,7 @@ public class ManifestViewer extends FrameworkController {
     }
     
     /**
-     * A single attribute item from a manifest.
+     * A single attribute row from a manifest.
      */
     public static class AttributeItem implements Matchable<AttributeItem> {
         
@@ -160,69 +162,61 @@ public class ManifestViewer extends FrameworkController {
     /**
      * Base renderer.
      * 
-     * @param <T> Class of rendered object.
+     * @param <M> Class of rendered object.
      */
-    private static abstract class BaseRenderer<T> implements IComponentRenderer<Listitem, T> {
+    private static abstract class BaseRenderer<M> implements IComponentRenderer<Row, M> {
         
-        public abstract ModelAndView<Listitem, T> init(Listbox list);
+        public abstract void init(Table table);
         
         /**
-         * Adds a cell with the specified content to the list item.
+         * Adds a cell with the specified content to the table row.
          * 
-         * @param item List item.
+         * @param row List row.
          * @param label Content for cell. Auto-detects type of content.
          * @return Newly created cell.
          */
-        public Span addContent(Listitem item, String label) {
+        public Span addContent(Row row, String label) {
             Span cell = new Span();
             cell.addChild(ZKUtil.getTextComponent(label));
-            item.addChild(cell);
+            row.addChild(cell);
             return cell;
         }
         
         /**
-         * Adds a cell to the list item.
+         * Adds a cell to the table row.
          * 
-         * @param item List item.
+         * @param row List row.
          * @param label Label text for cell.
          * @return Newly created cell.
          */
-        public Label addLabel(Listitem item, String label) {
+        public Label addLabel(Row row, String label) {
             Label cell = new Label(label);
-            item.addChild(cell);
+            row.addChild(cell);
             return cell;
         }
         
         /**
-         * Adds a header to a list box.
+         * Adds a column to a table.
          * 
-         * @param list List box.
-         * @param label Label for header.
-         * @param width Width for header.
+         * @param table Table.
+         * @param label Label for column.
+         * @param width Width for column.
          * @param orderBy The field to sort by.
-         * @return Newly created header.
+         * @return Newly created column.
          */
-        public Listheader addHeader(final Listbox list, String label, String width, String orderBy) {
-            Listheader header = new Listheader();
-            list.getListhead().appendChild(header);
-            header.setLabel(label);
-            header.setWidth(width);
+        public Column addColumn(Table table, String label, String width, String orderBy) {
+            Column column = new Column();
+            table.getColumns().addChild(column);
+            column.setLabel(label);
+            column.setWidth(width);
             orderBy = "auto(upper(" + orderBy + "))";
-            header.setSort(orderBy);
+            column.setSort(orderBy);
             
-            if (header.getColumnIndex() == 0) {
-                header.setSortDirection("ascending");
+            if (column.indexOf() == 0) {
+                column.setSortOrder(SortOrder.ASCENDING);
             }
             
-            header.addEventListener(Events.ON_SORT, new EventListener<SortEvent>() {
-                
-                @Override
-                public void onEvent(SortEvent event) throws Exception {
-                    EventUtil.post("afterSort", list, event);
-                }
-                
-            });
-            return header;
+            return column;
         }
         
     }
@@ -233,22 +227,22 @@ public class ManifestViewer extends FrameworkController {
     private static final BaseRenderer<ManifestItem> manifestItemRenderer = new BaseRenderer<ManifestItem>() {
         
         @Override
-        public Listitem render(ManifestItem manifestItem) {
-            Listitem item = new Listitem();
-            item.setData(manifestItem);
-            addLabel(item, manifestItem.implModule);
-            addLabel(item, manifestItem.implVersion);
-            addLabel(item, manifestItem.implVendor);
-            return item;
+        public Row render(ManifestItem manifestItem) {
+            Row row = new Row();
+            row.setData(manifestItem);
+            addLabel(row, manifestItem.implModule);
+            addLabel(row, manifestItem.implVersion);
+            addLabel(row, manifestItem.implVendor);
+            return row;
         }
         
         @Override
-        public ModelAndView<Listitem, ManifestItem> init(Listbox list) {
-            ModelAndView<Listitem, ManifestItem> modelAndView = new ModelAndView<>(list, null, this);
-            list.registerEventForward(DblclickEvent.TYPE, list, "onShowManifest");
-            addHeader(list, "Module", "40%", "implModule");
-            addHeader(list, "Version", "20%", "implVersion");
-            addHeader(list, "Author", "40%", "implVendor");
+        public void init(Table table) {
+            table.getRows().getModelAndView(ManifestItem.class).setRenderer(this);
+            table.registerEventForward(DblclickEvent.TYPE, table, "onShowManifest");
+            addColumn(table, "Module", "40%", "implModule");
+            addColumn(table, "Version", "20%", "implVersion");
+            addColumn(table, "Author", "40%", "implVendor");
         }
         
     };
@@ -259,36 +253,36 @@ public class ManifestViewer extends FrameworkController {
     private static final BaseRenderer<AttributeItem> attributeItemRenderer = new BaseRenderer<AttributeItem>() {
         
         @Override
-        public Listitem render(AttributeItem attributeItem) {
-            Listitem item = new Listitem();
-            item.setData(attributeItem);
-            addLabel(item, attributeItem.name);
-            addContent(item, attributeItem.value);
-            return item;
+        public Row render(AttributeItem attributeItem) {
+            Row row = new Row();
+            row.setData(attributeItem);
+            addLabel(row, attributeItem.name);
+            addContent(row, attributeItem.value);
+            return row;
         }
         
         @Override
-        public void init(Listbox list, ModelAndView<Listitem, ?> modelAndView) {
-            modelAndView.setRenderer(this);
-            addHeader(list, "Attribute", "30%", "name");
-            addHeader(list, "Value", "70%", "value");
+        public void init(Table table) {
+            //modelAndView.setRenderer(this);
+            addColumn(table, "Attribute", "30%", "name");
+            addColumn(table, "Value", "70%", "value");
         }
         
     };
     
-    private ModelAndView<Listitem, Matchable<?>> modelAndView;
+    private ModelAndView<Row, Matchable<?>> modelAndViewx;
     
-    private Listbox list;
+    private Table table;
     
-    private Caption caption;
+    private Label caption;
     
     private Textbox txtSearch;
     
-    private SortEvent sortEvent;
+    private Event sortEvent;
     
-    private final List<Matchable<?>> items = new ArrayList<>();
+    private final List<Matchable<?>> rows = new ArrayList<>();
     
-    private final ListModel<Matchable<?>> model = new ListModel<>();
+    private final IListModel<Matchable> model = new ListModel<>();
     
     /**
      * Display a summary dialog of all known manifests.
@@ -300,7 +294,7 @@ public class ManifestViewer extends FrameworkController {
     /**
      * Display a detail dialog for a single manifest entry.
      * 
-     * @param manifestItem The item to display. If null, all manifests are displayed.
+     * @param manifestItem The row to display. If null, all manifests are displayed.
      */
     private static void execute(ManifestItem manifestItem) {
         Map<Object, Object> args = new HashMap<>();
@@ -314,7 +308,6 @@ public class ManifestViewer extends FrameworkController {
     @Override
     public void afterInitialized(BaseComponent comp) {
         super.afterInitialized(comp);
-        modelAndView = new ModelAndView<>(list);
         ManifestItem manifestItem = (ManifestItem) comp.getAttribute("manifestItem");
         BaseRenderer<?> renderer;
         
@@ -323,7 +316,7 @@ public class ManifestViewer extends FrameworkController {
             caption.setLabel(manifestItem.implModule);
             
             for (Entry<Object, Object> entry : manifestItem.manifest.getMainAttributes().entrySet()) {
-                items.add(new AttributeItem(entry));
+                rows.add(new AttributeItem(entry));
             }
         } else {
             renderer = manifestItemRenderer;
@@ -331,24 +324,22 @@ public class ManifestViewer extends FrameworkController {
             for (Manifest mnfst : ManifestIterator.getInstance()) {
                 ManifestItem anItem = new ManifestItem(mnfst);
                 
-                if (!anItem.isEmpty() && !items.contains(anItem)) {
-                    items.add(anItem);
+                if (!anItem.isEmpty() && !rows.contains(anItem)) {
+                    rows.add(anItem);
                 }
             }
         }
         
-        renderer.init(list);
-        int rows = items.size();
-        list.setRows(rows > 15 ? 15 : rows);
+        renderer.init(table);
         filterChanged(null);
     }
     
     /**
      * Show a detail view of the selected manifest.
      */
-    public void onShowManifest$list() {
-        Listitem item = list.getSelectedItem();
-        ManifestItem manifestItem = item == null ? null : (ManifestItem) item.getData();
+    public void onShowManifest$table() {
+        Row row = table.getRows().getSelectedCount() == 0 ? null : table.getRows().getSelected().get(0);
+        ManifestItem manifestItem = row == null ? null : (ManifestItem) row.getData();
         
         if (manifestItem != null) {
             execute(manifestItem);
@@ -356,11 +347,11 @@ public class ManifestViewer extends FrameworkController {
     }
     
     /**
-     * Force rendering of all list items after sorting (so printing works correctly).
+     * Force rendering of all table rows after sorting (so printing works correctly).
      * 
      * @param event The sort event.
      */
-    public void onAfterSort$list(SortEvent event) {
+    public void onAfterSort$table(Event event) {
         sortEvent = event;
     }
     
@@ -374,34 +365,26 @@ public class ManifestViewer extends FrameworkController {
         
     }
     
-    public void onSelect$list() {
+    public void onSelect$table() {
         txtSearch.focus();
     }
     
     public void filterChanged(String filter) {
+        IModelAndView<Row, Matchable> modelAndView = table.getRows().getModelAndView(Matchable.class);
         modelAndView.setModel(null);
         model.clear();
         
         if (StringUtils.isEmpty(filter)) {
-            model.addAll(items);
+            model.addAll(rows);
         } else {
-            for (Matchable<?> item : items) {
-                if (item.matches(filter)) {
-                    model.add(item);
+            for (Matchable<?> row : rows) {
+                if (row.matches(filter)) {
+                    model.add(row);
                 }
             }
         }
         
-        if (sortEvent == null) {
-            model.sort(true);
-        }
-        
         modelAndView.setModel(model);
-        
-        if (sortEvent != null) {
-            Listheader lh = (Listheader) sortEvent.getTarget();
-            lh.sort(sortEvent.isAscending(), true);
-        }
     }
     
 }

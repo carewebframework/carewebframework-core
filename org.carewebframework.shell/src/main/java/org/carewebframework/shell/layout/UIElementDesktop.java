@@ -35,7 +35,6 @@ import org.carewebframework.shell.designer.DesignMenu;
 import org.carewebframework.shell.plugins.PluginResourceHelp;
 import org.carewebframework.theme.ThemeUtil;
 import org.carewebframework.ui.action.ActionListener;
-import org.carewebframework.ui.zk.MenuEx;
 import org.carewebframework.ui.zk.MenuUtil;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.BaseUIComponent;
@@ -45,6 +44,7 @@ import org.carewebframework.web.component.Menu;
 import org.carewebframework.web.component.Menuitem;
 import org.carewebframework.web.component.Menupopup;
 import org.carewebframework.web.component.Toolbar;
+import org.carewebframework.web.event.Event;
 import org.carewebframework.web.event.IEventListener;
 
 /**
@@ -113,13 +113,13 @@ public class UIElementDesktop extends UIElementCWFBase {
         ActionListener.addAction(mnuTOC, "zscript:org.carewebframework.shell.help.HelpUtil.showTOC();");
         fixedHelpItems = helpMenuRoot.getChildren().size();
         sortHelpMenu = false;
-        helpMenuRoot.addEventListener(Events.ON_OPEN, new IEventListener() {
+        helpMenuRoot.registerEventListener("open", new IEventListener() {
             
             @Override
-            public void onEvent(OpenEvent event) throws Exception {
-                if (sortHelpMenu && event.isOpen()) {
+            public void onEvent(Event event) {
+                /*TODO:  if (sortHelpMenu && event.isOpen()) {
                     sortHelpMenu();
-                }
+                }*/
             }
         });
         
@@ -276,11 +276,14 @@ public class UIElementDesktop extends UIElementCWFBase {
      *         Otherwise, it is a reference to the newly created menu item.
      */
     public Menu addMenu(String namePath, String action, boolean fixed) {
+        return null;
+        /* TODO:
         Menu menubar = fixed ? menubar2 : menubar1;
         Menu menu = MenuUtil.addMenuOrMenuItem(namePath, null, menubar, null, MenuEx.class);
         MenuUtil.updateStyles(menu);
         ActionListener.addAction(menu, action);
         return menu;
+        */
     }
     
     /**

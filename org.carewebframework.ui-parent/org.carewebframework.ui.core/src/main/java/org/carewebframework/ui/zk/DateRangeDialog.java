@@ -30,7 +30,10 @@ import java.util.Date;
 import org.carewebframework.common.DateRange;
 import org.carewebframework.common.DateUtil;
 import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.component.Datebox;
 import org.carewebframework.web.component.Window;
+import org.carewebframework.web.event.EventUtil;
+import org.carewebframework.web.page.PageUtil;
 
 /**
  * Presents a date range dialog.
@@ -53,10 +56,9 @@ public class DateRangeDialog extends Window {
      * Wire events and variables and set default values for input boxes.
      */
     public void onCreate() {
-        ZKUtil.wireController(this);
         startDate.setValue(startDefault);
         endDate.setValue(endDefault);
-        Events.echoEvent("onShow", this, null);
+        EventUtil.post("onShow", this, null);
     }
     
     /**
@@ -64,7 +66,7 @@ public class DateRangeDialog extends Window {
      * an asynch event because the selection doesn't appear to work otherwise.
      */
     public void onShow() {
-        startDate.select();
+        startDate.selectAll();
         startDate.setFocus(true);
     }
     
@@ -93,11 +95,10 @@ public class DateRangeDialog extends Window {
         DateRangeDialog dlg = null;
         
         try {
-            dlg = (DateRangeDialog) ZKUtil.loadZulPage(Constants.RESOURCE_PREFIX + "dateRangeDialog.cwf", null);
+            dlg = (DateRangeDialog) PageUtil.createPage(Constants.RESOURCE_PREFIX + "dateRangeDialog.cwf", parent).get(0);
             dlg.startDefault = startDefault;
             dlg.endDefault = endDefault;
-            dlg.setPage(parent.getPage());
-            dlg.doModal();
+            dlg.modal(null);
             return dlg.dateRange;
         } catch (Exception e) {
             if (dlg != null) {

@@ -177,7 +177,7 @@ public class MainController extends PluginController implements IInfoPanel {
         openAlertPanel(null);
         
         if (action == Action.TOP) {
-            alertGrid.setActivePage(0);
+            //alertGrid.setActivePage(0);
         }
     }
     
@@ -203,8 +203,8 @@ public class MainController extends PluginController implements IInfoPanel {
         open = open == null ? alertCount > 0 : open;
         alertPanelOpen = open;
         alertGrid.setVisible(open);
-        alertPanel.setMinsize(open ? 70 : 0);
-        alertPanel.setSplittable(open);
+        //alertPanel.setMinsize(open ? 70 : 0);
+        //alertPanel.setSplittable(open);
         alertPanel.setHeight(open ? this.openAlertPanelHeight : this.collapsedAlertPanelHeight);
         alertIcon.addClass(open ? "chevron:glyphicon-chevron-down" : "chevron:glyphicon-chevron-up");
         
@@ -246,7 +246,7 @@ public class MainController extends PluginController implements IInfoPanel {
     @Override
     public void showAlert(BaseComponent root) {
         AlertContainer.render(alertRoot, root);
-        alertGrid.setActivePage(0);
+        //alertGrid.setActivePage(0);
         openAlertPanel(true);
     }
     

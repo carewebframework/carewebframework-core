@@ -237,7 +237,7 @@ public class HelpUtil {
      * @param helpContext The help target.
      * @param commandTarget The command target.
      */
-    public static void associateCSH(BaseUIComponent component, HelpContext helpContext, BaseComponent commandTarget) {
+    public static void associateCSH(BaseUIComponent component, HelpContext helpContext, BaseUIComponent commandTarget) {
         if (component != null) {
             component.setAttribute(CSH_TARGET, helpContext);
             CommandUtil.associateCommand("help", component, commandTarget);

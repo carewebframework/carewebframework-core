@@ -29,22 +29,24 @@ import org.carewebframework.common.XMLUtil;
 import org.carewebframework.common.XMLUtil.TagFormat;
 import org.carewebframework.ui.xml.XMLTreeModel.XMLTreeNode;
 import org.carewebframework.ui.zk.TreeUtil.ITreenodeSearch;
+import org.carewebframework.web.component.Cell;
 import org.carewebframework.web.component.Label;
 import org.carewebframework.web.component.Treenode;
+import org.carewebframework.web.model.IComponentRenderer;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
 /**
  * Renderer for xml tree.
  */
-class XMLViewerRenderer implements TreenodeRenderer<XMLTreeNode> {
+class XMLViewerRenderer implements IComponentRenderer<Treenode, XMLTreeNode> {
     
     /**
      * Value associated with each tree item.
      */
     private class TreenodeValue {
         
-        private Treecell cell;
+        private Cell cell;
         
         private Label closingTag;
         
@@ -86,7 +88,8 @@ class XMLViewerRenderer implements TreenodeRenderer<XMLTreeNode> {
     };
     
     @Override
-    public void render(Treenode item, XMLTreeNode data, int index) throws Exception {
+    public Treenode render(XMLTreeNode data) {
+        Treenode item = new Treenode();
         Node node = data.getData();
         item.setLabel(null);
         TreenodeValue itemValue = new TreenodeValue();
@@ -95,12 +98,12 @@ class XMLViewerRenderer implements TreenodeRenderer<XMLTreeNode> {
         
         if (node.getNodeType() == Node.TEXT_NODE) {
             addLabel(itemValue, node.getNodeValue(), XMLConstants.STYLE_CONTENT);
-            return;
+            return item;
         }
         
         if (node.getParentNode() == null) { // Closing tag
             addLabel(itemValue, XMLUtil.formatNodeName(node, TagFormat.CLOSING), XMLConstants.STYLE_TAG);
-            return;
+            return item;
         }
         
         boolean leaf = !node.hasChildNodes();

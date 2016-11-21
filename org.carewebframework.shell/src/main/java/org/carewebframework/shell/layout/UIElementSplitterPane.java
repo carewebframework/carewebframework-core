@@ -39,11 +39,9 @@ public class UIElementSplitterPane extends UIElementCWFBase {
     
     private final Pane pane = new Pane();
     
-    private double size;
+    private int size;
     
     private boolean relative;
-    
-    private boolean deserializing;
     
     public UIElementSplitterPane() {
         super();
@@ -51,13 +49,13 @@ public class UIElementSplitterPane extends UIElementCWFBase {
         setOuterComponent(pane);
     }
     
-    public void setSize(double size) {
+    public void setSize(int size) {
         this.size = size;
         updateSize();
     }
     
-    public double getSize() {
-        return relative ? pane.getRelativeSize() : pane.getAbsoluteSize();
+    public int getSize() {
+        return size;
     }
     
     @Override
@@ -77,22 +75,6 @@ public class UIElementSplitterPane extends UIElementCWFBase {
         super.afterInitialize(deserializing);
     }
     
-    @Override
-    public void afterParentChanged(UIElementBase oldParent) {
-        if (!deserializing) {
-            notifyParent((UIElementSplitterView) oldParent);
-            notifyParent((UIElementSplitterView) getParent());
-        }
-        
-        super.afterParentChanged(oldParent);
-    }
-    
-    private void notifyParent(UIElementSplitterView parent) {
-        if (parent != null) {
-            parent.adjustPanes();
-        }
-    }
-    
     public void setRelative(boolean relative) {
         this.relative = relative;
         updateSize();
@@ -103,18 +85,18 @@ public class UIElementSplitterPane extends UIElementCWFBase {
     }
     
     public String getCaption() {
-        return pane.getTitle();
+        return null; //TODO:pane.getTitle();
     }
     
     public void setCaption(String caption) {
-        pane.setTitle(caption);
+        //TODO: pane.setTitle(caption);
     }
     
     private void updateSize() {
         if (relative) {
-            pane.setRelativeSize(size);
+            pane.addStyle("flex", Integer.toString(size));
         } else {
-            pane.setAbsoluteSize((int) Math.round(size));
+            pane.setHeight(size + "px");
         }
     }
 }

@@ -32,7 +32,6 @@ import org.carewebframework.api.domain.IUser;
 import org.carewebframework.api.security.SecurityUtil;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.security.spring.Constants;
-import org.carewebframework.ui.zk.ZKUtil;
 import org.carewebframework.web.ancillary.IAutoWired;
 import org.carewebframework.web.client.ClientUtil;
 import org.carewebframework.web.component.BaseComponent;
@@ -44,6 +43,7 @@ import org.carewebframework.web.component.Timer;
 import org.carewebframework.web.event.Event;
 import org.carewebframework.web.event.EventUtil;
 import org.carewebframework.web.event.IEventListener;
+import org.carewebframework.web.page.PageUtil;
 import org.springframework.security.authentication.CredentialsExpiredException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.WebAttributes;
@@ -111,7 +111,7 @@ public class LoginWindowController implements IAutoWired {
         AuthenticationException authError = (AuthenticationException) session
                 .removeAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
         IUser user = (IUser) session.removeAttribute(org.carewebframework.security.spring.Constants.SAVED_USER);
-        Map<Object, Object> args = new HashMap<>();
+        Map<String, Object> args = new HashMap<>();
         args.put("savedRequest", savedRequest);
         args.put("authError", authError);
         String form;
@@ -127,7 +127,7 @@ public class LoginWindowController implements IAutoWired {
             title = Constants.LBL_LOGIN_PAGE_TITLE;
         }
         
-        wireListener(ZKUtil.loadZulPage(form, loginForm, args));
+        wireListener(PageUtil.createPage(form, loginForm, args).get(0));
         root.getPage().setTitle(StrUtil.getLabel(title));
         resetTimer();
     }

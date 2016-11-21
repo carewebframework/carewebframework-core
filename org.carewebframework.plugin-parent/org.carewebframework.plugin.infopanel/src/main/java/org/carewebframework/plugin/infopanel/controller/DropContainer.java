@@ -127,11 +127,11 @@ public class DropContainer extends Window implements IActionTarget {
                 break;
             
             case COLLAPSE:
-                setOpen(false);
+                setSize(Size.MINIMIZED);
                 break;
             
             case EXPAND:
-                setOpen(true);
+                setSize(Size.NORMAL);
                 break;
             
             case TOP:

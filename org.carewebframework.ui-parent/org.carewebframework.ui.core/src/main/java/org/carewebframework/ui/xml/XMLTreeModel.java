@@ -27,16 +27,12 @@ package org.carewebframework.ui.xml;
 
 import java.util.Collection;
 
-import org.zkoss.zul.DefaultTreeModel;
-import org.zkoss.zul.DefaultTreeNode;
-
+import org.carewebframework.web.model.NestedModel;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-public class XMLTreeModel extends DefaultTreeModel<Node> {
-    
-    private static final long serialVersionUID = 1L;
+public class XMLTreeModel extends NestedModel<Node> {
     
     public static class XMLTreeNode extends DefaultTreeNode<Node> {
         
