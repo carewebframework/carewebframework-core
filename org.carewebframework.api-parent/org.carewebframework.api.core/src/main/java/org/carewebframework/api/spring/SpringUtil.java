@@ -25,7 +25,12 @@
  */
 package org.carewebframework.api.spring;
 
+import java.io.IOException;
+
+import org.carewebframework.common.MiscUtil;
 import org.springframework.context.ApplicationContext;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 /**
  * Static utility class for the access to Spring Framework services.
@@ -35,6 +40,8 @@ public class SpringUtil {
     private static IAppContextFinder appContextFinder;
     
     private static volatile PropertyProvider propertyProvider;
+    
+    private static final PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
     
     /**
      * Sets the finder logic for locating the framework context. This is set during framework
@@ -123,9 +130,34 @@ public class SpringUtil {
     }
     
     /**
+     * Returns the resource at the specified location. Supports classpath references.
+     * 
+     * @param location The resource location.
+     * @return The corresponding resource, or null if one does not exist.
+     */
+    public static Resource getResource(String location) {
+        Resource resource = resolver.getResource(location);
+        return resource.exists() ? resource : null;
+    }
+    
+    /**
+     * Returns an array of resources matching the location pattern.
+     * 
+     * @param locationPattern The location pattern. Supports classpath references.
+     * @return Array of matching resources.
+     */
+    public static Resource[] getResources(String locationPattern) {
+        try {
+            return resolver.getResources(locationPattern);
+        } catch (IOException e) {
+            throw MiscUtil.toUnchecked(e);
+        }
+    }
+    
+    /**
      * Enforce static class.
      */
     private SpringUtil() {
-    };
+    }
     
 }

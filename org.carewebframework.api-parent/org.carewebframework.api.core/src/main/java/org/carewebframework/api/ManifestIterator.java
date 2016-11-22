@@ -35,22 +35,16 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
+import org.carewebframework.api.spring.SpringUtil;
 import org.carewebframework.common.StrUtil;
-
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.io.Resource;
 
 /**
  * Service that provides access to manifests for all components on the class path.
  */
-public class ManifestIterator implements ApplicationContextAware, Iterable<Manifest> {
-    
+public class ManifestIterator implements Iterable<Manifest> {
     
     private static class ManifestEx extends Manifest {
-        
         
         private final String path;
         
@@ -88,8 +82,6 @@ public class ManifestIterator implements ApplicationContextAware, Iterable<Manif
     
     private List<Manifest> manifests;
     
-    private ApplicationContext appContext;
-    
     /**
      * Returns the manifest iterator instance.
      * 
@@ -114,13 +106,13 @@ public class ManifestIterator implements ApplicationContextAware, Iterable<Manif
         if (manifests == null) {
             manifests = new ArrayList<>();
             try {
-                primaryManifest = addToList(appContext.getResource(MANIFEST_PATH));
-                Resource[] resources = appContext.getResources("classpath*:/" + MANIFEST_PATH);
+                primaryManifest = addToList(SpringUtil.getResource(MANIFEST_PATH));
+                Resource[] resources = SpringUtil.getResources("classpath*:/" + MANIFEST_PATH);
                 
                 for (Resource resource : resources) {
                     addToList(resource);
                 }
-            } catch (IOException e) {
+            } catch (Exception e) {
                 log.error("Error enumerating manifests.", e);
             }
             
@@ -184,14 +176,6 @@ public class ManifestIterator implements ApplicationContextAware, Iterable<Manif
         }
         
         return null;
-    }
-    
-    /**
-     * Called by the container to inject itself into this instance.
-     */
-    @Override
-    public void setApplicationContext(ApplicationContext appContext) throws BeansException {
-        this.appContext = appContext;
     }
     
 }
