@@ -29,9 +29,11 @@ import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.property.PropertyInfo;
 import org.carewebframework.web.component.Popupbox;
 import org.carewebframework.web.component.Textbox;
+import org.carewebframework.web.event.ChangeEvent;
 import org.carewebframework.web.event.Event;
 import org.carewebframework.web.event.EventUtil;
 import org.carewebframework.web.event.InputEvent;
+import org.carewebframework.web.event.SelectEvent;
 
 /**
  * Editor for simple text.
@@ -56,10 +58,10 @@ public class PropertyEditorText extends PropertyEditorBase {
             textbox.setMaxLength(maxLength);
         }
         
-        popupbox.addForward(Events.ON_CHANGING, propGrid, Events.ON_CHANGE);
-        textbox.addForward(Events.ON_CHANGING, popupbox, Events.ON_CHANGE);
-        popupbox.addForward(Events.ON_FOCUS, propGrid, Events.ON_SELECT);
-        textbox.addForward(Events.ON_FOCUS, popupbox, Events.ON_SELECT);
+        popupbox.registerEventForward(ChangeEvent.TYPE, propGrid, null);
+        textbox.registerEventForward(ChangeEvent.TYPE, popupbox, null);
+        popupbox.registerEventForward("focus", propGrid, SelectEvent.TYPE);
+        textbox.registerEventForward("focus", popupbox, SelectEvent.TYPE);
     }
     
     @Override
@@ -93,7 +95,7 @@ public class PropertyEditorText extends PropertyEditorBase {
     }
     
     public void onOpen$popupbox() {
-        Events.echoEvent("onDelayedFocus", popupbox, popupbox.isOpen() ? textbox : popupbox);
+        EventUtil.post("onDelayedFocus", popupbox, popupbox.isOpen() ? textbox : popupbox);
     }
     
     public void onDelayedFocus$popupbox(Event event) {

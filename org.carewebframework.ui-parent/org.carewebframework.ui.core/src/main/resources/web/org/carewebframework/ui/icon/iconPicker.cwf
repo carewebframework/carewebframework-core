@@ -1,0 +1,5 @@
+
+<span controller="org.carewebframework.ui.icon.IconPicker">
+	<combobox name="cboLibrary" readonly="true" />
+	<imagepicker name="imagePicker" />
+</span>

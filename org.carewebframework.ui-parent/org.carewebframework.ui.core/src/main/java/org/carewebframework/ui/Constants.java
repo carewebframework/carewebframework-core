@@ -25,7 +25,7 @@
  */
 package org.carewebframework.ui;
 
-import org.carewebframework.ui.zk.ZKUtil;
+import org.carewebframework.ui.core.CWFUtil;
 
 /**
  * Constants class
@@ -35,7 +35,7 @@ public class Constants {
     /**
      * Primarily used to locate the embedded 'web' resources.
      */
-    public static final String RESOURCE_PREFIX = ZKUtil.getResourcePath(Constants.class);
+    public static final String RESOURCE_PREFIX = CWFUtil.getResourcePath(Constants.class);
     
     /**
      * Namespace/prefix for plugins (i.e. java package)

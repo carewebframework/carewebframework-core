@@ -27,7 +27,7 @@ package org.carewebframework.shell.designer;
 
 import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.property.PropertyInfo;
-import org.carewebframework.ui.zk.ZKUtil;
+import org.carewebframework.ui.core.CWFUtil;
 import org.carewebframework.web.component.BaseUIComponent;
 import org.carewebframework.web.event.ChangeEvent;
 import org.carewebframework.web.event.SelectEvent;
@@ -187,7 +187,7 @@ public abstract class PropertyEditorBase {
      * @param exc The exception to display.
      */
     public void setWrongValueException(Throwable exc) {
-        setWrongValueMessage(ZKUtil.formatExceptionForDisplay(exc));
+        setWrongValueMessage(CWFUtil.formatExceptionForDisplay(exc));
     }
     
     /**

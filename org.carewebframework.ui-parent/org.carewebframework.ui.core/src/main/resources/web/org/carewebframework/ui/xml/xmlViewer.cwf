@@ -1,0 +1,9 @@
+<window title="CWF Markup" closable="true" sizable="true" width="75%"
+	height="75%" controller="org.carewebframework.ui.xml.XMLViewerController">
+	<treeview name="tree" style="flex:1" />
+	<toolbar align="end" width="100%">
+		<label name="lblNotFound" label="Text not found" style="color: gray" visible="false" />
+		<textbox name="txtSearch" width="350px" focus="true" forward="enter=btnSearch.click"/>
+		<button name="btnSearch" label="Search" />
+	</toolbar>
+</window>

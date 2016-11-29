@@ -36,7 +36,8 @@ import org.carewebframework.api.messaging.Message;
 import org.carewebframework.api.messaging.ProducerService;
 import org.carewebframework.shell.plugins.PluginContainer;
 import org.carewebframework.shell.plugins.PluginController;
-import org.carewebframework.ui.zk.PromptDialog;
+import org.carewebframework.ui.dialog.DialogUtil;
+import org.carewebframework.ui.dialog.InputDialog.IInputCallback;
 import org.carewebframework.ui.zk.ZKUtil;
 import org.carewebframework.web.component.Button;
 import org.carewebframework.web.component.Checkbox;
@@ -137,13 +138,18 @@ public class MainController extends PluginController {
     }
     
     public void onClick$btnAddSubscription() {
-        String channel = PromptDialog.input("Enter the name of the channel to subscribe to:", "Subscribe to Channel");
-        
-        if (channel != null && !channels.contains(channel)) {
-            channels.add(channel);
-            channels2.add(channel);
-            subscribe(channel, true);
-        }
+        DialogUtil.input("Enter the name of the channel to subscribe to:", "Subscribe to Channel", new IInputCallback() {
+            
+            @Override
+            public void onComplete(String channel) {
+                if (channel != null && !channels.contains(channel)) {
+                    channels.add(channel);
+                    channels2.add(channel);
+                    subscribe(channel, true);
+                }
+            }
+            
+        });
     }
     
     public void onClick$btnRemoveSubscription() {

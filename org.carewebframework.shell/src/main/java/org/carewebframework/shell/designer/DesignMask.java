@@ -26,7 +26,6 @@
 package org.carewebframework.shell.designer;
 
 import org.carewebframework.shell.layout.UIElementCWFBase;
-import org.carewebframework.ui.zk.ZKUtil;
 import org.carewebframework.web.component.BaseUIComponent;
 import org.carewebframework.web.component.Menupopup;
 import org.carewebframework.web.event.Event;
@@ -95,7 +94,7 @@ public class DesignMask implements IEventListener {
             } else {
                 maskEvent = null;
                 target.unregisterEventListener("onMask", this);
-                ZKUtil.removeMask(target);
+                target.removeMask();
             }
         }
         

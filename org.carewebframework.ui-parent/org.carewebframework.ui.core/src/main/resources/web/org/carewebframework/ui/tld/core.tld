@@ -41,23 +41,4 @@
 		</description>
 	</function>
 	
-	<function>
-		<name>getFellow</name>
-		<function-class>org.carewebframework.ui.zk.ZKUtil</function-class>
-		<function-signature>org.zkoss.zk.ui.Component getFellow(org.zkoss.zk.ui.Component, java.lang.String)</function-signature>
-		<description>
-			Returns a component of the specified ID in the same ID space. Components in the same ID space are called fellows.
-			Unlike getFellowIfAny(java.lang.String), it throws an exception if not found.
-		</description>
-	</function>
-	
-	<function>
-		<name>getFellowIfAny</name>
-		<function-class>org.carewebframework.ui.zk.ZKUtil</function-class>
-		<function-signature>org.zkoss.zk.ui.Component getFellowIfAny(org.zkoss.zk.ui.Component, java.lang.String)</function-signature>
-		<description>
-			Returns a component of the specified ID in the same ID space. Components in the same ID space are called fellows.
-			Unlike getFellow(java.lang.String), it returns null if not found.
-		</description>
-	</function>
 </taglib>

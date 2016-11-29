@@ -30,7 +30,8 @@ import org.carewebframework.shell.designer.DesignContextMenu;
 import org.carewebframework.shell.designer.DesignMask;
 import org.carewebframework.shell.designer.DesignMask.MaskMode;
 import org.carewebframework.shell.designer.PropertyGrid;
-import org.carewebframework.ui.zk.PromptDialog;
+import org.carewebframework.ui.core.CWFUtil;
+import org.carewebframework.ui.dialog.DialogUtil;
 import org.carewebframework.ui.zk.ZKUtil;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.BaseUIComponent;
@@ -201,7 +202,7 @@ public abstract class UIElementCWFBase extends UIElementBase {
         if (StringUtils.isEmpty(template)) {
             template = getTemplateUrl();
         } else if (!template.startsWith("~")) {
-            template = ZKUtil.getResourcePath(getClass()) + template;
+            template = CWFUtil.getResourcePath(getClass()) + template;
         }
         
         BaseComponent top = null;
@@ -233,7 +234,7 @@ public abstract class UIElementCWFBase extends UIElementBase {
      * @param child2 The second child.
      */
     protected void swapChildren(BaseComponent child1, BaseComponent child2) {
-        ZKUtil.swapChildren(child1, child2);
+        child1.getParent().swapChildren(child1.indexOf(), child2.indexOf());
     }
     
     /**
@@ -372,7 +373,7 @@ public abstract class UIElementCWFBase extends UIElementBase {
         try {
             PropertyGrid.create(this, null);
         } catch (Exception e) {
-            PromptDialog.showError("Displaying property grid: \r\n" + e.toString());
+            DialogUtil.showError("Displaying property grid: \r\n" + e.toString());
         }
     }
     

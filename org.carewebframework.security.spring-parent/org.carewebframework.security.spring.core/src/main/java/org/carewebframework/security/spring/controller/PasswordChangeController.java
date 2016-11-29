@@ -30,7 +30,7 @@ import org.carewebframework.api.context.UserContext;
 import org.carewebframework.api.domain.IUser;
 import org.carewebframework.api.security.ISecurityService;
 import org.carewebframework.common.StrUtil;
-import org.carewebframework.ui.zk.PromptDialog;
+import org.carewebframework.ui.dialog.DialogUtil;
 import org.carewebframework.web.ancillary.IAutoWired;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.BaseUIComponent;
@@ -42,8 +42,6 @@ import org.carewebframework.web.event.EventUtil;
  * Controller for the password change dialog.
  */
 public class PasswordChangeController implements IAutoWired {
-    
-    private static final long serialVersionUID = 1L;
     
     private BaseUIComponent panel;
     
@@ -169,7 +167,7 @@ public class PasswordChangeController implements IAutoWired {
                     EventUtil.send("submit", panel.getPage(), null);
                 } else {
                     doCancel();
-                    PromptDialog.showInfo("@password.change.dialog.password.changed",
+                    DialogUtil.showInfo("@password.change.dialog.password.changed",
                         "@password.change.dialog.password.changed.dialog.title");
                 }
             } catch (Exception e) {

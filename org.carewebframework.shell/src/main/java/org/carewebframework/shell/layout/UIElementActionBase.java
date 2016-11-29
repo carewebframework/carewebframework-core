@@ -26,8 +26,8 @@
 package org.carewebframework.shell.layout;
 
 import org.apache.commons.lang.StringUtils;
-
 import org.carewebframework.ui.action.ActionListener;
+import org.carewebframework.ui.action.ActionUtil;
 
 /**
  * Base class for UI elements that support an associated action.
@@ -45,7 +45,7 @@ public class UIElementActionBase extends UIElementCWFBase {
     public void setAction(String action) {
         if (!StringUtils.equals(action, this.action)) {
             this.action = action;
-            listener = ActionListener.addAction(getOuterComponent(), action);
+            listener = ActionUtil.addAction(getOuterComponent(), action);
             updateListener();
         }
     }

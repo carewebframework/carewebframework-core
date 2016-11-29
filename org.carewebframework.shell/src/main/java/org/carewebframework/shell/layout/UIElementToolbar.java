@@ -27,7 +27,7 @@ package org.carewebframework.shell.layout;
 
 import org.carewebframework.shell.designer.PropertyEditorOrderedChildren;
 import org.carewebframework.shell.property.PropertyTypeRegistry;
-import org.carewebframework.ui.action.ActionListener;
+import org.carewebframework.ui.action.ActionUtil;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.BaseUIComponent;
 import org.carewebframework.web.component.Toolbar;
@@ -83,7 +83,7 @@ public class UIElementToolbar extends UIElementCWFBase {
             
         } else {
             toolbar.insertChild(component, ref);
-            ActionListener.addAction(component, action);
+            ActionUtil.addAction(component, action);
         }
     }
     

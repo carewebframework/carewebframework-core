@@ -60,7 +60,7 @@ public class UIElementTabMenu extends UIElementCWFBase {
             ref = ref == null ? tab : ref;
             
             if (getPage() == null) {
-                setPage(ref.getPage());
+                setParent(ref.getPage());
             }
             
             MenuUtil.updateStyles(this);

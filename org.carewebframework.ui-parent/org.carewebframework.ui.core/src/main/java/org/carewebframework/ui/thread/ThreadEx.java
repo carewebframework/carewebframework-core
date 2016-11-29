@@ -40,7 +40,7 @@ import org.carewebframework.web.event.Event;
 /**
  * Used to run long operations in the background. Uses events to notify the requester of completion.
  * <p>
- * <i>Note: reference {@link #getException()} to evaluate any exception the ZKRunnable target may
+ * <i>Note: reference {@link #getException()} to evaluate any exception the IRunnable target may
  * have thrown. You may also invoke {@link #rethrow()}. One of these methods should be referenced to
  * ensure that the task successfully completed.</i>
  * </p>
@@ -49,7 +49,7 @@ public class ThreadEx implements IAbortable {
     
     private static final Log log = LogFactory.getLog(ThreadEx.class);
     
-    public static final String ON_THREAD_COMPLETE = "onThreadComplete";
+    public static final String ON_THREAD_COMPLETE = "threadComplete";
     
     /**
      * Adds an abort method to the traditional Runnable interface. The target is responsible for
@@ -116,7 +116,7 @@ public class ThreadEx implements IAbortable {
      * callback.
      * 
      * @param target Target operation.
-     * @param requester ZK component requesting the operation.
+     * @param requester The component requesting the operation.
      */
     public ThreadEx(IRunnable target, BaseComponent requester) {
         this(target, requester, ON_THREAD_COMPLETE);
@@ -126,7 +126,7 @@ public class ThreadEx implements IAbortable {
      * Creates a thread for executing a background operation.
      * 
      * @param target Target operation.
-     * @param requester ZK component requesting the operation.
+     * @param requester The component requesting the operation.
      * @param eventName Name of the event used to notify requester of completion. When fired, the
      *            data associated with the event will be a reference to this instance and may be
      *            interrogated to determine the outcome of the operation.
@@ -143,7 +143,7 @@ public class ThreadEx implements IAbortable {
      */
     public void start() {
         if (log.isDebugEnabled()) {
-            log.debug("Executing ZKThread [target=" + target.getClass().getName() + "]");
+            log.debug("Executing ThreadEx [target=" + target.getClass().getName() + "]");
         }
         ThreadUtil.startThread(this.thread);
     }
@@ -228,7 +228,7 @@ public class ThreadEx implements IAbortable {
      * Throws the saved exception in the current thread. If there is no saved exception, no action
      * is taken.
      * 
-     * @throws Throwable when exception was thrown via ZKRunnable target
+     * @throws Throwable when exception was thrown via IRunnable target
      */
     public void rethrow() throws Throwable {
         if (exception != null) {

@@ -33,8 +33,9 @@ import org.carewebframework.shell.CareWebShell;
 import org.carewebframework.shell.layout.LayoutIdentifier;
 import org.carewebframework.shell.layout.UIElementDesktop;
 import org.carewebframework.shell.layout.UILayout;
+import org.carewebframework.ui.dialog.DialogUtil;
+import org.carewebframework.ui.dialog.DialogUtil.IConfirmCallback;
 import org.carewebframework.ui.xml.XMLViewer;
-import org.carewebframework.ui.zk.PromptDialog;
 import org.carewebframework.web.ancillary.INamespace;
 import org.carewebframework.web.component.BaseUIComponent;
 import org.carewebframework.web.component.Menu;
@@ -125,9 +126,15 @@ public class DesignMenu extends Menu implements INamespace {
      * Clear desktop.
      */
     public void onClick$mnuClearDesktop() {
-        if (PromptDialog.confirm(DesignConstants.MSG_DESKTOP_CLEAR, DesignConstants.CAP_DESKTOP_CLEAR)) {
-            shell.reset();
-        }
+        DialogUtil.confirm(DesignConstants.MSG_DESKTOP_CLEAR, DesignConstants.CAP_DESKTOP_CLEAR, new IConfirmCallback() {
+            
+            @Override
+            public void onComplete(boolean confirm) {
+                if (confirm) {
+                    shell.reset();
+                }
+            }
+        });
     }
     
     /**
@@ -190,10 +197,10 @@ public class DesignMenu extends Menu implements INamespace {
     }
     
     /**
-     * Shows ZK markup for current desktop.
+     * Shows CWF markup for current page.
      */
-    public void onClick$mnuShowZul() {
-        XMLViewer.showZUML(owner.getOuterComponent());
+    public void onClick$mnuShowCwf() {
+        XMLViewer.showCWF(owner.getOuterComponent());
     }
     
     /**

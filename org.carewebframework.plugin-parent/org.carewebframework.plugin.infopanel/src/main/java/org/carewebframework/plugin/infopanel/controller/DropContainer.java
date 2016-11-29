@@ -30,7 +30,6 @@ import java.util.List;
 import org.carewebframework.plugin.infopanel.model.IActionTarget;
 import org.carewebframework.plugin.infopanel.model.IInfoPanel.Action;
 import org.carewebframework.plugin.infopanel.service.InfoPanelService;
-import org.carewebframework.ui.zk.ZKUtil;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.Window;
 import org.carewebframework.web.dragdrop.DropUtil;
@@ -71,7 +70,7 @@ public class DropContainer extends Window implements IActionTarget {
         
         if (renderedItem != null) {
             String title = dropRenderer.getDisplayText(droppedItem);
-            dropContainer = ZKUtil.findAncestor(renderedItem, DropContainer.class);
+            dropContainer = renderedItem.getAncestor(DropContainer.class);
             
             if (dropContainer != null) {
                 dropContainer.setTitle(title);

@@ -1,0 +1,27 @@
+
+<window closable="true" controller="org.carewebframework.ui.dialog.InputDialog">
+	<div class="cwf_inputdialog">
+		<cell name="prompt" />
+		<textbox name="textbox" synchronized="true" />
+	</div>
+	<toolbar align="center" width="100%">
+		<button name="btnCancel" label="${@msg.cwf.btn.cancel.label}" class="flavor:btn-danger" />
+		<button name="btnOK" label="${@msg.cwf.btn.ok.label}" class="flavor:btn-success" disabled="true"/>
+	</toolbar>
+	
+	<style>
+		.cwf_inputdialog {
+			text-align: center;
+		}
+		
+		.cwf_inputdialog > .cwf_cell {
+			display: block;
+			white-space: pre-wrap;
+		}
+		
+		.cwf_inputdialog > .cwf_textbox {
+			width: 200pt;
+			margin: 5px 0 5px;
+		}
+	</style>
+</window>

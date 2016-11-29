@@ -32,6 +32,8 @@ import org.carewebframework.web.event.Event;
  */
 public class InvocationRequest extends Event {
     
+    private final String methodName;
+    
     /**
      * Create a help request.
      * 
@@ -39,7 +41,17 @@ public class InvocationRequest extends Event {
      * @param args Arguments to be passed to the method.
      */
     protected InvocationRequest(String methodName, Object... args) {
-        super(methodName, null, args);
+        super("invoke", null, args);
+        this.methodName = methodName;
+    }
+    
+    /**
+     * Returns the method name.
+     * 
+     * @return The method name.
+     */
+    public String getMethodName() {
+        return methodName;
     }
     
     /**

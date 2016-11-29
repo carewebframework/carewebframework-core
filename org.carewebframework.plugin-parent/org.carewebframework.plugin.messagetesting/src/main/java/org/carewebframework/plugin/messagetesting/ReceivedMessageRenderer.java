@@ -26,7 +26,6 @@
 package org.carewebframework.plugin.messagetesting;
 
 import org.carewebframework.api.messaging.Message;
-import org.carewebframework.ui.zk.ZKUtil;
 import org.carewebframework.web.component.Cell;
 import org.carewebframework.web.component.Label;
 import org.carewebframework.web.component.Listitem;
@@ -43,7 +42,7 @@ public class ReceivedMessageRenderer implements IComponentRenderer<Listitem, Mes
         createCell(item, message.getType());
         createCell(item, message.getId());
         Cell cell = createCell(item, message.getPayload());
-        cell.setHint(ZKUtil.findChild(cell, Label.class).getLabel());
+        cell.setHint(cell.getChild(Label.class).getLabel());
         item.registerEventForward(DblclickEvent.TYPE, item.getListbox(), null);
         return item;
     }

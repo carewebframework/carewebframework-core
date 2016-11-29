@@ -51,7 +51,7 @@ public class PropertyEditorList extends PropertyEditorBase {
     private final IEventListener deleteListener = new IEventListener() {
         
         /**
-         * Pressing delete key or control-X will clear combo box selection.
+         * Pressing delete key will clear combo box selection.
          * 
          * @param event The control key event.
          * @throws Exception Unspecified exception.
@@ -60,7 +60,7 @@ public class PropertyEditorList extends PropertyEditorBase {
         public void onEvent(Event event) {
             KeyEvent evt = (KeyEvent) event;
             
-            if (evt.getKeyCode() == KeyCode.VK_DELETE || evt.getKeyCode() == 88) {
+            if (evt.getKeyCode() == KeyCode.VK_DELETE) {
                 boolean changed = !StringUtils.isEmpty(combobox.getValue());
                 combobox.setValue(null);
                 combobox.close();

@@ -29,6 +29,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.security.auth.message.MessageInfo;
+
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -56,15 +58,15 @@ import org.carewebframework.shell.plugins.PluginResourceHelp;
 import org.carewebframework.ui.command.CommandEvent;
 import org.carewebframework.ui.command.CommandRegistry;
 import org.carewebframework.ui.command.CommandUtil;
-import org.carewebframework.ui.zk.MessageWindow;
-import org.carewebframework.ui.zk.MessageWindow.MessageInfo;
-import org.carewebframework.ui.zk.PromptDialog;
+import org.carewebframework.ui.dialog.DialogUtil;
+import org.carewebframework.ui.dialog.PromptDialog;
 import org.carewebframework.ui.zk.ZKUtil;
 import org.carewebframework.web.client.ClientUtil;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.BaseUIComponent;
 import org.carewebframework.web.component.Div;
 import org.carewebframework.web.component.Menu;
+import org.carewebframework.web.component.MessageWindow;
 import org.carewebframework.web.component.Span;
 import org.carewebframework.web.component.Stylesheet;
 import org.carewebframework.web.event.Event;
@@ -286,7 +288,7 @@ public class CareWebShell extends Div {
         if (!layout.loadByAppId(appId).isEmpty()) {
             buildUI(layout);
         } else {
-            PromptDialog.showError(LBL_NO_LAYOUT);
+            DialogUtil.showError(LBL_NO_LAYOUT);
         }
     }
     

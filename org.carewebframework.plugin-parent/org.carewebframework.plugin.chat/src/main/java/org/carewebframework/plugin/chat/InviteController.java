@@ -31,8 +31,8 @@ import java.util.Map;
 
 import org.carewebframework.api.messaging.IPublisherInfo;
 import org.carewebframework.ui.FrameworkController;
-import org.carewebframework.ui.zk.PopupDialog;
-import org.carewebframework.ui.zk.ZKUtil;
+import org.carewebframework.ui.core.CWFUtil;
+import org.carewebframework.ui.dialog.PopupDialog;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.Button;
 import org.carewebframework.web.component.Checkbox;
@@ -46,7 +46,7 @@ public class InviteController extends FrameworkController {
     
     private static final long serialVersionUID = 1L;
     
-    private static final String DIALOG = ZKUtil.getResourcePath(InviteController.class) + "invite.cwf";
+    private static final String DIALOG = CWFUtil.getResourcePath(InviteController.class) + "invite.cwf";
     
     private static final String ATTR_HIDE = InviteController.class.getName() + ".HIDE_ACTIVE";
     
@@ -75,10 +75,10 @@ public class InviteController extends FrameworkController {
      */
     @SuppressWarnings("unchecked")
     public static Collection<IPublisherInfo> show(String sessionId, Collection<IPublisherInfo> exclusions) {
-        Map<Object, Object> args = new HashMap<>();
+        Map<String, Object> args = new HashMap<>();
         args.put("sessionId", sessionId);
         args.put("exclusions", exclusions);
-        return (Collection<IPublisherInfo>) PopupDialog.popup(DIALOG, args, true, true, true).getAttribute("invitees");
+        return (Collection<IPublisherInfo>) PopupDialog.show(DIALOG, args, true, true, true).getAttribute("invitees");
     }
     
     /**

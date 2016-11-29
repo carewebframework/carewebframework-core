@@ -1,0 +1,32 @@
+
+<window closable="true" controller="org.carewebframework.ui.dialog.PromptDialog">
+	<span class="cwf_promptdialog">
+		<span name="icon" class="glyphicon" />
+		<cell name="message" />
+		<div>
+			<listbox name="listbox" visible="false" />
+			<checkbox name="chkRemember" visible="false"
+				label="${@msg.cwf.prompt.chx.reminder.label}" />
+		</div>
+	</span>
+	<toolbar name="toolbar" align="center" width="100%" />
+	<style>
+		.cwf_promptdialog > .glyphicon {
+			float: left;
+			margin: 0 10px 10px;
+			cursor: default;
+			font-size: 26px;
+			background: transparent;
+		}
+		
+		.cwf_promptdialog > div:first-of-type {
+			white-space: pre-wrap;
+		}
+		
+		.cwf_promptdialog > div:last-of-type {
+			clear: both;
+			margin: 10px 0 5px 0;
+			text-align: center;
+		}
+	</style>
+</window>

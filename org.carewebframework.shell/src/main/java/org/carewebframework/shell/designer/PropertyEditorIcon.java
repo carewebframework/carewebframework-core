@@ -27,9 +27,9 @@ package org.carewebframework.shell.designer;
 
 import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.property.PropertyInfo;
-import org.carewebframework.ui.icons.IconLibraryRegistry;
-import org.carewebframework.ui.icons.IconPickerEx;
-import org.carewebframework.ui.icons.IconUtil;
+import org.carewebframework.ui.icon.IconLibraryRegistry;
+import org.carewebframework.ui.icon.IconPicker;
+import org.carewebframework.ui.icon.IconUtil;
 import org.carewebframework.web.event.Event;
 import org.carewebframework.web.event.EventUtil;
 import org.carewebframework.web.event.IEventListener;
@@ -40,11 +40,11 @@ import org.carewebframework.web.event.IEventListener;
  */
 public class PropertyEditorIcon extends PropertyEditorBase {
     
-    private final IconPickerEx iconPicker;
+    private final IconPicker iconPicker;
     
     public PropertyEditorIcon() {
-        super(new IconPickerEx());
-        iconPicker = (IconPickerEx) component;
+        super(new IconPicker());
+        iconPicker = (IconPicker) component;
         iconPicker.registerEventListener("setValue", new IEventListener() {
             
             @Override

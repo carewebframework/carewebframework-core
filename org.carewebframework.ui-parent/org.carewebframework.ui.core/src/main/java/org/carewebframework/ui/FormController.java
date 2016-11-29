@@ -31,8 +31,9 @@ import java.util.Map;
 import java.util.Set;
 
 import org.carewebframework.common.StrUtil;
-import org.carewebframework.ui.zk.PopupDialog;
-import org.carewebframework.ui.zk.PromptDialog;
+import org.carewebframework.ui.dialog.DialogUtil;
+import org.carewebframework.ui.dialog.DialogUtil.IConfirmCallback;
+import org.carewebframework.ui.dialog.PopupDialog;
 import org.carewebframework.ui.zk.ZKUtil;
 import org.carewebframework.web.annotation.WiredComponent;
 import org.carewebframework.web.component.BaseComponent;
@@ -88,10 +89,10 @@ public abstract class FormController<T> extends FrameworkController {
      * @return True if changes were committed. False if canceled.
      */
     protected static boolean execute(String form, Object domainObject) {
-        Map<Object, Object> args = new HashMap<>();
+        Map<String, Object> args = new HashMap<>();
         args.put("domainObject", domainObject);
-        BaseComponent dlg = PopupDialog.popup(form, args, true, false, true);
-        return !ZKUtil.getAttributeBoolean(dlg, "cancelled");
+        BaseComponent dlg = PopupDialog.show(form, args, true, false, true);
+        return dlg.getAttribute("cancelled", false);
     }
     
     /**
@@ -260,17 +261,30 @@ public abstract class FormController<T> extends FrameworkController {
             changeSet.clear();
             return true;
         } catch (Exception e) {
-            PromptDialog.showError(e);
+            DialogUtil.showError(e);
             return false;
         }
         
     }
     
     private void close(boolean cancel) {
-        if (cancel && !changeSet.isEmpty() && !PromptDialog.confirm(label_cancel_message, label_cancel_title)) {
-            return;
+        if (cancel && !changeSet.isEmpty()) {
+            DialogUtil.confirm(label_cancel_message, label_cancel_title, new IConfirmCallback() {
+                
+                @Override
+                public void onComplete(boolean response) {
+                    if (response) {
+                        _close(cancel);
+                    }
+                }
+                
+            });
+        } else {
+            _close(cancel);
         }
-        
+    }
+    
+    private void _close(boolean cancel) {
         if (!cancel && !doCommit()) {
             return;
         }

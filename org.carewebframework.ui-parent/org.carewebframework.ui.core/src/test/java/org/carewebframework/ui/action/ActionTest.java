@@ -25,19 +25,25 @@
  */
 package org.carewebframework.ui.action;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 public class ActionTest {
     
+    @Rule
+    public final ExpectedException exception = ExpectedException.none();
+    
     @Test
     public void testActionFormats() {
-        assertEquals(ActionType.JSCRIPT, ActionType.getType("jscript: alert('hi');"));
-        assertEquals(ActionType.JSCRIPT, ActionType.getType("javascript: alert('hi');"));
-        assertEquals(ActionType.URL, ActionType.getType("http://www.regenstrief.org"));
-        assertEquals(ActionType.URL, ActionType.getType("https://www.regenstrief.org"));
-        assertEquals(ActionType.UNKNOWN, ActionType.getType("unknown type"));
+        assertTrue(ActionTypeRegistry.getType("jscript: alert('hi');") instanceof ActionTypeJavascript);
+        assertTrue(ActionTypeRegistry.getType("javascript: alert('hi');") instanceof ActionTypeJavascript);
+        assertTrue(ActionTypeRegistry.getType("http://www.regenstrief.org") instanceof ActionTypeUrl);
+        assertTrue(ActionTypeRegistry.getType("https://www.regenstrief.org") instanceof ActionTypeUrl);
+        exception.expect(IllegalArgumentException.class);
+        ActionTypeRegistry.getType("unknown type");
     }
     
 }

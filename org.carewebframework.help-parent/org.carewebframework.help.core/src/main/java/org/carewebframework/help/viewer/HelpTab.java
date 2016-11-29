@@ -29,6 +29,8 @@ import java.util.List;
 
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.help.HelpTopic;
+import org.carewebframework.help.HelpViewType;
+import org.carewebframework.help.IHelpView;
 import org.carewebframework.help.viewer.HelpHistory.ITopicListener;
 import org.carewebframework.web.ancillary.INamespace;
 import org.carewebframework.web.component.BaseComponent;
@@ -55,7 +57,7 @@ public abstract class HelpTab extends Tab implements INamespace, ITopicListener 
      * @return The help tab that supports the specified view type.
      */
     public static HelpTab createTab(HelpViewer viewer, HelpViewType viewType) {
-        Class<? extends HelpTab> tabClass = viewType == null ? null : viewType.getTabClass();
+        Class<? extends HelpTab> tabClass = viewType == null ? null : getTabClass(viewType);
         
         if (tabClass == null) {
             return null;
@@ -65,6 +67,38 @@ public abstract class HelpTab extends Tab implements INamespace, ITopicListener 
             return tabClass.getConstructor(HelpViewer.class, HelpViewType.class).newInstance(viewer, viewType);
         } catch (Exception e) {
             return null;
+        }
+    }
+    
+    /**
+     * Returns the help tab class that services the specified view type. For unsupported view types,
+     * returns null.
+     * 
+     * @param viewType The view type.
+     * @return A help tab class.
+     */
+    private static Class<? extends HelpTab> getTabClass(HelpViewType viewType) {
+        switch (viewType) {
+            case TOC:
+                return HelpContentsTab.class;
+            
+            case KEYWORD:
+                return HelpIndexTab.class;
+            
+            case INDEX:
+                return HelpIndexTab.class;
+            
+            case SEARCH:
+                return HelpSearchTab.class;
+            
+            case HISTORY:
+                return HelpHistoryTab.class;
+            
+            case GLOSSARY:
+                return HelpIndexTab.class;
+            
+            default:
+                return null;
         }
     }
     
@@ -179,7 +213,7 @@ public abstract class HelpTab extends Tab implements INamespace, ITopicListener 
      * (like selecting the corresponding UI element). Note that the originator of the topic change
      * may be the same tab.
      * 
-     * @see org.carewebframework.help.viewer.HelpHistory.ITopicListener#onTopicSelected(HelpTopic)
+     * @see org.carewebframework.ui.help.HelpHistory.ITopicListener#onTopicSelected(HelpTopic)
      */
     @Override
     public void onTopicSelected(HelpTopic topic) {

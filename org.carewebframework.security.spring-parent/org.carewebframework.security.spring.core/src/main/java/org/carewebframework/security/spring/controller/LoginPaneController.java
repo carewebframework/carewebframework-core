@@ -35,7 +35,7 @@ import org.carewebframework.api.security.ISecurityDomain;
 import org.carewebframework.api.security.SecurityDomainRegistry;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.security.spring.Constants;
-import org.carewebframework.ui.zk.ZKUtil;
+import org.carewebframework.ui.core.CWFUtil;
 import org.carewebframework.web.ancillary.IAutoWired;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.BaseUIComponent;
@@ -64,7 +64,7 @@ public class LoginPaneController implements IAutoWired {
     
     private static final long serialVersionUID = 1L;
     
-    protected static final String DIALOG_LOGIN_PANE = ZKUtil.getResourcePath(LoginPaneController.class) + "loginPane.cwf";
+    protected static final String DIALOG_LOGIN_PANE = CWFUtil.getResourcePath(LoginPaneController.class) + "loginPane.cwf";
     
     protected Listbox lstDomain;
     

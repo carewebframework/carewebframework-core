@@ -34,7 +34,7 @@ import org.carewebframework.shell.designer.DesignConstants;
 import org.carewebframework.shell.designer.DesignMenu;
 import org.carewebframework.shell.plugins.PluginResourceHelp;
 import org.carewebframework.theme.ThemeUtil;
-import org.carewebframework.ui.action.ActionListener;
+import org.carewebframework.ui.action.ActionUtil;
 import org.carewebframework.ui.zk.MenuUtil;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.BaseUIComponent;
@@ -109,8 +109,8 @@ public class UIElementDesktop extends UIElementCWFBase {
         setInnerComponent(desktopInner);
         menubar = new UIElementMenubar(menubar1);
         toolbar = new UIElementToolbar(toolbar1);
-        ActionListener.addAction(mnuAbout, "zscript:org.carewebframework.shell.CareWebUtil.about();");
-        ActionListener.addAction(mnuTOC, "zscript:org.carewebframework.shell.help.HelpUtil.showTOC();");
+        ActionUtil.addAction(mnuAbout, "zscript:org.carewebframework.shell.CareWebUtil.about();");
+        ActionUtil.addAction(mnuTOC, "zscript:org.carewebframework.shell.help.HelpUtil.showTOC();");
         fixedHelpItems = helpMenuRoot.getChildren().size();
         sortHelpMenu = false;
         helpMenuRoot.registerEventListener("open", new IEventListener() {

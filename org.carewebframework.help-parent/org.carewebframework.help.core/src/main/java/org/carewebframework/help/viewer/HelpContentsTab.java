@@ -30,6 +30,8 @@ import java.util.Map;
 
 import org.carewebframework.help.HelpTopic;
 import org.carewebframework.help.HelpTopicNode;
+import org.carewebframework.help.HelpViewType;
+import org.carewebframework.help.IHelpView;
 import org.carewebframework.ui.zk.TreeUtil;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.Treenode;

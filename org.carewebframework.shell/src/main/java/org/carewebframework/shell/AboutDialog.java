@@ -34,15 +34,13 @@ import org.carewebframework.common.StrUtil;
 import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.plugins.PluginDefinition;
 import org.carewebframework.ui.FrameworkController;
-import org.carewebframework.ui.zk.ManifestViewer;
-import org.carewebframework.ui.zk.PopupDialog;
-import org.carewebframework.ui.zk.PromptDialog;
-import org.carewebframework.ui.zk.ZKUtil;
+import org.carewebframework.ui.core.CWFUtil;
+import org.carewebframework.ui.dialog.DialogUtil;
+import org.carewebframework.ui.dialog.PopupDialog;
+import org.carewebframework.ui.manifest.ManifestViewer;
 import org.carewebframework.web.annotation.EventHandler;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.BaseUIComponent;
-import org.carewebframework.web.page.PageDefinition;
-import org.carewebframework.web.page.PageParser;
 
 /**
  * Displays an "about" dialog for a given UI element.
@@ -53,7 +51,7 @@ public class AboutDialog extends FrameworkController {
      * Internal class for passing about attributes to about dialog.
      */
     @SuppressWarnings("serial")
-    private static class AboutParams extends LinkedHashMap<Object, Object> {
+    private static class AboutParams extends LinkedHashMap<String, Object> {
         
         private String icon;
         
@@ -194,10 +192,9 @@ public class AboutDialog extends FrameworkController {
      */
     private static void showDialog(AboutParams params) {
         try {
-            PageDefinition pageDefinition = PageParser.getInstance().parse(Constants.RESOURCE_PREFIX + "aboutDialog.cwf");
-            PopupDialog.popup(pageDefinition, params, true, false, true);
+            PopupDialog.show(Constants.RESOURCE_PREFIX + "aboutDialog.cwf", params, true, false, true);
         } catch (Exception e) {
-            PromptDialog.showError(ZKUtil.formatExceptionForDisplay(e));
+            DialogUtil.showError(CWFUtil.formatExceptionForDisplay(e));
         }
     }
     
@@ -214,7 +211,7 @@ public class AboutDialog extends FrameworkController {
         super.afterInitialized(comp);
         
         if (!StringUtils.isEmpty(aboutParams.description)) {
-            cellDescription.addChild(ZKUtil.getTextComponent(aboutParams.description));
+            cellDescription.addChild(CWFUtil.getTextComponent(aboutParams.description));
             ((BaseUIComponent) cellDescription.getParent()).setVisible(true);
         }
     }

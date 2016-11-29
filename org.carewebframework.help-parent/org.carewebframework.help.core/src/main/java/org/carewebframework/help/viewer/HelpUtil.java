@@ -32,10 +32,11 @@ import org.carewebframework.help.HelpContext;
 import org.carewebframework.help.HelpModule;
 import org.carewebframework.help.HelpModuleRegistry;
 import org.carewebframework.help.HelpSetCache;
+import org.carewebframework.help.HelpViewType;
 import org.carewebframework.help.IHelpSearch;
 import org.carewebframework.help.IHelpSet;
+import org.carewebframework.help.IHelpViewer;
 import org.carewebframework.help.viewer.HelpViewer.HelpViewerMode;
-import org.carewebframework.ui.command.CommandUtil;
 import org.carewebframework.ui.event.InvocationRequest;
 import org.carewebframework.ui.event.InvocationRequestQueue;
 import org.carewebframework.ui.zk.ZKUtil;
@@ -259,7 +260,7 @@ public class HelpUtil {
     /**
      * Returns a reference to the help search service if one is available.
      * 
-     * @return A reference to the help search service (possibily null).
+     * @return A reference to the help search service (possibly null).
      */
     public static IHelpSearch getSearchService() {
         return SpringUtil.getBean("helpSearchService", IHelpSearch.class);

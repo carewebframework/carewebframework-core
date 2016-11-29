@@ -31,7 +31,7 @@ import java.util.List;
 
 import org.carewebframework.api.event.EventManager;
 import org.carewebframework.api.event.IGenericEvent;
-import org.carewebframework.ui.zk.ZKUtil;
+import org.carewebframework.ui.core.CWFUtil;
 import org.carewebframework.web.client.ExecutionContext;
 import org.carewebframework.web.component.Label;
 import org.carewebframework.web.component.Page;
@@ -47,7 +47,7 @@ import org.carewebframework.web.page.PageParser;
  */
 public class PopupSupport implements IGenericEvent<Object>, IEventListener {
     
-    private static final String RESOURCE_PREFIX = ZKUtil.getResourcePath(PopupSupport.class);
+    private static final String RESOURCE_PREFIX = CWFUtil.getResourcePath(PopupSupport.class);
     
     private static final String EVENT_POPUP = "POPUP";
     

@@ -25,9 +25,11 @@
  */
 package org.carewebframework.ui.zk;
 
+import org.carewebframework.ui.core.CWFUtil;
+
 public class Constants {
     
-    public static final String RESOURCE_PREFIX = ZKUtil.getResourcePath(Constants.class);
+    public static final String RESOURCE_PREFIX = CWFUtil.getResourcePath(Constants.class);
     
     public static final String PATH_DELIMITER = "\\";
     

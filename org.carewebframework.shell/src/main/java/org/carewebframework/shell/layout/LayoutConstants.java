@@ -26,14 +26,14 @@
 package org.carewebframework.shell.layout;
 
 import org.carewebframework.shell.Constants;
-import org.carewebframework.ui.zk.ZKUtil;
+import org.carewebframework.ui.core.CWFUtil;
 
 /**
  * Package-wide constants.
  */
 public class LayoutConstants {
     
-    public static final String RESOURCE_PREFIX = ZKUtil.getResourcePath(LayoutConstants.class);
+    public static final String RESOURCE_PREFIX = CWFUtil.getResourcePath(LayoutConstants.class);
     
     public static final String LAYOUT_ROOT = "layout";
     

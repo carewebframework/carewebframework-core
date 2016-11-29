@@ -25,12 +25,13 @@
  */
 package org.carewebframework.shell;
 
+import javax.security.auth.message.MessageInfo;
+
 import org.carewebframework.api.FrameworkUtil;
 import org.carewebframework.api.ManifestIterator;
 import org.carewebframework.help.HelpContext;
 import org.carewebframework.help.viewer.HelpUtil;
 import org.carewebframework.ui.action.ActionRegistry;
-import org.carewebframework.ui.zk.MessageWindow.MessageInfo;
 import org.carewebframework.web.component.BaseUIComponent;
 
 /**

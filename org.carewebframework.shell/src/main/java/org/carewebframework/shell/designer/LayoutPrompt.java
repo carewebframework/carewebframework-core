@@ -33,7 +33,7 @@ import static org.carewebframework.shell.designer.DesignConstants.MSG_LAYOUT_OVE
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.shell.layout.LayoutIdentifier;
 import org.carewebframework.shell.layout.LayoutUtil;
-import org.carewebframework.ui.zk.PromptDialog;
+import org.carewebframework.ui.dialog.PromptDialog;
 import org.carewebframework.web.component.Label;
 import org.carewebframework.web.component.Radiogroup;
 import org.carewebframework.web.component.Textbox;

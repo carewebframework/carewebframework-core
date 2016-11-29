@@ -43,9 +43,9 @@ import org.carewebframework.common.StrUtil;
 import org.carewebframework.shell.layout.LayoutIdentifier;
 import org.carewebframework.shell.layout.LayoutUtil;
 import org.carewebframework.shell.layout.UILayout;
+import org.carewebframework.ui.dialog.DialogUtil;
+import org.carewebframework.ui.dialog.DialogUtil.IConfirmCallback;
 import org.carewebframework.ui.zk.ListUtil;
-import org.carewebframework.ui.zk.PopupDialog;
-import org.carewebframework.ui.zk.PromptDialog;
 import org.carewebframework.web.client.ClientUtil;
 import org.carewebframework.web.component.BaseUIComponent;
 import org.carewebframework.web.component.Button;
@@ -60,7 +60,6 @@ import org.carewebframework.web.event.DblclickEvent;
 import org.carewebframework.web.model.IComponentRenderer;
 import org.carewebframework.web.model.ListModel;
 import org.carewebframework.web.model.ModelAndView;
-import org.carewebframework.web.page.PageUtil;
 
 /**
  * Supports selection and management of existing layouts.
@@ -142,8 +141,7 @@ public class LayoutManager extends Window {
         LayoutManager dlg = null;
         
         try {
-            dlg = (LayoutManager) PopupDialog.popup(PageUtil.getPageDefinition(RESOURCE_PREFIX + "LayoutManager.cwf"), null,
-                true, true, false);
+            dlg = (LayoutManager) DialogUtil.popup(RESOURCE_PREFIX + "LayoutManager.cwf", true, true, false);
             return dlg.show(manage, deflt);
         } catch (Exception e) {
             return null;
@@ -299,10 +297,16 @@ public class LayoutManager extends Window {
      * Deletes the selected layout.
      */
     public void onClick$btnDelete() {
-        if (PromptDialog.confirm(MSG_LAYOUT_DELETE)) {
-            LayoutUtil.deleteLayout(getSelectedLayout());
-            refresh(null);
-        }
+        DialogUtil.confirm(MSG_LAYOUT_DELETE, new IConfirmCallback() {
+            
+            @Override
+            public void onComplete(boolean confirm) {
+                if (confirm) {
+                    LayoutUtil.deleteLayout(getSelectedLayout());
+                    refresh(null);
+                }
+            }
+        });
     }
     
     /**

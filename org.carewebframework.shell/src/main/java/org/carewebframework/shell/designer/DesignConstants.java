@@ -26,11 +26,11 @@
 package org.carewebframework.shell.designer;
 
 import org.carewebframework.shell.Constants;
-import org.carewebframework.ui.zk.ZKUtil;
+import org.carewebframework.ui.core.CWFUtil;
 
 public class DesignConstants {
     
-    public static final String RESOURCE_PREFIX = ZKUtil.getResourcePath(DesignConstants.class);
+    public static final String RESOURCE_PREFIX = CWFUtil.getResourcePath(DesignConstants.class);
     
     public static final String MSG_LAYOUT_DUP = "@cwf.shell.designer.layout.duplicate.message";
     

@@ -34,6 +34,8 @@ import java.util.TreeMap;
 import org.apache.commons.lang.StringUtils;
 import org.carewebframework.help.HelpTopic;
 import org.carewebframework.help.HelpTopicNode;
+import org.carewebframework.help.HelpViewType;
+import org.carewebframework.help.IHelpView;
 import org.carewebframework.web.annotation.EventHandler;
 import org.carewebframework.web.component.Listbox;
 import org.carewebframework.web.component.Listitem;
@@ -160,7 +162,7 @@ public class HelpIndexTab extends HelpTab {
      * Initialize the tab the first time it is selected. This method creates a model list from the
      * current keyword list and assigns it to the keyword list box.
      * 
-     * @see org.carewebframework.help.viewer.HelpTab#init()
+     * @see org.carewebframework.ui.help.HelpTab#init()
      */
     @Override
     protected void init() {
@@ -172,7 +174,7 @@ public class HelpIndexTab extends HelpTab {
     /**
      * Sets the focus to the quick find text box when the tab is selected.
      * 
-     * @see org.carewebframework.help.viewer.HelpTab#onSelect()
+     * @see org.carewebframework.ui.help.HelpTab#onSelect()
      */
     @Override
     public void onSelect() {
@@ -184,7 +186,7 @@ public class HelpIndexTab extends HelpTab {
     /**
      * Add keywords and topics from the specified view to the tab.
      * 
-     * @see org.carewebframework.help.viewer.HelpTab#addView(IHelpView)
+     * @see org.carewebframework.ui.help.HelpTab#addView(IHelpView)
      */
     @Override
     public void addView(IHelpView view) {

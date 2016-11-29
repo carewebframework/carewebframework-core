@@ -26,6 +26,7 @@
 package org.carewebframework.help.viewer;
 
 import org.carewebframework.help.HelpTopic;
+import org.carewebframework.help.HelpViewType;
 import org.carewebframework.web.component.Listbox;
 import org.carewebframework.web.model.ModelAndView;
 
@@ -63,7 +64,7 @@ public class HelpHistoryTab extends HelpTab {
     /**
      * Sets focus to the list box when the tab is selected.
      * 
-     * @see org.carewebframework.help.viewer.HelpTab#onSelect()
+     * @see org.carewebframework.ui.help.HelpTab#onSelect()
      */
     @Override
     public void onSelect() {
@@ -74,7 +75,7 @@ public class HelpHistoryTab extends HelpTab {
     /**
      * Updated the list box selection when the history selection changes.
      * 
-     * @see org.carewebframework.help.viewer.HelpTab#onTopicSelected(HelpTopic)
+     * @see org.carewebframework.ui.help.HelpTab#onTopicSelected(HelpTopic)
      */
     @Override
     public void onTopicSelected(HelpTopic topic) {

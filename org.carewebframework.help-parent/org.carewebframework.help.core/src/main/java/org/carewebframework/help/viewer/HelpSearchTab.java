@@ -33,6 +33,7 @@ import org.apache.commons.lang.StringUtils;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.help.HelpSearchHit;
 import org.carewebframework.help.HelpTopic;
+import org.carewebframework.help.HelpViewType;
 import org.carewebframework.help.IHelpSearch.IHelpSearchListener;
 import org.carewebframework.help.IHelpSet;
 import org.carewebframework.web.component.Cell;
@@ -107,7 +108,7 @@ public class HelpSearchTab extends HelpTab implements IComponentRenderer<Listite
     /**
      * Sets the focus to the search text box when the tab is selected.
      * 
-     * @see org.carewebframework.help.viewer.HelpTab#onSelect()
+     * @see org.carewebframework.ui.help.HelpTab#onSelect()
      */
     @Override
     public void onSelect() {

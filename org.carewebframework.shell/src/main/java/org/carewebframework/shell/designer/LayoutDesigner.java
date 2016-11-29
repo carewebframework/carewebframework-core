@@ -27,7 +27,7 @@ package org.carewebframework.shell.designer;
 
 import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.layout.UILayout;
-import org.carewebframework.ui.zk.PopupDialog;
+import org.carewebframework.ui.dialog.DialogUtil;
 import org.carewebframework.web.ancillary.IAutoWired;
 import org.carewebframework.web.client.ExecutionContext;
 import org.carewebframework.web.component.BaseComponent;
@@ -40,7 +40,6 @@ import org.carewebframework.web.event.ClickEvent;
 import org.carewebframework.web.event.DblclickEvent;
 import org.carewebframework.web.event.DropEvent;
 import org.carewebframework.web.event.EventUtil;
-import org.carewebframework.web.page.PageUtil;
 
 /**
  * Dialog for managing the current layout.
@@ -136,7 +135,7 @@ public class LayoutDesigner extends Window implements IAutoWired {
         LayoutDesigner dlg = (LayoutDesigner) page.getAttribute(CWF_PAGE);
         
         if (autoCreate && dlg == null) {
-            dlg = (LayoutDesigner) PopupDialog.popup(PageUtil.getPageDefinition(CWF_PAGE), null, true, true, false);
+            dlg = (LayoutDesigner) DialogUtil.popup(CWF_PAGE, true, true, false);
             page.setAttribute(CWF_PAGE, dlg);
         }
         

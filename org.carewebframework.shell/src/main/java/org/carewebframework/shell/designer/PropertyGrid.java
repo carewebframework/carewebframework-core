@@ -36,7 +36,8 @@ import org.carewebframework.shell.layout.UIException;
 import org.carewebframework.shell.plugins.PluginDefinition;
 import org.carewebframework.shell.property.PropertyInfo;
 import org.carewebframework.shell.property.PropertyType;
-import org.carewebframework.ui.zk.PopupDialog;
+import org.carewebframework.ui.core.CWFUtil;
+import org.carewebframework.ui.dialog.DialogUtil;
 import org.carewebframework.ui.zk.ZKUtil;
 import org.carewebframework.web.ancillary.INamespace;
 import org.carewebframework.web.component.BaseComponent;
@@ -53,8 +54,6 @@ import org.carewebframework.web.event.ClickEvent;
 import org.carewebframework.web.event.Event;
 import org.carewebframework.web.event.EventUtil;
 import org.carewebframework.web.event.SelectEvent;
-import org.carewebframework.web.page.PageDefinition;
-import org.carewebframework.web.page.PageParser;
 
 /**
  * Dialog for managing property values of UI elements within the designer. Each editable property of
@@ -134,8 +133,8 @@ public class PropertyGrid extends Window {
      * @return Newly created PropertyGrid instance.
      */
     public static PropertyGrid create(UIElementBase target, BaseComponent parent, boolean embedded) {
-        PageDefinition def = PageParser.getInstance().parse(DesignConstants.RESOURCE_PREFIX + "PropertyGrid.cwf");
-        PropertyGrid propertyGrid = (PropertyGrid) PopupDialog.popup(def, null, !embedded, true, false);
+        PropertyGrid propertyGrid = (PropertyGrid) DialogUtil.popup(DesignConstants.RESOURCE_PREFIX + "PropertyGrid.cwf",
+            !embedded, true, false);
         propertyGrid.init(target, parent, embedded);
         
         if (parent == null) {
@@ -156,7 +155,7 @@ public class PropertyGrid extends Window {
         this.embedded = embedded;
         wireController(this);
         setTarget(target);
-        colProperty.setSortAscending(propSort);
+        colProperty.setSortComparator(propSort);
         
         if (parent != null) {
             setClosable(false);
@@ -261,7 +260,7 @@ public class PropertyGrid extends Window {
             try {
                 editor.setValue(propInfo.getPropertyValue(target));
             } catch (Exception e) {
-                lbl = new Label(ZKUtil.formatExceptionForDisplay(e));
+                lbl = new Label(CWFUtil.formatExceptionForDisplay(e));
                 lbl.setHint(lbl.getLabel());
                 cmpt = lbl;
             }
@@ -456,7 +455,7 @@ public class PropertyGrid extends Window {
      * @param event Row selection event.
      */
     public void onSelect(Event event) {
-        setSelectedRow(ZKUtil.findAncestor(event.getTarget(), Row.class));
+        setSelectedRow(event.getTarget().getAncestor(Row.class));
     }
     
     /**
@@ -465,7 +464,7 @@ public class PropertyGrid extends Window {
      * @param event Change event.
      */
     public void onChange(Event event) {
-        Clients.clearWrongValue(event.getTarget());
+        ((BaseUIComponent) event.getTarget()).setBalloon(null);
         disableButtons(false);
     }
 }

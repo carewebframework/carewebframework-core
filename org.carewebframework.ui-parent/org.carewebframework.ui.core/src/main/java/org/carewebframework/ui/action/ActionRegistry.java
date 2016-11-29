@@ -29,8 +29,9 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.carewebframework.api.FrameworkUtil;
 import org.carewebframework.common.AbstractRegistry;
+import org.carewebframework.web.client.ExecutionContext;
+import org.carewebframework.web.component.Page;
 
 /**
  * Global (shared across application instances) and local (restricted to current desktop) registry
@@ -125,10 +126,11 @@ public class ActionRegistry extends AbstractRegistry<String, ActionEntry> {
             return instance;
         }
         
-        ActionRegistry registry = (ActionRegistry) FrameworkUtil.getAttribute(ATTR_LOCAL_REGISTRY);
+        Page page = ExecutionContext.getPage();
+        ActionRegistry registry = (ActionRegistry) page.getAttribute(ATTR_LOCAL_REGISTRY);
         
         if (registry == null) {
-            FrameworkUtil.setAttribute(ATTR_LOCAL_REGISTRY, registry = new ActionRegistry());
+            page.setAttribute(ATTR_LOCAL_REGISTRY, registry = new ActionRegistry());
         }
         
         return registry;

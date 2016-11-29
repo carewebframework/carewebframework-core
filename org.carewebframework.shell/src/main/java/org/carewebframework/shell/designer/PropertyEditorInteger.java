@@ -27,23 +27,24 @@ package org.carewebframework.shell.designer;
 
 import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.property.PropertyInfo;
+import org.carewebframework.web.component.Integerbox;
 
 /**
  * Editor for integer values.
  */
 public class PropertyEditorInteger extends PropertyEditorBase {
     
-    private final Intbox intbox;
+    private final Integerbox intbox;
     
     public PropertyEditorInteger() {
-        super(new Intbox());
-        intbox = (Intbox) component;
+        super(new Integerbox());
+        intbox = (Integerbox) component;
     }
     
     @Override
     protected void init(UIElementBase target, PropertyInfo propInfo, PropertyGrid propGrid) {
         super.init(target, propInfo, propGrid);
-        intbox.setMaxlength(9);
+        intbox.setMaxLength(9);
         Integer min = propInfo.getConfigValueInt("min", null);
         Integer max = propInfo.getConfigValueInt("max", null);
         
@@ -57,12 +58,12 @@ public class PropertyEditorInteger extends PropertyEditorBase {
     
     @Override
     protected String getValue() {
-        return intbox.getText();
+        return Integer.toString(intbox.getValue());
     }
     
     @Override
     protected void setValue(Object value) {
-        intbox.setText(value == null ? null : value.toString());
+        intbox.setValue(value == null ? null : (Integer) value);
         updateValue();
     }
 }

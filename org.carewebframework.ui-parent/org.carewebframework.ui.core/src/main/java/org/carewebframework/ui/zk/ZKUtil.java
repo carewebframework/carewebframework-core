@@ -26,20 +26,10 @@
 package org.carewebframework.ui.zk;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
-import javax.swing.Popup;
 
 import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.beanutils.PropertyUtils;
-import org.apache.commons.lang.BooleanUtils;
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.lang.math.NumberUtils;
-import org.apache.commons.lang.reflect.FieldUtils;
 import org.carewebframework.common.MiscUtil;
-import org.carewebframework.common.StrUtil;
 import org.carewebframework.web.client.ClientUtil;
 import org.carewebframework.web.client.ExecutionContext;
 import org.carewebframework.web.component.BaseComponent;
@@ -47,30 +37,17 @@ import org.carewebframework.web.component.BaseInputboxComponent;
 import org.carewebframework.web.component.BaseUIComponent;
 import org.carewebframework.web.component.Checkbox;
 import org.carewebframework.web.component.Combobox;
-import org.carewebframework.web.component.Html;
-import org.carewebframework.web.component.Hyperlink;
-import org.carewebframework.web.component.Label;
 import org.carewebframework.web.component.Page;
 import org.carewebframework.web.event.ChangeEvent;
 import org.carewebframework.web.event.Event;
 import org.carewebframework.web.event.EventUtil;
 import org.carewebframework.web.event.IEventListener;
 import org.carewebframework.web.event.SelectEvent;
-import org.carewebframework.web.page.PageDefinition;
-import org.carewebframework.web.page.PageDefinitionCache;
-import org.springframework.core.io.ClassPathResource;
 
 /**
  * General purpose ZK extensions and convenience methods.
  */
 public class ZKUtil {
-    
-    /**
-     * Resource prefix for resources within this package
-     */
-    public static final String RESOURCE_PREFIX = getResourcePath(ZKUtil.class);
-    
-    private static final String MASK_ANCHOR = "maskTarget";
     
     private static final IEventListener deferredDelivery = new IEventListener() {
         
@@ -90,110 +67,6 @@ public class ZKUtil {
         CASE_SENSITIVE, // Case sensitive by node label.
         CASE_INSENSITIVE // Case insensitive by node label.
     };
-    
-    /**
-     * Returns the ZK resource path for the specified class.
-     * 
-     * @param clazz Class to evaluate
-     * @return String representing resource path
-     */
-    public static final String getResourcePath(Class<?> clazz) {
-        return getResourcePath(clazz.getPackage());
-    }
-    
-    /**
-     * Returns the ZK resource path for the specified class.
-     * 
-     * @param clazz Class to evaluate
-     * @param up Number of path levels to remove
-     * @return String representing resource path
-     */
-    public static final String getResourcePath(Class<?> clazz, int up) {
-        return getResourcePath(clazz.getPackage(), up);
-    }
-    
-    /**
-     * Returns the ZK resource path for the specified package.
-     * 
-     * @param pkg Package to evaluate
-     * @return String representing resource path
-     */
-    public static final String getResourcePath(Package pkg) {
-        return getResourcePath(pkg.getName());
-    }
-    
-    /**
-     * Returns the ZK resource path for the specified package.
-     * 
-     * @param pkg Package to evaluate
-     * @param up Number of path levels to remove
-     * @return String representing resource path
-     */
-    public static final String getResourcePath(Package pkg, int up) {
-        return getResourcePath(pkg.getName(), up);
-    }
-    
-    /**
-     * Returns the ZK resource path for the package name.
-     * 
-     * @param name Package name
-     * @return String representing resource path
-     */
-    public static final String getResourcePath(String name) {
-        return getResourcePath(name, 0);
-    }
-    
-    /**
-     * Returns the ZK resource path for the package name.
-     * 
-     * @param name Package name
-     * @param up Number of path levels to remove
-     * @return String representing resource path
-     */
-    public static final String getResourcePath(String name, int up) {
-        String path = StringUtils.chomp(name.replace('.', '/'), "/");
-        
-        while (up > 0) {
-            int i = path.lastIndexOf("/");
-            
-            if (i <= 0) {
-                break;
-            } else {
-                path = path.substring(0, i);
-                up--;
-            }
-        }
-        
-        return "~./" + path + "/";
-    }
-    
-    /**
-     * Loads a page definition from a cwf page. If the page is an embedded resource, prefix the file
-     * name with the owning class name followed by a colon. For example,
-     * "org.carewebframework.ui.component.PatientSelection:patientSelection.cwf"
-     * 
-     * @param filename File name pointing to the cwf page.
-     * @return A page definition representing the cwf page.
-     */
-    public static PageDefinition loadPageDefinition(String filename) {
-        Class<?> containingClass = null;
-        int i = filename.indexOf(":");
-        
-        try {
-            if (i > 0) {
-                containingClass = Class.forName(filename.substring(0, i));
-                filename = filename.substring(i + 1);
-            }
-            
-            if (containingClass != null) {
-                filename = new ClassPathResource(filename, containingClass).getURL().toString();
-            }
-            
-            return PageDefinitionCache.getInstance().get(filename);
-        } catch (Exception e) {
-            throw MiscUtil.toUnchecked(e);
-        }
-    }
     
     /**
      * Detaches all children from a parent.
@@ -235,7 +108,7 @@ public class ZKUtil {
             BaseComponent comp = components.get(i);
             
             if (exclusions == null || !exclusions.contains(comp)) {
-                comp.detach();
+                comp.destroy();
             }
         }
     }
@@ -258,58 +131,6 @@ public class ZKUtil {
             
             disableChildren(comp, disable);
         }
-    }
-    
-    /**
-     * Finds the first child component of the specified class, or null if none found;
-     * 
-     * @param <T> The child class.
-     * @param parent Parent whose children are to be searched.
-     * @param childClass Class of the child component being sought.
-     * @return Child component matching the specified class, or null if not found.
-     */
-    public static <T extends BaseComponent> T findChild(BaseComponent parent, Class<T> childClass) {
-        return findChild(parent, childClass, null);
-    }
-    
-    /**
-     * Finds a child component of the specified class, or null if none found;
-     * 
-     * @param <T> The child class.
-     * @param parent Parent whose children are to be searched.
-     * @param childClass Class of the child component being sought.
-     * @param lastChild Child after which search will begin, or null to begin with first child.
-     * @return Child component matching the specified class, or null if not found.
-     */
-    @SuppressWarnings("unchecked")
-    public static <T extends BaseComponent> T findChild(BaseComponent parent, Class<T> childClass, BaseComponent lastChild) {
-        BaseComponent child = parent == null ? null
-                : lastChild == null ? parent.getFirstChild() : lastChild.getNextSibling();
-        
-        while (child != null && !childClass.isInstance(child)) {
-            child = child.getNextSibling();
-        }
-        
-        return (T) child;
-    }
-    
-    /**
-     * Finds the first ancestor that belongs to the specified class.
-     * 
-     * @param <T> The ancestor class.
-     * @param child Child whose ancestors are to be searched.
-     * @param ancestorClass Class being sought.
-     * @return Ancestor matching requested class, or null if not found.
-     */
-    @SuppressWarnings("unchecked")
-    public static <T extends BaseComponent> T findAncestor(BaseComponent child, Class<T> ancestorClass) {
-        BaseComponent ancestor = child == null ? null : child.getParent();
-        
-        while (ancestor != null && !ancestorClass.isInstance(ancestor)) {
-            ancestor = ancestor.getParent();
-        }
-        
-        return (T) ancestor;
     }
     
     /**
@@ -399,178 +220,6 @@ public class ZKUtil {
     }
     
     /**
-     * Swaps the position of the two child components.
-     * 
-     * @param child1 The first child.
-     * @param child2 The second child.
-     */
-    public static void swapChildren(BaseComponent child1, BaseComponent child2) {
-        BaseComponent parent = child1.getParent();
-        
-        if (parent == null || parent != child2.getParent()) {
-            throw new IllegalArgumentException("Components do not have the same parent.");
-        }
-        
-        if (child1 != child2) {
-            int idx1 = child1.getNextSibling().indexOf();
-            int idx2 = child2.getNextSibling().indexOf();
-            parent.addChild(child1, idx2);
-            parent.addChild(child2, idx1);
-        }
-    }
-    
-    /**
-     * Returns named boolean attribute from the specified component.
-     * 
-     * @param c The component containing the desired attribute.
-     * @param attr The name of the attribute.
-     * @return Value of named attribute, or null if not found.
-     */
-    public static boolean getAttributeBoolean(BaseComponent c, String attr) {
-        Boolean val = getAttribute(c, attr, Boolean.class);
-        return val != null ? val : BooleanUtils.toBoolean(getAttributeString(c, attr));
-    }
-    
-    /**
-     * Returns named String attribute from the specified component.
-     * 
-     * @param c The component containing the desired attribute.
-     * @param attr The name of the attribute.
-     * @return Value of named attribute, or null if not found.
-     */
-    public static String getAttributeString(BaseComponent c, String attr) {
-        String val = getAttribute(c, attr, String.class);
-        return val == null ? "" : val;
-    }
-    
-    /**
-     * Returns named integer attribute from the specified component.
-     * 
-     * @param c The component containing the desired attribute.
-     * @param attr The name of the attribute.
-     * @param defaultVal The default value
-     * @return Value of named attribute, or null if not found.
-     */
-    public static int getAttributeInt(BaseComponent c, String attr, int defaultVal) {
-        Integer val = getAttribute(c, attr, Integer.class);
-        return val != null ? val : defaultVal;
-    }
-    
-    /**
-     * Returns named List attribute from the specified component.
-     * 
-     * @param c The component containing the desired attribute.
-     * @param attr The name of the attribute.
-     * @return Value of named attribute, or null if not found.
-     */
-    public static List<?> getAttributeList(BaseComponent c, String attr) {
-        return getAttribute(c, attr, List.class);
-    }
-    
-    /**
-     * Returns named List attribute from the specified component.
-     * 
-     * @param <T> Class of the list elements.
-     * @param c The component containing the desired attribute.
-     * @param attr The name of the attribute.
-     * @param elementClass The expected class of the list elements.
-     * @return Value of named attribute, or null if not found.
-     */
-    @SuppressWarnings("unchecked")
-    public static <T> List<T> getAttributeList(BaseComponent c, String attr, Class<T> elementClass) {
-        return getAttribute(c, attr, List.class);
-    }
-    
-    /**
-     * Returns named BaseComponent attribute from the specified component.
-     * 
-     * @param c The component containing the desired attribute.
-     * @param attr The name of the attribute.
-     * @return Value of named attribute, or null if not found.
-     */
-    public static BaseComponent getAttributeComponent(BaseComponent c, String attr) {
-        return getAttribute(c, attr, BaseComponent.class);
-    }
-    
-    /**
-     * Returns named attribute of the specified type from the specified component.
-     * 
-     * @param <T> Class of the attribute value.
-     * @param c The component containing the desired attribute.
-     * @param attr The name of the attribute.
-     * @param clazz The expected type of the attribute value.
-     * @return Value of named attribute, or null if not found.
-     */
-    @SuppressWarnings("unchecked")
-    public static <T> T getAttribute(BaseComponent c, String attr, Class<T> clazz) {
-        Object val = c == null || attr == null ? null : c.getAttribute(attr);
-        return clazz.isInstance(val) ? (T) val : null;
-    }
-    
-    /**
-     * Places a semi-transparent mask over the specified component to disable user interaction.
-     * 
-     * @param c BaseComponent to be disabled.
-     * @param caption Caption text to appear over disabled component.
-     */
-    public static void addMask(BaseComponent c, String caption) {
-        addMask(c, caption, null, null);
-    }
-    
-    /**
-     * Places a semi-transparent mask over the specified component to disable user interaction.
-     * 
-     * @param c BaseComponent to be disabled.
-     * @param caption Caption text to appear over disabled component.
-     * @param popup Optional popup to display when context menu is invoked.
-     */
-    public static void addMask(BaseComponent c, String caption, Popup popup) {
-        addMask(c, caption, popup, null);
-    }
-    
-    /**
-     * Places a semi-transparent mask over the specified component to disable user interaction.
-     * 
-     * @param component BaseComponent to be disabled.
-     * @param caption Caption text to appear over disabled component.
-     * @param popup Optional popup to display when context menu is invoked.
-     * @param hint Optional tooltip text.
-     */
-    public static void addMask(BaseComponent component, String caption, Popup popup, String hint) {
-        String anchor = getMaskAnchor(component);
-        ClientUtil.invoke("cwf_addMask", component, new Object[] { component, caption, popup, hint, anchor });
-    }
-    
-    /**
-     * Removes any disable mask over a component.
-     * 
-     * @param component The component.
-     */
-    public static void removeMask(BaseComponent component) {
-        ClientUtil.invoke("cwf_removeMask", component, new Object[] { component });
-    }
-    
-    /**
-     * Returns the uuid of the mask's anchor..
-     * 
-     * @param component BaseComponent
-     * @return The subid of the mask anchor, or null if none specified.
-     */
-    private static String getMaskAnchor(BaseComponent component) {
-        return (String) component.getAttribute(MASK_ANCHOR);
-    }
-    
-    /**
-     * Sets the subid of the real mask anchor.
-     * 
-     * @param component BaseComponent
-     * @param target The subid of the real anchor, or null to remove existing anchor.
-     */
-    public static void setMaskAnchor(BaseComponent component, String target) {
-        component.setAttribute(MASK_ANCHOR, target);
-    }
-    
-    /**
      * Adds or removes a badge to/from an HTML element.
      * 
      * @param selector Selector for the target element.
@@ -579,33 +228,6 @@ public class ZKUtil {
      */
     public static void setBadge(String selector, String label, String classes) {
         ClientUtil.invoke("cwf.setBadge", new Object[] { selector, label, classes });
-    }
-    
-    /**
-     * Wires variables from a map into a controller. Useful to inject parameters passed in an
-     * argument map.
-     * 
-     * @param map The argument map.
-     * @param controller The controller to be wired.
-     */
-    public static void wireController(Map<?, ?> map, Object controller) {
-        if (map == null || map.isEmpty() || controller == null) {
-            return;
-        }
-        
-        for (Entry<?, ?> entry : map.entrySet()) {
-            String key = entry.getKey().toString();
-            Object value = entry.getValue();
-            
-            try {
-                PropertyUtils.setProperty(controller, key, value);
-            } catch (Exception e) {
-                try {
-                    FieldUtils.writeField(controller, key, value, true);
-                } catch (Exception e1) {}
-            }
-            
-        }
     }
     
     /**
@@ -649,16 +271,6 @@ public class ZKUtil {
     }
     
     /**
-     * Formats an exception for display.
-     * 
-     * @param exc Exception to format.
-     * @return The displayable form of the exception.
-     */
-    public static String formatExceptionForDisplay(Throwable exc) {
-        return exc == null ? null : ExceptionUtils.getMessage(ExceptionUtils.getRootCause(exc));
-    }
-    
-    /**
      * Send a print request to the browser client.
      * 
      * @param selectors List of selectors whose content shall be printed.
@@ -678,45 +290,6 @@ public class ZKUtil {
      */
     public static void printToClient(String selectors, String styleSheets, boolean preview) {
         ClientUtil.invoke("cwf_print", null, selectors, styleSheets, preview);
-    }
-    
-    /**
-     * Provides a more convenient method signature for getting a ZK label with arguments. Also
-     * recognizes line continuation with backslash characters.
-     * 
-     * @param key Label key.
-     * @param args Optional argument list.
-     * @return The key value or null if not found.
-     * @deprecated Use StrUtil.getLabel
-     */
-    @Deprecated
-    public static String getLabel(String key, Object... args) {
-        return StrUtil.getLabel(key, args);
-    }
-    
-    /**
-     * Returns a component of a type suitable for displaying the specified text. For text that is a
-     * URL, returns an anchor. For text that begins with &lt;html&gt;, returns an HTML component.
-     * All other text returns a label.
-     * 
-     * @param text Text to be displayed.
-     * @return BaseComponent of the appropriate type.
-     */
-    public static BaseComponent getTextComponent(String text) {
-        String frag = text == null ? "" : StringUtils.substring(text, 0, 20).toLowerCase();
-        
-        if (frag.contains("<html>")) {
-            return new Html(text);
-        }
-        
-        if (frag.matches("^https?:\\/\\/.+$")) {
-            Hyperlink anchor = new Hyperlink();
-            anchor.setHref(text);
-            anchor.setTarget("_blank");
-            return anchor;
-        }
-        
-        return new Label(text);
     }
     
     /**
@@ -747,7 +320,7 @@ public class ZKUtil {
                     continue;
                 }
                 
-                BaseComponent parent = node == null ? root : ZKUtil.findChild(node, anchorClass);
+                BaseComponent parent = node == null ? root : node.getChild(anchorClass);
                 
                 if (parent == null) {
                     if (!create) {

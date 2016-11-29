@@ -34,6 +34,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import javax.security.auth.message.MessageInfo;
+
 import org.carewebframework.api.event.IEventManager;
 import org.carewebframework.api.event.ILocalEventDispatcher;
 import org.carewebframework.api.messaging.IPublisherInfo;
@@ -44,8 +46,7 @@ import org.carewebframework.common.StrUtil;
 import org.carewebframework.plugin.chat.ParticipantListener.IParticipantUpdate;
 import org.carewebframework.plugin.chat.SessionService.ISessionUpdate;
 import org.carewebframework.ui.action.ActionRegistry;
-import org.carewebframework.ui.zk.MessageWindow;
-import org.carewebframework.ui.zk.MessageWindow.MessageInfo;
+import org.carewebframework.web.component.MessageWindow;
 
 /**
  * Chat service.

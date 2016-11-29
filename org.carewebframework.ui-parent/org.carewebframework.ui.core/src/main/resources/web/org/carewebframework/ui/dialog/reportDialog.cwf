@@ -1,0 +1,38 @@
+
+<window class="flavor:panel-primary"
+	controller="org.carewebframework.ui.dialog.ReportDialog">
+	<paneview class="cwf_reportdialog" orientation="vertical">
+		<pane name="printRoot">
+			<cell name="cmpText" visible="false" />
+			<html name="cmpHtml" visible="false" />
+		</pane>
+		<pane>
+			<toolbar align="end" width="100%">
+				<button name="btnClose" class="flavor:btn-danger size:btn-sm" 
+					label="${@msg.cwf.btn.close.label}" width="60px" />
+				<button name="btnPrint" 
+					visible="false" class="flavor:btn-info size:btn-sm" 
+					label="${@msg.cwf.btn.print.label}" width="60px" />
+			</toolbar>
+		</pane>
+	</paneview>
+	
+	<style>
+		.cwf_reportdialog {
+			height: 100%;
+			width: 100%;
+		}
+		
+		.cwf_reportdialog > .cwf_pane:first-child {
+			flex: 1;
+			overflow: auto;
+			max-height: 400px;
+			font-family: monospace; 
+			white-space: pre;
+		}
+		
+		.cwf_reportdialog .cwf_toolbar {
+			border: none;
+		}
+	</style>
+</window>

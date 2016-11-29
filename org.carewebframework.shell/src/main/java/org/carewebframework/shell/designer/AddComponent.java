@@ -37,7 +37,7 @@ import org.carewebframework.shell.layout.UIElementLayout;
 import org.carewebframework.shell.layout.UIElementPlugin;
 import org.carewebframework.shell.plugins.PluginDefinition;
 import org.carewebframework.shell.plugins.PluginRegistry;
-import org.carewebframework.ui.zk.PopupDialog;
+import org.carewebframework.ui.dialog.DialogUtil;
 import org.carewebframework.ui.zk.TreeUtil;
 import org.carewebframework.ui.zk.ZKUtil;
 import org.carewebframework.web.component.BaseComponent;
@@ -52,7 +52,6 @@ import org.carewebframework.web.event.DblclickEvent;
 import org.carewebframework.web.event.Event;
 import org.carewebframework.web.event.EventUtil;
 import org.carewebframework.web.event.IEventListener;
-import org.carewebframework.web.page.PageUtil;
 
 /**
  * Dialog for adding new component to UI.
@@ -161,8 +160,7 @@ public class AddComponent extends Window {
         AddComponent dlg = null;
         
         try {
-            dlg = (AddComponent) PopupDialog.popup(
-                PageUtil.getPageDefinition(DesignConstants.RESOURCE_PREFIX + "AddComponent.cwf"), null, true, true, false);
+            dlg = (AddComponent) DialogUtil.popup(DesignConstants.RESOURCE_PREFIX + "AddComponent.cwf", true, true, false);
             dlg.init(parentElement, createChild);
             dlg.setMode(Mode.MODAL);
         } catch (Exception e) {

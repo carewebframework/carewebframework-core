@@ -26,7 +26,7 @@
 package org.carewebframework.shell.designer;
 
 import org.carewebframework.common.StrUtil;
-import org.carewebframework.ui.zk.PopupDialog;
+import org.carewebframework.ui.dialog.DialogUtil;
 import org.carewebframework.web.annotation.WiredComponentScanner;
 import org.carewebframework.web.component.Button;
 import org.carewebframework.web.component.Textbox;
@@ -61,7 +61,8 @@ public class ClipboardViewer extends Window {
      */
     public static void execute(Clipboard clipboard) throws Exception {
         PageDefinition def = PageParser.getInstance().parse(DesignConstants.RESOURCE_PREFIX + "ClipboardViewer.cwf");
-        ClipboardViewer viewer = (ClipboardViewer) PopupDialog.popup(def, null, true, true, false);
+        ClipboardViewer viewer = (ClipboardViewer) DialogUtil.popup(DesignConstants.RESOURCE_PREFIX + "ClipboardViewer.cwf",
+            true, true, false);
         viewer.clipboard = clipboard;
         viewer.data = clipboard.getData();
         WiredComponentScanner.wire(viewer, viewer);

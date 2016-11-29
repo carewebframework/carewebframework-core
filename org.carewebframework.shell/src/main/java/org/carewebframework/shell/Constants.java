@@ -25,7 +25,7 @@
  */
 package org.carewebframework.shell;
 
-import org.carewebframework.ui.zk.ZKUtil;
+import org.carewebframework.ui.core.CWFUtil;
 
 /**
  * Package-wide constants.
@@ -42,7 +42,7 @@ public class Constants {
     
     public static final String EVENT_RESOURCE_PROPGROUP_REMOVE = EVENT_RESOURCE_PROPGROUP_PREFIX + ".REMOVE";
     
-    public static final String RESOURCE_PREFIX = ZKUtil.getResourcePath(Constants.class);
+    public static final String RESOURCE_PREFIX = CWFUtil.getResourcePath(Constants.class);
     
     public static final String ICON_PATH = RESOURCE_PREFIX + "images/16x16/";
     
