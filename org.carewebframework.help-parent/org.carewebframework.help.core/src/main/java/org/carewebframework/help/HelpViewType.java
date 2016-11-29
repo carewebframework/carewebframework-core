@@ -23,7 +23,7 @@
  *
  * #L%
  */
-package org.carewebframework.help.viewer;
+package org.carewebframework.help;
 
 /**
  * Enum for representing known view types.
@@ -31,35 +31,4 @@ package org.carewebframework.help.viewer;
 public enum HelpViewType {
     Unknown, TOC, Keyword, Index, Search, History, Glossary;
     
-    /**
-     * Returns the help tab class that services this view type. For unsupported view types, returns
-     * null.
-     * 
-     * @return A help tab class.
-     */
-    public Class<? extends HelpTab> getTabClass() {
-        switch (this) {
-            case TOC:
-                return HelpContentsTab.class;
-                
-            case Keyword:
-                return HelpIndexTab.class;
-                
-            case Index:
-                return HelpIndexTab.class;
-                
-            case Search:
-                return HelpSearchTab.class;
-                
-            case History:
-                return HelpHistoryTab.class;
-                
-            case Glossary:
-                return HelpIndexTab.class;
-                
-            default:
-                return null;
-        }
-    }
-    
-};
+}

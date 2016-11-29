@@ -23,9 +23,7 @@
  *
  * #L%
  */
-package org.carewebframework.help.viewer;
-
-import org.carewebframework.help.IHelpSet;
+package org.carewebframework.help;
 
 /**
  * Interface implemented by a help viewer.

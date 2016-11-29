@@ -40,10 +40,9 @@ import org.carewebframework.help.HelpModule;
 import org.carewebframework.help.HelpSetBase;
 import org.carewebframework.help.HelpTopic;
 import org.carewebframework.help.HelpTopicNode;
+import org.carewebframework.help.HelpViewType;
+import org.carewebframework.help.IHelpView;
 import org.carewebframework.help.viewer.HelpUtil;
-import org.carewebframework.help.viewer.HelpViewType;
-import org.carewebframework.help.viewer.IHelpView;
-
 import org.zkoss.zk.ui.Executions;
 
 import org.w3c.dom.Node;

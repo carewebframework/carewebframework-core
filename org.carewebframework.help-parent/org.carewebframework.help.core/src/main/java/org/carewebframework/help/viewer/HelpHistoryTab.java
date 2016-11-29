@@ -26,7 +26,7 @@
 package org.carewebframework.help.viewer;
 
 import org.carewebframework.help.HelpTopic;
-
+import org.carewebframework.help.HelpViewType;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listitem;
 import org.zkoss.zul.ListitemRenderer;

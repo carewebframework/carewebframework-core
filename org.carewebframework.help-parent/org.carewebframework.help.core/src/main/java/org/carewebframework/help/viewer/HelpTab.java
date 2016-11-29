@@ -29,9 +29,10 @@ import java.util.List;
 
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.help.HelpTopic;
+import org.carewebframework.help.HelpViewType;
+import org.carewebframework.help.IHelpView;
 import org.carewebframework.help.viewer.HelpHistory.ITopicListener;
 import org.carewebframework.ui.zk.ZKUtil;
-
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.IdSpace;
@@ -64,7 +65,7 @@ public abstract class HelpTab extends Tabpanel implements IdSpace, ITopicListene
      * @return The help tab that supports the specified view type.
      */
     public static HelpTab createTab(HelpViewer viewer, HelpViewType viewType) {
-        Class<? extends HelpTab> tabClass = viewType == null ? null : viewType.getTabClass();
+        Class<? extends HelpTab> tabClass = viewType == null ? null : HelpUtil.getTabClass(viewType);
         
         if (tabClass == null) {
             return null;
@@ -194,7 +195,7 @@ public abstract class HelpTab extends Tabpanel implements IdSpace, ITopicListene
      */
     @Override
     public void onTopicSelected(HelpTopic topic) {
-    
+        
     }
     
     /**

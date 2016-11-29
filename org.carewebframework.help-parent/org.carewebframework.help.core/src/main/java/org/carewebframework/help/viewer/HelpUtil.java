@@ -32,15 +32,16 @@ import org.carewebframework.help.HelpContext;
 import org.carewebframework.help.HelpModule;
 import org.carewebframework.help.HelpModuleRegistry;
 import org.carewebframework.help.HelpSetCache;
+import org.carewebframework.help.HelpViewType;
 import org.carewebframework.help.IHelpSearch;
 import org.carewebframework.help.IHelpSet;
+import org.carewebframework.help.IHelpViewer;
 import org.carewebframework.help.viewer.HelpViewer.HelpViewerMode;
 import org.carewebframework.ui.FrameworkWebSupport;
 import org.carewebframework.ui.command.CommandUtil;
 import org.carewebframework.ui.event.InvocationRequest;
 import org.carewebframework.ui.event.InvocationRequestQueue;
 import org.carewebframework.ui.zk.ZKUtil;
-
 import org.zkoss.image.AImage;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
@@ -270,6 +271,38 @@ public class HelpUtil {
      */
     public static IHelpSearch getSearchService() {
         return SpringUtil.getBean("helpSearchService", IHelpSearch.class);
+    }
+    
+    /**
+     * Returns the help tab class that services the given view type. For unsupported view types,
+     * returns null.
+     * 
+     * @param type The view type.
+     * @return A help tab class.
+     */
+    public static Class<? extends HelpTab> getTabClass(HelpViewType type) {
+        switch (type) {
+            case TOC:
+                return HelpContentsTab.class;
+            
+            case Keyword:
+                return HelpIndexTab.class;
+            
+            case Index:
+                return HelpIndexTab.class;
+            
+            case Search:
+                return HelpSearchTab.class;
+            
+            case History:
+                return HelpHistoryTab.class;
+            
+            case Glossary:
+                return HelpIndexTab.class;
+            
+            default:
+                return null;
+        }
     }
     
     /**

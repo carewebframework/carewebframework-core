@@ -34,6 +34,7 @@ import org.apache.commons.lang.StringUtils;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.help.HelpSearchHit;
 import org.carewebframework.help.HelpTopic;
+import org.carewebframework.help.HelpViewType;
 import org.carewebframework.help.IHelpSearch.IHelpSearchListener;
 import org.carewebframework.help.IHelpSet;
 

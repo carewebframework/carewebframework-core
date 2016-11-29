@@ -35,6 +35,8 @@ import org.apache.commons.lang.StringUtils;
 
 import org.carewebframework.help.HelpTopic;
 import org.carewebframework.help.HelpTopicNode;
+import org.carewebframework.help.HelpViewType;
+import org.carewebframework.help.IHelpView;
 import org.carewebframework.ui.zk.ZKUtil;
 
 import org.zkoss.zk.ui.event.Event;
