@@ -31,7 +31,7 @@ import org.carewebframework.common.ColorUtil;
 import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.property.PropertyInfo;
 import org.carewebframework.web.component.ColorPicker;
-import org.carewebframework.web.component.ColorPicker.Colorpickeritem;;
+import org.carewebframework.web.component.ColorPicker.ColorPickeritem;;
 
 /**
  * Property editor for color properties. If the associated property has defined choices, the color
@@ -65,7 +65,7 @@ public class PropertyEditorColor extends PropertyEditorBase {
                 String[] color = choice.split("\\:", 2);
                 
                 for (int i = 0; i < color.length; i++) {
-                    Colorpickeritem item = new Colorpickeritem(ColorUtil.toColor(color[i]));
+                    ColorPickeritem item = new ColorPickeritem(ColorUtil.toColor(color[i]));
                     colorPicker.addChild(item);
                 }
             }
