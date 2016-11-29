@@ -29,6 +29,6 @@ package org.carewebframework.help;
  * Enum for representing known view types.
  */
 public enum HelpViewType {
-    Unknown, TOC, Keyword, Index, Search, History, Glossary;
+    UNKNOWN, TOC, KEYWORD, INDEX, SEARCH, HISTORY, GLOSSARY;
     
 }

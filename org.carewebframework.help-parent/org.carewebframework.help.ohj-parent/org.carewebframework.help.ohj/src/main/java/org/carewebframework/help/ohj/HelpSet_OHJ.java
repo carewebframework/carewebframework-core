@@ -52,8 +52,8 @@ public class HelpSet_OHJ extends HelpSetBase {
     
     static {
         viewMap.put("oracle.help.navigator.tocNavigator.TOCNavigator", HelpViewType.TOC);
-        viewMap.put("oracle.help.navigator.keywordNavigator.KeywordNavigator", HelpViewType.Index);
-        viewMap.put("oracle.help.navigator.searchNavigator.SearchNavigator", HelpViewType.Search);
+        viewMap.put("oracle.help.navigator.keywordNavigator.KeywordNavigator", HelpViewType.INDEX);
+        viewMap.put("oracle.help.navigator.searchNavigator.SearchNavigator", HelpViewType.SEARCH);
     }
     
     private final HelpSet helpSet;
@@ -73,7 +73,7 @@ public class HelpSet_OHJ extends HelpSetBase {
         for (View view : helpSet.getAllViews()) {
             HelpViewType viewType = viewMap.get(view.getType());
             
-            if (viewType != null && viewType != HelpViewType.Search) {
+            if (viewType != null && viewType != HelpViewType.SEARCH) {
                 helpViews.add(new HelpView(this, view, viewType));
             }
         }

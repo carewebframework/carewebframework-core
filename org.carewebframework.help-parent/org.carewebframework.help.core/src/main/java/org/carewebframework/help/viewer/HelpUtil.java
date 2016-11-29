@@ -285,19 +285,19 @@ public class HelpUtil {
             case TOC:
                 return HelpContentsTab.class;
             
-            case Keyword:
+            case KEYWORD:
                 return HelpIndexTab.class;
             
-            case Index:
+            case INDEX:
                 return HelpIndexTab.class;
             
-            case Search:
+            case SEARCH:
                 return HelpSearchTab.class;
             
-            case History:
+            case HISTORY:
                 return HelpHistoryTab.class;
             
-            case Glossary:
+            case GLOSSARY:
                 return HelpIndexTab.class;
             
             default:

@@ -168,7 +168,7 @@ public class HelpViewer extends Window implements IHelpViewer, AfterCompose, ITo
             helpTopic = helpTopic == null ? null
                     : new HelpTopic(helpTopic.getURL(), helpTopic.getLabel(), helpSet.getName());
             setTopic(helpTopic);
-            show(HelpViewType.History);
+            show(HelpViewType.HISTORY);
         }
     }
     
@@ -228,7 +228,7 @@ public class HelpViewer extends Window implements IHelpViewer, AfterCompose, ITo
             }
         }
         
-        findTab(HelpViewType.History, true).setVisible(false);
+        findTab(HelpViewType.HISTORY, true).setVisible(false);
         lblLoading.setVisible(false);
         tbxNavigator.setVisible(true);
         selectTab(getTabs().get(0));
@@ -255,7 +255,7 @@ public class HelpViewer extends Window implements IHelpViewer, AfterCompose, ITo
         }
         
         if (HelpUtil.getSearchService() != null) {
-            HelpSearchTab searchTab = (HelpSearchTab) findTab(HelpViewType.Search, true);
+            HelpSearchTab searchTab = (HelpSearchTab) findTab(HelpViewType.SEARCH, true);
             searchTab.mergeHelpSet(helpSet);
         }
         

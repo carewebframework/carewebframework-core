@@ -53,8 +53,8 @@ public class HelpSet_JavaHelp extends HelpSetBase {
     
     static {
         viewMap.put(TOCView.class, HelpViewType.TOC);
-        viewMap.put(GlossaryView.class, HelpViewType.Glossary);
-        viewMap.put(IndexView.class, HelpViewType.Index);
+        viewMap.put(GlossaryView.class, HelpViewType.GLOSSARY);
+        viewMap.put(IndexView.class, HelpViewType.INDEX);
     }
     
     private final HelpSet helpSet;

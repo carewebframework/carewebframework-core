@@ -132,7 +132,7 @@ public class HelpSet_CHMHelp extends HelpSetBase {
     
     private void initViews() throws Exception {
         initView("toc.xml", HelpViewType.TOC);
-        initView("index.xml", HelpViewType.Index);
+        initView("index.xml", HelpViewType.INDEX);
     }
     
     private void initView(String file, HelpViewType type) throws Exception {

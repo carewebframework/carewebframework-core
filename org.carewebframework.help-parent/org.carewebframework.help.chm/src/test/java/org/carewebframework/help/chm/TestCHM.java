@@ -67,7 +67,7 @@ public class TestCHM {
                     assertEquals(7, tree.getChildren().get(0).getChildren().size());
                     break;
                     
-                case Index:
+                case INDEX:
                     assertEquals(0, tree.getChildren().size());
                     break;
                     
