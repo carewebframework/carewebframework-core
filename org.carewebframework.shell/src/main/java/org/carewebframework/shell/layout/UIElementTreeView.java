@@ -85,7 +85,7 @@ public class UIElementTreeView extends UIElementCWFBase {
      * @param value True to open the selector pane; false to close it.
      */
     public void setOpen(boolean value) {
-        selectorPane.setOpen(value);
+        //TODO: selectorPane.setOpen(value);
     }
     
     /**
@@ -94,7 +94,7 @@ public class UIElementTreeView extends UIElementCWFBase {
      * @return True if selector pane is open.
      */
     public boolean isOpen() {
-        return selectorPane.isOpen();
+        return true; //TODO: selectorPane.isOpen();
     }
     
     /**

@@ -27,7 +27,6 @@ package org.carewebframework.shell.layout;
 
 import org.carewebframework.shell.designer.PropertyEditorTabMenu;
 import org.carewebframework.shell.property.PropertyTypeRegistry;
-import org.carewebframework.ui.zk.MenuUtil;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.Div;
 import org.carewebframework.web.component.Menu;
@@ -63,7 +62,6 @@ public class UIElementTabMenu extends UIElementCWFBase {
                 setParent(ref.getPage());
             }
             
-            MenuUtil.updateStyles(this);
             super.open(ref, position);
         }
         

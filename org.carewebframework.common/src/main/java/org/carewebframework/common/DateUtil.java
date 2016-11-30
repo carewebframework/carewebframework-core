@@ -30,7 +30,6 @@ import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -43,9 +42,7 @@ import org.apache.commons.lang.time.FastDateFormat;
  */
 public class DateUtil {
     
-    
     private static ThreadLocal<DecimalFormat> decimalFormat = new ThreadLocal<DecimalFormat>() {
-        
         
         @Override
         protected DecimalFormat initialValue() {
@@ -57,7 +54,6 @@ public class DateUtil {
      * Interface for accessing and setting user's timezone
      */
     public static interface ITimeZoneAccessor {
-        
         
         /**
          * Returns the current time zone.
@@ -76,7 +72,6 @@ public class DateUtil {
     }
     
     public static ITimeZoneAccessor localTimeZone = new ITimeZoneAccessor() {
-        
         
         @Override
         public TimeZone getTimeZone() {
@@ -104,13 +99,13 @@ public class DateUtil {
      * minus a numeric value of 'd' (days), 'm' (months), or 'y' (years).
      */
     private static final Pattern PATTERN_EXT_DATE = Pattern
-            .compile("^\\s*[t|n]{1}\\s*([+|-]{1}\\s*[\\d]*\\s*[d|m|y]?)?\\s*$");
+            .compile("^\\s*[t|n]{1}\\s*([+|-]{1}\\s*[\\d]*\\s*[s|n|h|d|m|y]?)?\\s*$");
     
     /*
      * Defines a regular expression pattern representing a value ending in one
      * of the acceptable extended style date units (d, m, or y).
      */
-    private static final Pattern PATTERN_SPECIFIES_UNITS = Pattern.compile("^.*[d|m|y]$");
+    private static final Pattern PATTERN_SPECIFIES_UNITS = Pattern.compile("^.*[s|n|h|d|m|y]$");
     
     /*
      * Defines a regular expression pattern for extracting a numeric prefix from a string.
@@ -215,44 +210,54 @@ public class DateUtil {
                 try {
                     s = s.replaceAll("\\s+", ""); // strip space since they not
                     // delim
-                    String _k = s.substring(1); // _k will ultimately be the
-                    // multiplier value
-                    char k = 'd'; // k = d (default), m, or y
+                    String _k = s.substring(1); // _k will ultimately be the multiplier value
+                    char k = 'd'; // k = s, n, h, d (default), m, or y
+                    
                     if (1 == s.length()) {
                         _k = "0";
                     } else {
-                        if ((PATTERN_SPECIFIES_UNITS.matcher(s)).matches()) { // has
-                            // valid
-                            // extended
-                            // date
-                            // units?
+                        if ((PATTERN_SPECIFIES_UNITS.matcher(s)).matches()) {
                             _k = s.substring(1, s.length() - 1);
                             k = s.charAt(s.length() - 1);
                         }
                     }
-                    if ('+' == _k.charAt(0)) { // if it is positive coefficient...
-                        _k = _k.substring(1); // ...clip the sign! parse *hates*
+                    
+                    if ('+' == _k.charAt(0)) { // clip positive coefficient...
+                        _k = _k.substring(1);
                     }
-                    // that
+                    
+                    int field = Calendar.DAY_OF_YEAR;
                     int offset = Integer.parseInt(_k);
-                    switch (k) {
-                        case 'y':
-                            offset *= 365;
-                            break;
-                        case 'm':
-                            offset *= 30;
-                            break;
-                    }
-                    Calendar c = new GregorianCalendar();
+                    Calendar c = Calendar.getInstance();
                     c.setLenient(false);
-                    c.add(Calendar.DAY_OF_YEAR, offset);
-                    result = c.getTime();
-                    if ('t' == s.charAt(0)) {// if 't' format, strip time...
-                        result = stripTime(result); // ...it's a no-op for 'n'
+                    
+                    if (s.charAt(0) == 't') {
+                        c.setTime(DateUtil.today());
                     }
+                    
+                    switch (k) {
+                        case 'y': // years
+                            field = Calendar.YEAR;
+                            break;
+                        case 'm': // months
+                            field = Calendar.MONTH;
+                            break;
+                        case 'h': // hours
+                            field = Calendar.HOUR_OF_DAY;
+                            break;
+                        case 'n': // minutes
+                            field = Calendar.MINUTE;
+                            break;
+                        case 's': // seconds
+                            field = Calendar.SECOND;
+                            break;
+                    }
+                    
+                    c.add(field, offset);
+                    result = c.getTime();
                     // format
                 } catch (Exception e) {
-                    return null; // found un-parseable date (e.g. t-y)
+                    return null; // found unparseable date (e.g. t-y)
                 }
             } else {
                 result = tryParse(s);

@@ -37,7 +37,6 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.apache.commons.io.IOUtils;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -101,6 +100,17 @@ public class XMLUtil {
      * @return Formatted XML document.
      */
     public static String toString(Document doc) {
+        return toString(doc, 4);
+    }
+    
+    /**
+     * Converts an XML document to a formatted XML string.
+     * 
+     * @param doc The document to format.
+     * @param indent Number of characters to indent.
+     * @return Formatted XML document.
+     */
+    public static String toString(Document doc, int indent) {
         if (doc == null) {
             return "";
         }
@@ -110,6 +120,7 @@ public class XMLUtil {
             StringWriter writer = new StringWriter();
             StreamResult result = new StreamResult(writer);
             TransformerFactory tf = TransformerFactory.newInstance();
+            tf.setAttribute("indent-number", indent);
             Transformer transformer = tf.newTransformer();
             transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");

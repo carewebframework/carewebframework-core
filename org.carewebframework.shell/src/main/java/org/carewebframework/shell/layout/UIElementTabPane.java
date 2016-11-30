@@ -25,8 +25,6 @@
  */
 package org.carewebframework.shell.layout;
 
-import org.carewebframework.ui.zk.ZKUtil;
-import org.carewebframework.web.ancillary.Badge;
 import org.carewebframework.web.component.Tab;
 import org.carewebframework.web.component.Tabview;
 
@@ -40,31 +38,7 @@ public class UIElementTabPane extends UIElementCWFBase {
         registerAllowedChildClass(UIElementTabPane.class, UIElementBase.class);
     }
     
-    /**
-     * Re-purpose close tab button for drop down menu.
-     */
-    public static class TabEx extends Tab implements INotificationListener {
-        
-        public TabEx() {
-            super();
-            addClass("cwf-tab");
-            ZKUtil.setCustomColorLogic(this, "jq(this).find('.z-tab-text').css('color',value?value:'');");
-        }
-        
-        @Override
-        public void onClose() {
-            // Ignore
-        }
-        
-        @Override
-        public boolean onNotification(UIElementBase sender, String eventName, Object eventData) {
-            Badge badge = eventData == null ? new Badge() : (Badge) eventData;
-            badge.apply("#" + getId() + "-cnt");
-            return false;
-        }
-    };
-    
-    private final TabEx tab = new TabEx();
+    private final Tab tab = new Tab();
     
     /**
      * Set up the tab and tab panel ZK components. Note that we use a custom widget override to
@@ -73,7 +47,7 @@ public class UIElementTabPane extends UIElementCWFBase {
     public UIElementTabPane() {
         super();
         setOuterComponent(tab);
-        listenToChild("badge", tab);
+        //TODO: listenToChild("badge", tab);
     }
     
     /**

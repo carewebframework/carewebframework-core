@@ -26,7 +26,7 @@
 package org.carewebframework.shell.layout;
 
 import org.carewebframework.theme.ThemeUtil;
-import org.carewebframework.ui.zk.Badge;
+import org.carewebframework.web.ancillary.Badge;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.Div;
 import org.carewebframework.web.component.Hyperlink;
@@ -70,7 +70,7 @@ public class UIElementTreePane extends UIElementCWFBase {
         @Override
         public boolean onNotification(UIElementBase sender, String eventName, Object eventData) {
             Badge badge = eventData == null ? new Badge() : (Badge) eventData;
-            badge.apply("#" + anchor.getId());
+            //TODO: badge.apply("#" + anchor.getId());
             return false;
         }
     };

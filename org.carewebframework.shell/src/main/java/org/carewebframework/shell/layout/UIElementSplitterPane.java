@@ -63,18 +63,6 @@ public class UIElementSplitterPane extends UIElementCWFBase {
         return "Pane #" + (getParent().indexOfChild(this) + 1);
     }
     
-    @Override
-    public void beforeInitialize(boolean deserializing) throws Exception {
-        super.beforeInitialize(deserializing);
-        this.deserializing = deserializing;
-    }
-    
-    @Override
-    public void afterInitialize(boolean deserializing) throws Exception {
-        deserializing = false;
-        super.afterInitialize(deserializing);
-    }
-    
     public void setRelative(boolean relative) {
         this.relative = relative;
         updateSize();

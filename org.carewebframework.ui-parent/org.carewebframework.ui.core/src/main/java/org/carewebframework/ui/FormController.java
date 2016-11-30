@@ -91,7 +91,7 @@ public abstract class FormController<T> extends FrameworkController {
     protected static boolean execute(String form, Object domainObject) {
         Map<String, Object> args = new HashMap<>();
         args.put("domainObject", domainObject);
-        BaseComponent dlg = PopupDialog.show(form, args, true, false, true);
+        BaseComponent dlg = PopupDialog.show(form, args, true, false, true, null);
         return dlg.getAttribute("cancelled", false);
     }
     

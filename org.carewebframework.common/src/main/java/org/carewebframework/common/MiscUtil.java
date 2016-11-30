@@ -27,6 +27,7 @@ package org.carewebframework.common;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -90,17 +91,17 @@ public class MiscUtil {
     }
     
     /**
-     * Returns a list iterator that produces only list members of the specified type.
+     * Returns a list iterator that produces only collection elements of the specified type.
      * 
-     * @param list List to iterate.
+     * @param collection Collection to iterate.
      * @param type Type of element to return.
      * @return An iterator.
      */
-    public static <T, S extends T> Iterator<S> iteratorForType(List<T> list, Class<S> type) {
+    public static <T, S extends T> Iterator<S> iteratorForType(Collection<T> collection, Class<S> type) {
         
         return new Iterator<S>() {
             
-            Iterator<T> iter = list.iterator();
+            Iterator<T> iter = collection.iterator();
             
             S next;
             
@@ -146,18 +147,18 @@ public class MiscUtil {
     }
     
     /**
-     * Returns an iterable that produces only list members of the specified type.
+     * Returns an iterable that produces only collection members of the specified type.
      * 
-     * @param list List to iterate.
+     * @param collection Collection to iterate.
      * @param type Type of element to return.
      * @return An iterable.
      */
-    public static <T, S extends T> Iterable<S> iterableForType(List<T> list, Class<S> type) {
+    public static <T, S extends T> Iterable<S> iterableForType(Collection<T> collection, Class<S> type) {
         return new Iterable<S>() {
             
             @Override
             public Iterator<S> iterator() {
-                return iteratorForType(list, type);
+                return iteratorForType(collection, type);
             }
             
         };

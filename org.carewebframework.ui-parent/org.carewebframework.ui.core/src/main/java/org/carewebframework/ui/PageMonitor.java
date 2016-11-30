@@ -191,7 +191,6 @@ public class PageMonitor extends Thread {
          */
         @Override
         public void onSessionCreate(Session session) {
-            page.removeListener(this);
             timeoutWindow = (Window) page.getExecution().createComponents(DESKTOP_TIMEOUT_ZUL, null, null);
             timeoutWindow.wireController(PageMonitor.this);
             IUser user = securityService.getAuthenticatedUser();
