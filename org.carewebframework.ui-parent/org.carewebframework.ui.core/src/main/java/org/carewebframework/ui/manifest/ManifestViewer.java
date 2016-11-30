@@ -98,7 +98,8 @@ public class ManifestViewer implements IAutoWired {
     private static void execute(ManifestItem manifestItem) {
         Map<String, Object> args = new HashMap<>();
         args.put("manifestItem", manifestItem);
-        PopupDialog.show(CWFUtil.getResourcePath(ManifestViewer.class) + "manifestViewer.cwf", args, true, false, true);
+        PopupDialog.show(CWFUtil.getResourcePath(ManifestViewer.class) + "manifestViewer.cwf", args, true, false, true,
+            null);
     }
     
     /**

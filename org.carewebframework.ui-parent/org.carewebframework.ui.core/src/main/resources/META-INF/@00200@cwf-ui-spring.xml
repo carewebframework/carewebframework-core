@@ -103,11 +103,6 @@
 				</bean>
 			</property>
 		</bean>
-
-		<bean id="popupManager" class="org.carewebframework.ui.zk.PopupManager"
-			destroy-method="destroy">
-		</bean>
-
 	</beans>
 </beans>
 
