@@ -57,14 +57,9 @@ public class IconPicker implements IAutoWired {
     
     @Override
     public void afterInitialized(BaseComponent root) {
-        cboLibrary.registerEventListener(SelectEvent.TYPE, new IEventListener() {
-            
-            @Override
-            public void onEvent(Event event) {
-                iconLibrary = (IIconLibrary) cboLibrary.getSelectedItem().getData();
-                libraryChanged();
-            }
-            
+        cboLibrary.registerEventListener(SelectEvent.TYPE, (event) -> {
+            iconLibrary = (IIconLibrary) cboLibrary.getSelectedItem().getData();
+            libraryChanged();
         });
         
         for (IIconLibrary lib : iconRegistry) {

@@ -416,14 +416,9 @@ public class ZKUtil {
             
             if (sourceEvents != null) {
                 for (String eventName : sourceEvents.split("\\,")) {
-                    child.registerEventListener(eventName, new IEventListener() {
-                        
-                        @Override
-                        public void onEvent(Event event) {
-                            event = new Event(targetEvent, targetComponent);
-                            EventUtil.post(event);
-                        }
-                        
+                    child.registerEventListener(eventName, (event) -> {
+                        event = new Event(targetEvent, targetComponent);
+                        EventUtil.post(event);
                     });
                 }
             }

@@ -66,14 +66,9 @@ public class UIElementStepPane extends UIElementCWFBase {
         step.addChild(button);
         button.addClass("cwf-step-button");
         button.addClass("btn btn-sm");
-        button.registerEventListener("click", new IEventListener() {
-            
-            @Override
-            public void onEvent(Event event) {
-                ((UIElementStepView) getParent()).setActivePane(UIElementStepPane.this);
-                pane.setFocus(true);
-            }
-            
+        button.registerEventListener("click", (event) -> {
+            ((UIElementStepView) getParent()).setActivePane(UIElementStepPane.this);
+            pane.setFocus(true);
         });
     }
     

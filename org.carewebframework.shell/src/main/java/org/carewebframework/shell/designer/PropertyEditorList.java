@@ -92,7 +92,7 @@ public class PropertyEditorList extends PropertyEditorBase {
             combobox.registerEventForward(ChangeEvent.TYPE, propGrid, null);
         }
         
-        combobox.registerEventListener(DblclickEvent.TYPE, new IEventListener() {
+        combobox.registerEventListener(DblclickEvent.TYPE, (event) -> {
             
             /**
              * Double-clicking a combo item will select the item and close the combo box.
@@ -100,14 +100,10 @@ public class PropertyEditorList extends PropertyEditorBase {
              * @param event The double click event.
              * @throws Exception Unspecified exception.
              */
-            @Override
-            public void onEvent(Event event) {
-                int i = combobox.getSelectedIndex() + 1;
-                combobox.setSelectedIndex(i >= combobox.getChildCount() ? 0 : i);
-                EventUtil.send(ChangeEvent.TYPE, propGrid, null);
-                combobox.close();
-            }
-            
+            int i = combobox.getSelectedIndex() + 1;
+            combobox.setSelectedIndex(i >= combobox.getChildCount() ? 0 : i);
+            EventUtil.send(ChangeEvent.TYPE, propGrid, null);
+            //TODO: combobox.close();
         });
     }
     

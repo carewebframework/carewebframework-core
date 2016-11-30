@@ -165,13 +165,8 @@ public class InfoPanelTestController extends FrameworkController {
     public void onClick$btnAddMenu() {
         Menuitem menuitem = new Menuitem();
         menuitem.setLabel(++menuCount + ". Click Me!");
-        menuitem.registerEventListener(ClickEvent.TYPE, new IEventListener() {
-            
-            @Override
-            public void onEvent(Event event) {
-                System.out.println("Menu was clicked!");
-            }
-            
+        menuitem.registerEventListener(ClickEvent.TYPE, (event) -> {
+            System.out.println("Menu was clicked!");
         });
         infoPanel.registerMenuItem(menuitem, "Test");
     }

@@ -69,13 +69,8 @@ public class InputDialog implements IAutoWired {
         Window dialog = (Window) PageUtil.createPage(RESOURCE_PREFIX + "inputDialog.cwf", ExecutionContext.getPage(), args)
                 .get(0);
         
-        dialog.modal(callback == null ? null : new IEventListener() {
-            
-            @Override
-            public void onEvent(Event event) {
-                callback.onComplete(dialog.getAttribute("result", String.class));
-            }
-            
+        dialog.modal(callback == null ? null : (event) -> {
+            callback.onComplete(dialog.getAttribute("result", String.class));
         });
     }
     
