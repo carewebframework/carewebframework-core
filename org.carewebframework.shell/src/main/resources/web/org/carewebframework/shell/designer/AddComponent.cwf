@@ -5,7 +5,7 @@
 			style="background:none;border:none;text-overflow:ellipsis;white-space:nowrap;padding:0 5px 0 5px">
 			<treechildren>
 				<treeitem name="itmFavorites" visible="false"
-					label="${labels.cwf.shell.plugin.category.favorite}">
+					label="${@msg.cwf.shell.plugin.category.favorite}">
 					<treechildren />
 				</treeitem>
 			</treechildren>
@@ -14,11 +14,11 @@
 			<div zclass="btn-toolbar" align="end">
 				<button name="btnOK" zclass="btn"
 					sclass="btn-success btn-sm"
-					label="${labels.cwf.shell.designer.add.component.btn.ok.label}"
+					label="${@msg.cwf.shell.designer.add.component.btn.ok.label}"
 					disabled="true" />
 				<button name="btnCancel" zclass="btn"
 					sclass="btn-danger btn-sm"
-					label="${labels.cwf.shell.designer.add.component.btn.cancel.label}" />
+					label="${@msg.cwf.shell.designer.add.component.btn.cancel.label}" />
 				<separator orient="vertical" width="20px" />
 			</div>
 		</div>

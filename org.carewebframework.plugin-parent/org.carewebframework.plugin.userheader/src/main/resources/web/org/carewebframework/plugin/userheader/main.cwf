@@ -9,14 +9,14 @@
 			<label name="userHeader" />
 		</hlayout>
 		<hlayout sclass="cwf-header-row" hflex="1" vflex="1">
-			<a name="password" label="${labels.cwf.userheader.password.label}"
-				tooltiptext="${labels.cwf.userheader.password.hint}" visible="true" />
+			<a name="password" label="${@msg.cwf.userheader.password.label}"
+				tooltiptext="${@msg.cwf.userheader.password.hint}" visible="true" />
 			<space hflex="1" />
-			<a name="lock" label="${labels.cwf.userheader.lock.label}"
-				tooltiptext="${labels.cwf.userheader.lock.hint}" />
+			<a name="lock" label="${@msg.cwf.userheader.lock.label}"
+				tooltiptext="${@msg.cwf.userheader.lock.hint}" />
 			<space />
-			<a name="logout" label="${labels.cwf.userheader.logout.label}"
-				tooltiptext="${labels.cwf.userheader.logout.hint}" />
+			<a name="logout" label="${@msg.cwf.userheader.logout.label}"
+				tooltiptext="${@msg.cwf.userheader.logout.hint}" />
 		</hlayout>
 	</vlayout>
 </zk>

@@ -11,10 +11,10 @@
 					sclass="cwf-propertygrid-grid">
 					<columns sizable="true">
 						<column name="colProperty"
-							label="${labels.cwf.shell.designer.property.grid.column.name}"
+							label="${@msg.cwf.shell.designer.property.grid.column.name}"
 							style="text-align:center" width="50%" />
 						<column name="colValue"
-							label="${labels.cwf.shell.designer.property.grid.column.value}"
+							label="${@msg.cwf.shell.designer.property.grid.column.value}"
 							style="text-align:center" width="50%" />
 					</columns>
 					<rows></rows>
@@ -23,7 +23,7 @@
 			<splitterpane sclass="cwf-propertygrid-info">
 				<groupbox closable="false" hflex="1" vflex="1">
 					<caption name="capPropertyName"
-						label="${labels.cwf.shell.designer.property.grid.gbox.caption}" />
+						label="${@msg.cwf.shell.designer.property.grid.gbox.caption}" />
 					<span zclass="help-block" style="margin:0">
 						<label name="lblPropertyInfo" multiline="true" />
 					</span>
@@ -34,17 +34,17 @@
 			<div zclass="btn-toolbar" name="toolbar" align="end">
 				<button name="btnApply" zclass="btn"
 					sclass="btn-default btn-sm"
-					label="${labels.cwf.shell.designer.property.grid.btn.apply.label}" />
+					label="${@msg.cwf.shell.designer.property.grid.btn.apply.label}" />
 				<button name="btnRestore" zclass="btn"
 					sclass="btn-default btn-sm"
-					label="${labels.cwf.shell.designer.property.grid.btn.restore.label}" />
+					label="${@msg.cwf.shell.designer.property.grid.btn.restore.label}" />
 				<space />
 				<button name="btnOK" zclass="btn"
 					sclass="btn-success btn-sm"
-					label="${labels.cwf.shell.designer.property.grid.btn.ok.label}" />
+					label="${@msg.cwf.shell.designer.property.grid.btn.ok.label}" />
 				<button name="btnCancel" zclass="btn"
 					sclass="btn-danger btn-sm"
-					label="${labels.cwf.shell.designer.property.grid.btn.cancel.label}" />
+					label="${@msg.cwf.shell.designer.property.grid.btn.cancel.label}" />
 			</div>
 		</div>
 	</window>

@@ -21,6 +21,6 @@
 	</splitterview>
 
 	<menuitem self="@define(sharedFormsMenu)" name="mnuRefresh"
-		label="${labels.cwf.btn.refresh.label}" />
+		label="${@msg.cwf.btn.refresh.label}" />
 
 </zk>

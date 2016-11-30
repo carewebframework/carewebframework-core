@@ -7,23 +7,23 @@
 		<menuitem name="mnuHeader" sclass="cwf-menu-header"
 			disabled="true" />
 		<menuitem name="mnuAdd"
-			label="${labels.cwf.shell.designer.menu.add.label}" />
+			label="${@msg.cwf.shell.designer.menu.add.label}" />
 		<menuitem name="mnuDelete"
-			label="${labels.cwf.shell.designer.menu.delete.label}" />
+			label="${@msg.cwf.shell.designer.menu.delete.label}" />
 		<menuseparator />
 		<menuitem name="mnuCopy"
-			label="${labels.cwf.shell.designer.menu.copy.label}" />
+			label="${@msg.cwf.shell.designer.menu.copy.label}" />
 		<menuitem name="mnuCut"
-			label="${labels.cwf.shell.designer.menu.cut.label}" />
+			label="${@msg.cwf.shell.designer.menu.cut.label}" />
 		<menuitem name="mnuPaste"
-			label="${labels.cwf.shell.designer.menu.paste.label}" />
+			label="${@msg.cwf.shell.designer.menu.paste.label}" />
 		<menuitem name="mnuView"
-			label="${labels.cwf.shell.designer.menu.view.label}" />
+			label="${@msg.cwf.shell.designer.menu.view.label}" />
 		<menuseparator />
 		<menuitem name="mnuProperties"
-			label="${labels.cwf.shell.designer.menu.properties.label}" />
+			label="${@msg.cwf.shell.designer.menu.properties.label}" />
 		<menuitem name="mnuAbout"
-			label="${labels.cwf.shell.designer.menu.about.label}" />
+			label="${@msg.cwf.shell.designer.menu.about.label}" />
 	</menupopup>
 
 </zk>

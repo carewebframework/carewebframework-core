@@ -8,9 +8,9 @@
 			<combobox name="cboLogFiles" readonly="true" hflex="1" />
 			<span style="float:right">
 				<button name="btnToggle" disabled="true"
-					label="${labels.cwf.filetailer.btn.toggle.on.label}" />
+					label="${@msg.cwf.filetailer.btn.toggle.on.label}" />
 				<button name="btnClear"
-					label="${labels.cwf.filetailer.btn.clear.label}" />
+					label="${@msg.cwf.filetailer.btn.clear.label}" />
 			</span>
 		</hlayout>
 		

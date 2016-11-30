@@ -5,7 +5,7 @@
 				<label name="lblSessionSummary" style="font-weight:bold" />
 			</span>
 			<span style="float:right">
-				<button name="btnRefreshSessionView" label="${labels.cwf.btn.refresh.label}" />
+				<button name="btnRefreshSessionView" label="${@msg.cwf.btn.refresh.label}" />
 			</span>
 		</toolbar>
 	</pane>
@@ -17,13 +17,13 @@
 	</pane>
 		<table name="grid">
 			<columns sizable="true">
-				<column width="20px" label="${labels.cwf.sessiontracker.master.col1.label}" />
-				<column hflex="1" label="${labels.cwf.sessiontracker.master.col2.label}" />
-				<column hflex="1" label="${labels.cwf.sessiontracker.master.col3.label}" />
-				<column hflex="1" label="${labels.cwf.sessiontracker.master.col4.label}" />
-				<column hflex="min" label="${labels.cwf.sessiontracker.master.col5.label}" />
-				<column hflex="min" label="${labels.cwf.sessiontracker.master.col6.label}" />
-				<column hflex="min" label="${labels.cwf.sessiontracker.master.col7.label}" />
+				<column width="20px" label="${@msg.cwf.sessiontracker.master.col1.label}" />
+				<column hflex="1" label="${@msg.cwf.sessiontracker.master.col2.label}" />
+				<column hflex="1" label="${@msg.cwf.sessiontracker.master.col3.label}" />
+				<column hflex="1" label="${@msg.cwf.sessiontracker.master.col4.label}" />
+				<column hflex="min" label="${@msg.cwf.sessiontracker.master.col5.label}" />
+				<column hflex="min" label="${@msg.cwf.sessiontracker.master.col6.label}" />
+				<column hflex="min" label="${@msg.cwf.sessiontracker.master.col7.label}" />
 			</columns>
 			<rows />
 		</table>

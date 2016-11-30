@@ -38,6 +38,9 @@ import static org.carewebframework.shell.designer.DesignConstants.MSG_LAYOUT_REN
 import static org.carewebframework.shell.designer.DesignConstants.MSG_LAYOUT_SAVE;
 import static org.carewebframework.shell.designer.DesignConstants.RESOURCE_PREFIX;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.carewebframework.api.FrameworkUtil;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.shell.layout.LayoutIdentifier;
@@ -45,8 +48,13 @@ import org.carewebframework.shell.layout.LayoutUtil;
 import org.carewebframework.shell.layout.UILayout;
 import org.carewebframework.ui.dialog.DialogUtil;
 import org.carewebframework.ui.dialog.DialogUtil.IConfirmCallback;
+import org.carewebframework.ui.dialog.PopupDialog;
 import org.carewebframework.ui.zk.ListUtil;
+import org.carewebframework.web.ancillary.IAutoWired;
+import org.carewebframework.web.annotation.EventHandler;
+import org.carewebframework.web.annotation.WiredComponent;
 import org.carewebframework.web.client.ClientUtil;
+import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.BaseUIComponent;
 import org.carewebframework.web.component.Button;
 import org.carewebframework.web.component.Label;
@@ -64,30 +72,41 @@ import org.carewebframework.web.model.ModelAndView;
 /**
  * Supports selection and management of existing layouts.
  */
-public class LayoutManager extends Window {
+public class LayoutManager implements IAutoWired {
     
     private static final String ATTR_DEFAULT_SCOPE = LayoutUtil.class.getName() + ".default_scope";
     
+    @WiredComponent
     private Button btnOK;
     
+    @WiredComponent
     private Button btnDelete;
     
+    @WiredComponent
     private Button btnRename;
     
+    @WiredComponent
     private Button btnClone;
     
+    @WiredComponent
     private Button btnExport;
     
+    @WiredComponent
     private Listbox lstLayouts;
     
+    @WiredComponent
     private Label lblPrompt;
     
+    @WiredComponent
     private Radiogroup radioGroup;
     
-    private BaseUIComponent pnlManage;
+    @WiredComponent
+    private BaseUIComponent tbManage;
     
+    @WiredComponent
     private BaseUIComponent pnlSelect;
     
+    @WiredComponent
     private BaseUIComponent pnlScope;
     
     private boolean shared;
@@ -135,17 +154,12 @@ public class LayoutManager extends Window {
      * 
      * @param manage If true, open in management mode; otherwise, in selection mode.
      * @param deflt Default layout name.
-     * @return The layout selected on dialog closure.
      */
-    public static LayoutIdentifier execute(boolean manage, String deflt) {
-        LayoutManager dlg = null;
-        
-        try {
-            dlg = (LayoutManager) DialogUtil.popup(RESOURCE_PREFIX + "LayoutManager.cwf", true, true, false);
-            return dlg.show(manage, deflt);
-        } catch (Exception e) {
-            return null;
-        }
+    public static void show(boolean manage, String deflt) {
+        Map<String, Object> args = new HashMap<>();
+        args.put("manage", manage);
+        args.put("deflt", deflt);
+        PopupDialog.show(RESOURCE_PREFIX + "layoutManager.cwf", args, true, true, true, null);
     }
     
     /**
@@ -154,16 +168,16 @@ public class LayoutManager extends Window {
      * @param layout Layout to save.
      * @param layoutId Layout identifier
      * @param hideScope If true, hide shared/private scope selection.
-     * @return The saved layout name.
      */
-    public static LayoutIdentifier saveLayout(UILayout layout, LayoutIdentifier layoutId, boolean hideScope) {
-        layoutId = LayoutPrompt.promptLayout(layoutId, hideScope, true, CAP_LAYOUT_SAVE, MSG_LAYOUT_SAVE);
-        
-        if (layoutId != null) {
-            layout.saveToProperty(layoutId);
-        }
-        
-        return layoutId;
+    public static void saveLayout(UILayout layout, LayoutIdentifier layoutId, boolean hideScope) {
+        LayoutPrompt.show(layoutId, hideScope, true, CAP_LAYOUT_SAVE, MSG_LAYOUT_SAVE, (event) -> {
+            LayoutIdentifier id = event.getTarget().getAttribute("layoutId", LayoutIdentifier.class);
+            
+            if (id != null) {
+                layout.saveToProperty(id);
+            }
+            
+        });
     }
     
     /**
@@ -205,26 +219,21 @@ public class LayoutManager extends Window {
         ClientUtil.saveToFile(content, "text/xml", layout.name + ".xml");
     }
     
-    /**
-     * Initialize and display the dialog.
-     * 
-     * @param manage If true, open in management mode; otherwise, in selection mode.
-     * @param deflt Default layout name.
-     * @return The selected layout name (if in selection mode).
-     */
-    private LayoutIdentifier show(boolean manage, String deflt) {
+    private Window window;
+    
+    @Override
+    public void afterInitialized(BaseComponent root) {
+        window = (Window) root;
         shared = defaultIsShared();
-        wireController(this);
-        setTitle(StrUtil.formatMessage(manage ? CAP_LAYOUT_MANAGE : CAP_LAYOUT_LOAD));
+        boolean manage = root.getAttribute("manage", false);
+        window.setTitle(StrUtil.formatMessage(manage ? CAP_LAYOUT_MANAGE : CAP_LAYOUT_LOAD));
         lblPrompt.setLabel(StrUtil.formatMessage(manage ? MSG_LAYOUT_MANAGE : MSG_LAYOUT_LOAD));
         modelAndView = new ModelAndView<>(lstLayouts, null, renderer);
         pnlSelect.setVisible(!manage);
-        pnlManage.setVisible(manage);
+        tbManage.setVisible(manage);
         ((Radiobutton) radioGroup.getChildAt(shared ? 0 : 1)).setChecked(true);
         pnlScope.addClass(manage ? "pull-right" : "pull-left");
-        refresh(deflt);
-        modal(null);
-        return manage || selectedLayout == null ? null : selectedLayout;
+        refresh(root.getAttribute("dflt", ""));
     }
     
     /**
@@ -269,33 +278,37 @@ public class LayoutManager extends Window {
         String title = clone ? CAP_LAYOUT_CLONE : CAP_LAYOUT_RENAME;
         String prompt = clone ? MSG_LAYOUT_CLONE : MSG_LAYOUT_RENAME;
         LayoutIdentifier layoutId1 = getSelectedLayout();
-        LayoutIdentifier layoutId2 = LayoutPrompt.promptLayout(layoutId1, !clone, false, title, prompt);
-        
-        if (layoutId2 != null) {
-            if (clone) {
-                LayoutUtil.cloneLayout(layoutId1, layoutId2);
-            } else {
-                LayoutUtil.renameLayout(layoutId1, layoutId2.name);
-            }
+        LayoutPrompt.show(layoutId1, !clone, false, title, prompt, (event) -> {
+            LayoutIdentifier layoutId2 = event.getTarget().getAttribute("layoutId", LayoutIdentifier.class);
             
-            refresh(null);
-        }
+            if (layoutId2 != null) {
+                if (clone) {
+                    LayoutUtil.cloneLayout(layoutId1, layoutId2);
+                } else {
+                    LayoutUtil.renameLayout(layoutId1, layoutId2.name);
+                }
+                
+                refresh(null);
+            }
+        });
     }
     
     /**
      * Sets the selected layout and closes the dialog.
      */
+    @EventHandler(value = "click", target = "@btnOK")
     public void onClick$btnOK() {
         selectedLayout = getSelectedLayout();
         
         if (selectedLayout != null) {
-            close();
+            window.close();
         }
     }
     
     /**
      * Deletes the selected layout.
      */
+    @EventHandler(value = "click", target = "@btnDelete")
     public void onClick$btnDelete() {
         DialogUtil.confirm(MSG_LAYOUT_DELETE, new IConfirmCallback() {
             
@@ -312,6 +325,7 @@ public class LayoutManager extends Window {
     /**
      * Renames the selected layout.
      */
+    @EventHandler(value = "click", target = "@btnRename")
     public void onClick$btnRename() {
         cloneOrRename(false);
     }
@@ -319,6 +333,7 @@ public class LayoutManager extends Window {
     /**
      * Clones the selected layout.
      */
+    @EventHandler(value = "click", target = "@btnClone")
     public void onClick$btnClone() {
         cloneOrRename(true);
     }
@@ -326,6 +341,7 @@ public class LayoutManager extends Window {
     /**
      * Import a layout.
      */
+    @EventHandler(value = "click", target = "@btnImport")
     public void onClick$btnImport() {
         LayoutIdentifier layoutId = importLayout(shared);
         
@@ -337,6 +353,7 @@ public class LayoutManager extends Window {
     /**
      * Export a layout
      */
+    @EventHandler(value = "click", target = "@btnExport")
     public void onClick$btnExport() {
         exportLayout(getSelectedLayout());
     }
@@ -344,6 +361,7 @@ public class LayoutManager extends Window {
     /**
      * Update control states when selection changes.
      */
+    @EventHandler(value = "select", target = "@lstLayouts")
     public void onSelect$lstLayouts() {
         updateControls();
     }
@@ -351,6 +369,7 @@ public class LayoutManager extends Window {
     /**
      * Refresh when shared/private toggled.
      */
+    @EventHandler(value = "select", target = "@radioGroup")
     public void onCheck$radioGroup() {
         shared = radioGroup.getSelected().indexOf() == 0;
         defaultIsShared(shared);

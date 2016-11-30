@@ -8,7 +8,7 @@
 -->
 <window maximizable="true" sizable="true" closable="true" width="50%"
 	mold="bootstrap" sclass="panel-danger" mode="modal">
-	<caption label="${labels.cwf.error.dialog.title}" />
+	<caption label="${@msg.cwf.error.dialog.title}" />
 	<include src="~./org/carewebframework/ui/zk/errorContent.zul"
 		zclass="panel-body" />
 </window>

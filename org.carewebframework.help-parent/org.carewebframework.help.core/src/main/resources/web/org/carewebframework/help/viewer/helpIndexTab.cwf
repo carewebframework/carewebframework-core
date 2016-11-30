@@ -1,10 +1,10 @@
 <vbox width="100%" vflex="1">
 	<label label="Quick find"/>
 	<textbox name="txtFind" width="90%"/>
-	<label label="${labels.cwf.help.tab.index.keyword.header}"/>
+	<label label="${@msg.cwf.help.tab.index.keyword.header}"/>
 	<listbox name="lstKeywords" vflex="1">
-		<listitem label="${labels.cwf.help.tab.index.wait}"/>
+		<listitem label="${@msg.cwf.help.tab.index.wait}"/>
 	</listbox>
-	<label label="${labels.cwf.help.tab.index.topic.header}"/>
+	<label label="${@msg.cwf.help.tab.index.topic.header}"/>
 	<listbox name="lstTopics" vflex="1"/>
 </vbox>

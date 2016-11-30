@@ -1,6 +1,6 @@
 <zk>
 	<window width="400px" height="400px" mold="bootstrap"
-		title="${labels.cwf.shell.clipboard.viewer.title}"
+		title="${@msg.cwf.shell.clipboard.viewer.title}"
 		use="org.carewebframework.shell.designer.ClipboardViewer">
 		<div zclass="panel-body" vflex="1">
 			<textbox name="txtData" multiline="true" vflex="1" width="100%" />
@@ -9,21 +9,21 @@
 			<div zclass="btn-toolbar" align="end">
 				<button name="btnSave" zclass="btn"
 					sclass="btn-default btn-sm"
-					label="${labels.cwf.shell.clipboard.viewer.btn.save.label}"
-					tooltiptext="${labels.cwf.shell.clipboard.viewer.btn.save.hint}" />
+					label="${@msg.cwf.shell.clipboard.viewer.btn.save.label}"
+					tooltiptext="${@msg.cwf.shell.clipboard.viewer.btn.save.hint}" />
 				<button name="btnRestore" zclass="btn"
 					sclass="btn-default btn-sm"
-					label="${labels.cwf.shell.clipboard.viewer.btn.restore.label}"
-					tooltiptext="${labels.cwf.shell.clipboard.viewer.btn.restore.hint}" />
+					label="${@msg.cwf.shell.clipboard.viewer.btn.restore.label}"
+					tooltiptext="${@msg.cwf.shell.clipboard.viewer.btn.restore.hint}" />
 				<separator orient="vertical" width="40px" />
 				<button name="btnOK" zclass="btn"
 					sclass="btn-success btn-sm"
-					label="${labels.cwf.shell.clipboard.viewer.btn.ok.label}"
-					tooltiptext="${labels.cwf.shell.clipboard.viewer.btn.ok.hint}" />
+					label="${@msg.cwf.shell.clipboard.viewer.btn.ok.label}"
+					tooltiptext="${@msg.cwf.shell.clipboard.viewer.btn.ok.hint}" />
 				<button name="btnCancel" zclass="btn"
 					sclass="btn-danger btn-sm"
-					label="${labels.cwf.shell.clipboard.viewer.btn.cancel.label}"
-					tooltiptext="${labels.cwf.shell.clipboard.viewer.btn.cancel.hint}" />
+					label="${@msg.cwf.shell.clipboard.viewer.btn.cancel.label}"
+					tooltiptext="${@msg.cwf.shell.clipboard.viewer.btn.cancel.hint}" />
 			</div>
 		</div>
 	</window>

@@ -6,11 +6,11 @@
 					sclass="alert-link" />
 				<separator orient="vertical" width="40px" />
 				<button name="btnKeepOpen" sclass="alert-link"
-					label="${labels.cwf.timeout.keepalive.label}" />
+					label="${@msg.cwf.timeout.keepalive.label}" />
 			</div>
 			<div zclass="cwf-timeout-lock-panel">
 				<panel name="lockPanel" mold="bootstrap"
-					title="${labels.cwf.timeout.lock.title}">
+					title="${@msg.cwf.timeout.lock.title}">
 					<panelchildren>
 						<hlayout>
 							<span
@@ -27,11 +27,11 @@
 							forward="onOK=btnUnlock.onClick" />
 						<button name="btnUnlock" zclass="btn"
 							sclass="btn-success btn-sm"
-							label="${labels.cwf.timeout.unlock.label}" />
+							label="${@msg.cwf.timeout.unlock.label}" />
 						<space />
 						<button name="btnLogout" zclass="btn"
 							sclass="btn-danger btn-sm"
-							label="${labels.cwf.timeout.logout.label}" />
+							label="${@msg.cwf.timeout.logout.label}" />
 						<label name="lblInfo"
 							style="display:block;color:red;font-weight:bold;padding-top:5px" />
 					</toolbar>

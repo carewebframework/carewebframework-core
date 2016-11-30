@@ -5,22 +5,22 @@
 			<panel mold="bootstrap" vflex="1">
 		        <caption hflex="1" >
 		          <label zclass="z-caption-content"
-		                 value="${labels.cwf.sandbox.title.left}" />
+		                 value="${@msg.cwf.sandbox.title.left}" />
 		          <space hflex="10" />
 		          <combobox name="cboZul" readonly="true" width="200px" 
-		                    placeholder="${labels.cwf.sandbox.combobox.placeholder}"/>
+		                    placeholder="${@msg.cwf.sandbox.combobox.placeholder}"/>
 		          <space hflex="10" />
 		          <button name="btnFormatContent" zclass="btn btn-xs btn-info"
 		                  w:onClick="this.$f('txtContent').format();"
-		                  label="${labels.cwf.sandbox.btn.format.label}" />
+		                  label="${@msg.cwf.sandbox.btn.format.label}" />
 		          <space hflex="10" />
 		          <button name="btnClearContent" zclass="btn btn-xs btn-danger"
 		                  w:onClick="this.$f('txtContent').clear();"
-		                  label="${labels.cwf.btn.clear.label}" />
+		                  label="${@msg.cwf.btn.clear.label}" />
 		          <space hflex="1" />
 		          <button name="btnRenderContent"
 		                  onClick="txtContent.focus();"
-		                  zclass="btn btn-xs btn-success" label="${labels.cwf.btn.view.label}" />
+		                  zclass="btn btn-xs btn-success" label="${@msg.cwf.btn.view.label}" />
 		        </caption>
 				<panelchildren style="padding:0">
 					<textbox name="txtContent" multiline="true" />
@@ -30,7 +30,7 @@
 						var cm = CodeMirror.fromTextArea(txtContent.$n(), {
 							lineNumbers: true,
 							mode: 'xml',
-							placeholder: '${labels.cwf.sandbox.textbox.placeholder}',
+							placeholder: '${@msg.cwf.sandbox.textbox.placeholder}',
 							autoCloseTags: true,
 							matchTags: {bothTags: true},
 							extraKeys: {
@@ -85,13 +85,13 @@
 		        <caption hflex="1">
 		          <button name="btnClearView" zclass="btn btn-xs btn-danger"
 		                  onClick="txtContent.focus();"
-		                  label="${labels.cwf.btn.clear.label}" />
+		                  label="${@msg.cwf.btn.clear.label}" />
 		          <space hflex="1" />
 		          <button name="btnRefreshView" zclass="btn btn-xs btn-success"
-		                  label="${labels.cwf.btn.refresh.label}" />
+		                  label="${@msg.cwf.btn.refresh.label}" />
 		          <space hflex="10" />
 		          <label zclass="z-caption-content" style="float:right"
-		                 value="${labels.cwf.sandbox.title.right}" />
+		                 value="${@msg.cwf.sandbox.title.right}" />
 		        </caption>
 				<panelchildren name="contentParent" style="padding:0">
 					<idspace vflex="1" width="100%"

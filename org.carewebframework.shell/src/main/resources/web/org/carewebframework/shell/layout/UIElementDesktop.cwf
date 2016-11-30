@@ -9,7 +9,7 @@
 			<div name="titleCell" hflex="min"
 				zclass="cwf-desktop-title">
 				<label name="title" zclass="panel-title"
-					value="${labels.cwf.shell.plugin._desktop.title.$}" />
+					value="${@msg.cwf.shell.plugin._desktop.title.$}" />
 			</div>
 			<menubar name="menubar1"
 				style="border:none;background:none" />
@@ -18,9 +18,9 @@
 				<menu name="helpMenu" label="Help">
 					<menupopup name="helpMenuRoot">
 						<menuEx name="mnuAbout"
-							label="${labels.cwf.shell.plugin._desktop.menu.about.label}" />
+							label="${@msg.cwf.shell.plugin._desktop.menu.about.label}" />
 						<menuEx name="mnuTOC" visible="false"
-							label="${labels.cwf.shell.plugin._desktop.menu.toc.label}" />
+							label="${@msg.cwf.shell.plugin._desktop.menu.toc.label}" />
 						<menuseparator name="helpSeparator"
 							visible="false" />
 					</menupopup>

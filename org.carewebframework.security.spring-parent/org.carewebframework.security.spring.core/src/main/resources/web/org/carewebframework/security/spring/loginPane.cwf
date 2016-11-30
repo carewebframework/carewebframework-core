@@ -7,14 +7,14 @@
 		style="margin-left:auto;margin-right:auto;border:2px solid black">
 		<div width="100%" height="90px">
 			<image name="imgDomain" style="padding:5px;float:left"
-				align="right" src="${labels.login.form.title.image}" />
+				align="right" src="${@msg.login.form.title.image}" />
 			<vbox height="100%" pack="middle"
 				sclass="cwf-login-domain">
 				<label name="lblDomain"
-					value="${labels.login.form.domain.name.label}"
+					value="${@msg.login.form.domain.name.label}"
 					style="font-size:1.2em;font-weight:bold;display:block" />
 				<label name="lblTitle"
-					value="${labels.login.form.title.label}" />
+					value="${@msg.login.form.title.label}" />
 			</vbox>
 		</div>
 		<vbox width="100%" align="center" spacing="10px"
@@ -23,7 +23,7 @@
 				sclass="cwf-login-banner" style="margin: 30px 80px 0 80px">
 				<hlayout name="cmpDomainList" visible="false" valign="middle">
 					<div hflex="1" align="right">
-						${labels.login.form.domain.label}
+						${@msg.login.form.domain.label}
 					</div>
 					<listbox name="lstDomain" name="domain" hflex="2"
 						mold="select" />
@@ -31,7 +31,7 @@
 				</hlayout>
 				<hlayout valign="middle">
 					<div hflex="1" align="right">
-						${labels.login.form.username.label}
+						${@msg.login.form.username.label}
 					</div>
 					<textbox name="txtUsername" name="username"
 						focus="true" hflex="2" />
@@ -39,20 +39,20 @@
 				</hlayout>
 				<hlayout valign="middle">
 					<div hflex="1" align="right">
-						${labels.login.form.password.label}
+						${@msg.login.form.password.label}
 					</div>
 					<textbox name="txtPassword" name="password"
 						type="password" hflex="2" />
 					<div hflex="1">
 						<button name="btnLogin" zclass="btn"
 							sclass="btn-success btn-sm"
-							label="${labels.login.form.button.login.label}" />
+							label="${@msg.login.form.button.login.label}" />
 					</div>
 				</hlayout>
 				<div name="divDomain" hflex="1">
 					<button name="btnDomain" zclass="btn"
 						sclass="btn-link btn-sm"
-						label="${labels.login.form.domain.alternate.label}" />
+						label="${@msg.login.form.domain.alternate.label}" />
 				</div>
 			</vlayout>
 			<label name="lblStatus" visible="false" />
@@ -68,22 +68,22 @@
 			<div name="divInfo" sclass="cwf-login-banner">
 				<label name="lblInfoTitle"
 					style="font-weight:bold;font-size:1.1em;display:block"
-					value="${labels.login.form.info.title.label}" />
+					value="${@msg.login.form.info.title.label}" />
 				<separator height="10px" bar="true" />
 				<label name="lblInfo" style="padding: 20px"
-					multiline="true" value="${labels.login.form.info.label}" />
+					multiline="true" value="${@msg.login.form.info.label}" />
 				<html name="htmlInfo" style="padding: 20px"
 					visible="false" />
 			</div>
-			<label label="${labels.login.form.footer.label}" />
+			<label label="${@msg.login.form.footer.label}" />
 			<hlayout sclass="panel-footer" hflex="1" valign="middle"
 				style="text-align: left; padding-left: 20px">
-				<label label="${labels.login.form.copyright.prefix}"
+				<label label="${@msg.login.form.copyright.prefix}"
 					style="font-style:italic" />
 				<image width="30px" height="30px" align="center"
 					style="background:transparent;margin:1px 5px 1px 5px"
-					src="${labels.login.form.copyright.image}" />
-				<label label="${labels.login.form.copyright.label}"
+					src="${@msg.login.form.copyright.image}" />
+				<label label="${@msg.login.form.copyright.label}"
 					style="font-weight:bold" />
 			</hlayout>
 		</vbox>

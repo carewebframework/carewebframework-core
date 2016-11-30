@@ -1,5 +1,5 @@
 <zk>
-	<window title="${labels.cwf.shell.about.title}"
+	<window title="${@msg.cwf.shell.about.title}"
 		width="500px" mold="bootstrap"
 		controller="${aboutDialogController}">
 		<caption label="${$composer.title}" />
@@ -30,7 +30,7 @@
 					id="btnCustom" label="${$composer.custom}" 
 					visible="${$composer.custom!=null}" />
 				<button zclass="btn" sclass="btn-danger btn-sm" style="float:right"
-					label="${labels.cwf.shell.about.btn.close.label}" width="80px"
+					label="${@msg.cwf.shell.about.btn.close.label}" width="80px"
 					forward="onClick=onClose" focus="true" />
 			</div>
 		</div>

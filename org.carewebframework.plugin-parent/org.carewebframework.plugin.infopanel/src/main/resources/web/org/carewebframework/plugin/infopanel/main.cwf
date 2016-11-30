@@ -21,7 +21,7 @@
 				<div zclass="panel-heading"
 					forward="onDoubleClick=alertIcon.onClick">
 					<label name="alertTitle" zclass="panel-title"
-						value="${labels.cwf.infopanel.alert.title}" />
+						value="${@msg.cwf.infopanel.alert.title}" />
 					<span name="alertIcon"
 						zclass="panel-icons panel-icon glyphicon"
 						sclass="glyphicon-chevron-down" />

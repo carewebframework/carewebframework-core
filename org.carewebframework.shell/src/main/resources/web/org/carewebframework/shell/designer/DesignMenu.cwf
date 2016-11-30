@@ -1,33 +1,33 @@
 <menu use="org.carewebframework.shell.designer.DesignMenu">
 	<menupopup name="menupopup">
 		<menuitem name="mnuDesignMode" checkmark="true"
-			label="${labels.cwf.shell.designer.menu.designmode.label}"
-			tooltiptext="${labels.cwf.shell.designer.menu.designmode.hint}" />
+			label="${@msg.cwf.shell.designer.menu.designmode.label}"
+			tooltiptext="${@msg.cwf.shell.designer.menu.designmode.hint}" />
 		<menuitem name="mnuDesktopProperties"
-			label="${labels.cwf.shell.designer.menu.desktop.properties.label}"
-			tooltiptext="${labels.cwf.shell.designer.menu.desktop.properties.hint}" />
+			label="${@msg.cwf.shell.designer.menu.desktop.properties.label}"
+			tooltiptext="${@msg.cwf.shell.designer.menu.desktop.properties.hint}" />
 		<menuitem name="mnuClearDesktop"
-			label="${labels.cwf.shell.designer.menu.desktop.clear.label}"
-			tooltiptext="${labels.cwf.shell.designer.menu.desktop.clear.hint}" />
+			label="${@msg.cwf.shell.designer.menu.desktop.clear.label}"
+			tooltiptext="${@msg.cwf.shell.designer.menu.desktop.clear.hint}" />
 		<menuitem name="mnuLayoutDesigner"
-			label="${labels.cwf.shell.designer.menu.layout.designer.label}"
-			tooltiptext="${labels.cwf.shell.designer.menu.layout.designer.hint}" />
+			label="${@msg.cwf.shell.designer.menu.layout.designer.label}"
+			tooltiptext="${@msg.cwf.shell.designer.menu.layout.designer.hint}" />
 		<menuitem name="mnuLayoutManager"
-			label="${labels.cwf.shell.designer.menu.layout.manager.label}"
-			tooltiptext="${labels.cwf.shell.designer.menu.layout.manager.hint}" />
+			label="${@msg.cwf.shell.designer.menu.layout.manager.label}"
+			tooltiptext="${@msg.cwf.shell.designer.menu.layout.manager.hint}" />
 		<menuitem name="mnuLoadLayout"
-			label="${labels.cwf.shell.designer.menu.layout.load.label}"
-			tooltiptext="${labels.cwf.shell.designer.menu.layout.load.hint}" />
+			label="${@msg.cwf.shell.designer.menu.layout.load.label}"
+			tooltiptext="${@msg.cwf.shell.designer.menu.layout.load.hint}" />
 		<menuitem name="mnuSaveLayout"
-			label="${labels.cwf.shell.designer.menu.layout.save.label}"
-			tooltiptext="${labels.cwf.shell.designer.menu.layout.save.hint}" />
+			label="${@msg.cwf.shell.designer.menu.layout.save.label}"
+			tooltiptext="${@msg.cwf.shell.designer.menu.layout.save.hint}" />
 		<menuitem name="mnuShowZul"
-			label="${labels.cwf.shell.designer.menu.zk.viewer.label}"
-			tooltiptext="${labels.cwf.shell.designer.menu.zk.viewer.hint}" />
+			label="${@msg.cwf.shell.designer.menu.zk.viewer.label}"
+			tooltiptext="${@msg.cwf.shell.designer.menu.zk.viewer.hint}" />
 		<menuseparator />
 		<menuitem name="mnuLogout"
-			label="${labels.cwf.shell.designer.menu.logout.label}"
-			tooltiptext="${labels.cwf.shell.designer.menu.logout.hint}" />
+			label="${@msg.cwf.shell.designer.menu.logout.label}"
+			tooltiptext="${@msg.cwf.shell.designer.menu.logout.hint}" />
 	</menupopup>
 </menu>
 

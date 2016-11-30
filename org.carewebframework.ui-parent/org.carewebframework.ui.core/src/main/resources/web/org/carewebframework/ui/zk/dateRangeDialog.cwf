@@ -1,35 +1,35 @@
 <zk>
 
-	<window title="${labels.cwf.date.range.win.title}" mold="bootstrap"
+	<window title="${@msg.cwf.date.range.win.title}" mold="bootstrap"
 		width="200px" use="org.carewebframework.ui.zk.DateRangeDialog">
 		<div width="100%" zclass="panel-body">
 			<label zclass="label" sclass="label-info"
-				value="${labels.cwf.date.range.start.date.label}" />
+				value="${@msg.cwf.date.range.start.date.label}" />
 			<div zclass="btn-group btn-xs" width="100%">
 				<datebox name="startDate" hflex="1" sclass="btn"
-					tooltiptext="${labels.cwf.date.range.start.date.dbx.hint}" />
+					tooltiptext="${@msg.cwf.date.range.start.date.dbx.hint}" />
 				<toolbarbutton name="btnSameAsEnd" zclass="btn"
 					sclass="btn-link glyphicon glyphicon-chevron-left"
-					tooltiptext="${labels.cwf.date.range.start.date.btn.hint}" />
+					tooltiptext="${@msg.cwf.date.range.start.date.btn.hint}" />
 			</div>
 			<label zclass="label" sclass="label-info"
-				value="${labels.cwf.date.range.end.date.label}" />
+				value="${@msg.cwf.date.range.end.date.label}" />
 			<div zclass="btn-group btn-xs" width="100%">
 				<datebox name="endDate" hflex="1" sclass="btn"
-					tooltiptext="${labels.cwf.date.range.end.date.dbx.hint}" />
+					tooltiptext="${@msg.cwf.date.range.end.date.dbx.hint}" />
 				<toolbarbutton name="btnSameAsStart" zclass="btn"
 					sclass="btn-link glyphicon glyphicon-chevron-left"
-					tooltiptext="${labels.cwf.date.range.end.date.btn.hint}" />
+					tooltiptext="${@msg.cwf.date.range.end.date.btn.hint}" />
 			</div>
 		</div>
 		<div zclass="panel-footer">
 			<div zclass="btn-toolbar" align="center">
 				<button name="btnOK" zclass="btn"
 					sclass="btn-success btn-sm"
-					label="${labels.cwf.date.range.btn.ok.label}" />
+					label="${@msg.cwf.date.range.btn.ok.label}" />
 				<button name="btnCancel" zclass="btn"
 					sclass="btn-danger btn-sm"
-					label="${labels.cwf.date.range.btn.cancel.label}" />
+					label="${@msg.cwf.date.range.btn.cancel.label}" />
 			</div>
 		</div>
 	</window>

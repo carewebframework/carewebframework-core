@@ -24,7 +24,7 @@ public class DialogUtil {
     
     public interface IConfirmCallback {
         
-        void onComplete(boolean response);
+        void onComplete(boolean confirm);
     }
     
     /**
@@ -250,7 +250,7 @@ public class DialogUtil {
      * @return Reference to the opened window, if successful.
      */
     public static Window popup(String cwfPage, boolean closable, boolean sizable, boolean show) {
-        return PopupDialog.show(cwfPage, null, closable, sizable, show);
+        return PopupDialog.show(cwfPage, null, closable, sizable, show, null);
     }
     
     private DialogUtil() {

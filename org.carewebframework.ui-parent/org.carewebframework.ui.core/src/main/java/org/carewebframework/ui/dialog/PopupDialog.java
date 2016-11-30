@@ -52,9 +52,11 @@ public class PopupDialog extends Window {
      * @param sizable If true, window sizing grips appear.
      * @param show If true, the window is displayed modally. If false, the window is created but not
      *            displayed.
+     * @param closeListener Called upon window closure.
      * @return Reference to the opened window, if successful.
      */
-    public static Window show(String dialog, Map<String, Object> args, boolean closable, boolean sizable, boolean show) {
+    public static Window show(String dialog, Map<String, Object> args, boolean closable, boolean sizable, boolean show,
+                              IEventListener closeListener) {
         Window parent = new Window(); // Temporary parent in case materialize fails, so can cleanup.
         Page currentPage = ExecutionContext.getPage();
         parent.setParent(currentPage);
@@ -82,7 +84,7 @@ public class PopupDialog extends Window {
             window.setSizable(sizable);
             
             if (show) {
-                window.modal(null);
+                window.modal(closeListener);
             }
         } catch (Exception e) {
             if (window != null) {

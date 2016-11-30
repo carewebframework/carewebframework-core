@@ -18,19 +18,19 @@
 					<toolbarbutton name="btnPrevious" zclass="btn"
 						sclass="btn-sm btn-default"
 						iconSclass="glyphicon glyphicon-chevron-left"
-						tooltiptext="${labels.cwf.help.viewer.btn.previous.hint}" />
+						tooltiptext="${@msg.cwf.help.viewer.btn.previous.hint}" />
 					<toolbarbutton name="btnNext" zclass="btn"
 						sclass="btn-sm btn-default"
 						iconSclass="glyphicon glyphicon-chevron-right"
-						tooltiptext="${labels.cwf.help.viewer.btn.next.hint}" />
+						tooltiptext="${@msg.cwf.help.viewer.btn.next.hint}" />
 					<space />
 					<toolbarbutton name="btnOpen" zclass="btn"
 						sclass="btn-sm btn-default"
 						iconSclass="glyphicon glyphicon-new-window"
-						tooltiptext="${labels.cwf.help.viewer.btn.open.hint}" />
+						tooltiptext="${@msg.cwf.help.viewer.btn.open.hint}" />
 					<toolbarbutton name="btnPrint" zclass="btn"
 						sclass="btn-sm btn-default" iconSclass="glyphicon glyphicon-print"
-						tooltiptext="${labels.cwf.help.viewer.btn.print.hint}"
+						tooltiptext="${@msg.cwf.help.viewer.btn.print.hint}"
 						c:onClick="jq(this.$f('iframe')).get(0).contentWindow.print();" />
 				</toolbar>
 				<iframe xmlns:ca="client/attribute" name="iframe" name="help_frame" 

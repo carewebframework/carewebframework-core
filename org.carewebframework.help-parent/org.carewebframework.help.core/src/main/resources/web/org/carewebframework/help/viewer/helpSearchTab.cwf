@@ -7,12 +7,12 @@
 		</hbox>
 	</toolbar>
 	<label name="lblNoResultsFound" visible="false"
-		value="${labels.cwf.help.tab.search.noresults}" />
+		value="${@msg.cwf.help.tab.search.noresults}" />
 	<listbox name="lstSrchResults" visible="false" vflex="1">
 		<listhead sizable="true">
 			<listheader label="" width="30px" sort="auto(confidence)"/>
-			<listheader label="${labels.cwf.help.tab.search.topic.header}" sort="auto(topic)" />
-			<listheader label="${labels.cwf.help.tab.search.source.header}" sort="auto(source)" />
+			<listheader label="${@msg.cwf.help.tab.search.topic.header}" sort="auto(topic)" />
+			<listheader label="${@msg.cwf.help.tab.search.source.header}" sort="auto(source)" />
 		</listhead>
 	</listbox>
 </zk>
