@@ -33,6 +33,7 @@ import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.carewebframework.api.property.IPropertyProvider;
+import org.carewebframework.common.MiscUtil;
 import org.carewebframework.common.XMLUtil;
 import org.carewebframework.shell.designer.IClipboardAware;
 import org.carewebframework.shell.plugins.PluginDefinition;
@@ -81,9 +82,8 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
      * 
      * @param parent Parent UI element at this level of the hierarchy. May be null.
      * @return The UI element created during this pass.
-     * @throws Exception Unspecified exception.
      */
-    public UIElementBase deserialize(UIElementBase parent) throws Exception {
+    public UIElementBase deserialize(UIElementBase parent) {
         moveTop();
         moveDown();
         UIElementBase element = internalDeserialize(parent, !(parent instanceof UIElementDesktop));
@@ -103,9 +103,8 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
      * @param parent Parent UI element at this level of the hierarchy. May be null.
      * @param ignoreInternal Ignore internal elements.
      * @return The UI element created during this pass.
-     * @throws Exception Unspecified exception.
      */
-    private UIElementBase internalDeserialize(UIElementBase parent, boolean ignoreInternal) throws Exception {
+    private UIElementBase internalDeserialize(UIElementBase parent, boolean ignoreInternal) {
         String id = getObjectName();
         PluginDefinition def = PluginDefinition.getDefinition(id);
         
@@ -288,9 +287,8 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
      * 
      * @param text The XML text to parse.
      * @return This layout (for chaining).
-     * @throws Exception Unspecified exception.
      */
-    public UILayout loadFromText(String text) throws Exception {
+    public UILayout loadFromText(String text) {
         try {
             reset();
             document = XMLUtil.parseXMLFromString(text);
@@ -298,7 +296,7 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
             return this;
         } catch (Exception e) {
             reset();
-            throw e;
+            throw MiscUtil.toUnchecked(e);
         }
     }
     
@@ -307,9 +305,8 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
      * 
      * @param layoutId Layout identifier.
      * @return This layout (for chaining).
-     * @throws Exception Unspecified exception.
      */
-    public UILayout loadFromProperty(LayoutIdentifier layoutId) throws Exception {
+    public UILayout loadFromProperty(LayoutIdentifier layoutId) {
         String xml = LayoutUtil.getLayoutContent(layoutId);
         loadFromText(xml);
         this.layoutName = layoutId.name;

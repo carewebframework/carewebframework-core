@@ -161,7 +161,7 @@ public class DesignMenu extends Menu implements INamespace {
      * @throws Exception Unspecified exception.
      */
     public void onClick$mnuLayoutManager() throws Exception {
-        LayoutManager.execute(true, shell.getUILayout().getName());
+        LayoutManager.show(true, shell.getUILayout().getName(), null);
     }
     
     /**
@@ -187,13 +187,15 @@ public class DesignMenu extends Menu implements INamespace {
      * @throws Exception Unspecified exception.
      */
     public void onClick$mnuLoadLayout() throws Exception {
-        LayoutIdentifier layoutId = LayoutManager.execute(false, shell.getUILayout().getName());
-        
-        if (layoutId != null) {
-            UILayout newLayout = new UILayout();
-            newLayout.loadFromProperty(layoutId);
-            shell.buildUI(newLayout);
-        }
+        LayoutManager.show(false, shell.getUILayout().getName(), (event) -> {
+            LayoutIdentifier layoutId = event.getTarget().getAttribute("layoutId", LayoutIdentifier.class);
+            
+            if (layoutId != null) {
+                UILayout newLayout = new UILayout();
+                newLayout.loadFromProperty(layoutId);
+                shell.buildUI(newLayout);
+            }
+        });
     }
     
     /**

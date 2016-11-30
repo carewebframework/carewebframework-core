@@ -349,9 +349,8 @@ public class CareWebShell extends Div {
      * Build the UI based on the specified layout.
      * 
      * @param layout Layout for building UI.
-     * @throws Exception Unspecified exception.
      */
-    public void buildUI(UILayout layout) throws Exception {
+    public void buildUI(UILayout layout) {
         this.layout = layout;
         reset();
         layout.deserialize(desktop);

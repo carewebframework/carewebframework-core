@@ -65,6 +65,7 @@ import org.carewebframework.web.component.Radiogroup;
 import org.carewebframework.web.component.Window;
 import org.carewebframework.web.event.ClickEvent;
 import org.carewebframework.web.event.DblclickEvent;
+import org.carewebframework.web.event.IEventListener;
 import org.carewebframework.web.model.IComponentRenderer;
 import org.carewebframework.web.model.ListModel;
 import org.carewebframework.web.model.ModelAndView;
@@ -154,12 +155,13 @@ public class LayoutManager implements IAutoWired {
      * 
      * @param manage If true, open in management mode; otherwise, in selection mode.
      * @param deflt Default layout name.
+     * @param closeListener Close event listener.
      */
-    public static void show(boolean manage, String deflt) {
+    public static void show(boolean manage, String deflt, IEventListener closeListener) {
         Map<String, Object> args = new HashMap<>();
         args.put("manage", manage);
         args.put("deflt", deflt);
-        PopupDialog.show(RESOURCE_PREFIX + "layoutManager.cwf", args, true, true, true, null);
+        PopupDialog.show(RESOURCE_PREFIX + "layoutManager.cwf", args, true, true, true, closeListener);
     }
     
     /**

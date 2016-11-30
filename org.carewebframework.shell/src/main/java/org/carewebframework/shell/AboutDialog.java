@@ -192,7 +192,7 @@ public class AboutDialog extends FrameworkController {
      */
     private static void showDialog(AboutParams params) {
         try {
-            PopupDialog.show(Constants.RESOURCE_PREFIX + "aboutDialog.cwf", params, true, false, true);
+            PopupDialog.show(Constants.RESOURCE_PREFIX + "aboutDialog.cwf", params, true, false, true, null);
         } catch (Exception e) {
             DialogUtil.showError(CWFUtil.formatExceptionForDisplay(e));
         }

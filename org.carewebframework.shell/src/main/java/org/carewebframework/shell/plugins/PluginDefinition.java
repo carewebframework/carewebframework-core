@@ -31,15 +31,14 @@ import java.util.jar.Manifest;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.carewebframework.api.ManifestIterator;
 import org.carewebframework.api.property.IPropertyProvider;
 import org.carewebframework.api.security.SecurityUtil;
+import org.carewebframework.common.MiscUtil;
 import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.layout.UIElementPlugin;
 import org.carewebframework.shell.layout.UILayout;
 import org.carewebframework.shell.property.PropertyInfo;
-
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.StringUtils;
 
@@ -130,7 +129,7 @@ public class PluginDefinition {
      * The basic constructor.
      */
     public PluginDefinition() {
-    
+        
     }
     
     /**
@@ -596,50 +595,54 @@ public class PluginDefinition {
      * @param propertySource Property source for initializing element properties (may be null).
      * @return Newly created element (may be null if access is restricted or plugin has been
      *         disabled).
-     * @throws Exception Unspecified exception.
      */
-    public UIElementBase createElement(UIElementBase parent, IPropertyProvider propertySource) throws Exception {
-        UIElementBase element = null;
-        boolean deserializing = propertySource instanceof UILayout;
-        
-        if (isForbidden()) {
-            log.info("Access to plugin " + getName() + " is restricted.");
-        } else if (isDisabled()) {
-            log.info("Plugin " + getName() + " has been disabled.");
-        } else {
-            Class<? extends UIElementBase> clazz = getClazz();
+    public UIElementBase createElement(UIElementBase parent, IPropertyProvider propertySource) {
+        try {
+            UIElementBase element = null;
+            boolean deserializing = propertySource instanceof UILayout;
             
-            if (isInternal()) {
-                element = parent.getChild(clazz, null);
+            if (isForbidden()) {
+                log.info("Access to plugin " + getName() + " is restricted.");
+            } else if (isDisabled()) {
+                log.info("Plugin " + getName() + " has been disabled.");
             } else {
-                element = clazz.newInstance();
-            }
-            
-            if (element == null) {
-                UIElementBase.raise("Failed to create UI element " + id + ".");
-            }
-            
-            element.setDefinition(this);
-            element.beforeInitialize(deserializing);
-            
-            if (propertySource != null) {
-                for (PropertyInfo propInfo : getProperties()) {
-                    String key = propInfo.getId();
-                    
-                    if (propertySource.hasProperty(key)) {
-                        String value = propertySource.getProperty(key);
-                        propInfo.setPropertyValue(element, value);
+                Class<? extends UIElementBase> clazz = getClazz();
+                
+                if (isInternal()) {
+                    element = parent.getChild(clazz, null);
+                } else {
+                    element = clazz.newInstance();
+                }
+                
+                if (element == null) {
+                    UIElementBase.raise("Failed to create UI element " + id + ".");
+                }
+                
+                element.setDefinition(this);
+                element.beforeInitialize(deserializing);
+                
+                if (propertySource != null) {
+                    for (PropertyInfo propInfo : getProperties()) {
+                        String key = propInfo.getId();
+                        
+                        if (propertySource.hasProperty(key)) {
+                            String value = propertySource.getProperty(key);
+                            propInfo.setPropertyValue(element, value);
+                        }
                     }
                 }
+                
+                if (parent != null) {
+                    element.setParent(parent);
+                }
+                
+                element.afterInitialize(deserializing);
             }
             
-            if (parent != null) {
-                element.setParent(parent);
-            }
+            return element;
             
-            element.afterInitialize(deserializing);
+        } catch (Exception e) {
+            throw MiscUtil.toUnchecked(e);
         }
-        
-        return element;
     }
 }

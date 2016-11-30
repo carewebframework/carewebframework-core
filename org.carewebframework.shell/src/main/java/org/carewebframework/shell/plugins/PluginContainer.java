@@ -113,8 +113,6 @@ public class PluginContainer extends Container {
     
     private class ToolbarContainer extends Container {
         
-        private static final long serialVersionUID = 1L;
-        
         public ToolbarContainer() {
             super();
             addClass("cwf-toolbar-container");
