@@ -46,7 +46,7 @@ public class XMLViewer {
     public static void showXML(Document document) {
         Map<String, Object> args = new HashMap<>();
         args.put("document", document);
-        PopupDialog.show(XMLConstants.VIEW_DIALOG, args, true, true, true);
+        PopupDialog.show(XMLConstants.VIEW_DIALOG, args, true, true, true, null);
     }
     
     /**

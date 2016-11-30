@@ -62,7 +62,7 @@ public class ReportDialog implements IAutoWired {
         args.put("text", text);
         args.put("title", title);
         args.put("allowPrint", allowPrint);
-        Window dialog = PopupDialog.show(DIALOG, args, true, true, false);
+        Window dialog = PopupDialog.show(DIALOG, args, true, true, false, null);
         
         if (asModal) {
             dialog.modal(callback);

@@ -63,14 +63,6 @@
 		<bean id="exceptionController" class="org.carewebframework.ui.ExceptionController"
 			scope="prototype" />
 
-		<!-- Controller for XML source viewer. -->
-		<bean id="xmlViewerController" class="org.carewebframework.ui.xml.XMLViewerController"
-			scope="prototype" />
-
-		<!-- Controller for manifest viewer. -->
-		<bean id="manifestViewer" class="org.carewebframework.ui.manifest.ManifestViewer"
-			scope="prototype" />
-
 	</beans>
 
 	<beans profile="desktop">
