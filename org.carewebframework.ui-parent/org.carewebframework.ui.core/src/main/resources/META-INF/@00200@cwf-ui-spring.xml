@@ -56,9 +56,18 @@
 			scope="prototype" />
 
 		<!-- Controller for manifest viewer. -->
-		<bean id="manifestViewer" class="org.carewebframework.ui.zk.ManifestViewer"
+		<bean id="manifestViewer" class="org.carewebframework.ui.manifest.ManifestViewer"
 			scope="prototype" />
 
+		<bean class="org.carewebframework.ui.action.ActionTypeRegistry" 
+			factory-method="getInstance" />
+		
+		<bean class="org.carewebframework.ui.action.ActionTypeUrl" />
+		
+		<bean class="org.carewebframework.ui.action.ActionTypeJavascript" />
+		
+		<bean class="org.carewebframework.ui.action.ActionTypeGroovy" />
+		
 	</beans>
 
 	<beans profile="desktop">
