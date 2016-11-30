@@ -8,6 +8,18 @@
 		http://www.carewebframework.org/schema/spring
 		http://www.carewebframework.org/schema/spring/spring-extensions.xsd">
 
+	<beans>
+		<bean class="org.carewebframework.ui.action.ActionTypeRegistry" 
+			factory-method="getInstance" />
+		
+		<bean class="org.carewebframework.ui.action.ActionTypeUrl" />
+		
+		<bean class="org.carewebframework.ui.action.ActionTypeJavascript" />
+		
+		<bean class="org.carewebframework.ui.action.ActionTypeGroovy" />
+		
+	</beans>
+	
 	<beans profile="root">
 
 		<bean class="org.carewebframework.ui.Application" factory-method="getInstance" />
@@ -59,15 +71,6 @@
 		<bean id="manifestViewer" class="org.carewebframework.ui.manifest.ManifestViewer"
 			scope="prototype" />
 
-		<bean class="org.carewebframework.ui.action.ActionTypeRegistry" 
-			factory-method="getInstance" />
-		
-		<bean class="org.carewebframework.ui.action.ActionTypeUrl" />
-		
-		<bean class="org.carewebframework.ui.action.ActionTypeJavascript" />
-		
-		<bean class="org.carewebframework.ui.action.ActionTypeGroovy" />
-		
 	</beans>
 
 	<beans profile="desktop">
