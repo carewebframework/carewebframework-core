@@ -32,10 +32,9 @@ import java.util.Collection;
 
 import org.carewebframework.help.HelpModule;
 import org.carewebframework.help.HelpTopicNode;
+import org.carewebframework.help.HelpViewType;
 import org.carewebframework.help.IHelpSet;
-import org.carewebframework.help.viewer.HelpViewType;
-import org.carewebframework.help.viewer.IHelpView;
-
+import org.carewebframework.help.IHelpView;
 import org.junit.Test;
 
 public class TestCHM {
@@ -67,11 +66,11 @@ public class TestCHM {
                     assertEquals(1, tree.getChildren().size());
                     assertEquals(7, tree.getChildren().get(0).getChildren().size());
                     break;
-                    
-                case Index:
+                
+                case INDEX:
                     assertEquals(0, tree.getChildren().size());
                     break;
-                    
+                
                 default:
                     fail("Unexpected view type: " + type);
             }

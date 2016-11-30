@@ -36,8 +36,8 @@ import java.util.Map;
 import org.carewebframework.help.HelpModule;
 import org.carewebframework.help.HelpSetBase;
 import org.carewebframework.help.HelpTopic;
-import org.carewebframework.help.viewer.HelpViewType;
-import org.carewebframework.help.viewer.IHelpView;
+import org.carewebframework.help.HelpViewType;
+import org.carewebframework.help.IHelpView;
 
 import oracle.help.common.View;
 import oracle.help.library.helpset.HelpSet;
@@ -52,8 +52,8 @@ public class HelpSet_OHJ extends HelpSetBase {
     
     static {
         viewMap.put("oracle.help.navigator.tocNavigator.TOCNavigator", HelpViewType.TOC);
-        viewMap.put("oracle.help.navigator.keywordNavigator.KeywordNavigator", HelpViewType.Index);
-        viewMap.put("oracle.help.navigator.searchNavigator.SearchNavigator", HelpViewType.Search);
+        viewMap.put("oracle.help.navigator.keywordNavigator.KeywordNavigator", HelpViewType.INDEX);
+        viewMap.put("oracle.help.navigator.searchNavigator.SearchNavigator", HelpViewType.SEARCH);
     }
     
     private final HelpSet helpSet;
@@ -73,7 +73,7 @@ public class HelpSet_OHJ extends HelpSetBase {
         for (View view : helpSet.getAllViews()) {
             HelpViewType viewType = viewMap.get(view.getType());
             
-            if (viewType != null && viewType != HelpViewType.Search) {
+            if (viewType != null && viewType != HelpViewType.SEARCH) {
                 helpViews.add(new HelpView(this, view, viewType));
             }
         }

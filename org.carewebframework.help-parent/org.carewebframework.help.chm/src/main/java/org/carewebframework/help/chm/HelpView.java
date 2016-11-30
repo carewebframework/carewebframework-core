@@ -26,8 +26,8 @@
 package org.carewebframework.help.chm;
 
 import org.carewebframework.help.HelpTopicNode;
-import org.carewebframework.help.viewer.HelpViewType;
-import org.carewebframework.help.viewer.IHelpView;
+import org.carewebframework.help.HelpViewType;
+import org.carewebframework.help.IHelpView;
 
 /**
  * IHelpView implementation for HTML Help navigator views.

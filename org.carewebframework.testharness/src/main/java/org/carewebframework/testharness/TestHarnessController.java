@@ -39,7 +39,7 @@ import org.carewebframework.ui.FrameworkController;
 import org.carewebframework.ui.action.ActionRegistry;
 import org.carewebframework.ui.action.ActionRegistry.ActionScope;
 import org.carewebframework.ui.action.IAction;
-import org.carewebframework.ui.zk.ZKUtil;
+import org.carewebframework.ui.core.CWFUtil;
 import org.carewebframework.web.component.BaseComponent;
 
 /**
@@ -75,7 +75,7 @@ public class TestHarnessController extends FrameworkController {
             shell = (CareWebShellEx) comp;
             
             if (shell.getLayout() == null) {
-                shell.setLayout(ZKUtil.getResourcePath(TestHarnessController.class) + "testharness-layout.xml");
+                shell.setLayout(CWFUtil.getResourcePath(TestHarnessController.class) + "testharness-layout.xml");
             }
             
             List<PluginDefinition> plugins = new ArrayList<>();

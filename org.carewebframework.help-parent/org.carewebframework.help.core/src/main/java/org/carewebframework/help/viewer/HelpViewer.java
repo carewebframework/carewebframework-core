@@ -431,12 +431,11 @@ public class HelpViewer extends Window implements IHelpViewer, ITopicListener, I
             InvocationRequestQueue proxyQueue = InvocationRequestQueue.getQueue(proxyId, HelpUtil.HELP_QUEUE_PREFIX);
             
             if (proxyQueue == null) {
-                detach();
+                destroy();
                 return;
             }
             
-            proxyQueue.sendRequest("setRemoteQueue",
-                new InvocationRequestQueue(this, HelpUtil.HELP_QUEUE_PREFIX, HelpUtil.closeRequest));
+            proxyQueue.sendRequest("setRemoteQueue", new InvocationRequestQueue(this, HelpUtil.closeRequest));
         }
         
     }

@@ -23,7 +23,7 @@
  *
  * #L%
  */
-package org.carewebframework.ui.zk;
+package org.carewebframework.ui.core;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -35,7 +35,7 @@ import org.carewebframework.web.component.Timebox;
 /**
  * Utility functions related to datebox and timebox components.
  */
-public class ZKDateUtil {
+public class DateTimeUtil {
     
     /**
      * Returns a date/time from the UI. This is combined from two UI input elements, one for date
@@ -74,6 +74,6 @@ public class ZKDateUtil {
     /**
      * Enforce static class.
      */
-    private ZKDateUtil() {
+    private DateTimeUtil() {
     }
 }

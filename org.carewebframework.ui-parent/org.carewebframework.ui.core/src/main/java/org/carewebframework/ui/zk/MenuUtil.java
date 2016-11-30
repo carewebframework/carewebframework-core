@@ -322,40 +322,6 @@ public class MenuUtil {
     }
     
     /**
-     * Recursively synchronizes menu styles.
-     * 
-     * @param comp Current menu tree component.
-     */
-    public static void updateStyles(BaseComponent comp) {
-        if (comp == null) {
-            return;
-        }
-        
-        Menupopup menupopup = null;
-        
-        if (comp instanceof Menupopup) {
-            menupopup = (Menupopup) comp;
-            boolean hasChildren = ZKUtil.firstVisibleChild(menupopup, false) != null;
-            //TODO: menupopup.setZclass(hasChildren ? null : "cwf-menupopup-empty");
-        } else if (comp instanceof Menu) {
-            Menupopup child = ((Menu) comp).getMenupopup();
-            boolean hasChildren = child != null && ZKUtil.firstVisibleChild(child, false) != null;
-            //TODO: ZKUtil.toggleSclass((Menu) comp, "cwf-menu", "cwf-menuitem", hasChildren);
-        }
-        
-        boolean hasImages = menupopup == null;
-        
-        for (BaseComponent child : comp.getChildren()) {
-            updateStyles(child);
-            hasImages |= child instanceof Menu && ((Menu) child).isImageAssigned();
-        }
-        
-        if (menupopup != null) {
-            //TODO: ZKUtil.updateSclass(menupopup, "cwf-menupopup-noimages", hasImages);
-        }
-    }
-    
-    /**
      * Enforce static class.
      */
     private MenuUtil() {

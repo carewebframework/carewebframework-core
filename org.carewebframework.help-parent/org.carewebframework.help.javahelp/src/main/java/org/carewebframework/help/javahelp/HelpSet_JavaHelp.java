@@ -44,8 +44,8 @@ import javax.help.TOCView;
 import org.carewebframework.help.HelpModule;
 import org.carewebframework.help.HelpSetBase;
 import org.carewebframework.help.HelpTopic;
-import org.carewebframework.help.viewer.HelpViewType;
-import org.carewebframework.help.viewer.IHelpView;
+import org.carewebframework.help.HelpViewType;
+import org.carewebframework.help.IHelpView;
 
 public class HelpSet_JavaHelp extends HelpSetBase {
     
@@ -53,8 +53,8 @@ public class HelpSet_JavaHelp extends HelpSetBase {
     
     static {
         viewMap.put(TOCView.class, HelpViewType.TOC);
-        viewMap.put(GlossaryView.class, HelpViewType.Glossary);
-        viewMap.put(IndexView.class, HelpViewType.Index);
+        viewMap.put(GlossaryView.class, HelpViewType.GLOSSARY);
+        viewMap.put(IndexView.class, HelpViewType.INDEX);
     }
     
     private final HelpSet helpSet;

@@ -32,8 +32,8 @@ import java.util.List;
 
 import org.carewebframework.help.HelpTopic;
 import org.carewebframework.help.HelpTopicNode;
-import org.carewebframework.help.viewer.HelpViewType;
-import org.carewebframework.help.viewer.IHelpView;
+import org.carewebframework.help.HelpViewType;
+import org.carewebframework.help.IHelpView;
 
 import oracle.help.common.KeywordTopicTreeNode;
 import oracle.help.common.Target;

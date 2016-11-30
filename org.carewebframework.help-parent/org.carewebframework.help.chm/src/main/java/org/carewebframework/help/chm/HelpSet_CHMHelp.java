@@ -40,8 +40,8 @@ import org.carewebframework.help.HelpModule;
 import org.carewebframework.help.HelpSetBase;
 import org.carewebframework.help.HelpTopic;
 import org.carewebframework.help.HelpTopicNode;
-import org.carewebframework.help.viewer.HelpViewType;
-import org.carewebframework.help.viewer.IHelpView;
+import org.carewebframework.help.HelpViewType;
+import org.carewebframework.help.IHelpView;
 import org.carewebframework.web.client.ExecutionContext;
 import org.w3c.dom.Node;
 
@@ -130,7 +130,7 @@ public class HelpSet_CHMHelp extends HelpSetBase {
     
     private void initViews() throws Exception {
         initView("toc.xml", HelpViewType.TOC);
-        initView("index.xml", HelpViewType.Index);
+        initView("index.xml", HelpViewType.INDEX);
     }
     
     private void initView(String file, HelpViewType type) throws Exception {

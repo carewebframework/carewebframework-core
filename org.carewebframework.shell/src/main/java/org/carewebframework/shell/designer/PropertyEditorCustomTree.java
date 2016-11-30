@@ -254,7 +254,7 @@ public abstract class PropertyEditorCustomTree<T extends UIElementBase> extends 
         
         txtLabel.registerEventListener(ChangeEvent.TYPE, labelEditorListener);
         txtLabel.registerEventListener("blur", labelEditorListener);
-        txtLabel.registerEventListener("ok", labelEditorListener);
+        txtLabel.registerEventListener("enter", labelEditorListener);
     }
     
     /**

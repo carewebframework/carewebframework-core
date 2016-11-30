@@ -27,6 +27,8 @@ package org.carewebframework.shell.designer;
 
 import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.property.PropertyInfo;
+import org.carewebframework.web.annotation.EventHandler;
+import org.carewebframework.web.annotation.WiredComponent;
 import org.carewebframework.web.component.Popupbox;
 import org.carewebframework.web.component.Textbox;
 import org.carewebframework.web.event.ChangeEvent;
@@ -40,8 +42,10 @@ import org.carewebframework.web.event.SelectEvent;
  */
 public class PropertyEditorText extends PropertyEditorBase {
     
+    @WiredComponent
     private Popupbox popupbox;
     
+    @WiredComponent
     private Textbox textbox;
     
     public PropertyEditorText() throws Exception {
@@ -76,21 +80,25 @@ public class PropertyEditorText extends PropertyEditorBase {
         updateValue();
     }
     
-    public void onChanging$textbox(InputEvent event) {
+    @EventHandler(value = "change", target = "textbox")
+    public void onChange$textbox(InputEvent event) {
         popupbox.setValue(event.getValue());
     }
     
+    @EventHandler(value = "blur", target = "textbox")
     public void onBlur$textbox() {
         popupbox.close();
         EventUtil.post("onDelayedFocus", popupbox, popupbox);
     }
     
-    public void onOK$textbox() {
+    @EventHandler(value = "enter", target = "textbox")
+    public void onEnter$textbox() {
         popupbox.close();
         EventUtil.post("onDelayedFocus", popupbox, popupbox);
     }
     
-    public void onChanging$popupbox(InputEvent event) {
+    @EventHandler(value = "change", target = "popupbox")
+    public void onChange$popupbox(InputEvent event) {
         textbox.setValue(event.getValue());
     }
     

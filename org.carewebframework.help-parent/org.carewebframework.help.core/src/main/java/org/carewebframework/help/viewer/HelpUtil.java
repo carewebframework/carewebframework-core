@@ -37,9 +37,10 @@ import org.carewebframework.help.IHelpSearch;
 import org.carewebframework.help.IHelpSet;
 import org.carewebframework.help.IHelpViewer;
 import org.carewebframework.help.viewer.HelpViewer.HelpViewerMode;
+import org.carewebframework.ui.command.CommandUtil;
+import org.carewebframework.ui.core.CWFUtil;
 import org.carewebframework.ui.event.InvocationRequest;
 import org.carewebframework.ui.event.InvocationRequestQueue;
-import org.carewebframework.ui.zk.ZKUtil;
 import org.carewebframework.web.client.ClientUtil;
 import org.carewebframework.web.client.ExecutionContext;
 import org.carewebframework.web.component.BaseComponent;
@@ -55,7 +56,7 @@ public class HelpUtil {
     
     private static HelpViewerMode defaultMode = HelpViewerMode.POPUP;
     
-    protected static final String RESOURCE_PREFIX = ZKUtil.getResourcePath(HelpUtil.class);
+    protected static final String RESOURCE_PREFIX = CWFUtil.getResourcePath(HelpUtil.class);
     
     protected static final String IMAGES_ROOT = RESOURCE_PREFIX + "images/";
     
