@@ -25,7 +25,6 @@
  */
 package org.carewebframework.shell.layout;
 
-import org.carewebframework.ui.zk.MenuUtil;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.Menu;
 
@@ -59,19 +58,4 @@ public class UIElementMenuBase extends UIElementCWFBase {
         return menubar;
     }
     
-    @Override
-    protected void afterAddChild(UIElementBase child) {
-        super.afterAddChild(child);
-        updateMenubar();
-    }
-    
-    @Override
-    protected void afterRemoveChild(UIElementBase child) {
-        super.afterRemoveChild(child);
-        updateMenubar();
-    }
-    
-    protected void updateMenubar() {
-        MenuUtil.updateStyles(menubar);
-    }
 }

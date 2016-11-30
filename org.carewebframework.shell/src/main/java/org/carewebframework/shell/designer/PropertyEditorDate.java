@@ -47,7 +47,7 @@ public class PropertyEditorDate extends PropertyEditorBase {
     @Override
     protected void init(UIElementBase target, PropertyInfo propInfo, PropertyGrid propGrid) {
         super.init(target, propInfo, propGrid);
-        datebox.setConstraint(propInfo.getConfigValue("constraint"));
+        //TODO: datebox.setConstraint(propInfo.getConfigValue("constraint"));
     }
     
     @Override

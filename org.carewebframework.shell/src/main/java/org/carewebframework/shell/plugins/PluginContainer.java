@@ -45,7 +45,6 @@ import org.carewebframework.shell.property.PropertyInfo;
 import org.carewebframework.ui.FrameworkController;
 import org.carewebframework.ui.command.CommandEvent;
 import org.carewebframework.ui.command.CommandUtil;
-import org.carewebframework.ui.zk.ZKUtil;
 import org.carewebframework.web.ancillary.IDisable;
 import org.carewebframework.web.client.ClientUtil;
 import org.carewebframework.web.component.BaseComponent;
@@ -129,7 +128,7 @@ public class PluginContainer extends Container {
      * @return The hosting plugin container, or null if no container hosts the component.
      */
     public static PluginContainer getContainer(BaseComponent comp) {
-        return ZKUtil.findAncestor(comp, PluginContainer.class);
+        return comp.getAncestor(PluginContainer.class);
     }
     
     /**

@@ -28,6 +28,7 @@ package org.carewebframework.shell.designer;
 import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.property.PropertyInfo;
 import org.carewebframework.web.component.Doublebox;
+import org.carewebframework.web.event.ChangeEvent;
 
 /**
  * Editor for double values.
@@ -44,26 +45,19 @@ public class PropertyEditorDouble extends PropertyEditorBase {
     @Override
     protected void init(UIElementBase target, PropertyInfo propInfo, PropertyGrid propGrid) {
         super.init(target, propInfo, propGrid);
-        doublebox.addForward(Events.ON_CHANGING, propGrid, Events.ON_CHANGE);
-        Double min = propInfo.getConfigValueDouble("min", null);
-        Double max = propInfo.getConfigValueDouble("max", null);
-        
-        if (min != null || max != null) {
-            SimpleDoubleSpinnerConstraint constraint = new SimpleDoubleSpinnerConstraint();
-            constraint.setMin(min);
-            constraint.setMax(max);
-            doublebox.setConstraint(constraint);
-        }
+        doublebox.registerEventForward(ChangeEvent.TYPE, propGrid, null);
+        doublebox.setMinValue(propInfo.getConfigValueDouble("min", null));
+        doublebox.setMaxValue(propInfo.getConfigValueDouble("max", null));
     }
     
     @Override
     protected String getValue() {
-        return doublebox.getText();
+        return Double.toString(doublebox.getValue());
     }
     
     @Override
     protected void setValue(Object value) {
-        doublebox.setText(value == null ? null : value.toString());
+        doublebox.setValue((Double) value);
         updateValue();
     }
 }

@@ -51,7 +51,7 @@ public class PropertyEditorCustom extends PropertyEditorBase implements IEventLi
         //popupbox.setAutodrop(false);
         popupbox.setReadonly(true);
         popupbox.setValue(StrUtil.getLabel("cwf.shell.designer.propedit.custom.popupbox.prompt"));
-        popupbox.addEventListener(Events.ON_OPEN, this);
+        popupbox.registerEventListener(Events.ON_OPEN, this);
         popup = new Popup();
         popupbox.addChild(popup);
     }

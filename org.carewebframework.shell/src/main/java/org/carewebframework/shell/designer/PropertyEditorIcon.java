@@ -30,6 +30,7 @@ import org.carewebframework.shell.property.PropertyInfo;
 import org.carewebframework.ui.icon.IconLibraryRegistry;
 import org.carewebframework.ui.icon.IconPicker;
 import org.carewebframework.ui.icon.IconUtil;
+import org.carewebframework.web.event.ChangeEvent;
 import org.carewebframework.web.event.Event;
 import org.carewebframework.web.event.EventUtil;
 import org.carewebframework.web.event.IEventListener;
@@ -60,7 +61,7 @@ public class PropertyEditorIcon extends PropertyEditorBase {
     @Override
     protected void init(UIElementBase target, PropertyInfo propInfo, PropertyGrid propGrid) {
         super.init(target, propInfo, propGrid);
-        component.addForward(IconPicker.ON_SELECT_ITEM, propGrid, Events.ON_CHANGE);
+        component.registerEventForward(ChangeEvent.TYPE, propGrid, null);
         String[] values = propInfo.getConfigValueArray("values");
         
         if (values == null) {
@@ -70,7 +71,7 @@ public class PropertyEditorIcon extends PropertyEditorBase {
             iconPicker.setSelectorVisible(false);
             
             for (String choice : values) {
-                if (choice.startsWith("~./")) {
+                if (choice.startsWith("web/")) {
                     iconPicker.addIconByUrl(choice);
                 } else {
                     String[] pcs = choice.split("\\:", 3);

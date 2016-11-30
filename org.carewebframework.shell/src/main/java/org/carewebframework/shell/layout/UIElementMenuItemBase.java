@@ -73,18 +73,6 @@ public class UIElementMenuItemBase extends UIElementActionBase {
     }
     
     @Override
-    protected void afterAddChild(UIElementBase child) {
-        super.afterAddChild(child);
-        MenuUtil.updateStyles(menu);
-    }
-    
-    @Override
-    protected void afterRemoveChild(UIElementBase child) {
-        super.afterRemoveChild(child);
-        MenuUtil.updateStyles(menu);
-    }
-    
-    @Override
     protected void bind() {
         if (getParent() instanceof UIElementMenuItemBase) {
             ((UIElementMenuItemBase) getParent()).menu.getParent().addChild(menu);

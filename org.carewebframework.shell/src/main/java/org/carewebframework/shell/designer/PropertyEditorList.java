@@ -37,6 +37,7 @@ import org.carewebframework.web.event.EventUtil;
 import org.carewebframework.web.event.IEventListener;
 import org.carewebframework.web.event.KeyCode;
 import org.carewebframework.web.event.KeyEvent;
+import org.carewebframework.web.event.KeycaptureEvent;
 import org.springframework.util.StringUtils;
 
 /**
@@ -91,7 +92,7 @@ public class PropertyEditorList extends PropertyEditorBase {
             combobox.registerEventForward(ChangeEvent.TYPE, propGrid, null);
         }
         
-        combobox.addEventListener(DblclickEvent.TYPE, new IEventListener() {
+        combobox.registerEventListener(DblclickEvent.TYPE, new IEventListener() {
             
             /**
              * Double-clicking a combo item will select the item and close the combo box.
@@ -119,12 +120,12 @@ public class PropertyEditorList extends PropertyEditorBase {
      */
     private void setReadonly(boolean readonly) {
         combobox.setReadonly(readonly);
-        combobox.setCtrlKeys(readonly ? "#del^x" : null);
+        combobox.setKeycapture(readonly ? "DEL" : null);
         
         if (readonly) {
-            combobox.addEventListener(Events.ON_CTRL_KEY, deleteListener);
+            combobox.registerEventListener(KeycaptureEvent.TYPE, deleteListener);
         } else {
-            combobox.removeEventListener(Events.ON_CTRL_KEY, deleteListener);
+            combobox.unregisterEventListener(KeycaptureEvent.TYPE, deleteListener);
         }
     }
     

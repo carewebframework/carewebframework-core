@@ -25,8 +25,8 @@
  */
 package org.carewebframework.shell.layout;
 
-import org.carewebframework.ui.zk.Badge;
 import org.carewebframework.ui.zk.ZKUtil;
+import org.carewebframework.web.ancillary.Badge;
 import org.carewebframework.web.component.Tab;
 import org.carewebframework.web.component.Tabview;
 

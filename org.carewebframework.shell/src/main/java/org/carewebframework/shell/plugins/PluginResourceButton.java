@@ -29,7 +29,7 @@ import org.carewebframework.common.StrUtil;
 import org.carewebframework.shell.CareWebShell;
 import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.layout.UIElementPlugin;
-import org.carewebframework.ui.action.ActionListener;
+import org.carewebframework.ui.action.ActionUtil;
 import org.carewebframework.web.component.Button;
 
 /**
@@ -158,8 +158,8 @@ public class PluginResourceButton implements IPluginResource {
             Button button = new Button(getCaption());
             button.setName(getName());
             button.setHint(getHint());
-            //button.setImage(getIcon());
-            ActionListener.addAction(button, getAction());
+            button.setImage(getIcon());
+            ActionUtil.addAction(button, getAction());
             container.addToolbarComponent(button);
             container.registerId(getName(), button);
         }

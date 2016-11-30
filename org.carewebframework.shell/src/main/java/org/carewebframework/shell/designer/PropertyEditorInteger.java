@@ -45,15 +45,8 @@ public class PropertyEditorInteger extends PropertyEditorBase {
     protected void init(UIElementBase target, PropertyInfo propInfo, PropertyGrid propGrid) {
         super.init(target, propInfo, propGrid);
         intbox.setMaxLength(9);
-        Integer min = propInfo.getConfigValueInt("min", null);
-        Integer max = propInfo.getConfigValueInt("max", null);
-        
-        if (min != null || max != null) {
-            SimpleSpinnerConstraint constraint = new SimpleSpinnerConstraint();
-            constraint.setMin(min);
-            constraint.setMax(max);
-            intbox.setConstraint(constraint);
-        }
+        intbox.setMinvalue(propInfo.getConfigValueInt("min", null));
+        intbox.setMaxvalue(propInfo.getConfigValueInt("max", null));
     }
     
     @Override
