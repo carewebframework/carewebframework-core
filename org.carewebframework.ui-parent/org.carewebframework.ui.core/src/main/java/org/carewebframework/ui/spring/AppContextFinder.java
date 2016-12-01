@@ -55,7 +55,8 @@ public class AppContextFinder implements IAppContextFinder {
      * @return New application context
      */
     public static ApplicationContext createAppContext(Page page) {
-        FrameworkAppContext appContext = new FrameworkAppContext(page);
+        XmlWebApplicationContext appContext = new XmlWebApplicationContext();
+        new AppContextInitializer(page).initialize(appContext);
         appContext.refresh();
         return appContext;
     }

@@ -44,19 +44,29 @@ import org.carewebframework.web.component.Page;
 import org.carewebframework.web.spring.ClasspathMessageSource;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.core.env.ConfigurableEnvironment;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.web.context.support.XmlWebApplicationContext;
 
 public class AppContextInitializer implements ApplicationContextInitializer<XmlWebApplicationContext> {
     
+    private final Page page;
+    
+    private final boolean testConfig;
+    
     public AppContextInitializer() {
+        this(null, false);
+    }
+    
+    public AppContextInitializer(Page page) {
+        this(page, false);
+    }
+    
+    public AppContextInitializer(Page page, boolean testConfig) {
+        this.page = page;
+        this.testConfig = testConfig;
     }
     
     @Override
     public void initialize(XmlWebApplicationContext ctx) {
-        Page page = ExecutionContext.getPage();
-        boolean testConfig = false; //Temporary
         ctx.setAllowBeanDefinitionOverriding(true);
         ConfigurableEnvironment env = ctx.getEnvironment();
         Set<String> aps = new LinkedHashSet<>();
@@ -65,9 +75,8 @@ public class AppContextInitializer implements ApplicationContextInitializer<XmlW
         if (page != null) {
             page.setAttribute(AppContextFinder.APP_CONTEXT_ATTRIB, this);
             ServletContext sc = ExecutionContext.getSession().getServletContext();
-            WebApplicationContext rootContext = WebApplicationContextUtils.getRequiredWebApplicationContext(sc);
             ctx.setDisplayName("Child XmlWebApplicationContext " + page);
-            ctx.setParent(rootContext);
+            ctx.setParent(AppContextFinder.rootContext);
             ctx.setServletContext(sc);
             // Set up profiles (remove root profiles merged from parent)
             aps.removeAll(Arrays.asList(Constants.PROFILES_ROOT));
