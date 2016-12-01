@@ -58,6 +58,7 @@ public class PageScope extends AbstractScope<Page> implements ISessionTracker {
     
     @Override
     public void onSessionCreate(Session session) {
+        AppContextFinder.createAppContext(session.getPage());
         getContainer(session.getPage(), false);
     }
     
@@ -68,6 +69,7 @@ public class PageScope extends AbstractScope<Page> implements ISessionTracker {
         if (container != null) {
             container.destroy();
             session.getPage().removeAttribute(getKey());
+            AppContextFinder.destroyAppContext(session.getPage());
         }
     }
     
