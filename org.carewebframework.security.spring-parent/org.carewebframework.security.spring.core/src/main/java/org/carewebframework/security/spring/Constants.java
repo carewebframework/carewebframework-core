@@ -25,11 +25,11 @@
  */
 package org.carewebframework.security.spring;
 
-import org.carewebframework.ui.zk.ZKUtil;
+import org.carewebframework.ui.core.CWFUtil;
 
 public class Constants {
     
-    public static final String RESOURCE_PREFIX = ZKUtil.getResourcePath(Constants.class);
+    public static final String RESOURCE_PREFIX = CWFUtil.getResourcePath(Constants.class);
     
     // Miscellaneous security constants
     

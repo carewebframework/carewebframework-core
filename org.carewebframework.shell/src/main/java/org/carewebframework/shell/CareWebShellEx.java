@@ -43,12 +43,15 @@ import org.carewebframework.shell.layout.UILayout;
 import org.carewebframework.shell.plugins.PluginDefinition;
 import org.carewebframework.shell.plugins.PluginException;
 import org.carewebframework.shell.plugins.PluginRegistry;
+import org.carewebframework.web.annotation.Component;
+import org.carewebframework.web.annotation.Component.ChildTag;
 
 /**
  * This class is provided primarily for backward compatibility with the old fixed layout of tab
  * views containing tree views. It can only be used with a layout that contains a tab view
  * component. Its public methods are fully compatible with version 1.0.
  */
+@Component(value = "cwfshellex", widgetClass = "Div", parentTag = "*", childTag = @ChildTag("*"))
 public class CareWebShellEx extends CareWebShell {
     
     public static final String TOOLBAR_PATH = "@toolbar";

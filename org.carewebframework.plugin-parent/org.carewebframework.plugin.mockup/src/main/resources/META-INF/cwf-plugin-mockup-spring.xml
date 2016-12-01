@@ -21,14 +21,14 @@
 			url="~./org/carewebframework/plugin/mockup/main.zul"
 			description="Plugin to allow embedding third-party wireframes for quick UI prototyping.">
 			<cwp:serialization>
-				<cwp:property id="mockupType" name="${labels.cwf.mockup.type.name}" type="enum"
-					description="${labels.cwf.mockup.type.description}">
+				<cwp:property id="mockupType" name="${@msg.cwf.mockup.type.name}" type="enum"
+					description="${@msg.cwf.mockup.type.description}">
 					<cwp:config>
 						<cwp:entry key="bean">cwfMockupTypeEnumerator</cwp:entry>
 					</cwp:config>
 				</cwp:property>
-				<cwp:property id="mockupId" name="${labels.cwf.mockup.identifier.name}" type="text"
-					description="${labels.cwf.mockup.identifier.description}" />
+				<cwp:property id="mockupId" name="${@msg.cwf.mockup.identifier.name}" type="text"
+					description="${@msg.cwf.mockup.identifier.description}" />
 			</cwp:serialization>
 		</cwp:plugin>
 		

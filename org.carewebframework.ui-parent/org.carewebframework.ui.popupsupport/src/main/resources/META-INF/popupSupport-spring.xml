@@ -5,7 +5,7 @@
 		http://www.springframework.org/schema/beans 
 		http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-	<beans profile="desktop">
+	<beans profile="page">
 
 		<bean id="popupSupport" class="org.carewebframework.ui.popupsupport.PopupSupport"
 			init-method="init" destroy-method="destroy">

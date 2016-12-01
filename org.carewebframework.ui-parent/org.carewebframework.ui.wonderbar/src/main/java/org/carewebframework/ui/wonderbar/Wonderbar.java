@@ -110,8 +110,8 @@ public class Wonderbar<T> extends BaseInputboxComponent<String> {
      * Updates defaultItems and items when a child is added.
      */
     @Override
-    public void insertChild(BaseComponent child, BaseComponent refChild) {
-        super.insertChild(child, refChild);
+    public void addChild(BaseComponent child, BaseComponent refChild) {
+        super.addChild(child, refChild);
         
         if (child instanceof WonderbarDefaults) {
             defaultItems = (WonderbarDefaults) child;

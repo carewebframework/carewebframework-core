@@ -5,7 +5,7 @@
 		http://www.springframework.org/schema/beans 
 		http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-	<beans profile="desktop">
+	<beans profile="page">
 
 		<bean name="sharedFormBaseController" scope="prototype"
 			class="org.carewebframework.ui.sharedforms.BaseForm" />

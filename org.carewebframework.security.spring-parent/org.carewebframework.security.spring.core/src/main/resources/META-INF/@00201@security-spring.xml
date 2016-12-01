@@ -20,18 +20,6 @@
 
 	<beans profile="root">
 
-		<!-- This registers the "auth" scope which is tied to the Spring Security
-		authentication context. -->
-		<bean class="org.springframework.beans.factory.config.CustomScopeConfigurer">
-			<property name="scopes">
-				<map>
-					<entry key="auth">
-						<bean class="org.carewebframework.security.spring.AuthenticationScope" />
-					</entry>
-				</map>
-			</property>
-		</bean>
-
 		<bean
 			class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
 			<property name="targetClass"
@@ -79,14 +67,6 @@
 		<bean id="securityAuthenticationProvider" 
 			class="org.carewebframework.security.spring.BaseAuthenticationProvider" />
 	
-		<bean id="securityContextRepository"
-			class="org.carewebframework.security.spring.DesktopSecurityContextRepository" />
-
-		<bean id="securityContextPersistenceFilter"
-			class="org.springframework.security.web.context.SecurityContextPersistenceFilter">
-			<constructor-arg ref="securityContextRepository" />
-		</bean>
-
 		<bean id="securityAccessDeniedHandler"
 			class="org.springframework.security.web.access.AccessDeniedHandlerImpl">
 			<property name="errorPage"

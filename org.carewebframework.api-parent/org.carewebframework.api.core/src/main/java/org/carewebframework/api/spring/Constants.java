@@ -58,19 +58,19 @@ public class Constants {
      * Constant for beans profile which identifies beans to be processed by a child Spring
      * application context.
      */
-    public static final String PROFILE_DESKTOP = "desktop";
+    public static final String PROFILE_PAGE = "page";
     
     /**
      * Constant for beans profile which identifies beans to be processed by a child Spring
      * application context, in a production setting.
      */
-    public static final String PROFILE_DESKTOP_PROD = "desktop-prod";
+    public static final String PROFILE_PAGE_PROD = "page-prod";
     
     /**
      * Constant for beans profile which identifies beans to be processed by a child Spring
      * application context, in a test setting.
      */
-    public static final String PROFILE_DESKTOP_TEST = "desktop-test";
+    public static final String PROFILE_PAGE_TEST = "page-test";
     
     /**
      * Constant for beans profile which specifies the default profile for a child Spring application
@@ -78,7 +78,7 @@ public class Constants {
      * bean in an unspecified profile in a child context (it should only be processed in the root
      * context).
      */
-    public static final String PROFILE_DESKTOP_DEFAULT = "dummy";
+    public static final String PROFILE_PAGE_DEFAULT = "dummy";
     
     /**
      * All root profiles.
@@ -86,19 +86,19 @@ public class Constants {
     public static final String[] PROFILES_ROOT = { PROFILE_ROOT, PROFILE_ROOT_PROD, PROFILE_ROOT_TEST };
     
     /**
-     * All desktop profiles.
+     * All page profiles.
      */
-    public static final String[] PROFILES_DESKTOP = { PROFILE_DESKTOP, PROFILE_DESKTOP_PROD, PROFILE_DESKTOP_TEST };
+    public static final String[] PROFILES_PAGE = { PROFILE_PAGE, PROFILE_PAGE_PROD, PROFILE_PAGE_TEST };
     
     /**
      * All production profiles.
      */
-    public static final String[] PROFILES_PROD = { PROFILE_ROOT, PROFILE_ROOT_PROD, PROFILE_DESKTOP, PROFILE_DESKTOP_PROD };
+    public static final String[] PROFILES_PROD = { PROFILE_ROOT, PROFILE_ROOT_PROD, PROFILE_PAGE, PROFILE_PAGE_PROD };
     
     /**
      * All test profiles.
      */
-    public static final String[] PROFILES_TEST = { PROFILE_ROOT, PROFILE_ROOT_TEST, PROFILE_DESKTOP, PROFILE_DESKTOP_TEST };
+    public static final String[] PROFILES_TEST = { PROFILE_ROOT, PROFILE_ROOT_TEST, PROFILE_PAGE, PROFILE_PAGE_TEST };
     
     /**
      * All production root profiles.
@@ -106,9 +106,9 @@ public class Constants {
     public static final String[] PROFILES_ROOT_PROD = { PROFILE_ROOT, PROFILE_ROOT_PROD };
     
     /**
-     * All production desktop profiles.
+     * All production page profiles.
      */
-    public static final String[] PROFILES_DESKTOP_PROD = { PROFILE_DESKTOP, PROFILE_DESKTOP_PROD };
+    public static final String[] PROFILES_PAGE_PROD = { PROFILE_PAGE, PROFILE_PAGE_PROD };
     
     /**
      * All test root profiles.
@@ -116,16 +116,16 @@ public class Constants {
     public static final String[] PROFILES_ROOT_TEST = { PROFILE_ROOT, PROFILE_ROOT_TEST };
     
     /**
-     * All test desktop profiles.
+     * All test page profiles.
      */
-    public static final String[] PROFILES_DESKTOP_TEST = { PROFILE_DESKTOP, PROFILE_DESKTOP_TEST };
+    public static final String[] PROFILES_PAGE_TEST = { PROFILE_PAGE, PROFILE_PAGE_TEST };
     
     /**
      * Default locations to search for configurations files for the Spring application context.
      */
     public static final String[] DEFAULT_LOCATIONS = { "classpath*:/META-INF/*-spring.xml",
             "classpath*:/META-INF/spring/*.xml" };
-            
+    
     /**
      * Enforce static class.
      */

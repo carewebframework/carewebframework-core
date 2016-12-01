@@ -197,10 +197,6 @@ public abstract class PropertyEditorBase {
      *            displayed next to the editor component.
      */
     public void setWrongValueMessage(String message) {
-        if (message == null) {
-            //TODO: Clients.clearWrongValue(component);
-        } else {
-            //TODO: Clients.wrongValue(component, message);
-        }
+        component.setBalloon(message);
     }
 }

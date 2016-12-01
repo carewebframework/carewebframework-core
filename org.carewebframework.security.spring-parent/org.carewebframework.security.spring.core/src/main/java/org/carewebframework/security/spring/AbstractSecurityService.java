@@ -41,8 +41,7 @@ import org.carewebframework.api.domain.IUser;
 import org.carewebframework.api.security.ISecurityService;
 import org.carewebframework.api.security.SecurityUtil;
 import org.carewebframework.common.StrUtil;
-import org.carewebframework.ui.core.PopupDialog;
-import org.carewebframework.ui.core.PromptDialog;
+import org.carewebframework.ui.dialog.DialogUtil;
 import org.carewebframework.web.client.ClientUtil;
 import org.carewebframework.web.client.ExecutionContext;
 import org.carewebframework.web.component.Page;
@@ -332,12 +331,12 @@ public abstract class AbstractSecurityService implements ISecurityService {
     @Override
     public void changePassword() {
         if (canChangePassword()) {
-            if (PopupDialog.popup(passwordChangeUrl, false, false) == null) {
-                PromptDialog.showError(StrUtil.getLabel("password.change.dialog.unavailable"));
+            if (DialogUtil.popup(passwordChangeUrl, false, false) == null) {
+                DialogUtil.showError(StrUtil.getLabel("password.change.dialog.unavailable"));
             }
             
         } else {
-            PromptDialog.showWarning(StrUtil.getLabel(Constants.LBL_PASSWORD_CHANGE_UNAVAILABLE));
+            DialogUtil.showWarning(StrUtil.getLabel(Constants.LBL_PASSWORD_CHANGE_UNAVAILABLE));
         }
     }
     

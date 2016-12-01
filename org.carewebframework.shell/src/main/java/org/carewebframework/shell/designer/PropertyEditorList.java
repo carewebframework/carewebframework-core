@@ -64,7 +64,7 @@ public class PropertyEditorList extends PropertyEditorBase {
             if (evt.getKeyCode() == KeyCode.VK_DELETE) {
                 boolean changed = !StringUtils.isEmpty(combobox.getValue());
                 combobox.setValue(null);
-                combobox.close();
+                //TODO: combobox.close();
                 
                 if (changed) {
                     EventUtil.post(ChangeEvent.TYPE, combobox, null);

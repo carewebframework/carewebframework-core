@@ -156,11 +156,7 @@ public abstract class HelpTab extends Tab implements INamespace, ITopicListener 
      *            is added after its siblings.
      */
     private void insertChild(BaseComponent parent, BaseComponent child, int pos) {
-        if (pos < 0) {
-            parent.addChild(child);
-        } else {
-            parent.insertChild(child, parent.getChildren().get(pos));
-        }
+        parent.addChild(child, pos);
     }
     
     /**

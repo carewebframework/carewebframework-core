@@ -235,7 +235,7 @@ public class TreeUtil {
             
             if (compare(item1, item2) > 0) {
                 item2.detach();
-                parent.insertChild(item2, item1);
+                parent.addChild(item2, item1);
                 i = i == 1 ? 2 : i - 1;
             } else {
                 i++;

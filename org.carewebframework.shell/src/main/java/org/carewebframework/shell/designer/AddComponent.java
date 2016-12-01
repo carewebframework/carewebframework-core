@@ -271,7 +271,7 @@ public class AddComponent extends Window {
             image.addClass("glyphicon");
             image.addStyle("float", "left");
             BaseComponent cell = item.getFirstChild();
-            cell.insertChild(image, cell.getFirstChild());
+            cell.addChild(image, cell.getFirstChild());
             image.registerEventForward(ClickEvent.TYPE, item, ON_FAVORITE);
             item.registerEventListener(ON_FAVORITE, other == null ? favoriteListener1 : favoriteListener2);
             

@@ -32,14 +32,14 @@ import org.carewebframework.shell.property.PropertyInfo;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.Popup;
 import org.carewebframework.web.component.Popupbox;
-import org.carewebframework.web.event.Event;
-import org.carewebframework.web.event.IEventListener;
+import org.carewebframework.web.event.CloseEvent;
+import org.carewebframework.web.event.OpenEvent;
 import org.carewebframework.web.page.PageUtil;
 
 /**
  * Allows registration of custom editors for complex property types.
  */
-public class PropertyEditorCustom extends PropertyEditorBase implements IEventListener {
+public class PropertyEditorCustom extends PropertyEditorBase {
     
     protected final Popupbox popupbox;
     
@@ -51,7 +51,12 @@ public class PropertyEditorCustom extends PropertyEditorBase implements IEventLi
         //popupbox.setAutodrop(false);
         popupbox.setReadonly(true);
         popupbox.setValue(StrUtil.getLabel("cwf.shell.designer.propedit.custom.popupbox.prompt"));
-        popupbox.registerEventListener(Events.ON_OPEN, this);
+        popupbox.registerEventListener(OpenEvent.class, (event) -> {
+            doOpen();
+        });
+        popupbox.registerEventListener(CloseEvent.class, (event) -> {
+            doClose();
+        });
         popup = new Popup();
         popupbox.addChild(popup);
     }
@@ -109,23 +114,6 @@ public class PropertyEditorCustom extends PropertyEditorBase implements IEventLi
     
     @Override
     protected void setValue(Object value) {
-    }
-    
-    /**
-     * Capture the popupbox onOpen event and invokes doOpen or doClose depending on the popupbox
-     * state.
-     */
-    @Override
-    public void onEvent(Event event) {
-        if (event instanceof OpenEvent) {
-            OpenEvent openEvent = (OpenEvent) event;
-            
-            if (openEvent.isOpen()) {
-                doOpen();
-            } else {
-                doClose();
-            }
-        }
     }
     
 }

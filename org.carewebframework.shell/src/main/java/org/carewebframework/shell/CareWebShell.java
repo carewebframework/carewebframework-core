@@ -61,6 +61,8 @@ import org.carewebframework.ui.command.CommandUtil;
 import org.carewebframework.ui.dialog.DialogUtil;
 import org.carewebframework.ui.dialog.PromptDialog;
 import org.carewebframework.ui.zk.ZKUtil;
+import org.carewebframework.web.annotation.Component;
+import org.carewebframework.web.annotation.Component.ChildTag;
 import org.carewebframework.web.client.ClientUtil;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.BaseUIComponent;
@@ -75,6 +77,7 @@ import org.carewebframework.web.event.KeyEvent;
 /**
  * Implements a generic UI shell that can be dynamically extended with plug-ins.
  */
+@Component(value = "cwfshell", widgetClass = "Div", parentTag = "*", childTag = @ChildTag("*"))
 public class CareWebShell extends Div {
     
     protected static final Log log = LogFactory.getLog(CareWebShell.class);

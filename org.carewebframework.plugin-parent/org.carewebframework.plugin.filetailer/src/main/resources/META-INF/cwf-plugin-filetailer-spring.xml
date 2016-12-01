@@ -10,7 +10,7 @@
 	<beans profile="root">
 
 		<cwp:plugin id="cwfFileTailer" name="Log File Tailer" 
-			category="${labels.cwf.shell.plugin.category.system}"
+			category="${@msg.cwf.shell.plugin.category.system}"
 			url="~./org/carewebframework/plugin/filetailer/main.zul">
 			<cwp:security requiresAll="false">
 				<cwp:authority name="PRIV_MONITOR_SYSTEM" />
@@ -19,7 +19,7 @@
 
 	</beans>
 
-	<beans profile="desktop">
+	<beans profile="page">
 
 		<!-- Controllers -->
 		<bean id="cwfFileTailerController" scope="prototype"

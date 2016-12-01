@@ -43,8 +43,6 @@ import org.carewebframework.web.event.SelectEvent;
  */
 public class DateRangePicker extends Combobox {
     
-    private static final long serialVersionUID = 1L;
-    
     public static final String ON_SELECT_RANGE = "onSelectRange";
     
     private static final String[] DEFAULT_CHOICES = { "All Dates", "Today|T|T", "Last Week|T|T-7", "Last Month|T|T-30|1",
@@ -129,12 +127,7 @@ public class DateRangePicker extends Combobox {
         item = new Comboitem();
         item.setLabel(range.getLabel());
         item.setData(range);
-        
-        if (isCustom) {
-            addChild(item);
-        } else {
-            insertChild(item, customItem);
-        }
+        addChild(item, isCustom ? null : customItem);
         
         if (range.isDefault()) {
             setSelectedItem(item);
@@ -159,6 +152,7 @@ public class DateRangePicker extends Combobox {
     /**
      * Removes all items (except for "custom") from the item list.
      */
+    @Override
     public void clear() {
         List<BaseComponent> items = getChildren();
         

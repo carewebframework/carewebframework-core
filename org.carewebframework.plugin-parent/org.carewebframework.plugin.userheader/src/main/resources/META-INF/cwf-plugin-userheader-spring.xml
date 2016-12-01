@@ -19,7 +19,7 @@
 
 	</beans>
 
-	<beans profile="desktop">
+	<beans profile="page">
 
 		<bean id="cwfUserHeaderController" scope="prototype"
 			class="org.carewebframework.plugin.userheader.MainController" />

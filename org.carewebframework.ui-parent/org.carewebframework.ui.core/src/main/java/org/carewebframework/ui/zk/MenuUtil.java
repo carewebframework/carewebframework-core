@@ -110,7 +110,7 @@ public class MenuUtil {
         parent = getRealParent(parent);
         
         if (insertBefore != null && parent == insertBefore.getParent()) {
-            parent.addChild(ele, insertBefore.indexOf());
+            parent.addChild(ele, insertBefore);
         } else {
             parent.addChild(ele);
         }
@@ -222,7 +222,7 @@ public class MenuUtil {
             if (item1 instanceof BaseLabeledImageComponent && item2 instanceof BaseLabeledImageComponent
                     && ((BaseLabeledImageComponent) item1).getLabel()
                             .compareToIgnoreCase(((BaseLabeledImageComponent) item2).getLabel()) > 0) {
-                parent.addChild(item2, item1.indexOf());
+                parent.addChild(item2, item1);
                 
                 if (i > bottom) {
                     i -= 2;

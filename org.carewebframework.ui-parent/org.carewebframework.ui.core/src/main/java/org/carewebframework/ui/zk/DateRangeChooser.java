@@ -103,12 +103,7 @@ public class DateRangeChooser extends Listbox {
         item = new Listitem();
         item.setLabel(range.getLabel());
         item.setData(range);
-        
-        if (isCustom) {
-            addChild(item);
-        } else {
-            insertChild(item, customItem);
-        }
+        addChild(item, isCustom ? null : customItem);
         
         if (range.isDefault()) {
             setSelectedItem(item);

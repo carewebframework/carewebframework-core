@@ -11,7 +11,7 @@
 	<beans profile="root">
 
 		<cwp:plugin id="cwfEventTesting" name="Event Testing" 
-			category="${labels.cwf.shell.plugin.category.system}"
+			category="${@msg.cwf.shell.plugin.category.system}"
 			url="~./org/carewebframework/plugin/eventtesting/main.zul">
 			<cwp:security requiresAll="false">
 				<cwp:authority name="PRIV_MONITOR_SYSTEM" />

@@ -12,14 +12,6 @@
 			<xsd:complexContent>
 				<xsd:extension base="beans:identifiedType">
 					<xsd:choice />
-					<xsd:attribute name="type" use="required">
-						<xsd:simpleType>
-							<xsd:restriction base="xsd:string">
-								<xsd:enumeration value="ZK" />
-								<xsd:enumeration value="CSS" />
-							</xsd:restriction>
-						</xsd:simpleType>
-					</xsd:attribute>
 					<xsd:attribute name="url" use="required" type="xsd:anyURI" />
 					<xsd:attribute name="description" use="optional" />
 					<xsd:attribute name="creator" use="optional" />

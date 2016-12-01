@@ -243,13 +243,7 @@ public class PropertyGrid extends Window {
             Row row = new RowEx();
             row.setAttribute(LABEL_ATTR, propInfo.getName());
             Rows rows = gridProperties.getRows();
-            
-            if (append) {
-                rows.addChild(row);
-            } else {
-                rows.insertChild(row, rows.getFirstChild());
-            }
-            
+            rows.addChild(row, append ? null : rows.getFirstChild());
             Cell cell = new Cell();
             row.addChild(cell);
             cell.registerEventForward(ClickEvent.TYPE, this, SelectEvent.TYPE);

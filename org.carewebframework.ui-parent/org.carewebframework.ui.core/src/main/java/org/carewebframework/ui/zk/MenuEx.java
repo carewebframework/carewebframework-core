@@ -63,13 +63,16 @@ public class MenuEx extends Menu {
             
             menu = (Menu) menuPopup.getParent();
             visible |= menu.isListenerAvailable(ClickEvent.TYPE, false);
+            boolean oldVisible = menu.isVisible();
             
-            if (visible == menu.setVisible(visible)) {
+            if (visible == oldVisible) {
                 break;
             }
+            
+            menu.setVisible(visible);
         }
         
-        MenuUtil.updateStyles(menu == null ? menuPopup : menu);
+        //TODO: MenuUtil.updateStyles(menu == null ? menuPopup : menu);
     }
     
     /**

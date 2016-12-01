@@ -52,10 +52,7 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
-
 import org.carewebframework.maven.plugin.core.BaseMojo;
-import org.carewebframework.maven.plugin.processor.AbstractProcessor;
-
 import org.codehaus.plexus.util.FileUtils;
 
 /**
@@ -267,16 +264,8 @@ public class ThemeGeneratorMojo extends BaseMojo {
      * @throws Exception Unspecified exception.
      */
     private void processTheme(Theme theme) throws Exception {
-        AbstractProcessor<?> processor;
         getLog().info("Processing theme: " + theme);
-        
-        if (theme.getBaseColor() != null) {
-            processor = new ZKThemeProcessor(theme, this);
-        } else {
-            processor = new CSSThemeProcessor(theme, this);
-        }
-        
-        processor.transform();
+        new CSSThemeProcessor(theme, this).transform();
     }
     
 }

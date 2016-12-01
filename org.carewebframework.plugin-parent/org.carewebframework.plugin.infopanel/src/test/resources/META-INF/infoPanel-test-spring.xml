@@ -16,7 +16,7 @@
 
 	</beans>
 
-	<beans profile="desktop">
+	<beans profile="page">
 
 		<bean id="infoPanelTestController"
 			class="org.carewebframework.plugin.infopanel.InfoPanelTestController"

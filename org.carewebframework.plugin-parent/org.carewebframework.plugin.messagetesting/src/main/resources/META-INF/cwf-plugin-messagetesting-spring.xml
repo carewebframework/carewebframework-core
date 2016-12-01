@@ -10,7 +10,7 @@
 	<beans profile="root">
 
 		<cwp:plugin id="cwfMessageTesting" name="Messaging Test Plugin" 
-			category="${labels.cwf.shell.plugin.category.system}"
+			category="${@msg.cwf.shell.plugin.category.system}"
 			url="~./org/carewebframework/plugin/messagetesting/main.zul">
 			<cwp:security requiresAll="false">
 				<cwp:authority name="PRIV_MONITOR_SYSTEM" />

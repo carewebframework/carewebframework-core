@@ -40,6 +40,7 @@ import org.carewebframework.web.component.Menuitem;
 import org.carewebframework.web.component.Menupopup;
 import org.carewebframework.web.component.Page;
 import org.carewebframework.web.event.Event;
+import org.carewebframework.web.event.OpenEvent;
 import org.carewebframework.web.page.PageUtil;
 
 /**
@@ -206,7 +207,7 @@ public class DesignContextMenu extends Menupopup implements INamespace {
      */
     public void onOpen(Event event) {
         if (listener == null) {
-            BaseComponent ref = ((OpenEvent) event).getReference();
+            BaseComponent ref = ((OpenEvent) event).getRelatedTarget();
             setOwner(UIElementCWFBase.getAssociatedUIElement(ref));
         }
         

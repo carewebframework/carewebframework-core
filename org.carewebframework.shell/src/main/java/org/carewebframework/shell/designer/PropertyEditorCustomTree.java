@@ -29,7 +29,6 @@ import java.beans.PropertyDescriptor;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.carewebframework.shell.layout.UIElementBase;
@@ -39,8 +38,8 @@ import org.carewebframework.shell.plugins.PluginRegistry;
 import org.carewebframework.shell.property.PropertyInfo;
 import org.carewebframework.ui.zk.TreeUtil;
 import org.carewebframework.ui.zk.ZKUtil;
+import org.carewebframework.web.annotation.WiredComponent;
 import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.component.BaseUIComponent;
 import org.carewebframework.web.component.Button;
 import org.carewebframework.web.component.Textbox;
 import org.carewebframework.web.component.Treenode;
@@ -60,29 +59,6 @@ import org.springframework.beans.BeanUtils;
  * @param <T> Type of child element.
  */
 public abstract class PropertyEditorCustomTree<T extends UIElementBase> extends PropertyEditorCustom {
-    
-    private static class LabelConstraint implements Constraint {
-        
-        private BaseUIComponent lastTarget;
-        
-        @Override
-        public void validate(BaseComponent comp, Object value) throws WrongValueException {
-            clearMessage();
-            String realValue = value == null ? null : ((String) value).trim();
-            lastTarget = (BaseUIComponent) comp.getAttribute(ITEM_ATTR);
-            
-            if (StringUtils.isEmpty(realValue)) {
-                throw new IllegalArgumentException("Label cannot be blank.");
-            }
-        }
-        
-        public void clearMessage() {
-            if (lastTarget != null) {
-                lastTarget.setBalloon(null);
-                lastTarget = null;
-            }
-        }
-    }
     
     /**
      * Subclass UIElementProxy to allow us to synchronize changes to label property with the
@@ -174,18 +150,25 @@ public abstract class PropertyEditorCustomTree<T extends UIElementBase> extends 
     
     private static final String LABEL_ATTR = "ITEM_LABEL";
     
+    @WiredComponent
     private Button btnUp;
     
+    @WiredComponent
     private Button btnDown;
     
+    @WiredComponent
     private Button btnRight;
     
+    @WiredComponent
     private Button btnLeft;
     
+    @WiredComponent
     private Button btnDelete;
     
+    @WiredComponent
     private Treeview tree;
     
+    @WiredComponent
     private BaseComponent gridParent;
     
     private final PropertyGrid propertyGrid;
@@ -236,11 +219,11 @@ public abstract class PropertyEditorCustomTree<T extends UIElementBase> extends 
         btnLeft.setVisible(hierarchical);
         propertyGrid = PropertyGrid.create(null, gridParent);
         propertyGrid.setClosable(true);
-        propertyGrid.registerEventListener(eventType, this);
+        //TODO: not sure if needed: propertyGrid.registerEventListener(eventType, this);
         txtLabel.setWidth("95%");
-        txtLabel.setConstraint(new LabelConstraint());
-        bandpopup.setHeight("400px");
-        bandpopup.setWidth("600px");
+        //TODO: Needs non blank label constraint: txtLabel.setConstraint(new LabelConstraint());
+        popupbox.setHeight("400px");
+        popupbox.setWidth("600px");
         definition = childClass == null ? null : PluginRegistry.getInstance().get(childClass);
         
         IEventListener labelEditorListener = new IEventListener() {
@@ -273,7 +256,7 @@ public abstract class PropertyEditorCustomTree<T extends UIElementBase> extends 
         }
         
         PluginDefinition def = AddComponent.getDefinition(getTarget());
-        bandbox.open();
+        popupbox.open();
         return def;
     }
     
@@ -341,9 +324,9 @@ public abstract class PropertyEditorCustomTree<T extends UIElementBase> extends 
     private void resetTree() {
         currentItem = null;
         proxies.clear();
-        ZKUtil.detachChildren(root);
-        initTree(getTarget(), root);
-        selectItem((Treenode) root.getFirstChild());
+        ZKUtil.detachChildren(tree);
+        initTree(getTarget(), tree);
+        selectItem((Treenode) tree.getFirstChild());
         hasChanged = false;
     }
     
@@ -360,7 +343,7 @@ public abstract class PropertyEditorCustomTree<T extends UIElementBase> extends 
                 Treenode item = addTreeitem((T) child, parent, null);
                 
                 if (hierarchical) {
-                    initTree(child, getTreechildren(item));
+                    initTree(child, item);
                 }
             }
         }
@@ -380,9 +363,9 @@ public abstract class PropertyEditorCustomTree<T extends UIElementBase> extends 
         
         if (proxy != null) {
             item = new Treenode();
-            parent = parent == null ? (insertAfter == null ? root : insertAfter.getParent()) : parent;
+            parent = parent == null ? (insertAfter == null ? tree : insertAfter.getParent()) : parent;
             BaseComponent refChild = insertAfter == null ? null : insertAfter.getNextSibling();
-            parent.insertChild(item, refChild);
+            parent.addChild(item, refChild);
             proxy.setItem(item);
             initProxy(proxy);
             
@@ -422,7 +405,7 @@ public abstract class PropertyEditorCustomTree<T extends UIElementBase> extends 
             proxy.commit();
         }
         
-        resequenceTargets(root, getTarget());
+        resequenceTargets(tree, getTarget());
         hasChanged = false;
     }
     
@@ -432,7 +415,7 @@ public abstract class PropertyEditorCustomTree<T extends UIElementBase> extends 
      * @param tc Root of subtree.
      * @param parent The parent UI element.
      */
-    protected void resequenceTargets(Treechildren tc, UIElementBase parent) {
+    protected void resequenceTargets(BaseComponent tc, UIElementBase parent) {
         if (tc != null) {
             int index = -1;
             
@@ -442,7 +425,7 @@ public abstract class PropertyEditorCustomTree<T extends UIElementBase> extends 
                 UIElementBase target = getProxy(item).getTarget();
                 target.setParent(parent);
                 target.setIndex(index);
-                resequenceTargets(item.getTreechildren(), target);
+                resequenceTargets(item, target);
             }
         }
     }
@@ -515,7 +498,7 @@ public abstract class PropertyEditorCustomTree<T extends UIElementBase> extends 
             item.setAttribute(LABEL_ATTR, label);
             txtLabel.setValue(label);
             item.setLabel(null);
-            item.getTreerow().getFirstChild().appendChild(txtLabel);
+            item.getFirstChild().addChild(txtLabel);
             txtLabel.setFocus(true);
         }
     }
@@ -531,7 +514,8 @@ public abstract class PropertyEditorCustomTree<T extends UIElementBase> extends 
         
         if (currentEdit != null) {
             String oldLabel = (String) currentEdit.getAttribute(LABEL_ATTR);
-            String newLabel = txtLabel.isValid() ? txtLabel.getValue() : oldLabel;
+            String newLabel = txtLabel.getValue();
+            newLabel = newLabel != null && !newLabel.trim().isEmpty() ? newLabel : oldLabel;
             currentEdit.setLabel(newLabel);
             
             if (!newLabel.equals(oldLabel)) {
@@ -547,13 +531,13 @@ public abstract class PropertyEditorCustomTree<T extends UIElementBase> extends 
     }
     
     /**
-     * If the property grid is closed, instead close the bandbox.
+     * If the property grid is closed, instead close the popupbox.
      * 
      * @param event The close event.
      */
     public void onClose(Event event) {
         if (event.getTarget() == propertyGrid) {
-            bandbox.close();
+            popupbox.close();
             doClose();
         }
     }
@@ -686,8 +670,8 @@ public abstract class PropertyEditorCustomTree<T extends UIElementBase> extends 
      */
     public void onClick$btnLeft() {
         Treenode item = tree.getSelectedNode();
-        Treenode parent = item.getParentItem();
-        parent.getParent().insertBefore(item, parent.getNextSibling());
+        Treenode parent = (Treenode) item.getParent();
+        parent.getParent().addChild(item, parent.getNextSibling());
         doChanged(true);
         updateControls();
     }
@@ -698,8 +682,7 @@ public abstract class PropertyEditorCustomTree<T extends UIElementBase> extends 
     public void onClick$btnRight() {
         Treenode item = tree.getSelectedNode();
         Treenode sib = (Treenode) item.getPreviousSibling();
-        Treechildren treechildren = getTreechildren(sib);
-        treechildren.appendChild(item);
+        item.getParent().addChild(item, sib);
         doChanged(true);
         updateControls();
     }
@@ -714,7 +697,7 @@ public abstract class PropertyEditorCustomTree<T extends UIElementBase> extends 
         if (item1 != null && item2 != null) {
             BaseComponent parent = item2.getParent();
             item2.detach();
-            parent.insertChild(item2, item1);
+            parent.addChild(item2, item1);
             doChanged(true);
         }
     }
@@ -762,14 +745,14 @@ public abstract class PropertyEditorCustomTree<T extends UIElementBase> extends 
      * @return True if the item can be demoted.
      */
     protected boolean canDemote(Treenode item) {
-        return hierarchical && item.getParent() != root;
+        return hierarchical && item.getParent() != tree;
     }
     
     /**
      * Update toolbar buttons to reflect the current selection state.
      */
     private void updateControls() {
-        TreeUtil.adjustVisibility(tree);
+        //TODO: TreeUtil.adjustVisibility(tree);
         Treenode item = tree.getSelectedNode();
         disableButton(btnDelete, item == null);
         disableButton(btnRight, item == null || !canPromote(item));

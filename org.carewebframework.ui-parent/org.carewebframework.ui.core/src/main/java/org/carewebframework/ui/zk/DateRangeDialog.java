@@ -40,8 +40,6 @@ import org.carewebframework.web.page.PageUtil;
  */
 public class DateRangeDialog extends Window {
     
-    private static final long serialVersionUID = 1L;
-    
     private Date startDefault;
     
     private Date endDefault;

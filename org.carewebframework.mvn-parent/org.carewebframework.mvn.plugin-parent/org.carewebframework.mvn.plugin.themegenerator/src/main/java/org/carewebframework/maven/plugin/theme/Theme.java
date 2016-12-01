@@ -34,8 +34,6 @@ public class Theme {
     
     private String themeName;
     
-    private String baseColor;
-    
     private String themeUri;
     
     private String cssMapper;
@@ -47,13 +45,6 @@ public class Theme {
      */
     public String getThemeName() {
         return themeName;
-    }
-    
-    /**
-     * @return The base color (for ZK themes).
-     */
-    public String getBaseColor() {
-        return baseColor;
     }
     
     /**
@@ -91,8 +82,7 @@ public class Theme {
      */
     @Override
     public String toString() {
-        String type = baseColor != null ? baseColor : themeUri;
-        return StringUtils.trimToEmpty(this.themeName) + ":" + StringUtils.trimToEmpty(type);
+        return StringUtils.trimToEmpty(themeName) + ":" + StringUtils.trimToEmpty(themeUri);
     }
     
 }

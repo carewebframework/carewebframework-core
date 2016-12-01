@@ -132,7 +132,7 @@
 		
 	</beans>
 
-	<beans profile="desktop">
+	<beans profile="page">
 
 		<context:annotation-config />
 

@@ -167,7 +167,7 @@ public class DropContainer extends Window implements IActionTarget {
         BaseComponent dragged = event.getRelatedTarget();
         
         if (dragged instanceof DropContainer) {
-            getParent().addChild(dragged, this.indexOf());
+            getParent().addChild(dragged, this);
         }
     }
     

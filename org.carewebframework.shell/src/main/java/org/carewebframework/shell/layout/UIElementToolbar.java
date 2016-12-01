@@ -78,11 +78,11 @@ public class UIElementToolbar extends UIElementCWFBase {
             BaseComponent child;
             
             while ((child = component.getFirstChild()) != null) {
-                toolbar.insertChild(child, ref);
+                toolbar.addChild(child, ref);
             }
             
         } else {
-            toolbar.insertChild(component, ref);
+            toolbar.addChild(component, ref);
             ActionUtil.addAction(component, action);
         }
     }

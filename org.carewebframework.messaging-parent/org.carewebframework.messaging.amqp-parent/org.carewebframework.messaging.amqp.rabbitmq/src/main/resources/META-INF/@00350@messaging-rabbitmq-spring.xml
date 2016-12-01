@@ -40,7 +40,7 @@
 
 	</beans>
 
-	<beans profile="desktop">
+	<beans profile="page">
 
 		<!-- globalEventDispatcher: Mediates communications between the local and 
 			the global event manager, in this case a AMQP messaging server. -->

@@ -25,38 +25,36 @@
  */
 package org.carewebframework.ui.icon;
 
-import org.carewebframework.web.ancillary.IAutoWired;
-import org.carewebframework.web.annotation.WiredComponent;
-import org.carewebframework.web.component.BaseComponent;
+import java.util.List;
+
 import org.carewebframework.web.component.Combobox;
 import org.carewebframework.web.component.Comboitem;
+import org.carewebframework.web.component.Div;
 import org.carewebframework.web.component.ImagePicker;
 import org.carewebframework.web.component.ImagePicker.ImagePickeritem;
-import org.carewebframework.web.event.Event;
-import org.carewebframework.web.event.IEventListener;
 import org.carewebframework.web.event.SelectEvent;
 
 /**
  * Extends the icon picker by adding the ability to pick an icon library from which to choose.
  */
-public class IconPicker implements IAutoWired {
+public class IconPicker extends Div {
     
     private final IconLibraryRegistry iconRegistry = IconLibraryRegistry.getInstance();
     
     private IIconLibrary iconLibrary;
     
-    @WiredComponent
-    private Combobox cboLibrary;
+    private final Combobox cboLibrary = new Combobox();
     
-    @WiredComponent
-    private ImagePicker imagePicker;
+    private final ImagePicker imagePicker = new ImagePicker();
     
     private boolean selectorVisible;
     
     private String dimensions = "16x16";
     
-    @Override
-    public void afterInitialized(BaseComponent root) {
+    public IconPicker() {
+        addChild(cboLibrary);
+        addChild(imagePicker);
+        
         cboLibrary.registerEventListener(SelectEvent.TYPE, (event) -> {
             iconLibrary = (IIconLibrary) cboLibrary.getSelectedItem().getData();
             libraryChanged();
@@ -106,11 +104,30 @@ public class IconPicker implements IAutoWired {
         cboLibrary.setVisible(visible && cboLibrary.getChildCount() > 1);
     }
     
+    public String getValue() {
+        return imagePicker.getValue();
+    }
+    
+    public void setValue(String value) {
+        imagePicker.setValue(value);
+    }
+    
     private void libraryChanged() {
         imagePicker.clear();
         
         for (String lib : iconLibrary.getMatching("*", dimensions)) {
             imagePicker.addChild(new ImagePickeritem(lib));
+        }
+    }
+    
+    public void addIconByUrl(String url) {
+        ImagePickeritem item = new ImagePickeritem(url);
+        imagePicker.addChild(item);
+    }
+    
+    public void addIconsByUrl(List<String> urls) {
+        for (String url : urls) {
+            addIconByUrl(url);
         }
     }
     

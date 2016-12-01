@@ -26,7 +26,6 @@
 package org.carewebframework.api.spring;
 
 import org.carewebframework.common.StrUtil;
-
 import org.springframework.core.env.PropertySource;
 
 /**
@@ -34,14 +33,14 @@ import org.springframework.core.env.PropertySource;
  */
 public class LabelPropertySource extends PropertySource<Object> {
     
-    private static final String LABEL_PREFIX = "labels.";
+    private static final String LABEL_PREFIX = "@msg.";
     
     public LabelPropertySource() {
         super("Labels");
     }
     
     /**
-     * Label names must be prefixed with "labels." to be recognized as such.
+     * Label names must be prefixed with "@msg." to be recognized as such.
      */
     @Override
     public String getProperty(String name) {

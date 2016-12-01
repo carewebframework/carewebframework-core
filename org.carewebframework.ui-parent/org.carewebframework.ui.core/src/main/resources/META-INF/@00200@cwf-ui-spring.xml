@@ -8,28 +8,14 @@
 		http://www.carewebframework.org/schema/spring
 		http://www.carewebframework.org/schema/spring/spring-extensions.xsd">
 
-	<beans>
-		<bean class="org.carewebframework.ui.action.ActionTypeRegistry" 
-			factory-method="getInstance" />
-		
-		<bean class="org.carewebframework.ui.action.ActionTypeUrl" />
-		
-		<bean class="org.carewebframework.ui.action.ActionTypeJavascript" />
-		
-		<bean class="org.carewebframework.ui.action.ActionTypeGroovy" />
-		
-	</beans>
-	
 	<beans profile="root">
-
-		<bean class="org.carewebframework.ui.Application" factory-method="getInstance" />
 
 		<!-- Allows access to a desktop-scoped bean in root context. -->
 		<bean class="org.springframework.beans.factory.config.CustomScopeConfigurer">
 			<property name="scopes">
 				<map>
-					<entry key="desktop">
-						<bean class="org.carewebframework.ui.spring.DesktopScope" />
+					<entry key="page">
+						<bean class="org.carewebframework.ui.spring.PageScope" />
 					</entry>
 				</map>
 			</property>
@@ -44,10 +30,10 @@
 			factory-method="getInstance" />
 
 		<!-- Registry for shared icon libraries. -->
-		<bean id="iconLibraryRegistry" class="org.carewebframework.ui.icons.IconLibraryRegistry"
+		<bean id="iconLibraryRegistry" class="org.carewebframework.ui.icon.IconLibraryRegistry"
 			factory-method="init">
-			<constructor-arg value="${org.carewebframework.icons.library.default}" />
-			<constructor-arg value="${org.carewebframework.icons.dimensions.default}" />
+			<constructor-arg value="${org.carewebframework.icon.library.default}" />
+			<constructor-arg value="${org.carewebframework.icon.dimensions.default}" />
 		</bean>
 
 		<!-- List of shortcut bindings for commands. -->
@@ -63,9 +49,18 @@
 		<bean id="exceptionController" class="org.carewebframework.ui.ExceptionController"
 			scope="prototype" />
 
+		<bean class="org.carewebframework.ui.action.ActionTypeRegistry" 
+			factory-method="getInstance" />
+		
+		<bean class="org.carewebframework.ui.action.ActionTypeUrl" />
+		
+		<bean class="org.carewebframework.ui.action.ActionTypeJavascript" />
+		
+		<bean class="org.carewebframework.ui.action.ActionTypeGroovy" />
+		
 	</beans>
 
-	<beans profile="desktop">
+	<beans profile="page">
 
 		<!-- Manages subscription and publication of generic events. -->
 		<bean id="eventManager" class="org.carewebframework.ui.event.EventManager"

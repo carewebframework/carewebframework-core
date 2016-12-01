@@ -546,7 +546,7 @@ public class LayoutDesigner extends Window implements IAutoWired {
             
             case EXCHANGE:
                 eleDragged.setIndex(eleTarget.getIndex());
-                target.getParent().insertChild(dragged, target);
+                target.getParent().addChild(dragged, target);
                 break;
             
             case FIRST:

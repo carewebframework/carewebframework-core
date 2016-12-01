@@ -371,8 +371,8 @@ public class HelpViewer extends Window implements IHelpViewer, ITopicListener, I
      * @return The topic matching the URL, or null if not found.
      */
     private HelpTopic findTopic(String url) {
-        int i = url.indexOf("/zkau/");
-        url = i == -1 ? url : url.substring(i + 6);
+        int i = url.indexOf("/web/");
+        url = i == -1 ? url : url.substring(i);
         
         for (IHelpSet hs : helpSets) {
             try {
