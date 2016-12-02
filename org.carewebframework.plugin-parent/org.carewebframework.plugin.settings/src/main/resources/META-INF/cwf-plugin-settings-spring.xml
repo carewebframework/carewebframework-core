@@ -26,7 +26,7 @@
 
 	</beans>
 
-	<beans profile="page">
+	<beans profile="child">
 
 		<bean name="cwfSettingsController" class="org.carewebframework.plugin.settings.MainController"
 			scope="prototype" />

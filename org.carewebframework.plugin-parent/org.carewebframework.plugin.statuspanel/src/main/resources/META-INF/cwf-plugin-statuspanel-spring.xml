@@ -20,7 +20,7 @@
 
 	</beans>
 
-	<beans profile="page">
+	<beans profile="child">
 
 		<bean name="cwfStatusPanelController" scope="prototype"
 			class="org.carewebframework.plugin.statuspanel.StatusPanel" />

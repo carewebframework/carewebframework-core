@@ -28,13 +28,12 @@ package org.carewebframework.api.test;
 import org.carewebframework.api.AppFramework;
 import org.carewebframework.api.context.ContextManager;
 import org.carewebframework.api.event.EventManager;
+import org.carewebframework.api.spring.AppContextInitializer;
 import org.carewebframework.api.spring.FrameworkAppContext;
-
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
 public class CommonTest {
-    
     
     public static FrameworkAppContext appContext;
     
@@ -49,7 +48,8 @@ public class CommonTest {
         if (appContext == null) {
             System.out.println("Initializing test IOC container...");
             try {
-                appContext = new FrameworkAppContext(true);
+                appContext = new FrameworkAppContext();
+                new AppContextInitializer(true).initialize(appContext);
                 appContext.refresh();
             } catch (Throwable e) {
                 appContext = null;

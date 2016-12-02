@@ -23,17 +23,19 @@
  *
  * #L%
  */
-package org.carewebframework.api.spring;
+package org.carewebframework.ui.spring;
 
+import org.carewebframework.api.spring.FrameworkBeanFactory;
+import org.carewebframework.api.spring.ResourceCache;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.core.io.support.ResourcePatternResolver;
+import org.springframework.web.context.support.XmlWebApplicationContext;
 
 /**
  * Subclass application context to implement resource caching and to customize bean definition
  * override capability.
  */
-public class FrameworkAppContext extends ClassPathXmlApplicationContext {
+public class FrameworkAppContext extends XmlWebApplicationContext {
     
     private static ResourceCache resourceCache;
     

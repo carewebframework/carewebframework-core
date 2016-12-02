@@ -439,7 +439,7 @@
 
 	</beans>
 
-	<beans profile="page">
+	<beans profile="child">
 
 		<!-- A registry of startup routines. -->
 		<bean id="careWebStartup" class="org.carewebframework.shell.CareWebStartup" />

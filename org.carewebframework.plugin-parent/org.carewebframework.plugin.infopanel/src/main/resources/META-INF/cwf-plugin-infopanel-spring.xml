@@ -19,7 +19,7 @@
 
 	</beans>
 
-	<beans profile="page">
+	<beans profile="child">
 
 		<bean id="cwfInfoPanelController" scope="prototype"
 			class="org.carewebframework.plugin.infopanel.controller.MainController" />

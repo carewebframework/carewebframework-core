@@ -29,15 +29,38 @@ import org.carewebframework.api.spring.ScopeContainer;
 import org.carewebframework.web.client.ExecutionContext;
 import org.carewebframework.web.client.ISessionTracker;
 import org.carewebframework.web.client.Session;
+import org.carewebframework.web.client.WebSocketHandler;
 import org.carewebframework.web.component.Page;
 
 /**
  * Implements a custom Spring scope based on the CWF page.
  */
-public class PageScope extends AbstractScope<Page> implements ISessionTracker {
+public class PageScope extends AbstractScope<Page> {
+    
+    private final ISessionTracker sessionTracker = new ISessionTracker() {
+        
+        @Override
+        public void onSessionCreate(Session session) {
+            getContainer(session.getPage(), false);
+            AppContextFinder.createAppContext(session.getPage());
+        }
+        
+        @Override
+        public void onSessionDestroy(Session session) {
+            ScopeContainer container = getContainer(session.getPage(), false);
+            
+            if (container != null) {
+                container.destroy();
+                session.getPage().removeAttribute(getKey());
+                AppContextFinder.destroyAppContext(session.getPage());
+            }
+        }
+        
+    };
     
     public PageScope() {
         super(true);
+        WebSocketHandler.registerSessionTracker(sessionTracker);
     }
     
     @Override
@@ -54,23 +77,6 @@ public class PageScope extends AbstractScope<Page> implements ISessionTracker {
     @Override
     protected Page getActiveScope() {
         return ExecutionContext.getPage();
-    }
-    
-    @Override
-    public void onSessionCreate(Session session) {
-        AppContextFinder.createAppContext(session.getPage());
-        getContainer(session.getPage(), false);
-    }
-    
-    @Override
-    public void onSessionDestroy(Session session) {
-        ScopeContainer container = getContainer(session.getPage(), false);
-        
-        if (container != null) {
-            container.destroy();
-            session.getPage().removeAttribute(getKey());
-            AppContextFinder.destroyAppContext(session.getPage());
-        }
     }
     
 }

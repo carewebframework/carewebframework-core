@@ -73,23 +73,23 @@ public class AppContextInitializer implements ApplicationContextInitializer<XmlW
         Collections.addAll(aps, env.getActiveProfiles());
         
         if (page != null) {
-            page.setAttribute(AppContextFinder.APP_CONTEXT_ATTRIB, this);
+            page.setAttribute(AppContextFinder.APP_CONTEXT_ATTRIB, ctx);
             ServletContext sc = ExecutionContext.getSession().getServletContext();
             ctx.setDisplayName("Child XmlWebApplicationContext " + page);
             ctx.setParent(AppContextFinder.rootContext);
             ctx.setServletContext(sc);
             // Set up profiles (remove root profiles merged from parent)
             aps.removeAll(Arrays.asList(Constants.PROFILES_ROOT));
-            Collections.addAll(aps, testConfig ? Constants.PROFILES_PAGE_TEST : Constants.PROFILES_PAGE_PROD);
-            env.setDefaultProfiles(Constants.PROFILE_PAGE_DEFAULT);
-            ctx.setConfigLocations((String[]) ArrayUtils.addAll(Constants.DEFAULT_LOCATIONS, ctx.getConfigLocations()));
+            Collections.addAll(aps, testConfig ? Constants.PROFILES_CHILD_TEST : Constants.PROFILES_CHILD_PROD);
+            env.setDefaultProfiles(Constants.PROFILE_CHILD_DEFAULT);
+            ctx.setConfigLocations(Constants.DEFAULT_LOCATIONS);
         } else {
             AppContextFinder.rootContext = ctx;
             Collections.addAll(aps, testConfig ? Constants.PROFILES_ROOT_TEST : Constants.PROFILES_ROOT_PROD);
-            env.getPropertySources().addLast(new LabelPropertySource());
+            env.getPropertySources().addFirst(new LabelPropertySource());
             env.getPropertySources().addLast(new DomainPropertySource(ctx));
             env.setDefaultProfiles(Constants.PROFILE_ROOT_DEFAULT);
-            ctx.setConfigLocations(Constants.DEFAULT_LOCATIONS);
+            ctx.setConfigLocations((String[]) ArrayUtils.addAll(Constants.DEFAULT_LOCATIONS, ctx.getConfigLocations()));
             Localizer.registerMessageSource(new IMessageSource() {
                 
                 @Override

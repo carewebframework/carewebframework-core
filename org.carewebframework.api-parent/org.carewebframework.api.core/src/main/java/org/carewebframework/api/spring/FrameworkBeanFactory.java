@@ -35,7 +35,6 @@ import org.springframework.beans.factory.xml.BeanDefinitionDecorator;
 import org.springframework.beans.factory.xml.NamespaceHandlerSupport;
 import org.springframework.beans.factory.xml.ParserContext;
 import org.springframework.context.ApplicationContext;
-
 import org.w3c.dom.Attr;
 import org.w3c.dom.Node;
 
@@ -114,10 +113,12 @@ public class FrameworkBeanFactory extends DefaultListableBeanFactory {
      */
     public FrameworkBeanFactory(ApplicationContext parentContext, BeanFactory parentBeanFactory) {
         super(parentBeanFactory);
+        int i = 0;
         
         if (parentContext != null) {
-            for (Object configurer : parentContext.getBeansOfType(PlaceholderConfigurerSupport.class, false, false).values()) {
-                registerSingleton("", configurer);
+            for (PlaceholderConfigurerSupport configurer : parentContext
+                    .getBeansOfType(PlaceholderConfigurerSupport.class, false, false).values()) {
+                registerSingleton("_placeholderconfigurer" + ++i, configurer);
             }
         }
     }

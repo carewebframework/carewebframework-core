@@ -60,19 +60,14 @@
 		
 	</beans>
 
-	<beans profile="page">
-
-		<!-- Manages subscription and publication of generic events. -->
-		<bean id="eventManager" class="org.carewebframework.ui.event.EventManager"
-			destroy-method="destroy" cwf:override="always">
-			<property name="desktop" ref="desktop" />
-		</bean>
+	<beans profile="child">
 
 		<!-- A registry of all supported commands. -->
 		<bean id="commandRegistry" class="org.carewebframework.ui.command.CommandRegistry">
 			<constructor-arg ref="commandShortcuts" />
 		</bean>
 
+		<!--
 		<bean id="desktopMonitor" class="org.carewebframework.ui.DesktopMonitor"
 			init-method="init" destroy-method="tearDown">
 			<constructor-arg ref="desktop" />
@@ -98,6 +93,8 @@
 				</bean>
 			</property>
 		</bean>
+		-->
+		
 	</beans>
 </beans>
 

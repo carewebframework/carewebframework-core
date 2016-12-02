@@ -38,7 +38,7 @@
 	
 <!-- This profile is processed for each managed desktop. -->
 
-	<beans profile="page">
+	<beans profile="child">
 
 		<bean id="${cwpLCC}Controller" 
 			class="${package}.controller.${cwpUCC}Controller" 

@@ -58,19 +58,19 @@ public class Constants {
      * Constant for beans profile which identifies beans to be processed by a child Spring
      * application context.
      */
-    public static final String PROFILE_PAGE = "page";
+    public static final String PROFILE_CHILD = "child";
     
     /**
      * Constant for beans profile which identifies beans to be processed by a child Spring
      * application context, in a production setting.
      */
-    public static final String PROFILE_PAGE_PROD = "page-prod";
+    public static final String PROFILE_CHILD_PROD = "child-prod";
     
     /**
      * Constant for beans profile which identifies beans to be processed by a child Spring
      * application context, in a test setting.
      */
-    public static final String PROFILE_PAGE_TEST = "page-test";
+    public static final String PROFILE_CHILD_TEST = "child-test";
     
     /**
      * Constant for beans profile which specifies the default profile for a child Spring application
@@ -78,7 +78,7 @@ public class Constants {
      * bean in an unspecified profile in a child context (it should only be processed in the root
      * context).
      */
-    public static final String PROFILE_PAGE_DEFAULT = "dummy";
+    public static final String PROFILE_CHILD_DEFAULT = "dummy";
     
     /**
      * All root profiles.
@@ -86,19 +86,19 @@ public class Constants {
     public static final String[] PROFILES_ROOT = { PROFILE_ROOT, PROFILE_ROOT_PROD, PROFILE_ROOT_TEST };
     
     /**
-     * All page profiles.
+     * All child profiles.
      */
-    public static final String[] PROFILES_PAGE = { PROFILE_PAGE, PROFILE_PAGE_PROD, PROFILE_PAGE_TEST };
+    public static final String[] PROFILES_CHILD = { PROFILE_CHILD, PROFILE_CHILD_PROD, PROFILE_CHILD_TEST };
     
     /**
      * All production profiles.
      */
-    public static final String[] PROFILES_PROD = { PROFILE_ROOT, PROFILE_ROOT_PROD, PROFILE_PAGE, PROFILE_PAGE_PROD };
+    public static final String[] PROFILES_PROD = { PROFILE_ROOT, PROFILE_ROOT_PROD, PROFILE_CHILD, PROFILE_CHILD_PROD };
     
     /**
      * All test profiles.
      */
-    public static final String[] PROFILES_TEST = { PROFILE_ROOT, PROFILE_ROOT_TEST, PROFILE_PAGE, PROFILE_PAGE_TEST };
+    public static final String[] PROFILES_TEST = { PROFILE_ROOT, PROFILE_ROOT_TEST, PROFILE_CHILD, PROFILE_CHILD_TEST };
     
     /**
      * All production root profiles.
@@ -106,9 +106,9 @@ public class Constants {
     public static final String[] PROFILES_ROOT_PROD = { PROFILE_ROOT, PROFILE_ROOT_PROD };
     
     /**
-     * All production page profiles.
+     * All production child profiles.
      */
-    public static final String[] PROFILES_PAGE_PROD = { PROFILE_PAGE, PROFILE_PAGE_PROD };
+    public static final String[] PROFILES_CHILD_PROD = { PROFILE_CHILD, PROFILE_CHILD_PROD };
     
     /**
      * All test root profiles.
@@ -116,9 +116,9 @@ public class Constants {
     public static final String[] PROFILES_ROOT_TEST = { PROFILE_ROOT, PROFILE_ROOT_TEST };
     
     /**
-     * All test page profiles.
+     * All test child profiles.
      */
-    public static final String[] PROFILES_PAGE_TEST = { PROFILE_PAGE, PROFILE_PAGE_TEST };
+    public static final String[] PROFILES_CHILD_TEST = { PROFILE_CHILD, PROFILE_CHILD_TEST };
     
     /**
      * Default locations to search for configurations files for the Spring application context.

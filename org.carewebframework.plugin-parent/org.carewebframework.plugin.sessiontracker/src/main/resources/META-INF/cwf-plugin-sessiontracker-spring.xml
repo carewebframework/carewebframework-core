@@ -19,7 +19,7 @@
 
 	</beans>
 
-	<beans profile="page">
+	<beans profile="child">
 
 		<!-- Controllers -->
 		<bean id="cwfSessionTrackerController"
