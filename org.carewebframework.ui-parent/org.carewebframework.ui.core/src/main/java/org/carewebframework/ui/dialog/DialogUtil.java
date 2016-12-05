@@ -20,12 +20,14 @@ import org.carewebframework.web.event.IEventListener;
 
 public class DialogUtil {
     
-    /********************* Confirmation Dialogs *********************/
-    
-    public interface IConfirmCallback {
+    public interface IResponseCallback<T> {
         
-        void onComplete(boolean confirm);
+        void onComplete(T confirm);
     }
+    
+    public interface IConfirmCallback extends IResponseCallback<Boolean> {};
+    
+    /********************* Confirmation Dialogs *********************/
     
     /**
      * Present a confirmation (OK/Cancel) dialog with the specified prompt and return the user

@@ -1,5 +1,7 @@
 package org.carewebframework.ui.dialog;
 
+import org.carewebframework.ui.core.CWFUtil;
+
 public class DialogConstants {
     
     static final String STYLE_FIXED_FONT = "|cwf-fixed-font";
@@ -17,6 +19,8 @@ public class DialogConstants {
     static final String STYLES_ERROR = "glyphicon-exclamation-sign alert-danger||panel-danger";
     
     static final String STYLES_QUESTION = "glyphicon-question-sign alert-success||panel-success";
+    
+    static final String RESOURCE_PREFIX = CWFUtil.getResourcePath(DialogConstants.class);
     
     private DialogConstants() {
     }

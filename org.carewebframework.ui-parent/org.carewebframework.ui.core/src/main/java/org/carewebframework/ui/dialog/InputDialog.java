@@ -29,7 +29,6 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.carewebframework.ui.core.CWFUtil;
 import org.carewebframework.web.ancillary.IAutoWired;
 import org.carewebframework.web.annotation.EventHandler;
 import org.carewebframework.web.annotation.WiredComponent;
@@ -39,8 +38,6 @@ import org.carewebframework.web.component.Button;
 import org.carewebframework.web.component.Cell;
 import org.carewebframework.web.component.Textbox;
 import org.carewebframework.web.component.Window;
-import org.carewebframework.web.event.Event;
-import org.carewebframework.web.event.IEventListener;
 import org.carewebframework.web.page.PageUtil;
 import org.springframework.util.StringUtils;
 
@@ -50,8 +47,6 @@ import org.springframework.util.StringUtils;
 public class InputDialog implements IAutoWired {
     
     protected static final Log log = LogFactory.getLog(InputDialog.class.getClass());
-    
-    private static final String RESOURCE_PREFIX = CWFUtil.getResourcePath(InputDialog.class);
     
     public interface IInputCallback {
         
@@ -66,8 +61,8 @@ public class InputDialog implements IAutoWired {
      *            input will be returned as null.
      */
     public static void show(Map<String, Object> args, IInputCallback callback) {
-        Window dialog = (Window) PageUtil.createPage(RESOURCE_PREFIX + "inputDialog.cwf", ExecutionContext.getPage(), args)
-                .get(0);
+        Window dialog = (Window) PageUtil
+                .createPage(DialogConstants.RESOURCE_PREFIX + "inputDialog.cwf", ExecutionContext.getPage(), args).get(0);
         
         dialog.modal(callback == null ? null : (event) -> {
             callback.onComplete(dialog.getAttribute("result", String.class));

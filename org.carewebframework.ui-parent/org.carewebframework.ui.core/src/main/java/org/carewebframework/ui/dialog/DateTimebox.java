@@ -229,7 +229,7 @@ public class DateTimebox extends Popupbox implements INamespace, IAutoWired {
      * 
      * @param event The open or close event.
      */
-    @EventHandler(value = { "open", "close" }, target = "popup", onFailure = OnFailure.IGNORE)
+    @EventHandler(value = { "open", "close" }, target = "popup")
     private void onOpenOrClose(Event event) {
         update(isOpen());
     }
@@ -248,7 +248,7 @@ public class DateTimebox extends Popupbox implements INamespace, IAutoWired {
     /**
      * Clear any validation error upon changing inputs.
      */
-    @EventHandler(value = "change", target = { "@datebox", "@timebox" }, onFailure = OnFailure.IGNORE)
+    @EventHandler(value = "change", target = { "@datebox", "@timebox" })
     private void onChange() {
         clearError();
     }
@@ -256,7 +256,7 @@ public class DateTimebox extends Popupbox implements INamespace, IAutoWired {
     /**
      * Close drop down and update input box if validation successful
      */
-    @EventHandler(value = "click", target = "btnOK", onFailure = OnFailure.IGNORE)
+    @EventHandler(value = "click", target = "btnOK")
     private void onClick$btnOK() {
         if (validateInput()) {
             setOpen(false);
@@ -266,7 +266,7 @@ public class DateTimebox extends Popupbox implements INamespace, IAutoWired {
     /**
      * Close drop down, ignoring all changes.
      */
-    @EventHandler(value = "click", target = "btnCancel", onFailure = OnFailure.IGNORE)
+    @EventHandler(value = "click", target = "btnCancel")
     private void onClick$btnCancel() {
         ok = false;
         setOpen(false);
@@ -275,7 +275,7 @@ public class DateTimebox extends Popupbox implements INamespace, IAutoWired {
     /**
      * Populate datebox with today's date while clearing timebox.
      */
-    @EventHandler(value = "click", target = "btnToday", onFailure = OnFailure.IGNORE)
+    @EventHandler(value = "click", target = "btnToday")
     private void onClick$btnToday() {
         updateDatebox(DateUtil.today());
         updateTimebox(null);
@@ -286,7 +286,7 @@ public class DateTimebox extends Popupbox implements INamespace, IAutoWired {
     /**
      * Populate datebox and timebox with current date and time.
      */
-    @EventHandler(value = "click", target = "btnNow", onFailure = OnFailure.IGNORE)
+    @EventHandler(value = "click", target = "btnNow")
     private void onClick$btnNow() {
         Date now = DateUtil.now();
         updateDatebox(now);
@@ -298,7 +298,7 @@ public class DateTimebox extends Popupbox implements INamespace, IAutoWired {
     /**
      * Clear the time box.
      */
-    @EventHandler(value = "click", target = "btnTimeClear", onFailure = OnFailure.IGNORE)
+    @EventHandler(value = "click", target = "btnTimeClear")
     private void onClick$btnTimeClear() {
         updateTimebox(null);
     }

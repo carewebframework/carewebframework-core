@@ -31,7 +31,6 @@ import org.carewebframework.web.client.ExecutionContext;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.Page;
 import org.carewebframework.web.component.Window;
-import org.carewebframework.web.event.Event;
 import org.carewebframework.web.event.IEventListener;
 import org.carewebframework.web.event.ResizeEvent;
 import org.carewebframework.web.page.PageUtil;

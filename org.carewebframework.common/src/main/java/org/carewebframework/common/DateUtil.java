@@ -131,8 +131,16 @@ public class DateUtil {
      * Enum representing common date formats.
      */
     public enum Format {
-        WITH_TZ("dd-MMM-yyyy HH:mm zzz"), WITHOUT_TZ("dd-MMM-yyyy HH:mm"), WITHOUT_TIME("dd-MMM-yyyy"), HL7(
-                HL7_DATE_TIME_PATTERN), HL7_WITHOUT_TIME(HL7_DATE_ONLY_PATTERN);
+        //@formatter:off
+        WITH_TZ("dd-MMM-yyyy HH:mm zzz"), 
+        WITHOUT_TZ("dd-MMM-yyyy HH:mm"), 
+        WITHOUT_TIME("dd-MMM-yyyy"), 
+        HL7(HL7_DATE_TIME_PATTERN),
+        HL7_WITHOUT_TIME(HL7_DATE_ONLY_PATTERN),
+        JS_WITH_TZ("yyyy-MM-dd HH:mm zzz"), 
+        JS_WITHOUT_TZ("yyyy-MM-dd HH:mm"), 
+        JS_WITHOUT_TIME("yyyy-MM-dd"); 
+        //@formatter:on
         
         private String pattern;
         

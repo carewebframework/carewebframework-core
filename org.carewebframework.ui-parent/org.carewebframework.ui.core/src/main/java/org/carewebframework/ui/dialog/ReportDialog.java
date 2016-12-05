@@ -28,7 +28,6 @@ package org.carewebframework.ui.dialog;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.carewebframework.ui.core.CWFUtil;
 import org.carewebframework.web.ancillary.IAutoWired;
 import org.carewebframework.web.annotation.EventHandler;
 import org.carewebframework.web.annotation.WiredComponent;
@@ -43,8 +42,6 @@ import org.carewebframework.web.event.IEventListener;
  * A simple dialog for displaying text information modally or amodally.
  */
 public class ReportDialog implements IAutoWired {
-    
-    private static final String DIALOG = CWFUtil.getResourcePath(ReportDialog.class) + "reportDialog.cwf";
     
     /**
      * Displays the dialog.
@@ -62,7 +59,8 @@ public class ReportDialog implements IAutoWired {
         args.put("text", text);
         args.put("title", title);
         args.put("allowPrint", allowPrint);
-        Window dialog = PopupDialog.show(DIALOG, args, true, true, false, null);
+        Window dialog = PopupDialog.show(DialogConstants.RESOURCE_PREFIX + "reportDialog.cwf", args, true, true, false,
+            null);
         
         if (asModal) {
             dialog.modal(callback);

@@ -1,0 +1,41 @@
+<window title="${@msg.cwf.date.range.win.title}" width="200px"
+	class="cwf_daterangedialog"
+	controller="org.carewebframework.ui.dialog.DateRangeDialog">
+	<label class="flavor:label-info"
+		label="${@msg.cwf.date.range.start.date.label}" />
+	<div>
+		<datebox name="startDate"
+			hint="${@msg.cwf.date.range.start.date.dbx.hint}" />
+		<a name="btnSameAsEnd" 
+			class="glyphicon glyphicon-chevron-left"
+			hint="${@msg.cwf.date.range.start.date.btn.hint}" />
+	</div>
+	<label class="flavor:label-info"
+		label="${@msg.cwf.date.range.end.date.label}" />
+	<div>
+		<datebox name="endDate"
+			hint="${@msg.cwf.date.range.end.date.dbx.hint}" />
+		<a name="btnSameAsStart" 
+			class="glyphicon glyphicon-chevron-left"
+			hint="${@msg.cwf.date.range.end.date.btn.hint}" />
+	</div>
+	<toolbar align="center" width="100%">
+		<button name="btnOK" class="flavor:btn-success size:btn-sm"
+			label="${@msg.cwf.date.range.btn.ok.label}" />
+		<button name="btnCancel" class="flavor:btn-danger size:btn-sm"
+			label="${@msg.cwf.date.range.btn.cancel.label}" />
+	</toolbar>
+	<style>
+		.cwf_daterangedialog .cwf_div {
+			display: flex;
+			width: 100%;
+			overflow: hidden;
+		}
+		.cwf_daterangedialog .cwf_datebox {
+			flex: 1;
+		}
+		.cwf_daterangedialog .glyphicon {
+			margin-top: 3px;
+		}
+	</style>
+</window>

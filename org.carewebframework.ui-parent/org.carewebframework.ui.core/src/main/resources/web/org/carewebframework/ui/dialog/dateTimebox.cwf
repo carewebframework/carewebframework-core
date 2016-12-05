@@ -1,4 +1,4 @@
-<popupbox impl="org.carewebframework.ui.dialog.DateTimebox" controller="this">
+<popupbox impl="org.carewebframework.ui.dialog.DateTimebox">
 	<popup name="popup">
 		<table class="cwf_datetimebox" width="350px">
 			<rows>

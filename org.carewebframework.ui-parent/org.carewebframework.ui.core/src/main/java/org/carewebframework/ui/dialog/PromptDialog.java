@@ -36,7 +36,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.carewebframework.common.MiscUtil;
 import org.carewebframework.common.StrUtil;
-import org.carewebframework.ui.core.CWFUtil;
 import org.carewebframework.ui.dialog.DialogControl.ChoiceFormat;
 import org.carewebframework.ui.dialog.DialogControl.IPromptCallback;
 import org.carewebframework.web.ancillary.IAutoWired;
@@ -63,8 +62,6 @@ import org.carewebframework.web.page.PageUtil;
 public class PromptDialog implements IAutoWired {
     
     protected static final Log log = LogFactory.getLog(PromptDialog.class.getClass());
-    
-    private static final String RESOURCE_PREFIX = CWFUtil.getResourcePath(PromptDialog.class);
     
     /**
      * Display the prompt dialog.
@@ -134,7 +131,8 @@ public class PromptDialog implements IAutoWired {
         
         try {
             Map<String, Object> args = Collections.singletonMap("control", control);
-            root = (Window) PageUtil.createPage(RESOURCE_PREFIX + "promptDialog.cwf", ExecutionContext.getPage(), args)
+            root = (Window) PageUtil
+                    .createPage(DialogConstants.RESOURCE_PREFIX + "promptDialog.cwf", ExecutionContext.getPage(), args)
                     .get(0);
             root.modal(null);
         } catch (Exception e) {
