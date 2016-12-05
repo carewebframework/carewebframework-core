@@ -1,0 +1,49 @@
+<popupbox impl="org.carewebframework.ui.dialog.DateTimebox" controller="this">
+	<popup name="popup">
+		<table class="cwf_datetimebox" width="350px">
+			<rows>
+				<row>
+					<datebox name="datebox" />
+					<timebox name="timebox" />
+					<button name="btnOK" width="100%"
+						label="${@msg.cwf.datetime.btn.ok.label}"
+						class="size:btn-sm flavor:btn-success" />
+				</row>
+				<row>
+					<a name="btnToday" 
+						label="${@msg.cwf.datetime.btn.today.label}" />
+					<div>
+						<a name="btnNow" 
+							label="${@msg.cwf.datetime.btn.now.label}" />
+						<a name="btnTimeClear" 
+							label="${@msg.cwf.datetime.btn.clear.label}" />
+					</div>
+					<button name="btnCancel"
+						label="${@msg.cwf.datetime.btn.cancel.label}" 
+						class="size:btn-sm flavor:btn-danger" />
+				</row>
+			</rows>
+		</table>
+		
+		<style>
+			.cwf_datetimebox {
+				border-radius: 6px;
+			}
+			
+			.cwf_datetimebox td {
+				text-align: center;
+			}
+			
+			.cwf_datetimebox .cwf_div {
+				display: flex;
+				width: 100%;
+			}
+			
+			.cwf_datetimebox a,
+			.cwf_datetimebox button {
+				flex: 1;
+			}
+		</style>
+	</popup>
+	
+</popupbox>
