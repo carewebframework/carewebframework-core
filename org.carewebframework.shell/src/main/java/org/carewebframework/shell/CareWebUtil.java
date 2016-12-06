@@ -25,8 +25,6 @@
  */
 package org.carewebframework.shell;
 
-import javax.security.auth.message.MessageInfo;
-
 import org.carewebframework.api.FrameworkUtil;
 import org.carewebframework.api.ManifestIterator;
 import org.carewebframework.help.HelpContext;
@@ -74,15 +72,6 @@ public class CareWebUtil {
      */
     public static void about() {
         AboutDialog.execute(ManifestIterator.getInstance().getPrimaryManifest());
-    }
-    
-    /**
-     * Sends an informational message for display by desktop.
-     * 
-     * @param messageInfo A message descriptor.
-     */
-    public static void showMessage(MessageInfo messageInfo) {
-        getShell().showMessage(messageInfo);
     }
     
     /**

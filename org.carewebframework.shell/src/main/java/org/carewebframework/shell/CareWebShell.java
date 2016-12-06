@@ -29,8 +29,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import javax.security.auth.message.MessageInfo;
-
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -59,20 +57,21 @@ import org.carewebframework.ui.command.CommandEvent;
 import org.carewebframework.ui.command.CommandRegistry;
 import org.carewebframework.ui.command.CommandUtil;
 import org.carewebframework.ui.dialog.DialogUtil;
-import org.carewebframework.ui.dialog.PromptDialog;
 import org.carewebframework.ui.zk.ZKUtil;
 import org.carewebframework.web.annotation.Component;
 import org.carewebframework.web.annotation.Component.ChildTag;
 import org.carewebframework.web.client.ClientUtil;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.BaseUIComponent;
+import org.carewebframework.web.component.Cell;
 import org.carewebframework.web.component.Div;
 import org.carewebframework.web.component.Menu;
+import org.carewebframework.web.component.MessagePane;
 import org.carewebframework.web.component.MessageWindow;
 import org.carewebframework.web.component.Span;
 import org.carewebframework.web.component.Stylesheet;
-import org.carewebframework.web.event.Event;
-import org.carewebframework.web.event.KeyEvent;
+import org.carewebframework.web.event.IEventListener;
+import org.carewebframework.web.event.KeycaptureEvent;
 
 /**
  * Implements a generic UI shell that can be dynamically extended with plug-ins.
@@ -140,11 +139,15 @@ public class CareWebShell extends Div {
          */
         @Override
         public String pending(boolean silent) {
+            return null;
+            
+            /* TODO: polling needs to be async
             if (silent || PromptDialog.confirm(LBL_LOGOUT_CONFIRMATION, LBL_LOGOUT_CONFIRMATION_CAPTION, "LOGOUT.CONFIRM")) {
                 return null;
             }
             
             return LBL_LOGOUT_CANCEL;
+            */
         }
         
     };
@@ -207,13 +210,12 @@ public class CareWebShell extends Div {
      * 
      * @param event Control key event.
      */
-    public void onCtrlKey(Event event) {
-        KeyEvent keyEvent = (KeyEvent) event;
-        String shortcut = CommandUtil.getShortcut(keyEvent);
+    public void onKeycapture(KeycaptureEvent event) {
+        String shortcut = event.getKeycapture();
         Collection<? extends BaseUIComponent> plugins = getActivatedPlugins(null);
         
         if (!plugins.isEmpty()) {
-            commandRegistry.fireCommands(shortcut, keyEvent, plugins);
+            commandRegistry.fireCommands(shortcut, event, plugins);
         }
     }
     
@@ -647,7 +649,7 @@ public class CareWebShell extends Div {
      * @see org.carewebframework.ui.zk.MessageWindow#show(String)
      */
     public void showMessage(String message) {
-        messageWindow.show(message);
+        showMessage(message, null);
     }
     
     /**
@@ -658,7 +660,7 @@ public class CareWebShell extends Div {
      * @see org.carewebframework.ui.zk.MessageWindow#show(String, String)
      */
     public void showMessage(String message, String caption) {
-        messageWindow.show(message, caption);
+        showMessage(message, caption, null);
     }
     
     /**
@@ -666,11 +668,10 @@ public class CareWebShell extends Div {
      * 
      * @param message Message to display
      * @param caption Caption for message.
-     * @param color Background color for message window.
-     * @see org.carewebframework.ui.zk.MessageWindow#show(String, String, String)
+     * @param clazz CSS classes to apply.
      */
-    public void showMessage(String message, String caption, String color) {
-        messageWindow.show(message, caption, color);
+    public void showMessage(String message, String caption, String clazz) {
+        showMessage(message, caption, clazz, 8000);
     }
     
     /**
@@ -678,12 +679,10 @@ public class CareWebShell extends Div {
      * 
      * @param message Message to display
      * @param caption Caption for message.
-     * @param color Background color for message window.
+     * @param clazz CSS classes to apply.
      * @param duration Message duration in milliseconds.
-     * @see org.carewebframework.ui.zk.MessageWindow#show(String, String, String, int)
      */
-    public void showMessage(String message, String caption, String color, int duration) {
-        messageWindow.show(message, caption, color, duration);
+    public void showMessage(String message, String caption, String clazz, int duration) {
     }
     
     /**
@@ -691,13 +690,12 @@ public class CareWebShell extends Div {
      * 
      * @param message Message to display
      * @param caption Caption for message.
-     * @param color Background color for message window.
+     * @param clazz CSS classes to apply.
      * @param duration Message duration in milliseconds.
-     * @param tag Tag to classify message.
-     * @see org.carewebframework.ui.zk.MessageWindow#show(String, String, String, Integer, String)
+     * @param category Tag to classify message.
      */
-    public void showMessage(String message, String caption, String color, Integer duration, String tag) {
-        messageWindow.show(message, caption, color, duration, tag);
+    public void showMessage(String message, String caption, String clazz, Integer duration, String category) {
+        showMessage(message, caption, clazz, duration, category, null);
     }
     
     /**
@@ -705,44 +703,50 @@ public class CareWebShell extends Div {
      * 
      * @param message Message to display
      * @param caption Caption for message.
-     * @param color Background color for message window.
+     * @param clazz CSS classes to apply.
      * @param duration Message duration in milliseconds.
-     * @param tag Tag to classify message.
-     * @param action Javascript action.
-     * @see org.carewebframework.ui.zk.MessageWindow#show(String, String, String, Integer, String,
-     *      String)
+     * @param category Tag to classify message.
+     * @param actionListener Listener for action invocation.
      */
-    public void showMessage(String message, String caption, String color, Integer duration, String tag, String action) {
-        messageWindow.show(message, caption, color, duration, tag, action);
-    }
-    
-    /**
-     * Shows a slide-down message.
-     * 
-     * @param messageInfo Message info structure.
-     * @see org.carewebframework.ui.zk.MessageWindow#show(MessageInfo)
-     */
-    public void showMessage(MessageInfo messageInfo) {
-        messageWindow.show(messageInfo);
+    public void showMessage(String message, String caption, String clazz, Integer duration, String category,
+                            IEventListener actionListener) {
+        MessagePane pane = new MessagePane(caption, category, duration, actionListener != null);
+        pane.addClass(clazz);
+        pane.addChild(new Cell(message));
+        
+        if (actionListener != null) {
+            pane.addEventListener("action", actionListener);
+        }
+        
+        if (messageWindow == null) {
+            messageWindow = getPage().getChild(MessageWindow.class);
+            
+            if (messageWindow == null) {
+                getPage().addChild(messageWindow = new MessageWindow());
+            }
+        }
+        
+        messageWindow.addChild(pane);
     }
     
     /**
      * Clears all slide-down messages;
-     * 
-     * @see org.carewebframework.ui.zk.MessageWindow#clear
      */
     public void clearMessages() {
-        messageWindow.clear();
+        if (messageWindow != null) {
+            messageWindow.clear();
+        }
     }
     
     /**
      * Clears all slide-down messages with specified tag;
      * 
-     * @param tag Messages with this tag will be cleared.
-     * @see org.carewebframework.ui.zk.MessageWindow#clear(String)
+     * @param category Messages with this tag will be cleared.
      */
-    public void clearMessages(String tag) {
-        messageWindow.clear(tag);
+    public void clearMessages(String category) {
+        if (messageWindow != null) {
+            messageWindow.clear(category);
+        }
     }
     
 }
