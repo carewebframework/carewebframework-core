@@ -31,8 +31,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.carewebframework.common.StrUtil;
+import org.carewebframework.ui.core.CWFUtil;
 import org.carewebframework.ui.dialog.DialogUtil;
-import org.carewebframework.ui.dialog.DialogUtil.IConfirmCallback;
 import org.carewebframework.ui.dialog.PopupDialog;
 import org.carewebframework.ui.zk.ZKUtil;
 import org.carewebframework.web.annotation.WiredComponent;
@@ -114,7 +114,7 @@ public abstract class FormController<T> extends FrameworkController {
      */
     public void onDeferredInit() {
         populateControls(domainObject);
-        ZKUtil.focusFirst(root, true);
+        CWFUtil.focusFirst(root, true);
         ZKUtil.wireChangeEvents(root, root, "change");
     }
     
@@ -269,15 +269,10 @@ public abstract class FormController<T> extends FrameworkController {
     
     private void close(boolean cancel) {
         if (cancel && !changeSet.isEmpty()) {
-            DialogUtil.confirm(label_cancel_message, label_cancel_title, new IConfirmCallback() {
-                
-                @Override
-                public void onComplete(boolean response) {
-                    if (response) {
-                        _close(cancel);
-                    }
+            DialogUtil.confirm(label_cancel_message, label_cancel_title, (response) -> {
+                if (response) {
+                    _close(cancel);
                 }
-                
             });
         } else {
             _close(cancel);

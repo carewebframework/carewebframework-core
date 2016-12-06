@@ -236,8 +236,8 @@ public class LayoutDesigner extends Window implements IAutoWired {
         Treenode item = new Treenode();
         item.setLabel(label);
         item.setData(ele);
-        item.registerEventForward(DropEvent.TYPE, this, null);
-        item.registerEventForward(DblclickEvent.TYPE, btnProperties, ClickEvent.TYPE);
+        item.addEventForward(DropEvent.TYPE, this, null);
+        item.addEventForward(DblclickEvent.TYPE, btnProperties, ClickEvent.TYPE);
         
         if (!ele.isLocked() && !ele.getDefinition().isInternal()) {
             item.setDragid("d" + dragId++);

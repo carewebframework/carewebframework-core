@@ -51,10 +51,10 @@ public class PropertyEditorCustom extends PropertyEditorBase {
         //popupbox.setAutodrop(false);
         popupbox.setReadonly(true);
         popupbox.setValue(StrUtil.getLabel("cwf.shell.designer.propedit.custom.popupbox.prompt"));
-        popupbox.registerEventListener(OpenEvent.class, (event) -> {
+        popupbox.addEventListener(OpenEvent.class, (event) -> {
             doOpen();
         });
-        popupbox.registerEventListener(CloseEvent.class, (event) -> {
+        popupbox.addEventListener(CloseEvent.class, (event) -> {
             doClose();
         });
         popup = new Popup();

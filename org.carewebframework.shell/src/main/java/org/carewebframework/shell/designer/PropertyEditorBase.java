@@ -143,8 +143,8 @@ public abstract class PropertyEditorBase {
     protected void init(UIElementBase target, PropertyInfo propInfo, PropertyGrid propGrid) {
         this.target = target;
         this.propInfo = propInfo;
-        component.registerEventForward(ChangeEvent.TYPE, propGrid, ChangeEvent.TYPE);
-        component.registerEventForward("focus", propGrid, SelectEvent.TYPE);
+        component.addEventForward(ChangeEvent.TYPE, propGrid, ChangeEvent.TYPE);
+        component.addEventForward("focus", propGrid, SelectEvent.TYPE);
     }
     
     /**

@@ -84,14 +84,14 @@ public class UIElementTabMenu extends UIElementCWFBase {
          */
         public void setTab(Tab tab) {
             if (this.tab != null) {
-                this.tab.unregisterEventForward("onClose", this, "onOpenMenu");
+                this.tab.removeEventForward("onClose", this, "onOpenMenu");
                 this.tab.setClosable(false);
             }
             
             this.tab = tab;
             
             if (this.tab != null) {
-                this.tab.registerEventForward("onClose", this, "onOpenMenu");
+                this.tab.addEventForward("onClose", this, "onOpenMenu");
                 this.tab.setClosable(getFirstChild() != null);
             }
             

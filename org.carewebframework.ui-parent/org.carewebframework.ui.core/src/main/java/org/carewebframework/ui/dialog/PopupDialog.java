@@ -131,7 +131,7 @@ public class PopupDialog extends Window {
         setClosable(true);
         setSizable(true);
         setMaximizable(true);
-        registerEventListener(ResizeEvent.TYPE, (event) -> {
+        addEventListener(ResizeEvent.TYPE, (event) -> {
             ResizeEvent sizeEvent = (ResizeEvent) event;
             onResize(sizeEvent.getHeight(), sizeEvent.getWidth());
         });

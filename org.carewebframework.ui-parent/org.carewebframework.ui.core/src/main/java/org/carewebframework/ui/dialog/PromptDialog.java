@@ -227,7 +227,7 @@ public class PromptDialog implements IAutoWired {
         for (Object rsp : responses) {
             DialogResponse<?> response = (DialogResponse<?>) rsp;
             Listitem item = new Listitem(StrUtil.formatMessage(response.getLabel()));
-            item.registerEventListener(DblclickEvent.TYPE, clickListener);
+            item.addEventListener(DblclickEvent.TYPE, clickListener);
             item.setData(response);
             listbox.addChild(item);
             
@@ -252,7 +252,7 @@ public class PromptDialog implements IAutoWired {
     private Button addButton(String label, String flavor, IEventListener listener) {
         Button button = new Button(StrUtil.formatMessage(label));
         button.addClass("flavor:btn-" + flavor);
-        button.registerEventListener(ClickEvent.TYPE, listener);
+        button.addEventListener(ClickEvent.TYPE, listener);
         toolbar.addChild(button);
         return button;
     }

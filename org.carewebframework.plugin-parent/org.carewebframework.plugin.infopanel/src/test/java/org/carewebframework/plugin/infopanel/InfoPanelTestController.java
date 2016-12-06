@@ -89,7 +89,7 @@ public class InfoPanelTestController extends FrameworkController {
         
         while (itemCount < 11) {
             Listitem item = newListitem(itemCount % 2 == 1);
-            item.registerEventForward(DblclickEvent.TYPE, listbox, null);
+            item.addEventForward(DblclickEvent.TYPE, listbox, null);
             listbox.addChild(item);
         }
         
@@ -165,7 +165,7 @@ public class InfoPanelTestController extends FrameworkController {
     public void onClick$btnAddMenu() {
         Menuitem menuitem = new Menuitem();
         menuitem.setLabel(++menuCount + ". Click Me!");
-        menuitem.registerEventListener(ClickEvent.TYPE, (event) -> {
+        menuitem.addEventListener(ClickEvent.TYPE, (event) -> {
             System.out.println("Menu was clicked!");
         });
         infoPanel.registerMenuItem(menuitem, "Test");

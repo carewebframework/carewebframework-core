@@ -101,7 +101,7 @@ public abstract class ListViewForm<DAO> extends CaptionedForm {
         @Override
         public Listitem render(DAO object) {
             Listitem item = new Listitem();
-            item.registerEventForward(ClickEvent.TYPE, listbox, SelectEvent.TYPE);
+            item.addEventForward(ClickEvent.TYPE, listbox, SelectEvent.TYPE);
             ListViewForm.this.renderItem(item, object);
         }
         

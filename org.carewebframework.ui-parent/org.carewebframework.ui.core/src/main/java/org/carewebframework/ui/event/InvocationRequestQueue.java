@@ -84,7 +84,7 @@ public class InvocationRequestQueue implements IEventListener {
         this.page = page;
         this.onClose = onClose;
         resetKeepAlive();
-        page.registerEventListener("invoke", this);
+        page.addEventListener("invoke", this);
     }
     
     /**
@@ -93,7 +93,7 @@ public class InvocationRequestQueue implements IEventListener {
     protected void close() {
         if (!closed) {
             closed = true;
-            page.unregisterEventListener("invoke", this);
+            page.removeEventListener("invoke", this);
             
             if (onClose != null) {
                 onEvent(onClose);

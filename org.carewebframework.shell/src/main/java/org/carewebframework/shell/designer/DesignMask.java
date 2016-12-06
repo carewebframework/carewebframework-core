@@ -89,11 +89,11 @@ public class DesignMask implements IEventListener {
             BaseUIComponent target = element.getMaskTarget();
             
             if (visible) {
-                target.registerEventListener("onMask", this);
+                target.addEventListener("onMask", this);
                 maskEvent = new Event("onMask", target);
             } else {
                 maskEvent = null;
-                target.unregisterEventListener("onMask", this);
+                target.removeEventListener("onMask", this);
                 target.removeMask();
             }
         }

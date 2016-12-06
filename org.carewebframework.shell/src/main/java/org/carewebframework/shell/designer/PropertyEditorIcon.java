@@ -46,7 +46,7 @@ public class PropertyEditorIcon extends PropertyEditorBase {
     public PropertyEditorIcon() {
         super(new IconPicker());
         iconPicker = (IconPicker) component;
-        iconPicker.registerEventListener("setValue", new IEventListener() {
+        iconPicker.addEventListener("setValue", new IEventListener() {
             
             @Override
             public void onEvent(Event event) {
@@ -61,7 +61,7 @@ public class PropertyEditorIcon extends PropertyEditorBase {
     @Override
     protected void init(UIElementBase target, PropertyInfo propInfo, PropertyGrid propGrid) {
         super.init(target, propInfo, propGrid);
-        component.registerEventForward(ChangeEvent.TYPE, propGrid, null);
+        component.addEventForward(ChangeEvent.TYPE, propGrid, null);
         String[] values = propInfo.getConfigValueArray("values");
         
         if (values == null) {

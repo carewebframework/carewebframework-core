@@ -66,7 +66,7 @@ public class UIElementTabMenuPane extends UIElementMenuItemBase {
         setOuterComponent(getMenu());
         setInnerComponent(div);
         div.setVisible(false);
-        getMenu().registerEventListener(ClickEvent.TYPE, listener);
+        getMenu().addEventListener(ClickEvent.TYPE, listener);
     }
     
     @Override

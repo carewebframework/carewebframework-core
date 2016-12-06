@@ -246,7 +246,7 @@ public class PropertyGrid extends Window {
             rows.addChild(row, append ? null : rows.getFirstChild());
             Cell cell = new Cell();
             row.addChild(cell);
-            cell.registerEventForward(ClickEvent.TYPE, this, SelectEvent.TYPE);
+            cell.addEventForward(ClickEvent.TYPE, this, SelectEvent.TYPE);
             Label lbl = new Label(propInfo.getName());
             cell.addChild(lbl);
             row.setAttribute(EDITOR_ATTR, editor);

@@ -235,9 +235,9 @@ public abstract class PropertyEditorCustomTree<T extends UIElementBase> extends 
             }
         };
         
-        txtLabel.registerEventListener(ChangeEvent.TYPE, labelEditorListener);
-        txtLabel.registerEventListener("blur", labelEditorListener);
-        txtLabel.registerEventListener("enter", labelEditorListener);
+        txtLabel.addEventListener(ChangeEvent.TYPE, labelEditorListener);
+        txtLabel.addEventListener("blur", labelEditorListener);
+        txtLabel.addEventListener("enter", labelEditorListener);
     }
     
     /**
@@ -370,7 +370,7 @@ public abstract class PropertyEditorCustomTree<T extends UIElementBase> extends 
             initProxy(proxy);
             
             if (hasLabelProperty(proxy.getDefinition().getClazz())) {
-                item.registerEventForward(DblclickEvent.TYPE, tree, null);
+                item.addEventForward(DblclickEvent.TYPE, tree, null);
             }
         }
         
@@ -574,7 +574,7 @@ public abstract class PropertyEditorCustomTree<T extends UIElementBase> extends 
         labelEditor = propertyGrid.findEditor(labelProperty);
         
         if (labelEditor != null) {
-            labelEditor.getComponent().registerEventForward(ChangeEvent.TYPE, tree, "onLabelChange");
+            labelEditor.getComponent().addEventForward(ChangeEvent.TYPE, tree, "onLabelChange");
         }
         
         updateControls();

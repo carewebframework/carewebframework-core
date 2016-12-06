@@ -28,7 +28,7 @@ public class ManifestItemRenderer extends BaseRenderer<ManifestItem> {
         addCell(row, manifestItem.implModule);
         addCell(row, manifestItem.implVersion);
         addCell(row, manifestItem.implVendor);
-        row.registerEventListener(ClickEvent.TYPE, listener);
+        row.addEventListener(ClickEvent.TYPE, listener);
         return row;
     }
     

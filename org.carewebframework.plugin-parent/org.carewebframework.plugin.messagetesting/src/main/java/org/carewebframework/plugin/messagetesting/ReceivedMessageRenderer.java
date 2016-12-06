@@ -43,7 +43,7 @@ public class ReceivedMessageRenderer implements IComponentRenderer<Listitem, Mes
         createCell(item, message.getId());
         Cell cell = createCell(item, message.getPayload());
         cell.setHint(cell.getChild(Label.class).getLabel());
-        item.registerEventForward(DblclickEvent.TYPE, item.getListbox(), null);
+        item.addEventForward(DblclickEvent.TYPE, item.getListbox(), null);
         return item;
     }
     

@@ -263,7 +263,7 @@ public class AddComponent extends Window {
         if (disabled) {
             item.setDisabled(true);
         } else {
-            item.registerEventForward(DblclickEvent.TYPE, btnOK, ClickEvent.TYPE);
+            item.addEventForward(DblclickEvent.TYPE, btnOK, ClickEvent.TYPE);
         }
         
         if (favorites != null) {
@@ -272,8 +272,8 @@ public class AddComponent extends Window {
             image.addStyle("float", "left");
             BaseComponent cell = item.getFirstChild();
             cell.addChild(image, cell.getFirstChild());
-            image.registerEventForward(ClickEvent.TYPE, item, ON_FAVORITE);
-            item.registerEventListener(ON_FAVORITE, other == null ? favoriteListener1 : favoriteListener2);
+            image.addEventForward(ClickEvent.TYPE, item, ON_FAVORITE);
+            item.addEventListener(ON_FAVORITE, other == null ? favoriteListener1 : favoriteListener2);
             
             if (isFavorite && other == null) {
                 other = addTreenode(def, item);

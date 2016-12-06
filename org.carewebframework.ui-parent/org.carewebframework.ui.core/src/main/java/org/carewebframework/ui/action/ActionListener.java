@@ -73,7 +73,7 @@ public class ActionListener implements IEventListener {
         this.eventName = eventName;
         this.attrName = getAttrName(eventName);
         ActionUtil.removeAction(component, eventName);
-        component.registerEventListener(eventName, this);
+        component.addEventListener(eventName, this);
         component.setAttribute(attrName, this);
     }
     
@@ -92,7 +92,7 @@ public class ActionListener implements IEventListener {
      * Remove this listener from its associated component.
      */
     protected void removeAction() {
-        component.unregisterEventListener(eventName, this);
+        component.removeEventListener(eventName, this);
         
         if (component.getAttribute(attrName) == this) {
             component.removeAttribute(attrName);

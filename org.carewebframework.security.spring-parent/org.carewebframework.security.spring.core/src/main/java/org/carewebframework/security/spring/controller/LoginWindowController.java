@@ -140,11 +140,11 @@ public class LoginWindowController implements IAutoWired {
     private void wireListener(BaseComponent root) {
         for (BaseComponent child : root.getChildren()) {
             if (child instanceof Combobox || child instanceof Listbox) {
-                child.registerEventListener("select", changeListener);
+                child.addEventListener("select", changeListener);
             } else if (child instanceof BaseInputComponent) {
-                child.registerEventListener("changing", changeListener);
+                child.addEventListener("changing", changeListener);
             } else if (child instanceof Button) {
-                child.registerEventListener("click", changeListener);
+                child.addEventListener("click", changeListener);
             } else {
                 wireListener(child);
             }

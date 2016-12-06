@@ -124,7 +124,7 @@ public class LayoutManager implements IAutoWired {
             item.setData(new LayoutIdentifier(data, shared));
             
             if (pnlSelect.isVisible()) {
-                item.registerEventForward(DblclickEvent.TYPE, btnOK, ClickEvent.TYPE);
+                item.addEventForward(DblclickEvent.TYPE, btnOK, ClickEvent.TYPE);
             }
             
             return item;

@@ -52,8 +52,8 @@ public class PropertyEditorBoolean extends PropertyEditorBase {
     protected void init(UIElementBase target, PropertyInfo propInfo, PropertyGrid propGrid) {
         super.init(target, propInfo, propGrid);
         //radiogroup.registerEventForward(Events.ON_CHECK, propGrid, Events.ON_CHANGE);
-        radiogroup.registerEventForward(ClickEvent.TYPE, propGrid, SelectEvent.TYPE);
-        component.registerEventForward(ClickEvent.TYPE, propGrid, SelectEvent.TYPE);
+        radiogroup.addEventForward(ClickEvent.TYPE, propGrid, SelectEvent.TYPE);
+        component.addEventForward(ClickEvent.TYPE, propGrid, SelectEvent.TYPE);
         
         for (Radiobutton radio : radiogroup.getChildren(Radiobutton.class)) {
             String label = propInfo.getConfigValue(radio.getLabel().trim());

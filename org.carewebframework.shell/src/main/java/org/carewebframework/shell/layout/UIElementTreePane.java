@@ -102,7 +102,7 @@ public class UIElementTreePane extends UIElementCWFBase {
         node = (Span) createFromTemplate();
         associateComponent(node);
         anchor = (Hyperlink) node.getFirstChild();
-        anchor.registerEventListener("click", clickListener);
+        anchor.addEventListener("click", clickListener);
         associateComponent(anchor);
         listenToChild("badge", badgeListener);
     }

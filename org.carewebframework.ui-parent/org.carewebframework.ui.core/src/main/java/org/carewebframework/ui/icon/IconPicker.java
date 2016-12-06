@@ -55,7 +55,7 @@ public class IconPicker extends Div {
         addChild(cboLibrary);
         addChild(imagePicker);
         
-        cboLibrary.registerEventListener(SelectEvent.TYPE, (event) -> {
+        cboLibrary.addEventListener(SelectEvent.TYPE, (event) -> {
             iconLibrary = (IIconLibrary) cboLibrary.getSelectedItem().getData();
             libraryChanged();
         });

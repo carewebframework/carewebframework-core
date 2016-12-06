@@ -55,7 +55,7 @@ public class UIElementTabView extends UIElementCWFBase {
         tabview = (Tabview) createFromTemplate();
         setOuterComponent(tabview);
         tabview.addClass("cwf-tabview");
-        tabview.registerEventListener(SelectEvent.TYPE, (event) -> {
+        tabview.addEventListener(SelectEvent.TYPE, (event) -> {
               setActivePane((UIElementTabPane) getAssociatedUIElement(event.getTarget()));
         });
     }

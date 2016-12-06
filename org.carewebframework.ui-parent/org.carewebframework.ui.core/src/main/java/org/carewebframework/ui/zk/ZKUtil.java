@@ -298,7 +298,7 @@ public class ZKUtil {
             
             if (sourceEvents != null) {
                 for (String eventName : sourceEvents.split("\\,")) {
-                    child.registerEventListener(eventName, (event) -> {
+                    child.addEventListener(eventName, (event) -> {
                         event = new Event(targetEvent, targetComponent);
                         EventUtil.post(event);
                     });

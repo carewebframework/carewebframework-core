@@ -89,7 +89,7 @@ public class PopupSupport implements IGenericEvent<Object>, IEventListener {
     public synchronized void closeAll() {
         for (Window window : windows) {
             try {
-                window.unregisterEventListener("close", this);
+                window.removeEventListener("close", this);
                 window.detach();
             } catch (Throwable e) {
                 
@@ -130,7 +130,7 @@ public class PopupSupport implements IGenericEvent<Object>, IEventListener {
             String pos = getPosition();
             window.addStyle("left", pos);
             window.addStyle("top", pos);
-            window.registerEventListener("close", this);
+            window.addEventListener("close", this);
             Label label = window.findByName("messagetext", Label.class);
             label.setLabel(popupData.getMessage());
             window.setMode(Mode.POPUP);

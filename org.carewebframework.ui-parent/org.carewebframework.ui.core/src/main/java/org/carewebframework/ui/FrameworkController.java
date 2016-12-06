@@ -179,7 +179,7 @@ public class FrameworkController implements IAutoWired {
         root = comp;
         this.comp = comp;
         comp.setAttribute(Constants.ATTR_COMPOSER, this);
-        comp.registerEventListener(ThreadEx.ON_THREAD_COMPLETE, threadCompletionListener);
+        comp.addEventListener(ThreadEx.ON_THREAD_COMPLETE, threadCompletionListener);
         appContext = SpringUtil.getAppContext();
         appFramework = FrameworkUtil.getAppFramework();
         eventManager = EventManager.getInstance();

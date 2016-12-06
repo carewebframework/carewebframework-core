@@ -74,9 +74,9 @@ public class Command {
         
         public void registerComponent(BaseComponent component, boolean register) {
             if (register) {
-                component.registerEventListener("keypress", this);
+                component.addEventListener("keypress", this);
             } else {
-                component.unregisterEventListener("keypress", this);
+                component.removeEventListener("keypress", this);
             }
         }
     }

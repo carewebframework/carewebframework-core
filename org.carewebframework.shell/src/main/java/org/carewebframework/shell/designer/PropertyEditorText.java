@@ -62,10 +62,10 @@ public class PropertyEditorText extends PropertyEditorBase {
             textbox.setMaxLength(maxLength);
         }
         
-        popupbox.registerEventForward(ChangeEvent.TYPE, propGrid, null);
-        textbox.registerEventForward(ChangeEvent.TYPE, popupbox, null);
-        popupbox.registerEventForward("focus", propGrid, SelectEvent.TYPE);
-        textbox.registerEventForward("focus", popupbox, SelectEvent.TYPE);
+        popupbox.addEventForward(ChangeEvent.TYPE, propGrid, null);
+        textbox.addEventForward(ChangeEvent.TYPE, popupbox, null);
+        popupbox.addEventForward("focus", propGrid, SelectEvent.TYPE);
+        textbox.addEventForward("focus", popupbox, SelectEvent.TYPE);
     }
     
     @Override

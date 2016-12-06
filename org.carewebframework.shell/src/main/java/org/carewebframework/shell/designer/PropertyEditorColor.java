@@ -53,7 +53,7 @@ public class PropertyEditorColor extends PropertyEditorBase {
     @Override
     protected void init(UIElementBase target, PropertyInfo propInfo, PropertyGrid propGrid) {
         super.init(target, propInfo, propGrid);
-        component.registerEventForward(ChangeEvent.TYPE, propGrid, null);
+        component.addEventForward(ChangeEvent.TYPE, propGrid, null);
         String[] values = propInfo.getConfigValueArray("values");
         
         if (values == null) {

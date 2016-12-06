@@ -113,7 +113,7 @@ public class UIElementDesktop extends UIElementCWFBase {
         ActionUtil.addAction(mnuTOC, "zscript:org.carewebframework.shell.help.HelpUtil.showTOC();");
         fixedHelpItems = helpMenuRoot.getChildren().size();
         sortHelpMenu = false;
-        helpMenuRoot.registerEventListener("open", (event) -> {
+        helpMenuRoot.addEventListener("open", (event) -> {
             
                 /*TODO:  if (sortHelpMenu && event.isOpen()) {
                     sortHelpMenu();

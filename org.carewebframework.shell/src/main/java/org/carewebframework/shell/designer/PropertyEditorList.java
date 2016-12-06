@@ -89,10 +89,10 @@ public class PropertyEditorList extends PropertyEditorBase {
         delimiter = propInfo.getConfigValue("delimiter");
         
         if (!combobox.isReadonly()) {
-            combobox.registerEventForward(ChangeEvent.TYPE, propGrid, null);
+            combobox.addEventForward(ChangeEvent.TYPE, propGrid, null);
         }
         
-        combobox.registerEventListener(DblclickEvent.TYPE, (event) -> {
+        combobox.addEventListener(DblclickEvent.TYPE, (event) -> {
             
             /**
              * Double-clicking a combo item will select the item and close the combo box.
@@ -119,9 +119,9 @@ public class PropertyEditorList extends PropertyEditorBase {
         combobox.setKeycapture(readonly ? "DEL" : null);
         
         if (readonly) {
-            combobox.registerEventListener(KeycaptureEvent.TYPE, deleteListener);
+            combobox.addEventListener(KeycaptureEvent.TYPE, deleteListener);
         } else {
-            combobox.unregisterEventListener(KeycaptureEvent.TYPE, deleteListener);
+            combobox.removeEventListener(KeycaptureEvent.TYPE, deleteListener);
         }
     }
     
