@@ -199,7 +199,7 @@ public class TreeUtil {
                 needsDelim = true;
             }
             
-            sb.insert(0, useLabels ? item.getLabel() : item.indexOf());
+            sb.insert(0, useLabels ? item.getLabel() : item.getIndex());
             item = (Treenode) item.getParent();
         }
         

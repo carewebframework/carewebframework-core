@@ -8,6 +8,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.lang.reflect.FieldUtils;
 import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.component.BaseInputboxComponent;
 import org.carewebframework.web.component.Cell;
 import org.carewebframework.web.component.Html;
 import org.carewebframework.web.component.Hyperlink;
@@ -151,6 +152,37 @@ public class CWFUtil {
             }
             
         }
+    }
+    
+    /**
+     * Sets focus to first input element under the parent that is capable of receiving focus.
+     * 
+     * @param parent Parent component.
+     * @param select If true, select contents after setting focus.
+     * @return The input element that received focus, or null if focus was not set.
+     */
+    public static BaseInputboxComponent<?> focusFirst(BaseComponent parent, boolean select) {
+        for (BaseComponent child : parent.getChildren()) {
+            BaseInputboxComponent<?> ele;
+            
+            if (child instanceof BaseInputboxComponent) {
+                ele = (BaseInputboxComponent<?>) child;
+                
+                if (ele.isVisible() && !ele.isDisabled() && !ele.isReadonly()) {
+                    ele.focus();
+                    
+                    if (select) {
+                        ele.selectAll();
+                    }
+                    
+                    return ele;
+                }
+            } else if ((ele = focusFirst(child, select)) != null) {
+                return ele;
+            }
+        }
+        
+        return null;
     }
     
     private CWFUtil() {

@@ -134,92 +134,6 @@ public class ZKUtil {
     }
     
     /**
-     * Returns the first visible child, if any.
-     * 
-     * @param parent The parent component.
-     * @param recurse If true, all descendant levels are also searched using a breadth first
-     *            strategy.
-     * @return The first visible child encountered, or null if not found.
-     */
-    public static BaseComponent firstVisibleChild(BaseComponent parent, boolean recurse) {
-        return firstVisibleChild(parent, BaseUIComponent.class, recurse);
-    }
-    
-    /**
-     * Returns the first visible child of a given class, if any.
-     * 
-     * @param <T> The child class.
-     * @param parent The parent component.
-     * @param clazz The child class to consider.
-     * @param recurse If true, all descendant levels are also searched using a breadth first
-     *            strategy.
-     * @return The first visible child encountered, or null if not found.
-     */
-    @SuppressWarnings("unchecked")
-    public static <T extends BaseUIComponent> T firstVisibleChild(BaseComponent parent, Class<T> clazz, boolean recurse) {
-        for (BaseComponent child : parent.getChildren()) {
-            if (clazz.isInstance(child) && ((BaseUIComponent) child).isVisible()) {
-                return (T) child;
-            }
-        }
-        
-        if (recurse) {
-            for (BaseComponent child : parent.getChildren()) {
-                T comp = firstVisibleChild(child, clazz, recurse);
-                
-                if (comp != null) {
-                    return comp;
-                }
-            }
-        }
-        
-        return null;
-    }
-    
-    /**
-     * Sets focus to first input element under the parent that is capable of receiving focus.
-     * 
-     * @param parent Parent component.
-     * @param select If true, select contents after setting focus.
-     * @return The input element that received focus, or null if focus was not set.
-     */
-    public static BaseInputboxComponent<?> focusFirst(BaseComponent parent, boolean select) {
-        for (BaseComponent child : parent.getChildren()) {
-            BaseInputboxComponent<?> ele;
-            
-            if (child instanceof BaseInputboxComponent) {
-                ele = (BaseInputboxComponent<?>) child;
-                
-                if (ele.isVisible() && !ele.isDisabled() && !ele.isReadonly()) {
-                    ele.focus();
-                    
-                    if (select) {
-                        ele.selectAll();
-                    }
-                    
-                    return ele;
-                }
-            } else if ((ele = focusFirst(child, select)) != null) {
-                return ele;
-            }
-        }
-        
-        return null;
-    }
-    
-    /**
-     * Moves a child to the position specified by an index.
-     * 
-     * @param child Child to move
-     * @param index Move child to this position.
-     */
-    public static void moveChild(BaseComponent child, int index) {
-        if (child != null && child.getParent() != null) {
-            child.getParent().addChild(child, index);
-        }
-    }
-    
-    /**
      * Adds or removes a badge to/from an HTML element.
      * 
      * @param selector Selector for the target element.
@@ -258,38 +172,6 @@ public class ZKUtil {
                 throw MiscUtil.toUnchecked(e);
             }
         }
-    }
-    
-    /**
-     * Returns true if in the specified page's event thread.
-     * 
-     * @param page Page instance.
-     * @return True if the current event thread is the page's event thread.
-     */
-    public static boolean inEventThread(Page page) {
-        return ExecutionContext.getPage() == page;
-    }
-    
-    /**
-     * Send a print request to the browser client.
-     * 
-     * @param selectors List of selectors whose content shall be printed.
-     * @param styleSheets List of stylesheets to be applied before printing.
-     * @param preview If true, open in preview mode. If false, submit directly for printing.
-     */
-    public static void printToClient(List<String> selectors, List<String> styleSheets, boolean preview) {
-        ClientUtil.invoke("cwf_print", null, selectors, styleSheets, preview);
-    }
-    
-    /**
-     * Send a print request to the browser client.
-     * 
-     * @param selectors Comma-delimited list of selectors whose content shall be printed.
-     * @param styleSheets Comma-delimited list of stylesheets to be applied before printing.
-     * @param preview If true, open in preview mode. If false, submit directly for printing.
-     */
-    public static void printToClient(String selectors, String styleSheets, boolean preview) {
-        ClientUtil.invoke("cwf_print", null, selectors, styleSheets, preview);
     }
     
     /**

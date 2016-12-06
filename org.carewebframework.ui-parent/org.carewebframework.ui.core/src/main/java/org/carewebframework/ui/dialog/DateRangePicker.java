@@ -23,38 +23,46 @@
  *
  * #L%
  */
-package org.carewebframework.ui.zk;
+package org.carewebframework.ui.dialog;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
 import org.carewebframework.api.property.PropertyUtil;
 import org.carewebframework.common.DateRange;
-import org.carewebframework.ui.dialog.DateRangeDialog;
+import org.carewebframework.web.annotation.EventHandler;
 import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.component.Listbox;
-import org.carewebframework.web.component.Listitem;
+import org.carewebframework.web.component.Combobox;
+import org.carewebframework.web.component.Comboitem;
 import org.carewebframework.web.event.Event;
 import org.carewebframework.web.event.EventUtil;
 
 /**
  * Generic component for choosing date ranges.
  */
-public class DateRangeChooser extends Listbox {
+public class DateRangePicker extends Combobox {
     
-    public static final String ON_SELECT_RANGE = "onSelectRange";
+    public static final String ON_SELECT_RANGE = "selectRange";
     
-    private final Listitem customItem;
+    private static final String[] DEFAULT_CHOICES = { "All Dates", "Today|T|T", "Last Week|T|T-7", "Last Month|T|T-30|1",
+            "Last Year|T|T-365", "Last Two Years|T|T-730" };
     
-    private Listitem lastSelectedItem;
+    private final Comboitem customItem;
     
-    public DateRangeChooser() {
+    private Comboitem lastSelectedItem;
+    
+    private String prompt = "Select a date range...";
+    
+    public DateRangePicker() {
         super();
-        customItem = new Listitem();
+        setReadonly(true);
+        setHint(prompt);
+        customItem = new Comboitem();
         customItem.setLabel("Custom...");
         addChild(customItem);
         setAllowCustom(false);
-        loadChoices(null);
+        loadChoices(DEFAULT_CHOICES);
     }
     
     /**
@@ -64,18 +72,33 @@ public class DateRangeChooser extends Listbox {
      *            format. If the property name is null, loads a default set of choices.
      */
     public void loadChoices(String propertyName) {
+        if (propertyName == null || propertyName.isEmpty()) {
+            loadChoices(DEFAULT_CHOICES);
+        } else {
+            loadChoices(PropertyUtil.getValues(propertyName, null));
+        }
+    }
+    
+    /**
+     * Load choices from a string array.
+     * 
+     * @param choices A string array containing choices.
+     */
+    public void loadChoices(String... choices) {
+        loadChoices(Arrays.asList(choices));
+    }
+    
+    /**
+     * Load choices from a list.
+     * 
+     * @param choices A list of choices.
+     */
+    public void loadChoices(Iterable<String> choices) {
         clear();
         
-        if (propertyName == null || propertyName.isEmpty()) {
-            addChoice("All Dates", false);
-            addChoice("Today|T|T", false);
-            addChoice("Last Week|T|T-7", false);
-            addChoice("Last Month|T|T-30|1", false);
-            addChoice("Last Year|T|T-365", false);
-            addChoice("Last Two Years|T|T-730", false);
-        } else {
-            for (String value : PropertyUtil.getValues(propertyName, null)) {
-                addChoice(value, false);
+        if (choices != null) {
+            for (String choice : choices) {
+                addChoice(choice, false);
             }
         }
         
@@ -88,10 +111,10 @@ public class DateRangeChooser extends Listbox {
      * @param range Date range item
      * @param isCustom If true, range is a custom item. In this case, if another matching custom
      *            item exists, it will not be added.
-     * @return List item that was added (or found if duplicate custom item).
+     * @return combo box item that was added (or found if duplicate custom item).
      */
-    public Listitem addChoice(DateRange range, boolean isCustom) {
-        Listitem item;
+    public Comboitem addChoice(DateRange range, boolean isCustom) {
+        Comboitem item;
         
         if (isCustom) {
             item = findMatchingItem(range);
@@ -101,7 +124,7 @@ public class DateRangeChooser extends Listbox {
             }
         }
         
-        item = new Listitem();
+        item = new Comboitem();
         item.setLabel(range.getLabel());
         item.setData(range);
         addChild(item, isCustom ? null : customItem);
@@ -120,17 +143,18 @@ public class DateRangeChooser extends Listbox {
      * @param range String representation of date range.
      * @param isCustom If true, range is a custom item. In this case, if another matching custom
      *            item exists, it will not be added.
-     * @return List item that was added (or found if duplicate custom item).
+     * @return combo box item that was added (or found if duplicate custom item).
      */
-    public Listitem addChoice(String range, boolean isCustom) {
+    public Comboitem addChoice(String range, boolean isCustom) {
         return addChoice(new DateRange(range), isCustom);
     }
     
     /**
      * Removes all items (except for "custom") from the item list.
      */
+    @Override
     public void clear() {
-        List<?> items = getChildren();
+        List<BaseComponent> items = getChildren();
         
         for (int i = items.size() - 1; i >= 0; i--) {
             if (items.get(i) != customItem) {
@@ -140,15 +164,15 @@ public class DateRangeChooser extends Listbox {
     }
     
     /**
-     * Searches for a Listitem that has a date range equivalent to the specified range.
+     * Searches for a comboitem that has a date range equivalent to the specified range.
      * 
      * @param range The date range to locate.
-     * @return A Listitem containing the date range, or null if not found.
+     * @return A comboitem containing the date range, or null if not found.
      */
-    public Listitem findMatchingItem(DateRange range) {
+    public Comboitem findMatchingItem(DateRange range) {
         for (BaseComponent item : getChildren()) {
             if (range.equals(item.getData())) {
-                return (Listitem) item;
+                return (Comboitem) item;
             }
         }
         
@@ -156,14 +180,16 @@ public class DateRangeChooser extends Listbox {
     }
     
     /**
-     * Searches for a Listitem that has a label that matches the specified value. The search is case
-     * insensitive.
+     * Searches for a comboitem that has a label that matches the specified value. The search is
+     * case insensitive.
      * 
      * @param label Label text to find.
-     * @return A Listitem with a matching label., or null if not found.
+     * @return A comboitem with a matching label., or null if not found.
      */
-    public Listitem findMatchingItem(String label) {
-        for (Listitem item : getChildren(Listitem.class)) {
+    public Comboitem findMatchingItem(String label) {
+        for (BaseComponent child : getChildren()) {
+            Comboitem item = (Comboitem) child;
+            
             if (label.equalsIgnoreCase(item.getLabel())) {
                 return item;
             }
@@ -175,10 +201,10 @@ public class DateRangeChooser extends Listbox {
     /**
      * Need to update visual appearance of selection when it is changed.
      * 
-     * @see org.zkoss.zul.Listbox#setSelectedItem(org.zkoss.zul.Listitem)
+     * @see org.zkoss.zul.Combobox#setSelectedItem(org.zkoss.zul.Comboitem)
      */
     @Override
-    public void setSelectedItem(Listitem item) {
+    public void setSelectedItem(Comboitem item) {
         super.setSelectedItem(item);
         updateSelection();
     }
@@ -212,12 +238,31 @@ public class DateRangeChooser extends Listbox {
     }
     
     /**
+     * Returns the prompt to display when there is no selection.
+     * 
+     * @return The prompt
+     */
+    public String getPrompt() {
+        return prompt;
+    }
+    
+    /**
+     * Sets the prompt to display when there is no selection.
+     * 
+     * @param prompt The prompt to set
+     */
+    public void setPrompt(String prompt) {
+        this.prompt = prompt;
+        setHint(prompt);
+    }
+    
+    /**
      * Returns the date range item that is currently selected.
      * 
      * @return Selected date range item, or null if none selected.
      */
     public DateRange getSelectedRange() {
-        Listitem selected = getSelectedItem();
+        Comboitem selected = getSelectedItem();
         return selected == null ? null : (DateRange) selected.getData();
     }
     
@@ -250,7 +295,7 @@ public class DateRangeChooser extends Listbox {
      * @param suppressEvent If true, onSelectRange event is not fired.
      */
     private void checkSelection(boolean suppressEvent) {
-        Listitem selectedItem = getSelectedItem();
+        Comboitem selectedItem = getSelectedItem();
         
         if (selectedItem == null) {
             selectedItem = lastSelectedItem;
@@ -270,6 +315,16 @@ public class DateRangeChooser extends Listbox {
      * Updates the visual appearance of the current selection.
      */
     private void updateSelection() {
+        Comboitem selectedItem = getSelectedItem();
+        
+        if (selectedItem == null) {
+            setValue(prompt);
+            addStyle("color", "gray");
+        } else {
+            addStyle("color", "inherit");
+        }
+        
+        setFocus(false);
     }
     
     /**
@@ -277,21 +332,30 @@ public class DateRangeChooser extends Listbox {
      * 
      * @param event The onSelect event.
      */
-    public void onSelect(Event event) {
-        /**
-         * When the custom range item is selected, triggers the display of the date range dialog.
-         */
-        if (getSelectedItem() == customItem) {
+    @EventHandler("select")
+    private void onSelect(Event event) {
+        // When the custom range item is selected, triggers the display of the date range dialog.
+        if (event.getTarget() == customItem) {
             event.stopPropagation();
-            DateRange range = DateRangeDialog.show(this);
+            DateRangeDialog.show((range) -> {
+                setSelectedItem(range == null ? lastSelectedItem : addChoice(range, true));
+                checkSelection(false);
+            });
             
-            if (range == null) {
-                setSelectedItem(lastSelectedItem);
-            } else {
-                setSelectedItem(addChoice(range, true));
-            }
+        } else {
+            checkSelection(false);
         }
+    }
+    
+    /**
+     * If the last selected item has been removed, then remove the reference.
+     */
+    @Override
+    public void afterRemoveChild(BaseComponent child) {
+        super.afterRemoveChild(child);
         
-        checkSelection(false);
+        if (child == lastSelectedItem) {
+            lastSelectedItem = null;
+        }
     }
 }

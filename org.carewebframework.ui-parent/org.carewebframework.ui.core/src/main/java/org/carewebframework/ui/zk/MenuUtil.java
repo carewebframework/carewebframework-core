@@ -181,7 +181,7 @@ public class MenuUtil {
         menu.setLabel(label);
         
         if (insertBefore != null && realParent == insertBefore.getParent()) {
-            realParent.addChild(menu, insertBefore.indexOf());
+            realParent.addChild(menu, insertBefore.getIndex());
         } else {
             realParent.addChild(menu);
         }

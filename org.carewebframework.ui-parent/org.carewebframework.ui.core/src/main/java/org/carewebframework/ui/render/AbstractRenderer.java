@@ -23,7 +23,7 @@
  *
  * #L%
  */
-package org.carewebframework.ui.zk;
+package org.carewebframework.ui.render;
 
 import java.util.Collection;
 import java.util.Date;
@@ -34,11 +34,15 @@ import org.carewebframework.common.StrUtil;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.BaseUIComponent;
 import org.carewebframework.web.component.Label;
+import org.carewebframework.web.model.IComponentRenderer;
 
 /**
  * Base for renderers.
+ * 
+ * @param <T> The component type to be rendered.
+ * @param <M> The model type.
  */
-public abstract class AbstractRenderer {
+public abstract class AbstractRenderer<T extends BaseComponent, M> implements IComponentRenderer<T, M> {
     
     protected final String compStyle;
     

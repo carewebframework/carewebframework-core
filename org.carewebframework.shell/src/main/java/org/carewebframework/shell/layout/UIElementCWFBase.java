@@ -234,7 +234,7 @@ public abstract class UIElementCWFBase extends UIElementBase {
      * @param child2 The second child.
      */
     protected void swapChildren(BaseComponent child1, BaseComponent child2) {
-        child1.getParent().swapChildren(child1.indexOf(), child2.indexOf());
+        child1.getParent().swapChildren(child1.getIndex(), child2.getIndex());
     }
     
     /**

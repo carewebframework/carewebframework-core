@@ -373,7 +373,7 @@ public class LayoutManager implements IAutoWired {
      */
     @EventHandler(value = "select", target = "@radioGroup")
     public void onCheck$radioGroup() {
-        shared = radioGroup.getSelected().indexOf() == 0;
+        shared = radioGroup.getSelected().getIndex() == 0;
         defaultIsShared(shared);
         refresh(null);
     }
