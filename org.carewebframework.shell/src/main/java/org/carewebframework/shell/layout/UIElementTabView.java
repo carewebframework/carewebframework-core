@@ -29,8 +29,6 @@ import org.carewebframework.shell.designer.PropertyEditorTabView;
 import org.carewebframework.shell.property.PropertyTypeRegistry;
 import org.carewebframework.web.component.Tabview;
 import org.carewebframework.web.component.Tabview.TabPosition;
-import org.carewebframework.web.event.Event;
-import org.carewebframework.web.event.IEventListener;
 import org.carewebframework.web.event.SelectEvent;
 
 /**
@@ -45,18 +43,18 @@ public class UIElementTabView extends UIElementCWFBase {
         PropertyTypeRegistry.register("tabs", PropertyEditorTabView.class);
     }
     
-    private final Tabview tabview;
+    private final Tabview tabview = new Tabview();
     
     private UIElementTabPane activePane;
     
     public UIElementTabView() throws Exception {
         super();
         maxChildren = Integer.MAX_VALUE;
-        tabview = (Tabview) createFromTemplate();
+        fullSize(tabview);
         setOuterComponent(tabview);
         tabview.addClass("cwf-tabview");
         tabview.addEventListener(SelectEvent.TYPE, (event) -> {
-              setActivePane((UIElementTabPane) getAssociatedUIElement(event.getTarget()));
+            setActivePane((UIElementTabPane) getAssociatedUIElement(event.getTarget()));
         });
     }
     

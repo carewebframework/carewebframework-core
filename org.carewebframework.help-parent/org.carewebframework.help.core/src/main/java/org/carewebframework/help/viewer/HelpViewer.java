@@ -428,7 +428,7 @@ public class HelpViewer extends Window implements IHelpViewer, ITopicListener, I
         
         if (proxied) {
             getPage().setTitle("Help");
-            InvocationRequestQueue proxyQueue = InvocationRequestQueue.getQueue(proxyId, HelpUtil.HELP_QUEUE_PREFIX);
+            InvocationRequestQueue proxyQueue = null; //TODO: InvocationRequestQueue.getQueue(proxyId, HelpUtil.HELP_QUEUE_PREFIX);
             
             if (proxyQueue == null) {
                 destroy();

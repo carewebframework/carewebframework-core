@@ -1,4 +1,4 @@
-<div height="100%" width="100%" class="cwf-desktop panel panel-default">
+<div class="cwf-desktop panel panel-default">
 	<div name="titlebar" class="panel-heading">
 		<span visible="false">
 			<image name="icon" style="padding:5px" />

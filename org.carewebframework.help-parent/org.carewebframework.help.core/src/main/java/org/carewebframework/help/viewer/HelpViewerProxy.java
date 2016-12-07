@@ -65,7 +65,7 @@ public class HelpViewerProxy implements IHelpViewer {
     public HelpViewerProxy(Page owner) {
         super();
         ownerId = owner.getId();
-        remoteWindowName = new InvocationRequestQueue(owner, this, HelpUtil.closeRequest).getQualifiedQueueName();
+        remoteWindowName = null; //TODO: new InvocationRequestQueue(owner, this, HelpUtil.closeRequest).getQualifiedQueueName();
     }
     
     /**
