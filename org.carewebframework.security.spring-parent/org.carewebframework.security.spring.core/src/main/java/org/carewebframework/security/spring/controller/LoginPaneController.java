@@ -132,7 +132,7 @@ public class LoginPaneController implements IAutoWired {
             loginFailureMessage = authError.getMessage();//override generic UserLoginException default
         }
         
-        String username = (String) session.removeAttribute(Constants.DEFAULT_USERNAME);
+        String username = null; //(String) session.removeAttribute(Constants.DEFAULT_USERNAME);
         username = authError == null ? defaultUsername : username;
         showMessage(authError == null ? null : loginFailureMessage);
         txtUsername.setValue(username);
@@ -157,7 +157,7 @@ public class LoginPaneController implements IAutoWired {
         String securityDomainId = securityDomains.size() == 1 ? securityDomains.get(0).getLogicalId() : null;
         
         if (StringUtils.isEmpty(securityDomainId)) {
-            securityDomainId = (String) session.getAttribute(Constants.DEFAULT_SECURITY_DOMAIN);
+            //securityDomainId = (String) session.getAttribute(Constants.DEFAULT_SECURITY_DOMAIN);
         }
         
         if (StringUtils.isEmpty(securityDomainId)) {
@@ -168,7 +168,7 @@ public class LoginPaneController implements IAutoWired {
                     securityDomainId = params[0];
                 }
             } else {
-                securityDomainId = execution.getParameter(Constants.DEFAULT_SECURITY_DOMAIN);
+                //securityDomainId = execution.getParameter(Constants.DEFAULT_SECURITY_DOMAIN);
             }
         }
         
@@ -293,12 +293,12 @@ public class LoginPaneController implements IAutoWired {
         }
         
         if (!username.isEmpty() && !password.isEmpty() && !securityDomainId.isEmpty()) {
-            session.setAttribute(Constants.DEFAULT_SECURITY_DOMAIN, securityDomainId);
+            //session.setAttribute(Constants.DEFAULT_SECURITY_DOMAIN, securityDomainId);
             WebUtil.setCookie(Constants.DEFAULT_SECURITY_DOMAIN, securityDomainId);
-            session.setAttribute(Constants.DEFAULT_USERNAME, username);
+            //session.setAttribute(Constants.DEFAULT_USERNAME, username);
             txtUsername.setValue(securityDomainId + "\\" + username);
             showStatus(StrUtil.getLabel(Constants.LBL_LOGIN_PROGRESS));
-            session.setAttribute(org.carewebframework.security.spring.Constants.SAVED_REQUEST, savedRequest);
+            //session.setAttribute(org.carewebframework.security.spring.Constants.SAVED_REQUEST, savedRequest);
             EventUtil.send("onSubmit", loginRoot.getPage(), null);
         } else {
             showMessage(StrUtil.getLabel(Constants.LBL_LOGIN_REQUIRED_FIELDS));

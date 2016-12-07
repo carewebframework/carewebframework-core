@@ -117,7 +117,7 @@ public abstract class AbstractProcessor<T extends BaseMojo> {
     public String replaceURLs(String line) {
         StringBuffer sb = new StringBuffer();
         Matcher matcher = URL_PATTERN.matcher(line);
-        String newPath = "~./" + getResourceBase() + "/";
+        String newPath = "web/" + getResourceBase() + "/";
         
         while (matcher.find()) {
             char dlm = line.charAt(matcher.start() - 1);

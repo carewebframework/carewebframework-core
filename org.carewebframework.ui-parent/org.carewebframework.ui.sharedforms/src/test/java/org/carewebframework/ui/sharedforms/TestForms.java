@@ -40,7 +40,7 @@ public class TestForms extends MockTest {
     
     @Test
     public void testForm() throws Exception {
-        BaseComponent root = PageUtil.createPage("~./org/carewebframework/ui/sharedforms/testForm.cwf", null).get(0);
+        BaseComponent root = PageUtil.createPage("web/org/carewebframework/ui/sharedforms/testForm.cwf", null).get(0);
         TestController controller = (TestController) FrameworkController.getController(root);
         PluginContainer dummy = new PluginContainer();
         controller.onLoad(dummy);

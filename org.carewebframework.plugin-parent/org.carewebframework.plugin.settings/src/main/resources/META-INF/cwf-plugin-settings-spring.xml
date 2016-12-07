@@ -11,7 +11,7 @@
 	<beans profile="root">
 
 		<cwp:plugin id="cwfSettingsEditor" name="Settings Editor"
-			url="~./org/carewebframework/plugin/settings/main.zul">
+			url="web/org/carewebframework/plugin/settings/main.zul">
 			<cwp:serialization>
 				<cwp:property name="Settings Provider" id="provider" type="enum" 
 					description="This is the bean id of the settings provider to use.">

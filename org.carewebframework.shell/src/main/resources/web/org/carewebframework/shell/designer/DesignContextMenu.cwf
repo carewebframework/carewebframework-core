@@ -1,10 +1,10 @@
-<zk xmlns="http://www.zkoss.org/2005/zul"
+<page xmlns="http://www.zkoss.org/2005/zul"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:h="http://www.w3.org/1999/xhtml"
 	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd ">
 	<menupopup
 		use="org.carewebframework.shell.designer.DesignContextMenu">
-		<menuitem name="mnuHeader" sclass="cwf-menu-header"
+		<menuitem name="mnuHeader" class="cwf-menu-header"
 			disabled="true" />
 		<menuitem name="mnuAdd"
 			label="${@msg.cwf.shell.designer.menu.add.label}" />
@@ -26,4 +26,4 @@
 			label="${@msg.cwf.shell.designer.menu.about.label}" />
 	</menupopup>
 
-</zk>
+</page>

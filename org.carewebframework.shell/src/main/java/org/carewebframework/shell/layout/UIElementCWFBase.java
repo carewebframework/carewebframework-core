@@ -32,7 +32,6 @@ import org.carewebframework.shell.designer.DesignMask.MaskMode;
 import org.carewebframework.shell.designer.PropertyGrid;
 import org.carewebframework.ui.core.CWFUtil;
 import org.carewebframework.ui.dialog.DialogUtil;
-import org.carewebframework.ui.zk.ZKUtil;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.BaseUIComponent;
 import org.carewebframework.web.component.Menupopup;
@@ -161,14 +160,14 @@ public abstract class UIElementCWFBase extends UIElementBase {
      * @return The template URL.
      */
     protected String getTemplateUrl() {
-        return "~./" + getClass().getName().replace(".", "/") + ".cwf";
+        return "web/" + getClass().getName().replace(".", "/") + ".cwf";
     }
     
     /**
      * Create wrapped component(s) from a template (a zul page). Performs autowiring of variables
      * and events. The template URL is derived from the class name. For example, if the class is
      * "org.carewebframework.xxx.Clazz", the template URL is assumed to be
-     * "~./org/carewebframework/xxx/Clazz.cwf".
+     * "web/org/carewebframework/xxx/Clazz.cwf".
      * 
      * @return Top level component.
      */
@@ -201,7 +200,7 @@ public abstract class UIElementCWFBase extends UIElementBase {
     protected BaseComponent createFromTemplate(String template, BaseComponent parent, Object controller) {
         if (StringUtils.isEmpty(template)) {
             template = getTemplateUrl();
-        } else if (!template.startsWith("~")) {
+        } else if (!template.startsWith("web/")) {
             template = CWFUtil.getResourcePath(getClass()) + template;
         }
         
@@ -224,7 +223,7 @@ public abstract class UIElementCWFBase extends UIElementBase {
      * @param index Move child to this position.
      */
     protected void moveChild(BaseComponent child, int index) {
-        ZKUtil.moveChild(child, index);
+        child.setIndex(index);
     }
     
     /**
@@ -239,7 +238,7 @@ public abstract class UIElementCWFBase extends UIElementBase {
     
     /**
      * Provides a default behavior for resequencing this element relative to its siblings. This
-     * assumes there is one wrapped ZK component and it is that component whose position is to be
+     * assumes there is one wrapped component and it is that component whose position is to be
      * changed.
      */
     @Override

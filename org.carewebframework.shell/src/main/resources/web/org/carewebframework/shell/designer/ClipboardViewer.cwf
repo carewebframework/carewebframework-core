@@ -1,4 +1,4 @@
-<zk>
+<page>
 	<window width="400px" height="400px" mold="bootstrap"
 		title="${@msg.cwf.shell.clipboard.viewer.title}"
 		use="org.carewebframework.shell.designer.ClipboardViewer">
@@ -8,23 +8,23 @@
 		<div zclass="panel-footer">
 			<div zclass="btn-toolbar" align="end">
 				<button name="btnSave" zclass="btn"
-					sclass="btn-default btn-sm"
+					class="btn-default btn-sm"
 					label="${@msg.cwf.shell.clipboard.viewer.btn.save.label}"
 					tooltiptext="${@msg.cwf.shell.clipboard.viewer.btn.save.hint}" />
 				<button name="btnRestore" zclass="btn"
-					sclass="btn-default btn-sm"
+					class="btn-default btn-sm"
 					label="${@msg.cwf.shell.clipboard.viewer.btn.restore.label}"
 					tooltiptext="${@msg.cwf.shell.clipboard.viewer.btn.restore.hint}" />
 				<separator orient="vertical" width="40px" />
 				<button name="btnOK" zclass="btn"
-					sclass="btn-success btn-sm"
+					class="btn-success btn-sm"
 					label="${@msg.cwf.shell.clipboard.viewer.btn.ok.label}"
 					tooltiptext="${@msg.cwf.shell.clipboard.viewer.btn.ok.hint}" />
 				<button name="btnCancel" zclass="btn"
-					sclass="btn-danger btn-sm"
+					class="btn-danger btn-sm"
 					label="${@msg.cwf.shell.clipboard.viewer.btn.cancel.label}"
 					tooltiptext="${@msg.cwf.shell.clipboard.viewer.btn.cancel.hint}" />
 			</div>
 		</div>
 	</window>
-</zk>
+</page>

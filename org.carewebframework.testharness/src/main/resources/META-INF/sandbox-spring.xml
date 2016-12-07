@@ -11,7 +11,7 @@
 	<beans profile="root">
 		
 		<cwp:plugin id="cwfSandboxPlugin" name="ZK Sandbox" 
-			url="~./org/carewebframework/testharness/sandbox.zul">
+			url="web/org/carewebframework/testharness/sandbox.zul">
 		</cwp:plugin>
 		
 		<bean id="cwfSandboxController" 

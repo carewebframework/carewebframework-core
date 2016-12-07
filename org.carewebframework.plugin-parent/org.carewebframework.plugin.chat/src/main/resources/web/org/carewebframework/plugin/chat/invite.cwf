@@ -1,17 +1,17 @@
-<zk xmlns="http://www.zkoss.org/2005/zul"
+<page xmlns="http://www.zkoss.org/2005/zul"
 	xmlns:h="http://www.w3.org/1999/xhtml"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
 
 	<window title="${@msg.cwf.chat.invite.title}" width="500px" mold="bootstrap"
 		controller="${cwfChatInviteController}" contentSclass="chat-invite">
-		<style src="~./org/carewebframework/plugin/chat/chat.css" />
+		<style src="web/org/carewebframework/plugin/chat/chat.css" />
 		<listbox name="lstSessions" rows="10" checkmark="true" vflex="1"
 			multiple="true">
 			<listhead>
 				<listheader width="30px" />
 					<listheader label="${@msg.cwf.chat.participant.header.user}"
-						id="getUserName" hflex="1" />
+						name="getUserName" hflex="1" />
 			</listhead>
 		</listbox>
 		<toolbar>
@@ -20,12 +20,12 @@
 					label="${@msg.cwf.chat.invite.check.hide.label}" />
 			</span>
 			<span style="float:right">
-				<button name="btnInvite" zclass="btn" sclass="btn-default btn-sm"
+				<button name="btnInvite" zclass="btn" class="btn-default btn-sm"
 					label="${@msg.cwf.chat.invite.button.invite.label}" />
-				<button name="btnCancel" zclass="btn" sclass="btn-danger btn-sm"
+				<button name="btnCancel" zclass="btn" class="btn-danger btn-sm"
 					label="${@msg.cwf.chat.invite.button.cancel.label}"
 					forward="onClick=onClose" />
 			</span>
 		</toolbar>
 	</window>
-</zk>
+</page>

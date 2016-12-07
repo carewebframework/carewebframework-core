@@ -1,4 +1,4 @@
-<zk>
+<page>
 	<toolbar>
 		<hbox width="100%">
 			<textbox name="txtSearch" hflex="1" />
@@ -15,4 +15,4 @@
 			<listheader label="${@msg.cwf.help.tab.search.source.header}" sort="auto(source)" />
 		</listhead>
 	</listbox>
-</zk>
+</page>

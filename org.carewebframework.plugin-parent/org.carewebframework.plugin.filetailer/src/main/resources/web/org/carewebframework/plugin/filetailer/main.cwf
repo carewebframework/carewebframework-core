@@ -1,10 +1,10 @@
-<zk xmlns="http://www.zkoss.org/2005/zul"
+<page xmlns="http://www.zkoss.org/2005/zul"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.zkoss.org/2005/zul 
 		http://www.zkoss.org/2005/zul/zul.xsd">
 
 	<vlayout controller="${cwfFileTailerController}" vflex="1">
-		<hlayout sclass="z-toolbar">
+		<hlayout class="z-toolbar">
 			<combobox name="cboLogFiles" readonly="true" hflex="1" />
 			<span style="float:right">
 				<button name="btnToggle" disabled="true"
@@ -23,4 +23,4 @@
 		<timer name="timer" running="false" />
 	</vlayout>
 
-</zk>
+</page>

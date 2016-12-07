@@ -9,6 +9,7 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.lang.reflect.FieldUtils;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.BaseInputboxComponent;
+import org.carewebframework.web.component.BaseLabeledComponent;
 import org.carewebframework.web.component.Cell;
 import org.carewebframework.web.component.Html;
 import org.carewebframework.web.component.Hyperlink;
@@ -152,6 +153,16 @@ public class CWFUtil {
             }
             
         }
+    }
+    
+    public static BaseLabeledComponent findChildByLabel(BaseComponent parent, String label) {
+        for (BaseLabeledComponent comp : parent.getChildren(BaseLabeledComponent.class)) {
+            if (label.equals(comp.getLabel())) {
+                return comp;
+            }
+        }
+        
+        return null;
     }
     
     /**

@@ -1,20 +1,20 @@
-<zk>
+<page>
 	<window title="Event Testing - Warning:  Do not use this in a production system." 
-		sclass="panel-danger" mold="bootstrap" height="100%" width="100%" 
+		class="panel-danger" mold="bootstrap" height="100%" width="100%" 
 		controller="${cwfEventTestingController}">
 		<borderlayout height="100%">
 			<west splittable="true" size="50%">
 				<panel title="Publish Test Events" height="100%"
-					sclass="panel-primary panel-sm" mold="bootstrap">
+					class="panel-primary panel-sm" mold="bootstrap">
 					<toolbar align="end">
 						<button name="btnPing" label="Send Ping Request" 
-							zclass="btn" sclass="btn-xs btn-primary" />
+							zclass="btn" class="btn-xs btn-primary" />
 						<separator orient="vertical" width="20px" />
 						<button name="btnReset" label="Reset" 
-							zclass="btn" sclass="btn-xs btn-danger" />
+							zclass="btn" class="btn-xs btn-danger" />
 						<separator orient="vertical" width="20px" />
 						<button name="btnSend" label="Send" 
-							zclass="btn" sclass="btn-xs btn-success" />
+							zclass="btn" class="btn-xs btn-success" />
 						<separator orient="vertical" width="15px" />
 					</toolbar>
 					<panelchildren>
@@ -52,11 +52,11 @@
 			</west>
 			<center>
 				<panel title="Subscribe/Unsubscribe" height="100%"
-					sclass="panel-primary panel-sm" mold="bootstrap">
+					class="panel-primary panel-sm" mold="bootstrap">
 					<toolbar>
 						<textbox name="tboxNewEvent" hflex="1" />
 						<button name="btnNewEvent" label="Add Event" 
-							zclass="btn" sclass="btn-xs btn-success" />
+							zclass="btn" class="btn-xs btn-success" />
 					</toolbar>
 					<panelchildren>
 						<listbox name="lboxEventList" checkmark="true"
@@ -70,12 +70,12 @@
 			</center>
 			<east splittable="true" size="25%">
 				<panel title="Received Events" height="100%"
-					sclass="panel-primary panel-sm" mold="bootstrap">
+					class="panel-primary panel-sm" mold="bootstrap">
 					<toolbar align="end">
 						<checkbox name="chkScrollLock" label="Scroll Lock" />
 						<separator orient="vertical" width="20px" />
 						<button name="btnClear" label="Clear" 
-							zclass="btn" sclass="btn-xs btn-danger" />
+							zclass="btn" class="btn-xs btn-danger" />
 						<separator orient="vertical" width="15px" />
 					</toolbar>
 					<panelchildren>
@@ -89,4 +89,4 @@
 			</south>
 		</borderlayout>
 	</window>
-</zk>
+</page>

@@ -1,4 +1,4 @@
-<zk xmlns="http://www.zkoss.org/2005/zul"
+<page xmlns="http://www.zkoss.org/2005/zul"
 	xmlns:h="http://www.w3.org/1999/xhtml"
 	xmlns:w="http://www.zkoss.org/2005/zk/client"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -7,22 +7,22 @@
 	<window name="outer" width="100%" height="100%" mold="bootstrap">
 		<caption name="caption" hflex="1">
 			<div zclass="cwf-step-taskbar" hflex="1">
-				<hlayout name="tbarLeft" sclass="cwf-step-taskbar-left"
+				<hlayout name="tbarLeft" class="cwf-step-taskbar-left"
 					hflex="min">
 					<label zclass="cwf-step-title" name="lblTitle" />
 					<toolbarbutton name="btnHome" style="margin-bottom:2px"
-						image="~./org/carewebframework/shell/images/home.png" />
+						image="web/org/carewebframework/shell/images/home.png" />
 					<toolbarbutton name="btnLeft"
-						image="~./org/carewebframework/shell/images/16x16/arrowL.png" />
+						image="web/org/carewebframework/shell/images/16x16/arrowL.png" />
 					<toolbarbutton name="btnRight"
-						image="~./org/carewebframework/shell/images/16x16/arrowR.png" />
+						image="web/org/carewebframework/shell/images/16x16/arrowR.png" />
 				</hlayout>
 				<div name="tbarCenter"
 					zclass="cwf-step-taskbar-center container-fluid" hflex="1" />
-				<hlayout name="tbarRight" sclass="cwf-step-taskbar-right"
+				<hlayout name="tbarRight" class="cwf-step-taskbar-right"
 					hflex="min" />
 			</div>
 		</caption>
 		<div name="inner" zclass="panel-body" height="100%" />
 	</window>
-</zk>
+</page>

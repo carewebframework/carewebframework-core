@@ -1,5 +1,5 @@
-<zk>
-	<tree name="tree" vflex="true" hflex="1" sclass="cwf-help-toc-tree">
+<page>
+	<tree name="tree" vflex="true" hflex="1" class="cwf-help-toc-tree">
 		<treechildren />
 	</tree>
 	
@@ -16,4 +16,4 @@
 			text-decoration: underline;
 		}
 	</style>
-</zk>
+</page>

@@ -46,10 +46,9 @@ import org.carewebframework.common.StrUtil;
 import org.carewebframework.shell.layout.LayoutIdentifier;
 import org.carewebframework.shell.layout.LayoutUtil;
 import org.carewebframework.shell.layout.UILayout;
+import org.carewebframework.ui.core.CWFUtil;
 import org.carewebframework.ui.dialog.DialogUtil;
-import org.carewebframework.ui.dialog.DialogUtil.IConfirmCallback;
 import org.carewebframework.ui.dialog.PopupDialog;
-import org.carewebframework.ui.zk.ListUtil;
 import org.carewebframework.web.ancillary.IAutoWired;
 import org.carewebframework.web.annotation.EventHandler;
 import org.carewebframework.web.annotation.WiredComponent;
@@ -245,7 +244,7 @@ public class LayoutManager implements IAutoWired {
      */
     private void refresh(String deflt) {
         modelAndView.setModel(new ListModel<>(LayoutUtil.getLayouts(shared)));
-        lstLayouts.setSelectedIndex(deflt == null ? -1 : ListUtil.findListboxItem(lstLayouts, deflt));
+        lstLayouts.setSelectedItem(deflt == null ? null : (Listitem) CWFUtil.findChildByLabel(lstLayouts, deflt));
         updateControls();
     }
     
@@ -312,14 +311,10 @@ public class LayoutManager implements IAutoWired {
      */
     @EventHandler(value = "click", target = "@btnDelete")
     public void onClick$btnDelete() {
-        DialogUtil.confirm(MSG_LAYOUT_DELETE, new IConfirmCallback() {
-            
-            @Override
-            public void onComplete(boolean confirm) {
-                if (confirm) {
-                    LayoutUtil.deleteLayout(getSelectedLayout());
-                    refresh(null);
-                }
+        DialogUtil.confirm(MSG_LAYOUT_DELETE, (confirm) -> {
+            if (confirm) {
+                LayoutUtil.deleteLayout(getSelectedLayout());
+                refresh(null);
             }
         });
     }

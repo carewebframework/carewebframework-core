@@ -1,6 +1,6 @@
-<?init class="org.carewebframework.ui.zk.Composition" arg0="~./org/carewebframework/ui/sharedforms/captionedForm.zul"?>
+<?init class="org.carewebframework.ui.zk.Composition" arg0="web/org/carewebframework/ui/sharedforms/captionedForm.zul"?>
 
-<zk xmlns="http://www.zkoss.org/2005/zul"
+<page xmlns="http://www.zkoss.org/2005/zul"
 	xmlns:h="http://www.w3.org/1999/xhtml"
 	xmlns:w="http://www.zkoss.org/2005/zk/client"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -17,10 +17,10 @@
 			</listbox>
 		</splitterpane>
 		<splitterpane self="@insert(sharedFormsListView)"
-			id="detailPane" visible="false" />
+			name="detailPane" visible="false" />
 	</splitterview>
 
 	<menuitem self="@define(sharedFormsMenu)" name="mnuRefresh"
 		label="${@msg.cwf.btn.refresh.label}" />
 
-</zk>
+</page>

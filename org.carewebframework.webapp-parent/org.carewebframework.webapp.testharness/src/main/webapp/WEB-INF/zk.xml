@@ -87,7 +87,7 @@ Copyright (C) 2006 Potix Corporation. All Rights Reserved.
 	<!-- Configure the error page -->
 	<error-page>
 		<exception-type>java.lang.Throwable</exception-type>
-		<location>~./org/carewebframework/ui/zk/errorUpdating.zul</location>
+		<location>web/org/carewebframework/ui/zk/errorUpdating.zul</location>
 	</error-page>
 	
 

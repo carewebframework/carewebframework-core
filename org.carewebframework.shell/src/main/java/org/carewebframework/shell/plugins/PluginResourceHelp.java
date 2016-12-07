@@ -102,7 +102,7 @@ public class PluginResourceHelp implements IPluginResource {
         if (action == null) {
             HelpModule module = HelpModule.getModule(id);
             action = module == null ? ""
-                    : "zscript:" + HelpUtil.class.getName() + ".show(\"" + id + "\",\"" + (topic == null ? "" : topic)
+                    : "groovy:" + HelpUtil.class.getName() + ".show(\"" + id + "\",\"" + (topic == null ? "" : topic)
                             + "\",\"" + module.getTitle() + "\");";
         }
         

@@ -100,7 +100,6 @@
 		<module>org.carewebframework.security.spring-parent</module>
 		<module>org.carewebframework.messaging-parent</module>
 		<module>org.carewebframework.hibernate-parent</module>
-		<module>org.carewebframework.ext-parent</module>
 		<module>org.carewebframework.plugin-parent</module>
 		<module>org.carewebframework.testharness</module>
 		<module>org.carewebframework.webapp-parent</module>

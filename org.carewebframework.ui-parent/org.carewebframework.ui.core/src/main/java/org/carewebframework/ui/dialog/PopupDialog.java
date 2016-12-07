@@ -92,7 +92,7 @@ public class PopupDialog extends Window {
             }
             
             if (parent != null) {
-                parent.detach();
+                parent.destroy();
             }
             
             DialogUtil.showError(e);

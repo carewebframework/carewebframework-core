@@ -1,4 +1,4 @@
-<zk xmlns="http://www.zkoss.org/2005/zul"
+<page xmlns="http://www.zkoss.org/2005/zul"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd ">
 
@@ -9,7 +9,7 @@
 			<image name="imgDomain" style="padding:5px;float:left"
 				align="right" src="${@msg.login.form.title.image}" />
 			<vbox height="100%" pack="middle"
-				sclass="cwf-login-domain">
+				class="cwf-login-domain">
 				<label name="lblDomain"
 					value="${@msg.login.form.domain.name.label}"
 					style="font-size:1.2em;font-weight:bold;display:block" />
@@ -18,9 +18,9 @@
 			</vbox>
 		</div>
 		<vbox width="100%" align="center" spacing="10px"
-			style="border-top:solid 2px" sclass="bg-success">
+			style="border-top:solid 2px" class="bg-success">
 			<vlayout name="loginPrompts" hflex="1"
-				sclass="cwf-login-banner" style="margin: 30px 80px 0 80px">
+				class="cwf-login-banner" style="margin: 30px 80px 0 80px">
 				<hlayout name="cmpDomainList" visible="false" valign="middle">
 					<div hflex="1" align="right">
 						${@msg.login.form.domain.label}
@@ -45,13 +45,13 @@
 						type="password" hflex="2" />
 					<div hflex="1">
 						<button name="btnLogin" zclass="btn"
-							sclass="btn-success btn-sm"
+							class="btn-success btn-sm"
 							label="${@msg.login.form.button.login.label}" />
 					</div>
 				</hlayout>
 				<div name="divDomain" hflex="1">
 					<button name="btnDomain" zclass="btn"
-						sclass="btn-link btn-sm"
+						class="btn-link btn-sm"
 						label="${@msg.login.form.domain.alternate.label}" />
 				</div>
 			</vlayout>
@@ -65,7 +65,7 @@
 				style="margin: 20px" />
 			<html name="htmlHeader" visible="false" style="margin: 20px" />
 			<separator height="20px" bar="true" />
-			<div name="divInfo" sclass="cwf-login-banner">
+			<div name="divInfo" class="cwf-login-banner">
 				<label name="lblInfoTitle"
 					style="font-weight:bold;font-size:1.1em;display:block"
 					value="${@msg.login.form.info.title.label}" />
@@ -76,7 +76,7 @@
 					visible="false" />
 			</div>
 			<label label="${@msg.login.form.footer.label}" />
-			<hlayout sclass="panel-footer" hflex="1" valign="middle"
+			<hlayout class="panel-footer" hflex="1" valign="middle"
 				style="text-align: left; padding-left: 20px">
 				<label label="${@msg.login.form.copyright.prefix}"
 					style="font-style:italic" />
@@ -106,4 +106,4 @@
 		}
 	</style>
 	
-</zk>
+</page>

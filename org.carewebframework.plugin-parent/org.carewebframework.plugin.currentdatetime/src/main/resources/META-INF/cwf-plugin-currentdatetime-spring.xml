@@ -11,7 +11,7 @@
 	<beans profile="root">
 		
 		<cwp:plugin id="cwfCurrentDateTime" name="Current Date and Time" 
-			url="~./org/carewebframework/plugin/currentdatetime/main.zul">
+			url="web/org/carewebframework/plugin/currentdatetime/main.zul">
 			<cwp:serialization>
 				<cwp:property id="color" name="Color" type="color" default="blue"
 					description="The font color." />

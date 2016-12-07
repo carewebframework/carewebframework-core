@@ -3,9 +3,9 @@
 <plugin id='plugin-test' name='Test1' url='http://docs.zkoss.org/wiki'>
 	<resource>
 		<button-resource id="btnTest" caption='Test Button'
-			action='zscript:System.out.println(\"hello\");' />
+			action='groovy:System.out.println(\"hello\");' />
 		<button-resource id="btnTest2" caption='Test Button2'
-			action='http://www.zkoss.org' />
+			action='http://www.carewebframework.org' />
 		<help-resource module='testHelpModule' />
 		<property-resource group='testPropertyGroup' />
 	</resource>

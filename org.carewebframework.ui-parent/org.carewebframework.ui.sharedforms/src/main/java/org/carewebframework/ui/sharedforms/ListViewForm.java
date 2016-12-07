@@ -33,14 +33,18 @@ import org.apache.commons.lang.math.NumberUtils;
 import org.carewebframework.common.NumUtil;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.ui.command.CommandUtil;
-import org.carewebframework.ui.zk.ZKUtil;
+import org.carewebframework.ui.core.CWFUtil;
 import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.component.BaseUIComponent;
 import org.carewebframework.web.component.Cell;
-import org.carewebframework.web.component.Listbox;
-import org.carewebframework.web.component.Listitem;
+import org.carewebframework.web.component.Column;
+import org.carewebframework.web.component.Columns;
 import org.carewebframework.web.component.Pane;
 import org.carewebframework.web.component.Paneview;
 import org.carewebframework.web.component.Paneview.Orientation;
+import org.carewebframework.web.component.Row;
+import org.carewebframework.web.component.Rowcell;
+import org.carewebframework.web.component.Table;
 import org.carewebframework.web.event.ClickEvent;
 import org.carewebframework.web.event.Event;
 import org.carewebframework.web.event.IEventListener;
@@ -66,15 +70,15 @@ public abstract class ListViewForm<DAO> extends CaptionedForm {
     
     private Paneview mainView;
     
-    private Listbox listbox;
+    private Table table;
     
-    private Listhead listhead;
+    private Columns columns;
     
     private Pane detailPane;
     
     private Pane listPane;
     
-    private Auxheader status;
+    private Cell status;
     
     private boolean allowPrint;
     
@@ -94,15 +98,16 @@ public abstract class ListViewForm<DAO> extends CaptionedForm {
     
     protected final ListModel<DAO> model = new ListModel<>();
     
-    protected ModelAndView<Listitem, DAO> modelAndView;
+    protected ModelAndView<Row, DAO> modelAndView;
     
-    private final IComponentRenderer<Listitem, DAO> renderer = new IComponentRenderer<Listitem, DAO>() {
+    private final IComponentRenderer<Row, DAO> renderer = new IComponentRenderer<Row, DAO>() {
         
         @Override
-        public Listitem render(DAO object) {
-            Listitem item = new Listitem();
-            item.addEventForward(ClickEvent.TYPE, listbox, SelectEvent.TYPE);
+        public Row render(DAO object) {
+            Row item = new Row();
+            item.addEventForward(ClickEvent.TYPE, table, SelectEvent.TYPE);
             ListViewForm.this.renderItem(item, object);
+            return item;
         }
         
     };
@@ -130,10 +135,10 @@ public abstract class ListViewForm<DAO> extends CaptionedForm {
     @Override
     protected void init() {
         super.init();
-        modelAndView = new ModelAndView<Listitem, DAO>(listbox, model, renderer);
+        modelAndView = new ModelAndView<Row, DAO>(table, model, renderer);
         root = detailPane;
         setSize(50);
-        CommandUtil.associateCommand("REFRESH", listbox);
+        CommandUtil.associateCommand("REFRESH", table);
         getContainer().registerProperties(this, "allowPrint", "alternateColor", "deferUpdate", "showDetailPane", "layout",
             "horizontal");
     }
@@ -153,15 +158,15 @@ public abstract class ListViewForm<DAO> extends CaptionedForm {
         
         for (String header : headers) {
             String[] pcs = StrUtil.split(header, StrUtil.U, 3);
-            Listheader lhdr = new Listheader(pcs[0]);
-            listhead.appendChild(lhdr);
+            Column lhdr = new Column(pcs[0]);
+            columns.addChild(lhdr);
             lhdr.setAttribute(SORT_TYPE_ATTR, NumberUtils.toInt(pcs[1]));
             lhdr.setAttribute(COL_INDEX_ATTR, colCount++);
             String width = pcs[2];
             
             if (!width.isEmpty()) {
                 if (NumberUtils.isDigits(width) || "min".equals(width)) {
-                    lhdr.setHflex(width);
+                    //lhdr.setHflex(width);
                 } else {
                     lhdr.setWidth(width);
                 }
@@ -200,10 +205,10 @@ public abstract class ListViewForm<DAO> extends CaptionedForm {
     public void setShowDetailPane(boolean value) {
         if (getShowDetailPane() != value) {
             if (value) {
-                listPane.setRelativeSize(getSize());
+                //listPane.setRelativeSize(getSize());
             } else {
-                setSize(listPane.getRelativeSize());
-                listPane.setRelativeSize(100);
+                //setSize(listPane.getRelativeSize());
+                //listPane.setRelativeSize(100);
             }
             
             detailPane.setVisible(value);
@@ -239,8 +244,8 @@ public abstract class ListViewForm<DAO> extends CaptionedForm {
         StringBuilder sb = new StringBuilder();
         sb.append(NumUtil.toString(getSize())).append(':').append(sortColumn).append(':').append(sortAscending);
         
-        for (BaseComponent comp : listhead.getChildren()) {
-            Listheader lhdr = (Listheader) comp;
+        for (BaseComponent comp : columns.getChildren()) {
+            Column lhdr = (Column) comp;
             sb.append(';').append(lhdr.getAttribute(COL_INDEX_ATTR)).append(':').append(lhdr.getWidth());
         }
         return sb.toString();
@@ -264,11 +269,11 @@ public abstract class ListViewForm<DAO> extends CaptionedForm {
         
         for (int i = 1; i < pcs.length; i++) {
             String[] col = StrUtil.split(pcs[i], ":", 2);
-            Listheader lhdr = getColumnByIndex(NumberUtils.toInt(col[0]));
+            Column lhdr = getColumnByIndex(NumberUtils.toInt(col[0]));
             
             if (lhdr != null) {
                 lhdr.setWidth(col[1]);
-                ZKUtil.moveChild(lhdr, i - 1);
+                lhdr.setIndex(i - 1);
             }
         }
         
@@ -284,7 +289,7 @@ public abstract class ListViewForm<DAO> extends CaptionedForm {
     }
     
     private void doSort() {
-        getColumnByIndex(sortColumn).sort(sortAscending);
+        getColumnByIndex(sortColumn).sort();
     }
     
     /**
@@ -293,10 +298,10 @@ public abstract class ListViewForm<DAO> extends CaptionedForm {
      * @param index Column index.
      * @return List header at index.
      */
-    private Listheader getColumnByIndex(int index) {
-        for (BaseComponent comp : listhead.getChildren()) {
+    private Column getColumnByIndex(int index) {
+        for (BaseComponent comp : columns.getChildren()) {
             if (((Integer) comp.getAttribute(COL_INDEX_ATTR)).intValue() == index) {
-                return (Listheader) comp;
+                return (Column) comp;
             }
         }
         
@@ -312,16 +317,16 @@ public abstract class ListViewForm<DAO> extends CaptionedForm {
         status(null);
     }
     
-    protected Listitem getSelectedItem() {
-        return listbox.getSelectedItem();
+    protected Row getSelectedItem() {
+        return table.getRows().getSelected().get(0);
     }
     
     @SuppressWarnings("unchecked")
     protected DAO getSelectedValue() {
-        Listitem item = getSelectedItem();
+        Row item = getSelectedItem();
         
         if (item != null) {
-            return (DAO) item.getValue();
+            return (DAO) item.getData();
         }
         
         return null;
@@ -357,7 +362,7 @@ public abstract class ListViewForm<DAO> extends CaptionedForm {
      * @param item List item being rendered.
      * @param dao DAO object
      */
-    protected void renderItem(Listitem item, DAO dao) {
+    protected void renderItem(Row item, DAO dao) {
         List<Object> columns = new ArrayList<>();
         boolean error = false;
         
@@ -365,18 +370,18 @@ public abstract class ListViewForm<DAO> extends CaptionedForm {
             render(dao, columns);
         } catch (Exception e) {
             columns.clear();
-            columns.add(ZKUtil.formatExceptionForDisplay(e));
+            columns.add(CWFUtil.formatExceptionForDisplay(e));
             error = true;
         }
         
         item.setVisible(!columns.isEmpty());
         
         for (Object colData : columns) {
-            Cell cell = renderer.createCell(item, transformData(colData));
+            Rowcell cell = null;//TODO: renderer.createCell(item, transformData(colData));
             cell.setData(colData);
             
             if (error) {
-                cell.setSpan(colCount);
+                cell.setColspan(colCount);
             }
         }
     }
@@ -429,11 +434,11 @@ public abstract class ListViewForm<DAO> extends CaptionedForm {
         if (message != null) {
             status.setLabel(StrUtil.piece(message, StrUtil.U));
             status.setHint(StrUtil.piece(message, StrUtil.U, 2, 999));
-            status.getParent().setVisible(true);
-            listhead.setVisible(false);
+            ((BaseUIComponent) status.getParent()).setVisible(true);
+            columns.setVisible(false);
         } else {
-            status.getParent().setVisible(false);
-            listhead.setVisible(true);
+            ((BaseUIComponent) status.getParent()).setVisible(false);
+            columns.setVisible(true);
         }
     }
     
@@ -441,11 +446,11 @@ public abstract class ListViewForm<DAO> extends CaptionedForm {
         refresh();
     }
     
-    public void onCommand$listbox() {
+    public void onCommand$table() {
         refresh();
     }
     
-    public void onSelect$listbox(Event event) {
+    public void onSelect$table(Event event) {
         if (getShowDetailPane() == (event instanceof SelectEvent)) {
             itemSelected(getSelectedItem());
         }
@@ -456,7 +461,7 @@ public abstract class ListViewForm<DAO> extends CaptionedForm {
      * 
      * @param li Selected list item.
      */
-    protected void itemSelected(Listitem li) {
+    protected void itemSelected(Row li) {
         
     }
     

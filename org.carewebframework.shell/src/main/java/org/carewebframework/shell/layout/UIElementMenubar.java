@@ -27,7 +27,7 @@ package org.carewebframework.shell.layout;
 
 import org.carewebframework.shell.designer.PropertyEditorMenubar;
 import org.carewebframework.shell.property.PropertyTypeRegistry;
-import org.carewebframework.web.component.Menu;
+import org.carewebframework.web.component.Span;
 
 /**
  * Implements a shared menubar.
@@ -47,10 +47,10 @@ public class UIElementMenubar extends UIElementMenuBase {
      * just-in-time sorting of dynamically added items.
      */
     public UIElementMenubar() {
-        this(new Menu());
+        this(new Span());
     }
     
-    public UIElementMenubar(Menu menubar) {
+    public UIElementMenubar(Span menubar) {
         super(menubar);
     }
     

@@ -68,6 +68,7 @@ import org.carewebframework.web.component.Div;
 import org.carewebframework.web.component.Menu;
 import org.carewebframework.web.component.MessagePane;
 import org.carewebframework.web.component.MessageWindow;
+import org.carewebframework.web.component.Page;
 import org.carewebframework.web.component.Span;
 import org.carewebframework.web.component.Stylesheet;
 import org.carewebframework.web.event.IEventListener;
@@ -167,11 +168,13 @@ public class CareWebShell extends Div {
     public CareWebShell() {
         super();
         CareWebUtil.setShell(this);
-        
+    }
+    
+    @Override
+    protected void onAttach(Page page) {
         try {
             CommandUtil.associateCommand("help", this);
             addChild(registeredStyles);
-            addChild(messageWindow = new MessageWindow());
             desktop = new UIElementDesktop(this);
             appFramework.registerObject(userContextListener);
             String confirmClose = getAppProperty("confirmClose", "CAREWEB.CONFIRM.CLOSE");

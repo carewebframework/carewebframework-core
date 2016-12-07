@@ -1,6 +1,6 @@
-<zk>
+<page>
 	<window closable="true" maximizable="true" sizable="true"
-		border="normal" sclass="panel-info cwf-popup" mold="bootstrap"
+		border="normal" class="panel-info cwf-popup" mold="bootstrap"
 		left="50%" top="50%" title="Popup Message"
 		contentSclass="bg-warning text-center" mode="highlighted"
 		style="position:absolute">
@@ -21,4 +21,4 @@
 			zoom: 80%;
 		}	
 	</style>
-</zk>
+</page>

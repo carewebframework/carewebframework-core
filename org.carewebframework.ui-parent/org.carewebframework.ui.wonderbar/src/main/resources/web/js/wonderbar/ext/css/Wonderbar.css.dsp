@@ -41,11 +41,11 @@
 }
 
 .cwf-wonderbar-arrow-down {
-	background-image: url(${c:encodeThemeURL('~./org/carewebframework/ui/wonderbar/arrow-down.png')});
+	background-image: url(${c:encodeThemeURL('web/org/carewebframework/ui/wonderbar/arrow-down.png')});
 }
 
 .cwf-wonderbar-arrow-up {
-	background-image: url(${c:encodeThemeURL('~./org/carewebframework/ui/wonderbar/arrow-up.png')});
+	background-image: url(${c:encodeThemeURL('web/org/carewebframework/ui/wonderbar/arrow-up.png')});
 }
 
 .cwf-wonderbar-arrow {

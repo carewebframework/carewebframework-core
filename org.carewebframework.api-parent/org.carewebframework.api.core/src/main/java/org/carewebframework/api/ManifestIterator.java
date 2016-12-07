@@ -112,6 +112,10 @@ public class ManifestIterator implements Iterable<Manifest> {
                 for (Resource resource : resources) {
                     addToList(resource);
                 }
+                
+                if (primaryManifest == null) {
+                    primaryManifest = manifests.get(0);
+                }
             } catch (Exception e) {
                 log.error("Error enumerating manifests.", e);
             }

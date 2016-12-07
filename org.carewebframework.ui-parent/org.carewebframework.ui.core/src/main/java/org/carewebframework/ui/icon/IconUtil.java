@@ -67,14 +67,14 @@ public class IconUtil {
      * </p>
      * <p>
      * For example: getIconPath("help.png") returns
-     * ~./org/carewebframework/ui/icons/silk/16x16/help.png
+     * web/org/carewebframework/ui/icons/silk/16x16/help.png
      * </p>
      * <p>
      * <i>Note: This method signature is exposed as an EL function</i>
      * </p>
      * 
      * @param iconName Name of the icon in question
-     * @return Path to icon resource (i.e. ~./org/carewebframework/ui/icons/silk/16x16/help.png)
+     * @return Path to icon resource (i.e. web/org/carewebframework/ui/icons/silk/16x16/help.png)
      */
     public static String getIconPath(String iconName) {
         return getIconPath(iconName, null, null);

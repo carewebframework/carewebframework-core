@@ -25,7 +25,10 @@
  */
 package org.carewebframework.shell;
 
+import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 
@@ -36,11 +39,19 @@ import org.carewebframework.shell.plugins.PluginDefinition;
 import org.carewebframework.ui.FrameworkController;
 import org.carewebframework.ui.core.CWFUtil;
 import org.carewebframework.ui.dialog.DialogUtil;
-import org.carewebframework.ui.dialog.PopupDialog;
 import org.carewebframework.ui.manifest.ManifestViewer;
 import org.carewebframework.web.annotation.EventHandler;
+import org.carewebframework.web.annotation.WiredComponent;
 import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.component.BaseUIComponent;
+import org.carewebframework.web.component.Button;
+import org.carewebframework.web.component.Cell;
+import org.carewebframework.web.component.Image;
+import org.carewebframework.web.component.Label;
+import org.carewebframework.web.component.Row;
+import org.carewebframework.web.component.Rowcell;
+import org.carewebframework.web.component.Rows;
+import org.carewebframework.web.component.Window;
+import org.carewebframework.web.page.PageUtil;
 
 /**
  * Displays an "about" dialog for a given UI element.
@@ -51,7 +62,7 @@ public class AboutDialog extends FrameworkController {
      * Internal class for passing about attributes to about dialog.
      */
     @SuppressWarnings("serial")
-    private static class AboutParams extends LinkedHashMap<String, Object> {
+    private static class AboutParams extends LinkedHashMap<String, String> {
         
         private String icon;
         
@@ -192,7 +203,9 @@ public class AboutDialog extends FrameworkController {
      */
     private static void showDialog(AboutParams params) {
         try {
-            PopupDialog.show(Constants.RESOURCE_PREFIX + "aboutDialog.cwf", params, true, false, true, null);
+            Map<String, Object> args = Collections.singletonMap("params", params);
+            Window dlg = (Window) PageUtil.createPage(Constants.RESOURCE_PREFIX + "aboutDialog.cwf", null, args).get(0);
+            dlg.modal(null);
         } catch (Exception e) {
             DialogUtil.showError(CWFUtil.formatExceptionForDisplay(e));
         }
@@ -200,19 +213,52 @@ public class AboutDialog extends FrameworkController {
     
     private AboutParams aboutParams;
     
-    private String source;
+    private Window window;
     
-    private String icon;
+    private String defaultIcon;
     
-    private BaseComponent cellDescription;
+    private String defaultSource;
+    
+    @WiredComponent
+    private Image imgIcon;
+    
+    @WiredComponent
+    private Label lblSource;
+    
+    @WiredComponent
+    private Rows rows;
+    
+    @WiredComponent
+    private Button btnCustom;
     
     @Override
     public void afterInitialized(BaseComponent comp) {
         super.afterInitialized(comp);
+        window = (Window) comp;
+        aboutParams = comp.getAttribute("params", AboutParams.class);
+        setIcon(aboutParams.icon == null ? defaultIcon : aboutParams.icon);
+        setSource(aboutParams.source == null ? defaultSource : aboutParams.source);
+        btnCustom.setLabel(aboutParams.custom);
+        btnCustom.setVisible(btnCustom.getLabel() != null);
+        
+        if (!StringUtils.isEmpty(aboutParams.title)) {
+            window.setTitle(window.getTitle() + " - " + aboutParams.title);
+        }
+        
+        for (Entry<String, String> entry : aboutParams.entrySet()) {
+            Row row = new Row();
+            row.addChild(new Cell(entry.getKey()));
+            row.addChild(new Cell(entry.getValue()));
+            rows.addChild(row);
+        }
         
         if (!StringUtils.isEmpty(aboutParams.description)) {
-            cellDescription.addChild(CWFUtil.getTextComponent(aboutParams.description));
-            ((BaseUIComponent) cellDescription.getParent()).setVisible(true);
+            Row row = new Row();
+            Rowcell cell = new Rowcell();
+            cell.setColspan(2);
+            row.addChild(cell);
+            cell.addChild(CWFUtil.getTextComponent(aboutParams.description));
+            rows.addChild(row);
         }
     }
     
@@ -220,17 +266,13 @@ public class AboutDialog extends FrameworkController {
      * Display the manifest viewer when detail button is clicked.
      */
     @EventHandler(value = "click", target = "btnCustom")
-    public void onClick$btnCustom() {
+    private void onClick$btnCustom() {
         ManifestViewer.execute();
     }
     
-    /**
-     * Returns the url of the icon to display in the header.
-     * 
-     * @return Icon url.
-     */
-    public String getIcon() {
-        return aboutParams.icon == null ? icon : aboutParams.icon;
+    @EventHandler(value = "click", target = "btnClose")
+    private void onClick$btnClose() {
+        window.close();
     }
     
     /**
@@ -239,16 +281,7 @@ public class AboutDialog extends FrameworkController {
      * @param icon Icon url.
      */
     public void setIcon(String icon) {
-        this.icon = icon;
-    }
-    
-    /**
-     * Returns the item source to display in the header.
-     * 
-     * @return Item source.
-     */
-    public String getSource() {
-        return aboutParams.source == null ? source : aboutParams.source;
+        defaultIcon = icon;
     }
     
     /**
@@ -257,24 +290,7 @@ public class AboutDialog extends FrameworkController {
      * @param source Item source.
      */
     public void setSource(String source) {
-        this.source = source;
+        defaultSource = source;
     }
     
-    /**
-     * Returns the label for the custom button.
-     * 
-     * @return The label for the custom button. If null, the custom button remains hidden.
-     */
-    public String getCustom() {
-        return aboutParams.custom;
-    }
-    
-    /**
-     * Returns the subtitle text.
-     * 
-     * @return Subtitle text.
-     */
-    public String getTitle() {
-        return aboutParams.title;
-    }
 }

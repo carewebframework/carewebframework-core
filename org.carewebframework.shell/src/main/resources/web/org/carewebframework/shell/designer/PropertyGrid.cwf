@@ -1,4 +1,4 @@
-<zk xmlns="http://www.zkoss.org/2005/zul"
+<page xmlns="http://www.zkoss.org/2005/zul"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:h="http://www.w3.org/1999/xhtml"
 	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd ">
@@ -8,7 +8,7 @@
 		<splitterview horizontal="false" vflex="1">
 			<splitterpane relativeSize="75">
 				<grid name="gridProperties" width="100%" vflex="true"
-					sclass="cwf-propertygrid-grid">
+					class="cwf-propertygrid-grid">
 					<columns sizable="true">
 						<column name="colProperty"
 							label="${@msg.cwf.shell.designer.property.grid.column.name}"
@@ -20,7 +20,7 @@
 					<rows></rows>
 				</grid>
 			</splitterpane>
-			<splitterpane sclass="cwf-propertygrid-info">
+			<splitterpane class="cwf-propertygrid-info">
 				<groupbox closable="false" hflex="1" vflex="1">
 					<caption name="capPropertyName"
 						label="${@msg.cwf.shell.designer.property.grid.gbox.caption}" />
@@ -33,19 +33,19 @@
 		<div zclass="panel-footer">
 			<div zclass="btn-toolbar" name="toolbar" align="end">
 				<button name="btnApply" zclass="btn"
-					sclass="btn-default btn-sm"
+					class="btn-default btn-sm"
 					label="${@msg.cwf.shell.designer.property.grid.btn.apply.label}" />
 				<button name="btnRestore" zclass="btn"
-					sclass="btn-default btn-sm"
+					class="btn-default btn-sm"
 					label="${@msg.cwf.shell.designer.property.grid.btn.restore.label}" />
 				<space />
 				<button name="btnOK" zclass="btn"
-					sclass="btn-success btn-sm"
+					class="btn-success btn-sm"
 					label="${@msg.cwf.shell.designer.property.grid.btn.ok.label}" />
 				<button name="btnCancel" zclass="btn"
-					sclass="btn-danger btn-sm"
+					class="btn-danger btn-sm"
 					label="${@msg.cwf.shell.designer.property.grid.btn.cancel.label}" />
 			</div>
 		</div>
 	</window>
-</zk>
+</page>

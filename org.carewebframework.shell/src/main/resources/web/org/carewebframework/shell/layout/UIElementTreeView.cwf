@@ -1,4 +1,4 @@
-<zk xmlns:w="http://www.zkoss.org/2005/zk/client">
+<page xmlns:w="http://www.zkoss.org/2005/zk/client">
 	
 	<idspace width="100%" height="100%">
 		<borderlayout>
@@ -13,4 +13,4 @@
 		</borderlayout>
 	</idspace>
 	
-</zk>
+</page>

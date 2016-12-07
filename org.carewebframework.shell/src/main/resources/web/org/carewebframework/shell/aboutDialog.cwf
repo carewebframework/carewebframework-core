@@ -1,38 +1,22 @@
-<zk>
-	<window title="${@msg.cwf.shell.about.title}"
-		width="500px" mold="bootstrap"
-		controller="${aboutDialogController}">
-		<caption label="${$composer.title}" />
-		<grid style="border:none">
-			<columns>
-				<column width="50%" style="text-align:center">
-					<image src="${$composer.icon}" />
-				</column>
-				<column width="50%" style="text-align:center">
-					<label label="${$composer.source}"
-						sclass="cwf-about-header" />
-				</column>
-			</columns>
-			<rows>
-				<row forEach="${arg}">
-					<label label="${each.key}" />
-					<label label="${each.value}" />
-				</row>
-				<row visible="false">
-					<cell name="cellDescription" colspan="2"
-						sclass="cwf-about-description" />
-				</row>
-			</rows>
-		</grid>
-		<div zclass="panel-footer">
-			<div zclass="btn-toolbar">
-				<button zclass="btn" sclass="btn-default btn-sm" style="float:left"
-					id="btnCustom" label="${$composer.custom}" 
-					visible="${$composer.custom!=null}" />
-				<button zclass="btn" sclass="btn-danger btn-sm" style="float:right"
-					label="${@msg.cwf.shell.about.btn.close.label}" width="80px"
-					forward="onClick=onClose" focus="true" />
-			</div>
-		</div>
-	</window>
-</zk>
+<window title="${@msg.cwf.shell.about.title}" width="500px" closable="true"
+	controller="${@aboutDialogController}">
+	<table style="border:none">
+		<columns>
+			<column width="50%" style="text-align:center">
+				<image name="imgIcon" />
+			</column>
+			<column width="50%" style="text-align:center">
+				<label name="lblSource" class="cwf-about-header" />
+			</column>
+		</columns>
+		<rows name="rows" />
+	</table>
+	<toolbar width="100%" align="center">
+		<button class="flavor:btn-default size:btn-sm"
+			name="btnCustom" visible="false" />
+		<button class="flavor:btn-danger size:btn-sm"
+			name="btnClose"
+			label="${@msg.cwf.shell.about.btn.close.label}" width="80px"
+			focus="true" />
+	</toolbar>
+</window>

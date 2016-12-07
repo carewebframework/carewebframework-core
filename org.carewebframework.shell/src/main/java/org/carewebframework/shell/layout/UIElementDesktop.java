@@ -36,16 +36,16 @@ import org.carewebframework.shell.plugins.PluginResourceHelp;
 import org.carewebframework.theme.ThemeUtil;
 import org.carewebframework.ui.action.ActionUtil;
 import org.carewebframework.ui.zk.MenuUtil;
-import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.annotation.EventHandler;
+import org.carewebframework.web.annotation.WiredComponent;
 import org.carewebframework.web.component.BaseUIComponent;
+import org.carewebframework.web.component.Cell;
 import org.carewebframework.web.component.Image;
-import org.carewebframework.web.component.Label;
 import org.carewebframework.web.component.Menu;
 import org.carewebframework.web.component.Menuitem;
-import org.carewebframework.web.component.Menupopup;
+import org.carewebframework.web.component.Menuseparator;
+import org.carewebframework.web.component.Span;
 import org.carewebframework.web.component.Toolbar;
-import org.carewebframework.web.event.Event;
-import org.carewebframework.web.event.IEventListener;
 
 /**
  * This is the topmost component of the layout.
@@ -58,35 +58,42 @@ public class UIElementDesktop extends UIElementCWFBase {
     
     private final BaseUIComponent desktopOuter;
     
-    private BaseUIComponent desktopInner;
-    
     private String appId;
     
     private DesignMenu designMenu;
     
-    private Label title;
+    @WiredComponent
+    private BaseUIComponent desktopInner;
     
-    private BaseUIComponent titleCell;
+    @WiredComponent
+    private Cell title;
     
-    private Menu menubar1;
+    @WiredComponent
+    private Span menubar1;
     
-    private Menu menubar2;
+    @WiredComponent
+    private Span menubar2;
     
+    @WiredComponent
     private Toolbar toolbar1;
     
+    @WiredComponent
     private Image icon;
     
-    private BaseComponent titlebar;
+    @WiredComponent
+    private BaseUIComponent titlebar;
     
+    @WiredComponent
     private Menu helpMenu;
     
-    private Menupopup helpMenuRoot;
+    @WiredComponent
+    private Menuitem mnuTOC;
     
-    private Menu mnuTOC;
+    @WiredComponent
+    private Menuitem mnuAbout;
     
-    private Menu mnuAbout;
-    
-    private Menuitem helpSeparator;
+    @WiredComponent
+    private Menuseparator helpSeparator;
     
     private final int fixedHelpItems;
     
@@ -109,15 +116,15 @@ public class UIElementDesktop extends UIElementCWFBase {
         setInnerComponent(desktopInner);
         menubar = new UIElementMenubar(menubar1);
         toolbar = new UIElementToolbar(toolbar1);
-        ActionUtil.addAction(mnuAbout, "zscript:org.carewebframework.shell.CareWebUtil.about();");
-        ActionUtil.addAction(mnuTOC, "zscript:org.carewebframework.shell.help.HelpUtil.showTOC();");
-        fixedHelpItems = helpMenuRoot.getChildren().size();
+        ActionUtil.addAction(mnuAbout, "groovy:org.carewebframework.shell.CareWebUtil.about();");
+        ActionUtil.addAction(mnuTOC, "groovy:org.carewebframework.shell.help.HelpUtil.showTOC();");
+        fixedHelpItems = helpMenu.getChildCount();
         sortHelpMenu = false;
-        helpMenuRoot.addEventListener("open", (event) -> {
+        helpMenu.addEventListener("open", (event) -> {
             
-                /*TODO:  if (sortHelpMenu && event.isOpen()) {
-                    sortHelpMenu();
-                }*/
+            /*TODO:  if (sortHelpMenu && event.isOpen()) {
+                sortHelpMenu();
+            }*/
         });
         
         if (SecurityUtil.isGrantedAny(DesignConstants.DESIGN_MODE_PRIVS)) {
@@ -147,8 +154,10 @@ public class UIElementDesktop extends UIElementCWFBase {
      */
     public void setTitle(String text) {
         title.setLabel(text);
-        desktopOuter.getPage().setTitle(text);
-        titleCell.addClass("title:cwf-desktop-" + (StringUtils.isEmpty(text) ? "notitle" : "title"));
+        
+        if (desktopInner.getPage() != null) {
+            desktopInner.getPage().setTitle(text);
+        }
     }
     
     /**
@@ -289,7 +298,7 @@ public class UIElementDesktop extends UIElementCWFBase {
      */
     private void sortHelpMenu() {
         sortHelpMenu = false;
-        MenuUtil.sortMenu(helpMenuRoot, fixedHelpItems, helpMenuRoot.getChildren().size() - 1);
+        MenuUtil.sortMenu(helpMenu, fixedHelpItems, helpMenu.getChildCount() - 1);
     }
     
     /**
@@ -324,8 +333,8 @@ public class UIElementDesktop extends UIElementCWFBase {
      * Remove all non-fixed items from help menu.
      */
     protected void clearHelpMenu() {
-        while (helpMenuRoot.getChildren().size() > fixedHelpItems) {
-            helpMenuRoot.getChildren().remove(fixedHelpItems);
+        while (helpMenu.getChildCount() > fixedHelpItems) {
+            helpMenu.getChildren().remove(fixedHelpItems);
         }
         
         mnuTOC.setVisible(false);
@@ -350,4 +359,8 @@ public class UIElementDesktop extends UIElementCWFBase {
         HelpUtil.setViewerMode(desktopOuter.getPage(), mode);
     }
     
+    @EventHandler(value = "attach", target = "@desktopInner")
+    private void onAttach() {
+        desktopInner.getPage().setTitle(title.getLabel());
+    }
 }

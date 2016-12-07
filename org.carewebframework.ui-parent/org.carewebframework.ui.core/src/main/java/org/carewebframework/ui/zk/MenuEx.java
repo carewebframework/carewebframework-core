@@ -26,7 +26,6 @@
 package org.carewebframework.ui.zk;
 
 import org.carewebframework.web.component.Menu;
-import org.carewebframework.web.component.Menupopup;
 import org.carewebframework.web.event.ClickEvent;
 
 /**
@@ -52,17 +51,10 @@ public class MenuEx extends Menu {
      */
     private void adjustVisibility(boolean visible) {
         Menu menu = this;
-        Menupopup menuPopup = null;
         
-        while ((menuPopup = getParentPopup(menu)) != null) {
-            visible |= ZKUtil.firstVisibleChild(menuPopup, false) != null;
-            
-            if (menuPopup.getParent() == null) {
-                break;
-            }
-            
-            menu = (Menu) menuPopup.getParent();
-            visible |= menu.isListenerAvailable(ClickEvent.TYPE, false);
+        while ((menu = getParentMenu(menu)) != null) {
+            visible |= menu.getFirstVisibleChild(false) != null;
+            visible |= menu.hasEventListener(ClickEvent.class);
             boolean oldVisible = menu.isVisible();
             
             if (visible == oldVisible) {
@@ -76,12 +68,12 @@ public class MenuEx extends Menu {
     }
     
     /**
-     * Returns the parent menu popup for this menu, or null if none.
+     * Returns the parent menu for this menu, or null if none.
      * 
-     * @param menu Menu whose parent menu popup is sought.
-     * @return The parent menu popup or null if none.
+     * @param menu Menu whose parent menu is sought.
+     * @return The parent menu or null if none.
      */
-    private Menupopup getParentPopup(Menu menu) {
-        return menu.isTopmost() ? null : (Menupopup) menu.getParent();
+    private Menu getParentMenu(Menu menu) {
+        return menu.getParent() instanceof Menu ? (Menu) menu.getParent() : null;
     }
 }

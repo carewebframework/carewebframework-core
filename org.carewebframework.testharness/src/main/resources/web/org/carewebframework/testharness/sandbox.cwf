@@ -1,5 +1,5 @@
-<zk xmlns:w="client">
-	<borderlayout height="100%" width="100%" sclass="cwf-sandbox"
+<page xmlns:w="client">
+	<borderlayout height="100%" width="100%" class="cwf-sandbox"
 		controller="${cwfSandboxController}">
 		<west size="50%" splittable="true" collapsible="true">
 			<panel mold="bootstrap" vflex="1">
@@ -110,4 +110,4 @@
   			text-decoration: underline;
 		}
 	</style>
-</zk>
+</page>

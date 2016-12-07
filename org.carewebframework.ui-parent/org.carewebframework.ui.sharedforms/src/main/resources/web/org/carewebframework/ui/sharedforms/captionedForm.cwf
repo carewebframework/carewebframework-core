@@ -1,6 +1,6 @@
-<?init class="org.carewebframework.ui.zk.Composition" arg0="~./org/carewebframework/ui/sharedforms/baseForm.zul"?>
+<?init class="org.carewebframework.ui.zk.Composition" arg0="web/org/carewebframework/ui/sharedforms/baseForm.zul"?>
 
-<zk xmlns="http://www.zkoss.org/2005/zul"
+<page xmlns="http://www.zkoss.org/2005/zul"
 	xmlns:h="http://www.w3.org/1999/xhtml"
 	xmlns:w="http://www.zkoss.org/2005/zk/client"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -8,9 +8,9 @@
 
 	<panel self="@define(sharedFormsBase)" name="panel" closable="false"
 		height="100%" width="100%" border="none"
-		sclass="sharedForms-captioned">
+		class="sharedForms-captioned">
 		<panelchildren self="@insert(sharedFormsCaptioned)" style="border:none" />
 		<toolbar self="@insert(sharedFormsToolbar)" name="toolbar"
 			visible="false" />
 	</panel>
-</zk>
+</page>

@@ -1,18 +1,18 @@
-<zk xmlns="http://www.zkoss.org/2005/zul"
+<page xmlns="http://www.zkoss.org/2005/zul"
 	xmlns:h="http://www.w3.org/1999/xhtml"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
 	
 	<window width="500px" height="500px" title="${arg.title}" visible="false"
 		controller="${cwfChatSessionController}" position="center" mold="bootstrap">
-		<style src="~./org/carewebframework/plugin/chat/chat.css" />
+		<style src="web/org/carewebframework/plugin/chat/chat.css" />
 		<hbox vflex="1" hflex="1">
 			<cell width="50%">
 				<groupbox closable="false" height="100%">
 					<caption label="${@msg.cwf.chat.session.group.dialog.caption}" />
-					<div name="pnlDialog" vflex="1" sclass="chat-dialog" />
+					<div name="pnlDialog" vflex="1" class="chat-dialog" />
 					<toolbar align="end">
-						<button name="btnClearDialog" zclass="btn" sclass="btn-default btn-sm"
+						<button name="btnClearDialog" zclass="btn" class="btn-default btn-sm"
 							label="${@msg.cwf.chat.session.button.clear.dialog.label}" />
 					</toolbar>
 				</groupbox>
@@ -25,9 +25,9 @@
 							<caption label="${@msg.cwf.chat.session.group.participants.caption}" />
 							<listbox name="lstParticipants" vflex="1" style="border:none" />
 							<toolbar align="end">
-								<button name="btnRefresh" zclass="btn" sclass="btn-default btn-sm"
+								<button name="btnRefresh" zclass="btn" class="btn-default btn-sm"
 									label="${@msg.cwf.chat.session.button.refresh.label}" />
-								<button name="btnInvite" zclass="btn" sclass="btn-default btn-sm"
+								<button name="btnInvite" zclass="btn" class="btn-default btn-sm"
 									label="${@msg.cwf.chat.session.button.invite.label}" />
 							</toolbar>
 						</groupbox>
@@ -37,9 +37,9 @@
 							<caption label="${@msg.cwf.chat.session.group.message.caption}" />
 							<textbox name="txtMessage" vflex="1" width="100%" multiline="true" style="border:none"/>
 							<toolbar align="end">
-								<button name="btnClearMessage" zclass="btn" sclass="btn-default btn-sm"
+								<button name="btnClearMessage" zclass="btn" class="btn-default btn-sm"
 									label="${@msg.cwf.chat.session.button.clear.message.label}" />
-								<button name="btnSendMessage" zclass="btn" sclass="btn-default btn-sm"
+								<button name="btnSendMessage" zclass="btn" class="btn-default btn-sm"
 									label="${@msg.cwf.chat.session.button.send.message.label}" />
 							</toolbar>
 						</groupbox>
@@ -48,4 +48,4 @@
 			</cell>
 		</hbox>
 	</window>
-</zk>
+</page>

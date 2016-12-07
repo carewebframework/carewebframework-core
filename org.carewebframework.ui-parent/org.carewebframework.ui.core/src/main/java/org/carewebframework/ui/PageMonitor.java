@@ -49,12 +49,12 @@ import org.carewebframework.web.client.ISessionTracker;
 import org.carewebframework.web.client.Session;
 import org.carewebframework.web.component.BaseUIComponent;
 import org.carewebframework.web.component.Label;
-import org.carewebframework.web.component.MessageWindow;
 import org.carewebframework.web.component.Page;
 import org.carewebframework.web.component.Textbox;
 import org.carewebframework.web.component.Window;
 import org.carewebframework.web.event.Event;
 import org.carewebframework.web.event.IEventListener;
+import org.carewebframework.web.page.PageUtil;
 
 /**
  * Page timeout thread that evaluates ZK's Page and the time a request was last sent. Used to notify
@@ -109,7 +109,7 @@ public class PageMonitor extends Thread {
     /**
      * Path to the zul code that will be used to display the count down.
      */
-    private static final String DESKTOP_TIMEOUT_ZUL = org.carewebframework.ui.zk.Constants.RESOURCE_PREFIX
+    private static final String DESKTOP_TIMEOUT_CWF = org.carewebframework.ui.zk.Constants.RESOURCE_PREFIX
             + "pageTimeoutWarning.cwf";
     
     /**
@@ -191,12 +191,12 @@ public class PageMonitor extends Thread {
          */
         @Override
         public void onSessionCreate(Session session) {
-            timeoutWindow = (Window) page.getExecution().createComponents(DESKTOP_TIMEOUT_ZUL, null, null);
+            timeoutWindow = (Window) PageUtil.createPage(DESKTOP_TIMEOUT_CWF, session.getPage(), null);
             timeoutWindow.wireController(PageMonitor.this);
             IUser user = securityService.getAuthenticatedUser();
             lblLocked.setLabel(
                 Mode.BASELINE.getLabel(TIMEOUT_EXPIRATION, user.getFullName() + "@" + user.getSecurityDomain().getName()));
-            page.addListener(pageActivityMonitor);
+            //TODO: page.addEventListener(pageActivityMonitor);
             ThreadUtil.startThread(PageMonitor.this);
         }
         
@@ -222,14 +222,14 @@ public class PageMonitor extends Thread {
                     lblDuration.setLabel(s);
                     setSclass(SCLASS_COUNTDOWN);
                     timeoutPanel.addClass("alert:" + (countdown <= 10000 ? "alert-danger" : "alert-warning"));
-                    resetActivity(false);
+                    //resetActivity(false);
                     break;
                 
                 case UPDATE_MODE:
                     setSclass(SCLASS_IDLE);
                     timeoutWindow.setMode(mode == Mode.LOCK ? Window.Mode.POPUP : Window.Mode.INLINE);
                     txtPassword.setFocus(mode == Mode.LOCK);
-                    Application.getPageInfo(page).sendToSpawned(mode == Mode.LOCK ? Command.LOCK : Command.UNLOCK);
+                    //Application.getPageInfo(page).sendToSpawned(mode == Mode.LOCK ? Command.LOCK : Command.UNLOCK);
                     break;
                 
                 case LOGOUT:
@@ -267,7 +267,7 @@ public class PageMonitor extends Thread {
     };
     
     private void setMode(Mode newMode) {
-        resetActivity(true);
+        //resetActivity(true);
         mode = newMode == null ? previousMode : newMode;
         pollingInterval = mode == newMode ? pollingInterval : inactivityDuration.get(mode);
         countdown = countdownDuration.get(mode);
@@ -301,8 +301,8 @@ public class PageMonitor extends Thread {
     public void abortShutdown(String message) {
         if (mode == Mode.SHUTDOWN) {
             updateShutdown(0);
-            eventManager.fireLocalEvent(MessageWindow.EVENT_SHOW,
-                StringUtils.isEmpty(message) ? StrUtil.getLabel("cwf.timeout.shutdown.abort.message") : message);
+            //eventManager.fireLocalEvent(MessageWindow.EVENT_SHOW,
+            //    StringUtils.isEmpty(message) ? StrUtil.getLabel("cwf.timeout.shutdown.abort.message") : message);
         }
     }
     
@@ -431,7 +431,7 @@ public class PageMonitor extends Thread {
      * Resets the keep alive timer when the "keep open" button is clicked.
      */
     public void onClick$btnKeepOpen() {
-        resetActivity(true);
+        //resetActivity(true);
         wakeup();
     }
     
@@ -531,7 +531,7 @@ public class PageMonitor extends Thread {
      */
     public void init() {
         eventManager.subscribe(Constants.DESKTOP_EVENT, pageEventListener);
-        String path = page.getRequestPath();
+        String path = page.getBrowserInfo("requestPath");
         path = path.startsWith("/") ? path.substring(1) : path;
         canAutoLock = !autoLockingExclusions.contains(path);
     }

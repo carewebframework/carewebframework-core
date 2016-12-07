@@ -27,7 +27,7 @@
 		<function-signature>java.lang.String getIconPath(java.lang.String)</function-signature>
 		<description>
 			Returns the path to the icon resource.
-			For example: getIconPath("help.png") returns ~./org/carewebframework/ui/icons/16x16/silk/help.png
+			For example: getIconPath("help.png") returns web/org/carewebframework/ui/icons/16x16/silk/help.png
 		</description>
 	</function>
 	
@@ -37,7 +37,7 @@
 		<function-signature>java.lang.String getIconPath(java.lang.String, java.lang.String, java.lang.String)</function-signature>
 		<description>
 			Returns the path to the icon resource.
-			For example: getIconPath("help.png", "16x16", "silk") returns ~./org/carewebframework/ui/icons/16x16/silk/help.png
+			For example: getIconPath("help.png", "16x16", "silk") returns web/org/carewebframework/ui/icons/16x16/silk/help.png
 		</description>
 	</function>
 	

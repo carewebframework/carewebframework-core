@@ -39,7 +39,6 @@ import org.carewebframework.shell.plugins.PluginDefinition;
 import org.carewebframework.shell.plugins.PluginRegistry;
 import org.carewebframework.ui.dialog.DialogUtil;
 import org.carewebframework.ui.zk.TreeUtil;
-import org.carewebframework.ui.zk.ZKUtil;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.BaseUIComponent;
 import org.carewebframework.web.component.Button;
@@ -217,7 +216,7 @@ public class AddComponent extends Window {
         }
         
         TreeUtil.sort(tree);
-        ZKUtil.moveChild(itmFavorites, 0);
+        itmFavorites.setIndex(0);
         
         if (useDefault && defaultItem != null) {
             defaultItem.setSelected(true);

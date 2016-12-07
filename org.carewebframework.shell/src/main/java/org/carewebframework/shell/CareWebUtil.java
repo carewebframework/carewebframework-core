@@ -37,7 +37,7 @@ import org.carewebframework.web.component.BaseUIComponent;
  */
 public class CareWebUtil {
     
-    private static final String ACTION_BASE = "zscript:" + CareWebUtil.class.getName() + ".getShell().";
+    private static final String ACTION_BASE = "groovy:" + CareWebUtil.class.getName() + ".getShell().";
     
     static {
         ActionRegistry.register(true, "cwf.shell.lock", "@cwf.shell.action.lock.label", ACTION_BASE + "lock();");

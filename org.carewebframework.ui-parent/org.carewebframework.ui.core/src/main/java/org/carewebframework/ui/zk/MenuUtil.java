@@ -168,12 +168,11 @@ public class MenuUtil {
      * @return Menu with the specified label.
      */
     public static Menu findMenu(BaseComponent parent, String label, BaseComponent insertBefore) {
-        BaseComponent child = null;
         BaseComponent realParent = getRealParent(parent);
         
-        while ((child = ZKUtil.findChild(realParent, Menu.class, child)) != null) {
-            if (((Menu) child).getLabel().equalsIgnoreCase(label)) {
-                return (Menu) child;
+        for (Menu child : realParent.getChildren(Menu.class)) {
+            if (child.getLabel().equalsIgnoreCase(label)) {
+                return child;
             }
         }
         
@@ -262,30 +261,18 @@ public class MenuUtil {
     }
     
     /**
-     * Opens a menu and all popups that precede it.
+     * Opens a menu and all menus that precede it.
      * 
      * @param menu Menu to open.
      * @return True if the menu was opened.
      */
-    public static boolean open(Menu menu) {
+    public static void open(Menu menu) {
         BaseComponent parent = menu.getParent();
         
-        if (parent instanceof Menupopup) {
-            Menupopup menupopup = (Menupopup) parent;
-            parent = parent.getParent();
-            
-            if (parent == null) {
-                menupopup.open(parent, "after_start");
-                return true;
-            } else if (parent instanceof Menu) {
-                menu = (Menu) parent;
-                String position = open(menu) ? "end_before" : "after_start";
-                menupopup.open(menu, position);
-                return true;
-            }
+        if (parent instanceof Menu) {
+            ((Menu) parent).open();
+            open((Menu) parent);
         }
-        
-        return false;
     }
     
     /**
@@ -294,8 +281,6 @@ public class MenuUtil {
      * @param menu Menu to close.
      */
     public static void close(Menu menu) {
-        BaseComponent target = menu.getMenupopup();
-        closeMenu(target == null ? menu : target);
     }
     
     /**
@@ -304,21 +289,6 @@ public class MenuUtil {
      * @param comp BaseComponent within menu tree.
      */
     private static void closeMenu(BaseComponent comp) {
-        Menupopup menuPopup = null;
-        
-        while (comp != null) {
-            if (comp instanceof Menupopup) {
-                menuPopup = (Menupopup) comp;
-            } else if (comp instanceof Toolbar) {
-                break;
-            }
-            
-            comp = comp.getParent();
-        }
-        
-        if (menuPopup != null) {
-            menuPopup.close();
-        }
     }
     
     /**

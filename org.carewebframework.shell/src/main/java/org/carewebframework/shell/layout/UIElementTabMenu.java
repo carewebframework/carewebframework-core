@@ -50,6 +50,7 @@ public class UIElementTabMenu extends UIElementCWFBase {
         
         private Tab tab;
         
+        /*TODO:
         public void onOpenMenu() {
             open(tab, "after_start");
         }
@@ -64,6 +65,7 @@ public class UIElementTabMenu extends UIElementCWFBase {
             
             super.open(ref, position);
         }
+        */
         
         @Override
         public void afterAddChild(BaseComponent child) {

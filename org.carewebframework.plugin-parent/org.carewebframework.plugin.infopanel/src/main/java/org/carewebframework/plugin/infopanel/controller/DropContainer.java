@@ -44,7 +44,7 @@ public class DropContainer extends Window implements IActionTarget {
     
     private static final String SCLASS = "cwf-infopanel-container";
     
-    private static final String TEMPLATE = "~./org/carewebframework/plugin/infopanel/dropContainer.cwf";
+    private static final String TEMPLATE = "web/org/carewebframework/plugin/infopanel/dropContainer.cwf";
     
     private List<ActionListener> actionListeners;
     

@@ -38,7 +38,7 @@ import org.springframework.core.io.Resource;
  */
 public class ThemeDefinition implements ApplicationContextAware {
     
-    private static final String URI_PREFIX = "~./";
+    private static final String URI_PREFIX = "web/";
     
     private String url;
     

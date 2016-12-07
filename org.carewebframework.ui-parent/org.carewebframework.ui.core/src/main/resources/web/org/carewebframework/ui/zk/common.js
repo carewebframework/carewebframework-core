@@ -40,7 +40,7 @@ cwf.print = function (source, printStyles, printPreview) {
 
 			for (var i = 0; i < printStyles.length; i++) {
 				var item = printStyles[i];
-				if (item.startsWith('~./'))
+				if (item.startsWith('web/'))
 					item = zk.ajaxURI('/web' + item.substring(2), {
 						au : true
 					});

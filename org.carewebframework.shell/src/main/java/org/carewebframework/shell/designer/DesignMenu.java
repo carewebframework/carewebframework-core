@@ -34,7 +34,6 @@ import org.carewebframework.shell.layout.LayoutIdentifier;
 import org.carewebframework.shell.layout.UIElementDesktop;
 import org.carewebframework.shell.layout.UILayout;
 import org.carewebframework.ui.dialog.DialogUtil;
-import org.carewebframework.ui.dialog.DialogUtil.IConfirmCallback;
 import org.carewebframework.ui.xml.XMLViewer;
 import org.carewebframework.web.ancillary.INamespace;
 import org.carewebframework.web.component.BaseUIComponent;
@@ -126,13 +125,9 @@ public class DesignMenu extends Menu implements INamespace {
      * Clear desktop.
      */
     public void onClick$mnuClearDesktop() {
-        DialogUtil.confirm(DesignConstants.MSG_DESKTOP_CLEAR, DesignConstants.CAP_DESKTOP_CLEAR, new IConfirmCallback() {
-            
-            @Override
-            public void onComplete(boolean confirm) {
-                if (confirm) {
-                    shell.reset();
-                }
+        DialogUtil.confirm(DesignConstants.MSG_DESKTOP_CLEAR, DesignConstants.CAP_DESKTOP_CLEAR, (confirm) -> {
+            if (confirm) {
+                shell.reset();
             }
         });
     }

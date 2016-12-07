@@ -1,4 +1,4 @@
-<zk>
+<page>
 	<window width="400px" height="400px" mold="bootstrap"
 		use="org.carewebframework.shell.designer.AddComponent">
 		<tree name="tree" vflex="true"
@@ -13,14 +13,14 @@
 		<div zclass="panel-footer">
 			<div zclass="btn-toolbar" align="end">
 				<button name="btnOK" zclass="btn"
-					sclass="btn-success btn-sm"
+					class="btn-success btn-sm"
 					label="${@msg.cwf.shell.designer.add.component.btn.ok.label}"
 					disabled="true" />
 				<button name="btnCancel" zclass="btn"
-					sclass="btn-danger btn-sm"
+					class="btn-danger btn-sm"
 					label="${@msg.cwf.shell.designer.add.component.btn.cancel.label}" />
 				<separator orient="vertical" width="20px" />
 			</div>
 		</div>
 	</window>
-</zk>
+</page>

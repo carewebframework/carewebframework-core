@@ -27,7 +27,6 @@ package org.carewebframework.shell.designer;
 
 import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.property.PropertyInfo;
-import org.carewebframework.ui.zk.ListUtil;
 import org.carewebframework.web.component.Combobox;
 import org.carewebframework.web.component.Comboitem;
 import org.carewebframework.web.event.ChangeEvent;
@@ -161,9 +160,10 @@ public class PropertyEditorList extends PropertyEditorBase {
     
     @Override
     protected void setValue(Object value) {
-        int index = value == null ? -1 : ListUtil.selectComboboxData(combobox, value);
+        Comboitem item = (Comboitem) combobox.getChildByData(value);
+        combobox.setSelectedItem(item);
         
-        if (index < 0) {
+        if (item == null) {
             combobox.setValue(value == null ? null : value.toString());
         }
         

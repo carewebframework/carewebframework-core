@@ -26,20 +26,20 @@
 package org.carewebframework.shell.layout;
 
 import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.component.Menu;
+import org.carewebframework.web.component.Span;
 
 /**
  * Base implementation of a menu bar.
  */
 public class UIElementMenuBase extends UIElementCWFBase {
     
-    private final Menu menubar;
+    private final Span menubar;
     
-    public UIElementMenuBase(Menu menubar) {
+    public UIElementMenuBase(Span menubar) {
         this(menubar, menubar);
     }
     
-    public UIElementMenuBase(Menu menubar, BaseComponent root) {
+    public UIElementMenuBase(Span menubar, BaseComponent root) {
         super();
         this.menubar = menubar;
         menubar.addClass("cwf-menubar");
@@ -54,7 +54,7 @@ public class UIElementMenuBase extends UIElementCWFBase {
      * 
      * @return The menu bar.
      */
-    public Menu getMenubar() {
+    public Span getMenubar() {
         return menubar;
     }
     

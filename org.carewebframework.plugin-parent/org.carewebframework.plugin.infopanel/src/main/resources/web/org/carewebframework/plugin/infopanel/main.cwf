@@ -1,6 +1,6 @@
-<zk>
+<page>
 	<borderlayout name="infoPanelRoot" width="100%" height="100%"
-		sclass="cwf-infopanel" controller="${cwfInfoPanelController}">
+		class="cwf-infopanel" controller="${cwfInfoPanelController}">
 		<center name="infoPanel" autoscroll="true" border="none">
 			<div zclass="panel panel-primary cwf-infopanel-panel"
 				height="100%">
@@ -24,10 +24,10 @@
 						value="${@msg.cwf.infopanel.alert.title}" />
 					<span name="alertIcon"
 						zclass="panel-icons panel-icon glyphicon"
-						sclass="glyphicon-chevron-down" />
+						class="glyphicon-chevron-down" />
 				</div>
 				<grid name="alertGrid" mold="paging" vflex="1"
-					pagingPosition="top" sclass="cwf-infopanel-alertgrid"
+					pagingPosition="top" class="cwf-infopanel-alertgrid"
 					pageSize="1">
 					<rows name="alertRoot" />
 				</grid>
@@ -56,4 +56,4 @@
 		.cwf-infopanel-alertgrid { border-style: none; overflow: auto; }
 	</style>
 
-</zk>
+</page>

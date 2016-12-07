@@ -25,10 +25,6 @@
  */
 package org.carewebframework.security.spring.controller;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.carewebframework.api.domain.IUser;
 import org.carewebframework.api.security.SecurityUtil;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.security.spring.Constants;
@@ -43,10 +39,7 @@ import org.carewebframework.web.component.Timer;
 import org.carewebframework.web.event.Event;
 import org.carewebframework.web.event.EventUtil;
 import org.carewebframework.web.event.IEventListener;
-import org.carewebframework.web.page.PageUtil;
-import org.springframework.security.authentication.CredentialsExpiredException;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.web.WebAttributes;
 import org.springframework.security.web.savedrequest.SavedRequest;
 
 /**
@@ -106,7 +99,7 @@ public class LoginWindowController implements IAutoWired {
      */
     @Override
     public void afterInitialized(BaseComponent root) {
-        timer.setDelay(execution.getSession().getMaxInactiveInterval() * 500);
+        /*timer.setDelay(execution.getSession().getMaxInactiveInterval() * 500);
         savedRequest = (SavedRequest) session.removeAttribute(org.carewebframework.security.spring.Constants.SAVED_REQUEST);
         AuthenticationException authError = (AuthenticationException) session
                 .removeAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
@@ -130,6 +123,7 @@ public class LoginWindowController implements IAutoWired {
         wireListener(PageUtil.createPage(form, loginForm, args).get(0));
         root.getPage().setTitle(StrUtil.getLabel(title));
         resetTimer();
+        */
     }
     
     /**
