@@ -10,13 +10,13 @@
 		</hlayout>
 		<hlayout class="cwf-header-row" hflex="1" vflex="1">
 			<a name="password" label="${@msg.cwf.userheader.password.label}"
-				tooltiptext="${@msg.cwf.userheader.password.hint}" visible="true" />
+				hint="${@msg.cwf.userheader.password.hint}" visible="true" />
 			<space hflex="1" />
 			<a name="lock" label="${@msg.cwf.userheader.lock.label}"
-				tooltiptext="${@msg.cwf.userheader.lock.hint}" />
+				hint="${@msg.cwf.userheader.lock.hint}" />
 			<space />
 			<a name="logout" label="${@msg.cwf.userheader.logout.label}"
-				tooltiptext="${@msg.cwf.userheader.logout.hint}" />
+				hint="${@msg.cwf.userheader.logout.hint}" />
 		</hlayout>
 	</vlayout>
 </page>

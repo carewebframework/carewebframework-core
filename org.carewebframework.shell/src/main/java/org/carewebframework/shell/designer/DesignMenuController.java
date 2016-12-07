@@ -25,6 +25,9 @@
  */
 package org.carewebframework.shell.designer;
 
+import java.util.Collections;
+import java.util.Map;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.carewebframework.api.security.SecurityUtil;
@@ -35,30 +38,35 @@ import org.carewebframework.shell.layout.UIElementDesktop;
 import org.carewebframework.shell.layout.UILayout;
 import org.carewebframework.ui.dialog.DialogUtil;
 import org.carewebframework.ui.xml.XMLViewer;
-import org.carewebframework.web.ancillary.INamespace;
+import org.carewebframework.web.ancillary.IAutoWired;
+import org.carewebframework.web.annotation.EventHandler;
+import org.carewebframework.web.annotation.WiredComponent;
+import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.BaseUIComponent;
 import org.carewebframework.web.component.Menu;
 import org.carewebframework.web.component.Menuitem;
-import org.carewebframework.web.component.Menupopup;
 import org.carewebframework.web.event.EventUtil;
 import org.carewebframework.web.page.PageUtil;
 
 /**
  * This is the design menu that appears in the desktop's menu bar.
  */
-public class DesignMenu extends Menu implements INamespace {
+public class DesignMenuController implements IAutoWired {
     
-    private static final Log log = LogFactory.getLog(DesignMenu.class);
+    private static final Log log = LogFactory.getLog(DesignMenuController.class);
     
     private CareWebShell shell;
     
     private UIElementDesktop owner;
     
+    @WiredComponent
+    private Menu menu;
+    
+    @WiredComponent
     private Menuitem mnuDesignMode;
     
-    private Menuitem mnuShowZul;
-    
-    private Menupopup menupopup;
+    @WiredComponent
+    private Menuitem mnuShowMarkup;
     
     /**
      * Creates the design menu with the specified desktop as owner.
@@ -66,18 +74,17 @@ public class DesignMenu extends Menu implements INamespace {
      * @param owner Desktop UI element owner.
      * @return Design menu instance.
      */
-    public static DesignMenu create(UIElementDesktop owner) {
-        DesignMenu designMenu = null;
+    public static BaseComponent createMenu(UIElementDesktop owner) {
+        BaseComponent designMenu = null;
         
         try {
-            designMenu = null;
-            designMenu = (DesignMenu) PageUtil.createPage(DesignConstants.RESOURCE_PREFIX + "DesignMenu.cwf", null);
-            designMenu.init(owner);
+            Map<String, Object> args = Collections.singletonMap("owner", owner);
+            designMenu = PageUtil.createPage(DesignConstants.RESOURCE_PREFIX + "DesignMenu.cwf", null, args).get(0);
         } catch (Exception e) {
             log.error("Error creating design menu.", e);
             
             if (designMenu != null) {
-                designMenu.detach();
+                designMenu.destroy();
                 designMenu = null;
             }
         }
@@ -85,17 +92,15 @@ public class DesignMenu extends Menu implements INamespace {
     }
     
     /**
-     * Initializes the design menu.
-     * 
-     * @param owner Owner of the menu.
+     * Initialize the design menu.
      */
-    private void init(UIElementDesktop owner) {
-        this.owner = owner;
+    @Override
+    public void afterInitialized(BaseComponent comp) {
+        this.owner = comp.getAttribute("owner", UIElementDesktop.class);
         shell = owner.getShell();
-        wireController(this);
         
         if (!SecurityUtil.hasDebugRole()) {
-            mnuShowZul.detach();
+            mnuShowMarkup.destroy();
         }
         
         updateMenus(false);
@@ -104,27 +109,30 @@ public class DesignMenu extends Menu implements INamespace {
     /**
      * Toggles design mode.
      */
-    public void onClick$mnuDesignMode() {
+    @EventHandler(value = "click", target = "mnuDesignMode")
+    private void onClick$mnuDesignMode() {
         boolean enabled = !mnuDesignMode.isChecked();
         mnuDesignMode.setChecked(enabled);
         owner.setDesignMode(enabled);
         updateMenus(enabled);
         
         if (enabled) {
-            EventUtil.post("afterEnabled", this, null);
+            EventUtil.post("afterEnabled", menu, null);
         } else {
             LayoutDesigner.closeDialog();
         }
     }
     
-    public void onAfterEnabled() {
-        setOpen(true);
+    @EventHandler(value = "afterEnabled", target = "@menu")
+    private void onAfterEnabled() {
+        menu.setOpen(true);
     }
     
     /**
      * Clear desktop.
      */
-    public void onClick$mnuClearDesktop() {
+    @EventHandler(value = "click", target = "mnuClearDesktop")
+    private void onClick$mnuClearDesktop() {
         DialogUtil.confirm(DesignConstants.MSG_DESKTOP_CLEAR, DesignConstants.CAP_DESKTOP_CLEAR, (confirm) -> {
             if (confirm) {
                 shell.reset();
@@ -137,7 +145,8 @@ public class DesignMenu extends Menu implements INamespace {
      * 
      * @throws Exception Unspecified exception.
      */
-    public void onClick$mnuDesktopProperties() throws Exception {
+    @EventHandler(value = "click", target = "mnuDesktopProperties")
+    private void onClick$mnuDesktopProperties() {
         PropertyGrid.create(owner, null);
     }
     
@@ -146,7 +155,8 @@ public class DesignMenu extends Menu implements INamespace {
      * 
      * @throws Exception Unspecified exception.
      */
-    public void onClick$mnuLayoutDesigner() throws Exception {
+    @EventHandler(value = "click", target = "mnuLayoutDesigner")
+    private void onClick$mnuLayoutDesigner() {
         LayoutDesigner.execute(owner);
     }
     
@@ -155,14 +165,16 @@ public class DesignMenu extends Menu implements INamespace {
      * 
      * @throws Exception Unspecified exception.
      */
-    public void onClick$mnuLayoutManager() throws Exception {
+    @EventHandler(value = "click", target = "mnuLayoutManager")
+    private void onClick$mnuLayoutManager() throws Exception {
         LayoutManager.show(true, shell.getUILayout().getName(), null);
     }
     
     /**
      * Performs logout.
      */
-    public void onClick$mnuLogout() {
+    @EventHandler(value = "click", target = "mnuLogout")
+    private void onClick$mnuLogout() {
         shell.logout();
     }
     
@@ -171,7 +183,8 @@ public class DesignMenu extends Menu implements INamespace {
      * 
      * @throws Exception Unspecified exception.
      */
-    public void onClick$mnuSaveLayout() throws Exception {
+    @EventHandler(value = "click", target = "mnuSaveLayout")
+    private void onClick$mnuSaveLayout() {
         LayoutManager.saveLayout(UILayout.serialize(owner),
             new LayoutIdentifier(shell.getUILayout().getName(), LayoutManager.defaultIsShared()), false);
     }
@@ -181,7 +194,8 @@ public class DesignMenu extends Menu implements INamespace {
      * 
      * @throws Exception Unspecified exception.
      */
-    public void onClick$mnuLoadLayout() throws Exception {
+    @EventHandler(value = "click", target = "mnuLoadLayout")
+    private void onClick$mnuLoadLayout() {
         LayoutManager.show(false, shell.getUILayout().getName(), (event) -> {
             LayoutIdentifier layoutId = event.getTarget().getAttribute("layoutId", LayoutIdentifier.class);
             
@@ -196,7 +210,8 @@ public class DesignMenu extends Menu implements INamespace {
     /**
      * Shows CWF markup for current page.
      */
-    public void onClick$mnuShowCwf() {
+    @EventHandler(value = "click", target = "mnuShowMarkup")
+    private void onClick$mnuShowMarkup() {
         XMLViewer.showCWF(owner.getOuterComponent());
     }
     
@@ -206,10 +221,11 @@ public class DesignMenu extends Menu implements INamespace {
      * @param enabled The enabled status.
      */
     private void updateMenus(boolean enabled) {
-        setImage(enabled ? DesignConstants.DESIGN_ICON_ACTIVE : DesignConstants.DESIGN_ICON_INACTIVE);
+        menu.setImage(enabled ? DesignConstants.DESIGN_ICON_ACTIVE : DesignConstants.DESIGN_ICON_INACTIVE);
         mnuDesignMode.addStyle("border-bottom", enabled ? "2px solid lightgray" : null);
-        setHint(StrUtil.formatMessage(enabled ? DesignConstants.DESIGN_HINT_ACTIVE : DesignConstants.DESIGN_HINT_INACTIVE));
-        BaseUIComponent child = (BaseUIComponent) menupopup.getFirstChild();
+        menu.setHint(
+            StrUtil.formatMessage(enabled ? DesignConstants.DESIGN_HINT_ACTIVE : DesignConstants.DESIGN_HINT_INACTIVE));
+        BaseUIComponent child = (BaseUIComponent) menu.getFirstChild();
         
         while (child != null) {
             child.setVisible(enabled || child == mnuDesignMode);

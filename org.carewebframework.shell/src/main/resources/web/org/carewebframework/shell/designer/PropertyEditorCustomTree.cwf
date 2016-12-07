@@ -5,27 +5,27 @@
 		<div height="100%" width="100%">
 			<div zclass="btn-toolbar btn-group btn-group-xs" style="min-height:33px;padding:5px">
 				<button name="btnUp" zclass="btn" class="btn-link"
-					tooltiptext="${@msg.cwf.shell.designer.propedit.custom.btn.up.hint}"
+					hint="${@msg.cwf.shell.designer.propedit.custom.btn.up.hint}"
 					style="background:transparent"
 					image="${rc:getIconPath('carewebframework:16x16:arrowU.png')}" />
 				<button name="btnDown" zclass="btn" class="btn-link"
-					tooltiptext="${@msg.cwf.shell.designer.propedit.custom.btn.down.hint}"
+					hint="${@msg.cwf.shell.designer.propedit.custom.btn.down.hint}"
 					style="background:transparent"
 					image="${rc:getIconPath('carewebframework:16x16:arrowD.png')}" />
 				<button name="btnLeft" zclass="btn" class="btn-link"
-					tooltiptext="${@msg.cwf.shell.designer.propedit.custom.btn.promote.hint}"
+					hint="${@msg.cwf.shell.designer.propedit.custom.btn.promote.hint}"
 					style="background:transparent"
 					image="${rc:getIconPath('carewebframework:16x16:arrowL.png')}" />
 				<button name="btnRight" zclass="btn" class="btn-link"
-					tooltiptext="${@msg.cwf.shell.designer.propedit.custom.btn.demote.hint}"
+					hint="${@msg.cwf.shell.designer.propedit.custom.btn.demote.hint}"
 					style="background:transparent"
 					image="${rc:getIconPath('carewebframework:16x16:arrowR.png')}" />
 				<button name="btnAdd" zclass="btn" class="btn-link"
-					tooltiptext="${@msg.cwf.shell.designer.propedit.custom.btn.add.hint}"
+					hint="${@msg.cwf.shell.designer.propedit.custom.btn.add.hint}"
 					style="background:transparent"
 					image="${rc:getIconPath('carewebframework:16x16:add.png')}" />
 				<button name="btnDelete" zclass="btn" class="btn-link"
-					tooltiptext="${@msg.cwf.shell.designer.propedit.custom.btn.delete.hint}"
+					hint="${@msg.cwf.shell.designer.propedit.custom.btn.delete.hint}"
 					style="background:transparent"
 					image="${rc:getIconPath('carewebframework:16x16:delete.png')}" />
 			</div>

@@ -118,9 +118,8 @@ public class PropertyGrid extends Window {
      * @param target UI element whose properties are to be edited.
      * @param parent Parent component for property grid (may be null).
      * @return Newly created PropertyGrid instance.
-     * @throws Exception Unspecified exception.
      */
-    public static PropertyGrid create(UIElementBase target, BaseComponent parent) throws Exception {
+    public static PropertyGrid create(UIElementBase target, BaseComponent parent) {
         return create(target, parent, false);
     }
     

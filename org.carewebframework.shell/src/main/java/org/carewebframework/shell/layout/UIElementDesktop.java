@@ -31,13 +31,14 @@ import org.carewebframework.help.viewer.HelpUtil;
 import org.carewebframework.help.viewer.HelpViewer.HelpViewerMode;
 import org.carewebframework.shell.CareWebShell;
 import org.carewebframework.shell.designer.DesignConstants;
-import org.carewebframework.shell.designer.DesignMenu;
+import org.carewebframework.shell.designer.DesignMenuController;
 import org.carewebframework.shell.plugins.PluginResourceHelp;
 import org.carewebframework.theme.ThemeUtil;
 import org.carewebframework.ui.action.ActionUtil;
 import org.carewebframework.ui.zk.MenuUtil;
 import org.carewebframework.web.annotation.EventHandler;
 import org.carewebframework.web.annotation.WiredComponent;
+import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.BaseUIComponent;
 import org.carewebframework.web.component.Cell;
 import org.carewebframework.web.component.Image;
@@ -59,8 +60,6 @@ public class UIElementDesktop extends UIElementCWFBase {
     private final BaseUIComponent desktopOuter;
     
     private String appId;
-    
-    private DesignMenu designMenu;
     
     @WiredComponent
     private BaseUIComponent desktopInner;
@@ -121,14 +120,13 @@ public class UIElementDesktop extends UIElementCWFBase {
         fixedHelpItems = helpMenu.getChildCount();
         sortHelpMenu = false;
         helpMenu.addEventListener("open", (event) -> {
-            
-            /*TODO:  if (sortHelpMenu && event.isOpen()) {
+            if (sortHelpMenu) {
                 sortHelpMenu();
-            }*/
+            }
         });
         
-        if (SecurityUtil.isGrantedAny(DesignConstants.DESIGN_MODE_PRIVS)) {
-            designMenu = DesignMenu.create(this);
+        if (true || SecurityUtil.isGrantedAny(DesignConstants.DESIGN_MODE_PRIVS)) {
+            BaseComponent designMenu = DesignMenuController.createMenu(this);
             menubar2.addChild(designMenu);
         }
         
@@ -273,7 +271,7 @@ public class UIElementDesktop extends UIElementCWFBase {
     }
     
     /**
-     * Adds a ZK menu item to the main menu.
+     * Adds a menu item to the main menu.
      * 
      * @param namePath Determines the position of the menu item in the menu tree by caption text.
      * @param action The action to be executed when the menu item is clicked.
@@ -282,14 +280,11 @@ public class UIElementDesktop extends UIElementCWFBase {
      *         Otherwise, it is a reference to the newly created menu item.
      */
     public Menu addMenu(String namePath, String action, boolean fixed) {
-        return null;
-        /* TODO:
-        Menu menubar = fixed ? menubar2 : menubar1;
-        Menu menu = MenuUtil.addMenuOrMenuItem(namePath, null, menubar, null, MenuEx.class);
-        MenuUtil.updateStyles(menu);
-        ActionListener.addAction(menu, action);
+        BaseComponent menubar = fixed ? menubar2 : menubar1;
+        Menu menu = MenuUtil.addMenuOrMenuItem(namePath, null, menubar, null, Menu.class);
+        //MenuUtil.updateStyles(menu);
+        ActionUtil.addAction(menu, action);
         return menu;
-        */
     }
     
     /**

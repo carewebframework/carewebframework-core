@@ -88,7 +88,7 @@ public class MenuUtil {
      * @param clazz Class of the element to be added.
      * @return The element that was added.
      */
-    public static <T extends BaseLabeledImageComponent> T addMenuOrMenuItem(String path, T ele, Toolbar menubar,
+    public static <T extends BaseLabeledImageComponent> T addMenuOrMenuItem(String path, T ele, BaseComponent menubar,
                                                                             BaseComponent insertBefore, Class<T> clazz) {
         String pcs[] = path == null ? NULL_PATH : path.split(Constants.PATH_DELIMITER_REGEX);
         int last = pcs.length - 1;

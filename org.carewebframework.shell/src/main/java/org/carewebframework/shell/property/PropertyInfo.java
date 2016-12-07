@@ -29,6 +29,7 @@ import java.lang.reflect.Method;
 import java.util.Properties;
 
 import org.apache.commons.lang.StringUtils;
+import org.carewebframework.common.MiscUtil;
 
 /**
  * Holds information about a specific plug-in property.
@@ -171,19 +172,22 @@ public class PropertyInfo {
      * 
      * @param instance The object instance.
      * @return The object's property value.
-     * @throws Exception Unspecified exception.
      */
-    public Object getPropertyValue(Object instance) throws Exception {
-        if (instance == null) {
-            return dflt == null || !isSerializable() ? null : getPropertyType().getSerializer().deserialize(dflt);
+    public Object getPropertyValue(Object instance) {
+        try {
+            if (instance == null) {
+                return dflt == null || !isSerializable() ? null : getPropertyType().getSerializer().deserialize(dflt);
+            }
+            
+            if (instance instanceof IPropertyAccessor) {
+                return ((IPropertyAccessor) instance).getPropertyValue(this);
+            }
+            
+            Method method = PropertyUtil.findGetter(getter, instance, null);
+            return method == null ? null : method.invoke(instance);
+        } catch (Exception e) {
+            throw MiscUtil.toUnchecked(e);
         }
-        
-        if (instance instanceof IPropertyAccessor) {
-            return ((IPropertyAccessor) instance).getPropertyValue(this);
-        }
-        
-        Method method = PropertyUtil.findGetter(getter, instance, null);
-        return method == null ? null : method.invoke(instance);
     }
     
     /**
@@ -191,30 +195,33 @@ public class PropertyInfo {
      * 
      * @param instance The object instance.
      * @param value The value to assign.
-     * @throws Exception Unspecified exception.
      */
-    public void setPropertyValue(Object instance, Object value) throws Exception {
-        if (instance instanceof IPropertyAccessor) {
-            ((IPropertyAccessor) instance).setPropertyValue(this, value);
-            return;
-        }
-        
-        Method method = null;
-        
+    public void setPropertyValue(Object instance, Object value) {
         try {
-            method = PropertyUtil.findSetter(setter, instance, value == null ? null : value.getClass());
-        } catch (Exception e) {
-            if (value != null) {
-                PropertySerializer<?> serializer = getPropertyType().getSerializer();
-                value = value instanceof String ? serializer.deserialize((String) value) : serializer.serialize(value);
-                method = PropertyUtil.findSetter(setter, instance, value.getClass());
-            } else {
-                throw e;
+            if (instance instanceof IPropertyAccessor) {
+                ((IPropertyAccessor) instance).setPropertyValue(this, value);
+                return;
             }
-        }
-        
-        if (method != null) {
-            method.invoke(instance, value);
+            
+            Method method = null;
+            
+            try {
+                method = PropertyUtil.findSetter(setter, instance, value == null ? null : value.getClass());
+            } catch (Exception e) {
+                if (value != null) {
+                    PropertySerializer<?> serializer = getPropertyType().getSerializer();
+                    value = value instanceof String ? serializer.deserialize((String) value) : serializer.serialize(value);
+                    method = PropertyUtil.findSetter(setter, instance, value.getClass());
+                } else {
+                    throw e;
+                }
+            }
+            
+            if (method != null) {
+                method.invoke(instance, value);
+            }
+        } catch (Exception e) {
+            throw MiscUtil.toUnchecked(e);
         }
     }
     

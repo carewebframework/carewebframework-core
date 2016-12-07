@@ -101,9 +101,8 @@ public class LayoutDesigner extends Window implements IAutoWired {
      * Display the Layout Manager dialog
      * 
      * @param rootElement The root UI element.
-     * @throws Exception Unspecified exception.
      */
-    public static void execute(UIElementBase rootElement) throws Exception {
+    public static void execute(UIElementBase rootElement) {
         LayoutDesigner dlg = getInstance(true);
         dlg.init(rootElement);
         dlg.setMode(Mode.POPUP);
@@ -128,9 +127,8 @@ public class LayoutDesigner extends Window implements IAutoWired {
      * 
      * @param autoCreate If true and dialog does not exist, it is created.
      * @return The layout manager.
-     * @throws Exception Unspecified exception.
      */
-    private static LayoutDesigner getInstance(boolean autoCreate) throws Exception {
+    private static LayoutDesigner getInstance(boolean autoCreate) {
         Page page = ExecutionContext.getPage();
         LayoutDesigner dlg = (LayoutDesigner) page.getAttribute(CWF_PAGE);
         

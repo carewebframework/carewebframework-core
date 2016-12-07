@@ -4,7 +4,7 @@
 	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd ">
 
 	<window width="400px" height="500px" mold="bootstrap"
-		use="org.carewebframework.shell.designer.PropertyGrid">
+		impl="org.carewebframework.shell.designer.PropertyGrid">
 		<splitterview horizontal="false" vflex="1">
 			<splitterpane relativeSize="75">
 				<grid name="gridProperties" width="100%" vflex="true"

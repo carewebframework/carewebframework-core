@@ -64,9 +64,8 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
      * 
      * @param parent Top level element to be serialized.
      * @return A UI layout representing the serialized hierarchy.
-     * @throws Exception Unspecified exception.
      */
-    public static UILayout serialize(UIElementBase parent) throws Exception {
+    public static UILayout serialize(UIElementBase parent) {
         UILayout layout = new UILayout();
         layout.internalSerialize(parent);
         return layout;
@@ -131,9 +130,8 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
      * element and all its subordinates.
      * 
      * @param parent UI element to be serialized.
-     * @throws Exception Unspecified exception.
      */
-    private void internalSerialize(UIElementBase parent) throws Exception {
+    private void internalSerialize(UIElementBase parent) {
         PluginDefinition def = parent.getDefinition();
         boolean isRoot = parent.getParent() == null;
         

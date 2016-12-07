@@ -3,7 +3,7 @@
 	xmlns:h="http://www.w3.org/1999/xhtml"
 	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd ">
 	<menupopup
-		use="org.carewebframework.shell.designer.DesignContextMenu">
+		impl="org.carewebframework.shell.designer.DesignContextMenu">
 		<menuitem name="mnuHeader" class="cwf-menu-header"
 			disabled="true" />
 		<menuitem name="mnuAdd"

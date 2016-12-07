@@ -1,6 +1,6 @@
 <page>
 	<window width="400px" height="400px" mold="bootstrap"
-		use="org.carewebframework.shell.designer.AddComponent">
+		impl="org.carewebframework.shell.designer.AddComponent">
 		<tree name="tree" vflex="true"
 			style="background:none;border:none;text-overflow:ellipsis;white-space:nowrap;padding:0 5px 0 5px">
 			<treechildren>
