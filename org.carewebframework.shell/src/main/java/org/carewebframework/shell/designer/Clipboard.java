@@ -69,7 +69,7 @@ public class Clipboard {
     }
     
     public void view() {
-        ClipboardViewer.execute(this);
+        ClipboardViewer.show(this);
     }
     
     public boolean isEmpty() {

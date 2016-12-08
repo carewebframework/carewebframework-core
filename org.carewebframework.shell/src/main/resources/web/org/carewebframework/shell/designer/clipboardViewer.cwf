@@ -1,0 +1,24 @@
+<window width="400px" height="400px" sizable="true" closable="true"
+	title="${@msg.cwf.shell.clipboard.viewer.title}"
+	controller="org.carewebframework.shell.designer.ClipboardViewer">
+	<memobox name="txtData" synchronized="true" width="100%" style="flex:1" />
+	<toolbar align="end" width="100%">
+		<button name="btnSave"
+			class="flavor:btn-default size:btn-sm"
+			label="${@msg.cwf.shell.clipboard.viewer.btn.save.label}"
+			hint="${@msg.cwf.shell.clipboard.viewer.btn.save.hint}" />
+		<button name="btnRestore"
+			class="flavor:btn-default size:btn-sm"
+			label="${@msg.cwf.shell.clipboard.viewer.btn.restore.label}"
+			hint="${@msg.cwf.shell.clipboard.viewer.btn.restore.hint}" />
+		<span width="40px" />
+		<button name="btnOK"
+			class="flavor:btn-success size:btn-sm"
+			label="${@msg.cwf.shell.clipboard.viewer.btn.ok.label}"
+			hint="${@msg.cwf.shell.clipboard.viewer.btn.ok.hint}" />
+		<button name="btnCancel"
+			class="flavor:btn-danger size:btn-sm"
+			label="${@msg.cwf.shell.clipboard.viewer.btn.cancel.label}"
+			hint="${@msg.cwf.shell.clipboard.viewer.btn.cancel.hint}" />
+	</toolbar>
+</window>

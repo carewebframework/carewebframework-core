@@ -1,4 +1,4 @@
-<container controller="org.carewebframework.shell.designer.DesignMenuController">
+<container controller="org.carewebframework.shell.designer.DesignMenu">
 	<menu name="menu">
 		<menuitem name="mnuDesignMode" checkable="true"
 			label="${@msg.cwf.shell.designer.menu.designmode.label}" 

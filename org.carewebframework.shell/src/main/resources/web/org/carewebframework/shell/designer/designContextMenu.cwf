@@ -1,0 +1,22 @@
+<menupopup
+	controller="org.carewebframework.shell.designer.DesignContextMenu">
+	<menuheader name="mnuHeader" />
+	<menuitem name="mnuAdd"
+		label="${@msg.cwf.shell.designer.menu.add.label}" />
+	<menuitem name="mnuDelete"
+		label="${@msg.cwf.shell.designer.menu.delete.label}" />
+	<menuseparator />
+	<menuitem name="mnuCopy"
+		label="${@msg.cwf.shell.designer.menu.copy.label}" />
+	<menuitem name="mnuCut"
+		label="${@msg.cwf.shell.designer.menu.cut.label}" />
+	<menuitem name="mnuPaste"
+		label="${@msg.cwf.shell.designer.menu.paste.label}" />
+	<menuitem name="mnuView"
+		label="${@msg.cwf.shell.designer.menu.view.label}" />
+	<menuseparator />
+	<menuitem name="mnuProperties"
+		label="${@msg.cwf.shell.designer.menu.properties.label}" />
+	<menuitem name="mnuAbout"
+		label="${@msg.cwf.shell.designer.menu.about.label}" />
+	</menupopup>

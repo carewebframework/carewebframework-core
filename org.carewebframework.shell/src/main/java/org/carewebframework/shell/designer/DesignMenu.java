@@ -28,8 +28,6 @@ package org.carewebframework.shell.designer;
 import java.util.Collections;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.carewebframework.api.security.SecurityUtil;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.shell.CareWebShell;
@@ -52,9 +50,7 @@ import org.carewebframework.web.page.PageUtil;
 /**
  * This is the controller for the design menu that appears in the desktop's menu bar.
  */
-public class DesignMenuController implements IAutoWired {
-    
-    private static final Log log = LogFactory.getLog(DesignMenuController.class);
+public class DesignMenu implements IAutoWired {
     
     private CareWebShell shell;
     
@@ -73,23 +69,11 @@ public class DesignMenuController implements IAutoWired {
      * Creates the design menu with the specified desktop as owner.
      * 
      * @param owner Desktop UI element owner.
-     * @return Design menu instance.
+     * @param parent The parent for the design menu.
      */
-    public static BaseComponent createMenu(UIElementDesktop owner) {
-        BaseComponent designMenu = null;
-        
-        try {
-            Map<String, Object> args = Collections.singletonMap("owner", owner);
-            designMenu = PageUtil.createPage(DesignConstants.RESOURCE_PREFIX + "designMenu.cwf", null, args).get(0);
-        } catch (Exception e) {
-            log.error("Error creating design menu.", e);
-            
-            if (designMenu != null) {
-                designMenu.destroy();
-                designMenu = null;
-            }
-        }
-        return designMenu;
+    public static void create(UIElementDesktop owner, BaseUIComponent parent) {
+        Map<String, Object> args = Collections.singletonMap("owner", owner);
+        PageUtil.createPage(DesignConstants.RESOURCE_PREFIX + "designMenu.cwf", parent, args).get(0);
     }
     
     /**

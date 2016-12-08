@@ -25,48 +25,62 @@
  */
 package org.carewebframework.shell.designer;
 
+import java.util.Collections;
+import java.util.Map;
+
 import org.carewebframework.common.StrUtil;
-import org.carewebframework.ui.dialog.DialogUtil;
-import org.carewebframework.web.annotation.WiredComponentScanner;
+import org.carewebframework.ui.core.CWFUtil;
+import org.carewebframework.web.ancillary.IAutoWired;
+import org.carewebframework.web.annotation.EventHandler;
+import org.carewebframework.web.annotation.WiredComponent;
+import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.Button;
-import org.carewebframework.web.component.Textbox;
+import org.carewebframework.web.component.Memobox;
 import org.carewebframework.web.component.Window;
-import org.carewebframework.web.page.PageDefinition;
-import org.carewebframework.web.page.PageParser;
+import org.carewebframework.web.page.PageUtil;
 
 /**
  * Allows viewing and editing of clipboard contents.
  */
-public class ClipboardViewer extends Window {
+public class ClipboardViewer implements IAutoWired {
+    
+    private final String MSG_EMPTY = StrUtil.getLabel("cwf.shell.clipboard.viewer.message.empty");
+    
+    private boolean modified;
+    
+    private Window window;
     
     private Clipboard clipboard;
     
     private Object data;
     
-    private Textbox txtData;
+    @WiredComponent
+    private Memobox txtData;
     
+    @WiredComponent
     private Button btnSave;
     
+    @WiredComponent
     private Button btnRestore;
-    
-    private boolean modified;
-    
-    private final String MSG_EMPTY = StrUtil.getLabel("cwf.shell.clipboard.viewer.message.empty");
     
     /**
      * Show viewer.
      * 
      * @param clipboard Clipboard whose contents is to be accessed.
      */
-    public static void execute(Clipboard clipboard) {
-        PageDefinition def = PageParser.getInstance().parse(DesignConstants.RESOURCE_PREFIX + "ClipboardViewer.cwf");
-        ClipboardViewer viewer = (ClipboardViewer) DialogUtil.popup(DesignConstants.RESOURCE_PREFIX + "ClipboardViewer.cwf",
-            true, true, false);
-        viewer.clipboard = clipboard;
-        viewer.data = clipboard.getData();
-        WiredComponentScanner.wire(viewer, viewer);
-        viewer.restore();
-        viewer.setMode(Mode.MODAL);
+    public static void show(Clipboard clipboard) {
+        Map<String, Object> args = Collections.singletonMap("clipboard", clipboard);
+        Window dlg = (Window) PageUtil.createPage(DesignConstants.RESOURCE_PREFIX + "clipboardViewer.cwf", null, args)
+                .get(0);
+        dlg.modal(null);
+    }
+    
+    @Override
+    public void afterInitialized(BaseComponent root) {
+        window = (Window) root;
+        clipboard = root.getAttribute("clipboard", Clipboard.class);
+        data = clipboard.getData();
+        restore();
     }
     
     /**
@@ -81,7 +95,7 @@ public class ClipboardViewer extends Window {
                 clipboard.copy(data instanceof String ? text
                         : data instanceof IClipboardAware ? ((IClipboardAware<?>) data).fromClipboard(text) : null);
             } catch (Exception e) {
-                //TODO: Clients.wrongValue(txtData, ZKUtil.formatExceptionForDisplay(e));
+                txtData.setBalloon(CWFUtil.formatExceptionForDisplay(e));
                 txtData.focus();
                 return false;
             }
@@ -110,48 +124,49 @@ public class ClipboardViewer extends Window {
     private void updateControls() {
         btnSave.setDisabled(!modified);
         btnRestore.setDisabled(!modified);
-        //TODO: Clients.clearWrongValue(txtData);
+        txtData.setBalloon(null);
     }
     
     /**
      * Detected data edits.
      */
-    public void onChanging$txtData() {
+    @EventHandler(value = "change", target = "@txtData")
+    private void onChange$txtData() {
         modified = true;
         updateControls();
     }
     
     /**
      * Clicking OK button commits changes and closes viewer.
-     * 
-     * @throws Exception Unspecified exception.
      */
-    public void onClick$btnOK() throws Exception {
+    @EventHandler(value = "click", target = "btnOK")
+    private void onClick$btnOK() {
         if (commit()) {
-            detach();
+            window.close();
         }
     }
     
     /**
      * Clicking cancel button discards changes and closes viewer.
      */
-    public void onClick$btnCancel() {
-        detach();
+    @EventHandler(value = "click", target = "btnCancel")
+    private void onClick$btnCancel() {
+        window.close();
     }
     
     /**
      * Clicking save button commits changes.
-     * 
-     * @throws Exception Unspecified exception.
      */
-    public void onClick$btnSave() throws Exception {
+    @EventHandler(value = "click", target = "@btnSave")
+    private void onClick$btnSave() {
         commit();
     }
     
     /**
      * Clicking restore button restores original data.
      */
-    public void onClick$btnRestore() {
+    @EventHandler(value = "click", target = "@btnRestore")
+    private void onClick$btnRestore() {
         restore();
     }
 }

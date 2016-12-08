@@ -50,7 +50,7 @@ import org.carewebframework.web.event.EventUtil;
  */
 public class LayoutDesigner implements IAutoWired {
     
-    private static final String CWF_PAGE = DesignConstants.RESOURCE_PREFIX + "LayoutDesigner.cwf";
+    private static final String CWF_PAGE = DesignConstants.RESOURCE_PREFIX + "layoutDesigner.cwf";
     
     private static final String ATTR_BRING_TO_FRONT = CWF_PAGE + ".BTF";
     
@@ -163,12 +163,13 @@ public class LayoutDesigner implements IAutoWired {
         window = (Window) comp;
         window.setCloseAction(CloseAction.HIDE);
         comp.setAttribute("controller", this);
-        boolean btf = comp.getPage().getAttribute(ATTR_BRING_TO_FRONT, true);
+        bringToFront = comp.getPage().getAttribute(ATTR_BRING_TO_FRONT, true);
         layoutChangedEvent = new LayoutChangedEvent(comp, null);
-        contextMenu.setParent(comp);
         contextMenu.setListener(comp);
         clipboard.addListener(comp);
-        //TODO: getPage().registerEventListener(layoutListener);
+        comp.getPage().addEventListener("register unregister", (event) -> {
+            //refresh();
+        });
     }
     
     /**
@@ -224,7 +225,7 @@ public class LayoutDesigner implements IAutoWired {
      */
     private void buildTree(UIElementBase root, Treenode parentNode, UIElementBase selectedElement) {
         Treenode item = createItem(root);
-        parentNode.addChild(item);
+        item.setParent(parentNode == null ? tree : parentNode);
         
         if (root == selectedElement) {
             tree.setSelectedNode(item);
@@ -288,7 +289,7 @@ public class LayoutDesigner implements IAutoWired {
      * @return The UI element associated with the tree item.
      */
     private UIElementBase getElement(Treenode item) {
-        return (UIElementBase) (item == null ? null : item.getData());
+        return (UIElementBase) (item == null ? rootElement : item.getData());
     }
     
     /**
@@ -297,10 +298,10 @@ public class LayoutDesigner implements IAutoWired {
     private void updateControls() {
         Treenode selectedItem = tree.getSelectedNode();
         UIElementBase selectedElement = getElement(selectedItem);
-        DesignContextMenu.updateStates(selectedElement, btnAdd, btnDelete, btnCopy, btnCut, btnPaste, btnProperties,
-            btnAbout);
-        Treenode target = selectedItem == null ? null : (Treenode) selectedItem.getParent();
-        target = target == null ? null : (Treenode) target.getParent();
+        contextMenu.updateStates(selectedElement, btnAdd, btnDelete, btnCopy, btnCut, btnPaste, btnProperties, btnAbout);
+        BaseComponent parent = selectedItem == null ? null : selectedItem.getParent();
+        parent = parent == null ? null : parent.getParent();
+        Treenode target = parent instanceof Treenode ? (Treenode) parent : null;
         btnLeft.setDisabled(movementType(selectedItem, target, false) == MovementType.INVALID);
         target = selectedItem == null ? null : (Treenode) selectedItem.getPreviousSibling();
         btnRight.setDisabled(movementType(selectedItem, target, false) == MovementType.INVALID);
@@ -309,8 +310,8 @@ public class LayoutDesigner implements IAutoWired {
         btnDown.setDisabled(movementType(selectedItem, target, true) == MovementType.INVALID);
         btnToFront.addStyle("opacity", bringToFront ? null : "0.5");
         
-        if (selectedElement == null) {} else {
-            window.setContext(contextMenu);
+        if (selectedElement != null) {
+            window.setContext(contextMenu.getMenupopup());
             contextMenu.setOwner(selectedElement);
         }
         
@@ -450,7 +451,7 @@ public class LayoutDesigner implements IAutoWired {
     /**
      * Shows clipboard contents.
      */
-    @EventHandler(value = "click", target = "@btnView")
+    @EventHandler(value = "click", target = "btnView")
     private void onClick$btnView() {
         clipboard.view();
     }
@@ -458,7 +459,7 @@ public class LayoutDesigner implements IAutoWired {
     /**
      * Refreshes the tree view.
      */
-    @EventHandler(value = "click", target = "@btnRefresh")
+    @EventHandler(value = "click", target = "btnRefresh")
     private void onClick$btnRefresh() {
         refresh();
     }

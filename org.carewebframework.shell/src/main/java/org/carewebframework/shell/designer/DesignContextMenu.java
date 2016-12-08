@@ -25,62 +25,70 @@
  */
 package org.carewebframework.shell.designer;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.layout.UIElementCWFBase;
 import org.carewebframework.shell.layout.UILayout;
+import org.carewebframework.web.ancillary.IAutoWired;
 import org.carewebframework.web.ancillary.IDisable;
-import org.carewebframework.web.ancillary.INamespace;
+import org.carewebframework.web.annotation.EventHandler;
+import org.carewebframework.web.annotation.WiredComponent;
 import org.carewebframework.web.client.ExecutionContext;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.BaseUIComponent;
+import org.carewebframework.web.component.Menuheader;
 import org.carewebframework.web.component.Menuitem;
 import org.carewebframework.web.component.Menupopup;
 import org.carewebframework.web.component.Page;
 import org.carewebframework.web.event.Event;
-import org.carewebframework.web.event.OpenEvent;
 import org.carewebframework.web.page.PageUtil;
 
 /**
  * Context menu for designer.
  */
-public class DesignContextMenu extends Menupopup implements INamespace {
-    
-    private static final Log log = LogFactory.getLog(DesignContextMenu.class);
-    
-    private UIElementBase owner;
-    
-    private Menuitem mnuHeader;
-    
-    private Menuitem mnuAdd;
-    
-    private Menuitem mnuDelete;
-    
-    private Menuitem mnuCopy;
-    
-    private Menuitem mnuPaste;
-    
-    private Menuitem mnuCut;
-    
-    private Menuitem mnuProperties;
-    
-    private Menuitem mnuAbout;
+public class DesignContextMenu implements IAutoWired {
     
     private final Clipboard clipboard = Clipboard.getInstance();
     
     private BaseComponent listener;
     
+    private UIElementBase owner;
+    
+    private Menupopup menuPopup;
+    
+    @WiredComponent
+    private Menuheader mnuHeader;
+    
+    @WiredComponent
+    private Menuitem mnuAdd;
+    
+    @WiredComponent
+    private Menuitem mnuDelete;
+    
+    @WiredComponent
+    private Menuitem mnuCopy;
+    
+    @WiredComponent
+    private Menuitem mnuPaste;
+    
+    @WiredComponent
+    private Menuitem mnuCut;
+    
+    @WiredComponent
+    private Menuitem mnuProperties;
+    
+    @WiredComponent
+    private Menuitem mnuAbout;
+    
     /**
-     * Returns an instance of the design context menu. This is a singleton with the desktop scope
-     * and is cached once created.
+     * Returns an instance of the design context menu. This is a singleton with the page scope and
+     * is cached once created.
      * 
-     * @return The design context menu for the active destkop.
+     * @return The design context menu for the active page.
      */
     public static DesignContextMenu getInstance() {
         Page page = ExecutionContext.getPage();
-        DesignContextMenu contextMenu = (DesignContextMenu) page.getAttribute(DesignConstants.ATTR_DESIGN_MENU);
+        DesignContextMenu contextMenu = page.getAttribute(DesignConstants.ATTR_DESIGN_MENU, DesignContextMenu.class);
         
         if (contextMenu == null) {
             contextMenu = create();
@@ -96,24 +104,8 @@ public class DesignContextMenu extends Menupopup implements INamespace {
      * @return New design context menu.
      */
     public static DesignContextMenu create() {
-        DesignContextMenu contextMenu = null;
-        
-        try {
-            contextMenu = (DesignContextMenu) PageUtil.createPage(DesignConstants.RESOURCE_PREFIX + "DesignContextMenu.cwf",
-                null);
-            contextMenu.wireController(contextMenu);
-            contextMenu.mnuHeader.setImage(DesignConstants.DESIGN_ICON_ACTIVE);
-            contextMenu.clipboard.addListener(contextMenu);
-        } catch (Exception e) {
-            log.error("Error creating design context menu.", e);
-            
-            if (contextMenu != null) {
-                contextMenu.detach();
-                contextMenu = null;
-            }
-        }
-        
-        return contextMenu;
+        return PageUtil.createPage(DesignConstants.RESOURCE_PREFIX + "designContextMenu.cwf", ExecutionContext.getPage())
+                .get(0).getAttribute("controller", DesignContextMenu.class);
     }
     
     /**
@@ -129,8 +121,8 @@ public class DesignContextMenu extends Menupopup implements INamespace {
      * @param properties Properties input element.
      * @param about About input element.
      */
-    public static void updateStates(UIElementBase ele, IDisable add, IDisable delete, IDisable copy, IDisable cut,
-                                    IDisable paste, IDisable properties, IDisable about) {
+    public void updateStates(UIElementBase ele, IDisable add, IDisable delete, IDisable copy, IDisable cut, IDisable paste,
+                             IDisable properties, IDisable about) {
         boolean isNull = ele == null;
         boolean isLocked = isNull || ele.isLocked();
         boolean noDelete = isLocked || ele.getDefinition().isInternal();
@@ -155,7 +147,7 @@ public class DesignContextMenu extends Menupopup implements INamespace {
      * @param comp The component.
      * @param disabled The disabled state.
      */
-    private static void disable(IDisable comp, boolean disabled) {
+    private void disable(IDisable comp, boolean disabled) {
         if (comp != null) {
             comp.setDisabled(disabled);
             
@@ -165,12 +157,23 @@ public class DesignContextMenu extends Menupopup implements INamespace {
         }
     }
     
+    @Override
+    public void afterInitialized(BaseComponent root) {
+        menuPopup = (Menupopup) root;
+        root.setAttribute("controller", this);
+        mnuHeader.setImage(DesignConstants.DESIGN_ICON_ACTIVE);
+        clipboard.addListener(mnuHeader);
+        menuPopup.addEventListener("open", (event) -> {
+            onOpen(event);
+        });
+    }
+    
     /**
      * Update control states based on menu owner.
      */
     private void updateControls() {
         if (owner == null) {
-            setVisible(false);
+            menuPopup.setVisible(false);
         } else {
             updateStates(owner, mnuAdd, mnuDelete, mnuCopy, mnuCut, mnuPaste, mnuProperties, mnuAbout);
         }
@@ -200,79 +203,82 @@ public class DesignContextMenu extends Menupopup implements INamespace {
         this.listener = listener;
     }
     
+    public Menupopup getMenupopup() {
+        return menuPopup;
+    }
+    
     /**
      * Sets the context menu's owner based on the UI element that invoked the menu.
      * 
      * @param event The open event.
      */
-    public void onOpen(Event event) {
+    private void onOpen(Event event) {
         if (listener == null) {
-            BaseComponent ref = ((OpenEvent) event).getRelatedTarget();
+            BaseComponent ref = event.getRelatedTarget();
             setOwner(UIElementCWFBase.getAssociatedUIElement(ref));
         }
         
         if (owner == null) {
             event.stopPropagation();
-            hide();
+            menuPopup.hide();
         }
     }
     
     /**
      * Invoke owner's property editor.
      */
-    public void onClick$mnuProperties() {
+    @EventHandler(value = "click", target = "@mnuProperties")
+    private void onClick$mnuProperties() {
         owner.editProperties();
     }
     
     /**
      * Invoke owner's about dialog.
-     * 
-     * @throws Exception Unspecified exception.
      */
-    public void onClick$mnuAbout() throws Exception {
+    @EventHandler(value = "click", target = "@mnuAbout")
+    private void onClick$mnuAbout() {
         owner.about();
     }
     
     /**
      * Remove owner from the layout.
      */
-    public void onClick$mnuDelete() {
+    @EventHandler(value = "click", target = "@mnuDelete")
+    private void onClick$mnuDelete() {
         owner.remove(true);
     }
     
     /**
      * Present Add Component dialog containing valid choices for this owner.
      */
-    public void onClick$mnuAdd() {
+    @EventHandler(value = "click", target = "@mnuAdd")
+    private void onClick$mnuAdd() {
         AddComponent.newChild(owner);
     }
     
     /**
      * Copies the XML layout with the owner as the root node to the clipboard.
-     * 
-     * @throws Exception Unspecified exception.
      */
-    public void onClick$mnuCopy() throws Exception {
+    @EventHandler(value = "click", target = "@mnuCopy")
+    private void onClick$mnuCopy() {
         clipboard.copy(UILayout.serialize(owner));
     }
     
     /**
      * Copies the XML layout with the owner as the root node to the clipboard, then deletes the
      * owner.
-     * 
-     * @throws Exception Unspecified exception.
      */
-    public void onClick$mnuCut() throws Exception {
+    @EventHandler(value = "click", target = "@mnuCut")
+    private void onClick$mnuCut() {
         onClick$mnuCopy();
         onClick$mnuDelete();
     }
     
     /**
      * Paste the XML layout in the clipboard into the layout with the owner as the parent node.
-     * 
-     * @throws Exception Unspecified exception.
      */
-    public void onClick$mnuPaste() throws Exception {
+    @EventHandler(value = "click", target = "@mnuPaste")
+    private void onClick$mnuPaste() {
         Object data = clipboard.getData();
         
         if (data instanceof UILayout) {
@@ -282,17 +288,17 @@ public class DesignContextMenu extends Menupopup implements INamespace {
     
     /**
      * Display the clipboard viewer.
-     * 
-     * @throws Exception Unspecified exception.
      */
-    public void onClick$mnuView() throws Exception {
+    @EventHandler(value = "click", target = "mnuView")
+    private void onClick$mnuView() {
         clipboard.view();
     }
     
     /**
      * Called when clipboard contents changes.
      */
-    public void onClipboardChange() {
+    @EventHandler(value = "clipboardChange", target = "@mnuHeader")
+    private void onClipboardChange() {
         updateControls();
     }
 }

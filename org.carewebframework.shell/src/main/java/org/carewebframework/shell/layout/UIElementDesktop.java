@@ -31,7 +31,7 @@ import org.carewebframework.help.viewer.HelpUtil;
 import org.carewebframework.help.viewer.HelpViewer.HelpViewerMode;
 import org.carewebframework.shell.CareWebShell;
 import org.carewebframework.shell.designer.DesignConstants;
-import org.carewebframework.shell.designer.DesignMenuController;
+import org.carewebframework.shell.designer.DesignMenu;
 import org.carewebframework.shell.plugins.PluginResourceHelp;
 import org.carewebframework.theme.ThemeUtil;
 import org.carewebframework.ui.action.ActionUtil;
@@ -126,8 +126,7 @@ public class UIElementDesktop extends UIElementCWFBase {
         });
         
         if (true || SecurityUtil.isGrantedAny(DesignConstants.DESIGN_MODE_PRIVS)) {
-            BaseComponent designMenu = DesignMenuController.createMenu(this);
-            menubar2.addChild(designMenu);
+            DesignMenu.create(this, menubar2);
         }
         
         addChild(menubar);

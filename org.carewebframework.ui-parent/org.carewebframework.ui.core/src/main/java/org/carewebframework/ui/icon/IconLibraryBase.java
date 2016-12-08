@@ -68,7 +68,7 @@ public class IconLibraryBase implements IIconLibrary {
     
     @Override
     public String getIconUrl(String iconName, String dimensions) {
-        return formatURL(iconName, dimensions, "~.");
+        return formatURL(iconName, dimensions, "web");
     }
     
     @Override

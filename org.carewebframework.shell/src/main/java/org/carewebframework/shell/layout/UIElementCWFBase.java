@@ -291,7 +291,7 @@ public abstract class UIElementCWFBase extends UIElementBase {
     public void setDesignMode(boolean designMode) {
         if (isDesignMode() != designMode) {
             super.setDesignMode(designMode);
-            setDesignContextMenu(designMode ? DesignContextMenu.getInstance() : null);
+            setDesignContextMenu(designMode ? DesignContextMenu.getInstance().getMenupopup() : null);
         }
         
         mask.update();
