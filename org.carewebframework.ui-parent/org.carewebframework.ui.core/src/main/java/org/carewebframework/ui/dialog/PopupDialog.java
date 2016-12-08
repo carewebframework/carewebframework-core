@@ -27,6 +27,8 @@ package org.carewebframework.ui.dialog;
 
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.carewebframework.web.client.ExecutionContext;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.Page;
@@ -39,6 +41,8 @@ import org.carewebframework.web.page.PageUtil;
  * Base class for a popup window.
  */
 public class PopupDialog extends Window {
+    
+    private static final Log log = LogFactory.getLog(PopupDialog.class);
     
     private boolean cancelled = true;
     
@@ -96,6 +100,7 @@ public class PopupDialog extends Window {
             }
             
             DialogUtil.showError(e);
+            log.error(e);
         }
         
         return window;

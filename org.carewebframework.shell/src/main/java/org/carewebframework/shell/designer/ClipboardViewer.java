@@ -57,9 +57,8 @@ public class ClipboardViewer extends Window {
      * Show viewer.
      * 
      * @param clipboard Clipboard whose contents is to be accessed.
-     * @throws Exception Unspecified exception.
      */
-    public static void execute(Clipboard clipboard) throws Exception {
+    public static void execute(Clipboard clipboard) {
         PageDefinition def = PageParser.getInstance().parse(DesignConstants.RESOURCE_PREFIX + "ClipboardViewer.cwf");
         ClipboardViewer viewer = (ClipboardViewer) DialogUtil.popup(DesignConstants.RESOURCE_PREFIX + "ClipboardViewer.cwf",
             true, true, false);

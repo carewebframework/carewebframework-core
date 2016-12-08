@@ -93,7 +93,7 @@
 			description="${@msg.cwf.shell.plugin.tabpane.description}">
 			<cwp:serialization>
 				<cwp:property id="label"
-					default="${@msg.cwf.shell.plugin.tabpane.label.default_}" name="${@msg.cwf.shell.plugin.tabpane.label.name}"
+					default="${@msg.cwf.shell.plugin.tabpane.label.default}" name="${@msg.cwf.shell.plugin.tabpane.label.name}"
 					description="${@msg.cwf.shell.plugin.tabpane.label.description}" />
 				<cwp:property id="icon" type="icon"
 					name="${@msg.cwf.shell.plugin.tabpane.icon.name}" description="${@msg.cwf.shell.plugin.tabpane.icon.description}" />
@@ -118,7 +118,7 @@
 			description="${@msg.cwf.shell.plugin.tabmenupane.description}">
 			<cwp:serialization>
 				<cwp:property id="label"
-					default="${@msg.cwf.shell.plugin.tabmenupane.label.default_}" name="${@msg.cwf.shell.plugin.tabmenupane.label.name}"
+					default="${@msg.cwf.shell.plugin.tabmenupane.label.default}" name="${@msg.cwf.shell.plugin.tabmenupane.label.name}"
 					description="${@msg.cwf.shell.plugin.tabmenupane.label.description}" />
 				<cwp:property id="hint"
 					name="${@msg.cwf.shell.plugin.tabmenupane.hint.name}" description="${@msg.cwf.shell.plugin.tabmenupane.hint.description}" />
@@ -161,7 +161,7 @@
 			description="${@msg.cwf.shell.plugin.treepane.description}">
 			<cwp:serialization>
 				<cwp:property id="label"
-					default="${@msg.cwf.shell.plugin.treepane.label.default_}" name="${@msg.cwf.shell.plugin.treepane.label.name}"
+					default="${@msg.cwf.shell.plugin.treepane.label.default}" name="${@msg.cwf.shell.plugin.treepane.label.name}"
 					description="${@msg.cwf.shell.plugin.treepane.label.description}" />
 				<cwp:property id="hint"
 					name="${@msg.cwf.shell.plugin.treepane.hint.name}" description="${@msg.cwf.shell.plugin.treepane.hint.description}" />
@@ -314,7 +314,7 @@
 			description="${@msg.cwf.shell.plugin.menuitem.description}">
 			<cwp:serialization>
 				<cwp:property id="label"
-					default="${@msg.cwf.shell.plugin.menuitem.label.default_}" name="${@msg.cwf.shell.plugin.menuitem.label.name}"
+					default="${@msg.cwf.shell.plugin.menuitem.label.default}" name="${@msg.cwf.shell.plugin.menuitem.label.name}"
 					description="${@msg.cwf.shell.plugin.menuitem.label.description}" />
 				<cwp:property id="hint"
 					name="${@msg.cwf.shell.plugin.menuitem.hint.name}" description="${@msg.cwf.shell.plugin.menuitem.hint.description}" />
@@ -352,7 +352,7 @@
 			description="${@msg.cwf.shell.plugin.label.description}">
 			<cwp:serialization>
 				<cwp:property id="label"
-					default="${@msg.cwf.shell.plugin.label.label.default_}" name="${@msg.cwf.shell.plugin.label.label.name}"
+					default="${@msg.cwf.shell.plugin.label.label.default}" name="${@msg.cwf.shell.plugin.label.label.name}"
 					description="${@msg.cwf.shell.plugin.label.label.description}" />
 				<cwp:property id="hint"
 					name="${@msg.cwf.shell.plugin.label.hint.name}" description="${@msg.cwf.shell.plugin.label.hint.description}" />
@@ -376,7 +376,7 @@
 			description="${@msg.cwf.shell.plugin.button.description}">
 			<cwp:serialization>
 				<cwp:property id="label"
-					default="${@msg.cwf.shell.plugin.button.label.default_}" name="${@msg.cwf.shell.plugin.button.label.name}"
+					default="${@msg.cwf.shell.plugin.button.label.default}" name="${@msg.cwf.shell.plugin.button.label.name}"
 					description="${@msg.cwf.shell.plugin.button.label.description}" />
 				<cwp:property id="icon" type="icon"
 					name="${@msg.cwf.shell.plugin.button.icon.name}" description="${@msg.cwf.shell.plugin.button.icon.description}" />
@@ -404,10 +404,10 @@
 			description="${@msg.cwf.shell.plugin.link.description}">
 			<cwp:serialization>
 				<cwp:property id="label"
-					default="${@msg.cwf.shell.plugin.link.label.default_}" name="${@msg.cwf.shell.plugin.link.label.name}"
+					default="${@msg.cwf.shell.plugin.link.label.default}" name="${@msg.cwf.shell.plugin.link.label.name}"
 					description="${@msg.cwf.shell.plugin.link.label.description}" />
 				<cwp:property id="color" type="color"
-					default="${@msg.cwf.shell.plugin.link.color.default_}" name="${@msg.cwf.shell.plugin.link.color.name}"
+					default="${@msg.cwf.shell.plugin.link.color.default}" name="${@msg.cwf.shell.plugin.link.color.name}"
 					description="${@msg.cwf.shell.plugin.link.color.description}" />
 				<cwp:property id="icon" type="icon"
 					name="${@msg.cwf.shell.plugin.link.icon.name}" description="${@msg.cwf.shell.plugin.link.icon.description}" />

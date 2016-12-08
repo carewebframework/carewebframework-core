@@ -66,15 +66,15 @@ import org.carewebframework.web.event.ClickEvent;
 import org.carewebframework.web.event.DblclickEvent;
 import org.carewebframework.web.event.IEventListener;
 import org.carewebframework.web.model.IComponentRenderer;
+import org.carewebframework.web.model.IModelAndView;
 import org.carewebframework.web.model.ListModel;
-import org.carewebframework.web.model.ModelAndView;
 
 /**
  * Supports selection and management of existing layouts.
  */
 public class LayoutManager implements IAutoWired {
     
-    private static final String ATTR_DEFAULT_SCOPE = LayoutUtil.class.getName() + ".default_scope";
+    private static final String ATTR_DEFAULT_SCOPE = LayoutUtil.class.getName() + ".defaultscope";
     
     @WiredComponent
     private Button btnOK;
@@ -113,7 +113,7 @@ public class LayoutManager implements IAutoWired {
     
     private LayoutIdentifier selectedLayout;
     
-    private ModelAndView<Listitem, String> modelAndView;
+    private IModelAndView<Listitem, String> modelAndView;
     
     private final IComponentRenderer<Listitem, String> renderer = new IComponentRenderer<Listitem, String>() {
         
@@ -229,7 +229,8 @@ public class LayoutManager implements IAutoWired {
         boolean manage = root.getAttribute("manage", false);
         window.setTitle(StrUtil.formatMessage(manage ? CAP_LAYOUT_MANAGE : CAP_LAYOUT_LOAD));
         lblPrompt.setLabel(StrUtil.formatMessage(manage ? MSG_LAYOUT_MANAGE : MSG_LAYOUT_LOAD));
-        modelAndView = new ModelAndView<>(lstLayouts, null, renderer);
+        modelAndView = lstLayouts.getModelAndView(String.class);
+        modelAndView.setRenderer(renderer);
         pnlSelect.setVisible(!manage);
         tbManage.setVisible(manage);
         ((Radiobutton) radioGroup.getChildAt(shared ? 0 : 1)).setChecked(true);
@@ -338,7 +339,7 @@ public class LayoutManager implements IAutoWired {
     /**
      * Import a layout.
      */
-    @EventHandler(value = "click", target = "@btnImport")
+    @EventHandler(value = "click", target = "btnImport")
     public void onClick$btnImport() {
         LayoutIdentifier layoutId = importLayout(shared);
         

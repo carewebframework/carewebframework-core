@@ -1,9 +1,9 @@
 <radiogroup name="radiogroup">
 	<radio
-		label=" ${@msg.cwf.shell.designer.propedit.bool.radio.true_.label}"
+		label=" ${@msg.cwf.shell.designer.propedit.bool.radio.true.label}"
 		forward="onFocus=onSelect" />
 	<separator orient="vertical" />
 	<radio
-		label=" ${@msg.cwf.shell.designer.propedit.bool.radio.false_.label}"
+		label=" ${@msg.cwf.shell.designer.propedit.bool.radio.false.label}"
 		forward="onFocus=onSelect" />
 </radiogroup>

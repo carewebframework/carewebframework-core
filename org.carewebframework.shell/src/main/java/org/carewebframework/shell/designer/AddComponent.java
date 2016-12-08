@@ -246,7 +246,7 @@ public class AddComponent extends Window {
         
         if (StringUtils.isEmpty(category)) {
             if (UIElementPlugin.class.isAssignableFrom(def.getClazz())) {
-                category = StrUtil.getLabel("cwf.shell.plugin.category._default");
+                category = StrUtil.getLabel("cwf.shell.plugin.category.default");
             } else {
                 return null;
             }

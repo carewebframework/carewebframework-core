@@ -66,11 +66,11 @@ public class DesignConstants {
     
     public static final String MSG_LAYOUT_DELETE = "@cwf.shell.designer.layout.delete.message";
     
-    public static final String MSG_LAYOUT_IMPORT = "@cwf.shell.designer.layout.import_.message";
+    public static final String MSG_LAYOUT_IMPORT = "@cwf.shell.designer.layout.import.message";
     
-    public static final String CAP_LAYOUT_IMPORT = "@cwf.shell.designer.layout.import_.caption";
+    public static final String CAP_LAYOUT_IMPORT = "@cwf.shell.designer.layout.import.caption";
     
-    public static final String ERR_LAYOUT_IMPORT = "@cwf.shell.designer.layout.import_.error.bad";
+    public static final String ERR_LAYOUT_IMPORT = "@cwf.shell.designer.layout.import.error.bad";
     
     public static final String DESIGN_HINT_ACTIVE = "@cwf.shell.designer.designmode.active.hint";
     

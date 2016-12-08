@@ -29,6 +29,8 @@ import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.layout.UILayout;
 import org.carewebframework.ui.dialog.DialogUtil;
 import org.carewebframework.web.ancillary.IAutoWired;
+import org.carewebframework.web.annotation.EventHandler;
+import org.carewebframework.web.annotation.WiredComponent;
 import org.carewebframework.web.client.ExecutionContext;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.Button;
@@ -36,15 +38,17 @@ import org.carewebframework.web.component.Page;
 import org.carewebframework.web.component.Treenode;
 import org.carewebframework.web.component.Treeview;
 import org.carewebframework.web.component.Window;
+import org.carewebframework.web.component.Window.CloseAction;
 import org.carewebframework.web.event.ClickEvent;
 import org.carewebframework.web.event.DblclickEvent;
 import org.carewebframework.web.event.DropEvent;
+import org.carewebframework.web.event.Event;
 import org.carewebframework.web.event.EventUtil;
 
 /**
- * Dialog for managing the current layout.
+ * Controller for dialog for managing the current layout.
  */
-public class LayoutDesigner extends Window implements IAutoWired {
+public class LayoutDesigner implements IAutoWired {
     
     private static final String CWF_PAGE = DesignConstants.RESOURCE_PREFIX + "LayoutDesigner.cwf";
     
@@ -57,32 +61,47 @@ public class LayoutDesigner extends Window implements IAutoWired {
         RELOCATE // Move to a different parent
     }
     
-    private Treeview tree;
-    
     private UIElementBase rootElement;
     
+    private Window window;
+    
+    @WiredComponent
+    private Treeview tree;
+    
+    @WiredComponent
     private Button btnCut;
     
+    @WiredComponent
     private Button btnCopy;
     
+    @WiredComponent
     private Button btnPaste;
     
+    @WiredComponent
     private Button btnAdd;
     
+    @WiredComponent
     private Button btnDelete;
     
+    @WiredComponent
     private Button btnUp;
     
+    @WiredComponent
     private Button btnDown;
     
+    @WiredComponent
     private Button btnLeft;
     
+    @WiredComponent
     private Button btnRight;
     
+    @WiredComponent
     private Button btnToFront;
     
+    @WiredComponent
     private Button btnProperties;
     
+    @WiredComponent
     private Button btnAbout;
     
     private final Clipboard clipboard = Clipboard.getInstance();
@@ -103,22 +122,20 @@ public class LayoutDesigner extends Window implements IAutoWired {
      * @param rootElement The root UI element.
      */
     public static void execute(UIElementBase rootElement) {
-        LayoutDesigner dlg = getInstance(true);
-        dlg.init(rootElement);
-        dlg.setMode(Mode.POPUP);
+        Window dlg = getInstance(true);
+        dlg.getAttribute("controller", LayoutDesigner.class).init(rootElement);
+        dlg.popup(null);
     }
     
     /**
      * Close the dialog if it is open.
      */
     public static void closeDialog() {
-        try {
-            LayoutDesigner dlg = getInstance(false);
-            
-            if (dlg != null) {
-                dlg.close();
-            }
-        } catch (Exception e) {}
+        Window dlg = getInstance(false);
+        
+        if (dlg != null) {
+            dlg.close();
+        }
     }
     
     /**
@@ -128,12 +145,12 @@ public class LayoutDesigner extends Window implements IAutoWired {
      * @param autoCreate If true and dialog does not exist, it is created.
      * @return The layout manager.
      */
-    private static LayoutDesigner getInstance(boolean autoCreate) {
+    private static Window getInstance(boolean autoCreate) {
         Page page = ExecutionContext.getPage();
-        LayoutDesigner dlg = (LayoutDesigner) page.getAttribute(CWF_PAGE);
+        Window dlg = page.getAttribute(CWF_PAGE, Window.class);
         
         if (autoCreate && dlg == null) {
-            dlg = (LayoutDesigner) DialogUtil.popup(CWF_PAGE, true, true, false);
+            dlg = DialogUtil.popup(CWF_PAGE, true, true, false);
             page.setAttribute(CWF_PAGE, dlg);
         }
         
@@ -142,14 +159,15 @@ public class LayoutDesigner extends Window implements IAutoWired {
     
     @Override
     public void afterInitialized(BaseComponent comp) {
-        wireController(this);
         //TODO: setWidgetOverride("_cwf_highlight", "function(comp) {jq(comp).effect('pulsate',{times:1}).effect('highlight');}");
-        Boolean btf = (Boolean) getPage().getAttribute(ATTR_BRING_TO_FRONT);
-        bringToFront = btf == null || btf;
-        layoutChangedEvent = new LayoutChangedEvent(this, null);
-        contextMenu.setParent(this);
-        contextMenu.setListener(this);
-        clipboard.addListener(this);
+        window = (Window) comp;
+        window.setCloseAction(CloseAction.HIDE);
+        comp.setAttribute("controller", this);
+        boolean btf = comp.getPage().getAttribute(ATTR_BRING_TO_FRONT, true);
+        layoutChangedEvent = new LayoutChangedEvent(comp, null);
+        contextMenu.setParent(comp);
+        contextMenu.setListener(comp);
+        clipboard.addListener(comp);
         //TODO: getPage().registerEventListener(layoutListener);
     }
     
@@ -234,8 +252,8 @@ public class LayoutDesigner extends Window implements IAutoWired {
         Treenode item = new Treenode();
         item.setLabel(label);
         item.setData(ele);
-        item.addEventForward(DropEvent.TYPE, this, null);
-        item.addEventForward(DblclickEvent.TYPE, btnProperties, ClickEvent.TYPE);
+        item.addEventForward(DropEvent.class, window, null);
+        item.addEventForward(DblclickEvent.class, btnProperties, ClickEvent.TYPE);
         
         if (!ele.isLocked() && !ele.getDefinition().isInternal()) {
             item.setDragid("d" + dragId++);
@@ -292,7 +310,7 @@ public class LayoutDesigner extends Window implements IAutoWired {
         btnToFront.addStyle("opacity", bringToFront ? null : "0.5");
         
         if (selectedElement == null) {} else {
-            setContext(contextMenu);
+            window.setContext(contextMenu);
             contextMenu.setOwner(selectedElement);
         }
         
@@ -377,14 +395,15 @@ public class LayoutDesigner extends Window implements IAutoWired {
     /**
      * Refreshes tree when layout has changed.
      */
-    public void onLayoutChanged() {
+    private void onLayoutChanged() {
         refresh();
     }
     
     /**
      * Updates tool bar controls when selected changes.
      */
-    public void onSelect$tree() {
+    @EventHandler(value = "select", target = "@tree")
+    private void onSelect$tree() {
         UIElementBase ele = selectedElement();
         Object obj = ele == null ? null : ele.getOuterComponent();
         
@@ -400,29 +419,26 @@ public class LayoutDesigner extends Window implements IAutoWired {
     
     /**
      * Performs a cut operation on the selected item.
-     * 
-     * @throws Exception Unspecified exception.
      */
-    public void onClick$btnCut() throws Exception {
+    @EventHandler(value = "click", target = "@btnCut")
+    private void onClick$btnCut() {
         onClick$btnCopy();
         onClick$btnDelete();
     }
     
     /**
      * Performs a copy operation on the selected item.
-     * 
-     * @throws Exception Unspecified exception.
      */
-    public void onClick$btnCopy() throws Exception {
+    @EventHandler(value = "click", target = "@btnCopy")
+    private void onClick$btnCopy() {
         clipboard.copy(UILayout.serialize(selectedElement()));
     }
     
     /**
      * Performs a paste operation, inserted the pasted elements under the current selection.
-     * 
-     * @throws Exception Unspecified exception.
      */
-    public void onClick$btnPaste() throws Exception {
+    @EventHandler(value = "click", target = "@btnPaste")
+    private void onClick$btnPaste() {
         Object data = clipboard.getData();
         
         if (data instanceof UILayout) {
@@ -433,31 +449,31 @@ public class LayoutDesigner extends Window implements IAutoWired {
     
     /**
      * Shows clipboard contents.
-     * 
-     * @throws Exception Unspecified exception.
      */
-    public void onClick$btnView() throws Exception {
+    @EventHandler(value = "click", target = "@btnView")
+    private void onClick$btnView() {
         clipboard.view();
     }
     
     /**
      * Refreshes the tree view.
      */
-    public void onClick$btnRefresh() {
+    @EventHandler(value = "click", target = "@btnRefresh")
+    private void onClick$btnRefresh() {
         refresh();
     }
     
-    public void onClick$btnToFront() {
+    @EventHandler(value = "click", target = "@btnToFront")
+    private void onClick$btnToFront() {
         bringToFront = !bringToFront;
         updateControls();
     }
     
     /**
      * Displays the property grid for the currently selected item.
-     * 
-     * @throws Exception Unspecified exception.
      */
-    public void onClick$btnProperties() throws Exception {
+    @EventHandler(value = "click", target = "@btnProperties")
+    private void onClick$btnProperties() {
         if (!btnProperties.isDisabled()) {
             PropertyGrid.create(selectedElement(), null);
         }
@@ -467,7 +483,8 @@ public class LayoutDesigner extends Window implements IAutoWired {
      * Invokes the add component dialog. Any newly added component will be placed under the current
      * selection.
      */
-    public void onClick$btnAdd() {
+    @EventHandler(value = "click", target = "@btnAdd")
+    private void onClick$btnAdd() {
         if (AddComponent.newChild(selectedElement()) != null) {
             requestRefresh();
         }
@@ -475,51 +492,53 @@ public class LayoutDesigner extends Window implements IAutoWired {
     
     /**
      * Removes the currently selected element and any children.
-     * 
-     * @throws Exception Unspecified exception.
      */
-    public void onClick$btnDelete() throws Exception {
+    @EventHandler(value = "click", target = "@btnDelete")
+    private void onClick$btnDelete() {
         UIElementBase child = selectedElement();
         UIElementBase parent = child.getParent();
         parent.removeChild(child, true);
-        tree.getSelectedNode().detach();
+        tree.getSelectedNode().destroy();
         updateDroppable();
         updateControls();
     }
     
-    public void onClick$btnUp() {
+    @EventHandler(value = "click", target = "@btnUp")
+    private void onClick$btnUp() {
         Treenode item = tree.getSelectedNode();
         doDrop(item, (Treenode) item.getPreviousSibling(), true);
     }
     
-    public void onClick$btnDown() {
+    @EventHandler(value = "click", target = "@btnDown")
+    private void onClick$btnDown() {
         Treenode item = tree.getSelectedNode();
         doDrop((Treenode) item.getNextSibling(), item, true);
     }
     
-    public void onClick$btnRight() {
+    @EventHandler(value = "click", target = "@btnRight")
+    private void onClick$btnRight() {
         Treenode item = tree.getSelectedNode();
         doDrop(item, (Treenode) item.getPreviousSibling(), false);
     }
     
-    public void onClick$btnLeft() {
+    @EventHandler(value = "click", target = "@btnLeft")
+    private void onClick$btnLeft() {
         Treenode item = tree.getSelectedNode();
         doDrop(item, (Treenode) item.getParent().getParent(), false);
     }
     
     /**
      * Display the About dialog for the selected element.
-     * 
-     * @throws Exception Unspecified exception.
      */
-    public void onClick$btnAbout() throws Exception {
+    @EventHandler(value = "click", target = "@btnAbout")
+    private void onClick$btnAbout() {
         selectedElement().about();
     }
     
     /**
      * Invoked when the clipboard contents changes.
      */
-    public void onClipboardChange() {
+    private void onClipboardChange() {
         updateControls();
     }
     
@@ -528,7 +547,7 @@ public class LayoutDesigner extends Window implements IAutoWired {
      * 
      * @param event The drop event.
      */
-    public void onDrop(DropEvent event) {
+    private void onDrop(DropEvent event) {
         Treenode target = getTreenode(event.getTarget());
         Treenode dragged = getTreenode(event.getRelatedTarget());
         doDrop(dragged, target, true);
@@ -564,13 +583,11 @@ public class LayoutDesigner extends Window implements IAutoWired {
     /**
      * Remove all listeners upon close.
      */
-    @Override
-    public void close() {
-        Page page = getPage();
+    private void onClose(Event event) {
+        Page page = window.getPage();
         //TODO: page.removeEventListener(layoutListener);
         page.removeAttribute(CWF_PAGE);
         page.setAttribute(ATTR_BRING_TO_FRONT, bringToFront);
-        clipboard.removeListener(this);
-        super.close();
+        clipboard.removeListener(window);
     }
 }

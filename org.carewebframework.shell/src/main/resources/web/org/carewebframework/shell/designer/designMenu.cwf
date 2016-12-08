@@ -22,8 +22,8 @@
 			label="${@msg.cwf.shell.designer.menu.layout.save.label}" 
 			hint="${@msg.cwf.shell.designer.menu.layout.save.hint}" />
 		<menuitem name="mnuShowMarkup"
-			label="${@msg.cwf.shell.designer.menu.zk.viewer.label}" 
-			hint="${@msg.cwf.shell.designer.menu.zk.viewer.hint}" />
+			label="${@msg.cwf.shell.designer.menu.markup.viewer.label}" 
+			hint="${@msg.cwf.shell.designer.menu.markup.viewer.hint}" />
 		<menuseparator />
 		<menuitem name="mnuLogout" 
 			label="${@msg.cwf.shell.designer.menu.logout.label}"

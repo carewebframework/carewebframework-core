@@ -45,11 +45,12 @@ import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.BaseUIComponent;
 import org.carewebframework.web.component.Menu;
 import org.carewebframework.web.component.Menuitem;
+import org.carewebframework.web.core.WebUtil;
 import org.carewebframework.web.event.EventUtil;
 import org.carewebframework.web.page.PageUtil;
 
 /**
- * This is the design menu that appears in the desktop's menu bar.
+ * This is the controller for the design menu that appears in the desktop's menu bar.
  */
 public class DesignMenuController implements IAutoWired {
     
@@ -79,7 +80,7 @@ public class DesignMenuController implements IAutoWired {
         
         try {
             Map<String, Object> args = Collections.singletonMap("owner", owner);
-            designMenu = PageUtil.createPage(DesignConstants.RESOURCE_PREFIX + "DesignMenu.cwf", null, args).get(0);
+            designMenu = PageUtil.createPage(DesignConstants.RESOURCE_PREFIX + "designMenu.cwf", null, args).get(0);
         } catch (Exception e) {
             log.error("Error creating design menu.", e);
             
@@ -99,7 +100,7 @@ public class DesignMenuController implements IAutoWired {
         this.owner = comp.getAttribute("owner", UIElementDesktop.class);
         shell = owner.getShell();
         
-        if (!SecurityUtil.hasDebugRole()) {
+        if (!WebUtil.isDebugEnabled() && !SecurityUtil.hasDebugRole()) {
             mnuShowMarkup.destroy();
         }
         
@@ -166,7 +167,7 @@ public class DesignMenuController implements IAutoWired {
      * @throws Exception Unspecified exception.
      */
     @EventHandler(value = "click", target = "mnuLayoutManager")
-    private void onClick$mnuLayoutManager() throws Exception {
+    private void onClick$mnuLayoutManager() {
         LayoutManager.show(true, shell.getUILayout().getName(), null);
     }
     

@@ -68,7 +68,7 @@ public class Clipboard {
         }
     }
     
-    public void view() throws Exception {
+    public void view() {
         ClipboardViewer.execute(this);
     }
     

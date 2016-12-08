@@ -23,7 +23,7 @@
 	
 	<function>
 		<name>getIconPath</name>
-		<function-class>org.carewebframework.ui.icons.IconUtil</function-class>
+		<function-class>org.carewebframework.ui.icon.IconUtil</function-class>
 		<function-signature>java.lang.String getIconPath(java.lang.String)</function-signature>
 		<description>
 			Returns the path to the icon resource.
@@ -33,7 +33,7 @@
 	
 	<function>
 		<name>getIconPathEx</name>
-		<function-class>org.carewebframework.ui.icons.IconUtil</function-class>
+		<function-class>org.carewebframework.ui.icon.IconUtil</function-class>
 		<function-signature>java.lang.String getIconPath(java.lang.String, java.lang.String, java.lang.String)</function-signature>
 		<description>
 			Returns the path to the icon resource.
