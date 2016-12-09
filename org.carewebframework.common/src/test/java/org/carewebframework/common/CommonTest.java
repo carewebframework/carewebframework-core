@@ -41,6 +41,7 @@ import java.util.Map;
 import java.util.TimeZone;
 
 import org.carewebframework.common.DateUtil.TimeUnit;
+import org.carewebframework.common.ObservedCollection.IObservedCollectionListener;
 import org.carewebframework.common.Version.VersionPart;
 import org.junit.Test;
 
@@ -96,11 +97,26 @@ public class CommonTest {
     
     @Test
     public void testDateUtil() {
-        testDate(new Date());
-        testDate(DateUtil.parseDate("T"));
-        testDate(DateUtil.parseDate("N"));
-        testDate(DateUtil.parseDate("T+30"));
-        testDate(DateUtil.parseDate("T-4"));
+        Date now = new Date();
+        Date today = DateUtil.stripTime(now);
+        testDate(now);
+        testDate(today);
+        testDate("T", today, 0);
+        testDate("N", now, 100);
+        testDate("T+30", DateUtil.addDays(today, 30, false), 0);
+        testDate("N+30", DateUtil.addDays(now, 30, false), 100);
+        testDate("T-4", DateUtil.addDays(today, -4, false), 0);
+        testDate("T-50s", new Date(today.getTime() - 50000), 0);
+        testDate("N-50s", new Date(now.getTime() - 50000), 100);
+        testDate("T-50h", new Date(today.getTime() - 50 * 60 * 60 * 1000), 0);
+        testDate("T-50n", new Date(today.getTime() - 50 * 60 * 1000), 0);
+    }
+    
+    private void testDate(String value, Date expected, int threshold) {
+        Date actual = DateUtil.parseDate(value);
+        testDate(actual);
+        long diff = Math.abs(expected.getTime() - actual.getTime());
+        assertTrue("Difference exceeded threshold " + diff + " (" + threshold + ")", diff <= threshold);
     }
     
     private void testDate(Date date) {
@@ -142,7 +158,7 @@ public class CommonTest {
     private void testDateFormat(String tz, String time) throws Exception {
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MMM-yyyy HH:mm zzz");
         Date date = formatter.parse(DATE + " 13:04 EST"); // Reference date/time is 21-Nov-1978 13:04 EST
-        Localizer.setTimeZone(TimeZone.getTimeZone(tz));
+        TimeZone.setDefault(TimeZone.getTimeZone(tz));
         String DATE_TIME_NOTZ = DATE + " " + time;
         String DATE_TIME_TZ = DATE_TIME_NOTZ + " " + tz;
         assertEquals(DATE_TIME_TZ, DateUtil.formatDate(date, true));
@@ -324,6 +340,38 @@ public class CommonTest {
         }
         
         assertEquals(2, strCount);
+    }
+    
+    @Test
+    public void testObservedList() {
+        List<String> list = new ArrayList<>();
+        final int[] ops = { 0, 0 };
+        
+        ObservedCollection<String> col = new ObservedCollection<>(list, new IObservedCollectionListener<String>() {
+            
+            @Override
+            public void onAddElement(String element) {
+                ops[0]++;
+            }
+            
+            @Override
+            public void onRemoveElement(String element) {
+                ops[1]++;
+            }
+            
+        });
+        
+        col.add("ele1"); // ele1
+        col.add("ele2"); // ele1, ele2
+        col.remove("ele1"); // ele2
+        col.addAll(Arrays.asList(new String[] { "ele3", "ele4", "ele5" })); // ele2, ele3, ele4, ele5
+        col.removeAll(Arrays.asList(new String[] { "ele1", "ele4" })); // ele2, ele3, ele5
+        col.retainAll(Arrays.asList(new String[] { "ele1", "ele3" })); // ele3
+        assertEquals("Add count does not match.", 5, ops[0]);
+        assertEquals("Remove count does not match.", 4, ops[1]);
+        col.clear();
+        assertEquals("Add count does not match.", 5, ops[0]);
+        assertEquals("Remove count does not match.", 5, ops[1]);
     }
     
     @Test
