@@ -97,19 +97,25 @@ public class CommonTest {
     
     @Test
     public void testDateUtil() {
-        Date now = new Date();
-        Date today = DateUtil.stripTime(now);
-        testDate(now);
-        testDate(today);
-        testDate("T", today, 0);
-        testDate("N", now, 100);
-        testDate("T+30", DateUtil.addDays(today, 30, false), 0);
-        testDate("N+30", DateUtil.addDays(now, 30, false), 100);
-        testDate("T-4", DateUtil.addDays(today, -4, false), 0);
-        testDate("T-50s", new Date(today.getTime() - 50000), 0);
-        testDate("N-50s", new Date(now.getTime() - 50000), 100);
-        testDate("T-50h", new Date(today.getTime() - 50 * 60 * 60 * 1000), 0);
-        testDate("T-50n", new Date(today.getTime() - 50 * 60 * 1000), 0);
+        testDate(now());
+        testDate(today());
+        testDate("T", today(), 0);
+        testDate("N", now(), 100);
+        testDate("T+30", DateUtil.addDays(today(), 30, false), 0);
+        testDate("N+30", DateUtil.addDays(now(), 30, false), 100);
+        testDate("T-4", DateUtil.addDays(today(), -4, false), 0);
+        testDate("T-50s", new Date(today().getTime() - 50000), 0);
+        testDate("N-50s", new Date(now().getTime() - 50000), 100);
+        testDate("T-50h", new Date(today().getTime() - 50 * 60 * 60 * 1000), 0);
+        testDate("T-50n", new Date(today().getTime() - 50 * 60 * 1000), 0);
+    }
+    
+    private Date now() {
+        return new Date();
+    }
+    
+    private Date today() {
+        return DateUtil.stripTime(now());
     }
     
     private void testDate(String value, Date expected, int threshold) {
