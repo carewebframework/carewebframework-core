@@ -25,11 +25,12 @@
  */
 package org.carewebframework.shell.designer;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.carewebframework.api.property.PropertyUtil;
-import org.carewebframework.common.MiscUtil;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.shell.layout.LayoutUtil;
 import org.carewebframework.shell.layout.UIElementBase;
@@ -37,8 +38,11 @@ import org.carewebframework.shell.layout.UIElementLayout;
 import org.carewebframework.shell.layout.UIElementPlugin;
 import org.carewebframework.shell.plugins.PluginDefinition;
 import org.carewebframework.shell.plugins.PluginRegistry;
-import org.carewebframework.ui.dialog.DialogUtil;
 import org.carewebframework.ui.zk.TreeUtil;
+import org.carewebframework.web.ancillary.IAutoWired;
+import org.carewebframework.web.ancillary.IResponseCallback;
+import org.carewebframework.web.annotation.EventHandler;
+import org.carewebframework.web.annotation.WiredComponent;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.BaseUIComponent;
 import org.carewebframework.web.component.Button;
@@ -51,13 +55,14 @@ import org.carewebframework.web.event.DblclickEvent;
 import org.carewebframework.web.event.Event;
 import org.carewebframework.web.event.EventUtil;
 import org.carewebframework.web.event.IEventListener;
+import org.carewebframework.web.page.PageUtil;
 
 /**
  * Dialog for adding new component to UI.
  */
-public class AddComponent extends Window {
+public class AddComponent implements IAutoWired {
     
-    private static final String ON_FAVORITE = "onFavorite";
+    private static final String ON_FAVORITE = "favorite";
     
     private UIElementBase parentElement;
     
@@ -65,13 +70,9 @@ public class AddComponent extends Window {
     
     private PluginDefinition definition;
     
-    private Treeview tree;
-    
-    private Button btnOK;
+    private Window window;
     
     private boolean createChild;
-    
-    private Treenode itmFavorites;
     
     private List<String> favorites;
     
@@ -85,6 +86,15 @@ public class AddComponent extends Window {
     
     private final String noDescriptionHint = StrUtil.getLabel("cwf.shell.designer.add.component.description.missing.hint");
     
+    @WiredComponent
+    private Treenode tnFavorites;
+    
+    @WiredComponent
+    private Treeview tree;
+    
+    @WiredComponent
+    private Button btnOK;
+    
     /**
      * Handles click on item not under favorites category.
      */
@@ -92,22 +102,22 @@ public class AddComponent extends Window {
         
         @Override
         public void onEvent(Event event) {
-            Treenode item = (Treenode) event.getTarget();
-            String path = (String) item.getAttribute("path");
-            boolean isFavorite = !(Boolean) item.getAttribute("favorite");
-            Treenode other = (Treenode) item.getAttribute("other");
+            Treenode node = (Treenode) event.getTarget();
+            String path = (String) node.getAttribute("path");
+            boolean isFavorite = !(Boolean) node.getAttribute("favorite");
+            Treenode other = (Treenode) node.getAttribute("other");
             favoritesChanged = true;
             
             if (isFavorite) {
                 favorites.add(path);
-                other = addTreenode((PluginDefinition) item.getData(), item);
-                item.setAttribute("other", other);
+                other = addTreenode((PluginDefinition) node.getData(), node);
+                node.setAttribute("other", other);
             } else {
                 favorites.remove(path);
                 other.detach();
             }
             
-            setFavoriteStatus(item, isFavorite);
+            setFavoriteStatus(node, isFavorite);
         }
     };
     
@@ -118,8 +128,8 @@ public class AddComponent extends Window {
         
         @Override
         public void onEvent(Event event) {
-            Treenode item = (Treenode) event.getTarget();
-            Treenode other = (Treenode) item.getAttribute("other");
+            Treenode node = (Treenode) event.getTarget();
+            Treenode other = (Treenode) node.getAttribute("other");
             EventUtil.send(ON_FAVORITE, other, null);
         }
         
@@ -130,10 +140,14 @@ public class AddComponent extends Window {
      * children to the specified parent element.
      * 
      * @param parentElement Element to serve as parent to the newly created child element.
-     * @return The newly created child element, or null if the dialog was cancelled.
+     * @param callback Callback to return the newly created child element.
      */
-    public static UIElementBase newChild(UIElementBase parentElement) {
-        return execute(parentElement, true).childElement;
+    public static void newChild(UIElementBase parentElement, IResponseCallback<UIElementBase> callback) {
+        show(parentElement, true, (event) -> {
+            if (callback != null) {
+                callback.onComplete(event.getTarget().getAttribute("childElement", UIElementBase.class));
+            }
+        });
     }
     
     /**
@@ -141,10 +155,14 @@ public class AddComponent extends Window {
      * children to the specified parent element.
      * 
      * @param parentElement Element to serve as parent to the newly created child element.
-     * @return The selected plugin definition, or null if the dialog was cancelled.
+     * @param callback Callback to return the plugin definition.
      */
-    public static PluginDefinition getDefinition(UIElementBase parentElement) {
-        return execute(parentElement, false).definition;
+    public static void getDefinition(UIElementBase parentElement, IResponseCallback<PluginDefinition> callback) {
+        show(parentElement, false, (event) -> {
+            if (callback != null) {
+                callback.onComplete(event.getTarget().getAttribute("pluginDefinition", PluginDefinition.class));
+            }
+        });
     }
     
     /**
@@ -153,20 +171,14 @@ public class AddComponent extends Window {
      * 
      * @param parentElement Element to serve as parent to the newly created child element.
      * @param createChild If true, the selected element will be created.
-     * @return The dialog instance that was created.
+     * @param callback The close event handler.
      */
-    private static AddComponent execute(UIElementBase parentElement, boolean createChild) {
-        AddComponent dlg = null;
-        
-        try {
-            dlg = (AddComponent) DialogUtil.popup(DesignConstants.RESOURCE_PREFIX + "AddComponent.cwf", true, true, false);
-            dlg.init(parentElement, createChild);
-            dlg.setMode(Mode.MODAL);
-        } catch (Exception e) {
-            throw MiscUtil.toUnchecked(e);
-        }
-        
-        return dlg;
+    private static void show(UIElementBase parentElement, boolean createChild, IEventListener callback) {
+        Map<String, Object> args = new HashMap<>();
+        args.put("parentElement", parentElement);
+        args.put("createChid", createChild);
+        Window dlg = (Window) PageUtil.createPage(DesignConstants.RESOURCE_PREFIX + "addComponent.cwf", null, args).get(0);
+        dlg.modal(callback);
     }
     
     /**
@@ -176,10 +188,11 @@ public class AddComponent extends Window {
      * @param parentElement Element to serve as parent to the newly created child element.
      * @param createChild If true, the selected element will be created.
      */
-    private void init(UIElementBase parentElement, boolean createChild) {
-        this.parentElement = parentElement;
-        this.createChild = createChild;
-        wireController(this);
+    @Override
+    public void afterInitialized(BaseComponent comp) {
+        window = (Window) comp;
+        this.parentElement = comp.getAttribute("parentElement", UIElementBase.class);
+        this.createChild = comp.getAttribute("createChild", false);
         Treenode defaultItem = null;
         boolean useDefault = true;
         loadFavorites();
@@ -216,14 +229,22 @@ public class AddComponent extends Window {
         }
         
         TreeUtil.sort(tree);
-        itmFavorites.setIndex(0);
+        tnFavorites.setIndex(0);
         
         if (useDefault && defaultItem != null) {
             defaultItem.setSelected(true);
             onSelect$tree();
         }
         
-        setTitle(StrUtil.formatMessage("@cwf.shell.designer.add.component.title", parentElement.getDefinition().getName()));
+        window.setTitle(
+            StrUtil.formatMessage("@cwf.shell.designer.add.component.title", parentElement.getDefinition().getName()));
+        window.setOnCanClose(() -> {
+            if (favoritesChanged) {
+                PropertyUtil.saveValues(DesignConstants.DESIGN_FAVORITES_PROPERTY, null, false, favorites);
+            }
+            
+            return true;
+        });
     }
     
     private void loadFavorites() {
@@ -255,35 +276,35 @@ public class AddComponent extends Window {
         String path = category + (category.endsWith("\\") ? "" : "\\") + def.getName();
         boolean isFavorite = other != null || (favorites != null && favorites.contains(path));
         boolean disabled = def.isDisabled() || def.isForbidden();
-        Treenode item = TreeUtil.findNode(tree, path, true);
-        item.setData(def);
-        item.setHint(StringUtils.defaultString(def.getDescription(), noDescriptionHint));
+        Treenode node = TreeUtil.findNode(tree, path, true);
+        node.setData(def);
+        node.setHint(StringUtils.defaultString(def.getDescription(), noDescriptionHint));
         
         if (disabled) {
-            item.setDisabled(true);
+            node.setDisabled(true);
         } else {
-            item.addEventForward(DblclickEvent.TYPE, btnOK, ClickEvent.TYPE);
+            node.addEventForward(DblclickEvent.TYPE, btnOK, ClickEvent.TYPE);
         }
         
         if (favorites != null) {
             Span image = new Span();
             image.addClass("glyphicon");
             image.addStyle("float", "left");
-            BaseComponent cell = item.getFirstChild();
+            BaseComponent cell = node.getFirstChild();
             cell.addChild(image, cell.getFirstChild());
-            image.addEventForward(ClickEvent.TYPE, item, ON_FAVORITE);
-            item.addEventListener(ON_FAVORITE, other == null ? favoriteListener1 : favoriteListener2);
+            image.addEventForward(ClickEvent.TYPE, node, ON_FAVORITE);
+            node.addEventListener(ON_FAVORITE, other == null ? favoriteListener1 : favoriteListener2);
             
             if (isFavorite && other == null) {
-                other = addTreenode(def, item);
+                other = addTreenode(def, node);
             }
             
-            item.setAttribute("other", other);
-            item.setAttribute("path", path);
-            item.setAttribute("image", image);
-            setFavoriteStatus(item, isFavorite);
+            node.setAttribute("other", other);
+            node.setAttribute("path", path);
+            node.setAttribute("image", image);
+            setFavoriteStatus(node, isFavorite);
         }
-        return item;
+        return node;
     }
     
     /**
@@ -298,7 +319,7 @@ public class AddComponent extends Window {
         image.addClass(isFavorite ? "glyphicon-star text-primary" : "glyphicon-star-empty text-muted");
         image.setHint(isFavorite ? favoritesRemoveHint : favoritesAddHint);
         item.setAttribute("favorite", isFavorite);
-        itmFavorites.setVisible(isFavorite || itmFavorites.getFirstChild() != null);
+        tnFavorites.setVisible(isFavorite || tnFavorites.getFirstChild() != null);
         return image;
     }
     
@@ -314,17 +335,17 @@ public class AddComponent extends Window {
     /**
      * Close dialog without further action.
      */
-    public void onClick$btnCancel() {
-        close();
+    @EventHandler(value = "click", target = "btnCancel")
+    private void onClick$btnCancel() {
+        window.close();
     }
     
     /**
      * Create new element based on selected plugin definition, add it to the parent element and
      * close the dialog.
-     * 
-     * @throws Exception Unspecified exception.
      */
-    public void onClick$btnOK() throws Exception {
+    @EventHandler(value = "click", target = "@btnOK")
+    private void onClick$btnOK() {
         definition = selectedPluginDefinition();
         
         if (definition != null) {
@@ -334,26 +355,17 @@ public class AddComponent extends Window {
                 childElement.bringToFront();
             }
             
-            close();
-        }
-    }
-    
-    /**
-     * Close the dialog, saving any changes to favorites.
-     */
-    @Override
-    public void close() {
-        super.close();
-        
-        if (favoritesChanged) {
-            PropertyUtil.saveValues(DesignConstants.DESIGN_FAVORITES_PROPERTY, null, false, favorites);
+            window.setAttribute("pluginDefinition", definition);
+            window.setAttribute("childElement", childElement);
+            window.close();
         }
     }
     
     /**
      * Update buttons based on current selection.
      */
-    public void onSelect$tree() {
+    @EventHandler(value = "select", target = "@tree")
+    private void onSelect$tree() {
         btnOK.setDisabled(selectedPluginDefinition() == null);
     }
 }

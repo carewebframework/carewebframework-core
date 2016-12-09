@@ -255,7 +255,7 @@ public abstract class PropertyEditorCustomTree<T extends UIElementBase> extends 
             return definition;
         }
         
-        PluginDefinition def = AddComponent.getDefinition(getTarget());
+        PluginDefinition def = null; //TODO: AddComponent.getDefinition(getTarget());
         popupbox.open();
         return def;
     }

@@ -31,8 +31,8 @@ import java.util.Map;
 
 import org.carewebframework.common.DateRange;
 import org.carewebframework.common.DateUtil;
-import org.carewebframework.ui.dialog.DialogUtil.IResponseCallback;
 import org.carewebframework.web.ancillary.IAutoWired;
+import org.carewebframework.web.ancillary.IResponseCallback;
 import org.carewebframework.web.annotation.EventHandler;
 import org.carewebframework.web.annotation.WiredComponent;
 import org.carewebframework.web.component.BaseComponent;

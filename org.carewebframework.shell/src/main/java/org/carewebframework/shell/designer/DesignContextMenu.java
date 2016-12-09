@@ -253,7 +253,7 @@ public class DesignContextMenu implements IAutoWired {
      */
     @EventHandler(value = "click", target = "@mnuAdd")
     private void onClick$mnuAdd() {
-        AddComponent.newChild(owner);
+        AddComponent.newChild(owner, null);
     }
     
     /**

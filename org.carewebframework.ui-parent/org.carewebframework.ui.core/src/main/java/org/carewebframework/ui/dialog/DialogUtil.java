@@ -15,15 +15,11 @@ import java.util.Map;
 import org.carewebframework.ui.core.CWFUtil;
 import org.carewebframework.ui.dialog.DialogControl.IPromptCallback;
 import org.carewebframework.ui.dialog.InputDialog.IInputCallback;
+import org.carewebframework.web.ancillary.IResponseCallback;
 import org.carewebframework.web.component.Window;
 import org.carewebframework.web.event.IEventListener;
 
 public class DialogUtil {
-    
-    public interface IResponseCallback<T> {
-        
-        void onComplete(T confirm);
-    }
     
     public interface IConfirmCallback extends IResponseCallback<Boolean> {};
     

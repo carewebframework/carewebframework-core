@@ -1,12 +1,16 @@
 package org.carewebframework.ui.core;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
+import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.lang.reflect.FieldUtils;
+import org.carewebframework.common.MiscUtil;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.BaseInputboxComponent;
 import org.carewebframework.web.component.BaseLabeledComponent;
@@ -15,6 +19,16 @@ import org.carewebframework.web.component.Html;
 import org.carewebframework.web.component.Hyperlink;
 
 public class CWFUtil {
+    
+    /**
+     * Possible match modes for hierarchical tree search.
+     */
+    public enum MatchMode {
+        AUTO, // Autodetect index vs label
+        INDEX, // By node index.
+        CASE_SENSITIVE, // Case sensitive by node label.
+        CASE_INSENSITIVE // Case insensitive by node label.
+    };
     
     /**
      * Returns the CWF resource path for the specified class.
@@ -194,6 +208,85 @@ public class CWFUtil {
         }
         
         return null;
+    }
+    
+    /**
+     * Returns the node associated with the specified \-delimited path.
+     * 
+     * @param <NODE> Class of the node component.
+     * @param root Root component of hierarchy.
+     * @param nodeClass Class of the node component.
+     * @param path \-delimited path to search.
+     * @param create If true, nodes are created as needed.
+     * @param matchMode The match mode.
+     * @return The node corresponding to the specified path, or null if not found.
+     */
+    @SuppressWarnings("unchecked")
+    public static <NODE extends BaseComponent> NODE findNode(BaseComponent root, Class<NODE> nodeClass, String path,
+                                                             boolean create, MatchMode matchMode) {
+        String[] pcs = path.split("\\\\");
+        BaseComponent node = null;
+        
+        try {
+            for (String pc : pcs) {
+                if (pc.isEmpty()) {
+                    continue;
+                }
+                
+                BaseComponent parent = node == null ? root : node;
+                node = null;
+                int index = matchMode == MatchMode.INDEX || matchMode == MatchMode.AUTO ? NumberUtils.toInt(pc, -1) : -1;
+                MatchMode mode = matchMode != MatchMode.AUTO ? matchMode
+                        : index >= 0 ? MatchMode.INDEX : MatchMode.CASE_INSENSITIVE;
+                List<BaseComponent> children = parent.getChildren();
+                int size = children.size();
+                
+                if (mode == MatchMode.INDEX) {
+                    
+                    if (index < 0) {
+                        index = size;
+                    }
+                    
+                    int deficit = index - size;
+                    
+                    if (!create && deficit >= 0) {
+                        return null;
+                    }
+                    
+                    while (deficit-- >= 0) {
+                        parent.addChild(nodeClass.newInstance());
+                    }
+                    node = children.get(index);
+                    
+                } else {
+                    for (BaseComponent child : children) {
+                        String label = BeanUtils.getProperty(child, "label");
+                        
+                        if (mode == MatchMode.CASE_SENSITIVE ? pc.equals(label) : pc.equalsIgnoreCase(label)) {
+                            node = child;
+                            break;
+                        }
+                    }
+                    
+                    if (node == null) {
+                        if (!create) {
+                            return null;
+                        }
+                        node = nodeClass.newInstance();
+                        parent.addChild(node);
+                        BeanUtils.setProperty(node, "label", pc);
+                    }
+                }
+                
+                if (node == null) {
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            throw MiscUtil.toUnchecked(e);
+        }
+        
+        return (NODE) node;
     }
     
     private CWFUtil() {

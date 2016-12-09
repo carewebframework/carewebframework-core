@@ -26,7 +26,8 @@
 package org.carewebframework.ui.zk;
 
 import org.carewebframework.common.MiscUtil;
-import org.carewebframework.ui.zk.ZKUtil.MatchMode;
+import org.carewebframework.ui.core.CWFUtil;
+import org.carewebframework.ui.core.CWFUtil.MatchMode;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.Treenode;
 import org.carewebframework.web.component.Treeview;
@@ -93,7 +94,7 @@ public class TreeUtil {
             return null;
         }
         
-        return ZKUtil.findNode(tree, Treenode.class, clazz, path, create, matchMode);
+        return CWFUtil.findNode(tree, clazz, path, create, matchMode);
     }
     
     /**

@@ -28,7 +28,8 @@ package org.carewebframework.ui.zk;
 import java.util.List;
 
 import org.carewebframework.common.MiscUtil;
-import org.carewebframework.ui.zk.ZKUtil.MatchMode;
+import org.carewebframework.ui.core.CWFUtil;
+import org.carewebframework.ui.core.CWFUtil.MatchMode;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.BaseLabeledImageComponent;
 import org.carewebframework.web.component.Menu;
@@ -200,7 +201,7 @@ public class MenuUtil {
      */
     public static Menu findMenu(Toolbar menubar, String path, boolean create, Class<? extends Menu> clazz,
                                 MatchMode matchMode) {
-        return ZKUtil.findNode(menubar, Menupopup.class, clazz, path, create, matchMode);
+        return CWFUtil.findNode(menubar, clazz, path, create, matchMode);
     }
     
     /**

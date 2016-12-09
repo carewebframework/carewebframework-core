@@ -1,0 +1,15 @@
+<window width="400px" height="400px"
+	controller="org.carewebframework.shell.designer.AddComponent">
+	<treeview name="tree" style="flex:1">
+		<treenode name="tnFavorites" visible="false"
+			label="${@msg.cwf.shell.plugin.category.favorite}" />
+	</treeview>
+	<toolbar align="end">
+		<button name="btnOK" class="flavor:btn-success size:btn-sm"
+			label="${@msg.cwf.shell.designer.add.component.btn.ok.label}"
+			disabled="true" />
+		<button name="btnCancel" class="flavor:btn-danger size:btn-sm"
+			label="${@msg.cwf.shell.designer.add.component.btn.cancel.label}" />
+		<span width="20px" />
+	</toolbar>
+</window>

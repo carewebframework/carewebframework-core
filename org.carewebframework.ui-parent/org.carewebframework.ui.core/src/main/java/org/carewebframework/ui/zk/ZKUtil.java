@@ -27,8 +27,6 @@ package org.carewebframework.ui.zk;
 
 import java.util.List;
 
-import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.lang.math.NumberUtils;
 import org.carewebframework.common.MiscUtil;
 import org.carewebframework.web.client.ClientUtil;
 import org.carewebframework.web.client.ExecutionContext;
@@ -56,16 +54,6 @@ public class ZKUtil {
             EventUtil.send(event);
         }
         
-    };
-    
-    /**
-     * Possible match modes for hierarchical tree search.
-     */
-    public enum MatchMode {
-        AUTO, // Autodetect index vs label
-        INDEX, // By node index.
-        CASE_SENSITIVE, // Case sensitive by node label.
-        CASE_INSENSITIVE // Case insensitive by node label.
     };
     
     /**
@@ -172,98 +160,6 @@ public class ZKUtil {
                 throw MiscUtil.toUnchecked(e);
             }
         }
-    }
-    
-    /**
-     * Returns the node associated with the specified \-delimited path.
-     * 
-     * @param <ANCHOR> Class of the anchor component.
-     * @param <NODE> Class of the node component.
-     * @param root Root component of hierarchy.
-     * @param anchorClass Class of the anchor component.
-     * @param nodeClass Class of the node component.
-     * @param path \-delimited path to search.
-     * @param create If true, nodes are created as needed.
-     * @param matchMode The match mode.
-     * @return The node corresponding to the specified path, or null if not found.
-     */
-    @SuppressWarnings("unchecked")
-    public static <ANCHOR extends BaseComponent, NODE extends BaseComponent> NODE findNode(BaseComponent root,
-                                                                                           Class<ANCHOR> anchorClass,
-                                                                                           Class<NODE> nodeClass,
-                                                                                           String path, boolean create,
-                                                                                           MatchMode matchMode) {
-        String[] pcs = path.split("\\\\");
-        BaseComponent node = null;
-        
-        try {
-            for (String pc : pcs) {
-                if (pc.isEmpty()) {
-                    continue;
-                }
-                
-                BaseComponent parent = node == null ? root : node.getChild(anchorClass);
-                
-                if (parent == null) {
-                    if (!create) {
-                        return null;
-                    }
-                    node.addChild(parent = anchorClass.newInstance());
-                }
-                
-                node = null;
-                int index = matchMode == MatchMode.INDEX || matchMode == MatchMode.AUTO ? NumberUtils.toInt(pc, -1) : -1;
-                MatchMode mode = matchMode != MatchMode.AUTO ? matchMode
-                        : index >= 0 ? MatchMode.INDEX : MatchMode.CASE_INSENSITIVE;
-                List<BaseComponent> children = parent.getChildren();
-                int size = children.size();
-                
-                if (mode == MatchMode.INDEX) {
-                    
-                    if (index < 0) {
-                        index = size;
-                    }
-                    
-                    int deficit = index - size;
-                    
-                    if (!create && deficit >= 0) {
-                        return null;
-                    }
-                    
-                    while (deficit-- >= 0) {
-                        parent.addChild(nodeClass.newInstance());
-                    }
-                    node = children.get(index);
-                    
-                } else {
-                    for (BaseComponent child : children) {
-                        String label = BeanUtils.getProperty(child, "label");
-                        
-                        if (mode == MatchMode.CASE_SENSITIVE ? pc.equals(label) : pc.equalsIgnoreCase(label)) {
-                            node = child;
-                            break;
-                        }
-                    }
-                    
-                    if (node == null) {
-                        if (!create) {
-                            return null;
-                        }
-                        node = nodeClass.newInstance();
-                        parent.addChild(node);
-                        BeanUtils.setProperty(node, "label", pc);
-                    }
-                }
-                
-                if (node == null) {
-                    break;
-                }
-            }
-        } catch (Exception e) {
-            throw MiscUtil.toUnchecked(e);
-        }
-        
-        return (NODE) node;
     }
     
     /**

@@ -486,9 +486,11 @@ public class LayoutDesigner implements IAutoWired {
      */
     @EventHandler(value = "click", target = "@btnAdd")
     private void onClick$btnAdd() {
-        if (AddComponent.newChild(selectedElement()) != null) {
-            requestRefresh();
-        }
+        AddComponent.newChild(selectedElement(), (result) -> {
+            if (result != null) {
+                requestRefresh();
+            }
+        });
     }
     
     /**
