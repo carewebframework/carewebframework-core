@@ -38,8 +38,8 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.carewebframework.api.FrameworkRuntimeException;
-import org.carewebframework.common.DateUtil;
-import org.carewebframework.common.DateUtil.ITimeZoneAccessor;
+import org.carewebframework.common.Localizer;
+import org.carewebframework.common.Localizer.ITimeZoneResolver;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.ui.LifecycleEventListener.ILifecycleCallback;
 import org.carewebframework.ui.action.ActionRegistry;
@@ -570,7 +570,7 @@ public class Application {
         }
     }
     
-    private final ITimeZoneAccessor localTimeZone = new ITimeZoneAccessor() {
+    private final ITimeZoneResolver timeZoneResolver = new ITimeZoneResolver() {
         
         @Override
         public TimeZone getTimeZone() {
@@ -723,7 +723,7 @@ public class Application {
      */
     private Application() {
         super();
-        DateUtil.localTimeZone = localTimeZone;
+        Localizer.setTimeZoneResolver(timeZoneResolver);
         Fileupload.setTemplate("~./org/carewebframework/ui/zk/fileuploaddlg.zul");
         LifecycleEventDispatcher.addDesktopCallback(desktopLifeCycle);
         LifecycleEventDispatcher.addSessionCallback(sessionLifeCycle);

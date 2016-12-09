@@ -37,13 +37,10 @@ import java.util.Map;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.carewebframework.common.Localizer;
-import org.carewebframework.common.Localizer.ILocaleFinder;
-
+import org.carewebframework.common.Localizer.ILocaleResolver;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.Resource;
-
 import org.zkoss.util.Locales;
 import org.zkoss.util.Maps;
 import org.zkoss.util.resource.Labels;
@@ -119,7 +116,7 @@ public class LabelFinder {
      */
     public LabelFinder(ApplicationContext appContext) {
         Localizer.registerMessageSource(new LabelResolver());
-        Localizer.setLocaleFinder(new ILocaleFinder() {
+        Localizer.setLocaleResolver(new ILocaleResolver() {
             
             @Override
             public Locale getLocale() {

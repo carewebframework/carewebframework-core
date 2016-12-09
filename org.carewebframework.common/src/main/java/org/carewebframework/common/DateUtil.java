@@ -50,41 +50,6 @@ public class DateUtil {
         }
     };
     
-    /**
-     * Interface for accessing and setting user's timezone
-     */
-    public static interface ITimeZoneAccessor {
-        
-        /**
-         * Returns the current time zone.
-         * 
-         * @return TimeZone instance
-         */
-        TimeZone getTimeZone();
-        
-        /**
-         * Sets the current time zone.
-         * 
-         * @param timezone New time zone.
-         */
-        void setTimeZone(TimeZone timezone);
-        
-    }
-    
-    public static ITimeZoneAccessor localTimeZone = new ITimeZoneAccessor() {
-        
-        @Override
-        public TimeZone getTimeZone() {
-            return TimeZone.getDefault();
-        }
-        
-        @Override
-        public void setTimeZone(TimeZone timezone) {
-            TimeZone.setDefault(timezone);
-        }
-        
-    };
-    
     private static final String HL7_DATE_ONLY_PATTERN = "yyyyMMdd";
     
     private static final String HL7_DATE_TIME_PATTERN = HL7_DATE_ONLY_PATTERN + "HHmmssz";
@@ -698,7 +663,7 @@ public class DateUtil {
      * @return The user's time zone.
      */
     public static TimeZone getLocalTimeZone() {
-        return localTimeZone.getTimeZone();
+        return Localizer.getTimeZone();
     }
     
     /**
@@ -817,7 +782,7 @@ public class DateUtil {
      * @return Date instance.
      */
     public static Date toDate(int day, int month, int year, int hr, int min, int sec) {
-        Calendar cal = Calendar.getInstance(localTimeZone.getTimeZone());
+        Calendar cal = Calendar.getInstance(Localizer.getTimeZone());
         cal.set(year, month - 1, day, hr, min, sec);
         cal.set(Calendar.MILLISECOND, 0);
         return cal.getTime();
