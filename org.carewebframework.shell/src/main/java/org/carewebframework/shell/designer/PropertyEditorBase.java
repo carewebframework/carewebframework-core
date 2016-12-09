@@ -50,9 +50,8 @@ public abstract class PropertyEditorBase {
      * Create property editor using the specified template.
      * 
      * @param template The template to create the editing component.
-     * @throws Exception Unspecified exception.
      */
-    protected PropertyEditorBase(String template) throws Exception {
+    protected PropertyEditorBase(String template) {
         this((BaseUIComponent) PageUtil.createPage(template, null).get(0));
     }
     
@@ -143,8 +142,8 @@ public abstract class PropertyEditorBase {
     protected void init(UIElementBase target, PropertyInfo propInfo, PropertyGrid propGrid) {
         this.target = target;
         this.propInfo = propInfo;
-        component.addEventForward(ChangeEvent.TYPE, propGrid, ChangeEvent.TYPE);
-        component.addEventForward("focus", propGrid, SelectEvent.TYPE);
+        component.addEventForward(ChangeEvent.TYPE, propGrid.getWindow(), ChangeEvent.TYPE);
+        component.addEventForward("focus", propGrid.getWindow(), SelectEvent.TYPE);
     }
     
     /**

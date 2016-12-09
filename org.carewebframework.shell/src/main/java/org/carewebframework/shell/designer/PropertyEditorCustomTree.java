@@ -218,7 +218,7 @@ public abstract class PropertyEditorCustomTree<T extends UIElementBase> extends 
         btnRight.setVisible(hierarchical);
         btnLeft.setVisible(hierarchical);
         propertyGrid = PropertyGrid.create(null, gridParent);
-        propertyGrid.setClosable(true);
+        propertyGrid.getWindow().setClosable(true);
         //TODO: not sure if needed: propertyGrid.registerEventListener(eventType, this);
         txtLabel.setWidth("95%");
         //TODO: Needs non blank label constraint: txtLabel.setConstraint(new LabelConstraint());
@@ -279,7 +279,7 @@ public abstract class PropertyEditorCustomTree<T extends UIElementBase> extends 
     @Override
     protected void init(UIElementBase target, PropertyInfo propInfo, PropertyGrid propGrid) {
         super.init(target, propInfo, propGrid);
-        changeEvent = new Event(ChangeEvent.TYPE, propGrid);
+        changeEvent = new Event(ChangeEvent.TYPE, propGrid.getWindow());
         resetTree();
     }
     
@@ -536,7 +536,7 @@ public abstract class PropertyEditorCustomTree<T extends UIElementBase> extends 
      * @param event The close event.
      */
     public void onClose(Event event) {
-        if (event.getTarget() == propertyGrid) {
+        if (event.getTarget() == propertyGrid.getWindow()) {
             popupbox.close();
             doClose();
         }

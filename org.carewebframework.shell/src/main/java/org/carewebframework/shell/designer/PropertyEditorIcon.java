@@ -61,7 +61,7 @@ public class PropertyEditorIcon extends PropertyEditorBase {
     @Override
     protected void init(UIElementBase target, PropertyInfo propInfo, PropertyGrid propGrid) {
         super.init(target, propInfo, propGrid);
-        component.addEventForward(ChangeEvent.TYPE, propGrid, null);
+        component.addEventForward(ChangeEvent.TYPE, propGrid.getWindow(), null);
         String[] values = propInfo.getConfigValueArray("values");
         
         if (values == null) {

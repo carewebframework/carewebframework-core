@@ -45,7 +45,7 @@ public class PropertyEditorDouble extends PropertyEditorBase {
     @Override
     protected void init(UIElementBase target, PropertyInfo propInfo, PropertyGrid propGrid) {
         super.init(target, propInfo, propGrid);
-        doublebox.addEventForward(ChangeEvent.TYPE, propGrid, null);
+        doublebox.addEventForward(ChangeEvent.TYPE, propGrid.getWindow(), null);
         doublebox.setMinValue(propInfo.getConfigValueDouble("min", null));
         doublebox.setMaxValue(propInfo.getConfigValueDouble("max", null));
     }

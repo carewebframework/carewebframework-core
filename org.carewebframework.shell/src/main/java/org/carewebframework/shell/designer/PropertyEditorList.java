@@ -88,7 +88,7 @@ public class PropertyEditorList extends PropertyEditorBase {
         delimiter = propInfo.getConfigValue("delimiter");
         
         if (!combobox.isReadonly()) {
-            combobox.addEventForward(ChangeEvent.TYPE, propGrid, null);
+            combobox.addEventForward(ChangeEvent.TYPE, propGrid.getWindow(), null);
         }
         
         combobox.addEventListener(DblclickEvent.TYPE, (event) -> {
@@ -101,7 +101,7 @@ public class PropertyEditorList extends PropertyEditorBase {
              */
             int i = combobox.getSelectedIndex() + 1;
             combobox.setSelectedIndex(i >= combobox.getChildCount() ? 0 : i);
-            EventUtil.send(ChangeEvent.TYPE, propGrid, null);
+            EventUtil.send(ChangeEvent.TYPE, propGrid.getWindow(), null);
             //TODO: combobox.close();
         });
     }

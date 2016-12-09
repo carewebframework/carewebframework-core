@@ -26,7 +26,9 @@
 package org.carewebframework.shell.designer;
 
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -37,9 +39,9 @@ import org.carewebframework.shell.plugins.PluginDefinition;
 import org.carewebframework.shell.property.PropertyInfo;
 import org.carewebframework.shell.property.PropertyType;
 import org.carewebframework.ui.core.CWFUtil;
-import org.carewebframework.ui.dialog.DialogUtil;
-import org.carewebframework.ui.zk.ZKUtil;
+import org.carewebframework.web.ancillary.IAutoWired;
 import org.carewebframework.web.ancillary.INamespace;
+import org.carewebframework.web.annotation.WiredComponent;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.BaseUIComponent;
 import org.carewebframework.web.component.Button;
@@ -54,12 +56,13 @@ import org.carewebframework.web.event.ClickEvent;
 import org.carewebframework.web.event.Event;
 import org.carewebframework.web.event.EventUtil;
 import org.carewebframework.web.event.SelectEvent;
+import org.carewebframework.web.page.PageUtil;
 
 /**
  * Dialog for managing property values of UI elements within the designer. Each editable property of
  * the target UI element is presented as a row in the grid with its associated property editor.
  */
-public class PropertyGrid extends Window {
+public class PropertyGrid implements IAutoWired {
     
     private static final Log log = LogFactory.getLog(PropertyGrid.class);
     
@@ -84,25 +87,34 @@ public class PropertyGrid extends Window {
         
     };
     
+    @WiredComponent
     private Table gridProperties;
     
-    private UIElementBase target;
-    
+    @WiredComponent
     private Label lblPropertyInfo;
     
+    @WiredComponent
     private Column colProperty;
     
+    @WiredComponent
     private Label capPropertyName;
     
+    @WiredComponent
     private Button btnOK;
     
+    @WiredComponent
     private Button btnCancel;
     
+    @WiredComponent
     private Button btnApply;
     
+    @WiredComponent
     private Button btnRestore;
     
+    @WiredComponent
     private BaseUIComponent toolbar;
+    
+    private UIElementBase target;
     
     private Row selectedRow;
     
@@ -111,6 +123,8 @@ public class PropertyGrid extends Window {
     private boolean propertiesModified;
     
     private boolean embedded;
+    
+    private Window window;
     
     /**
      * Creates a property grid for the given target UI element.
@@ -132,15 +146,17 @@ public class PropertyGrid extends Window {
      * @return Newly created PropertyGrid instance.
      */
     public static PropertyGrid create(UIElementBase target, BaseComponent parent, boolean embedded) {
-        PropertyGrid propertyGrid = (PropertyGrid) DialogUtil.popup(DesignConstants.RESOURCE_PREFIX + "PropertyGrid.cwf",
-            !embedded, true, false);
-        propertyGrid.init(target, parent, embedded);
+        Map<String, Object> args = new HashMap<>();
+        args.put("target", target);
+        args.put("embedded", embedded);
+        Window window = (Window) PageUtil.createPage(DesignConstants.RESOURCE_PREFIX + "PropertyGrid.cwf", parent, args)
+                .get(0);
         
         if (parent == null) {
-            propertyGrid.setMode(Mode.MODAL);
+            window.modal(null);
         }
         
-        return propertyGrid;
+        return window.getAttribute("controller", PropertyGrid.class);
     }
     
     /**
@@ -150,24 +166,29 @@ public class PropertyGrid extends Window {
      * @param parent Parent component for property grid (may be null).
      * @param embedded If true, the property grid is embedded within another component.
      */
-    private void init(UIElementBase target, BaseComponent parent, boolean embedded) {
-        this.embedded = embedded;
-        wireController(this);
-        setTarget(target);
+    @Override
+    public void afterInitialized(BaseComponent comp) {
+        window = (Window) comp;
+        comp.setAttribute("controller", this);
+        this.embedded = comp.getAttribute("embedded", false);
+        setTarget(comp.getAttribute("target", UIElementBase.class));
         colProperty.setSortComparator(propSort);
         
-        if (parent != null) {
-            setClosable(false);
-            setWidth("100%");
-            setHeight("100%");
-            setSizable(false);
-            addClass("panel-primary cwf-propertygrid-embedded");
+        if (window.getParent() != null) {
+            window.setClosable(false);
+            window.setWidth("100%");
+            window.setHeight("100%");
+            window.setSizable(false);
+            window.addClass("cwf-propertygrid-embedded");
             toolbar.setVisible(embedded);
-            setParent(parent);
         }
         
         btnOK.setVisible(!embedded);
         btnCancel.setVisible(!embedded);
+    }
+    
+    public Window getWindow() {
+        return window;
     }
     
     /**
@@ -178,17 +199,17 @@ public class PropertyGrid extends Window {
      */
     public void setTarget(UIElementBase target) {
         this.target = target;
-        ZKUtil.detachChildren(gridProperties.getRows());
+        gridProperties.getRows().destroyChildren();
         
         if (target == null) {
-            ((BaseUIComponent) getFirstChild()).setVisible(false);
-            setTitle(StrUtil.formatMessage("@cwf.shell.designer.property.grid.noselection"));
+            ((BaseUIComponent) window.getFirstChild()).setVisible(false);
+            window.setTitle(StrUtil.formatMessage("@cwf.shell.designer.property.grid.noselection"));
             disableButtons(true);
             return;
         }
         
-        ((BaseUIComponent) getFirstChild()).setVisible(true);
-        setTitle(StrUtil.formatMessage("@cwf.shell.designer.property.grid.title", target.getDisplayName()));
+        ((BaseUIComponent) window.getFirstChild()).setVisible(true);
+        window.setTitle(StrUtil.formatMessage("@cwf.shell.designer.property.grid.title", target.getDisplayName()));
         PluginDefinition def = target.getDefinition();
         List<PropertyInfo> props = def.getProperties();
         
@@ -245,7 +266,7 @@ public class PropertyGrid extends Window {
             rows.addChild(row, append ? null : rows.getFirstChild());
             Cell cell = new Cell();
             row.addChild(cell);
-            cell.addEventForward(ClickEvent.TYPE, this, SelectEvent.TYPE);
+            cell.addEventForward(ClickEvent.TYPE, window, SelectEvent.TYPE);
             Label lbl = new Label(propInfo.getName());
             cell.addChild(lbl);
             row.setAttribute(EDITOR_ATTR, editor);
@@ -360,7 +381,7 @@ public class PropertyGrid extends Window {
         if (embedded) {
             commitChanges(false);
         } else {
-            close();
+            window.close();
         }
     }
     
@@ -383,19 +404,7 @@ public class PropertyGrid extends Window {
      */
     public void onClick$btnOK() {
         if (commitChanges(true)) {
-            close();
-        }
-    }
-    
-    /**
-     * Overrides the onClose method to prevent dialog closure when in embedded mode.
-     */
-    @Override
-    public void close() {
-        if (embedded) {
-            setVisible(false);
-        } else if (getMode() == Mode.MODAL) {
-            super.close();
+            window.close();
         }
     }
     

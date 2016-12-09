@@ -1,5 +1,5 @@
 <page>
-	<span zclass="cwf-treeview-node">
-		<a label="item" zclass="btn" class="btn-default" />
+	<span class="cwf-treeview-node">
+		<a label="item" />
 	</span>
 </page>
