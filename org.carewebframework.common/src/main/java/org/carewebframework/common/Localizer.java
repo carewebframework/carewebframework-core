@@ -28,6 +28,7 @@ package org.carewebframework.common;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -51,7 +52,7 @@ public class Localizer {
         
     }
     
-    public interface ILocaleFinder {
+    public interface ILocaleResolver {
         
         /**
          * Returns the default locale when none is specified.
@@ -61,15 +62,50 @@ public class Localizer {
         Locale getLocale();
     }
     
+    /**
+     * Interface for accessing and setting the local timezone
+     */
+    public interface ITimeZoneResolver {
+        
+        /**
+         * Returns the current time zone.
+         * 
+         * @return TimeZone instance
+         */
+        TimeZone getTimeZone();
+        
+        /**
+         * Sets the current time zone.
+         * 
+         * @param timezone New time zone.
+         */
+        void setTimeZone(TimeZone timezone);
+        
+    }
+    
     private static final Log log = LogFactory.getLog(Localizer.class);
     
     private static final List<IMessageSource> messageSources = new ArrayList<>();
     
-    private static ILocaleFinder localeFinder = new ILocaleFinder() {
+    private static ILocaleResolver localeResolver = new ILocaleResolver() {
         
         @Override
         public Locale getLocale() {
             return Locale.getDefault();
+        }
+        
+    };
+    
+    private static ITimeZoneResolver timeZoneResolver = new ITimeZoneResolver() {
+        
+        @Override
+        public TimeZone getTimeZone() {
+            return TimeZone.getDefault();
+        }
+        
+        @Override
+        public void setTimeZone(TimeZone timezone) {
+            TimeZone.setDefault(timezone);
         }
         
     };
@@ -113,16 +149,43 @@ public class Localizer {
      * @return The default locale.
      */
     public static Locale getDefaultLocale() {
-        return localeFinder.getLocale();
+        return localeResolver.getLocale();
     }
     
     /**
-     * Sets the locale finder used to determine the default locale.
+     * Sets the resolver used to determine the default locale.
      * 
-     * @param localeFinder An ILocaleFinder implementation.
+     * @param localeResolver An ILocaleResolver implementation.
      */
-    public static void setLocaleFinder(ILocaleFinder localeFinder) {
-        Localizer.localeFinder = localeFinder;
+    public static void setLocaleResolver(ILocaleResolver localeResolver) {
+        Localizer.localeResolver = localeResolver;
+    }
+    
+    /**
+     * Returns the local time zone.
+     * 
+     * @return The local time zone.
+     */
+    public static TimeZone getTimeZone() {
+        return timeZoneResolver.getTimeZone();
+    }
+    
+    /**
+     * Sets the local time zone.
+     * 
+     * @param timeZone The new time zone.
+     */
+    public static void setTimeZone(TimeZone timeZone) {
+        timeZoneResolver.setTimeZone(timeZone);
+    }
+    
+    /**
+     * Sets the resolver used to determine the local time zone.
+     * 
+     * @param timeZoneResolver An ITimeZoneResolver implementation.
+     */
+    public static void setTimeZoneResolver(ITimeZoneResolver timeZoneResolver) {
+        Localizer.timeZoneResolver = timeZoneResolver;
     }
     
     /**

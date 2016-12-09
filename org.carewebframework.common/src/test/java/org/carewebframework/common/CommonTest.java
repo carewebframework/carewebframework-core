@@ -142,7 +142,7 @@ public class CommonTest {
     private void testDateFormat(String tz, String time) throws Exception {
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MMM-yyyy HH:mm zzz");
         Date date = formatter.parse(DATE + " 13:04 EST"); // Reference date/time is 21-Nov-1978 13:04 EST
-        DateUtil.localTimeZone.setTimeZone(TimeZone.getTimeZone(tz));
+        Localizer.setTimeZone(TimeZone.getTimeZone(tz));
         String DATE_TIME_NOTZ = DATE + " " + time;
         String DATE_TIME_TZ = DATE_TIME_NOTZ + " " + tz;
         assertEquals(DATE_TIME_TZ, DateUtil.formatDate(date, true));
