@@ -63,7 +63,7 @@ public class Localizer {
     }
     
     /**
-     * Interface for accessing and setting the local timezone
+     * Interface for accessing the local timezone
      */
     public interface ITimeZoneResolver {
         
@@ -74,40 +74,18 @@ public class Localizer {
          */
         TimeZone getTimeZone();
         
-        /**
-         * Sets the current time zone.
-         * 
-         * @param timezone New time zone.
-         */
-        void setTimeZone(TimeZone timezone);
-        
     }
     
     private static final Log log = LogFactory.getLog(Localizer.class);
     
     private static final List<IMessageSource> messageSources = new ArrayList<>();
     
-    private static ILocaleResolver localeResolver = new ILocaleResolver() {
-        
-        @Override
-        public Locale getLocale() {
-            return Locale.getDefault();
-        }
-        
+    private static ILocaleResolver localeResolver = () -> {
+        return Locale.getDefault();
     };
     
-    private static ITimeZoneResolver timeZoneResolver = new ITimeZoneResolver() {
-        
-        @Override
-        public TimeZone getTimeZone() {
-            return TimeZone.getDefault();
-        }
-        
-        @Override
-        public void setTimeZone(TimeZone timezone) {
-            TimeZone.setDefault(timezone);
-        }
-        
+    private static ITimeZoneResolver timeZoneResolver = () -> {
+        return TimeZone.getDefault();
     };
     
     /**
@@ -168,15 +146,6 @@ public class Localizer {
      */
     public static TimeZone getTimeZone() {
         return timeZoneResolver.getTimeZone();
-    }
-    
-    /**
-     * Sets the local time zone.
-     * 
-     * @param timeZone The new time zone.
-     */
-    public static void setTimeZone(TimeZone timeZone) {
-        timeZoneResolver.setTimeZone(timeZone);
     }
     
     /**

@@ -577,12 +577,6 @@ public class Application {
             TimeZone tz = Application.getTimeZone(FrameworkWebSupport.getDesktop());
             return tz == null ? TimeZone.getDefault() : tz;
         }
-        
-        @Override
-        public void setTimeZone(TimeZone timezone) {
-            throw new UnsupportedOperationException();
-        }
-        
     };
     
     /**
