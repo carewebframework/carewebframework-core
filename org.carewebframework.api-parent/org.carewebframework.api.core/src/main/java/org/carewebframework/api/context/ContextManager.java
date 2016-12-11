@@ -78,7 +78,7 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
      * icons.
      */
     private enum CCOWStatus {
-        none, disabled, changing, joined, broken
+        NONE, DISABLED, CHANGING, JOINED, BROKEN
     };
     
     /**
@@ -362,17 +362,17 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
      */
     private CCOWStatus getCCOWStatus() {
         if (ccowContextManager == null) {
-            return ccowEnabled ? CCOWStatus.none : CCOWStatus.disabled;
+            return ccowEnabled ? CCOWStatus.NONE : CCOWStatus.DISABLED;
         } else if (ccowTransaction) {
-            return CCOWStatus.changing;
+            return CCOWStatus.CHANGING;
         } else {
             switch (ccowContextManager.getState()) {
                 case csParticipating:
-                    return CCOWStatus.joined;
+                    return CCOWStatus.JOINED;
                 case csSuspended:
-                    return CCOWStatus.broken;
+                    return CCOWStatus.BROKEN;
                 default:
-                    return CCOWStatus.none;
+                    return CCOWStatus.NONE;
             }
         }
     }

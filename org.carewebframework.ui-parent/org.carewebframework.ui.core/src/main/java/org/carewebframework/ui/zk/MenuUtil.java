@@ -265,7 +265,6 @@ public class MenuUtil {
      * Opens a menu and all menus that precede it.
      * 
      * @param menu Menu to open.
-     * @return True if the menu was opened.
      */
     public static void open(Menu menu) {
         BaseComponent parent = menu.getParent();
