@@ -1,5 +1,5 @@
 <window xmlns:c="client" name="win" border="none" height="80%"
-	mold="bootstrap" impl="org.carewebframework.help.viewer.HelpViewer">
+	impl="org.carewebframework.help.viewer.HelpViewer">
 	<borderlayout>
 		<west size="33%" splittable="true">
 			<div height="100%" width="100%">
@@ -15,21 +15,18 @@
 		<center>
 			<div width="100%" height="100%">
 				<toolbar class="cwf-help-viewer-navbar">
-					<toolbarbutton name="btnPrevious" zclass="btn"
-						class="btn-sm btn-default"
+					<toolbarbutton name="btnPrevious"
 						iconSclass="glyphicon glyphicon-chevron-left"
 						hint="${@msg.cwf.help.viewer.btn.previous.hint}" />
-					<toolbarbutton name="btnNext" zclass="btn"
-						class="btn-sm btn-default"
+					<toolbarbutton name="btnNext"
 						iconSclass="glyphicon glyphicon-chevron-right"
 						hint="${@msg.cwf.help.viewer.btn.next.hint}" />
 					<space />
-					<toolbarbutton name="btnOpen" zclass="btn"
-						class="btn-sm btn-default"
+					<toolbarbutton name="btnOpen" 
 						iconSclass="glyphicon glyphicon-new-window"
 						hint="${@msg.cwf.help.viewer.btn.open.hint}" />
-					<toolbarbutton name="btnPrint" zclass="btn"
-						class="btn-sm btn-default" iconSclass="glyphicon glyphicon-print"
+					<toolbarbutton name="btnPrint" 
+						iconSclass="glyphicon glyphicon-print"
 						hint="${@msg.cwf.help.viewer.btn.print.hint}"
 						c:onClick="jq(this.$f('iframe')).get(0).contentWindow.print();" />
 				</toolbar>

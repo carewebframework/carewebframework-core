@@ -24,13 +24,13 @@
 					</panelchildren>
 					<toolbar align="center">
 						<textbox name="txtPassword" type="password"
-							forward="onOK=btnUnlock.onClick" />
-						<button name="btnUnlock" zclass="btn"
-							class="btn-success btn-sm"
+							forward="enter=btnUnlock.click" />
+						<button name="btnUnlock"
+							class="flavor:btn-success"
 							label="${@msg.cwf.timeout.unlock.label}" />
 						<space />
-						<button name="btnLogout" zclass="btn"
-							class="btn-danger btn-sm"
+						<button name="btnLogout"
+							class="flavor:btn-danger"
 							label="${@msg.cwf.timeout.logout.label}" />
 						<label name="lblInfo"
 							style="display:block;color:red;font-weight:bold;padding-top:5px" />

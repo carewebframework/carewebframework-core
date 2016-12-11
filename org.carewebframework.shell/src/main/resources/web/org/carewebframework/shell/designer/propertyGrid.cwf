@@ -26,17 +26,15 @@
 		<pane>
 			<toolbar name="toolbar" align="end" width="100%">
 				<button name="btnApply" 
-					class="size:btn-sm"
 					label="${@msg.cwf.shell.designer.property.grid.btn.apply.label}" />
 				<button name="btnRestore"
-					class="size:btn-sm"
 					label="${@msg.cwf.shell.designer.property.grid.btn.restore.label}" />
 				<span width="20px" />
 				<button name="btnOK"
-					class="flavor:btn-success size:btn-sm"
+					class="flavor:btn-success"
 					label="${@msg.cwf.shell.designer.property.grid.btn.ok.label}" />
 				<button name="btnCancel"
-					class="flavor:btn-danger size:btn-sm"
+					class="flavor:btn-danger"
 					label="${@msg.cwf.shell.designer.property.grid.btn.cancel.label}" />
 			</toolbar>
 		</pane>

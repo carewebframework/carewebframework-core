@@ -34,6 +34,12 @@ public class Constants {
     
     public static final String EVENT_PREFIX = "CAREWEB";
     
+    private static final String EVENT_INFO_ROOT = EVENT_PREFIX + ".INFO";
+    
+    public static final String EVENT_INFO_SHOW = EVENT_INFO_ROOT + ".SHOW";
+    
+    public static final String EVENT_INFO_HIDE = EVENT_INFO_ROOT + ".HIDE";
+    
     public static final String EVENT_RESOURCE_PREFIX = EVENT_PREFIX + ".RESOURCE";
     
     public static final String EVENT_RESOURCE_PROPGROUP_PREFIX = EVENT_RESOURCE_PREFIX + ".PROPGROUP";

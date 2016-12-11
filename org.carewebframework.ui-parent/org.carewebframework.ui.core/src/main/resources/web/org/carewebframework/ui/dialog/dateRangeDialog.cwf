@@ -20,9 +20,9 @@
 			hint="${@msg.cwf.date.range.end.date.btn.hint}" />
 	</div>
 	<toolbar align="center" width="100%">
-		<button name="btnOK" class="flavor:btn-success size:btn-sm"
+		<button name="btnOK" class="flavor:btn-success"
 			label="${@msg.cwf.date.range.btn.ok.label}" />
-		<button name="btnCancel" class="flavor:btn-danger size:btn-sm"
+		<button name="btnCancel" class="flavor:btn-danger"
 			label="${@msg.cwf.date.range.btn.cancel.label}" />
 	</toolbar>
 	<style>

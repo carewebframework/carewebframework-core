@@ -1,7 +1,7 @@
 <?taglib uri="http://www.carewebframework.org/tld/core" prefix="rc"?>
 
 <paneview orientation="horizontal">
-	<pane style="flex:3"></pane>
+	<pane flex="3" ></pane>
 		<toolbar width="100%">
 			<button name="btnUp" class="flavor:btn-link"
 				hint="${@msg.cwf.shell.designer.propedit.custom.btn.up.hint}"
@@ -28,7 +28,7 @@
 				style="background:transparent"
 				image="${rc.getIconPath('carewebframework:16x16:delete.png')}" />
 		</toolbar>
-		<treeview name="tree" style="flex:1" />
+		<treeview name="tree" flex="1" />
 	</pane>
-	<pane name="gridParent" style="flex:7" />
+	<pane name="gridParent" flex="7" />
 </paneview>

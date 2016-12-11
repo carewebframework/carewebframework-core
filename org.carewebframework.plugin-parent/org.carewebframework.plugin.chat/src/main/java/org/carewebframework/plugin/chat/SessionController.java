@@ -43,8 +43,8 @@ import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.Button;
 import org.carewebframework.web.component.Label;
 import org.carewebframework.web.component.Listbox;
-import org.carewebframework.web.component.Listitem;
-import org.carewebframework.web.component.Textbox;
+import org.carewebframework.web.component.Memobox;
+import org.carewebframework.web.component.Row;
 import org.carewebframework.web.component.Window;
 import org.carewebframework.web.event.InputEvent;
 import org.carewebframework.web.model.ListModel;
@@ -54,8 +54,6 @@ import org.carewebframework.web.model.ModelAndView;
  * Controller for an individual chat session.
  */
 public class SessionController extends FrameworkController implements ISessionUpdate {
-    
-    private static final long serialVersionUID = 1L;
     
     private static final String DIALOG = CWFUtil.getResourcePath(SessionController.class) + "session.cwf";
     
@@ -67,7 +65,7 @@ public class SessionController extends FrameworkController implements ISessionUp
     
     private BaseComponent pnlDialog;
     
-    private Textbox txtMessage;
+    private Memobox txtMessage;
     
     private Button btnSendMessage;
     
@@ -75,7 +73,7 @@ public class SessionController extends FrameworkController implements ISessionUp
     
     private final Set<IPublisherInfo> outstandingInvitations = new HashSet<>();
     
-    private ModelAndView<Listitem, IPublisherInfo> modelAndView;
+    private ModelAndView<Row, IPublisherInfo> modelAndView;
     
     private SessionService sessionService;
     
@@ -91,7 +89,7 @@ public class SessionController extends FrameworkController implements ISessionUp
         args.put("id", sessionId);
         args.put("title", StrUtil.formatMessage("@cwf.chat.session.title"));
         args.put("originator", originator ? true : null);
-        Window dlg = PopupDialog.show(DIALOG, args, true, true, false);
+        Window dlg = PopupDialog.show(DIALOG, args, true, true, false, null);
         
         if (dlg.hasAttribute("closed")) {
             dlg.detach();
@@ -109,7 +107,7 @@ public class SessionController extends FrameworkController implements ISessionUp
     public void afterInitialized(BaseComponent comp) {
         super.afterInitialized(comp);
         sessionId = (String) comp.getAttribute("id");
-        modelAndView = new ModelAndView<Listitem, IPublisherInfo>(lstParticipants);
+        modelAndView = new ModelAndView<Row, IPublisherInfo>(lstParticipants);
         modelAndView.setRenderer(new ParticipantRenderer(chatService.getSelf(), null));
         model.add(chatService.getSelf());
         modelAndView.setModel(model);

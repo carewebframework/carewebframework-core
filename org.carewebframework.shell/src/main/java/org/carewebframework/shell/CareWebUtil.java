@@ -81,7 +81,7 @@ public class CareWebUtil {
      * @param caption Optional caption text.
      */
     public static void showMessage(String message, String caption) {
-        getShell().showMessage(message, caption);
+        getShell().getMessageWindow().showMessage(message, caption);
     }
     
     /**

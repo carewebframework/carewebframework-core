@@ -34,8 +34,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import javax.security.auth.message.MessageInfo;
-
 import org.carewebframework.api.event.IEventManager;
 import org.carewebframework.api.event.ILocalEventDispatcher;
 import org.carewebframework.api.messaging.IPublisherInfo;
@@ -45,8 +43,9 @@ import org.carewebframework.api.spring.SpringUtil;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.plugin.chat.ParticipantListener.IParticipantUpdate;
 import org.carewebframework.plugin.chat.SessionService.ISessionUpdate;
+import org.carewebframework.shell.CareWebShell;
+import org.carewebframework.shell.CareWebUtil;
 import org.carewebframework.ui.action.ActionRegistry;
-import org.carewebframework.web.component.MessageWindow;
 
 /**
  * Chat service.
@@ -120,18 +119,20 @@ public class ChatService implements IParticipantUpdate {
             public void eventCallback(String eventName, String eventData) {
                 String[] pcs = eventData.split("\\^", 2);
                 String tag = EVENT_INVITE + "_" + pcs[0];
+                CareWebShell shell = CareWebUtil.getShell();
                 
                 if (pcs.length == 2) {
                     String message = StrUtil.formatMessage("@cwf.chat.invitation.message", pcs[1]);
                     String caption = StrUtil.formatMessage("@cwf.chat.invitation.caption");
-                    String action = "cwf.fireLocalEvent('" + EVENT_ACCEPT + "', '" + pcs[0] + "'); return true;";
-                    MessageInfo mi = new MessageInfo(message, caption, null, 999999, tag, action);
-                    eventManager.fireLocalEvent(MessageWindow.EVENT_SHOW, mi);
+                    shell.getMessageWindow().showMessage(message, caption, null, 999999, tag, (event) -> {
+                        eventManager.fireLocalEvent(EVENT_ACCEPT, pcs[0]);
+                    });
                 } else {
-                    eventManager.fireLocalEvent(MessageWindow.EVENT_HIDE, tag);
+                    shell.getMessageWindow().clearMessages(tag);
                 }
             }
         };
+        
         acceptListener = new ServiceListener<String>(EVENT_ACCEPT, eventManager) {
             
             @Override

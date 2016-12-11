@@ -63,15 +63,12 @@ import org.carewebframework.web.annotation.Component.ChildTag;
 import org.carewebframework.web.client.ClientUtil;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.BaseUIComponent;
-import org.carewebframework.web.component.Cell;
 import org.carewebframework.web.component.Div;
 import org.carewebframework.web.component.Menu;
-import org.carewebframework.web.component.MessagePane;
 import org.carewebframework.web.component.MessageWindow;
 import org.carewebframework.web.component.Page;
 import org.carewebframework.web.component.Span;
 import org.carewebframework.web.component.Stylesheet;
-import org.carewebframework.web.event.IEventListener;
 import org.carewebframework.web.event.KeycaptureEvent;
 
 /**
@@ -646,81 +643,11 @@ public class CareWebShell extends Div {
     }
     
     /**
-     * Shows a slide-down message.
+     * Returns the message window instance for managing slide-down messages.
      * 
-     * @param message Message to display.
-     * @see org.carewebframework.ui.zk.MessageWindow#show(String)
+     * @return A message window instance.
      */
-    public void showMessage(String message) {
-        showMessage(message, null);
-    }
-    
-    /**
-     * Shows a slide-down message.
-     * 
-     * @param message Message to display.
-     * @param caption Caption for message.
-     * @see org.carewebframework.ui.zk.MessageWindow#show(String, String)
-     */
-    public void showMessage(String message, String caption) {
-        showMessage(message, caption, null);
-    }
-    
-    /**
-     * Shows a slide-down message.
-     * 
-     * @param message Message to display
-     * @param caption Caption for message.
-     * @param clazz CSS classes to apply.
-     */
-    public void showMessage(String message, String caption, String clazz) {
-        showMessage(message, caption, clazz, 8000);
-    }
-    
-    /**
-     * Shows a slide-down message.
-     * 
-     * @param message Message to display
-     * @param caption Caption for message.
-     * @param clazz CSS classes to apply.
-     * @param duration Message duration in milliseconds.
-     */
-    public void showMessage(String message, String caption, String clazz, int duration) {
-    }
-    
-    /**
-     * Shows a slide-down message.
-     * 
-     * @param message Message to display
-     * @param caption Caption for message.
-     * @param clazz CSS classes to apply.
-     * @param duration Message duration in milliseconds.
-     * @param category Tag to classify message.
-     */
-    public void showMessage(String message, String caption, String clazz, Integer duration, String category) {
-        showMessage(message, caption, clazz, duration, category, null);
-    }
-    
-    /**
-     * Shows a slide-down message.
-     * 
-     * @param message Message to display
-     * @param caption Caption for message.
-     * @param clazz CSS classes to apply.
-     * @param duration Message duration in milliseconds.
-     * @param category Tag to classify message.
-     * @param actionListener Listener for action invocation.
-     */
-    public void showMessage(String message, String caption, String clazz, Integer duration, String category,
-                            IEventListener actionListener) {
-        MessagePane pane = new MessagePane(caption, category, duration, actionListener != null);
-        pane.addClass(clazz);
-        pane.addChild(new Cell(message));
-        
-        if (actionListener != null) {
-            pane.addEventListener("action", actionListener);
-        }
-        
+    public MessageWindow getMessageWindow() {
         if (messageWindow == null) {
             messageWindow = getPage().getChild(MessageWindow.class);
             
@@ -729,27 +656,6 @@ public class CareWebShell extends Div {
             }
         }
         
-        messageWindow.addChild(pane);
+        return messageWindow;
     }
-    
-    /**
-     * Clears all slide-down messages;
-     */
-    public void clearMessages() {
-        if (messageWindow != null) {
-            messageWindow.clear();
-        }
-    }
-    
-    /**
-     * Clears all slide-down messages with specified tag;
-     * 
-     * @param category Messages with this tag will be cleared.
-     */
-    public void clearMessages(String category) {
-        if (messageWindow != null) {
-            messageWindow.clear(category);
-        }
-    }
-    
 }

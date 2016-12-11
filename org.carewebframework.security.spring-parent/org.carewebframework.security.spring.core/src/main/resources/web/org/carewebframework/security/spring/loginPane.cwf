@@ -44,14 +44,12 @@
 					<textbox name="txtPassword" name="password"
 						type="password" hflex="2" />
 					<div hflex="1">
-						<button name="btnLogin" zclass="btn"
-							class="btn-success btn-sm"
+						<button name="btnLogin" class="flavor:btn-success"
 							label="${@msg.login.form.button.login.label}" />
 					</div>
 				</hlayout>
 				<div name="divDomain" hflex="1">
-					<button name="btnDomain" zclass="btn"
-						class="btn-link btn-sm"
+					<button name="btnDomain" class="flavor:btn-link"
 						label="${@msg.login.form.domain.alternate.label}" />
 				</div>
 			</vlayout>

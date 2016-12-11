@@ -9,9 +9,9 @@
 			<radiobutton name="rbPrivate"
 				label="${@msg.cwf.shell.designer.layout.manager.radio.private.label}" />
 		</radiogroup>
-		<button name="btnOK" class="flavor:btn-success size:btn-sm"
+		<button name="btnOK" class="flavor:btn-success"
 			label="${@msg.cwf.shell.designer.layout.manager.btn.ok.label}" />
-		<button name="btnCancel" class="flavor:btn-danger size:btn-sm"
+		<button name="btnCancel" class="flavor:btn-danger"
 			label="${@msg.cwf.shell.designer.layout.manager.btn.cancel.label}"
 			forward="onClose" />
 	</toolbar>

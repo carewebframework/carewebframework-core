@@ -7,7 +7,7 @@
 					<timebox name="timebox" />
 					<button name="btnOK" width="100%"
 						label="${@msg.cwf.datetime.btn.ok.label}"
-						class="size:btn-sm flavor:btn-success" />
+						class="flavor:btn-success" />
 				</row>
 				<row>
 					<a name="btnToday" 
@@ -20,7 +20,7 @@
 					</div>
 					<button name="btnCancel"
 						label="${@msg.cwf.datetime.btn.cancel.label}" 
-						class="size:btn-sm flavor:btn-danger" />
+						class="flavor:btn-danger" />
 				</row>
 			</rows>
 		</table>

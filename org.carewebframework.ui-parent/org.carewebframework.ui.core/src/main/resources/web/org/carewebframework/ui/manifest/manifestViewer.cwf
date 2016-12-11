@@ -10,11 +10,11 @@
 	<toolbar width="100%">
 		<textbox name="txtSearch" synchronized="true"
 			placeholder="${@msg.cwf.manifest.viewer.txt.search.placeholder}"
-			focus="true" style="flex:1" />
-		<button name="btnPrint" class="flavor:btn-default size:btn-sm"
+			focus="true" flex="1" />
+		<button name="btnPrint"
 			label="${@msg.cwf.manifest.viewer.btn.print.label}"
 			hint="${@msg.cwf.manifest.viewer.btn.print.hint}" />
-		<button name="btnClose" class="flavor:btn-danger size:btn-sm"
+		<button name="btnClose" class="flavor:btn-danger"
 			label="${@msg.cwf.manifest.viewer.btn.close.label}" />
 	</toolbar>
 </window>

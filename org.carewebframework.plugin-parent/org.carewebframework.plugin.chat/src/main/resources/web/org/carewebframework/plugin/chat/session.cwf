@@ -1,51 +1,49 @@
-<page xmlns="http://www.zkoss.org/2005/zul"
-	xmlns:h="http://www.w3.org/1999/xhtml"
+<page xmlns="http://www.carewebframework.org/schema/cwf"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+	xsi:schemaLocation="http://www.carewebframework.org/schema/cwf http://www.carewebframework.org/schema/cwf/cwf.xsd">
 	
-	<window width="500px" height="500px" title="${arg.title}" visible="false"
-		controller="${cwfChatSessionController}" position="center" mold="bootstrap">
+	<window width="500px" height="500px" title="${this.title}" visible="false"
+		controller="${cwfChatSessionController}">
 		<style src="web/org/carewebframework/plugin/chat/chat.css" />
-		<hbox vflex="1" hflex="1">
-			<cell width="50%">
-				<groupbox closable="false" height="100%">
-					<caption label="${@msg.cwf.chat.session.group.dialog.caption}" />
-					<div name="pnlDialog" vflex="1" class="chat-dialog" />
+		<paneview width="100%" height="100%" orientation="horizontal">
+			<pane width="50%">
+				<groupbox closable="false" height="100%" 
+					title="${@msg.cwf.chat.session.group.dialog.caption}" />
+					<div name="pnlDialog" class="chat-dialog" />
 					<toolbar align="end">
-						<button name="btnClearDialog" zclass="btn" class="btn-default btn-sm"
+						<button name="btnClearDialog"
 							label="${@msg.cwf.chat.session.button.clear.dialog.label}" />
 					</toolbar>
 				</groupbox>
-			</cell>
-			<splitter />
-			<cell width="50%">
-				<vbox hflex="1" vflex="1">
-					<cell vflex="1">
-						<groupbox closable="false" vflex="1">
-							<caption label="${@msg.cwf.chat.session.group.participants.caption}" />
-							<listbox name="lstParticipants" vflex="1" style="border:none" />
+			</panel>
+			<pane width="50%" splittable="true">
+				<paneview width="100%" height="100%" orientation="vertical">
+					<pane flex="1">
+						<groupbox
+							title="${@msg.cwf.chat.session.group.participants.caption}" />
+							<listbox name="lstParticipants" style="border:none" />
 							<toolbar align="end">
-								<button name="btnRefresh" zclass="btn" class="btn-default btn-sm"
+								<button name="btnRefresh" 
 									label="${@msg.cwf.chat.session.button.refresh.label}" />
-								<button name="btnInvite" zclass="btn" class="btn-default btn-sm"
+								<button name="btnInvite"
 									label="${@msg.cwf.chat.session.button.invite.label}" />
 							</toolbar>
 						</groupbox>
-					</cell>
-					<cell vflex="1">
-						<groupbox closable="false" height="100%">
-							<caption label="${@msg.cwf.chat.session.group.message.caption}" />
-							<textbox name="txtMessage" vflex="1" width="100%" multiline="true" style="border:none"/>
+					</pane>
+					<pane flex="1">
+						<groupbox height="100%"
+							title="${@msg.cwf.chat.session.group.message.caption}" />
+							<memobox name="txtMessage" width="100%" style="border:none" />
 							<toolbar align="end">
-								<button name="btnClearMessage" zclass="btn" class="btn-default btn-sm"
+								<button name="btnClearMessage" 
 									label="${@msg.cwf.chat.session.button.clear.message.label}" />
-								<button name="btnSendMessage" zclass="btn" class="btn-default btn-sm"
+								<button name="btnSendMessage"
 									label="${@msg.cwf.chat.session.button.send.message.label}" />
 							</toolbar>
 						</groupbox>
 					</cell>
-				</vbox>
-			</cell>
-		</hbox>
+				</paneview>
+			</pane>
+		</paneview>
 	</window>
 </page>

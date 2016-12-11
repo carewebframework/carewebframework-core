@@ -25,8 +25,10 @@
  */
 package org.carewebframework.plugin.chat;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.carewebframework.api.messaging.IPublisherInfo;
@@ -36,7 +38,9 @@ import org.carewebframework.ui.dialog.PopupDialog;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.Button;
 import org.carewebframework.web.component.Checkbox;
-import org.carewebframework.web.component.Listbox;
+import org.carewebframework.web.component.Column;
+import org.carewebframework.web.component.Row;
+import org.carewebframework.web.component.Table;
 import org.carewebframework.web.model.ListModel;
 
 /**
@@ -44,15 +48,13 @@ import org.carewebframework.web.model.ListModel;
  */
 public class InviteController extends FrameworkController {
     
-    private static final long serialVersionUID = 1L;
-    
     private static final String DIALOG = CWFUtil.getResourcePath(InviteController.class) + "invite.cwf";
     
     private static final String ATTR_HIDE = InviteController.class.getName() + ".HIDE_ACTIVE";
     
-    private Listbox lstSessions;
+    private Table sessions;
     
-    private Listheader getUserName;
+    private Column getUserName;
     
     private Button btnInvite;
     
@@ -78,7 +80,7 @@ public class InviteController extends FrameworkController {
         Map<String, Object> args = new HashMap<>();
         args.put("sessionId", sessionId);
         args.put("exclusions", exclusions);
-        return (Collection<IPublisherInfo>) PopupDialog.show(DIALOG, args, true, true, true).getAttribute("invitees");
+        return (Collection<IPublisherInfo>) PopupDialog.show(DIALOG, args, true, true, true, null).getAttribute("invitees");
     }
     
     /**
@@ -90,10 +92,8 @@ public class InviteController extends FrameworkController {
         super.afterInitialized(comp);
         sessionId = (String) comp.findAttribute("sessionId");
         Collection<IPublisherInfo> exclusions = (Collection<IPublisherInfo>) comp.findAttribute("exclusions");
-        model.setMultiple(lstSessions.isMultiple());
         renderer = new ParticipantRenderer(chatService.getSelf(), exclusions);
-        lstSessions.getModelAndView(IPublisherInfo.class).setRenderer(renderer);
-        RowComparator.autowireColumnComparators(lstSessions.getListhead().getChildren());
+        sessions.getRows().getModelAndView(IPublisherInfo.class).setRenderer(renderer);
         chkHideActive.setChecked(getAppFramework().getAttribute(ATTR_HIDE) != null);
         refresh();
     }
@@ -103,12 +103,12 @@ public class InviteController extends FrameworkController {
      */
     @Override
     public void refresh() {
-        lstSessions.getModelAndView(IPublisherInfo.class).setModel(null);
+        sessions.getRows().getModelAndView(IPublisherInfo.class).setModel(null);
         model.clear();
         model.addAll(chatService.getChatCandidates());
         renderer.setHideExclusions(chkHideActive.isChecked());
-        lstSessions.getModelAndView(IPublisherInfo.class).setModel(model);
-        getUserName.sort(true);
+        sessions.getRows().getModelAndView(IPublisherInfo.class).setModel(model);
+        getUserName.sort();
         updateControls();
     }
     
@@ -116,13 +116,13 @@ public class InviteController extends FrameworkController {
      * Updates controls to reflect the current selection state.
      */
     private void updateControls() {
-        btnInvite.setDisabled(lstSessions.getSelectedCount() == 0);
+        btnInvite.setDisabled(sessions.getRows().getSelectedCount() == 0);
     }
     
     /**
      * Update control states when the selection state changes.
      */
-    public void onSelect$lstSessions() {
+    public void onSelect$sessions() {
         updateControls();
     }
     
@@ -130,10 +130,20 @@ public class InviteController extends FrameworkController {
      * Send invitations to the selected participants, then close the dialog.
      */
     public void onClick$btnInvite() {
-        Collection<IPublisherInfo> invitees = model.getSelection();
+        List<IPublisherInfo> invitees = getInvitees();
         chatService.invite(sessionId, invitees, false);
         root.setAttribute("invitees", invitees);
         root.detach();
+    }
+    
+    private List<IPublisherInfo> getInvitees() {
+        List<IPublisherInfo> invitees = new ArrayList<>();
+        
+        for (Row row : sessions.getRows().getSelected()) {
+            invitees.add(row.getData(IPublisherInfo.class));
+        }
+        
+        return invitees;
     }
     
     /**

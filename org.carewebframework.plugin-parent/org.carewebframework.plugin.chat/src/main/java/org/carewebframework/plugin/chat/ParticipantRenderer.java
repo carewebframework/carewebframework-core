@@ -29,13 +29,13 @@ import java.util.Collection;
 
 import org.carewebframework.api.messaging.IPublisherInfo;
 import org.carewebframework.web.component.Cell;
-import org.carewebframework.web.component.Listitem;
+import org.carewebframework.web.component.Row;
 import org.carewebframework.web.model.IComponentRenderer;
 
 /**
  * Renderer for participant list.
  */
-public class ParticipantRenderer implements IComponentRenderer<Listitem, IPublisherInfo> {
+public class ParticipantRenderer implements IComponentRenderer<Row, IPublisherInfo> {
     
     private final Collection<IPublisherInfo> exclusions;
     
@@ -56,26 +56,27 @@ public class ParticipantRenderer implements IComponentRenderer<Listitem, IPublis
     }
     
     @Override
-    public Listitem render(IPublisherInfo participant) {
-        Listitem item = new Listitem();
+    public Row render(IPublisherInfo participant) {
+        Row row = new Row();
+        row.setData(participant);
         
-        createCell(item, participant.getUserName());
+        createCell(row, participant.getUserName());
         
         if (exclusions != null && exclusions.contains(participant)) {
-            item.setDisabled(true);
-            item.addClass("chat-participant-active");
-            item.setVisible(!hideExclusions);
+            row.setDisabled(true);
+            row.addClass("chat-participant-active");
+            row.setVisible(!hideExclusions);
         }
         
         if (participant.equals(self)) {
-            item.addClass("chat-participant-self");
+            row.addClass("chat-participant-self");
         }
         
-        return item;
+        return row;
     }
     
-    private void createCell(Listitem item, String userName) {
-        item.addChild(new Cell(userName));
+    private void createCell(Row row, String userName) {
+        row.addChild(new Cell(userName));
     }
     
     public boolean getHideExclusions() {

@@ -12,9 +12,9 @@
 		<rows name="rows" />
 	</table>
 	<toolbar width="100%" align="center">
-		<button class="flavor:btn-default size:btn-sm"
+		<button
 			name="btnCustom" visible="false" />
-		<button class="flavor:btn-danger size:btn-sm"
+		<button class="flavor:btn-danger"
 			name="btnClose"
 			label="${@msg.cwf.shell.about.btn.close.label}" width="80px"
 			focus="true" />

@@ -8,10 +8,10 @@
 		</pane>
 		<pane>
 			<toolbar align="end" width="100%">
-				<button name="btnClose" class="flavor:btn-danger size:btn-sm" 
+				<button name="btnClose" class="flavor:btn-danger" 
 					label="${@msg.cwf.btn.close.label}" width="60px" />
 				<button name="btnPrint" 
-					visible="false" class="flavor:btn-info size:btn-sm" 
+					visible="false" class="flavor:btn-info" 
 					label="${@msg.cwf.btn.print.label}" width="60px" />
 			</toolbar>
 		</pane>

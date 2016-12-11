@@ -4,7 +4,7 @@
 			width="200px">
 			<div name="selector" height="100%" width="100%" class="cwf-treeview" />
 		</pane>
-		<pane style="flex:1">
+		<pane flex="1">
 			<div name="innerPane" height="100%" width="100%" />
 		</pane>
 	</borderlayout>

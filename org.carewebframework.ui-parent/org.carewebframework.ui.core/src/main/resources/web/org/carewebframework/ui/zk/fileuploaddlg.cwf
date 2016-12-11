@@ -21,10 +21,10 @@
 	<separator bar="true" />
 	<toolbar name="btns" align="end">
 		<submit name="submit" label="${c:l('mesg:org.zkoss.zul.mesg.MZul:UPLOAD_SUBMIT')}"
-			zclass="btn" class="btn-sm btn-success"
+			class="flavor:btn-success"
 			w:onClick="this.submit()" />
 		<button label="${c:l('mesg:org.zkoss.zul.mesg.MZul:UPLOAD_CANCEL')}" 
-			zclass="btn" class="btn-sm btn-danger"
+			class="flavor:btn-danger"
 			w:onClick="this.$o().cancel(true)" />
 	</toolbar>
     <script defer="true">
