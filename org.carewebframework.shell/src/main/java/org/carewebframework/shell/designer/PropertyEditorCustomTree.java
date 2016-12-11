@@ -32,7 +32,6 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.layout.UIElementProxy;
 import org.carewebframework.shell.plugins.PluginDefinition;
@@ -40,9 +39,7 @@ import org.carewebframework.shell.plugins.PluginRegistry;
 import org.carewebframework.shell.property.PropertyInfo;
 import org.carewebframework.ui.zk.TreeUtil;
 import org.carewebframework.ui.zk.ZKUtil;
-
 import org.springframework.beans.BeanUtils;
-
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Event;
@@ -209,7 +206,7 @@ public abstract class PropertyEditorCustomTree<T extends UIElementBase> extends 
     
     private final Textbox txtLabel = new Textbox();
     
-    private PropertyEditorBase labelEditor;
+    private PropertyEditorBase<?> labelEditor;
     
     private final List<Proxy> proxies = new ArrayList<>();
     
@@ -278,7 +275,7 @@ public abstract class PropertyEditorCustomTree<T extends UIElementBase> extends 
         }
         
         PluginDefinition def = AddComponent.getDefinition(getTarget());
-        bandbox.open();
+        editor.open();
         return def;
     }
     
@@ -568,13 +565,13 @@ public abstract class PropertyEditorCustomTree<T extends UIElementBase> extends 
     }
     
     /**
-     * If the property grid is closed, instead close the bandbox.
+     * If the property grid is closed, instead close the editor.
      * 
      * @param event The close event.
      */
     public void onClose(Event event) {
         if (event.getTarget() == propertyGrid) {
-            bandbox.close();
+            editor.close();
             doClose();
         }
     }

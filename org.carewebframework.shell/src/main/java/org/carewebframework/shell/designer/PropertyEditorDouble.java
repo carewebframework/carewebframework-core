@@ -27,7 +27,6 @@ package org.carewebframework.shell.designer;
 
 import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.property.PropertyInfo;
-
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.Doublebox;
 import org.zkoss.zul.SimpleDoubleSpinnerConstraint;
@@ -35,19 +34,16 @@ import org.zkoss.zul.SimpleDoubleSpinnerConstraint;
 /**
  * Editor for double values.
  */
-public class PropertyEditorDouble extends PropertyEditorBase {
-    
-    private final Doublebox doublebox;
+public class PropertyEditorDouble extends PropertyEditorBase<Doublebox> {
     
     public PropertyEditorDouble() {
         super(new Doublebox());
-        doublebox = (Doublebox) component;
     }
     
     @Override
     protected void init(UIElementBase target, PropertyInfo propInfo, PropertyGrid propGrid) {
         super.init(target, propInfo, propGrid);
-        doublebox.addForward(Events.ON_CHANGING, propGrid, Events.ON_CHANGE);
+        editor.addForward(Events.ON_CHANGING, propGrid, Events.ON_CHANGE);
         Double min = propInfo.getConfigValueDouble("min", null);
         Double max = propInfo.getConfigValueDouble("max", null);
         
@@ -55,18 +51,18 @@ public class PropertyEditorDouble extends PropertyEditorBase {
             SimpleDoubleSpinnerConstraint constraint = new SimpleDoubleSpinnerConstraint();
             constraint.setMin(min);
             constraint.setMax(max);
-            doublebox.setConstraint(constraint);
+            editor.setConstraint(constraint);
         }
     }
     
     @Override
     protected String getValue() {
-        return doublebox.getText();
+        return editor.getText();
     }
     
     @Override
     protected void setValue(Object value) {
-        doublebox.setText(value == null ? null : value.toString());
+        editor.setText(value == null ? null : value.toString());
         updateValue();
     }
 }

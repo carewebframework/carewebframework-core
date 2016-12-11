@@ -60,7 +60,7 @@ public class PropertyTypeRegistry extends AbstractRegistry<String, PropertyType>
      * @param typeName The name of the property type as used in the plug-in declaration.
      * @param editorClass The property editor class to use to edit this property's value.
      */
-    public static void register(String typeName, Class<? extends PropertyEditorBase> editorClass) {
+    public static void register(String typeName, Class<? extends PropertyEditorBase<?>> editorClass) {
         register(typeName, null, editorClass);
     }
     
@@ -72,7 +72,7 @@ public class PropertyTypeRegistry extends AbstractRegistry<String, PropertyType>
      * @param editorClass The property editor class to use to edit this property's value.
      */
     public static void register(String typeName, PropertySerializer<?> serializer,
-                                Class<? extends PropertyEditorBase> editorClass) {
+                                Class<? extends PropertyEditorBase<?>> editorClass) {
         instance.add(typeName, serializer, editorClass);
     }
     
@@ -91,7 +91,7 @@ public class PropertyTypeRegistry extends AbstractRegistry<String, PropertyType>
      * @param serializer Serializer for this property type (may be null).
      * @param editorClass The property editor class to use to edit this property's value.
      */
-    public void add(String typeName, PropertySerializer<?> serializer, Class<? extends PropertyEditorBase> editorClass) {
+    public void add(String typeName, PropertySerializer<?> serializer, Class<? extends PropertyEditorBase<?>> editorClass) {
         if (get(typeName) == null) {
             register(new PropertyType(typeName, serializer, editorClass));
         }
@@ -134,8 +134,9 @@ public class PropertyTypeRegistry extends AbstractRegistry<String, PropertyType>
         } else if ("class".equals(pcs[1])) {
             try {
                 Class<?> clazz = Class.forName(pcs[2]);
-                serializer = clazz.isEnum() ? new PropertySerializer.EnumSerializer((Class<Enum>) clazz) : Iterable.class
-                        .isAssignableFrom(clazz) ? new PropertySerializer.IterableSerializer((Class<Iterable>) clazz) : null;
+                serializer = clazz.isEnum() ? new PropertySerializer.EnumSerializer((Class<Enum>) clazz)
+                        : Iterable.class.isAssignableFrom(clazz)
+                                ? new PropertySerializer.IterableSerializer((Class<Iterable>) clazz) : null;
             } catch (ClassNotFoundException e) {
                 throw new IllegalArgumentException(e);
             }

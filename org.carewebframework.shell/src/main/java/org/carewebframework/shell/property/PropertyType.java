@@ -34,7 +34,7 @@ public class PropertyType {
     
     private final String typeName;
     
-    private final Class<? extends PropertyEditorBase> editorClass;
+    private final Class<? extends PropertyEditorBase<?>> editorClass;
     
     private final PropertySerializer<Object> serializer;
     
@@ -46,7 +46,8 @@ public class PropertyType {
      * @param editorClass The property editor class to use to edit this property's value.
      */
     @SuppressWarnings("unchecked")
-    public PropertyType(String typeName, PropertySerializer<?> serializer, Class<? extends PropertyEditorBase> editorClass) {
+    public PropertyType(String typeName, PropertySerializer<?> serializer,
+        Class<? extends PropertyEditorBase<?>> editorClass) {
         this.typeName = typeName;
         this.serializer = (PropertySerializer<Object>) serializer;
         this.editorClass = editorClass;
@@ -66,7 +67,7 @@ public class PropertyType {
      * 
      * @return Class of the associated property editor.
      */
-    public Class<? extends PropertyEditorBase> getEditorClass() {
+    public Class<? extends PropertyEditorBase<?>> getEditorClass() {
         return editorClass;
     }
     

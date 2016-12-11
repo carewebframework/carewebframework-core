@@ -31,7 +31,6 @@ import org.carewebframework.ui.icons.IconLibraryRegistry;
 import org.carewebframework.ui.icons.IconPickerEx;
 import org.carewebframework.ui.icons.IconUtil;
 import org.carewebframework.ui.zk.IconPicker;
-
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
@@ -41,21 +40,18 @@ import org.zkoss.zul.Image;
  * Property editor for icon properties. If the associated property has defined choices, the icon
  * picker will be limited to those values only. Otherwise, all registered icons will be available.
  */
-public class PropertyEditorIcon extends PropertyEditorBase {
-    
-    private final IconPickerEx iconPicker;
+public class PropertyEditorIcon extends PropertyEditorBase<IconPickerEx> {
     
     public PropertyEditorIcon() {
         super(new IconPickerEx());
-        iconPicker = (IconPickerEx) component;
-        iconPicker.setAutoAdd(false);
-        iconPicker.addEventListener("onSetValue", new EventListener<Event>() {
+        editor.setAutoAdd(false);
+        editor.addEventListener("onSetValue", new EventListener<Event>() {
             
             @Override
             public void onEvent(Event event) throws Exception {
                 Object value = event.getData();
-                Image icon = value == null ? null : iconPicker.findIcon(value.toString());
-                iconPicker.setSelectedItem(icon);
+                Image icon = value == null ? null : editor.findIcon(value.toString());
+                editor.setSelectedItem(icon);
                 updateValue();
             }
             
@@ -65,24 +61,24 @@ public class PropertyEditorIcon extends PropertyEditorBase {
     @Override
     protected void init(UIElementBase target, PropertyInfo propInfo, PropertyGrid propGrid) {
         super.init(target, propInfo, propGrid);
-        component.addForward(IconPicker.ON_SELECT_ITEM, propGrid, Events.ON_CHANGE);
+        editor.addForward(IconPicker.ON_SELECT_ITEM, propGrid, Events.ON_CHANGE);
         String[] values = propInfo.getConfigValueArray("values");
         
         if (values == null) {
             String dflt = IconLibraryRegistry.getInstance().getDefaultLibrary();
-            iconPicker.setIconLibrary(dflt);
+            editor.setIconLibrary(dflt);
         } else {
-            iconPicker.setSelectorVisible(false);
+            editor.setSelectorVisible(false);
             
             for (String choice : values) {
                 if (choice.startsWith("~./")) {
-                    iconPicker.addIconByUrl(choice);
+                    editor.addIconByUrl(choice);
                 } else {
                     String[] pcs = choice.split("\\:", 3);
                     String library = pcs.length == 0 ? null : pcs[0];
                     String name = pcs.length < 2 ? "*" : pcs[1];
                     String dimension = pcs.length < 3 ? null : pcs[2];
-                    iconPicker.addIconsByUrl(IconUtil.getMatching(library, name, dimension));
+                    editor.addIconsByUrl(IconUtil.getMatching(library, name, dimension));
                 }
             }
         }
@@ -90,12 +86,12 @@ public class PropertyEditorIcon extends PropertyEditorBase {
     
     @Override
     protected String getValue() {
-        Image icon = iconPicker.getSelectedItem();
+        Image icon = editor.getSelectedItem();
         return icon == null ? null : icon.getSrc();
     }
     
     @Override
     protected void setValue(Object value) {
-        Events.postEvent("onSetValue", iconPicker, value);
+        Events.postEvent("onSetValue", editor, value);
     }
 }

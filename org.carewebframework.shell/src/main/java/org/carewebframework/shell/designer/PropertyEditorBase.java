@@ -28,17 +28,18 @@ package org.carewebframework.shell.designer;
 import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.property.PropertyInfo;
 import org.carewebframework.ui.zk.ZKUtil;
-
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.impl.XulElement;
 
 /**
  * All property editors must descend from this abstract class.
+ * 
+ * @param <T> The type of input component.
  */
-public abstract class PropertyEditorBase {
+public abstract class PropertyEditorBase<T extends XulElement> {
     
-    protected final XulElement component;
+    protected final T editor;
     
     private Object value;
     
@@ -50,22 +51,22 @@ public abstract class PropertyEditorBase {
      * Create property editor using the specified template.
      * 
      * @param template The template to create the editing component.
-     * @throws Exception Unspecified exception.
      */
-    protected PropertyEditorBase(String template) throws Exception {
-        this((XulElement) ZKUtil.loadZulPage(template, null));
+    @SuppressWarnings("unchecked")
+    protected PropertyEditorBase(String template) {
+        this((T) ZKUtil.loadZulPage(template, null));
     }
     
     /**
      * Create property editor using the specified component for editing.
      * 
-     * @param component The component used to edit the property.
+     * @param editor The component used to edit the property.
      */
-    protected PropertyEditorBase(XulElement component) {
-        this.component = component;
-        component.setHeight("80%");
-        component.setWidth("95%");
-        ZKUtil.wireController(component, this);
+    protected PropertyEditorBase(T editor) {
+        this.editor = editor;
+        editor.setHeight("80%");
+        editor.setWidth("95%");
+        ZKUtil.wireController(editor, this);
     }
     
     /**
@@ -74,7 +75,7 @@ public abstract class PropertyEditorBase {
      * @return The editor component.
      */
     public XulElement getComponent() {
-        return component;
+        return editor;
     }
     
     /**
@@ -130,7 +131,7 @@ public abstract class PropertyEditorBase {
      * Sets focus to the editor component.
      */
     public void setFocus() {
-        component.setFocus(true);
+        editor.setFocus(true);
     }
     
     /**
@@ -143,8 +144,8 @@ public abstract class PropertyEditorBase {
     protected void init(UIElementBase target, PropertyInfo propInfo, PropertyGrid propGrid) {
         this.target = target;
         this.propInfo = propInfo;
-        component.addForward(Events.ON_CHANGE, propGrid, Events.ON_CHANGE);
-        component.addForward(Events.ON_FOCUS, propGrid, Events.ON_SELECT);
+        editor.addForward(Events.ON_CHANGE, propGrid, Events.ON_CHANGE);
+        editor.addForward(Events.ON_FOCUS, propGrid, Events.ON_SELECT);
     }
     
     /**
@@ -198,9 +199,9 @@ public abstract class PropertyEditorBase {
      */
     public void setWrongValueMessage(String message) {
         if (message == null) {
-            Clients.clearWrongValue(component);
+            Clients.clearWrongValue(editor);
         } else {
-            Clients.wrongValue(component, message);
+            Clients.wrongValue(editor, message);
         }
     }
 }

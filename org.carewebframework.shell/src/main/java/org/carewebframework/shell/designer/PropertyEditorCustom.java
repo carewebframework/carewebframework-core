@@ -30,7 +30,6 @@ import org.carewebframework.common.StrUtil;
 import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.property.PropertyInfo;
 import org.carewebframework.ui.zk.ZKUtil;
-
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
@@ -41,21 +40,18 @@ import org.zkoss.zul.Bandpopup;
 /**
  * Allows registration of custom editors for complex property types.
  */
-public class PropertyEditorCustom extends PropertyEditorBase implements EventListener<Event> {
-    
-    protected final Bandbox bandbox;
+public class PropertyEditorCustom extends PropertyEditorBase<Bandbox> implements EventListener<Event> {
     
     protected final Bandpopup bandpopup;
     
     protected PropertyEditorCustom() {
         super(new Bandbox());
-        bandbox = (Bandbox) component;
-        bandbox.setAutodrop(false);
-        bandbox.setReadonly(true);
-        bandbox.setText(StrUtil.getLabel("cwf.shell.designer.propedit.custom.bandbox.prompt"));
-        bandbox.addEventListener(Events.ON_OPEN, this);
+        editor.setAutodrop(false);
+        editor.setReadonly(true);
+        editor.setText(StrUtil.getLabel("cwf.shell.designer.propedit.custom.editor.prompt"));
+        editor.addEventListener(Events.ON_OPEN, this);
         bandpopup = new Bandpopup();
-        bandbox.appendChild(bandpopup);
+        editor.appendChild(bandpopup);
     }
     
     protected PropertyEditorCustom(String template) throws Exception {
@@ -64,13 +60,13 @@ public class PropertyEditorCustom extends PropertyEditorBase implements EventLis
     }
     
     /**
-     * Invoked when the associated bandbox is opened.
+     * Invoked when the associated editor is opened.
      */
     protected void doOpen() {
     }
     
     /**
-     * Invoked when the associated bandbox is closed;
+     * Invoked when the associated editor is closed;
      */
     protected void doClose() {
     }
@@ -99,7 +95,7 @@ public class PropertyEditorCustom extends PropertyEditorBase implements EventLis
     
     @Override
     public void setFocus() {
-        bandbox.open();
+        editor.open();
         doOpen();
     }
     
@@ -113,8 +109,7 @@ public class PropertyEditorCustom extends PropertyEditorBase implements EventLis
     }
     
     /**
-     * Capture the bandbox onOpen event and invokes doOpen or doClose depending on the bandbox
-     * state.
+     * Capture the editor onOpen event and invokes doOpen or doClose depending on the editor state.
      */
     @Override
     public void onEvent(Event event) throws Exception {

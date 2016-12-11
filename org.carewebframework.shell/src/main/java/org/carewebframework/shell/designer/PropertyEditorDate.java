@@ -30,37 +30,33 @@ import java.util.Date;
 import org.carewebframework.common.DateUtil;
 import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.property.PropertyInfo;
-
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.Datebox;
 
 /**
  * Editor for dates.
  */
-public class PropertyEditorDate extends PropertyEditorBase {
-    
-    private final Datebox datebox;
+public class PropertyEditorDate extends PropertyEditorBase<Datebox> {
     
     public PropertyEditorDate() {
         super(new Datebox());
-        datebox = (Datebox) component;
     }
     
     @Override
     protected void init(UIElementBase target, PropertyInfo propInfo, PropertyGrid propGrid) {
         super.init(target, propInfo, propGrid);
-        datebox.setConstraint(propInfo.getConfigValue("constraint"));
-        datebox.addForward(Events.ON_CHANGING, propGrid, Events.ON_CHANGE);
+        editor.setConstraint(propInfo.getConfigValue("constraint"));
+        editor.addForward(Events.ON_CHANGING, propGrid, Events.ON_CHANGE);
     }
     
     @Override
     protected String getValue() {
-        return DateUtil.formatDate(datebox.getValue());
+        return DateUtil.formatDate(editor.getValue());
     }
     
     @Override
     protected void setValue(Object value) {
-        datebox.setValue((Date) value);
+        editor.setValue((Date) value);
         updateValue();
     }
 }

@@ -27,7 +27,6 @@ package org.carewebframework.shell.designer;
 
 import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.property.PropertyInfo;
-
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.Radio;
 import org.zkoss.zul.Radiogroup;
@@ -35,9 +34,7 @@ import org.zkoss.zul.Radiogroup;
 /**
  * Editor for boolean values.
  */
-public class PropertyEditorBoolean extends PropertyEditorBase {
-    
-    private Radiogroup radiogroup;
+public class PropertyEditorBoolean extends PropertyEditorBase<Radiogroup> {
     
     /**
      * Create property editor.
@@ -51,11 +48,11 @@ public class PropertyEditorBoolean extends PropertyEditorBase {
     @Override
     protected void init(UIElementBase target, PropertyInfo propInfo, PropertyGrid propGrid) {
         super.init(target, propInfo, propGrid);
-        radiogroup.addForward(Events.ON_CHECK, propGrid, Events.ON_CHANGE);
-        radiogroup.addForward(Events.ON_CLICK, propGrid, Events.ON_SELECT);
-        component.addForward(Events.ON_CLICK, propGrid, Events.ON_SELECT);
+        editor.addForward(Events.ON_CHECK, propGrid, Events.ON_CHANGE);
+        editor.addForward(Events.ON_CLICK, propGrid, Events.ON_SELECT);
+        editor.addForward(Events.ON_CLICK, propGrid, Events.ON_SELECT);
         
-        for (Radio radio : radiogroup.getItems()) {
+        for (Radio radio : editor.getItems()) {
             String label = propInfo.getConfigValue(radio.getLabel().trim());
             
             if (label != null) {
@@ -69,10 +66,10 @@ public class PropertyEditorBoolean extends PropertyEditorBase {
      */
     @Override
     public void setFocus() {
-        Radio radio = radiogroup.getSelectedItem();
+        Radio radio = editor.getSelectedItem();
         
         if (radio == null) {
-            radio = radiogroup.getItems().get(0);
+            radio = editor.getItems().get(0);
         }
         
         radio.setFocus(true);
@@ -80,13 +77,13 @@ public class PropertyEditorBoolean extends PropertyEditorBase {
     
     @Override
     protected Boolean getValue() {
-        int i = radiogroup.getSelectedIndex();
+        int i = editor.getSelectedIndex();
         return i < 0 ? null : i == 0;
     }
     
     @Override
     protected void setValue(Object value) {
         int i = value == null ? -1 : (Boolean) value ? 0 : 1;
-        radiogroup.setSelectedIndex(i);
+        editor.setSelectedIndex(i);
     }
 }

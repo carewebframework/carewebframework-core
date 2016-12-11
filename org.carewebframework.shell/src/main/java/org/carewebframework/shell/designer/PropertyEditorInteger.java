@@ -27,7 +27,6 @@ package org.carewebframework.shell.designer;
 
 import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.property.PropertyInfo;
-
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.Intbox;
 import org.zkoss.zul.SimpleSpinnerConstraint;
@@ -35,20 +34,17 @@ import org.zkoss.zul.SimpleSpinnerConstraint;
 /**
  * Editor for integer values.
  */
-public class PropertyEditorInteger extends PropertyEditorBase {
-    
-    private final Intbox intbox;
+public class PropertyEditorInteger extends PropertyEditorBase<Intbox> {
     
     public PropertyEditorInteger() {
         super(new Intbox());
-        intbox = (Intbox) component;
     }
     
     @Override
     protected void init(UIElementBase target, PropertyInfo propInfo, PropertyGrid propGrid) {
         super.init(target, propInfo, propGrid);
-        intbox.setMaxlength(9);
-        intbox.addForward(Events.ON_CHANGING, propGrid, Events.ON_CHANGE);
+        editor.setMaxlength(9);
+        editor.addForward(Events.ON_CHANGING, propGrid, Events.ON_CHANGE);
         Integer min = propInfo.getConfigValueInt("min", null);
         Integer max = propInfo.getConfigValueInt("max", null);
         
@@ -56,18 +52,18 @@ public class PropertyEditorInteger extends PropertyEditorBase {
             SimpleSpinnerConstraint constraint = new SimpleSpinnerConstraint();
             constraint.setMin(min);
             constraint.setMax(max);
-            intbox.setConstraint(constraint);
+            editor.setConstraint(constraint);
         }
     }
     
     @Override
     protected String getValue() {
-        return intbox.getText();
+        return editor.getText();
     }
     
     @Override
     protected void setValue(Object value) {
-        intbox.setText(value == null ? null : value.toString());
+        editor.setText(value == null ? null : value.toString());
         updateValue();
     }
 }

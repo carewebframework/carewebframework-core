@@ -30,7 +30,6 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.layout.UIException;
@@ -39,7 +38,6 @@ import org.carewebframework.shell.property.PropertyInfo;
 import org.carewebframework.shell.property.PropertyType;
 import org.carewebframework.ui.zk.PopupDialog;
 import org.carewebframework.ui.zk.ZKUtil;
-
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.IdSpace;
 import org.zkoss.zk.ui.event.Event;
@@ -235,8 +233,8 @@ public class PropertyGrid extends Window {
      *            is inserted at the beginning.
      * @return The newly added property editor.
      */
-    protected PropertyEditorBase addPropertyEditor(PropertyInfo propInfo, boolean append) {
-        PropertyEditorBase editor = null;
+    protected PropertyEditorBase<?> addPropertyEditor(PropertyInfo propInfo, boolean append) {
+        PropertyEditorBase<?> editor = null;
         
         try {
             PropertyType type = propInfo.getPropertyType();
@@ -245,7 +243,7 @@ public class PropertyGrid extends Window {
                 throw new UIException("Unknown property type: " + propInfo.getType());
             }
             
-            Class<? extends PropertyEditorBase> editorClass = type.getEditorClass();
+            Class<? extends PropertyEditorBase<?>> editorClass = type.getEditorClass();
             
             if (editorClass != null && propInfo.isEditable()) {
                 editor = editorClass.newInstance();
@@ -300,7 +298,7 @@ public class PropertyGrid extends Window {
         for (Object child : gridProperties.getRows().getChildren()) {
             if (child instanceof Row) {
                 Row row = (Row) child;
-                PropertyEditorBase editor = (PropertyEditorBase) row.getAttribute(EDITOR_ATTR);
+                PropertyEditorBase<?> editor = (PropertyEditorBase<?>) row.getAttribute(EDITOR_ATTR);
                 
                 if (editor != null && editor.hasChanged()) {
                     if (commit) {
@@ -327,11 +325,11 @@ public class PropertyGrid extends Window {
      * @param propName The property name.
      * @return The associated property editor (may be null).
      */
-    protected PropertyEditorBase findEditor(String propName) {
+    protected PropertyEditorBase<?> findEditor(String propName) {
         for (Object child : gridProperties.getRows().getChildren()) {
             if (child instanceof Row) {
                 Row row = (Row) child;
-                PropertyEditorBase editor = (PropertyEditorBase) row.getAttribute(EDITOR_ATTR);
+                PropertyEditorBase<?> editor = (PropertyEditorBase<?>) row.getAttribute(EDITOR_ATTR);
                 
                 if (editor != null && editor.getPropInfo().getId().equals(propName)) {
                     return editor;
@@ -449,8 +447,8 @@ public class PropertyGrid extends Window {
         }
         
         selectedRow = row;
-        PropertyEditorBase editor = selectedRow == null ? null
-                : (PropertyEditorBase) (selectedRow.getAttribute(EDITOR_ATTR));
+        PropertyEditorBase<?> editor = selectedRow == null ? null
+                : (PropertyEditorBase<?>) (selectedRow.getAttribute(EDITOR_ATTR));
         PropertyInfo propInfo = editor == null ? null : editor.getPropInfo();
         setPropertyDescription(
             propInfo == null ? "@cwf.shell.designer.property.grid.propdx.some.caption" : propInfo.getName(),

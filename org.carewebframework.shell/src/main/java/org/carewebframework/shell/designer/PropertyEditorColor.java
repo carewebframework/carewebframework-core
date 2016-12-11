@@ -28,7 +28,6 @@ package org.carewebframework.shell.designer;
 import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.property.PropertyInfo;
 import org.carewebframework.ui.zk.ColorPicker;
-
 import org.zkoss.zk.ui.event.Events;
 
 /**
@@ -36,44 +35,41 @@ import org.zkoss.zk.ui.event.Events;
  * picker will be limited to those values only. Otherwise, the color palette is considered
  * unlimited.
  */
-public class PropertyEditorColor extends PropertyEditorBase {
-    
-    private final ColorPicker colorPicker;
+public class PropertyEditorColor extends PropertyEditorBase<ColorPicker> {
     
     public PropertyEditorColor() {
         super(new ColorPicker());
-        colorPicker = (ColorPicker) component;
-        colorPicker.setShowText(true);
-        colorPicker.setAutoAdd(true);
+        editor.setShowText(true);
+        editor.setAutoAdd(true);
     }
     
     @Override
     protected void init(UIElementBase target, PropertyInfo propInfo, PropertyGrid propGrid) {
         super.init(target, propInfo, propGrid);
-        component.addForward(ColorPicker.ON_SELECT_ITEM, propGrid, Events.ON_CHANGE);
+        editor.addForward(ColorPicker.ON_SELECT_ITEM, propGrid, Events.ON_CHANGE);
         String[] values = propInfo.getConfigValueArray("values");
         
         if (values == null) {
-            colorPicker.setAutoAdd(true);
+            editor.setAutoAdd(true);
         } else {
-            colorPicker.setAutoAdd(false);
-            colorPicker.clear();
+            editor.setAutoAdd(false);
+            editor.clear();
             
             for (String choice : values) {
                 String[] color = choice.split("\\:", 2);
-                colorPicker.addColor(color[0], color.length == 2 ? color[1] : "");
+                editor.addColor(color[0], color.length == 2 ? color[1] : "");
             }
         }
     }
     
     @Override
     protected String getValue() {
-        return colorPicker.getSelectedValue();
+        return editor.getSelectedValue();
     }
     
     @Override
     protected void setValue(Object value) {
-        colorPicker.setSelectedColor(value == null ? "" : value.toString());
+        editor.setSelectedColor(value == null ? "" : value.toString());
         updateValue();
     }
 }

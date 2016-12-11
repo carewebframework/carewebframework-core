@@ -28,7 +28,6 @@ package org.carewebframework.shell.designer;
 import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.property.PropertyInfo;
 import org.carewebframework.ui.zk.ZKUtil;
-
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.InputEvent;
@@ -38,9 +37,7 @@ import org.zkoss.zul.Textbox;
 /**
  * Editor for simple text.
  */
-public class PropertyEditorText extends PropertyEditorBase {
-    
-    private Bandbox bandbox;
+public class PropertyEditorText extends PropertyEditorBase<Bandbox> {
     
     private Textbox textbox;
     
@@ -54,51 +51,51 @@ public class PropertyEditorText extends PropertyEditorBase {
         Integer maxLength = propInfo.getConfigValueInt("max", null);
         
         if (maxLength != null) {
-            bandbox.setMaxlength(maxLength);
+            editor.setMaxlength(maxLength);
             textbox.setMaxlength(maxLength);
         }
         
-        bandbox.addForward(Events.ON_CHANGING, propGrid, Events.ON_CHANGE);
-        textbox.addForward(Events.ON_CHANGING, bandbox, Events.ON_CHANGE);
-        bandbox.addForward(Events.ON_FOCUS, propGrid, Events.ON_SELECT);
-        textbox.addForward(Events.ON_FOCUS, bandbox, Events.ON_SELECT);
+        editor.addForward(Events.ON_CHANGING, propGrid, Events.ON_CHANGE);
+        textbox.addForward(Events.ON_CHANGING, editor, Events.ON_CHANGE);
+        editor.addForward(Events.ON_FOCUS, propGrid, Events.ON_SELECT);
+        textbox.addForward(Events.ON_FOCUS, editor, Events.ON_SELECT);
     }
     
     @Override
     protected String getValue() {
-        return bandbox.getText();
+        return editor.getText();
     }
     
     @Override
     protected void setValue(Object value) {
-        bandbox.setText((String) value);
+        editor.setText((String) value);
         textbox.setText((String) value);
         updateValue();
     }
     
     public void onChanging$textbox(InputEvent event) {
-        bandbox.setRawValue(event.getValue());
+        editor.setRawValue(event.getValue());
     }
     
     public void onBlur$textbox() {
-        bandbox.close();
-        Events.echoEvent("onDelayedFocus", bandbox, bandbox);
+        editor.close();
+        Events.echoEvent("onDelayedFocus", editor, editor);
     }
     
     public void onOK$textbox() {
-        bandbox.close();
-        Events.echoEvent("onDelayedFocus", bandbox, bandbox);
+        editor.close();
+        Events.echoEvent("onDelayedFocus", editor, editor);
     }
     
-    public void onChanging$bandbox(InputEvent event) {
+    public void onChanging$editor(InputEvent event) {
         textbox.setRawValue(event.getValue());
     }
     
-    public void onOpen$bandbox() {
-        Events.echoEvent("onDelayedFocus", bandbox, bandbox.isOpen() ? textbox : bandbox);
+    public void onOpen$editor() {
+        Events.echoEvent("onDelayedFocus", editor, editor.isOpen() ? textbox : editor);
     }
     
-    public void onDelayedFocus$bandbox(Event event) {
+    public void onDelayedFocus$editor(Event event) {
         ((Textbox) ZKUtil.getEventOrigin(event).getData()).setFocus(true);
     }
 }
