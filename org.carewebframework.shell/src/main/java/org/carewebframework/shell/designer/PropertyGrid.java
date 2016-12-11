@@ -236,8 +236,8 @@ public class PropertyGrid implements IAutoWired {
      *            is inserted at the beginning.
      * @return The newly added property editor.
      */
-    protected PropertyEditorBase addPropertyEditor(PropertyInfo propInfo, boolean append) {
-        PropertyEditorBase editor = null;
+    protected PropertyEditorBase<?> addPropertyEditor(PropertyInfo propInfo, boolean append) {
+        PropertyEditorBase<?> editor = null;
         
         try {
             PropertyType type = propInfo.getPropertyType();
@@ -246,7 +246,7 @@ public class PropertyGrid implements IAutoWired {
                 throw new UIException("Unknown property type: " + propInfo.getType());
             }
             
-            Class<? extends PropertyEditorBase> editorClass = type.getEditorClass();
+            Class<? extends PropertyEditorBase<?>> editorClass = type.getEditorClass();
             
             if (editorClass != null && propInfo.isEditable()) {
                 editor = editorClass.newInstance();
@@ -295,7 +295,7 @@ public class PropertyGrid implements IAutoWired {
         for (Object child : gridProperties.getRows().getChildren()) {
             if (child instanceof Row) {
                 Row row = (Row) child;
-                PropertyEditorBase editor = (PropertyEditorBase) row.getAttribute(EDITOR_ATTR);
+                PropertyEditorBase<?> editor = (PropertyEditorBase<?>) row.getAttribute(EDITOR_ATTR);
                 
                 if (editor != null && editor.hasChanged()) {
                     if (commit) {
@@ -322,11 +322,11 @@ public class PropertyGrid implements IAutoWired {
      * @param propName The property name.
      * @return The associated property editor (may be null).
      */
-    protected PropertyEditorBase findEditor(String propName) {
+    protected PropertyEditorBase<?> findEditor(String propName) {
         for (Object child : gridProperties.getRows().getChildren()) {
             if (child instanceof Row) {
                 Row row = (Row) child;
-                PropertyEditorBase editor = (PropertyEditorBase) row.getAttribute(EDITOR_ATTR);
+                PropertyEditorBase<?> editor = (PropertyEditorBase<?>) row.getAttribute(EDITOR_ATTR);
                 
                 if (editor != null && editor.getPropInfo().getId().equals(propName)) {
                     return editor;

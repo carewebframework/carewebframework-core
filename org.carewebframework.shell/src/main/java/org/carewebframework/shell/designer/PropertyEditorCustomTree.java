@@ -187,7 +187,7 @@ public abstract class PropertyEditorCustomTree<T extends UIElementBase> extends 
     
     private final Textbox txtLabel = new Textbox();
     
-    private PropertyEditorBase labelEditor;
+    private PropertyEditorBase<?> labelEditor;
     
     private final List<Proxy> proxies = new ArrayList<>();
     

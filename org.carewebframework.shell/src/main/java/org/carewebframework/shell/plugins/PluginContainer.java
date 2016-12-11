@@ -204,6 +204,7 @@ public class PluginContainer extends Container {
     /**
      * Calls the hosting UI element to bring the plugin to the front of the UI.
      */
+    @Override
     public void bringToFront() {
         UIElementBase host = getHost();
         
