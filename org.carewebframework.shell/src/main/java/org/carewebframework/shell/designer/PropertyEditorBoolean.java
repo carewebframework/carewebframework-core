@@ -29,15 +29,14 @@ import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.property.PropertyInfo;
 import org.carewebframework.web.component.Radiobutton;
 import org.carewebframework.web.component.Radiogroup;
+import org.carewebframework.web.event.ChangeEvent;
 import org.carewebframework.web.event.ClickEvent;
 import org.carewebframework.web.event.SelectEvent;
 
 /**
  * Editor for boolean values.
  */
-public class PropertyEditorBoolean extends PropertyEditorBase {
-    
-    private Radiogroup radiogroup;
+public class PropertyEditorBoolean extends PropertyEditorBase<Radiogroup> {
     
     /**
      * Create property editor.
@@ -45,17 +44,17 @@ public class PropertyEditorBoolean extends PropertyEditorBase {
      * @throws Exception Unspecified exception.
      */
     public PropertyEditorBoolean() throws Exception {
-        super(DesignConstants.RESOURCE_PREFIX + "PropertyEditorBoolean.cwf");
+        super(DesignConstants.RESOURCE_PREFIX + "propertyEditorBoolean.cwf");
     }
     
     @Override
     protected void init(UIElementBase target, PropertyInfo propInfo, PropertyGrid propGrid) {
         super.init(target, propInfo, propGrid);
-        //radiogroup.registerEventForward(Events.ON_CHECK, propGrid, Events.ON_CHANGE);
-        radiogroup.addEventForward(ClickEvent.TYPE, propGrid.getWindow(), SelectEvent.TYPE);
+        component.addEventForward(SelectEvent.TYPE, propGrid.getWindow(), ChangeEvent.TYPE);
+        component.addEventForward(ClickEvent.TYPE, propGrid.getWindow(), SelectEvent.TYPE);
         component.addEventForward(ClickEvent.TYPE, propGrid.getWindow(), SelectEvent.TYPE);
         
-        for (Radiobutton radio : radiogroup.getChildren(Radiobutton.class)) {
+        for (Radiobutton radio : component.getChildren(Radiobutton.class)) {
             String label = propInfo.getConfigValue(radio.getLabel().trim());
             
             if (label != null) {
@@ -69,10 +68,10 @@ public class PropertyEditorBoolean extends PropertyEditorBase {
      */
     @Override
     public void setFocus() {
-        Radiobutton radio = radiogroup.getSelected();
+        Radiobutton radio = component.getSelected();
         
         if (radio == null) {
-            radio = (Radiobutton) radiogroup.getChildren().get(0);
+            radio = (Radiobutton) component.getChildren().get(0);
         }
         
         radio.setFocus(true);
@@ -80,19 +79,19 @@ public class PropertyEditorBoolean extends PropertyEditorBase {
     
     @Override
     protected Boolean getValue() {
-        return radiogroup.getSelected() != null;
+        return component.getSelected() != null;
     }
     
     @Override
     protected void setValue(Object value) {
         int i = value == null ? -1 : (Boolean) value ? 0 : 1;
-        Radiobutton rb = radiogroup.getSelected();
+        Radiobutton rb = component.getSelected();
         
         if (rb != null) {
             rb.setChecked(false);
         }
         
-        rb = (Radiobutton) radiogroup.getChildAt(i);
+        rb = (Radiobutton) component.getChildAt(i);
         
         if (rb != null) {
             rb.setChecked(true);

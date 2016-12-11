@@ -39,26 +39,23 @@ import org.carewebframework.web.page.PageUtil;
 /**
  * Allows registration of custom editors for complex property types.
  */
-public class PropertyEditorCustom extends PropertyEditorBase {
-    
-    protected final Popupbox popupbox;
+public class PropertyEditorCustom extends PropertyEditorBase<Popupbox> {
     
     protected final Popup popup;
     
     protected PropertyEditorCustom() {
         super(new Popupbox());
-        popupbox = (Popupbox) component;
-        //popupbox.setAutodrop(false);
-        popupbox.setReadonly(true);
-        popupbox.setValue(StrUtil.getLabel("cwf.shell.designer.propedit.custom.popupbox.prompt"));
-        popupbox.addEventListener(OpenEvent.class, (event) -> {
+        //component.setAutodrop(false);
+        component.setReadonly(true);
+        component.setValue(StrUtil.getLabel("cwf.shell.designer.propedit.custom.component.prompt"));
+        component.addEventListener(OpenEvent.class, (event) -> {
             doOpen();
         });
-        popupbox.addEventListener(CloseEvent.class, (event) -> {
+        component.addEventListener(CloseEvent.class, (event) -> {
             doClose();
         });
         popup = new Popup();
-        popupbox.addChild(popup);
+        component.addChild(popup);
     }
     
     protected PropertyEditorCustom(String template) throws Exception {
@@ -68,13 +65,13 @@ public class PropertyEditorCustom extends PropertyEditorBase {
     }
     
     /**
-     * Invoked when the associated popupbox is opened.
+     * Invoked when the associated component is opened.
      */
     protected void doOpen() {
     }
     
     /**
-     * Invoked when the associated popupbox is closed;
+     * Invoked when the associated component is closed;
      */
     protected void doClose() {
     }
@@ -103,7 +100,7 @@ public class PropertyEditorCustom extends PropertyEditorBase {
     
     @Override
     public void setFocus() {
-        popupbox.open();
+        component.open();
         doOpen();
     }
     

@@ -35,29 +35,26 @@ import org.carewebframework.web.component.Datebox;
 /**
  * Editor for dates.
  */
-public class PropertyEditorDate extends PropertyEditorBase {
-    
-    private final Datebox datebox;
+public class PropertyEditorDate extends PropertyEditorBase<Datebox> {
     
     public PropertyEditorDate() {
         super(new Datebox());
-        datebox = (Datebox) component;
     }
     
     @Override
     protected void init(UIElementBase target, PropertyInfo propInfo, PropertyGrid propGrid) {
         super.init(target, propInfo, propGrid);
-        //TODO: datebox.setConstraint(propInfo.getConfigValue("constraint"));
+        //TODO: component.setConstraint(propInfo.getConfigValue("constraint"));
     }
     
     @Override
     protected String getValue() {
-        return DateUtil.formatDate(datebox.getValue());
+        return DateUtil.formatDate(component.getValue());
     }
     
     @Override
     protected void setValue(Object value) {
-        datebox.setValue((Date) value);
+        component.setValue((Date) value);
         updateValue();
     }
 }

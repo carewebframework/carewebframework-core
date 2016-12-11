@@ -32,31 +32,28 @@ import org.carewebframework.web.component.Integerbox;
 /**
  * Editor for integer values.
  */
-public class PropertyEditorInteger extends PropertyEditorBase {
-    
-    private final Integerbox intbox;
+public class PropertyEditorInteger extends PropertyEditorBase<Integerbox> {
     
     public PropertyEditorInteger() {
         super(new Integerbox());
-        intbox = (Integerbox) component;
     }
     
     @Override
     protected void init(UIElementBase target, PropertyInfo propInfo, PropertyGrid propGrid) {
         super.init(target, propInfo, propGrid);
-        intbox.setMaxLength(9);
-        intbox.setMinvalue(propInfo.getConfigValueInt("min", null));
-        intbox.setMaxvalue(propInfo.getConfigValueInt("max", null));
+        component.setMaxLength(9);
+        component.setMinvalue(propInfo.getConfigValueInt("min", null));
+        component.setMaxvalue(propInfo.getConfigValueInt("max", null));
     }
     
     @Override
     protected String getValue() {
-        return Integer.toString(intbox.getValue());
+        return Integer.toString(component.getValue());
     }
     
     @Override
     protected void setValue(Object value) {
-        intbox.setValue(value == null ? null : (Integer) value);
+        component.setValue(value == null ? null : (Integer) value);
         updateValue();
     }
 }

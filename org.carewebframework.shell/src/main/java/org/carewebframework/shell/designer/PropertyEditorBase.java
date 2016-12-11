@@ -35,10 +35,12 @@ import org.carewebframework.web.page.PageUtil;
 
 /**
  * All property editors must descend from this abstract class.
+ * 
+ * @param <T> The input component class.
  */
-public abstract class PropertyEditorBase {
+public abstract class PropertyEditorBase<T extends BaseUIComponent> {
     
-    protected final BaseUIComponent component;
+    protected final T component;
     
     private Object value;
     
@@ -51,8 +53,9 @@ public abstract class PropertyEditorBase {
      * 
      * @param template The template to create the editing component.
      */
+    @SuppressWarnings("unchecked")
     protected PropertyEditorBase(String template) {
-        this((BaseUIComponent) PageUtil.createPage(template, null).get(0));
+        this((T) PageUtil.createPage(template, null).get(0));
     }
     
     /**
@@ -60,9 +63,8 @@ public abstract class PropertyEditorBase {
      * 
      * @param component The component used to edit the property.
      */
-    protected PropertyEditorBase(BaseUIComponent component) {
+    protected PropertyEditorBase(T component) {
         this.component = component;
-        component.setHeight("80%");
         component.setWidth("95%");
         component.wireController(this);
     }
@@ -72,7 +74,7 @@ public abstract class PropertyEditorBase {
      * 
      * @return The editor component.
      */
-    public BaseUIComponent getComponent() {
+    public T getComponent() {
         return component;
     }
     

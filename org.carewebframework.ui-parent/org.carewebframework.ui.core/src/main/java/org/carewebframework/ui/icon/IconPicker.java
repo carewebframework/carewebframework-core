@@ -32,6 +32,7 @@ import org.carewebframework.web.component.Comboitem;
 import org.carewebframework.web.component.Div;
 import org.carewebframework.web.component.ImagePicker;
 import org.carewebframework.web.component.ImagePicker.ImagePickeritem;
+import org.carewebframework.web.event.ChangeEvent;
 import org.carewebframework.web.event.SelectEvent;
 
 /**
@@ -54,6 +55,8 @@ public class IconPicker extends Div {
     public IconPicker() {
         addChild(cboLibrary);
         addChild(imagePicker);
+        addStyle("overflow", "visible");
+        imagePicker.addEventForward(ChangeEvent.class, this, null);
         
         cboLibrary.addEventListener(SelectEvent.TYPE, (event) -> {
             iconLibrary = (IIconLibrary) cboLibrary.getSelectedItem().getData();

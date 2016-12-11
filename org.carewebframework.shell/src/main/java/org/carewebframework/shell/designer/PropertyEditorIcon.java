@@ -39,19 +39,16 @@ import org.carewebframework.web.event.IEventListener;
  * Property editor for icon properties. If the associated property has defined choices, the icon
  * picker will be limited to those values only. Otherwise, all registered icons will be available.
  */
-public class PropertyEditorIcon extends PropertyEditorBase {
-    
-    private final IconPicker iconPicker;
+public class PropertyEditorIcon extends PropertyEditorBase<IconPicker> {
     
     public PropertyEditorIcon() {
         super(new IconPicker());
-        iconPicker = (IconPicker) component;
-        iconPicker.addEventListener("setValue", new IEventListener() {
+        component.addEventListener("setValue", new IEventListener() {
             
             @Override
             public void onEvent(Event event) {
                 Object value = event.getData();
-                iconPicker.setValue((String) value);
+                component.setValue((String) value);
                 updateValue();
             }
             
@@ -66,19 +63,19 @@ public class PropertyEditorIcon extends PropertyEditorBase {
         
         if (values == null) {
             String dflt = IconLibraryRegistry.getInstance().getDefaultLibrary();
-            iconPicker.setIconLibrary(dflt);
+            component.setIconLibrary(dflt);
         } else {
-            iconPicker.setSelectorVisible(false);
+            component.setSelectorVisible(false);
             
             for (String choice : values) {
                 if (choice.startsWith("web/")) {
-                    iconPicker.addIconByUrl(choice);
+                    component.addIconByUrl(choice);
                 } else {
                     String[] pcs = choice.split("\\:", 3);
                     String library = pcs.length == 0 ? null : pcs[0];
                     String name = pcs.length < 2 ? "*" : pcs[1];
                     String dimension = pcs.length < 3 ? null : pcs[2];
-                    iconPicker.addIconsByUrl(IconUtil.getMatching(library, name, dimension));
+                    component.addIconsByUrl(IconUtil.getMatching(library, name, dimension));
                 }
             }
         }
@@ -86,11 +83,11 @@ public class PropertyEditorIcon extends PropertyEditorBase {
     
     @Override
     protected String getValue() {
-        return iconPicker.getValue();
+        return component.getValue();
     }
     
     @Override
     protected void setValue(Object value) {
-        EventUtil.post("setValue", iconPicker, value);
+        EventUtil.post("setValue", component, value);
     }
 }

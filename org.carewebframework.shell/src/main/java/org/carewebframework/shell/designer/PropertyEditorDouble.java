@@ -33,31 +33,28 @@ import org.carewebframework.web.event.ChangeEvent;
 /**
  * Editor for double values.
  */
-public class PropertyEditorDouble extends PropertyEditorBase {
-    
-    private final Doublebox doublebox;
+public class PropertyEditorDouble extends PropertyEditorBase<Doublebox> {
     
     public PropertyEditorDouble() {
         super(new Doublebox());
-        doublebox = (Doublebox) component;
     }
     
     @Override
     protected void init(UIElementBase target, PropertyInfo propInfo, PropertyGrid propGrid) {
         super.init(target, propInfo, propGrid);
-        doublebox.addEventForward(ChangeEvent.TYPE, propGrid.getWindow(), null);
-        doublebox.setMinValue(propInfo.getConfigValueDouble("min", null));
-        doublebox.setMaxValue(propInfo.getConfigValueDouble("max", null));
+        component.addEventForward(ChangeEvent.TYPE, propGrid.getWindow(), null);
+        component.setMinValue(propInfo.getConfigValueDouble("min", null));
+        component.setMaxValue(propInfo.getConfigValueDouble("max", null));
     }
     
     @Override
     protected String getValue() {
-        return Double.toString(doublebox.getValue());
+        return Double.toString(component.getValue());
     }
     
     @Override
     protected void setValue(Object value) {
-        doublebox.setValue((Double) value);
+        component.setValue((Double) value);
         updateValue();
     }
 }

@@ -41,6 +41,7 @@ import org.carewebframework.shell.property.PropertyType;
 import org.carewebframework.ui.core.CWFUtil;
 import org.carewebframework.web.ancillary.IAutoWired;
 import org.carewebframework.web.ancillary.INamespace;
+import org.carewebframework.web.annotation.EventHandler;
 import org.carewebframework.web.annotation.WiredComponent;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.BaseUIComponent;
@@ -97,9 +98,6 @@ public class PropertyGrid implements IAutoWired {
     private Column colProperty;
     
     @WiredComponent
-    private Label capPropertyName;
-    
-    @WiredComponent
     private Button btnOK;
     
     @WiredComponent
@@ -149,7 +147,7 @@ public class PropertyGrid implements IAutoWired {
         Map<String, Object> args = new HashMap<>();
         args.put("target", target);
         args.put("embedded", embedded);
-        Window window = (Window) PageUtil.createPage(DesignConstants.RESOURCE_PREFIX + "PropertyGrid.cwf", parent, args)
+        Window window = (Window) PageUtil.createPage(DesignConstants.RESOURCE_PREFIX + "propertyGrid.cwf", parent, args)
                 .get(0);
         
         if (parent == null) {
@@ -377,7 +375,8 @@ public class PropertyGrid implements IAutoWired {
      * Clicking the cancel button cancels any pending edits and, if embedded mode is not active,
      * closes the dialog.
      */
-    public void onClick$btnCancel() {
+    @EventHandler(value = "click", target = "@btnCancel")
+    private void onClick$btnCancel() {
         if (embedded) {
             commitChanges(false);
         } else {
@@ -388,21 +387,24 @@ public class PropertyGrid implements IAutoWired {
     /**
      * Clicking the apply button commits any pending edits.
      */
-    public void onClick$btnApply() {
+    @EventHandler(value = "click", target = "@btnApply")
+    private void onClick$btnApply() {
         commitChanges(true);
     }
     
     /**
      * Clicking the restore button cancels any pending edits.
      */
-    public void onClick$btnRestore() {
+    @EventHandler(value = "click", target = "@btnRestore")
+    private void onClick$btnRestore() {
         commitChanges(false);
     }
     
     /**
      * Clicking the OK button commits any pending edits and closes the dialog.
      */
-    public void onClick$btnOK() {
+    @EventHandler(value = "click", target = "@btnOK")
+    private void onClick$btnOK() {
         if (commitChanges(true)) {
             window.close();
         }
@@ -415,40 +417,8 @@ public class PropertyGrid implements IAutoWired {
      * @param propertyDescription Property description.
      */
     private void setPropertyDescription(String propertyName, String propertyDescription) {
-        capPropertyName.setLabel(StrUtil.formatMessage(propertyName));
+        //capPropertyName.setLabel(StrUtil.formatMessage(propertyName));
         lblPropertyInfo.setLabel(StrUtil.formatMessage(propertyDescription));
-    }
-    
-    /**
-     * Sets the selected row.
-     * 
-     * @param row The row to select.
-     */
-    private void setSelectedRow(Row row) {
-        if (row == selectedRow) {
-            return;
-        }
-        
-        if (selectedRow != null) {
-            selectedRow.removeClass("cwf-propertygrid-selectedrow");
-        }
-        
-        selectedRow = row;
-        PropertyEditorBase editor = selectedRow == null ? null
-                : (PropertyEditorBase) (selectedRow.getAttribute(EDITOR_ATTR));
-        PropertyInfo propInfo = editor == null ? null : editor.getPropInfo();
-        setPropertyDescription(
-            propInfo == null ? "@cwf.shell.designer.property.grid.propdx.some.caption" : propInfo.getName(),
-            propInfo == null ? " " : propInfo.getDescription());
-        
-        if (selectedRow != null) {
-            selectedRow.addClass("cwf-propertygrid-selectedrow");
-        }
-        
-        if (editor != null) {
-            editor.setFocus();
-        }
-        
     }
     
     /**
@@ -456,8 +426,20 @@ public class PropertyGrid implements IAutoWired {
      * 
      * @param event Row selection event.
      */
-    public void onSelect(Event event) {
-        setSelectedRow(event.getTarget().getAncestor(Row.class));
+    @EventHandler(value = "select", target = "rowProperties")
+    private void onSelect() {
+        Rows rows = gridProperties.getRows();
+        selectedRow = rows.getSelectedCount() == 0 ? null : rows.getSelected().get(0);
+        PropertyEditorBase<?> editor = selectedRow == null ? null
+                : (PropertyEditorBase<?>) (selectedRow.getAttribute(EDITOR_ATTR));
+        PropertyInfo propInfo = editor == null ? null : editor.getPropInfo();
+        setPropertyDescription(
+            propInfo == null ? "@cwf.shell.designer.property.grid.propdx.some.caption" : propInfo.getName(),
+            propInfo == null ? " " : propInfo.getDescription());
+        
+        if (editor != null) {
+            editor.setFocus();
+        }
     }
     
     /**
@@ -465,7 +447,8 @@ public class PropertyGrid implements IAutoWired {
      * 
      * @param event Change event.
      */
-    public void onChange(Event event) {
+    @EventHandler(value = { "select", "change" }, target = "gridProperties")
+    private void onChange(Event event) {
         ((BaseUIComponent) event.getTarget()).setBalloon(null);
         disableButtons(false);
     }

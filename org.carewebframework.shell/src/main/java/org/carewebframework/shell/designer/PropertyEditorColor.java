@@ -39,15 +39,12 @@ import org.carewebframework.web.event.ChangeEvent;;
  * picker will be limited to those values only. Otherwise, the color palette is considered
  * unlimited.
  */
-public class PropertyEditorColor extends PropertyEditorBase {
-    
-    private final ColorPicker colorPicker;
+public class PropertyEditorColor extends PropertyEditorBase<ColorPicker> {
     
     public PropertyEditorColor() {
         super(new ColorPicker());
-        colorPicker = (ColorPicker) component;
-        colorPicker.setShowText(true);
-        //colorPicker.setAutoAdd(true);
+        component.setShowText(true);
+        //component.setAutoAdd(true);
     }
     
     @Override
@@ -57,17 +54,17 @@ public class PropertyEditorColor extends PropertyEditorBase {
         String[] values = propInfo.getConfigValueArray("values");
         
         if (values == null) {
-            //colorPicker.setAutoAdd(true);
+            //component.setAutoAdd(true);
         } else {
-            //colorPicker.setAutoAdd(false);
-            colorPicker.clear();
+            //component.setAutoAdd(false);
+            component.clear();
             
             for (String choice : values) {
                 String[] color = choice.split("\\:", 2);
                 
                 for (int i = 0; i < color.length; i++) {
                     ColorPickeritem item = new ColorPickeritem(ColorUtil.toColor(color[i]));
-                    colorPicker.addChild(item);
+                    component.addChild(item);
                 }
             }
         }
@@ -75,12 +72,12 @@ public class PropertyEditorColor extends PropertyEditorBase {
     
     @Override
     protected String getValue() {
-        return colorPicker.getValue().toString();
+        return component.getValue().toString();
     }
     
     @Override
     protected void setValue(Object value) {
-        colorPicker.setValue((Color) value);
+        component.setValue((Color) value);
         updateValue();
     }
 }

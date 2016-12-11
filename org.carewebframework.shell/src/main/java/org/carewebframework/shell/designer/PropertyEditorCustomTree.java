@@ -211,7 +211,7 @@ public abstract class PropertyEditorCustomTree<T extends UIElementBase> extends 
      * @throws Exception Unspecified exception.
      */
     public PropertyEditorCustomTree(Class<T> childClass, String labelProperty, boolean hierarchical) throws Exception {
-        super(DesignConstants.RESOURCE_PREFIX + "PropertyEditorCustomTree.cwf");
+        super(DesignConstants.RESOURCE_PREFIX + "propertyEditorCustomTree.cwf");
         this.childClass = childClass;
         this.labelProperty = labelProperty;
         this.hierarchical = hierarchical;
@@ -222,8 +222,8 @@ public abstract class PropertyEditorCustomTree<T extends UIElementBase> extends 
         //TODO: not sure if needed: propertyGrid.registerEventListener(eventType, this);
         txtLabel.setWidth("95%");
         //TODO: Needs non blank label constraint: txtLabel.setConstraint(new LabelConstraint());
-        popupbox.setHeight("400px");
-        popupbox.setWidth("600px");
+        component.setHeight("400px");
+        component.setWidth("600px");
         definition = childClass == null ? null : PluginRegistry.getInstance().get(childClass);
         
         IEventListener labelEditorListener = new IEventListener() {
@@ -256,7 +256,7 @@ public abstract class PropertyEditorCustomTree<T extends UIElementBase> extends 
         }
         
         PluginDefinition def = null; //TODO: AddComponent.getDefinition(getTarget());
-        popupbox.open();
+        component.open();
         return def;
     }
     
@@ -531,13 +531,13 @@ public abstract class PropertyEditorCustomTree<T extends UIElementBase> extends 
     }
     
     /**
-     * If the property grid is closed, instead close the popupbox.
+     * If the property grid is closed, instead close the component.
      * 
      * @param event The close event.
      */
     public void onClose(Event event) {
         if (event.getTarget() == propertyGrid.getWindow()) {
-            popupbox.close();
+            component.close();
             doClose();
         }
     }
