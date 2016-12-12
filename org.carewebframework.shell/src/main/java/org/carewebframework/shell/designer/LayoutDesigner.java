@@ -403,8 +403,8 @@ public class LayoutDesigner implements IAutoWired {
     /**
      * Updates tool bar controls when selected changes.
      */
-    @EventHandler(value = "select", target = "@tree")
-    private void onSelect$tree() {
+    @EventHandler(value = "change", target = "@tree")
+    private void onChange$tree() {
         UIElementBase ele = selectedElement();
         Object obj = ele == null ? null : ele.getOuterComponent();
         

@@ -3,51 +3,51 @@
 <window width="500px" height="450px"
 	title="${@msg.cwf.shell.designer.layout.designer.caption}"
 	controller="org.carewebframework.shell.designer.LayoutDesigner">
-	<toolbar align="start" css="##{id}>button {background:transparent}" width="100%">
-			<button name="btnCut" class="btn-link"
+	<toolbar align="start" css="##{id}>button {background:transparent;padding:5px}" width="100%">
+			<button name="btnCut" class="flavor:btn-link"
 				hint="${@msg.cwf.shell.designer.layout.designer.cut.hint}"
 				image="${rc.getIconPath('carewebframework:16x16:cut.png')}" />
-			<button name="btnCopy" class="btn-link"
+			<button name="btnCopy" class="flavor:btn-link"
 				hint="${@msg.cwf.shell.designer.layout.designer.copy.hint}"
 				image="${rc.getIconPath('carewebframework:16x16:copy.png')}" />
-			<button name="btnPaste" class="btn-link"
+			<button name="btnPaste" class="flavor:btn-link"
 				hint="${@msg.cwf.shell.designer.layout.designer.paste.hint}"
 				image="${rc.getIconPath('carewebframework:16x16:paste.png')}" />
-			<button name="btnView" class="btn-link"
+			<button name="btnView" class="flavor:btn-link"
 				hint="${@msg.cwf.shell.designer.layout.designer.view.hint}"
 				image="${rc.getIconPath('carewebframework:16x16:view.png')}" />
 
-			<button name="btnAdd" class="btn-link"
+			<button name="btnAdd" class="flavor:btn-link"
 				hint="${@msg.cwf.shell.designer.layout.designer.add.hint}"
 				image="${rc.getIconPath('carewebframework:16x16:add.png')}" />
-			<button name="btnDelete" class="btn-link"
+			<button name="btnDelete" class="flavor:btn-link"
 				hint="${@msg.cwf.shell.designer.layout.designer.delete.hint}"
 				image="${rc.getIconPath('carewebframework:16x16:delete.png')}" />
 
-			<button name="btnUp" class="btn-link"
+			<button name="btnUp" class="flavor:btn-link"
 				hint="${@msg.cwf.shell.designer.layout.designer.up.hint}"
 				image="${rc.getIconPath('carewebframework:16x16:arrowU.png')}" />
-			<button name="btnDown" class="btn-link"
+			<button name="btnDown" class="flavor:btn-link"
 				hint="${@msg.cwf.shell.designer.layout.designer.down.hint}"
 				image="${rc.getIconPath('carewebframework:16x16:arrowD.png')}" />
-			<button name="btnLeft" class="btn-link"
+			<button name="btnLeft" class="flavor:btn-link"
 				hint="${@msg.cwf.shell.designer.layout.designer.promote.hint}"
 				image="${rc.getIconPath('carewebframework:16x16:arrowL.png')}" />
-			<button name="btnRight" class="btn-link"
+			<button name="btnRight" class="flavor:btn-link"
 				hint="${@msg.cwf.shell.designer.layout.designer.demote.hint}"
 				image="${rc.getIconPath('carewebframework:16x16:arrowR.png')}" />
 
-			<button name="btnProperties" class="btn-link"
+			<button name="btnProperties" class="flavor:btn-link"
 				hint="${@msg.cwf.shell.designer.layout.designer.properties.hint}"
 				image="${rc.getIconPath('carewebframework:16x16:properties.png')}" />
-			<button name="btnAbout" class="btn-link"
+			<button name="btnAbout" class="flavor:btn-link"
 				hint="${@msg.cwf.shell.designer.layout.designer.about.hint}"
 				image="${rc.getIconPath('carewebframework:16x16:about.png')}" />
 
-			<button name="btnToFront" class="btn-link"
+			<button name="btnToFront" class="flavor:btn-link"
 				hint="${@msg.cwf.shell.designer.layout.designer.tofront.hint}"
 				image="${rc.getIconPath('carewebframework:16x16:bringToFront.png')}" />
-			<button name="btnRefresh" class="btn-link"
+			<button name="btnRefresh" class="flavor:btn-link"
 				hint="${@msg.cwf.shell.designer.layout.designer.refresh.hint}"
 				image="${rc.getIconPath('carewebframework:16x16:refresh.png')}" />
 		</toolbar>

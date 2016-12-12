@@ -56,6 +56,7 @@ public class IconPicker extends Div {
         addChild(imagePicker);
         addStyle("overflow", "visible");
         imagePicker.addEventForward(ChangeEvent.class, this, null);
+        imagePicker.setShowText(true);
         
         cboLibrary.addEventListener(ChangeEvent.class, (event) -> {
             iconLibrary = (IIconLibrary) cboLibrary.getSelectedItem().getData();
@@ -116,6 +117,7 @@ public class IconPicker extends Div {
     
     private void libraryChanged() {
         imagePicker.clear();
+        imagePicker.addChild(new ImagePickeritem());
         
         for (String lib : iconLibrary.getMatching("*", dimensions)) {
             imagePicker.addChild(new ImagePickeritem(lib));

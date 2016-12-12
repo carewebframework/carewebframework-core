@@ -13,6 +13,6 @@
 			label="${@msg.cwf.shell.designer.layout.manager.btn.ok.label}" />
 		<button name="btnCancel" class="flavor:btn-danger"
 			label="${@msg.cwf.shell.designer.layout.manager.btn.cancel.label}"
-			forward="onClose" />
+			forward="click=^.close" />
 	</toolbar>
 </window>

@@ -299,7 +299,7 @@ public class LayoutManager implements IAutoWired {
      * Sets the selected layout and closes the dialog.
      */
     @EventHandler(value = "click", target = "@btnOK")
-    public void onClick$btnOK() {
+    private void onClick$btnOK() {
         selectedLayout = getSelectedLayout();
         
         if (selectedLayout != null) {
@@ -307,11 +307,16 @@ public class LayoutManager implements IAutoWired {
         }
     }
     
+    @EventHandler(value = "click", target = "btnCancel")
+    private void onClick$btnCancel() {
+        window.close();
+    }
+    
     /**
      * Deletes the selected layout.
      */
     @EventHandler(value = "click", target = "@btnDelete")
-    public void onClick$btnDelete() {
+    private void onClick$btnDelete() {
         DialogUtil.confirm(MSG_LAYOUT_DELETE, (confirm) -> {
             if (confirm) {
                 LayoutUtil.deleteLayout(getSelectedLayout());
@@ -324,7 +329,7 @@ public class LayoutManager implements IAutoWired {
      * Renames the selected layout.
      */
     @EventHandler(value = "click", target = "@btnRename")
-    public void onClick$btnRename() {
+    private void onClick$btnRename() {
         cloneOrRename(false);
     }
     
@@ -332,7 +337,7 @@ public class LayoutManager implements IAutoWired {
      * Clones the selected layout.
      */
     @EventHandler(value = "click", target = "@btnClone")
-    public void onClick$btnClone() {
+    private void onClick$btnClone() {
         cloneOrRename(true);
     }
     
@@ -340,7 +345,7 @@ public class LayoutManager implements IAutoWired {
      * Import a layout.
      */
     @EventHandler(value = "click", target = "btnImport")
-    public void onClick$btnImport() {
+    private void onClick$btnImport() {
         LayoutIdentifier layoutId = importLayout(shared);
         
         if (layoutId != null) {
@@ -352,23 +357,23 @@ public class LayoutManager implements IAutoWired {
      * Export a layout
      */
     @EventHandler(value = "click", target = "@btnExport")
-    public void onClick$btnExport() {
+    private void onClick$btnExport() {
         exportLayout(getSelectedLayout());
     }
     
     /**
      * Update control states when selection changes.
      */
-    @EventHandler(value = "select", target = "@lstLayouts")
-    public void onSelect$lstLayouts() {
+    @EventHandler(value = "change", target = "@lstLayouts")
+    private void onChange$lstLayouts() {
         updateControls();
     }
     
     /**
      * Refresh when shared/private toggled.
      */
-    @EventHandler(value = "select", target = "@radioGroup")
-    public void onCheck$radioGroup() {
+    @EventHandler(value = "change", target = "@radioGroup")
+    private void onChange$radioGroup() {
         shared = radioGroup.getSelected().getIndex() == 0;
         defaultIsShared(shared);
         refresh(null);

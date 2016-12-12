@@ -233,7 +233,7 @@ public class AddComponent implements IAutoWired {
         
         if (useDefault && defaultItem != null) {
             defaultItem.setSelected(true);
-            onSelect$tree();
+            onChange$tree();
         }
         
         window.setTitle(
@@ -364,8 +364,8 @@ public class AddComponent implements IAutoWired {
     /**
      * Update buttons based on current selection.
      */
-    @EventHandler(value = "select", target = "@tree")
-    private void onSelect$tree() {
+    @EventHandler(value = "change", target = "@tree")
+    private void onChange$tree() {
         btnOK.setDisabled(selectedPluginDefinition() == null);
     }
 }

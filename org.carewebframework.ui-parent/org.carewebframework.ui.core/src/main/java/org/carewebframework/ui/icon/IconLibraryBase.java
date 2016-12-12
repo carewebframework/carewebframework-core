@@ -79,7 +79,7 @@ public class IconLibraryBase implements IIconLibrary {
             for (Resource resource : SpringUtil.getResources(formatURL(iconName, dimensions, "classpath:web"))) {
                 String path = resource.getURL().getPath();
                 int i = path.indexOf(resourcePath);
-                urls.add("web/" + path.substring(i));
+                urls.add("web" + path.substring(i));
             }
         } catch (IOException e) {
             log.error("Error enumerating icons.", e);
