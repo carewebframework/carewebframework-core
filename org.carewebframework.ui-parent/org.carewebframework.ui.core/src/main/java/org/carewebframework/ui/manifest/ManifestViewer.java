@@ -156,7 +156,7 @@ public class ManifestViewer implements IAutoWired {
      */
     @EventHandler(value = "change", target = "@txtSearch")
     private void onChange$txtSearch(ChangeEvent event) {
-        filterChanged(event.getValue());
+        filterChanged(event.getValue(String.class));
         
     }
     
@@ -165,8 +165,8 @@ public class ManifestViewer implements IAutoWired {
         root.close();
     }
     
-    @EventHandler(value = "select", target = "@txtSearch")
-    private void onSelect$table() {
+    @EventHandler(value = "change", target = "@table")
+    private void onChange$table() {
         txtSearch.focus();
     }
     

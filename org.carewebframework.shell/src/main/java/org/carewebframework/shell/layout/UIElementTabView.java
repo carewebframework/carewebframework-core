@@ -29,7 +29,7 @@ import org.carewebframework.shell.designer.PropertyEditorTabView;
 import org.carewebframework.shell.property.PropertyTypeRegistry;
 import org.carewebframework.web.component.Tabview;
 import org.carewebframework.web.component.Tabview.TabPosition;
-import org.carewebframework.web.event.SelectEvent;
+import org.carewebframework.web.event.ChangeEvent;
 
 /**
  * Wraps the Tabview component. This UI element can only accept UIElementTabPane elements as
@@ -53,7 +53,7 @@ public class UIElementTabView extends UIElementCWFBase {
         fullSize(tabview);
         setOuterComponent(tabview);
         tabview.addClass("cwf-tabview");
-        tabview.addEventListener(SelectEvent.TYPE, (event) -> {
+        tabview.addEventListener(ChangeEvent.TYPE, (event) -> {
             setActivePane((UIElementTabPane) getAssociatedUIElement(event.getTarget()));
         });
     }

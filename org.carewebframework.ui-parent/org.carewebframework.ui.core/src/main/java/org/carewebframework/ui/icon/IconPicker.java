@@ -33,7 +33,6 @@ import org.carewebframework.web.component.Div;
 import org.carewebframework.web.component.ImagePicker;
 import org.carewebframework.web.component.ImagePicker.ImagePickeritem;
 import org.carewebframework.web.event.ChangeEvent;
-import org.carewebframework.web.event.SelectEvent;
 
 /**
  * Extends the icon picker by adding the ability to pick an icon library from which to choose.
@@ -58,7 +57,7 @@ public class IconPicker extends Div {
         addStyle("overflow", "visible");
         imagePicker.addEventForward(ChangeEvent.class, this, null);
         
-        cboLibrary.addEventListener(SelectEvent.TYPE, (event) -> {
+        cboLibrary.addEventListener(ChangeEvent.class, (event) -> {
             iconLibrary = (IIconLibrary) cboLibrary.getSelectedItem().getData();
             libraryChanged();
         });

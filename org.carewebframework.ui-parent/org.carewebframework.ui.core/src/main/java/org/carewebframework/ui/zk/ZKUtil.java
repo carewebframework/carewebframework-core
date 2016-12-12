@@ -40,7 +40,6 @@ import org.carewebframework.web.event.ChangeEvent;
 import org.carewebframework.web.event.Event;
 import org.carewebframework.web.event.EventUtil;
 import org.carewebframework.web.event.IEventListener;
-import org.carewebframework.web.event.SelectEvent;
 
 /**
  * General purpose ZK extensions and convenience methods.
@@ -185,7 +184,7 @@ public class ZKUtil {
             String sourceEvents = null;
             
             if (child instanceof Combobox) {
-                sourceEvents = ChangeEvent.TYPE + "," + SelectEvent.TYPE;
+                sourceEvents = ChangeEvent.TYPE;
             } else if (child instanceof BaseInputboxComponent) {
                 sourceEvents = ChangeEvent.TYPE;
             } else if (child instanceof Checkbox) {

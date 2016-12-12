@@ -44,7 +44,7 @@ import org.carewebframework.web.component.Label;
 import org.carewebframework.web.component.Listbox;
 import org.carewebframework.web.component.Listitem;
 import org.carewebframework.web.component.Textbox;
-import org.carewebframework.web.event.SelectEvent;
+import org.carewebframework.web.event.ChangeEvent;
 
 /**
  * Plug-in to test remote events.
@@ -140,7 +140,7 @@ public class MainController extends PluginController implements IGenericEvent<Ob
         return false;
     }
     
-    public void onSelect$lboxEventList(SelectEvent event) {
+    public void onChange$lboxEventList(ChangeEvent event) {
         Listitem item = (Listitem) event.getTarget();
         String eventName = item.getLabel();
         

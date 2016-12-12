@@ -34,6 +34,7 @@ import org.carewebframework.web.annotation.EventHandler;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.Listbox;
 import org.carewebframework.web.component.Listitem;
+import org.carewebframework.web.event.ChangeEvent;
 import org.carewebframework.web.event.Event;
 import org.carewebframework.web.event.EventUtil;
 
@@ -275,10 +276,10 @@ public class DateRangeChooser extends Listbox {
     /**
      * onSelect event handler.
      * 
-     * @param event The onSelect event.
+     * @param event The change event.
      */
-    @EventHandler("select")
-    private void onSelect(Event event) {
+    @EventHandler("change")
+    private void onChange(ChangeEvent event) {
         /**
          * When the custom range item is selected, triggers the display of the date range dialog.
          */

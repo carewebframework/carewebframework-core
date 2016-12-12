@@ -52,10 +52,10 @@ import org.carewebframework.web.component.Row;
 import org.carewebframework.web.component.Rows;
 import org.carewebframework.web.component.Table;
 import org.carewebframework.web.component.Window;
+import org.carewebframework.web.event.ChangeEvent;
 import org.carewebframework.web.event.ClickEvent;
 import org.carewebframework.web.event.Event;
 import org.carewebframework.web.event.EventUtil;
-import org.carewebframework.web.event.SelectEvent;
 import org.carewebframework.web.model.IComponentRenderer;
 import org.carewebframework.web.model.IListModel;
 import org.carewebframework.web.model.IModelAndView;
@@ -85,7 +85,7 @@ public class PropertyGrid implements IAutoWired {
             PropertyInfo propInfo = editor.getPropInfo();
             Cell cell = new Cell();
             row.addChild(cell);
-            cell.addEventForward(ClickEvent.TYPE, window, SelectEvent.TYPE);
+            cell.addEventForward(ClickEvent.TYPE, window, ChangeEvent.TYPE);
             Label lbl = new Label(propInfo.getName());
             cell.addChild(lbl);
             row.setAttribute(EDITOR_ATTR, editor);
@@ -432,9 +432,9 @@ public class PropertyGrid implements IAutoWired {
      * 
      * @param event Row selection event.
      */
-    @EventHandler(value = "select", target = "rowProperties")
-    private void onSelect(SelectEvent event) {
-        if (event.isSelected()) {
+    @EventHandler(value = "change", target = "rowProperties")
+    private void onChange(ChangeEvent event) {
+        if (event.getValue(Boolean.class)) {
             Rows rows = gridProperties.getRows();
             selectedRow = rows.getSelectedCount() == 0 ? null : rows.getSelected().get(0);
             PropertyEditorBase<?> editor = selectedRow == null ? null

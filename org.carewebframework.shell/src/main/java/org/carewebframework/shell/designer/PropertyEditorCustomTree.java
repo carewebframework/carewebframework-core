@@ -49,7 +49,6 @@ import org.carewebframework.web.event.DblclickEvent;
 import org.carewebframework.web.event.Event;
 import org.carewebframework.web.event.EventUtil;
 import org.carewebframework.web.event.IEventListener;
-import org.carewebframework.web.event.SelectEvent;
 import org.springframework.beans.BeanUtils;
 
 /**
@@ -524,7 +523,7 @@ public abstract class PropertyEditorCustomTree<T extends UIElementBase> extends 
     @Override
     public void doClose() {
         tree.focus();
-        EventUtil.post(SelectEvent.TYPE, tree, null); // Must be done asynchronously to allow server to sync with client changes
+        EventUtil.post(ChangeEvent.TYPE, tree, null); // Must be done asynchronously to allow server to sync with client changes
     }
     
     /**

@@ -74,8 +74,8 @@ public class XMLViewerController implements IAutoWired {
     /**
      * Selecting an item sets it as the starting point for a search.
      */
-    @EventHandler(value = "select", target = "@tree")
-    private void onSelect$tree() {
+    @EventHandler(value = "change", target = "@tree")
+    private void onChange$tree() {
         Treenode node = tree.getSelectedNode();
         iterator = tree.iterator();
         

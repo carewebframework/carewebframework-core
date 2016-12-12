@@ -46,9 +46,9 @@ import org.carewebframework.web.component.Comboitem;
 import org.carewebframework.web.component.Listbox;
 import org.carewebframework.web.component.Listitem;
 import org.carewebframework.web.component.Textbox;
+import org.carewebframework.web.event.ChangeEvent;
 import org.carewebframework.web.event.Event;
 import org.carewebframework.web.event.IEventListener;
-import org.carewebframework.web.event.SelectEvent;
 import org.carewebframework.web.model.ListModel;
 import org.carewebframework.web.model.ModelAndView;
 
@@ -184,16 +184,16 @@ public class MainController extends PluginController {
         received.clear();
     }
     
-    public void onSelect$cboxChannels(SelectEvent event) {
+    public void onChange$cboxChannels(ChangeEvent event) {
         btnSendMessage.setDisabled(false);
     }
     
-    public void onSelect$lboxSubscriptions(SelectEvent event) {
+    public void onChange$lboxSubscriptions(ChangeEvent event) {
         Listitem item = (Listitem) event.getTarget();
         subscribe(item.getLabel(), item.isSelected());
     }
     
-    public void onSelect$lboxProviders(SelectEvent event) {
+    public void onChange$lboxProviders(ChangeEvent event) {
         Listitem item = (Listitem) event.getTarget();
         IMessageProducer producer = (IMessageProducer) item.getData();
         

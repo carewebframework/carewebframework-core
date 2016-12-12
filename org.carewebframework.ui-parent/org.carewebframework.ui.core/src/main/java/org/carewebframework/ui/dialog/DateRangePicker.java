@@ -35,6 +35,7 @@ import org.carewebframework.web.annotation.EventHandler;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.Combobox;
 import org.carewebframework.web.component.Comboitem;
+import org.carewebframework.web.event.ChangeEvent;
 import org.carewebframework.web.event.Event;
 import org.carewebframework.web.event.EventUtil;
 
@@ -328,12 +329,12 @@ public class DateRangePicker extends Combobox {
     }
     
     /**
-     * onSelect event handler.
+     * Change event handler.
      * 
-     * @param event The onSelect event.
+     * @param event The change event.
      */
-    @EventHandler("select")
-    private void onSelect(Event event) {
+    @EventHandler("change")
+    private void onChange(ChangeEvent event) {
         // When the custom range item is selected, triggers the display of the date range dialog.
         if (event.getTarget() == customItem) {
             event.stopPropagation();

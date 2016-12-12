@@ -45,10 +45,10 @@ import org.carewebframework.web.component.Paneview.Orientation;
 import org.carewebframework.web.component.Row;
 import org.carewebframework.web.component.Rowcell;
 import org.carewebframework.web.component.Table;
+import org.carewebframework.web.event.ChangeEvent;
 import org.carewebframework.web.event.ClickEvent;
 import org.carewebframework.web.event.Event;
 import org.carewebframework.web.event.IEventListener;
-import org.carewebframework.web.event.SelectEvent;
 import org.carewebframework.web.model.IComponentRenderer;
 import org.carewebframework.web.model.ListModel;
 import org.carewebframework.web.model.ModelAndView;
@@ -105,7 +105,7 @@ public abstract class ListViewForm<DAO> extends CaptionedForm {
         @Override
         public Row render(DAO object) {
             Row item = new Row();
-            item.addEventForward(ClickEvent.TYPE, table, SelectEvent.TYPE);
+            item.addEventForward(ClickEvent.TYPE, table, ChangeEvent.TYPE);
             ListViewForm.this.renderItem(item, object);
             return item;
         }
@@ -450,8 +450,8 @@ public abstract class ListViewForm<DAO> extends CaptionedForm {
         refresh();
     }
     
-    public void onSelect$table(Event event) {
-        if (getShowDetailPane() == (event instanceof SelectEvent)) {
+    public void onChange$table(Event event) {
+        if (getShowDetailPane() == (event instanceof ChangeEvent)) {
             itemSelected(getSelectedItem());
         }
     }

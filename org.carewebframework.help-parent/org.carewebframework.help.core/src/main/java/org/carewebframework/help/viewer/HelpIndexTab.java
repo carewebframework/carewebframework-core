@@ -136,7 +136,7 @@ public class HelpIndexTab extends HelpTab {
      */
     @EventHandler(value = "change", target = "txtFind")
     public void onChange$txtFind(ChangeEvent event) {
-        String find = event.getValue().toLowerCase();
+        String find = event.getValue(String.class).toLowerCase();
         
         if (StringUtils.isEmpty(find)) {
             return;
