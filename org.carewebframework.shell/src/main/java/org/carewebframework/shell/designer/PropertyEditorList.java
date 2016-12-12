@@ -31,7 +31,6 @@ import org.carewebframework.web.component.Combobox;
 import org.carewebframework.web.component.Comboitem;
 import org.carewebframework.web.event.ChangeEvent;
 import org.carewebframework.web.event.DblclickEvent;
-import org.carewebframework.web.event.Event;
 import org.carewebframework.web.event.EventUtil;
 import org.carewebframework.web.event.IEventListener;
 import org.carewebframework.web.event.KeyCode;
@@ -46,29 +45,21 @@ public class PropertyEditorList extends PropertyEditorBase<Combobox> {
     
     private String delimiter;
     
-    private final IEventListener deleteListener = new IEventListener() {
+    /**
+     * Pressing delete key will clear combo box selection.
+     */
+    private final IEventListener deleteListener = (event) -> {
+        KeyEvent evt = (KeyEvent) event;
         
-        /**
-         * Pressing delete key will clear combo box selection.
-         * 
-         * @param event The control key event.
-         * @throws Exception Unspecified exception.
-         */
-        @Override
-        public void onEvent(Event event) {
-            KeyEvent evt = (KeyEvent) event;
+        if (evt.getKeyCode() == KeyCode.VK_DELETE) {
+            boolean changed = !StringUtils.isEmpty(editor.getValue());
+            editor.setValue(null);
+            //TODO: component.close();
             
-            if (evt.getKeyCode() == KeyCode.VK_DELETE) {
-                boolean changed = !StringUtils.isEmpty(component.getValue());
-                component.setValue(null);
-                //TODO: component.close();
-                
-                if (changed) {
-                    EventUtil.post(ChangeEvent.TYPE, component, null);
-                }
+            if (changed) {
+                EventUtil.post(ChangeEvent.TYPE, editor, null);
             }
         }
-        
     };
     
     /**
@@ -84,22 +75,17 @@ public class PropertyEditorList extends PropertyEditorBase<Combobox> {
         setReadonly(propInfo.getConfigValueBoolean("readonly", true));
         delimiter = propInfo.getConfigValue("delimiter");
         
-        if (!component.isReadonly()) {
-            component.addEventForward(ChangeEvent.TYPE, propGrid.getWindow(), null);
-        }
-        
-        component.addEventListener(DblclickEvent.TYPE, (event) -> {
-            
-            /**
-             * Double-clicking a combo item will select the item and close the combo box.
-             * 
-             * @param event The double click event.
-             * @throws Exception Unspecified exception.
-             */
-            int i = component.getSelectedIndex() + 1;
-            component.setSelectedIndex(i >= component.getChildCount() ? 0 : i);
-            EventUtil.send(ChangeEvent.TYPE, propGrid.getWindow(), null);
-            //TODO: component.close();
+        /**
+         * Double-clicking a combo item will select the item and close the combo box.
+         * 
+         * @param event The double click event.
+         * @throws Exception Unspecified exception.
+         */
+        editor.addEventListener(DblclickEvent.TYPE, (event) -> {
+            int i = editor.getSelectedIndex() + 1;
+            editor.setSelectedIndex(i >= editor.getChildCount() ? 0 : i);
+            propGrid.changed(editor);
+            //TODO: editor.close();
         });
     }
     
@@ -111,13 +97,13 @@ public class PropertyEditorList extends PropertyEditorBase<Combobox> {
      *            delete key functions normally.
      */
     private void setReadonly(boolean readonly) {
-        component.setReadonly(readonly);
-        component.setKeycapture(readonly ? "DEL" : null);
+        editor.setReadonly(readonly);
+        editor.setKeycapture(readonly ? "DELETE" : null);
         
         if (readonly) {
-            component.addEventListener(KeycaptureEvent.TYPE, deleteListener);
+            editor.addEventListener(KeycaptureEvent.TYPE, deleteListener);
         } else {
-            component.removeEventListener(KeycaptureEvent.TYPE, deleteListener);
+            editor.removeEventListener(KeycaptureEvent.TYPE, deleteListener);
         }
     }
     
@@ -143,25 +129,25 @@ public class PropertyEditorList extends PropertyEditorBase<Combobox> {
      */
     protected Comboitem appendItem(String label, Object value) {
         Comboitem item = new Comboitem(label);
-        component.addChild(item);
+        editor.addChild(item);
         item.setData(value);
         return item;
     }
     
     @Override
     protected Object getValue() {
-        Comboitem item = component.getSelectedItem();
-        Object value = item != null ? item.getValue() : component.isReadonly() ? null : component.getValue();
+        Comboitem item = editor.getSelectedItem();
+        Object value = item != null ? item.getValue() : editor.isReadonly() ? null : editor.getValue();
         return value;
     }
     
     @Override
     protected void setValue(Object value) {
-        Comboitem item = (Comboitem) component.getChildByData(value);
-        component.setSelectedItem(item);
+        Comboitem item = (Comboitem) editor.getChildByData(value);
+        editor.setSelectedItem(item);
         
         if (item == null) {
-            component.setValue(value == null ? null : value.toString());
+            editor.setValue(value == null ? null : value.toString());
         }
         
         updateValue();

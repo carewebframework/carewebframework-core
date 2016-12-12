@@ -183,8 +183,6 @@ public abstract class PropertyEditorCustomTree<T extends UIElementBase> extends 
     
     private boolean selectionChanging;
     
-    private Event changeEvent;
-    
     private final Textbox txtLabel = new Textbox();
     
     private PropertyEditorBase<?> labelEditor;
@@ -222,8 +220,8 @@ public abstract class PropertyEditorCustomTree<T extends UIElementBase> extends 
         //TODO: not sure if needed: propertyGrid.registerEventListener(eventType, this);
         txtLabel.setWidth("95%");
         //TODO: Needs non blank label constraint: txtLabel.setConstraint(new LabelConstraint());
-        component.setHeight("400px");
-        component.setWidth("600px");
+        editor.setHeight("400px");
+        editor.setWidth("600px");
         definition = childClass == null ? null : PluginRegistry.getInstance().get(childClass);
         
         IEventListener labelEditorListener = new IEventListener() {
@@ -256,7 +254,7 @@ public abstract class PropertyEditorCustomTree<T extends UIElementBase> extends 
         }
         
         PluginDefinition def = null; //TODO: AddComponent.getDefinition(getTarget());
-        component.open();
+        editor.open();
         return def;
     }
     
@@ -279,7 +277,6 @@ public abstract class PropertyEditorCustomTree<T extends UIElementBase> extends 
     @Override
     protected void init(UIElementBase target, PropertyInfo propInfo, PropertyGrid propGrid) {
         super.init(target, propInfo, propGrid);
-        changeEvent = new Event(ChangeEvent.TYPE, propGrid.getWindow());
         resetTree();
     }
     
@@ -536,8 +533,8 @@ public abstract class PropertyEditorCustomTree<T extends UIElementBase> extends 
      * @param event The close event.
      */
     public void onClose(Event event) {
-        if (event.getTarget() == propertyGrid.getWindow()) {
-            component.close();
+        if (event.getTarget().getAttribute("controller") == propertyGrid) {
+            editor.close();
             doClose();
         }
     }
@@ -574,7 +571,7 @@ public abstract class PropertyEditorCustomTree<T extends UIElementBase> extends 
         labelEditor = propertyGrid.findEditor(labelProperty);
         
         if (labelEditor != null) {
-            labelEditor.getComponent().addEventForward(ChangeEvent.TYPE, tree, "onLabelChange");
+            labelEditor.getEditor().addEventForward(ChangeEvent.TYPE, tree, "onLabelChange");
         }
         
         updateControls();
@@ -724,7 +721,7 @@ public abstract class PropertyEditorCustomTree<T extends UIElementBase> extends 
         
         if (!selectionChanging && !hasChanged) {
             hasChanged = true;
-            EventUtil.send(changeEvent);
+            propertyGrid.changed(editor);
         }
     }
     

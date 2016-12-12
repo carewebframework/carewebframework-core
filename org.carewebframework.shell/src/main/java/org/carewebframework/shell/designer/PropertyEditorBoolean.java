@@ -29,7 +29,6 @@ import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.property.PropertyInfo;
 import org.carewebframework.web.component.Radiobutton;
 import org.carewebframework.web.component.Radiogroup;
-import org.carewebframework.web.event.ChangeEvent;
 import org.carewebframework.web.event.ClickEvent;
 import org.carewebframework.web.event.SelectEvent;
 
@@ -50,11 +49,10 @@ public class PropertyEditorBoolean extends PropertyEditorBase<Radiogroup> {
     @Override
     protected void init(UIElementBase target, PropertyInfo propInfo, PropertyGrid propGrid) {
         super.init(target, propInfo, propGrid);
-        component.addEventForward(SelectEvent.TYPE, propGrid.getWindow(), ChangeEvent.TYPE);
-        component.addEventForward(ClickEvent.TYPE, propGrid.getWindow(), SelectEvent.TYPE);
-        component.addEventForward(ClickEvent.TYPE, propGrid.getWindow(), SelectEvent.TYPE);
+        propGrid.capture(SelectEvent.TYPE, editor);
+        propGrid.capture(ClickEvent.TYPE, editor);
         
-        for (Radiobutton radio : component.getChildren(Radiobutton.class)) {
+        for (Radiobutton radio : editor.getChildren(Radiobutton.class)) {
             String label = propInfo.getConfigValue(radio.getLabel().trim());
             
             if (label != null) {
@@ -68,10 +66,10 @@ public class PropertyEditorBoolean extends PropertyEditorBase<Radiogroup> {
      */
     @Override
     public void setFocus() {
-        Radiobutton radio = component.getSelected();
+        Radiobutton radio = editor.getSelected();
         
         if (radio == null) {
-            radio = (Radiobutton) component.getChildren().get(0);
+            radio = (Radiobutton) editor.getChildren().get(0);
         }
         
         radio.setFocus(true);
@@ -79,19 +77,19 @@ public class PropertyEditorBoolean extends PropertyEditorBase<Radiogroup> {
     
     @Override
     protected Boolean getValue() {
-        return component.getSelected() != null;
+        return editor.getSelected() != null;
     }
     
     @Override
     protected void setValue(Object value) {
         int i = value == null ? -1 : (Boolean) value ? 0 : 1;
-        Radiobutton rb = component.getSelected();
+        Radiobutton rb = editor.getSelected();
         
         if (rb != null) {
             rb.setChecked(false);
         }
         
-        rb = (Radiobutton) component.getChildAt(i);
+        rb = (Radiobutton) editor.getChildAt(i);
         
         if (rb != null) {
             rb.setChecked(true);

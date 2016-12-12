@@ -41,19 +41,19 @@ public class PropertyEditorInteger extends PropertyEditorBase<Integerbox> {
     @Override
     protected void init(UIElementBase target, PropertyInfo propInfo, PropertyGrid propGrid) {
         super.init(target, propInfo, propGrid);
-        component.setMaxLength(9);
-        component.setMinvalue(propInfo.getConfigValueInt("min", null));
-        component.setMaxvalue(propInfo.getConfigValueInt("max", null));
+        editor.setMaxLength(9);
+        editor.setMinvalue(propInfo.getConfigValueInt("min", null));
+        editor.setMaxvalue(propInfo.getConfigValueInt("max", null));
     }
     
     @Override
     protected String getValue() {
-        return Integer.toString(component.getValue());
+        return Integer.toString(editor.getValue());
     }
     
     @Override
     protected void setValue(Object value) {
-        component.setValue(value == null ? null : (Integer) value);
+        editor.setValue(value == null ? null : (Integer) value);
         updateValue();
     }
 }

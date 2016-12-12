@@ -30,7 +30,6 @@ import org.carewebframework.shell.property.PropertyInfo;
 import org.carewebframework.ui.core.CWFUtil;
 import org.carewebframework.web.component.BaseUIComponent;
 import org.carewebframework.web.event.ChangeEvent;
-import org.carewebframework.web.event.SelectEvent;
 import org.carewebframework.web.page.PageUtil;
 
 /**
@@ -40,7 +39,7 @@ import org.carewebframework.web.page.PageUtil;
  */
 public abstract class PropertyEditorBase<T extends BaseUIComponent> {
     
-    protected final T component;
+    protected final T editor;
     
     private Object value;
     
@@ -61,12 +60,12 @@ public abstract class PropertyEditorBase<T extends BaseUIComponent> {
     /**
      * Create property editor using the specified component for editing.
      * 
-     * @param component The component used to edit the property.
+     * @param editor The component used to edit the property.
      */
-    protected PropertyEditorBase(T component) {
-        this.component = component;
-        component.setWidth("95%");
-        component.wireController(this);
+    protected PropertyEditorBase(T editor) {
+        this.editor = editor;
+        editor.setWidth("95%");
+        editor.wireController(this);
     }
     
     /**
@@ -74,8 +73,8 @@ public abstract class PropertyEditorBase<T extends BaseUIComponent> {
      * 
      * @return The editor component.
      */
-    public T getComponent() {
-        return component;
+    public T getEditor() {
+        return editor;
     }
     
     /**
@@ -131,7 +130,7 @@ public abstract class PropertyEditorBase<T extends BaseUIComponent> {
      * Sets focus to the editor component.
      */
     public void setFocus() {
-        component.setFocus(true);
+        editor.setFocus(true);
     }
     
     /**
@@ -144,8 +143,8 @@ public abstract class PropertyEditorBase<T extends BaseUIComponent> {
     protected void init(UIElementBase target, PropertyInfo propInfo, PropertyGrid propGrid) {
         this.target = target;
         this.propInfo = propInfo;
-        component.addEventForward(ChangeEvent.TYPE, propGrid.getWindow(), ChangeEvent.TYPE);
-        component.addEventForward("focus", propGrid.getWindow(), SelectEvent.TYPE);
+        propGrid.capture(ChangeEvent.TYPE, editor);
+        propGrid.capture("focus", editor);
     }
     
     /**
@@ -198,6 +197,6 @@ public abstract class PropertyEditorBase<T extends BaseUIComponent> {
      *            displayed next to the editor component.
      */
     public void setWrongValueMessage(String message) {
-        component.setBalloon(message);
+        editor.setBalloon(message);
     }
 }

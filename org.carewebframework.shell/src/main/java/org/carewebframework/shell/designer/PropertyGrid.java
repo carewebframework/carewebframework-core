@@ -25,7 +25,6 @@
  */
 package org.carewebframework.shell.designer;
 
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -57,6 +56,10 @@ import org.carewebframework.web.event.ClickEvent;
 import org.carewebframework.web.event.Event;
 import org.carewebframework.web.event.EventUtil;
 import org.carewebframework.web.event.SelectEvent;
+import org.carewebframework.web.model.IComponentRenderer;
+import org.carewebframework.web.model.IListModel;
+import org.carewebframework.web.model.IModelAndView;
+import org.carewebframework.web.model.ListModel;
 import org.carewebframework.web.page.PageUtil;
 
 /**
@@ -69,21 +72,34 @@ public class PropertyGrid implements IAutoWired {
     
     private static final String EDITOR_ATTR = "@editor";
     
-    private static final String LABEL_ATTR = "@label";
-    
     private static class RowEx extends Row implements INamespace {};
     
-    /**
-     * Used to sort the properties column alphabetically. We store the property name in an attribute
-     * on the corresponding row to make it simpler.
-     */
-    private static final Comparator<Row> propSort = new Comparator<Row>() {
+    @SuppressWarnings("rawtypes")
+    private final IComponentRenderer<Row, PropertyEditorBase> rowRenderer = new IComponentRenderer<Row, PropertyEditorBase>() {
         
         @Override
-        public int compare(Row r1, Row r2) {
-            String label1 = (String) r1.getAttribute(LABEL_ATTR);
-            String label2 = (String) r2.getAttribute(LABEL_ATTR);
-            return label1.compareToIgnoreCase(label2);
+        public Row render(PropertyEditorBase editor) {
+            Row row = new RowEx();
+            row.setData(editor);
+            BaseComponent cmpt = editor.getEditor();
+            PropertyInfo propInfo = editor.getPropInfo();
+            Cell cell = new Cell();
+            row.addChild(cell);
+            cell.addEventForward(ClickEvent.TYPE, window, SelectEvent.TYPE);
+            Label lbl = new Label(propInfo.getName());
+            cell.addChild(lbl);
+            row.setAttribute(EDITOR_ATTR, editor);
+            
+            try {
+                editor.setValue(propInfo.getPropertyValue(target));
+            } catch (Exception e) {
+                lbl = new Label(CWFUtil.formatExceptionForDisplay(e));
+                lbl.setHint(lbl.getLabel());
+                cmpt = lbl;
+            }
+            
+            row.addChild(cmpt);
+            return row;
         }
         
     };
@@ -111,6 +127,9 @@ public class PropertyGrid implements IAutoWired {
     
     @WiredComponent
     private BaseUIComponent toolbar;
+    
+    @SuppressWarnings("rawtypes")
+    private final IListModel<PropertyEditorBase> model = new ListModel<>();
     
     private UIElementBase target;
     
@@ -167,10 +186,13 @@ public class PropertyGrid implements IAutoWired {
     @Override
     public void afterInitialized(BaseComponent comp) {
         window = (Window) comp;
+        @SuppressWarnings("rawtypes")
+        IModelAndView<Row, PropertyEditorBase> mv = gridProperties.getRows().getModelAndView(PropertyEditorBase.class);
+        mv.setRenderer(rowRenderer);
+        mv.setModel(model);
         comp.setAttribute("controller", this);
         this.embedded = comp.getAttribute("embedded", false);
         setTarget(comp.getAttribute("target", UIElementBase.class));
-        colProperty.setSortComparator(propSort);
         
         if (window.getParent() != null) {
             window.setClosable(false);
@@ -187,6 +209,10 @@ public class PropertyGrid implements IAutoWired {
     
     public Window getWindow() {
         return window;
+    }
+    
+    public void capture(String eventType, BaseComponent target) {
+        target.addEventForward(eventType, gridProperties, "updated");
     }
     
     /**
@@ -257,27 +283,7 @@ public class PropertyGrid implements IAutoWired {
         }
         
         if (editor != null) {
-            BaseComponent cmpt = editor.getComponent();
-            Row row = new RowEx();
-            row.setAttribute(LABEL_ATTR, propInfo.getName());
-            Rows rows = gridProperties.getRows();
-            rows.addChild(row, append ? null : rows.getFirstChild());
-            Cell cell = new Cell();
-            row.addChild(cell);
-            cell.addEventForward(ClickEvent.TYPE, window, SelectEvent.TYPE);
-            Label lbl = new Label(propInfo.getName());
-            cell.addChild(lbl);
-            row.setAttribute(EDITOR_ATTR, editor);
-            
-            try {
-                editor.setValue(propInfo.getPropertyValue(target));
-            } catch (Exception e) {
-                lbl = new Label(CWFUtil.formatExceptionForDisplay(e));
-                lbl.setHint(lbl.getLabel());
-                cmpt = lbl;
-            }
-            
-            row.addChild(cmpt);
+            model.add(append ? model.size() : 0, editor);
         }
         
         return editor;
@@ -427,18 +433,20 @@ public class PropertyGrid implements IAutoWired {
      * @param event Row selection event.
      */
     @EventHandler(value = "select", target = "rowProperties")
-    private void onSelect() {
-        Rows rows = gridProperties.getRows();
-        selectedRow = rows.getSelectedCount() == 0 ? null : rows.getSelected().get(0);
-        PropertyEditorBase<?> editor = selectedRow == null ? null
-                : (PropertyEditorBase<?>) (selectedRow.getAttribute(EDITOR_ATTR));
-        PropertyInfo propInfo = editor == null ? null : editor.getPropInfo();
-        setPropertyDescription(
-            propInfo == null ? "@cwf.shell.designer.property.grid.propdx.some.caption" : propInfo.getName(),
-            propInfo == null ? " " : propInfo.getDescription());
-        
-        if (editor != null) {
-            editor.setFocus();
+    private void onSelect(SelectEvent event) {
+        if (event.isSelected()) {
+            Rows rows = gridProperties.getRows();
+            selectedRow = rows.getSelectedCount() == 0 ? null : rows.getSelected().get(0);
+            PropertyEditorBase<?> editor = selectedRow == null ? null
+                    : (PropertyEditorBase<?>) (selectedRow.getAttribute(EDITOR_ATTR));
+            PropertyInfo propInfo = editor == null ? null : editor.getPropInfo();
+            setPropertyDescription(
+                propInfo == null ? "@cwf.shell.designer.property.grid.propdx.some.caption" : propInfo.getName(),
+                propInfo == null ? " " : propInfo.getDescription());
+            
+            if (editor != null) {
+                editor.setFocus();
+            }
         }
     }
     
@@ -447,9 +455,13 @@ public class PropertyGrid implements IAutoWired {
      * 
      * @param event Change event.
      */
-    @EventHandler(value = { "select", "change" }, target = "gridProperties")
+    @EventHandler(value = { "updated" }, target = "gridProperties")
     private void onChange(Event event) {
-        ((BaseUIComponent) event.getTarget()).setBalloon(null);
+        changed((BaseUIComponent) event.getTarget());
+    }
+    
+    public void changed(BaseUIComponent comp) {
+        comp.setBalloon(null);
         disableButtons(false);
     }
 }

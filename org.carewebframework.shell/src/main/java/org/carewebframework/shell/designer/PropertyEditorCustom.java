@@ -46,16 +46,16 @@ public class PropertyEditorCustom extends PropertyEditorBase<Popupbox> {
     protected PropertyEditorCustom() {
         super(new Popupbox());
         //component.setAutodrop(false);
-        component.setReadonly(true);
-        component.setValue(StrUtil.getLabel("cwf.shell.designer.propedit.custom.component.prompt"));
-        component.addEventListener(OpenEvent.class, (event) -> {
+        editor.setReadonly(true);
+        editor.setValue(StrUtil.getLabel("cwf.shell.designer.propedit.custom.component.prompt"));
+        editor.addEventListener(OpenEvent.class, (event) -> {
             doOpen();
         });
-        component.addEventListener(CloseEvent.class, (event) -> {
+        editor.addEventListener(CloseEvent.class, (event) -> {
             doClose();
         });
         popup = new Popup();
-        component.addChild(popup);
+        editor.addChild(popup);
     }
     
     protected PropertyEditorCustom(String template) throws Exception {
@@ -100,7 +100,7 @@ public class PropertyEditorCustom extends PropertyEditorBase<Popupbox> {
     
     @Override
     public void setFocus() {
-        component.open();
+        editor.open();
         doOpen();
     }
     

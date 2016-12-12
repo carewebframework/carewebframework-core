@@ -49,12 +49,12 @@ public class PropertyEditorDate extends PropertyEditorBase<Datebox> {
     
     @Override
     protected String getValue() {
-        return DateUtil.formatDate(component.getValue());
+        return DateUtil.formatDate(editor.getValue());
     }
     
     @Override
     protected void setValue(Object value) {
-        component.setValue((Date) value);
+        editor.setValue((Date) value);
         updateValue();
     }
 }

@@ -31,8 +31,7 @@ import org.carewebframework.common.ColorUtil;
 import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.property.PropertyInfo;
 import org.carewebframework.web.component.ColorPicker;
-import org.carewebframework.web.component.ColorPicker.ColorPickeritem;
-import org.carewebframework.web.event.ChangeEvent;;
+import org.carewebframework.web.component.ColorPicker.ColorPickeritem;;
 
 /**
  * Property editor for color properties. If the associated property has defined choices, the color
@@ -43,28 +42,27 @@ public class PropertyEditorColor extends PropertyEditorBase<ColorPicker> {
     
     public PropertyEditorColor() {
         super(new ColorPicker());
-        component.setShowText(true);
+        editor.setShowText(true);
         //component.setAutoAdd(true);
     }
     
     @Override
     protected void init(UIElementBase target, PropertyInfo propInfo, PropertyGrid propGrid) {
         super.init(target, propInfo, propGrid);
-        component.addEventForward(ChangeEvent.TYPE, propGrid.getWindow(), null);
         String[] values = propInfo.getConfigValueArray("values");
         
         if (values == null) {
             //component.setAutoAdd(true);
         } else {
             //component.setAutoAdd(false);
-            component.clear();
+            editor.clear();
             
             for (String choice : values) {
                 String[] color = choice.split("\\:", 2);
                 
                 for (int i = 0; i < color.length; i++) {
                     ColorPickeritem item = new ColorPickeritem(ColorUtil.toColor(color[i]));
-                    component.addChild(item);
+                    editor.addChild(item);
                 }
             }
         }
@@ -72,12 +70,12 @@ public class PropertyEditorColor extends PropertyEditorBase<ColorPicker> {
     
     @Override
     protected String getValue() {
-        return component.getValue().toString();
+        return editor.getValue().toString();
     }
     
     @Override
     protected void setValue(Object value) {
-        component.setValue((Color) value);
+        editor.setValue((Color) value);
         updateValue();
     }
 }

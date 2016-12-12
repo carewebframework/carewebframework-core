@@ -30,7 +30,6 @@ import org.carewebframework.shell.property.PropertyInfo;
 import org.carewebframework.ui.icon.IconLibraryRegistry;
 import org.carewebframework.ui.icon.IconPicker;
 import org.carewebframework.ui.icon.IconUtil;
-import org.carewebframework.web.event.ChangeEvent;
 import org.carewebframework.web.event.Event;
 import org.carewebframework.web.event.EventUtil;
 import org.carewebframework.web.event.IEventListener;
@@ -43,12 +42,12 @@ public class PropertyEditorIcon extends PropertyEditorBase<IconPicker> {
     
     public PropertyEditorIcon() {
         super(new IconPicker());
-        component.addEventListener("setValue", new IEventListener() {
+        editor.addEventListener("setValue", new IEventListener() {
             
             @Override
             public void onEvent(Event event) {
                 Object value = event.getData();
-                component.setValue((String) value);
+                editor.setValue((String) value);
                 updateValue();
             }
             
@@ -58,24 +57,23 @@ public class PropertyEditorIcon extends PropertyEditorBase<IconPicker> {
     @Override
     protected void init(UIElementBase target, PropertyInfo propInfo, PropertyGrid propGrid) {
         super.init(target, propInfo, propGrid);
-        component.addEventForward(ChangeEvent.TYPE, propGrid.getWindow(), null);
         String[] values = propInfo.getConfigValueArray("values");
         
         if (values == null) {
             String dflt = IconLibraryRegistry.getInstance().getDefaultLibrary();
-            component.setIconLibrary(dflt);
+            editor.setIconLibrary(dflt);
         } else {
-            component.setSelectorVisible(false);
+            editor.setSelectorVisible(false);
             
             for (String choice : values) {
                 if (choice.startsWith("web/")) {
-                    component.addIconByUrl(choice);
+                    editor.addIconByUrl(choice);
                 } else {
                     String[] pcs = choice.split("\\:", 3);
                     String library = pcs.length == 0 ? null : pcs[0];
                     String name = pcs.length < 2 ? "*" : pcs[1];
                     String dimension = pcs.length < 3 ? null : pcs[2];
-                    component.addIconsByUrl(IconUtil.getMatching(library, name, dimension));
+                    editor.addIconsByUrl(IconUtil.getMatching(library, name, dimension));
                 }
             }
         }
@@ -83,11 +81,11 @@ public class PropertyEditorIcon extends PropertyEditorBase<IconPicker> {
     
     @Override
     protected String getValue() {
-        return component.getValue();
+        return editor.getValue();
     }
     
     @Override
     protected void setValue(Object value) {
-        EventUtil.post("setValue", component, value);
+        EventUtil.post("setValue", editor, value);
     }
 }

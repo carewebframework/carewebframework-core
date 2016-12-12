@@ -1,11 +1,11 @@
 <window width="400px" height="500px"
 	controller="org.carewebframework.shell.designer.PropertyGrid">
 	<paneview orientation="vertical" height="100%" width="100%">
-		<pane style="flex:75" splittable="true">
-			<table name="gridProperties" width="100%" height="100%"
+		<pane flex="75" splittable="true" style="overflow:hidden">
+			<table name="gridProperties" width="100%"
 				class="cwf-propertygrid-grid">
 				<columns>
-					<column name="colProperty"
+					<column name="colProperty" sortBy="propInfo.name"
 						label="${@msg.cwf.shell.designer.property.grid.column.name}"
 						style="text-align:center" width="50%" />
 					<column name="colValue"
@@ -15,7 +15,7 @@
 				<rows name="rowProperties" selectable="single" />
 			</table>
 		</pane>
-		<pane class="cwf-propertygrid-info" style="flex:25">
+		<pane class="cwf-propertygrid-info" flex="25">
 			<groupbox width="100%"
 				title="${@msg.cwf.shell.designer.property.grid.gbox.caption}">
 				<span class="help-block" style="margin:0">
@@ -24,7 +24,7 @@
 			</groupbox>
 		</pane>
 		<pane>
-			<toolbar name="toolbar" align="end" width="100%">
+			<toolbar name="toolbar" align="end" width="100%" style="border:none">
 				<button name="btnApply" 
 					label="${@msg.cwf.shell.designer.property.grid.btn.apply.label}" />
 				<button name="btnRestore"

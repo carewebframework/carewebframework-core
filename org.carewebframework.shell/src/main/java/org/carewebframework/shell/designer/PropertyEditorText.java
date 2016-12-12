@@ -35,17 +35,16 @@ import org.carewebframework.web.event.ChangeEvent;
 import org.carewebframework.web.event.Event;
 import org.carewebframework.web.event.EventUtil;
 import org.carewebframework.web.event.InputEvent;
-import org.carewebframework.web.event.SelectEvent;
 
 /**
  * Editor for simple text.
  */
 public class PropertyEditorText extends PropertyEditorBase<Popupbox> {
     
-    @WiredComponent
+    @WiredComponent("popup.textbox")
     private Textbox textbox;
     
-    public PropertyEditorText() throws Exception {
+    public PropertyEditorText() {
         super(DesignConstants.RESOURCE_PREFIX + "propertyEditorText.cwf");
     }
     
@@ -55,43 +54,41 @@ public class PropertyEditorText extends PropertyEditorBase<Popupbox> {
         Integer maxLength = propInfo.getConfigValueInt("max", null);
         
         if (maxLength != null) {
-            component.setMaxLength(maxLength);
+            editor.setMaxLength(maxLength);
             textbox.setMaxLength(maxLength);
         }
         
-        component.addEventForward(ChangeEvent.TYPE, propGrid.getWindow(), null);
-        textbox.addEventForward(ChangeEvent.TYPE, component, null);
-        component.addEventForward("focus", propGrid.getWindow(), SelectEvent.TYPE);
-        textbox.addEventForward("focus", component, SelectEvent.TYPE);
+        propGrid.capture(ChangeEvent.TYPE, textbox);
+        propGrid.capture("focus", textbox);
     }
     
     @Override
     protected String getValue() {
-        return component.getValue();
+        return editor.getValue();
     }
     
     @Override
     protected void setValue(Object value) {
-        component.setValue((String) value);
+        editor.setValue((String) value);
         textbox.setValue((String) value);
         updateValue();
     }
     
     @EventHandler(value = "change", target = "textbox")
     public void onChange$textbox(InputEvent event) {
-        component.setValue(event.getValue());
+        editor.setValue(event.getValue());
     }
     
     @EventHandler(value = "blur", target = "textbox")
     public void onBlur$textbox() {
-        component.close();
-        EventUtil.post("onDelayedFocus", component, component);
+        editor.close();
+        EventUtil.post("onDelayedFocus", editor, editor);
     }
     
     @EventHandler(value = "enter", target = "textbox")
     public void onEnter$textbox() {
-        component.close();
-        EventUtil.post("onDelayedFocus", component, component);
+        editor.close();
+        EventUtil.post("onDelayedFocus", editor, editor);
     }
     
     @EventHandler(value = "change", target = "component")
@@ -100,7 +97,7 @@ public class PropertyEditorText extends PropertyEditorBase<Popupbox> {
     }
     
     public void onOpen$component() {
-        EventUtil.post("onDelayedFocus", component, component.isOpen() ? textbox : component);
+        EventUtil.post("onDelayedFocus", editor, editor.isOpen() ? textbox : editor);
     }
     
     public void onDelayedFocus$component(Event event) {
