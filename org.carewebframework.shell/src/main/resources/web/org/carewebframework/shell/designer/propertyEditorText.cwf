@@ -1,5 +1,5 @@
-<popupbox name="popupbox">
+<popupbox name="popupbox" synchronized="true">
 	<popup name="popup" width="100%">
-		<textbox name="textbox" width="99%"/>
+		<textbox name="textbox" width="99%" synchronized="true" />
 	</popup>
 </popupbox>

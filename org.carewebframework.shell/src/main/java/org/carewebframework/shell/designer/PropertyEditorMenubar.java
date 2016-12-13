@@ -32,7 +32,7 @@ import org.carewebframework.shell.layout.UIElementMenuItem;
  */
 public class PropertyEditorMenubar extends PropertyEditorCustomTree<UIElementMenuItem> {
     
-    public PropertyEditorMenubar() throws Exception {
+    public PropertyEditorMenubar() {
         super(UIElementMenuItem.class, "label", true);
     }
 }

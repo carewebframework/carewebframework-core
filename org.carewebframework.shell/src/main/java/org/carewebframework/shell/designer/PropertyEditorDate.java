@@ -30,6 +30,7 @@ import java.util.Date;
 import org.carewebframework.common.DateUtil;
 import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.property.PropertyInfo;
+import org.carewebframework.web.annotation.EventHandler;
 import org.carewebframework.web.component.Datebox;
 
 /**
@@ -56,5 +57,11 @@ public class PropertyEditorDate extends PropertyEditorBase<Datebox> {
     protected void setValue(Object value) {
         editor.setValue((Date) value);
         updateValue();
+    }
+    
+    @Override
+    @EventHandler(value = "change", target = "editor")
+    protected void onChange() {
+        super.onChange();
     }
 }

@@ -27,10 +27,10 @@ package org.carewebframework.shell.designer;
 
 import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.property.PropertyInfo;
+import org.carewebframework.web.annotation.EventHandler;
 import org.carewebframework.web.component.Combobox;
 import org.carewebframework.web.component.Comboitem;
 import org.carewebframework.web.event.ChangeEvent;
-import org.carewebframework.web.event.DblclickEvent;
 import org.carewebframework.web.event.EventUtil;
 import org.carewebframework.web.event.IEventListener;
 import org.carewebframework.web.event.KeyCode;
@@ -46,7 +46,7 @@ public class PropertyEditorList extends PropertyEditorBase<Combobox> {
     private String delimiter;
     
     /**
-     * Pressing delete key will clear combo box selection.
+     * Pressing delete key will clear combo box selection when set to read-only.
      */
     private final IEventListener deleteListener = (event) -> {
         KeyEvent evt = (KeyEvent) event;
@@ -54,7 +54,7 @@ public class PropertyEditorList extends PropertyEditorBase<Combobox> {
         if (evt.getKeyCode() == KeyCode.VK_DELETE) {
             boolean changed = !StringUtils.isEmpty(editor.getValue());
             editor.setValue(null);
-            //TODO: component.close();
+            //TODO: editor.close();
             
             if (changed) {
                 EventUtil.post(ChangeEvent.TYPE, editor, null);
@@ -74,19 +74,6 @@ public class PropertyEditorList extends PropertyEditorBase<Combobox> {
         super.init(target, propInfo, propGrid);
         setReadonly(propInfo.getConfigValueBoolean("readonly", true));
         delimiter = propInfo.getConfigValue("delimiter");
-        
-        /**
-         * Double-clicking a combo item will select the item and close the combo box.
-         * 
-         * @param event The double click event.
-         * @throws Exception Unspecified exception.
-         */
-        editor.addEventListener(DblclickEvent.TYPE, (event) -> {
-            int i = editor.getSelectedIndex() + 1;
-            editor.setSelectedIndex(i >= editor.getChildCount() ? 0 : i);
-            propGrid.changed(editor);
-            //TODO: editor.close();
-        });
     }
     
     /**
@@ -151,5 +138,19 @@ public class PropertyEditorList extends PropertyEditorBase<Combobox> {
         }
         
         updateValue();
+    }
+    
+    @Override
+    @EventHandler(value = "change", target = "editor")
+    protected void onChange() {
+        super.onChange();
+    }
+    
+    @EventHandler(value = "dblclick", target = "editor")
+    private void onDblclick() {
+        int i = editor.getSelectedIndex() + 1;
+        editor.setSelectedIndex(i >= editor.getChildCount() ? 0 : i);
+        onChange();
+        //TODO: editor.close();
     }
 }

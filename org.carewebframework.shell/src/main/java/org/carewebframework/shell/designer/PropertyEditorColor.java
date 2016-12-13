@@ -30,6 +30,7 @@ import java.awt.Color;
 import org.carewebframework.common.ColorUtil;
 import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.property.PropertyInfo;
+import org.carewebframework.web.annotation.EventHandler;
 import org.carewebframework.web.component.ColorPicker;
 import org.carewebframework.web.component.ColorPicker.ColorPickeritem;;
 
@@ -43,7 +44,7 @@ public class PropertyEditorColor extends PropertyEditorBase<ColorPicker> {
     public PropertyEditorColor() {
         super(new ColorPicker());
         editor.setShowText(true);
-        //component.setAutoAdd(true);
+        //editor.setAutoAdd(true);
     }
     
     @Override
@@ -77,5 +78,11 @@ public class PropertyEditorColor extends PropertyEditorBase<ColorPicker> {
     protected void setValue(Object value) {
         editor.setValue((Color) value);
         updateValue();
+    }
+    
+    @Override
+    @EventHandler(value = "change", target = "editor")
+    protected void onChange() {
+        super.onChange();
     }
 }

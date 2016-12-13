@@ -32,7 +32,7 @@ import org.carewebframework.shell.layout.UIElementBase;
  */
 public class PropertyEditorOrderedChildren extends PropertyEditorCustomTree<UIElementBase> {
     
-    public PropertyEditorOrderedChildren() throws Exception {
+    public PropertyEditorOrderedChildren() {
         super(null, "label", false);
     }
     

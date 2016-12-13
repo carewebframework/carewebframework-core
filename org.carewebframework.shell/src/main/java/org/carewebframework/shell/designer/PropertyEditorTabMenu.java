@@ -32,7 +32,7 @@ import org.carewebframework.shell.layout.UIElementTabMenuPane;
  */
 public class PropertyEditorTabMenu extends PropertyEditorCustomTree<UIElementTabMenuPane> {
     
-    public PropertyEditorTabMenu() throws Exception {
+    public PropertyEditorTabMenu() {
         super(UIElementTabMenuPane.class, "label", true);
     }
     

@@ -30,9 +30,7 @@ import org.carewebframework.shell.property.PropertyInfo;
 import org.carewebframework.ui.icon.IconLibraryRegistry;
 import org.carewebframework.ui.icon.IconPicker;
 import org.carewebframework.ui.icon.IconUtil;
-import org.carewebframework.web.event.Event;
-import org.carewebframework.web.event.EventUtil;
-import org.carewebframework.web.event.IEventListener;
+import org.carewebframework.web.annotation.EventHandler;
 
 /**
  * Property editor for icon properties. If the associated property has defined choices, the icon
@@ -42,16 +40,6 @@ public class PropertyEditorIcon extends PropertyEditorBase<IconPicker> {
     
     public PropertyEditorIcon() {
         super(new IconPicker());
-        editor.addEventListener("setValue", new IEventListener() {
-            
-            @Override
-            public void onEvent(Event event) {
-                Object value = event.getData();
-                editor.setValue((String) value);
-                updateValue();
-            }
-            
-        });
     }
     
     @Override
@@ -86,6 +74,13 @@ public class PropertyEditorIcon extends PropertyEditorBase<IconPicker> {
     
     @Override
     protected void setValue(Object value) {
-        EventUtil.post("setValue", editor, value);
+        editor.setValue((String) value);
+        updateValue();
+    }
+    
+    @Override
+    @EventHandler(value = "change", target = "editor")
+    protected void onChange() {
+        super.onChange();
     }
 }

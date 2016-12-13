@@ -39,13 +39,13 @@ import org.carewebframework.web.page.PageUtil;
 /**
  * Allows registration of custom editors for complex property types.
  */
-public class PropertyEditorCustom extends PropertyEditorBase<Popupbox> {
+public abstract class PropertyEditorCustom extends PropertyEditorBase<Popupbox> {
     
     protected final Popup popup;
     
     protected PropertyEditorCustom() {
         super(new Popupbox());
-        //component.setAutodrop(false);
+        //editor.setAutodrop(false);
         editor.setReadonly(true);
         editor.setValue(StrUtil.getLabel("cwf.shell.designer.propedit.custom.component.prompt"));
         editor.addEventListener(OpenEvent.class, (event) -> {
@@ -58,7 +58,7 @@ public class PropertyEditorCustom extends PropertyEditorBase<Popupbox> {
         editor.addChild(popup);
     }
     
-    protected PropertyEditorCustom(String template) throws Exception {
+    protected PropertyEditorCustom(String template) {
         this();
         BaseComponent root = PageUtil.createPage(template, popup).get(0);
         root.wireController(this);
@@ -102,15 +102,6 @@ public class PropertyEditorCustom extends PropertyEditorBase<Popupbox> {
     public void setFocus() {
         editor.open();
         doOpen();
-    }
-    
-    @Override
-    protected Object getValue() {
-        return null;
-    }
-    
-    @Override
-    protected void setValue(Object value) {
     }
     
 }

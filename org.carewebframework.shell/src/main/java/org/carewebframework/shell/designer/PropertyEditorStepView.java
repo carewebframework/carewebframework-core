@@ -32,7 +32,7 @@ import org.carewebframework.shell.layout.UIElementStepPane;
  */
 public class PropertyEditorStepView extends PropertyEditorCustomTree<UIElementStepPane> {
     
-    public PropertyEditorStepView() throws Exception {
+    public PropertyEditorStepView() {
         super(UIElementStepPane.class, "label", false);
     }
     

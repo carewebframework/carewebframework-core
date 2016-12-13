@@ -1,7 +1,7 @@
 <radiogroup>
-	<radiobutton data="${true}"
+	<radiobutton name="rbTrue"
 		label=" ${@msg.cwf.shell.designer.propedit.bool.radio.true.label}" /	
 	<span width="20px" />
-	<radiobutton data="${false}"
+	<radiobutton name="rbFalse"
 		label=" ${@msg.cwf.shell.designer.propedit.bool.radio.false.label}" /	
 </radiogroup>

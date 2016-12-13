@@ -32,9 +32,6 @@ import org.carewebframework.web.annotation.WiredComponent;
 import org.carewebframework.web.component.Popupbox;
 import org.carewebframework.web.component.Textbox;
 import org.carewebframework.web.event.ChangeEvent;
-import org.carewebframework.web.event.Event;
-import org.carewebframework.web.event.EventUtil;
-import org.carewebframework.web.event.InputEvent;
 
 /**
  * Editor for simple text.
@@ -57,9 +54,6 @@ public class PropertyEditorText extends PropertyEditorBase<Popupbox> {
             editor.setMaxLength(maxLength);
             textbox.setMaxLength(maxLength);
         }
-        
-        propGrid.capture(ChangeEvent.TYPE, textbox);
-        propGrid.capture("focus", textbox);
     }
     
     @Override
@@ -74,33 +68,21 @@ public class PropertyEditorText extends PropertyEditorBase<Popupbox> {
         updateValue();
     }
     
-    @EventHandler(value = "change", target = "textbox")
-    public void onChange$textbox(InputEvent event) {
-        editor.setValue(event.getValue());
-    }
-    
-    @EventHandler(value = "blur", target = "textbox")
-    public void onBlur$textbox() {
+    @EventHandler(value = { "blur", "enter" }, target = "@textbox")
+    private void onBlurOrEnter$textbox() {
         editor.close();
-        EventUtil.post("onDelayedFocus", editor, editor);
+        editor.focus();
     }
     
-    @EventHandler(value = "enter", target = "textbox")
-    public void onEnter$textbox() {
-        editor.close();
-        EventUtil.post("onDelayedFocus", editor, editor);
+    @EventHandler(value = "change", target = "@textbox")
+    private void onChange$textbox(ChangeEvent event) {
+        editor.setValue(event.getValue(String.class));
+        onChange();
     }
     
-    @EventHandler(value = "change", target = "component")
-    public void onChange$component(InputEvent event) {
-        textbox.setValue(event.getValue());
-    }
-    
-    public void onOpen$component() {
-        EventUtil.post("onDelayedFocus", editor, editor.isOpen() ? textbox : editor);
-    }
-    
-    public void onDelayedFocus$component(Event event) {
-        ((Textbox) event.getData()).setFocus(true);
+    @EventHandler(value = "change", target = "editor")
+    private void onChange$editor(ChangeEvent event) {
+        textbox.setValue(event.getValue(String.class));
+        onChange();
     }
 }

@@ -32,7 +32,7 @@ import org.carewebframework.shell.layout.UIElementSplitterPane;
  */
 public class PropertyEditorSplitterView extends PropertyEditorCustomTree<UIElementSplitterPane> {
     
-    public PropertyEditorSplitterView() throws Exception {
+    public PropertyEditorSplitterView() {
         super(UIElementSplitterPane.class, null, false);
     }
     

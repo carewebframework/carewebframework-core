@@ -27,30 +27,31 @@ package org.carewebframework.shell.designer;
 
 import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.property.PropertyInfo;
+import org.carewebframework.web.annotation.EventHandler;
+import org.carewebframework.web.annotation.WiredComponent;
 import org.carewebframework.web.component.Radiobutton;
 import org.carewebframework.web.component.Radiogroup;
-import org.carewebframework.web.event.ChangeEvent;
-import org.carewebframework.web.event.ClickEvent;
 
 /**
  * Editor for boolean values.
  */
 public class PropertyEditorBoolean extends PropertyEditorBase<Radiogroup> {
     
+    @WiredComponent
+    private Radiobutton rbTrue;
+    
     /**
      * Create property editor.
      * 
      * @throws Exception Unspecified exception.
      */
-    public PropertyEditorBoolean() throws Exception {
+    public PropertyEditorBoolean() {
         super(DesignConstants.RESOURCE_PREFIX + "propertyEditorBoolean.cwf");
     }
     
     @Override
     protected void init(UIElementBase target, PropertyInfo propInfo, PropertyGrid propGrid) {
         super.init(target, propInfo, propGrid);
-        propGrid.capture(ChangeEvent.TYPE, editor);
-        propGrid.capture(ClickEvent.TYPE, editor);
         
         for (Radiobutton radio : editor.getChildren(Radiobutton.class)) {
             String label = propInfo.getConfigValue(radio.getLabel().trim());
@@ -77,22 +78,17 @@ public class PropertyEditorBoolean extends PropertyEditorBase<Radiogroup> {
     
     @Override
     protected Boolean getValue() {
-        return editor.getSelected() != null;
+        return rbTrue.isChecked();
     }
     
     @Override
     protected void setValue(Object value) {
-        int i = value == null ? -1 : (Boolean) value ? 0 : 1;
-        Radiobutton rb = editor.getSelected();
-        
-        if (rb != null) {
-            rb.setChecked(false);
-        }
-        
-        rb = (Radiobutton) editor.getChildAt(i);
-        
-        if (rb != null) {
-            rb.setChecked(true);
-        }
+        rbTrue.setChecked(value instanceof Boolean && (Boolean) value);
+    }
+    
+    @Override
+    @EventHandler(value = "change", target = "@rbTrue")
+    protected void onChange() {
+        super.onChange();
     }
 }

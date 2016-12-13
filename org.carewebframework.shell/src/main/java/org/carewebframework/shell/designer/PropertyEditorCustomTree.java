@@ -57,7 +57,7 @@ import org.springframework.beans.BeanUtils;
  * 
  * @param <T> Type of child element.
  */
-public abstract class PropertyEditorCustomTree<T extends UIElementBase> extends PropertyEditorCustom {
+public class PropertyEditorCustomTree<T extends UIElementBase> extends PropertyEditorCustom {
     
     /**
      * Subclass UIElementProxy to allow us to synchronize changes to label property with the
@@ -207,7 +207,7 @@ public abstract class PropertyEditorCustomTree<T extends UIElementBase> extends 
      *            elements.
      * @throws Exception Unspecified exception.
      */
-    public PropertyEditorCustomTree(Class<T> childClass, String labelProperty, boolean hierarchical) throws Exception {
+    public PropertyEditorCustomTree(Class<T> childClass, String labelProperty, boolean hierarchical) {
         super(DesignConstants.RESOURCE_PREFIX + "propertyEditorCustomTree.cwf");
         this.childClass = childClass;
         this.labelProperty = labelProperty;
@@ -567,7 +567,7 @@ public abstract class PropertyEditorCustomTree<T extends UIElementBase> extends 
         
         currentItem = tree.getSelectedNode();
         propertyGrid.setTarget(getProxy(currentItem));
-        labelEditor = propertyGrid.findEditor(labelProperty);
+        labelEditor = propertyGrid.findEditor(labelProperty, false);
         
         if (labelEditor != null) {
             labelEditor.getEditor().addEventForward(ChangeEvent.TYPE, tree, "onLabelChange");
@@ -720,7 +720,7 @@ public abstract class PropertyEditorCustomTree<T extends UIElementBase> extends 
         
         if (!selectionChanging && !hasChanged) {
             hasChanged = true;
-            propertyGrid.changed(editor);
+            propertyGrid.propertyChanged();
         }
     }
     
@@ -768,5 +768,14 @@ public abstract class PropertyEditorCustomTree<T extends UIElementBase> extends 
     @Override
     public boolean hasChanged() {
         return hasChanged;
+    }
+    
+    @Override
+    protected Object getValue() {
+        return null;
+    }
+    
+    @Override
+    protected void setValue(Object value) {
     }
 }

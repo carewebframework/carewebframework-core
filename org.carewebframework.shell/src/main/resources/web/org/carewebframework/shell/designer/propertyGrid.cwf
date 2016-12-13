@@ -6,6 +6,7 @@
 				class="cwf-propertygrid-grid">
 				<columns>
 					<column name="colProperty" sortBy="propInfo.name"
+						sortToggle="tristate"
 						label="${@msg.cwf.shell.designer.property.grid.column.name}"
 						style="text-align:center" width="50%" />
 					<column name="colValue"

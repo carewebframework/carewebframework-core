@@ -32,7 +32,7 @@ import org.carewebframework.shell.layout.UIElementTreePane;
  */
 public class PropertyEditorTreeView extends PropertyEditorCustomTree<UIElementTreePane> {
     
-    public PropertyEditorTreeView() throws Exception {
+    public PropertyEditorTreeView() {
         super(UIElementTreePane.class, "label", true);
     }
     

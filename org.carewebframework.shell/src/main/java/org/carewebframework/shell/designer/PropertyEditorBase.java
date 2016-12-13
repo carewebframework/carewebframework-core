@@ -28,8 +28,8 @@ package org.carewebframework.shell.designer;
 import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.property.PropertyInfo;
 import org.carewebframework.ui.core.CWFUtil;
+import org.carewebframework.web.annotation.EventHandler;
 import org.carewebframework.web.component.BaseUIComponent;
-import org.carewebframework.web.event.ChangeEvent;
 import org.carewebframework.web.page.PageUtil;
 
 /**
@@ -37,7 +37,7 @@ import org.carewebframework.web.page.PageUtil;
  * 
  * @param <T> The input component class.
  */
-public abstract class PropertyEditorBase<T extends BaseUIComponent> {
+public abstract class PropertyEditorBase<T extends BaseUIComponent> implements Comparable<PropertyEditorBase<T>> {
     
     protected final T editor;
     
@@ -45,7 +45,11 @@ public abstract class PropertyEditorBase<T extends BaseUIComponent> {
     
     private UIElementBase target;
     
+    private PropertyGrid propGrid;
+    
     private PropertyInfo propInfo;
+    
+    private int index;
     
     /**
      * Create property editor using the specified template.
@@ -64,6 +68,7 @@ public abstract class PropertyEditorBase<T extends BaseUIComponent> {
      */
     protected PropertyEditorBase(T editor) {
         this.editor = editor;
+        editor.setName("editor");
         editor.setWidth("95%");
         editor.wireController(this);
     }
@@ -99,6 +104,15 @@ public abstract class PropertyEditorBase<T extends BaseUIComponent> {
     public boolean hasChanged() {
         Object currentValue = getValue();
         return value == null || currentValue == null ? value != currentValue : !value.equals(currentValue);
+    }
+    
+    /**
+     * Notify the property grid that the value has changed.
+     */
+    protected void onChange() {
+        if (hasChanged()) {
+            propGrid.propertyChanged();
+        }
     }
     
     /**
@@ -143,8 +157,8 @@ public abstract class PropertyEditorBase<T extends BaseUIComponent> {
     protected void init(UIElementBase target, PropertyInfo propInfo, PropertyGrid propGrid) {
         this.target = target;
         this.propInfo = propInfo;
-        propGrid.capture(ChangeEvent.TYPE, editor);
-        propGrid.capture("focus", editor);
+        this.propGrid = propGrid;
+        this.index = propGrid.getEditorCount();
     }
     
     /**
@@ -198,5 +212,15 @@ public abstract class PropertyEditorBase<T extends BaseUIComponent> {
      */
     public void setWrongValueMessage(String message) {
         editor.setBalloon(message);
+    }
+    
+    @Override
+    public int compareTo(PropertyEditorBase<T> o) {
+        return index - o.index;
+    }
+    
+    @EventHandler(value = "focus", target = "editor")
+    private void onFocus() {
+        propGrid.findEditor(propInfo.getName(), true);
     }
 }

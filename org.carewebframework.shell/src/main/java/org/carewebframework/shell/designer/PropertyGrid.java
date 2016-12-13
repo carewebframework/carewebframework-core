@@ -54,7 +54,6 @@ import org.carewebframework.web.component.Table;
 import org.carewebframework.web.component.Window;
 import org.carewebframework.web.event.ChangeEvent;
 import org.carewebframework.web.event.ClickEvent;
-import org.carewebframework.web.event.Event;
 import org.carewebframework.web.event.EventUtil;
 import org.carewebframework.web.model.IComponentRenderer;
 import org.carewebframework.web.model.IListModel;
@@ -70,39 +69,9 @@ public class PropertyGrid implements IAutoWired {
     
     private static final Log log = LogFactory.getLog(PropertyGrid.class);
     
-    private static final String EDITOR_ATTR = "@editor";
+    private static final String EDITOR_ATTR = "editor";
     
     private static class RowEx extends Row implements INamespace {};
-    
-    @SuppressWarnings("rawtypes")
-    private final IComponentRenderer<Row, PropertyEditorBase> rowRenderer = new IComponentRenderer<Row, PropertyEditorBase>() {
-        
-        @Override
-        public Row render(PropertyEditorBase editor) {
-            Row row = new RowEx();
-            row.setData(editor);
-            BaseComponent cmpt = editor.getEditor();
-            PropertyInfo propInfo = editor.getPropInfo();
-            Cell cell = new Cell();
-            row.addChild(cell);
-            cell.addEventForward(ClickEvent.TYPE, window, ChangeEvent.TYPE);
-            Label lbl = new Label(propInfo.getName());
-            cell.addChild(lbl);
-            row.setAttribute(EDITOR_ATTR, editor);
-            
-            try {
-                editor.setValue(propInfo.getPropertyValue(target));
-            } catch (Exception e) {
-                lbl = new Label(CWFUtil.formatExceptionForDisplay(e));
-                lbl.setHint(lbl.getLabel());
-                cmpt = lbl;
-            }
-            
-            row.addChild(cmpt);
-            return row;
-        }
-        
-    };
     
     @WiredComponent
     private Table gridProperties;
@@ -133,8 +102,6 @@ public class PropertyGrid implements IAutoWired {
     
     private UIElementBase target;
     
-    private Row selectedRow;
-    
     private boolean pendingChanges;
     
     private boolean propertiesModified;
@@ -142,6 +109,31 @@ public class PropertyGrid implements IAutoWired {
     private boolean embedded;
     
     private Window window;
+    
+    @SuppressWarnings("rawtypes")
+    private final IComponentRenderer<Row, PropertyEditorBase> rowRenderer = (editor) -> {
+        Row row = new RowEx();
+        row.setData(editor);
+        BaseComponent cmpt = editor.getEditor();
+        PropertyInfo propInfo = editor.getPropInfo();
+        Cell cell = new Cell();
+        row.addChild(cell);
+        cell.addEventForward(ClickEvent.TYPE, window, ChangeEvent.TYPE);
+        Label lbl = new Label(propInfo.getName());
+        cell.addChild(lbl);
+        row.setAttribute(EDITOR_ATTR, editor);
+        
+        try {
+            editor.setValue(propInfo.getPropertyValue(target));
+        } catch (Exception e) {
+            lbl = new Label(CWFUtil.formatExceptionForDisplay(e));
+            lbl.setHint(lbl.getLabel());
+            cmpt = lbl;
+        }
+        
+        row.addChild(cmpt);
+        return row;
+    };
     
     /**
      * Creates a property grid for the given target UI element.
@@ -211,10 +203,6 @@ public class PropertyGrid implements IAutoWired {
         return window;
     }
     
-    public void capture(String eventType, BaseComponent target) {
-        target.addEventForward(eventType, gridProperties, "updated");
-    }
-    
     /**
      * Sets the target UI element for the property grid. Iterates throw the target's property
      * definitions and presents a row for each editable property.
@@ -263,7 +251,7 @@ public class PropertyGrid implements IAutoWired {
      * @return The newly added property editor.
      */
     protected PropertyEditorBase<?> addPropertyEditor(PropertyInfo propInfo, boolean append) {
-        PropertyEditorBase<?> editor = null;
+        PropertyEditorBase<?> propEditor = null;
         
         try {
             PropertyType type = propInfo.getPropertyType();
@@ -275,18 +263,15 @@ public class PropertyGrid implements IAutoWired {
             Class<? extends PropertyEditorBase<?>> editorClass = type.getEditorClass();
             
             if (editorClass != null && propInfo.isEditable()) {
-                editor = editorClass.newInstance();
-                editor.init(target, propInfo, this);
+                propEditor = editorClass.newInstance();
+                propEditor.init(target, propInfo, this);
+                model.add(append ? model.size() : 0, propEditor);
             }
         } catch (Exception e) {
             log.error("Error creating editor for property '" + propInfo.getName() + "'.", e);
         }
         
-        if (editor != null) {
-            model.add(append ? model.size() : 0, editor);
-        }
-        
-        return editor;
+        return propEditor;
     }
     
     /**
@@ -326,21 +311,35 @@ public class PropertyGrid implements IAutoWired {
      * Returns the editor associated with the named property, or null if none found.
      * 
      * @param propName The property name.
+     * @param select If true, select editor's the containing row.
      * @return The associated property editor (may be null).
      */
-    protected PropertyEditorBase<?> findEditor(String propName) {
+    public PropertyEditorBase<?> findEditor(String propName, boolean select) {
         for (Object child : gridProperties.getRows().getChildren()) {
             if (child instanceof Row) {
                 Row row = (Row) child;
                 PropertyEditorBase<?> editor = (PropertyEditorBase<?>) row.getAttribute(EDITOR_ATTR);
                 
                 if (editor != null && editor.getPropInfo().getId().equals(propName)) {
+                    if (select) {
+                        row.setSelected(true);
+                    }
+                    
                     return editor;
                 }
             }
         }
         
         return null;
+    }
+    
+    /**
+     * Returns number of editors in this property grid.
+     * 
+     * @return Number of editors.
+     */
+    public int getEditorCount() {
+        return model.size();
     }
     
     /**
@@ -416,6 +415,10 @@ public class PropertyGrid implements IAutoWired {
         }
     }
     
+    public void propertyChanged() {
+        disableButtons(false);
+    }
+    
     /**
      * Displays the description information for a property.
      * 
@@ -433,10 +436,10 @@ public class PropertyGrid implements IAutoWired {
      * @param event Row selection event.
      */
     @EventHandler(value = "change", target = "rowProperties")
-    private void onChange(ChangeEvent event) {
+    private void onRowSelect(ChangeEvent event) {
         if (event.getValue(Boolean.class)) {
             Rows rows = gridProperties.getRows();
-            selectedRow = rows.getSelectedCount() == 0 ? null : rows.getSelected().get(0);
+            Row selectedRow = rows.getSelectedCount() == 0 ? null : rows.getSelected().get(0);
             PropertyEditorBase<?> editor = selectedRow == null ? null
                     : (PropertyEditorBase<?>) (selectedRow.getAttribute(EDITOR_ATTR));
             PropertyInfo propInfo = editor == null ? null : editor.getPropInfo();
@@ -450,18 +453,4 @@ public class PropertyGrid implements IAutoWired {
         }
     }
     
-    /**
-     * Handles change events from property editors.
-     * 
-     * @param event Change event.
-     */
-    @EventHandler(value = { "updated" }, target = "gridProperties")
-    private void onChange(Event event) {
-        changed((BaseUIComponent) event.getTarget());
-    }
-    
-    public void changed(BaseUIComponent comp) {
-        comp.setBalloon(null);
-        disableButtons(false);
-    }
 }

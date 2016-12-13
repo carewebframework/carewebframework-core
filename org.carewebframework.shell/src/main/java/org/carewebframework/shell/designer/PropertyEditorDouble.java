@@ -27,6 +27,7 @@ package org.carewebframework.shell.designer;
 
 import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.property.PropertyInfo;
+import org.carewebframework.web.annotation.EventHandler;
 import org.carewebframework.web.component.Doublebox;
 
 /**
@@ -54,5 +55,11 @@ public class PropertyEditorDouble extends PropertyEditorBase<Doublebox> {
     protected void setValue(Object value) {
         editor.setValue((Double) value);
         updateValue();
+    }
+    
+    @Override
+    @EventHandler(value = "change", target = "editor")
+    protected void onChange() {
+        super.onChange();
     }
 }

@@ -27,6 +27,7 @@ package org.carewebframework.shell.designer;
 
 import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.property.PropertyInfo;
+import org.carewebframework.web.annotation.EventHandler;
 import org.carewebframework.web.component.Integerbox;
 
 /**
@@ -55,5 +56,11 @@ public class PropertyEditorInteger extends PropertyEditorBase<Integerbox> {
     protected void setValue(Object value) {
         editor.setValue(value == null ? null : (Integer) value);
         updateValue();
+    }
+    
+    @Override
+    @EventHandler(value = "change", target = "editor")
+    protected void onChange() {
+        super.onChange();
     }
 }
