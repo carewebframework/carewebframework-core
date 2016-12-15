@@ -115,6 +115,10 @@ public class IconPicker extends Div {
         imagePicker.setValue(value);
     }
     
+    public ImagePicker getImagePicker() {
+        return imagePicker;
+    }
+    
     private void libraryChanged() {
         imagePicker.clear();
         imagePicker.addChild(new ImagePickeritem());

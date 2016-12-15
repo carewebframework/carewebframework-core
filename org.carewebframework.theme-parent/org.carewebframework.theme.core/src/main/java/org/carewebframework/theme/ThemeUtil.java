@@ -66,7 +66,7 @@ public class ThemeUtil {
      * Corresponds to Bootstrap button size classes.
      */
     public enum ButtonSize implements IThemeClass {
-        DEFAULT(null), LARGE("btn-lg"), SMALL("btn-sm"), TINY("btn-xs");
+        DEFAULT(null), LARGE("lg"), SMALL("sm"), TINY("xs");
         
         private final String themeClass;
         
@@ -76,7 +76,7 @@ public class ThemeUtil {
         
         @Override
         public String getThemeClass() {
-            return themeClass;
+            return themeClass == null ? null : "size:btn-" + themeClass;
         }
         
         @Override
@@ -93,7 +93,7 @@ public class ThemeUtil {
         
         @Override
         public String getThemeClass() {
-            return "btn-" + name().toLowerCase();
+            return "flavor:btn-" + name().toLowerCase();
         }
         
         @Override
@@ -106,7 +106,7 @@ public class ThemeUtil {
      * Corresponds to Bootstrap button size classes.
      */
     public enum LabelSize implements IThemeClass {
-        XLARGE("label-xl"), LARGE("label-lg"), DEFAULT("label-rg"), SMALL("label-sm"), TINY("label-xs");
+        XLARGE("xl"), LARGE("lg"), DEFAULT("rg"), SMALL("sm"), TINY("xs");
         
         private final String themeClass;
         
@@ -116,7 +116,7 @@ public class ThemeUtil {
         
         @Override
         public String getThemeClass() {
-            return themeClass;
+            return "size:label-" + themeClass;
         }
         
         @Override
@@ -133,7 +133,7 @@ public class ThemeUtil {
         
         @Override
         public String getThemeClass() {
-            return "label-" + name().toLowerCase();
+            return "flavor:label-" + name().toLowerCase();
         }
         
         @Override
@@ -150,7 +150,7 @@ public class ThemeUtil {
         
         @Override
         public String getThemeClass() {
-            return "panel-" + name().toLowerCase();
+            return "flavor:panel-" + name().toLowerCase();
         }
         
         @Override
@@ -163,5 +163,5 @@ public class ThemeUtil {
      * Enforce static class.
      */
     private ThemeUtil() {
-    };
+    }
 }

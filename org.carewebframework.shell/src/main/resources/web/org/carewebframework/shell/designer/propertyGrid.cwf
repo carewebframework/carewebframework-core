@@ -1,7 +1,7 @@
-<window width="400px" height="500px"
+<window width="400px" height="500px" style="overflow:visible"
 	controller="org.carewebframework.shell.designer.PropertyGrid">
 	<paneview orientation="vertical" height="100%" width="100%">
-		<pane flex="75" splittable="true" style="overflow:hidden">
+		<pane flex="75" splittable="true" css="##{id}-inner{overflow:visible}">
 			<table name="gridProperties" width="100%"
 				class="cwf-propertygrid-grid">
 				<columns>

@@ -46,6 +46,8 @@ public class PropertyEditorIcon extends PropertyEditorBase<IconPicker> {
     protected void init(UIElementBase target, PropertyInfo propInfo, PropertyGrid propGrid) {
         super.init(target, propInfo, propGrid);
         String[] values = propInfo.getConfigValueArray("values");
+        editor.getImagePicker().setReadonly(true);
+        editor.getImagePicker().setShowText(false);
         
         if (values == null) {
             String dflt = IconLibraryRegistry.getInstance().getDefaultLibrary();
