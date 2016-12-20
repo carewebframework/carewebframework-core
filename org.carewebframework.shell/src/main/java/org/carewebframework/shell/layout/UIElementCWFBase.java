@@ -33,13 +33,14 @@ import org.carewebframework.shell.designer.PropertyGrid;
 import org.carewebframework.ui.core.CWFUtil;
 import org.carewebframework.ui.dialog.DialogUtil;
 import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.component.BaseLabeledComponent;
 import org.carewebframework.web.component.BaseUIComponent;
 import org.carewebframework.web.component.Menupopup;
 import org.carewebframework.web.component.Popup;
 import org.carewebframework.web.page.PageUtil;
 
 /**
- * This is an abstract class from which all ZK-based UI elements must derive.
+ * This is an abstract class from which all CWF-based UI elements must derive.
  */
 public abstract class UIElementCWFBase extends UIElementBase {
     
@@ -90,9 +91,9 @@ public abstract class UIElementCWFBase extends UIElementBase {
     private final DesignMask mask;
     
     /**
-     * Returns the UI element that registered the ZK component.
+     * Returns the UI element that registered the CWF component.
      * 
-     * @param component The ZK component of interest.
+     * @param component The CWF component of interest.
      * @return The associated UI element.
      */
     public static UIElementBase getAssociatedUIElement(BaseComponent component) {
@@ -102,7 +103,7 @@ public abstract class UIElementCWFBase extends UIElementBase {
     /**
      * Returns the design context menu currently bound to the component.
      * 
-     * @param component The ZK component of interest.
+     * @param component The CWF component of interest.
      * @return The associated design context menu, or null if none.
      */
     public static Menupopup getDesignContextMenu(BaseComponent component) {
@@ -114,9 +115,9 @@ public abstract class UIElementCWFBase extends UIElementBase {
     }
     
     /**
-     * Associates the specified ZK component with this UI element.
+     * Associates the specified CWF component with this UI element.
      * 
-     * @param component ZK component to associate.
+     * @param component CWF component to associate.
      */
     public void associateComponent(BaseComponent component) {
         if (component != null) {
@@ -143,7 +144,7 @@ public abstract class UIElementCWFBase extends UIElementBase {
     }
     
     /**
-     * Provides a default implementation for ZK-derived UI components by setting the visibility of
+     * Provides a default implementation for CWF-derived UI components by setting the visibility of
      * the outer component.
      */
     @Override
@@ -298,8 +299,8 @@ public abstract class UIElementCWFBase extends UIElementBase {
     }
     
     /**
-     * Apply/remove the design context menu to/from ZK components. This default implementation
-     * applies the design context menu to the outer ZK component only. It may be overridden to
+     * Apply/remove the design context menu to/from CWF components. This default implementation
+     * applies the design context menu to the outer CWF component only. It may be overridden to
      * modify this default behavior.
      * 
      * @param contextMenu The design menu if design mode is activated, or null if it is not.
@@ -377,9 +378,9 @@ public abstract class UIElementCWFBase extends UIElementBase {
     }
     
     /**
-     * Returns the innermost wrapped ZK component.
+     * Returns the innermost wrapped CWF component.
      * 
-     * @return The inner ZK component.
+     * @return The inner CWF component.
      */
     @Override
     public BaseComponent getInnerComponent() {
@@ -387,9 +388,9 @@ public abstract class UIElementCWFBase extends UIElementBase {
     }
     
     /**
-     * Returns the outermost wrapped ZK component.
+     * Returns the outermost wrapped CWF component.
      * 
-     * @return The outer ZK component.
+     * @return The outer CWF component.
      */
     @Override
     public BaseUIComponent getOuterComponent() {
@@ -411,7 +412,13 @@ public abstract class UIElementCWFBase extends UIElementBase {
     @Override
     protected void applyColor(Object component) {
         if (component instanceof BaseUIComponent) {
-            //TODO: ZKUtil.applyColor((BaseUIComponent) component, getColor());
+            BaseUIComponent comp = (BaseUIComponent) component;
+            
+            if (comp instanceof BaseLabeledComponent) {
+                comp.invoke(comp.sub("lbl"), "css", "color", getColor());
+            } else {
+                comp.addStyle("background-color", getColor());
+            }
         }
     }
     

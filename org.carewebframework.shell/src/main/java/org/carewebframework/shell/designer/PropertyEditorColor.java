@@ -71,12 +71,13 @@ public class PropertyEditorColor extends PropertyEditorBase<ColorPicker> {
     
     @Override
     protected String getValue() {
-        return editor.getValue().toString();
+        Color value = editor.getValue();
+        return value == null ? null : ColorUtil.toString(value);
     }
     
     @Override
     protected void setValue(Object value) {
-        editor.setValue((Color) value);
+        editor.setValue(ColorUtil.toColor((String) value));
         updateValue();
     }
     

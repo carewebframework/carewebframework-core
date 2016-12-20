@@ -176,7 +176,7 @@ public class AddComponent implements IAutoWired {
     private static void show(UIElementBase parentElement, boolean createChild, IEventListener callback) {
         Map<String, Object> args = new HashMap<>();
         args.put("parentElement", parentElement);
-        args.put("createChid", createChild);
+        args.put("createChild", createChild);
         Window dlg = (Window) PageUtil.createPage(DesignConstants.RESOURCE_PREFIX + "addComponent.cwf", null, args).get(0);
         dlg.modal(callback);
     }

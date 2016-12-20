@@ -26,7 +26,6 @@
 package org.carewebframework.shell.layout;
 
 import org.carewebframework.theme.ThemeUtil;
-import org.carewebframework.web.ancillary.Badge;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.Div;
 import org.carewebframework.web.component.Hyperlink;
@@ -65,16 +64,6 @@ public class UIElementTreePane extends UIElementCWFBase {
         
     };
     
-    private final INotificationListener badgeListener = new INotificationListener() {
-        
-        @Override
-        public boolean onNotification(UIElementBase sender, String eventName, Object eventData) {
-            Badge badge = eventData == null ? new Badge() : (Badge) eventData;
-            //TODO: badge.apply("#" + anchor.getId());
-            return false;
-        }
-    };
-    
     private final Div pane = new Div();
     
     private final Span node;
@@ -104,7 +93,6 @@ public class UIElementTreePane extends UIElementCWFBase {
         anchor = (Hyperlink) node.getFirstChild();
         anchor.addEventListener("click", clickListener);
         associateComponent(anchor);
-        listenToChild("badge", badgeListener);
     }
     
     /**

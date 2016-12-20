@@ -396,6 +396,7 @@ public class LayoutDesigner implements IAutoWired {
     /**
      * Refreshes tree when layout has changed.
      */
+    @EventHandler(value = "layoutChanged", target = "^")
     private void onLayoutChanged() {
         refresh();
     }
