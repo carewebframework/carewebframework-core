@@ -173,7 +173,7 @@ public class DesignContextMenu implements IAutoWired {
      */
     private void updateControls() {
         if (owner == null) {
-            menuPopup.setVisible(false);
+            menuPopup.close();
         } else {
             updateStates(owner, mnuAdd, mnuDelete, mnuCopy, mnuCut, mnuPaste, mnuProperties, mnuAbout);
         }
@@ -220,7 +220,7 @@ public class DesignContextMenu implements IAutoWired {
         
         if (owner == null) {
             event.stopPropagation();
-            menuPopup.hide();
+            menuPopup.close();
         }
     }
     

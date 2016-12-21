@@ -108,7 +108,6 @@ public class DesignMask implements IEventListener {
         BaseUIComponent target = element.getMaskTarget();
         Menupopup contextMenu = UIElementCWFBase.getDesignContextMenu(target);
         String displayName = element.getDisplayName();
-        target.addMask(displayName);
-        //TODO: ZKUtil.addMask(target, displayName, contextMenu, displayName);
+        target.addMask(displayName, contextMenu);
     }
 }
