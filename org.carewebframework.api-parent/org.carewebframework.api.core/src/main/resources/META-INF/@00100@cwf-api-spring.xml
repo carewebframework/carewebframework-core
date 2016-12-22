@@ -115,6 +115,7 @@
 				 	<constructor-arg value="classpath:/META-INF/cwf-ehcache.xml" />
 				</bean>
 			</property>
+			<property name="shared" value="true" />
 		</bean>
 		
 		<bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
