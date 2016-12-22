@@ -52,7 +52,6 @@ import org.carewebframework.web.component.Treeview;
 import org.carewebframework.web.component.Window;
 import org.carewebframework.web.event.ClickEvent;
 import org.carewebframework.web.event.DblclickEvent;
-import org.carewebframework.web.event.Event;
 import org.carewebframework.web.event.EventUtil;
 import org.carewebframework.web.event.IEventListener;
 import org.carewebframework.web.page.PageUtil;
@@ -98,41 +97,32 @@ public class AddComponent implements IAutoWired {
     /**
      * Handles click on item not under favorites category.
      */
-    private final IEventListener favoriteListener1 = new IEventListener() {
+    private final IEventListener favoriteListener1 = (event) -> {
+        Treenode node = (Treenode) event.getTarget();
+        String path = (String) node.getAttribute("path");
+        boolean isFavorite = !(Boolean) node.getAttribute("favorite");
+        Treenode other = (Treenode) node.getAttribute("other");
+        favoritesChanged = true;
         
-        @Override
-        public void onEvent(Event event) {
-            Treenode node = (Treenode) event.getTarget();
-            String path = (String) node.getAttribute("path");
-            boolean isFavorite = !(Boolean) node.getAttribute("favorite");
-            Treenode other = (Treenode) node.getAttribute("other");
-            favoritesChanged = true;
-            
-            if (isFavorite) {
-                favorites.add(path);
-                other = addTreenode((PluginDefinition) node.getData(), node);
-                node.setAttribute("other", other);
-            } else {
-                favorites.remove(path);
-                other.detach();
-            }
-            
-            setFavoriteStatus(node, isFavorite);
+        if (isFavorite) {
+            favorites.add(path);
+            other = addTreenode((PluginDefinition) node.getData(), node);
+            node.setAttribute("other", other);
+        } else {
+            favorites.remove(path);
+            other.detach();
         }
+        
+        setFavoriteStatus(node, isFavorite);
     };
     
     /**
      * Handles click on item under favorites category.
      */
-    private final IEventListener favoriteListener2 = new IEventListener() {
-        
-        @Override
-        public void onEvent(Event event) {
-            Treenode node = (Treenode) event.getTarget();
-            Treenode other = (Treenode) node.getAttribute("other");
-            EventUtil.send(ON_FAVORITE, other, null);
-        }
-        
+    private final IEventListener favoriteListener2 = (event) -> {
+        Treenode node = (Treenode) event.getTarget();
+        Treenode other = (Treenode) node.getAttribute("other");
+        EventUtil.send(ON_FAVORITE, other, null);
     };
     
     /**

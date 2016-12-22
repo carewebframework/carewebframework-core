@@ -70,10 +70,6 @@ import org.codehaus.plexus.util.FileUtils;
  *                 <configuration>
  *                     <themes>
  *                         <theme>
- *                             <themeName>green</themeName>
- *                             <baseColor>003300</baseColor>
- *                         </theme>
- *                         <theme>
  *                              <themeName>cerulean</themeName>
  *                              <themeUri>src/main/themes/cerulean/bootstrap.min.css</themeUri>
  *                         </theme>
@@ -90,23 +86,6 @@ import org.codehaus.plexus.util.FileUtils;
  * }
  * </pre>
  * <p>
- * In most cases, you will want your build to only consider certain artifacts and not all resolved
- * dependencies. If this is the case consider adding the following:
- * </p>
- * 
- * <pre>
- * {@code
- *                     <themeSources>
- *                        <themeSource>org.zkoss.zk:zk:jar</themeSource>
- *                        <themeSource>org.zkoss.zkforge.el:zcommons-el:jar</themeSource>
- *                        <themeSource>org.zkoss.zk:zkex:jar</themeSource>
- *                        <themeSource>org.zkoss.zk:zkmax:jar</themeSource>
- *                        <themeSource>org.zkoss.zk:zul:jar</themeSource>
- *                        <themeSource>org.zkoss.common:zweb:jar</themeSource>
- *                     </themeSources>
- * 
- * }
- * </pre>
  */
 @Mojo(name = "prepare", requiresDependencyResolution = ResolutionScope.COMPILE)
 @Execute(goal = "prepare", phase = LifecyclePhase.PREPARE_PACKAGE)

@@ -22,23 +22,6 @@
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.carewebframework</groupId>
-				<artifactId>org.carewebframework.mvn.plugin.themegenerator</artifactId>
-				<configuration>
-					<skip>${exclude-war-builds}</skip>
-					<themes>
-						<theme>
-							<themeName>green</themeName>
-							<baseColor>003300</baseColor>
-						</theme>
-						<theme>
-							<themeName>lilac</themeName>
-							<baseColor>3e48ac</baseColor>
-						</theme>
-					</themes>
-				</configuration>
-			</plugin>
-			<plugin>
 				 <groupId>org.apache.tomcat.maven</groupId>
 				 <artifactId>tomcat7-maven-plugin</artifactId>
 				 <version>2.2</version>
