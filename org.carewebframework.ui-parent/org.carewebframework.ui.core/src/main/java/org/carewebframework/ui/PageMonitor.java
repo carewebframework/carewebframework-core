@@ -45,6 +45,7 @@ import org.carewebframework.common.DateUtil;
 import org.carewebframework.common.DateUtil.TimeUnit;
 import org.carewebframework.common.MiscUtil;
 import org.carewebframework.common.StrUtil;
+import org.carewebframework.ui.core.CWFUtil;
 import org.carewebframework.web.client.ISessionTracker;
 import org.carewebframework.web.client.Session;
 import org.carewebframework.web.component.BaseUIComponent;
@@ -109,8 +110,8 @@ public class PageMonitor extends Thread {
     /**
      * Path to the zul code that will be used to display the count down.
      */
-    private static final String DESKTOP_TIMEOUT_CWF = org.carewebframework.ui.zk.Constants.RESOURCE_PREFIX
-            + "pageTimeoutWarning.cwf";
+    private static final String DESKTOP_TIMEOUT_CWF = CWFUtil.getResourcePath(PageMonitor.class)
+            + "cwf/pageTimeoutWarning.cwf";
     
     /**
      * Events that will not reset keepalive timer.

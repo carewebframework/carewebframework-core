@@ -91,7 +91,7 @@ public class MenuUtil {
      */
     public static <T extends BaseLabeledImageComponent> T addMenuOrMenuItem(String path, T ele, BaseComponent menubar,
                                                                             BaseComponent insertBefore, Class<T> clazz) {
-        String pcs[] = path == null ? NULL_PATH : path.split(Constants.PATH_DELIMITER_REGEX);
+        String pcs[] = path == null ? NULL_PATH : path.split("\\\\");
         int last = pcs.length - 1;
         BaseComponent parent = menubar;
         
@@ -257,7 +257,7 @@ public class MenuUtil {
         getPath(comp.getParent(), sb);
         
         if (comp instanceof BaseLabeledImageComponent) {
-            sb.append(Constants.PATH_DELIMITER).append(((BaseLabeledImageComponent) comp).getLabel());
+            sb.append("\\").append(((BaseLabeledImageComponent) comp).getLabel());
         }
     }
     
