@@ -72,10 +72,8 @@ public class UIElementStepView extends UIElementCWFBase {
     
     /**
      * Creates the ZK components that comprise this UI element.
-     * 
-     * @throws Exception Unspecified exception.
      */
-    public UIElementStepView() throws Exception {
+    public UIElementStepView() {
         super();
         maxChildren = Integer.MAX_VALUE;
         outer = (Window) createFromTemplate();

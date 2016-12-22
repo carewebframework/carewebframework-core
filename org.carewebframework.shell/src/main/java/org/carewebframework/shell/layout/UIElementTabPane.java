@@ -47,7 +47,6 @@ public class UIElementTabPane extends UIElementCWFBase {
     public UIElementTabPane() {
         super();
         setOuterComponent(tab);
-        //TODO: listenToChild("badge", tab);
     }
     
     /**

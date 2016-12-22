@@ -73,11 +73,11 @@ public class UIElementSplitterPane extends UIElementCWFBase {
     }
     
     public String getCaption() {
-        return null; //TODO:pane.getTitle();
+        return pane.getTitle();
     }
     
     public void setCaption(String caption) {
-        //TODO: pane.setTitle(caption);
+        pane.setTitle(caption);
     }
     
     private void updateSize() {

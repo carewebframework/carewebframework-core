@@ -211,7 +211,7 @@ public class PropertyGrid implements IAutoWired {
      */
     public void setTarget(UIElementBase target) {
         this.target = target;
-        gridProperties.getRows().destroyChildren();
+        model.clear();
         
         if (target == null) {
             ((BaseUIComponent) window.getFirstChild()).setVisible(false);
