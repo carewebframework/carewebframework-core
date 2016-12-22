@@ -50,7 +50,7 @@ import org.carewebframework.web.event.IEventListener;
 import org.carewebframework.web.event.ResizeEvent;
 
 /**
- * ZK-based viewer for viewing help content. Supports multiple help formats.
+ * Help content viewer. Supports multiple help formats.
  */
 public class HelpViewer extends Window implements IHelpViewer, ITopicListener, IEventListener {
     

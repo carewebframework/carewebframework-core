@@ -35,7 +35,7 @@ import org.carewebframework.maven.plugin.transform.AbstractTransform;
 
 /**
  * Transforms HTML pages by converting them from window-1252 encoding to UTF-8 and removing the
- * character set metadata declaration. This is necessary because ZK expects UTF-8 encoding for
+ * character set metadata declaration. This is necessary because CWF expects UTF-8 encoding for
  * jar-embedded resources.
  */
 public class HtmlTransform extends AbstractTransform {

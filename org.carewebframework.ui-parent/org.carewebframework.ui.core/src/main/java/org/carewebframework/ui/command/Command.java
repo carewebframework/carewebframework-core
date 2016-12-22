@@ -170,7 +170,7 @@ public class Command {
     /**
      * Unbind a keyboard shortcut from this command.
      * 
-     * @param shortcut Shortcut specifier in ZK format.
+     * @param shortcut Shortcut specifier in CWF format.
      */
     /*package*/void unbind(String shortcut) {
         if (shortcutBindings.remove(shortcut)) {

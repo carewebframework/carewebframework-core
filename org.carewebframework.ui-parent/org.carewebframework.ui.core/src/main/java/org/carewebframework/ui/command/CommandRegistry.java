@@ -54,7 +54,7 @@ public class CommandRegistry implements Iterable<Command> {
      * Creates the command registry using the specified shortcut mappings.
      * 
      * @param shortcuts A map of shortcut mappings, where the key is the command name and the value
-     *            contains the associated shortcut(s) in ZK format.
+     *            contains the associated shortcut(s) in CWF format.
      */
     public CommandRegistry(Map<Object, Object> shortcuts) {
         super();

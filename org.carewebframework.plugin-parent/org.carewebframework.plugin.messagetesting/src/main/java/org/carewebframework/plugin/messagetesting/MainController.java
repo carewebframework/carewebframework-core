@@ -36,9 +36,9 @@ import org.carewebframework.api.messaging.Message;
 import org.carewebframework.api.messaging.ProducerService;
 import org.carewebframework.shell.plugins.PluginContainer;
 import org.carewebframework.shell.plugins.PluginController;
+import org.carewebframework.ui.core.CWFUtil;
 import org.carewebframework.ui.dialog.DialogUtil;
 import org.carewebframework.ui.dialog.InputDialog.IInputCallback;
-import org.carewebframework.ui.zk.ZKUtil;
 import org.carewebframework.web.component.Button;
 import org.carewebframework.web.component.Checkbox;
 import org.carewebframework.web.component.Combobox;
@@ -74,7 +74,7 @@ public class MainController extends PluginController {
         
         @Override
         public void onMessage(String channel, Message message) {
-            ZKUtil.fireEvent(new Event(channel, root, message), eventListener);
+            CWFUtil.fireEvent(new Event(channel, root, message), eventListener);
         }
         
     };

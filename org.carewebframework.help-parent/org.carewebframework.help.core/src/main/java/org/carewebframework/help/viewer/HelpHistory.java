@@ -46,8 +46,8 @@ public class HelpHistory {
     }
     
     /**
-     * Class for storing the topic history. It extends ZK's ListModelList (and can be used as a live
-     * model list for a list box) mainly to introduce some convenience methods without any
+     * Class for storing the topic history. It extends ListModel (and can be used as a live
+     * model for a list box) mainly to introduce some convenience methods without any
      * significant new functionality.
      */
     public class HistoryList extends ListModel<HelpTopic> {

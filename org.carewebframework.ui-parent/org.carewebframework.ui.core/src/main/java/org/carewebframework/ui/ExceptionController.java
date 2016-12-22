@@ -54,8 +54,8 @@ import org.springframework.core.NestedRuntimeException;
 import org.springframework.web.util.WebUtils;
 
 /**
- * Controller to handle exceptions caught by the framework. This controller currently assumes the
- * listed ZK/ZUL members are properly wired. This class logs to our our logging appender with the
+ * Controller to handle exceptions caught by the framework. 
+ * This class logs to our our logging appender with the
  * name defined by constant {@link Constants#EXCEPTION_LOG}.
  */
 public class ExceptionController implements IAutoWired {

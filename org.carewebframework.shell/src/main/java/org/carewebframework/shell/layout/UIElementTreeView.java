@@ -32,7 +32,7 @@ import org.carewebframework.web.component.Div;
 import org.carewebframework.web.component.Pane;
 
 /**
- * A tree view consists of a selector pane on the left containing a ZK tree component and a view
+ * A tree view consists of a selector pane on the left containing a treeview component and a view
  * area on the right where tree panes are positioned. Clicking on a node in the tree activates the
  * associated tree pane.
  */

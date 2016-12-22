@@ -57,7 +57,6 @@ import org.carewebframework.ui.command.CommandEvent;
 import org.carewebframework.ui.command.CommandRegistry;
 import org.carewebframework.ui.command.CommandUtil;
 import org.carewebframework.ui.dialog.DialogUtil;
-import org.carewebframework.ui.zk.ZKUtil;
 import org.carewebframework.web.annotation.Component;
 import org.carewebframework.web.annotation.Component.ChildTag;
 import org.carewebframework.web.client.ClientUtil;
@@ -385,7 +384,7 @@ public class CareWebShell extends Div {
             HelpUtil.getViewer().load(null);
             propertyGroups.clear();
             registerPropertyGroup("CAREWEB.CONTROLS");
-            ZKUtil.detachChildren(registeredStyles);
+            registeredStyles.destroyChildren();
             plugins.clear();
         } catch (Exception e) {}
     }

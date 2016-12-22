@@ -38,7 +38,6 @@ import org.carewebframework.plugin.chat.SessionService.ISessionUpdate;
 import org.carewebframework.ui.FrameworkController;
 import org.carewebframework.ui.core.CWFUtil;
 import org.carewebframework.ui.dialog.PopupDialog;
-import org.carewebframework.ui.zk.ZKUtil;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.Button;
 import org.carewebframework.web.component.Label;
@@ -180,7 +179,7 @@ public class SessionController extends FrameworkController implements ISessionUp
      * Clear the dialog panel.
      */
     public void onClick$btnClearDialog() {
-        ZKUtil.detachChildren(pnlDialog);
+        pnlDialog.destroyChildren();
     }
     
     /**

@@ -51,7 +51,7 @@ public class UIElementStepPane extends UIElementCWFBase {
     private boolean isHomePane;
     
     /**
-     * Create the ZK components that comprise this UI element.
+     * Create the UI components that comprise this UI element.
      */
     public UIElementStepPane() {
         super();
@@ -81,7 +81,7 @@ public class UIElementStepPane extends UIElementCWFBase {
     }
     
     /**
-     * Add the ZK components of the child pane to their respective parent components in the view.
+     * Add the UI components of the child pane to their respective parent components in the view.
      * 
      * @see org.carewebframework.shell.layout.UIElementCWFBase#bind
      */
@@ -93,7 +93,7 @@ public class UIElementStepPane extends UIElementCWFBase {
     }
     
     /**
-     * Detach the ZK components of the child pane the UI.
+     * Detach the UI components of the child pane the UI.
      * 
      * @see org.carewebframework.shell.layout.UIElementCWFBase#unbind
      */

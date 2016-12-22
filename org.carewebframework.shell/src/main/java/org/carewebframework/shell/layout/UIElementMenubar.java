@@ -41,7 +41,7 @@ public class UIElementMenubar extends UIElementMenuBase {
     }
     
     /**
-     * Creates the menu bar UI element. This consists of a ZK menu bar component. A help menu is
+     * Creates the menu bar UI element. This is simply a span component for hosting menus. A help menu is
      * automatically created a pre-populated with references to the about dialog and table of
      * contents. We also attach an onOpen event handler to the help menu and use this to do
      * just-in-time sorting of dynamically added items.

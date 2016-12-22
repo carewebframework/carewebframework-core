@@ -33,7 +33,6 @@ import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.carewebframework.common.MiscUtil;
 import org.carewebframework.shell.plugins.PluginController;
-import org.carewebframework.ui.zk.ZKUtil;
 import org.carewebframework.web.ancillary.INamespace;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.Combobox;
@@ -137,7 +136,7 @@ public class SandboxController extends PluginController implements ApplicationCo
     @Override
     public void refresh() {
         super.refresh();
-        ZKUtil.detachChildren(contentBase);
+        contentBase.destroyChildren();
         
         if (content != null && !content.isEmpty()) {
             try {
@@ -199,7 +198,7 @@ public class SandboxController extends PluginController implements ApplicationCo
      * Clears the view pane.
      */
     public void onClick$btnClearView() {
-        ZKUtil.detachChildren(contentBase);
+        contentBase.destroyChildren();
     }
     
     /**

@@ -37,7 +37,7 @@ import org.carewebframework.web.component.BaseInputboxComponent;
 import org.carewebframework.web.event.EventUtil;
 
 /**
- * This is the main ZK component for the wonder bar. It supports both server-side searching for
+ * This is the main UI component for the wonder bar. It supports both server-side searching for
  * searching through large lists of items and client/browser-side searching for smaller lists of
  * items.
  * 

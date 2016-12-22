@@ -35,7 +35,7 @@ import org.carewebframework.web.component.Label;
 import org.carewebframework.web.component.Window;
 
 /**
- * A step-oriented UI Element. This is implemented as a ZK panel component with a top toolbar
+ * A step-oriented UI Element. This is implemented as a window component with a top toolbar
  * containing sequential steps as a sequence of buttons.
  */
 public class UIElementStepView extends UIElementCWFBase {
@@ -71,7 +71,7 @@ public class UIElementStepView extends UIElementCWFBase {
     private ThemeUtil.PanelStyle style = ThemeUtil.PanelStyle.PRIMARY;
     
     /**
-     * Creates the ZK components that comprise this UI element.
+     * Creates the UI components that comprise this UI element.
      */
     public UIElementStepView() {
         super();

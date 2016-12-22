@@ -165,7 +165,7 @@ public class HelpModule {
     /**
      * Encodes the specified URL path, which may be absolute or relative.
      * <p>
-     * For compressed help sets, use the web/ prefix. When using this syntax, ZK requires that the
+     * For compressed help sets, use the web/ prefix. When using this syntax, CWF requires that the
      * root folder in the jar file be named "web" with the specified path being relative to that
      * folder.
      * 

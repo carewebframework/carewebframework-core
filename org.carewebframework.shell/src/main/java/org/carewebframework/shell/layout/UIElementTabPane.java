@@ -41,7 +41,7 @@ public class UIElementTabPane extends UIElementCWFBase {
     private final Tab tab = new Tab();
     
     /**
-     * Set up the tab and tab panel ZK components. Note that we use a custom widget override to
+     * Set up the tab and tab panel UI components. Note that we use a custom widget override to
      * allow setting the color of the caption text.
      */
     public UIElementTabPane() {

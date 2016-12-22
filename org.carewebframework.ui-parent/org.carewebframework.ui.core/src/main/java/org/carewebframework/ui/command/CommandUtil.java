@@ -168,7 +168,7 @@ public class CommandUtil {
     }
     
     /**
-     * Associates a ZK component with a command.
+     * Associates a UI component with a command.
      * 
      * @param commandName Name of the command.
      * @param component Component to be associated.
@@ -178,7 +178,7 @@ public class CommandUtil {
     }
     
     /**
-     * Associates a ZK component with a command.
+     * Associates a UI component with a command.
      * 
      * @param commandName Name of the command.
      * @param component Component to be associated.
@@ -190,7 +190,7 @@ public class CommandUtil {
     }
     
     /**
-     * Associates a ZK component with a command and action.
+     * Associates a UI component with a command and action.
      * 
      * @param commandName Name of the command.
      * @param component Component to be associated.
@@ -201,7 +201,7 @@ public class CommandUtil {
     }
     
     /**
-     * Dissociate a ZK component with a command.
+     * Dissociate a UI component with a command.
      * 
      * @param commandName Name of the command.
      * @param component Component to be associated.

@@ -52,20 +52,20 @@ public abstract class UIElementCWFBase extends UIElementBase {
         
         final BaseUIComponent component;
         
-        final String tooltipText;
+        final String hint;
         
         final Popup contextMenu;
         
         public SavedState(BaseUIComponent component) {
             this.component = component;
-            tooltipText = component.getHint();
+            hint = component.getHint();
             contextMenu = component.getContext();
             component.setAttribute(SAVED_STATE, this);
             component.addClass("cwf-designmode-active");
         }
         
         private void restore() {
-            component.setHint(tooltipText);
+            component.setHint(hint);
             component.setContext(contextMenu);
             component.removeAttribute(SAVED_STATE);
             component.removeClass("cwf-designmode-active");

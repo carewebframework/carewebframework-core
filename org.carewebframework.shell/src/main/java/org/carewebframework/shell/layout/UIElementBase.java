@@ -1061,9 +1061,9 @@ public abstract class UIElementBase {
     }
     
     /**
-     * Provides a default implementation for setting the color of a ZK-based UI element. This is
+     * Provides a default implementation for setting the color of a UI element. This is
      * provided to allow components to easily expose a color property in the property editor. It may
-     * not be appropriate for all subclasses. To change which ZK elements are affected, override the
+     * not be appropriate for all subclasses. To change which UI elements are affected, override the
      * applyColor() method.
      * 
      * @param value A correctly formatted HTML color specification.

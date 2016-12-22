@@ -11,12 +11,17 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.lang.reflect.FieldUtils;
 import org.carewebframework.common.MiscUtil;
+import org.carewebframework.web.client.ExecutionContext;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.BaseInputboxComponent;
 import org.carewebframework.web.component.BaseLabeledComponent;
 import org.carewebframework.web.component.Cell;
 import org.carewebframework.web.component.Html;
 import org.carewebframework.web.component.Hyperlink;
+import org.carewebframework.web.component.Page;
+import org.carewebframework.web.event.Event;
+import org.carewebframework.web.event.EventUtil;
+import org.carewebframework.web.event.IEventListener;
 
 public class CWFUtil {
     
@@ -29,6 +34,40 @@ public class CWFUtil {
         CASE_SENSITIVE, // Case sensitive by node label.
         CASE_INSENSITIVE // Case insensitive by node label.
     };
+    
+    private static final IEventListener deferredDelivery = (event) -> {
+        EventUtil.send(event);
+    };
+    
+    /**
+     * Fires an event, deferring delivery if the desktop of the target is not currently active.
+     * 
+     * @param event The event to fire.
+     */
+    public static void fireEventx(Event event) {
+        fireEvent(event, deferredDelivery);
+    }
+    
+    /**
+     * Fires an event to the specified listener, deferring delivery if the page of the target is not
+     * currently active.
+     * 
+     * @param event The event to fire.
+     * @param listener The listener to receive the event.
+     */
+    public static void fireEvent(Event event, IEventListener listener) {
+        Page page = event.getTarget() == null ? null : event.getTarget().getPage();
+        
+        if (page != null && page != ExecutionContext.getPage()) {
+            page.getEventQueue().queue(event);
+        } else {
+            try {
+                listener.onEvent(event);
+            } catch (Exception e) {
+                throw MiscUtil.toUnchecked(e);
+            }
+        }
+    }
     
     /**
      * Returns the CWF resource path for the specified class.

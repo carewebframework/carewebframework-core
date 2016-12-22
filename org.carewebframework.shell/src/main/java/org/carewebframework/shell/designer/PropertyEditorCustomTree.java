@@ -37,7 +37,6 @@ import org.carewebframework.shell.plugins.PluginDefinition;
 import org.carewebframework.shell.plugins.PluginRegistry;
 import org.carewebframework.shell.property.PropertyInfo;
 import org.carewebframework.ui.zk.TreeUtil;
-import org.carewebframework.ui.zk.ZKUtil;
 import org.carewebframework.web.annotation.WiredComponent;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.Button;
@@ -320,7 +319,7 @@ public class PropertyEditorCustomTree<T extends UIElementBase> extends PropertyE
     private void resetTree() {
         currentItem = null;
         proxies.clear();
-        ZKUtil.detachChildren(tree);
+        tree.destroyChildren();
         initTree(getTarget(), tree);
         selectItem((Treenode) tree.getFirstChild());
         hasChanged = false;

@@ -34,13 +34,13 @@ import org.carewebframework.common.StrUtil;
 import org.carewebframework.ui.core.CWFUtil;
 import org.carewebframework.ui.dialog.DialogUtil;
 import org.carewebframework.ui.dialog.PopupDialog;
-import org.carewebframework.ui.zk.ZKUtil;
 import org.carewebframework.web.annotation.WiredComponent;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.BaseUIComponent;
 import org.carewebframework.web.component.Button;
 import org.carewebframework.web.event.Event;
 import org.carewebframework.web.event.EventUtil;
+import org.carewebframework.web.event.IEventListener;
 
 /**
  * Base controller for creating/editing a domain object.
@@ -73,6 +73,10 @@ public abstract class FormController<T> extends FrameworkController {
     private String label_cancel_message = "@cwf.formcontroller.cancel.message";
     
     private String label_required_message = "@cwf.formcontroller.required.message";
+    
+    private final IEventListener changeListener = (event) -> {
+        changed(event.getTarget());
+    };
     
     // Start of auto-wired members
     
@@ -115,16 +119,14 @@ public abstract class FormController<T> extends FrameworkController {
     public void onDeferredInit() {
         populateControls(domainObject);
         CWFUtil.focusFirst(root, true);
-        ZKUtil.wireChangeEvents(root, root, "change");
+        forwardChangeEvents(root);
     }
     
-    /**
-     * Handler for change events from input elements.
-     * 
-     * @param event Change event.
-     */
-    public void onChange(Event event) {
-        changed(event.getTarget());
+    private void forwardChangeEvents(BaseComponent root) {
+        for (BaseUIComponent child : root.getChildren(BaseUIComponent.class)) {
+            child.addEventListener("change", changeListener);
+            forwardChangeEvents(child);
+        }
     }
     
     /**
