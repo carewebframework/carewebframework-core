@@ -38,7 +38,7 @@ public class UIElementLink extends UIElementButton {
     }
     
     public UIElementLink() {
-        super(new Hyperlink(), ThemeUtil.ButtonSize.DEFAULT, ThemeUtil.ButtonStyle.LINK);
+        super(new Hyperlink(), ThemeUtil.ButtonSize.SMALL, ThemeUtil.ButtonStyle.LINK);
     }
     
 }

@@ -28,14 +28,11 @@ package org.carewebframework.shell.designer;
 import org.carewebframework.shell.layout.UIElementCWFBase;
 import org.carewebframework.web.component.BaseUIComponent;
 import org.carewebframework.web.component.Menupopup;
-import org.carewebframework.web.event.Event;
-import org.carewebframework.web.event.EventUtil;
-import org.carewebframework.web.event.IEventListener;
 
 /**
  * Implements the mask that covers components when design mode is active.
  */
-public class DesignMask implements IEventListener {
+public class DesignMask {
     
     public enum MaskMode {
         AUTO, ENABLE, DISABLE
@@ -44,8 +41,6 @@ public class DesignMask implements IEventListener {
     private final UIElementCWFBase element;
     
     private MaskMode mode = MaskMode.AUTO;
-    
-    private Event maskEvent;
     
     private boolean visible;
     
@@ -89,25 +84,13 @@ public class DesignMask implements IEventListener {
             BaseUIComponent target = element.getMaskTarget();
             
             if (visible) {
-                target.addEventListener("onMask", this);
-                maskEvent = new Event("onMask", target);
+                Menupopup contextMenu = UIElementCWFBase.getDesignContextMenu(target);
+                String displayName = element.getDisplayName();
+                target.addMask(displayName, contextMenu);
             } else {
-                maskEvent = null;
-                target.removeEventListener("onMask", this);
                 target.removeMask();
             }
         }
-        
-        if (maskEvent != null && element.isActivated()) {
-            EventUtil.post(maskEvent);
-        }
     }
     
-    @Override
-    public void onEvent(Event event) {
-        BaseUIComponent target = element.getMaskTarget();
-        Menupopup contextMenu = UIElementCWFBase.getDesignContextMenu(target);
-        String displayName = element.getDisplayName();
-        target.addMask(displayName, contextMenu);
-    }
 }

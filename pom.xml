@@ -45,7 +45,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<org.carewebframework.core.version>6.0.0-SNAPSHOT</org.carewebframework.core.version>
-		<org.springframework.version>4.3.0.RELEASE</org.springframework.version>
+		<org.springframework.version>4.3.5.RELEASE</org.springframework.version>
 		<org.springframework.security.version>4.0.4.RELEASE</org.springframework.security.version>
 		<ehcache.version>2.10.2.2.21</ehcache.version>
 		<jackson.version>2.6.2</jackson.version>

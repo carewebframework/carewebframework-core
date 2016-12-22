@@ -68,6 +68,11 @@ public class PropertyEditorText extends PropertyEditorBase<Popupbox> {
         updateValue();
     }
     
+    @EventHandler(value = "open", target = "editor")
+    private void onOpen() {
+        textbox.focus();
+    }
+    
     @EventHandler(value = { "blur", "enter" }, target = "@textbox")
     private void onBlurOrEnter$textbox() {
         editor.close();
@@ -77,12 +82,12 @@ public class PropertyEditorText extends PropertyEditorBase<Popupbox> {
     @EventHandler(value = "change", target = "@textbox")
     private void onChange$textbox(ChangeEvent event) {
         editor.setValue(event.getValue(String.class));
-        onChange();
+        super.onChange(event);
     }
     
-    @EventHandler(value = "change", target = "editor")
-    private void onChange$editor(ChangeEvent event) {
+    @Override
+    protected void onChange(ChangeEvent event) {
         textbox.setValue(event.getValue(String.class));
-        onChange();
+        super.onChange(event);
     }
 }

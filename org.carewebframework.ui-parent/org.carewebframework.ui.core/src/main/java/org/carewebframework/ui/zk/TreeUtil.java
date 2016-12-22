@@ -235,8 +235,7 @@ public class TreeUtil {
             Treenode item2 = (Treenode) parent.getChildren().get(i);
             
             if (compare(item1, item2) > 0) {
-                item2.detach();
-                parent.addChild(item2, item1);
+                parent.swapChildren(i - 1, i);
                 i = i == 1 ? 2 : i - 1;
             } else {
                 i++;

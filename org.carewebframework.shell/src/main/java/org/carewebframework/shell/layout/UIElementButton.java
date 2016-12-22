@@ -44,7 +44,7 @@ public class UIElementButton extends UIElementActionBase {
     private ThemeUtil.ButtonStyle style;
     
     public UIElementButton() {
-        this(new Hyperlink(), ThemeUtil.ButtonSize.DEFAULT, ThemeUtil.ButtonStyle.DEFAULT);
+        this(new Hyperlink(), ThemeUtil.ButtonSize.SMALL, ThemeUtil.ButtonStyle.DEFAULT);
     }
     
     public UIElementButton(Hyperlink component, ThemeUtil.ButtonSize size, ThemeUtil.ButtonStyle style) {
@@ -88,7 +88,7 @@ public class UIElementButton extends UIElementActionBase {
      * @param url Icon URL.
      */
     public void setIcon(String url) {
-        //component.setImage(url);
+        component.setImage(url);
     }
     
     /**
@@ -97,7 +97,7 @@ public class UIElementButton extends UIElementActionBase {
      * @return Icon URL.
      */
     public String getIcon() {
-        return null;//component.getImage();
+        return component.getImage();
     }
     
     public ThemeUtil.ButtonSize getSize() {

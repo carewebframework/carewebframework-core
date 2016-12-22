@@ -140,17 +140,11 @@ public class PropertyEditorList extends PropertyEditorBase<Combobox> {
         updateValue();
     }
     
-    @Override
-    @EventHandler(value = "change", target = "editor")
-    protected void onChange() {
-        super.onChange();
-    }
-    
     @EventHandler(value = "dblclick", target = "editor")
     private void onDblclick() {
         int i = editor.getSelectedIndex() + 1;
         editor.setSelectedIndex(i >= editor.getChildCount() ? 0 : i);
-        onChange();
+        onChange(null);
         //TODO: editor.close();
     }
 }

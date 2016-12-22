@@ -27,10 +27,10 @@ package org.carewebframework.shell.designer;
 
 import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.property.PropertyInfo;
-import org.carewebframework.web.annotation.EventHandler;
 import org.carewebframework.web.annotation.WiredComponent;
 import org.carewebframework.web.component.Radiobutton;
 import org.carewebframework.web.component.Radiogroup;
+import org.carewebframework.web.event.ChangeEvent;
 
 /**
  * Editor for boolean values.
@@ -52,6 +52,7 @@ public class PropertyEditorBoolean extends PropertyEditorBase<Radiogroup> {
     @Override
     protected void init(UIElementBase target, PropertyInfo propInfo, PropertyGrid propGrid) {
         super.init(target, propInfo, propGrid);
+        rbTrue.addEventForward(ChangeEvent.TYPE, editor, null);
         
         for (Radiobutton radio : editor.getChildren(Radiobutton.class)) {
             String label = propInfo.getConfigValue(radio.getLabel().trim());
@@ -86,9 +87,4 @@ public class PropertyEditorBoolean extends PropertyEditorBase<Radiogroup> {
         rbTrue.setChecked(value instanceof Boolean && (Boolean) value);
     }
     
-    @Override
-    @EventHandler(value = "change", target = "@rbTrue")
-    protected void onChange() {
-        super.onChange();
-    }
 }

@@ -30,6 +30,7 @@ import org.carewebframework.shell.property.PropertyInfo;
 import org.carewebframework.ui.core.CWFUtil;
 import org.carewebframework.web.annotation.EventHandler;
 import org.carewebframework.web.component.BaseUIComponent;
+import org.carewebframework.web.event.ChangeEvent;
 import org.carewebframework.web.page.PageUtil;
 
 /**
@@ -104,15 +105,6 @@ public abstract class PropertyEditorBase<T extends BaseUIComponent> implements C
     public boolean hasChanged() {
         Object currentValue = getValue();
         return value == null || currentValue == null ? value != currentValue : !value.equals(currentValue);
-    }
-    
-    /**
-     * Notify the property grid that the value has changed.
-     */
-    protected void onChange() {
-        if (hasChanged()) {
-            propGrid.propertyChanged();
-        }
     }
     
     /**
@@ -217,6 +209,18 @@ public abstract class PropertyEditorBase<T extends BaseUIComponent> implements C
     @Override
     public int compareTo(PropertyEditorBase<T> o) {
         return index - o.index;
+    }
+    
+    /**
+     * Notify the property grid that the value has changed.
+     * 
+     * @param event The change event.
+     */
+    @EventHandler(value = "change", target = "editor")
+    protected void onChange(ChangeEvent event) {
+        if (hasChanged()) {
+            propGrid.propertyChanged();
+        }
     }
     
     @EventHandler(value = "focus", target = "editor")

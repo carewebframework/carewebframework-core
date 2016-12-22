@@ -11,6 +11,15 @@
     margin: 0;
 }
 
+.cwf-desktop > .panel-heading {
+    display: flex;
+    align-items: center;
+}
+
+.cwf-desktop > .panel-heading > * {
+	padding-right: 5px
+}
+
 .cwf-desktop > .panel-body {
      display: inline-flex;  
      padding: 0;

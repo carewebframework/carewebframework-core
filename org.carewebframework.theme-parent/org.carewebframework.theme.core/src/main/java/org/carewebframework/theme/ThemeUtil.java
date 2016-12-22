@@ -66,7 +66,7 @@ public class ThemeUtil {
      * Corresponds to Bootstrap button size classes.
      */
     public enum ButtonSize implements IThemeClass {
-        DEFAULT(null), LARGE("lg"), SMALL("sm"), TINY("xs");
+        LARGE("lg"), MEDIUM("md"), SMALL("sm"), TINY("xs");
         
         private final String themeClass;
         

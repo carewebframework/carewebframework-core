@@ -27,8 +27,10 @@
 		<pane>
 			<toolbar name="toolbar" align="end" width="100%" style="border:none">
 				<button name="btnApply" 
+					class="flavor:btn-primary"
 					label="${@msg.cwf.shell.designer.property.grid.btn.apply.label}" />
 				<button name="btnRestore"
+					class="flavor:btn-warning"
 					label="${@msg.cwf.shell.designer.property.grid.btn.restore.label}" />
 				<span width="20px" />
 				<button name="btnOK"
