@@ -157,7 +157,7 @@ public class MainController extends PluginController {
     
     /**
      * Handles the Button onClick event for changing the state of the
-     * {@link org.carewebframework.api.logging.LogFileTailer} and the client org.zkoss.zul.Timer
+     * {@link org.carewebframework.api.logging.LogFileTailer}
      */
     public void onClick$btnToggle() {
         if (isTailerStarted) {

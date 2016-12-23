@@ -66,6 +66,7 @@ public class PromptDialog implements IAutoWired {
     /**
      * Display the prompt dialog.
      * 
+     * @param <T> The type of response object.
      * @param message Text message
      * @param title Title of dialog
      * @param styles Style classes for icon, message text, and panel (pipe-delimited)
@@ -117,6 +118,7 @@ public class PromptDialog implements IAutoWired {
     /**
      * Display the prompt dialog.
      * 
+     * @param <T> The type of response object.
      * @param control The dialog control.
      */
     public static <T> void show(DialogControl<T> control) {

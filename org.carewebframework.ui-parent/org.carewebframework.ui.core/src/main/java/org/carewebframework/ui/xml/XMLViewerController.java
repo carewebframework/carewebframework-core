@@ -61,8 +61,6 @@ public class XMLViewerController implements IAutoWired {
     
     /**
      * Sets the renderer.
-     * 
-     * @throws Exception Unspecified exception.
      */
     @Override
     public void afterInitialized(BaseComponent comp) {

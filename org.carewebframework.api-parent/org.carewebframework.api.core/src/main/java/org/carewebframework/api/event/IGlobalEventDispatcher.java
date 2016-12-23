@@ -61,9 +61,9 @@ public interface IGlobalEventDispatcher {
     void fireRemoteEvent(String eventName, Serializable eventData, Recipient... recipients);
     
     /**
-     * @param responseEvent
-     * @param filters
-     * @param recipients
+     * @param responseEvent Name of the event with which to respond.
+     * @param filters Ping filters to apply.
+     * @param recipients Optional recipients of ping request.
      */
     void Ping(String responseEvent, List<PingFilter> filters, Recipient... recipients);
 }

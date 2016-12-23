@@ -36,8 +36,8 @@ import org.apache.commons.logging.LogFactory;
 import org.carewebframework.shell.plugins.PluginContainer;
 import org.carewebframework.shell.plugins.PluginController;
 
-import org.zkoss.zk.ui.Component;
-import org.zkoss.zul.Label;
+import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.component.Label;
 
 /**
  * This is a sample controller that extends the PluginController class which provides some
@@ -56,12 +56,12 @@ public class ${cwpUCC}Controller extends PluginController {
     private Label lblDate; // This value will be injected automatically by the parent class
 
     /**
-     * @see org.carewebframework.ui.FrameworkController${symbol_pound}doAfterCompose(org.zkoss.zk.ui.Component)
+     * @see org.carewebframework.ui.FrameworkController${symbol_pound}afterInitialized(org.carewebframework.web.component.BaseComponent)
      */
     @Override
-    public void doAfterCompose(Component comp) throws Exception {
-        super.doAfterCompose(comp);
-        log.trace("Controller composed");
+    public void afterInitialized(BaseComponent comp) {
+        super.afterInitialized(comp);
+        log.trace("Controller initialized");
     }
     
     /**

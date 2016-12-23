@@ -70,6 +70,7 @@ public class LoginWindowController implements IAutoWired {
      * If this authentication exception (or its cause) is of the expected type, return it.
      * Otherwise, return null.
      * 
+     * @param <T> The desired type.
      * @param exc The authentication exception.
      * @param clazz The desired type.
      * @return The original exception or its cause if one of them is of the expected type.
@@ -95,7 +96,7 @@ public class LoginWindowController implements IAutoWired {
     /**
      * Initialize the login form.
      * 
-     * @param comp The top level component.
+     * @param root The top level component.
      */
     @Override
     public void afterInitialized(BaseComponent root) {

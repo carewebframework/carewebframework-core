@@ -1,10 +1,6 @@
 <?init class="org.carewebframework.ui.zk.Composition" arg0="web/org/carewebframework/ui/sharedforms/captionedForm.zul"?>
 
-<page xmlns="http://www.zkoss.org/2005/zul"
-	xmlns:h="http://www.w3.org/1999/xhtml"
-	xmlns:w="http://www.zkoss.org/2005/zk/client"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+<page>
 
 	<splitterview self="@define(sharedFormsCaptioned)" name="mainView"
 		height="100%" width="100%">

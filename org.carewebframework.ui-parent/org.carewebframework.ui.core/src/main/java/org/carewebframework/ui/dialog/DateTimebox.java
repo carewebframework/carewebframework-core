@@ -159,7 +159,7 @@ public class DateTimebox extends Popupbox implements INamespace, IAutoWired {
     /**
      * Validates that a time component exists if one is required.
      * 
-     * @param value
+     * @param value The date value.
      */
     public void validateDate(Date value) {
         if (requireTime && !DateUtil.hasTime(value)) {

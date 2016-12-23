@@ -83,6 +83,7 @@ public class Message implements Serializable {
     /**
      * Returns the payload coerced to the specified type.
      * 
+     * @param <T> Type of returned data.
      * @param type The class of the returned data.
      * @return The associated data.
      */

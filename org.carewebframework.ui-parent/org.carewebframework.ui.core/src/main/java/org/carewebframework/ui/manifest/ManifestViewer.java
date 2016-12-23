@@ -138,7 +138,7 @@ public class ManifestViewer implements IAutoWired {
     /**
      * Show a detail view of the selected manifest.
      * 
-     * @param event
+     * @param event The triggering event.
      */
     @EventHandler(value = "showManifest", target = "@table")
     public void onShowManifest(Event event) {

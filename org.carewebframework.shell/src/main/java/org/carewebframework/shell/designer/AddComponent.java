@@ -175,8 +175,7 @@ public class AddComponent implements IAutoWired {
      * Initialize the tree view based with list of plugins that may serve as children to the parent
      * element.
      * 
-     * @param parentElement Element to serve as parent to the newly created child element.
-     * @param createChild If true, the selected element will be created.
+     * @param comp The root component.
      */
     @Override
     public void afterInitialized(BaseComponent comp) {

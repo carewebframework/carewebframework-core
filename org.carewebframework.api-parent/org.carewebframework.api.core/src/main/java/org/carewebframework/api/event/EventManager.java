@@ -89,7 +89,7 @@ public class EventManager implements ILocalEventDispatcher, IEventManager {
     
     /**
      * @see org.carewebframework.api.event.IEventManager#fireRemoteEvent(java.lang.String,
-     *      java.lang.Object, java.lang.String)
+     *      java.lang.Object, Recipient...)
      */
     @Override
     public void fireRemoteEvent(String eventName, Object eventData, Recipient... recipients) {

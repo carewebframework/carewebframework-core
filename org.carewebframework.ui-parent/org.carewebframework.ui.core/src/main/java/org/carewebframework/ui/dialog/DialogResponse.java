@@ -33,6 +33,7 @@ public class DialogResponse<T> {
     /**
      * Returns list of response objects created from a string of vertical bar delimited captions.
      * 
+     * @param <T> The type of response object.
      * @param responses Response list separated by vertical bars.
      * @param exclusions Exclusion list separated by vertical bars (may be null).
      * @param dflt Default response (may be null).

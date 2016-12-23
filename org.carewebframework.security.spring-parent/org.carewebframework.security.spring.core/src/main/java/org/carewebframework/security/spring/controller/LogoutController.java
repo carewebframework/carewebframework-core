@@ -42,9 +42,6 @@ public class LogoutController implements IAutoWired {
     
     private Hyperlink btnLogin;
     
-    /**
-     * @see org.zkoss.zk.ui.util.GenericAutowireComposer#doAfterCompose(org.zkoss.zk.ui.Component)
-     */
     @Override
     public void afterInitialized(BaseComponent comp) {
         lblMessage.setLabel(AbstractSecurityService.getLogoutAttribute(Constants.LOGOUT_WARNING_ATTR,

@@ -108,7 +108,7 @@ public class HelpSearchTab extends HelpTab implements IComponentRenderer<Listite
     /**
      * Sets the focus to the search text box when the tab is selected.
      * 
-     * @see org.carewebframework.ui.help.HelpTab#onSelect()
+     * @see org.carewebframework.help.viewer.HelpTab#onSelect()
      */
     @Override
     public void onSelect() {
@@ -183,7 +183,7 @@ public class HelpSearchTab extends HelpTab implements IComponentRenderer<Listite
     /**
      * Renders the list box contents.
      * 
-     * @see org.zkoss.zul.ListitemRenderer#render
+     * @param qr The search hit to render.
      */
     @Override
     public Listitem render(HelpSearchHit qr) {

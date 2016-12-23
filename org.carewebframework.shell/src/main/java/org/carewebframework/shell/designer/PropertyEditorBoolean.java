@@ -42,8 +42,6 @@ public class PropertyEditorBoolean extends PropertyEditorBase<Radiogroup> {
     
     /**
      * Create property editor.
-     * 
-     * @throws Exception Unspecified exception.
      */
     public PropertyEditorBoolean() {
         super(DesignConstants.RESOURCE_PREFIX + "propertyEditorBoolean.cwf");

@@ -670,6 +670,7 @@ public abstract class UIElementBase {
      * Locates and returns a child that is an instance of the specified class. If none is found,
      * returns null.
      * 
+     * @param <T> The type of child being sought.
      * @param clazz Class of the child being sought.
      * @param last If specified, the search begins after this child. If null, the search begins with
      *            the first child.
@@ -816,6 +817,7 @@ public abstract class UIElementBase {
     /**
      * Recurses the component subtree for a child belonging to the specified class.
      * 
+     * @param <T> The type of child being sought.
      * @param clazz Class of child being sought.
      * @return A child of the specified class, or null if not found.
      */
@@ -1061,9 +1063,9 @@ public abstract class UIElementBase {
     }
     
     /**
-     * Provides a default implementation for setting the color of a UI element. This is
-     * provided to allow components to easily expose a color property in the property editor. It may
-     * not be appropriate for all subclasses. To change which UI elements are affected, override the
+     * Provides a default implementation for setting the color of a UI element. This is provided to
+     * allow components to easily expose a color property in the property editor. It may not be
+     * appropriate for all subclasses. To change which UI elements are affected, override the
      * applyColor() method.
      * 
      * @param value A correctly formatted HTML color specification.
@@ -1331,6 +1333,7 @@ public abstract class UIElementBase {
     /**
      * Returns the first ancestor corresponding to the specified class.
      * 
+     * @param <T> The type of ancestor sought.
      * @param clazz Class of ancestor sought.
      * @return An ancestor of the specified class or null if not found.
      */

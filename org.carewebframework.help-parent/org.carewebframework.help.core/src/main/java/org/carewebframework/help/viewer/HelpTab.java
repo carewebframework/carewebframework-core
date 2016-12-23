@@ -208,8 +208,6 @@ public abstract class HelpTab extends Tab implements INamespace, ITopicListener 
      * Called when a new topic is selected in the viewer. Override to provide any special actions
      * (like selecting the corresponding UI element). Note that the originator of the topic change
      * may be the same tab.
-     * 
-     * @see org.carewebframework.ui.help.HelpHistory.ITopicListener#onTopicSelected(HelpTopic)
      */
     @Override
     public void onTopicSelected(HelpTopic topic) {

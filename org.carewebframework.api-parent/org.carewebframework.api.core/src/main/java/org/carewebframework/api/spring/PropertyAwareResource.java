@@ -53,9 +53,8 @@ public class PropertyAwareResource implements Resource, ApplicationContextAware 
     
     /**
      * @param resource Resource to be transformed.
-     * @throws IOException
      */
-    public PropertyAwareResource(Resource resource) throws IOException {
+    public PropertyAwareResource(Resource resource) {
         originalResource = resource;
     }
     

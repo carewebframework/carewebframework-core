@@ -202,7 +202,7 @@ public class DateRangePicker extends Combobox {
     /**
      * Need to update visual appearance of selection when it is changed.
      * 
-     * @see org.zkoss.zul.Combobox#setSelectedItem(org.zkoss.zul.Comboitem)
+     * @see org.carewebframework.web.component.Combobox#setSelectedItem(Comboitem)
      */
     @Override
     public void setSelectedItem(Comboitem item) {

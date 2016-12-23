@@ -1,9 +1,6 @@
 <?init class="org.carewebframework.ui.zk.Composition" arg0="web/org/carewebframework/ui/sharedforms/listViewForm.zul"?>
 
-<page xmlns="http://www.zkoss.org/2005/zul"
-	xmlns:h="http://www.w3.org/1999/xhtml"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+<page>
 
 	<div self="@insert(sharedFormsRoot)" height="100%" width="100%"
 		controller="org.carewebframework.ui.sharedforms.TestController" />

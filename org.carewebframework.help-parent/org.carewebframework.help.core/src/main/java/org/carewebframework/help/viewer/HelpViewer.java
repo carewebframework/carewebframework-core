@@ -94,7 +94,7 @@ public class HelpViewer extends Window implements IHelpViewer, ITopicListener, I
     }
     
     /**
-     * @see org.carewebframework.ui.help.IHelpViewer#show()
+     * @see org.carewebframework.help.IHelpViewer#show()
      */
     @Override
     public void show() {
@@ -110,7 +110,7 @@ public class HelpViewer extends Window implements IHelpViewer, ITopicListener, I
     }
     
     /**
-     * @see org.carewebframework.ui.help.IHelpViewer#show(java.lang.String)
+     * @see org.carewebframework.help.IHelpViewer#show(java.lang.String)
      */
     @Override
     public void show(String homeId) {
@@ -118,7 +118,7 @@ public class HelpViewer extends Window implements IHelpViewer, ITopicListener, I
     }
     
     /**
-     * @see org.carewebframework.ui.help.IHelpViewer#show(IHelpSet)
+     * @see org.carewebframework.help.IHelpViewer#show(IHelpSet)
      */
     @Override
     public void show(IHelpSet helpSet) {
@@ -126,7 +126,7 @@ public class HelpViewer extends Window implements IHelpViewer, ITopicListener, I
     }
     
     /**
-     * @see org.carewebframework.ui.help.IHelpViewer#show(java.lang.String, java.lang.String)
+     * @see org.carewebframework.help.IHelpViewer#show(java.lang.String, java.lang.String)
      */
     @Override
     public void show(String homeId, String topicId) {
@@ -134,7 +134,7 @@ public class HelpViewer extends Window implements IHelpViewer, ITopicListener, I
     }
     
     /**
-     * @see org.carewebframework.ui.help.IHelpViewer#show(IHelpSet, java.lang.String)
+     * @see org.carewebframework.help.IHelpViewer#show(IHelpSet, java.lang.String)
      */
     @Override
     public void show(IHelpSet helpSet, String topicId) {
@@ -142,8 +142,7 @@ public class HelpViewer extends Window implements IHelpViewer, ITopicListener, I
     }
     
     /**
-     * @see org.carewebframework.ui.help.IHelpViewer#show(IHelpSet, java.lang.String,
-     *      java.lang.String)
+     * @see org.carewebframework.help.IHelpViewer#show(IHelpSet, java.lang.String, java.lang.String)
      */
     @Override
     public void show(IHelpSet helpSet, String topicId, String topicLabel) {
@@ -159,7 +158,7 @@ public class HelpViewer extends Window implements IHelpViewer, ITopicListener, I
     }
     
     /**
-     * @see org.carewebframework.ui.help.IHelpViewer#show(org.carewebframework.ui.help.HelpViewType)
+     * @see org.carewebframework.help.IHelpViewer#show(org.carewebframework.help.viewer.HelpViewType)
      */
     @Override
     public void show(HelpViewType viewType) {
@@ -177,7 +176,7 @@ public class HelpViewer extends Window implements IHelpViewer, ITopicListener, I
      * Close the window. If this is a local window, simply hide it. If it is a remote window, close
      * the browser window entirely.
      * 
-     * @see org.carewebframework.ui.help.IHelpViewer#close()
+     * @see org.carewebframework.help.IHelpViewer#close()
      */
     @Override
     public void close() {
@@ -201,7 +200,7 @@ public class HelpViewer extends Window implements IHelpViewer, ITopicListener, I
     }
     
     /**
-     * @see org.carewebframework.ui.help.IHelpViewer#load(java.lang.Iterable)
+     * @see org.carewebframework.help.IHelpViewer#load(java.lang.Iterable)
      */
     @Override
     public void load(Iterable<IHelpSet> helpSets) {
@@ -231,7 +230,7 @@ public class HelpViewer extends Window implements IHelpViewer, ITopicListener, I
     }
     
     /**
-     * @see org.carewebframework.ui.help.IHelpViewer#mergeHelpSet(IHelpSet)
+     * @see org.carewebframework.help.IHelpViewer#mergeHelpSet(IHelpSet)
      */
     @Override
     public void mergeHelpSet(IHelpSet helpSet) {
@@ -452,8 +451,6 @@ public class HelpViewer extends Window implements IHelpViewer, ITopicListener, I
     
     /**
      * Remove the viewer reference when it is detached.
-     * 
-     * @see org.zkoss.zul.Window#onPageDetached(org.zkoss.zk.ui.Page)
      */
     @Override
     public void onDestroy() {
@@ -463,8 +460,6 @@ public class HelpViewer extends Window implements IHelpViewer, ITopicListener, I
     
     /**
      * Invoked by the view history whenever the selected topic changes.
-     * 
-     * @see org.carewebframework.ui.help.HelpHistory.ITopicListener#onTopicSelected(HelpTopic)
      */
     @Override
     public void onTopicSelected(HelpTopic topic) {
@@ -476,7 +471,7 @@ public class HelpViewer extends Window implements IHelpViewer, ITopicListener, I
             
             if (src != null && src.startsWith("jar:")) {
                 int i = src.indexOf("!");
-                src = i < 0 ? null : HelpUtil.getBaseUrl() + "/zkau" + src.substring(++i);
+                src = i < 0 ? null : HelpUtil.getBaseUrl() + src.substring(++i);
             }
             iframe.setSrc(src);
         } catch (Exception e) {
@@ -499,7 +494,6 @@ public class HelpViewer extends Window implements IHelpViewer, ITopicListener, I
      * 
      * @param event The event object that embodies the request. The event name is the method name to
      *            be invoked and the event data is an array of the method parameters.
-     * @throws Exception Unspecified exception.
      */
     @Override
     public void onEvent(Event event) {

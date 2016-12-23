@@ -162,7 +162,7 @@ public class HelpIndexTab extends HelpTab {
      * Initialize the tab the first time it is selected. This method creates a model list from the
      * current keyword list and assigns it to the keyword list box.
      * 
-     * @see org.carewebframework.ui.help.HelpTab#init()
+     * @see org.carewebframework.help.viewer.HelpTab#init()
      */
     @Override
     protected void init() {
@@ -174,7 +174,7 @@ public class HelpIndexTab extends HelpTab {
     /**
      * Sets the focus to the quick find text box when the tab is selected.
      * 
-     * @see org.carewebframework.ui.help.HelpTab#onSelect()
+     * @see org.carewebframework.help.viewer.HelpTab#onSelect()
      */
     @Override
     public void onSelect() {
@@ -186,7 +186,7 @@ public class HelpIndexTab extends HelpTab {
     /**
      * Add keywords and topics from the specified view to the tab.
      * 
-     * @see org.carewebframework.ui.help.HelpTab#addView(IHelpView)
+     * @see org.carewebframework.help.viewer.HelpTab#addView(IHelpView)
      */
     @Override
     public void addView(IHelpView view) {

@@ -103,7 +103,6 @@ public class ActionListener implements IEventListener {
      * Listener for the target event. Initial execution resolves the action.
      * 
      * @param event The target event.
-     * @throws Exception Unspecified exception.
      */
     @Override
     public void onEvent(Event event) {

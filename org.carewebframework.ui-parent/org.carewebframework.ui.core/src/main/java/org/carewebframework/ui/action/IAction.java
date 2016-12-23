@@ -40,7 +40,7 @@ public interface IAction {
     String getLabel();
     
     /**
-     * Returns the action script. See {@link ActionType#getType(String)} for supported formats.
+     * Returns the action script.
      * 
      * @return The action script.
      */

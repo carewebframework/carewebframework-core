@@ -183,15 +183,12 @@ public class JMSService {
     }
     
     /**
-     * Creates an ObjectMessage from a given session and sets properties of the message (JMSType,
-     * {@value #MESSAGE_SENDER_PROPERTY}, {@value #MESSAGE_RECIPIENTS_PROPERTY}.
+     * Creates a message.
      * 
-     * @param session The session for which to create the message.
      * @param messageData Message data.
      * @param sender Sender client ID.
      * @param recipients Comma-delimited list of recipient client IDs
-     * @return MessageThe newly created message.
-     * @throws JMSException if error thrown from creation of object message
+     * @return The newly created message.
      */
     public Message createObjectMessage(Serializable messageData, String sender, String recipients) {
         try {
@@ -202,10 +199,8 @@ public class JMSService {
     }
     
     /**
-     * Creates a TextMessage from a given session and sets properties of the message (JMSType,
-     * {@value #MESSAGE_SENDER_PROPERTY}, {@value #MESSAGE_RECIPIENTS_PROPERTY}.
+     * Creates a message.
      * 
-     * @param session the session for which to create the message
      * @param text text data
      * @param sender Sender client ID.
      * @param recipients Comma-delimited list of recipient client IDs
@@ -217,11 +212,9 @@ public class JMSService {
     }
     
     /**
-     * Given a Message, supplement the message with additional properties/attributes (JMSType,
-     * recipients, sender).
+     * Given a message, supplement the message with additional properties/attributes.
      * 
      * @param message The message
-     * @param topic Topic to which message will be published.
      * @param sender Sender client ID.
      * @param recipients Comma-delimited list of recipient client IDs
      * @return The decorated Message

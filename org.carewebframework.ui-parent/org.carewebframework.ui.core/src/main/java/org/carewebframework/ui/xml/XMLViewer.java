@@ -41,7 +41,6 @@ public class XMLViewer {
      * Show the dialog, loading the specified document.
      * 
      * @param document The XML document.
-     * @throws Exception
      */
     public static void showXML(Document document) {
         Map<String, Object> args = new HashMap<>();

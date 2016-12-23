@@ -171,9 +171,7 @@ public class PropertyGrid implements IAutoWired {
     /**
      * Initializes the property grid.
      * 
-     * @param target UI element whose properties are to be edited.
-     * @param parent Parent component for property grid (may be null).
-     * @param embedded If true, the property grid is embedded within another component.
+     * @param comp The root component.
      */
     @Override
     public void afterInitialized(BaseComponent comp) {

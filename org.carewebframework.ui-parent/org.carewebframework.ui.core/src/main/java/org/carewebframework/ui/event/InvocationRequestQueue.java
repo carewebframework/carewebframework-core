@@ -150,7 +150,7 @@ public class InvocationRequestQueue implements IEventListener {
     /**
      * Invokes the method on the target as specified by the event.
      * 
-     * @param request The invocation request.
+     * @param event The invocation request event.
      */
     @Override
     public void onEvent(Event event) {

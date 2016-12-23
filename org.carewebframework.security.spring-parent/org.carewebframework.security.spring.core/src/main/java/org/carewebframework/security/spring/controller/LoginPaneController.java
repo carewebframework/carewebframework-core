@@ -215,7 +215,6 @@ public class LoginPaneController implements IAutoWired {
         domainChanged();
         
         if (authError == null && autoLogin) {
-            // Do not use setVisible here as it prevents posting of credentials with some versions of ZK.
             ((BaseUIComponent) comp).addStyle("display", "none");
             EventUtil.post("onSubmit", comp, null);
         }

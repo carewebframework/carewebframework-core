@@ -204,7 +204,6 @@ public class PropertyEditorCustomTree<T extends UIElementBase> extends PropertyE
      *            synchronized with the label of the corresponding tree node. It may be null.
      * @param hierarchical If true, the editor assumes that child elements may contain other child
      *            elements.
-     * @throws Exception Unspecified exception.
      */
     public PropertyEditorCustomTree(Class<T> childClass, String labelProperty, boolean hierarchical) {
         super(DesignConstants.RESOURCE_PREFIX + "propertyEditorCustomTree.cwf");

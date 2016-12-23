@@ -176,7 +176,7 @@ public class DateRangeChooser extends Listbox {
     /**
      * Need to update visual appearance of selection when it is changed.
      * 
-     * @see org.zkoss.zul.Listbox#setSelectedItem(org.zkoss.zul.Listitem)
+     * @see org.carewebframework.web.component.Listbox#setSelectedItem(Listitem)
      */
     @Override
     public void setSelectedItem(Listitem item) {

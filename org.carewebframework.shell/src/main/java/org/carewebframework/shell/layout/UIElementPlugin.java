@@ -154,17 +154,11 @@ public class UIElementPlugin extends UIElementCWFBase implements IDisable, IProp
         container.setPropertyValue(propInfo, value);
     }
     
-    /**
-     * @see org.zkoss.zk.ui.ext.Disable#isDisabled()
-     */
     @Override
     public boolean isDisabled() {
         return !isEnabled();
     }
     
-    /**
-     * @see org.zkoss.zk.ui.ext.Disable#setDisabled(boolean)
-     */
     @Override
     public void setDisabled(boolean disabled) {
         setEnabled(!disabled);

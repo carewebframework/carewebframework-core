@@ -71,9 +71,6 @@ public class MainController extends PluginController implements IUserContextEven
         SecurityUtil.getSecurityService().changePassword();
     }
     
-    /**
-     * @see org.carewebframework.ui.FrameworkController#doAfterCompose(org.zkoss.zk.ui.Component)
-     */
     @Override
     public void afterInitialized(BaseComponent comp) {
         super.afterInitialized(comp);

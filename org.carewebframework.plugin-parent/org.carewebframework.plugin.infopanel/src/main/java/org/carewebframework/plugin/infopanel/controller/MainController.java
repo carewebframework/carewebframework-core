@@ -219,8 +219,6 @@ public class MainController extends PluginController implements IInfoPanel {
     
     /**
      * Returns the drop id for the panel.
-     * 
-     * @see org.carewebframework.ui.zk.IDropHandler#getDropId()
      */
     @Override
     public String getDropId() {
@@ -231,7 +229,6 @@ public class MainController extends PluginController implements IInfoPanel {
      * Drops the specified item onto the panel, invoking its renderer.
      * 
      * @param droppedItem Item to drop.
-     * @see org.carewebframework.ui.zk.IDropHandler#drop(BaseComponent)
      */
     @Override
     public void drop(BaseComponent droppedItem) {

@@ -153,7 +153,7 @@ public class HelpUtil {
      * @param windowName Name of browser window.
      */
     protected static void openWindow(String url, String windowName) {
-        ClientUtil.eval("window.open('" + url.replace("web/", "zkau/web/") + "', '" + windowName + "', 'dummy=1')");
+        ClientUtil.eval("window.open('" + url + "', '" + windowName + "', 'dummy=1')");
     }
     
     /**
