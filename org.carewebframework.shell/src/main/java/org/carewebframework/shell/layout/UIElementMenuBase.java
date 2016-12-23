@@ -25,6 +25,7 @@
  */
 package org.carewebframework.shell.layout;
 
+import org.carewebframework.shell.designer.DesignMask.MaskMode;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.Span;
 
@@ -46,7 +47,7 @@ public class UIElementMenuBase extends UIElementCWFBase {
         setOuterComponent(menubar);
         setInnerComponent(root);
         maxChildren = Integer.MAX_VALUE;
-        setMaskMode(null);
+        setMaskMode(MaskMode.AUTO);
     }
     
     /**
