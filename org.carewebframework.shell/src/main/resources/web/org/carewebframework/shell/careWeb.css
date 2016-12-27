@@ -11,6 +11,11 @@
     margin: 0;
 }
 
+.cwf-desktop-toolbar {
+    flex: 1;
+    border: none;
+}
+
 .cwf-desktop > .panel-heading {
     display: flex;
     align-items: center;
@@ -145,16 +150,6 @@
 	overflow: visible;
 }
 
-.cwf-menu-header {
-    background: lightyellow;
-    border-bottom: 1px gray solid;
-}
-
-.cwf-menu-header.z-menuitem * {
-	font-weight: bold;
-	color: black!important;
-}
-
 .cwf-step-taskbar > * {
 	display: inline-block;
 }
@@ -220,6 +215,7 @@
 
 *.cwf-designmode-active {
 	outline: 1px dotted gray;
+	position: relative;
 }
 
 .cwf-about-header {
