@@ -40,7 +40,6 @@ public class UIElementMenuItem extends UIElementMenuItemBase {
         super();
         autoHide = false;
         setOuterComponent(getMenu());
-        //TODO: setInnerComponent(getMenu().getMenupopup());
     }
     
 }
