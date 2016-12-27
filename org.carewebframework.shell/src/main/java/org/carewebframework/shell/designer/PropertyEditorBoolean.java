@@ -40,6 +40,9 @@ public class PropertyEditorBoolean extends PropertyEditorBase<Radiogroup> {
     @WiredComponent
     private Radiobutton rbTrue;
     
+    @WiredComponent
+    private Radiobutton rbFalse;
+    
     /**
      * Create property editor.
      */
@@ -82,7 +85,8 @@ public class PropertyEditorBoolean extends PropertyEditorBase<Radiogroup> {
     
     @Override
     protected void setValue(Object value) {
-        rbTrue.setChecked(value instanceof Boolean && (Boolean) value);
+        boolean val = value instanceof Boolean && (Boolean) value;
+        (val ? rbTrue : rbFalse).setChecked(true);
     }
     
 }
