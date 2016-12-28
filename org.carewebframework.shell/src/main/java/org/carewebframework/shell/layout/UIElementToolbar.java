@@ -31,6 +31,7 @@ import org.carewebframework.ui.action.ActionUtil;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.BaseUIComponent;
 import org.carewebframework.web.component.Toolbar;
+import org.carewebframework.web.component.Toolbar.Alignment;
 
 /**
  * Implements a shared toolbar.
@@ -45,8 +46,6 @@ public class UIElementToolbar extends UIElementCWFBase {
     
     private final Toolbar toolbar;
     
-    private boolean alignRight = true;
-    
     public UIElementToolbar() {
         this(new Toolbar());
     }
@@ -54,7 +53,7 @@ public class UIElementToolbar extends UIElementCWFBase {
     public UIElementToolbar(Toolbar toolbar) {
         super();
         this.toolbar = toolbar;
-        toolbar.setAlign(Toolbar.Align.END);
+        toolbar.setAlignment(Toolbar.Alignment.END);
         toolbar.addClass("cwf-desktop-toolbar btn-toolbar");
         setOuterComponent(toolbar);
         maxChildren = Integer.MAX_VALUE;
@@ -99,13 +98,12 @@ public class UIElementToolbar extends UIElementCWFBase {
         }
     }
     
-    public boolean getAlignRight() {
-        return alignRight;
+    public Alignment getAlignment() {
+        return toolbar.getAlignment();
     }
     
-    public void setAlignRight(boolean alignRight) {
-        this.alignRight = alignRight;
-        toolbar.setAlign(alignRight ? Toolbar.Align.END : Toolbar.Align.START);
+    public void setAlignment(Alignment alignment) {
+        toolbar.setAlignment(alignment);
     }
     
 }

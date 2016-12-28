@@ -6,7 +6,7 @@
 			<west splittable="true" size="50%">
 				<panel title="Publish Test Events" height="100%"
 					class="panel-primary panel-sm" mold="bootstrap">
-					<toolbar align="end">
+					<toolbar alignment="end">
 						<button name="btnPing" label="Send Ping Request" 
 							zclass="btn" class="btn-xs btn-primary" />
 						<separator orient="vertical" width="20px" />
@@ -71,7 +71,7 @@
 			<east splittable="true" size="25%">
 				<panel title="Received Events" height="100%"
 					class="panel-primary panel-sm" mold="bootstrap">
-					<toolbar align="end">
+					<toolbar alignment="end">
 						<checkbox name="chkScrollLock" label="Scroll Lock" />
 						<separator orient="vertical" width="20px" />
 						<button name="btnClear" label="Clear" 

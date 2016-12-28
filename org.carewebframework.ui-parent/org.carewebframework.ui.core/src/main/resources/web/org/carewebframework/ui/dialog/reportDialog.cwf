@@ -7,7 +7,7 @@
 			<html name="cmpHtml" visible="false" />
 		</pane>
 		<pane>
-			<toolbar align="end" width="100%">
+			<toolbar alignment="end" width="100%">
 				<button name="btnClose" class="flavor:btn-danger" 
 					label="${@msg.cwf.btn.close.label}" width="60px" />
 				<button name="btnPrint" 

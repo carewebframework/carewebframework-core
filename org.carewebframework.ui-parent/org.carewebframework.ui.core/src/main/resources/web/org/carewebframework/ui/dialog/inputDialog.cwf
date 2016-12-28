@@ -4,7 +4,7 @@
 		<cell name="prompt" />
 		<textbox name="textbox" synchronized="true" />
 	</div>
-	<toolbar align="center" width="100%">
+	<toolbar alignment="center" width="100%">
 		<button name="btnCancel" label="${@msg.cwf.btn.cancel.label}" class="flavor:btn-danger" />
 		<button name="btnOK" label="${@msg.cwf.btn.ok.label}" class="flavor:btn-success" disabled="true"/>
 	</toolbar>

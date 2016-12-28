@@ -259,12 +259,11 @@
 			class="org.carewebframework.shell.layout.UIElementToolbar" name="${@msg.cwf.shell.plugin.toolbar.name}"
 			description="${@msg.cwf.shell.plugin.toolbar.description}">
 			<cwp:serialization>
-				<cwp:property id="alignRight" type="boolean"
-					name="${@msg.cwf.shell.plugin.toolbar.align.name}"
-					description="${@msg.cwf.shell.plugin.toolbar.align.description}">
+				<cwp:property id="alignment" type="enum"
+					name="${@msg.cwf.shell.plugin.toolbar.alignment.name}"
+					description="${@msg.cwf.shell.plugin.toolbar.alignment.description}">
 					<cwp:config>
-						<cwp:entry key="true">${@msg.cwf.shell.plugin.toolbar.align.right}</cwp:entry>
-						<cwp:entry key="false">${@msg.cwf.shell.plugin.toolbar.align.left}</cwp:entry>
+						<cwp:entry key="class">org.carewebframework.web.component.Toolbar$Alignment</cwp:entry>
 					</cwp:config>
 				</cwp:property>
 				<cwp:property id="" type="children"
@@ -277,12 +276,11 @@
 			class="org.carewebframework.shell.layout.UIElementToolbar" name="${@msg.cwf.shell.plugin._toolbar.name}"
 			description="${@msg.cwf.shell.plugin.toolbar.description}">
 			<cwp:serialization>
-				<cwp:property id="alignRight" type="boolean"
-					name="${@msg.cwf.shell.plugin.toolbar.align.name}"
-					description="${@msg.cwf.shell.plugin.toolbar.align.description}">
+				<cwp:property id="alignment" type="enum"
+					name="${@msg.cwf.shell.plugin.toolbar.alignment.name}"
+					description="${@msg.cwf.shell.plugin.toolbar.alignment.description}">
 					<cwp:config>
-						<cwp:entry key="true">${@msg.cwf.shell.plugin.toolbar.align.right}</cwp:entry>
-						<cwp:entry key="false">${@msg.cwf.shell.plugin.toolbar.align.left}</cwp:entry>
+						<cwp:entry key="class">org.carewebframework.web.component.Toolbar$Alignment</cwp:entry>
 					</cwp:config>
 				</cwp:property>
 				<cwp:property id="" type="children"

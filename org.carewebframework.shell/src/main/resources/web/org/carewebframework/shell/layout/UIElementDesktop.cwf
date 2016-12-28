@@ -15,7 +15,7 @@
 				<menuseparator name="helpSeparator" visible="false" />
 			</menu>
 		</span>
-		<toolbar name="toolbar1" align="end" />
+		<toolbar name="toolbar1" alignment="end" />
 	</div>
 	<div name="desktopInner" class="panel-body" />
 	<stylesheet href="web/org/carewebframework/shell/careWeb.css" />

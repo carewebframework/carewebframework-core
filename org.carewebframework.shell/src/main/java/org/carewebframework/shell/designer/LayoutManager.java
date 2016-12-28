@@ -111,8 +111,6 @@ public class LayoutManager implements IAutoWired {
     
     private boolean shared;
     
-    private LayoutIdentifier selectedLayout;
-    
     private IModelAndView<Listitem, String> modelAndView;
     
     private final IComponentRenderer<Listitem, String> renderer = new IComponentRenderer<Listitem, String>() {
@@ -300,9 +298,10 @@ public class LayoutManager implements IAutoWired {
      */
     @EventHandler(value = "click", target = "@btnOK")
     private void onClick$btnOK() {
-        selectedLayout = getSelectedLayout();
+        LayoutIdentifier id = getSelectedLayout();
         
-        if (selectedLayout != null) {
+        if (id != null) {
+            window.setAttribute("layoutId", id);
             window.close();
         }
     }

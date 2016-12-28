@@ -4,7 +4,7 @@
 		<treenode name="tnFavorites" visible="false"
 			label="${@msg.cwf.shell.plugin.category.favorite}" />
 	</treeview>
-	<toolbar align="end">
+	<toolbar alignment="end">
 		<button name="btnOK" class="flavor:btn-success"
 			label="${@msg.cwf.shell.designer.add.component.btn.ok.label}"
 			disabled="true" />

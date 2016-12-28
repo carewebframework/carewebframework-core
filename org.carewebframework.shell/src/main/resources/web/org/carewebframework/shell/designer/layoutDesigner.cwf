@@ -3,7 +3,7 @@
 <window width="500px" height="450px"
 	title="${@msg.cwf.shell.designer.layout.designer.caption}"
 	controller="org.carewebframework.shell.designer.LayoutDesigner">
-	<toolbar align="start" css="##{id}>button {background:transparent;padding:5px}" width="100%">
+	<toolbar alignment="start" css="##{id}>button {background:transparent;padding:5px}" width="100%">
 			<button name="btnCut" class="flavor:btn-link"
 				hint="${@msg.cwf.shell.designer.layout.designer.cut.hint}"
 				image="${rc.getIconPath('carewebframework:16x16:cut.png')}" />

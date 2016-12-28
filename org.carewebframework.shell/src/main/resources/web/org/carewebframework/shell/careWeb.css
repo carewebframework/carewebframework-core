@@ -16,6 +16,10 @@
     border: none;
 }
 
+.cwf-desktop-toolbar.cwf-designmode-active {
+    min-height: 20px;
+}
+
 .cwf-desktop > .panel-heading {
     display: flex;
     align-items: center;
@@ -73,6 +77,11 @@
 
 .cwf-tab-panel {
 	padding: 0;
+}
+
+.cwf-menubar.cwf-designmode-active {
+    min-height: 20px;
+    min-width: 80px;
 }
 
 .cwf-treeview {

@@ -3,7 +3,7 @@
 	controller="org.carewebframework.shell.designer.LayoutManager">
 	<label name="lblPrompt" class="flavor:text-primary" style="display:block" />
 	<listbox name="lstLayouts" flex="1" style="display:block;width:100%" size="10" />
-	<toolbar width="100%" align="end">
+	<toolbar width="100%" alignment="end">
 		<div name="pnlSelect" flex="1" >
 			<button name="btnOK" class="flavor:btn-success" style="margin-right:5px"
 				label="${@msg.cwf.shell.designer.layout.manager.btn.ok.label}" />
@@ -19,7 +19,7 @@
 			</radiogroup>
 		</div>
 	</toolbar>
-	<toolbar name="tbManage" width="100%" align="end">
+	<toolbar name="tbManage" width="100%" alignment="end">
 		<button name="btnImport"
 			label="${@msg.cwf.shell.designer.layout.manager.btn.import.label}" />
 		<button name="btnExport"

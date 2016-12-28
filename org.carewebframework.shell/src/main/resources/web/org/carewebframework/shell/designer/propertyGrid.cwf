@@ -26,7 +26,7 @@
 			</groupbox>
 		</pane>
 		<pane>
-			<toolbar name="toolbar" align="end" width="100%" style="border:none">
+			<toolbar name="toolbar" alignment="end" width="100%" style="border:none">
 				<button name="btnApply" 
 					class="flavor:btn-primary"
 					label="${@msg.cwf.shell.designer.property.grid.btn.apply.label}" />

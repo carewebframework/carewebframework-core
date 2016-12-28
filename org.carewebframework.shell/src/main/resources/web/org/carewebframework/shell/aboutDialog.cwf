@@ -1,17 +1,20 @@
-<window title="${@msg.cwf.shell.about.title}" width="500px" closable="true"
+<window width="500px" closable="true"
+	title="${@msg.cwf.shell.about.title}" 
 	controller="${@aboutDialogController}">
-	<table style="border:none">
-		<columns>
-			<column width="50%" style="text-align:center">
-				<image name="imgIcon" />
-			</column>
-			<column width="50%" style="text-align:center">
-				<label name="lblSource" class="cwf-about-header" />
-			</column>
-		</columns>
-		<rows name="rows" />
-	</table>
-	<toolbar width="100%" align="center">
+	<div style="display:flex;flex:1">
+		<table style="border:none">
+			<columns css="##{id} th {text-align:center;vertical-align:middle;width:50%}">
+				<column>
+					<image name="imgIcon" />
+				</column>
+				<column>
+					<label name="lblSource" class="cwf-about-header" />
+				</column>
+			</columns>
+			<rows name="rows" />
+		</table>
+	</div>
+	<toolbar width="100%" alignment="center">
 		<button
 			name="btnCustom" visible="false" />
 		<button class="flavor:btn-danger"

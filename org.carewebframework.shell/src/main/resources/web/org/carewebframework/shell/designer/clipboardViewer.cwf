@@ -2,7 +2,7 @@
 	title="${@msg.cwf.shell.clipboard.viewer.title}"
 	controller="org.carewebframework.shell.designer.ClipboardViewer">
 	<memobox name="txtData" synchronized="true" width="100%" flex="1"  />
-	<toolbar align="end" width="100%">
+	<toolbar alignment="end" width="100%">
 		<button name="btnSave"
 			label="${@msg.cwf.shell.clipboard.viewer.btn.save.label}"
 			hint="${@msg.cwf.shell.clipboard.viewer.btn.save.hint}" />

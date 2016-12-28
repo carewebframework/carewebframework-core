@@ -2,13 +2,15 @@
 <window width="500px" controller="org.carewebframework.shell.designer.LayoutPrompt">
 	<label name="lblPrompt" class="flavor:text-primary" />
 	<textbox name="txtLayout" width="100%" synchronized="true"/>
-	<toolbar align="end" width="100%">
+	<span height="5px" />
+	<toolbar alignment="end" width="100%">
 		<radiogroup name="radioGroup">
 			<radiobutton name="rbShared" checked="true"
 				label="${@msg.cwf.shell.designer.layout.manager.radio.shared.label}" />
 			<radiobutton name="rbPrivate"
 				label="${@msg.cwf.shell.designer.layout.manager.radio.private.label}" />
 		</radiogroup>
+		<span flex="1" />
 		<button name="btnOK" class="flavor:btn-success"
 			label="${@msg.cwf.shell.designer.layout.manager.btn.ok.label}" />
 		<button name="btnCancel" class="flavor:btn-danger"

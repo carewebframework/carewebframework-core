@@ -19,7 +19,7 @@
 		upload="zul.fud.ModalFileViewer,maxsize=${arg.maxsize}${arg['accept'] != null ? c:cat(',accept=', arg['accept']) :''}${arg['native'] ? ',native':''}" />
 	<div name="uploaded" visible="false" />
 	<separator bar="true" />
-	<toolbar name="btns" align="end">
+	<toolbar name="btns" alignment="end">
 		<submit name="submit" label="${c:l('mesg:org.zkoss.zul.mesg.MZul:UPLOAD_SUBMIT')}"
 			class="flavor:btn-success"
 			w:onClick="this.submit()" />

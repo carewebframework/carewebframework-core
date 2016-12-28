@@ -54,11 +54,4 @@ public class UIElementMenubar extends UIElementMenuBase {
         super(menubar);
     }
     
-    @Override
-    public void setDesignMode(boolean designMode) {
-        super.setDesignMode(designMode);
-        getMenubar().addStyle("min-height", designMode ? "40px" : null);
-        getMenubar().addStyle("min-width", designMode ? "40px" : null);
-    }
-    
 }

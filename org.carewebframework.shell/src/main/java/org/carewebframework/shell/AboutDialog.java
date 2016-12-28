@@ -236,8 +236,8 @@ public class AboutDialog extends FrameworkController {
         super.afterInitialized(comp);
         window = (Window) comp;
         aboutParams = comp.getAttribute("params", AboutParams.class);
-        setIcon(aboutParams.icon == null ? defaultIcon : aboutParams.icon);
-        setSource(aboutParams.source == null ? defaultSource : aboutParams.source);
+        imgIcon.setSrc(aboutParams.icon == null ? defaultIcon : aboutParams.icon);
+        lblSource.setLabel(aboutParams.source == null ? defaultSource : aboutParams.source);
         btnCustom.setLabel(aboutParams.custom);
         btnCustom.setVisible(btnCustom.getLabel() != null);
         

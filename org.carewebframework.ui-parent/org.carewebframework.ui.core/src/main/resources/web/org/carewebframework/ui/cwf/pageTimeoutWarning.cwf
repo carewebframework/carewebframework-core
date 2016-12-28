@@ -22,7 +22,7 @@
 								style="font-size:300%;margin:20px 0 0 30px" />
 						</hlayout>
 					</panelchildren>
-					<toolbar align="center">
+					<toolbar alignment="center">
 						<textbox name="txtPassword" type="password"
 							forward="enter=btnUnlock.click" />
 						<button name="btnUnlock"

@@ -9,7 +9,7 @@
 				label="${@msg.cwf.prompt.chx.reminder.label}" />
 		</div>
 	</span>
-	<toolbar name="toolbar" align="center" width="100%" />
+	<toolbar name="toolbar" alignment="center" width="100%" />
 	<style>
 		.cwf_promptdialog > .glyphicon {
 			float: left;

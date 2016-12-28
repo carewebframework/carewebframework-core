@@ -1,6 +1,8 @@
-<window width="700px" title="${@msg.cwf.manifest.viewer.title}"
-	class="flavor:panel-primary" controller="org.carewebframework.ui.manifest.ManifestViewer">
-	<div name="printRoot">
+<window width="700px" height="80%"
+	title="${@msg.cwf.manifest.viewer.title}"
+	class="flavor:panel-primary" 
+	controller="org.carewebframework.ui.manifest.ManifestViewer">
+	<div name="printRoot" flex="1">
 		<label name="caption" />
 		<table name="table">
 			<columns />

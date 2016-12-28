@@ -12,7 +12,7 @@
 			</columns>
 			<rows />
 		</table>
-		<toolbar width="100%" align="start">
+		<toolbar width="100%" alignment="start">
 			<checkbox name="chkHideActive"
 				label="${@msg.cwf.chat.invite.check.hide.label}" />
 			<span flex="1" />
