@@ -39,7 +39,7 @@
 		</bean>
 		
 		<bean id="cwfHibernateAbstractDAO" 
-			class="org.carewebframework.hibernate.AbstractDAO" 
+			class="org.carewebframework.hibernate.core.AbstractDAO" 
 			abstract="true">
 			<constructor-arg ref="cwfHibernateSessionFactory" />
 		</bean>

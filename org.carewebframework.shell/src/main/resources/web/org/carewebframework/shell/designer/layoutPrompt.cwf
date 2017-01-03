@@ -1,5 +1,6 @@
 
-<window width="500px" controller="org.carewebframework.shell.designer.LayoutPrompt">
+<window width="500px" css="##{id} > .panel-body {overflow:visible}"
+	controller="org.carewebframework.shell.designer.LayoutPrompt">
 	<label name="lblPrompt" class="flavor:text-primary" />
 	<textbox name="txtLayout" width="100%" synchronized="true"/>
 	<span height="5px" />

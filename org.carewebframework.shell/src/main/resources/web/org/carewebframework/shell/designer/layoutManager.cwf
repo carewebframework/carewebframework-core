@@ -12,9 +12,9 @@
 		</div>
 		<div name="pnlScope">
 			<radiogroup name="radioGroup">
-				<radiobutton checked="true"
+				<radiobutton name="rbShared" checked="true"
 					label="${@msg.cwf.shell.designer.layout.manager.radio.shared.label}" />
-				<radiobutton
+				<radiobutton name="rbPrivate"
 					label="${@msg.cwf.shell.designer.layout.manager.radio.private.label}" />
 			</radiogroup>
 		</div>

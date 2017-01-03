@@ -101,6 +101,9 @@ public class LayoutManager implements IAutoWired {
     private Radiogroup radioGroup;
     
     @WiredComponent
+    private Radiobutton rbShared;
+    
+    @WiredComponent
     private BaseUIComponent tbManage;
     
     @WiredComponent
@@ -373,7 +376,7 @@ public class LayoutManager implements IAutoWired {
      */
     @EventHandler(value = "change", target = "@radioGroup")
     private void onChange$radioGroup() {
-        shared = radioGroup.getSelected().getIndex() == 0;
+        shared = radioGroup.getSelected() == rbShared;
         defaultIsShared(shared);
         refresh(null);
     }
