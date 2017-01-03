@@ -435,6 +435,19 @@
 						</execution>
 					</executions>
 				</plugin>
+				<!-- SASS stylesheet compiler -->
+				<plugin>
+					<groupId>nl.geodienstencentrum.maven</groupId>
+					<artifactId>sass-maven-plugin</artifactId>
+					<version>2.22</version>
+					<executions>
+						<execution>
+							<goals>
+								<goal>update-stylesheets</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
 			</plugins>
 		</pluginManagement>
 
