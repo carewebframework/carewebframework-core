@@ -32,6 +32,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.carewebframework.api.property.IPropertyProvider;
 import org.carewebframework.common.MiscUtil;
 import org.carewebframework.common.XMLUtil;
@@ -244,9 +245,8 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
      *            If url of format "private:xxx", then user layout named "xxx" is loaded.
      *            <p>
      *            Otherwise, resource is assumed to be a resource url.
-     * @throws Exception Unspecified exception.
      */
-    public void loadFromResource(String resource) throws Exception {
+    public void loadFromResource(String resource) {
         if (resource.startsWith("app:")) {
             loadByAppId(resource.substring(4));
         } else if (resource.startsWith("shared:")) {
@@ -262,21 +262,33 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
      * Load the layout from a file.
      * 
      * @param url Resource path.
+     */
+    public void loadFromUrl(String url) {
+        InputStream strm = ExecutionContext.getSession().getServletContext().getResourceAsStream(url);
+        
+        if (strm == null) {
+            throw new UIException("Unable to locate layout resource: " + url);
+        }
+        
+        loadFromStream(strm);
+    }
+    
+    /**
+     * Load the layout from an input stream.
+     * 
+     * @param strm The input stream.
      * @throws Exception when problem retrieving resource via url.
      */
-    public void loadFromUrl(String url) throws Exception {
-        try (InputStream strm = ExecutionContext.getSession().getServletContext().getResourceAsStream(url)) {
+    public void loadFromStream(InputStream strm) {
+        try {
             reset();
-            
-            if (strm == null) {
-                throw new UIException("Unable to locate layout resource: " + url);
-            }
-            
             document = XMLUtil.parseXMLFromStream(strm);
             validateDocument();
         } catch (Exception e) {
             reset();
-            throw e;
+            throw MiscUtil.toUnchecked(e);
+        } finally {
+            IOUtils.closeQuietly(strm);
         }
     }
     
@@ -316,9 +328,8 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
      * 
      * @param appId An application id.
      * @return True if the operation succeeded.
-     * @throws Exception Unspecified exception.
      */
-    public UILayout loadByAppId(String appId) throws Exception {
+    public UILayout loadByAppId(String appId) {
         String xml = LayoutUtil.getLayoutContentByAppId(appId);
         return loadFromText(xml);
     }

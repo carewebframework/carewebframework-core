@@ -32,4 +32,5 @@
 		<button name="btnDelete"
 			label="${@msg.cwf.shell.designer.layout.manager.btn.delete.label}" />
 	</toolbar>
+	<upload name="upload" style="position:absolute;left:-9999px" accept=".xml" />
 </window>

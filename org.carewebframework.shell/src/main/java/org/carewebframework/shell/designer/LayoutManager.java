@@ -38,6 +38,7 @@ import static org.carewebframework.shell.designer.DesignConstants.MSG_LAYOUT_REN
 import static org.carewebframework.shell.designer.DesignConstants.MSG_LAYOUT_SAVE;
 import static org.carewebframework.shell.designer.DesignConstants.RESOURCE_PREFIX;
 
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -61,10 +62,13 @@ import org.carewebframework.web.component.Listbox;
 import org.carewebframework.web.component.Listitem;
 import org.carewebframework.web.component.Radiobutton;
 import org.carewebframework.web.component.Radiogroup;
+import org.carewebframework.web.component.Upload;
 import org.carewebframework.web.component.Window;
 import org.carewebframework.web.event.ClickEvent;
 import org.carewebframework.web.event.DblclickEvent;
 import org.carewebframework.web.event.IEventListener;
+import org.carewebframework.web.event.UploadEvent;
+import org.carewebframework.web.event.UploadEvent.UploadState;
 import org.carewebframework.web.model.IComponentRenderer;
 import org.carewebframework.web.model.IModelAndView;
 import org.carewebframework.web.model.ListModel;
@@ -92,6 +96,9 @@ public class LayoutManager implements IAutoWired {
     private Button btnExport;
     
     @WiredComponent
+    private Button btnImport;
+    
+    @WiredComponent
     private Listbox lstLayouts;
     
     @WiredComponent
@@ -111,6 +118,9 @@ public class LayoutManager implements IAutoWired {
     
     @WiredComponent
     private BaseUIComponent pnlScope;
+    
+    @WiredComponent
+    private Upload upload;
     
     private boolean shared;
     
@@ -182,40 +192,6 @@ public class LayoutManager implements IAutoWired {
         });
     }
     
-    /**
-     * Import a layout.
-     * 
-     * @param shared If true, import as a shared layout.
-     * @return The layout identifier if the import was successful, null otherwise.
-     */
-    public static LayoutIdentifier importLayout(boolean shared) {
-        /*TODO:
-        while (true) {
-            try {
-                Media media = Fileupload.get(StrUtil.formatMessage(MSG_LAYOUT_IMPORT),
-                    StrUtil.formatMessage(CAP_LAYOUT_IMPORT), false);
-                
-                if (media == null) {
-                    break;
-                }
-                
-                if (!"text/xml".equalsIgnoreCase(media.getContentType())) {
-                    PromptDialog.showError(ERR_LAYOUT_IMPORT);
-                    continue;
-                }
-                
-                UILayout layout = new UILayout();
-                layout.loadFromText(media.getStringData());
-                LayoutIdentifier layoutId = saveLayout(layout, new LayoutIdentifier(layout.getName(), shared), false);
-                return layoutId;
-            } catch (Exception e) {
-                PromptDialog.showError(e);
-            }
-        }
-        */
-        return null;
-    }
-    
     public static void exportLayout(LayoutIdentifier layout) {
         String content = LayoutUtil.getLayoutContent(layout);
         ClientUtil.saveToFile(content, "text/xml", layout.name + ".xml");
@@ -236,6 +212,7 @@ public class LayoutManager implements IAutoWired {
         tbManage.setVisible(manage);
         ((Radiobutton) radioGroup.getChildAt(shared ? 0 : 1)).setChecked(true);
         pnlScope.addClass(manage ? "pull-right" : "pull-left");
+        upload.bind(btnImport);
         refresh(root.getAttribute("dflt", ""));
     }
     
@@ -297,6 +274,34 @@ public class LayoutManager implements IAutoWired {
     }
     
     /**
+     * Import a layout.
+     * 
+     * @param shared If true, import as a shared layout.
+     * @param strm An input stream.
+     * @return The layout identifier if the import was successful, null otherwise.
+     */
+    public LayoutIdentifier importLayout(boolean shared, InputStream strm) {
+        UILayout layout = new UILayout();
+        layout.loadFromStream(strm);
+        LayoutIdentifier layoutId = new LayoutIdentifier(layout.getName(), shared);
+        saveLayout(layout, layoutId, false);
+        refresh(null);
+        return layoutId;
+    }
+    
+    @EventHandler(value = "upload", target = "@upload")
+    private void onUpload$upload(UploadEvent event) {
+        if (event.getState() == UploadState.DONE) {
+            LayoutIdentifier layoutId = importLayout(shared, event.getBlob());
+            
+            if (layoutId != null) {
+                refresh(layoutId.name);
+            }
+            
+        }
+    }
+    
+    /**
      * Sets the selected layout and closes the dialog.
      */
     @EventHandler(value = "click", target = "@btnOK")
@@ -341,18 +346,6 @@ public class LayoutManager implements IAutoWired {
     @EventHandler(value = "click", target = "@btnClone")
     private void onClick$btnClone() {
         cloneOrRename(true);
-    }
-    
-    /**
-     * Import a layout.
-     */
-    @EventHandler(value = "click", target = "btnImport")
-    private void onClick$btnImport() {
-        LayoutIdentifier layoutId = importLayout(shared);
-        
-        if (layoutId != null) {
-            refresh(layoutId.name);
-        }
     }
     
     /**
