@@ -51,6 +51,7 @@ import org.carewebframework.ui.core.CWFUtil;
 import org.carewebframework.ui.dialog.DialogUtil;
 import org.carewebframework.ui.dialog.PopupDialog;
 import org.carewebframework.web.ancillary.IAutoWired;
+import org.carewebframework.web.ancillary.IResponseCallback;
 import org.carewebframework.web.annotation.EventHandler;
 import org.carewebframework.web.annotation.WiredComponent;
 import org.carewebframework.web.client.ClientUtil;
@@ -180,13 +181,19 @@ public class LayoutManager implements IAutoWired {
      * @param layout Layout to save.
      * @param layoutId Layout identifier
      * @param hideScope If true, hide shared/private scope selection.
+     * @param callback Callback if layout successfully saved.
      */
-    public static void saveLayout(UILayout layout, LayoutIdentifier layoutId, boolean hideScope) {
+    public static void saveLayout(UILayout layout, LayoutIdentifier layoutId, boolean hideScope,
+                                  IResponseCallback<LayoutIdentifier> callback) {
         LayoutPrompt.show(layoutId, hideScope, true, CAP_LAYOUT_SAVE, MSG_LAYOUT_SAVE, (event) -> {
             LayoutIdentifier id = event.getTarget().getAttribute("layoutId", LayoutIdentifier.class);
             
             if (id != null) {
                 layout.saveToProperty(id);
+                
+                if (callback != null) {
+                    callback.onComplete(id);
+                }
             }
             
         });
@@ -278,26 +285,20 @@ public class LayoutManager implements IAutoWired {
      * 
      * @param shared If true, import as a shared layout.
      * @param strm An input stream.
-     * @return The layout identifier if the import was successful, null otherwise.
      */
-    public LayoutIdentifier importLayout(boolean shared, InputStream strm) {
+    public void importLayout(boolean shared, InputStream strm) {
         UILayout layout = new UILayout();
         layout.loadFromStream(strm);
         LayoutIdentifier layoutId = new LayoutIdentifier(layout.getName(), shared);
-        saveLayout(layout, layoutId, false);
-        refresh(null);
-        return layoutId;
+        saveLayout(layout, layoutId, false, (response) -> {
+            refresh(response.name);
+        });
     }
     
     @EventHandler(value = "upload", target = "@btnImport")
     private void onUpload$btnImport(UploadEvent event) {
         if (event.getState() == UploadState.DONE) {
-            LayoutIdentifier layoutId = importLayout(shared, event.getBlob());
-            
-            if (layoutId != null) {
-                refresh(layoutId.name);
-            }
-            
+            importLayout(shared, event.getBlob());
         }
     }
     

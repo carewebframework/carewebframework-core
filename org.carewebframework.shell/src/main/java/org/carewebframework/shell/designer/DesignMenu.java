@@ -171,7 +171,7 @@ public class DesignMenu implements IAutoWired {
     @EventHandler(value = "click", target = "mnuSaveLayout")
     private void onClick$mnuSaveLayout() {
         LayoutManager.saveLayout(UILayout.serialize(owner),
-            new LayoutIdentifier(shell.getUILayout().getName(), LayoutManager.defaultIsShared()), false);
+            new LayoutIdentifier(shell.getUILayout().getName(), LayoutManager.defaultIsShared()), false, null);
     }
     
     /**
