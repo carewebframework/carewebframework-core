@@ -37,6 +37,7 @@ import org.carewebframework.shell.plugins.PluginDefinition;
 import org.carewebframework.shell.plugins.PluginRegistry;
 import org.carewebframework.shell.property.PropertyInfo;
 import org.carewebframework.ui.zk.TreeUtil;
+import org.carewebframework.web.annotation.EventHandler;
 import org.carewebframework.web.annotation.WiredComponent;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.Button;
@@ -44,6 +45,7 @@ import org.carewebframework.web.component.Textbox;
 import org.carewebframework.web.component.Treenode;
 import org.carewebframework.web.component.Treeview;
 import org.carewebframework.web.event.ChangeEvent;
+import org.carewebframework.web.event.ClickEvent;
 import org.carewebframework.web.event.DblclickEvent;
 import org.carewebframework.web.event.Event;
 import org.carewebframework.web.event.EventUtil;
@@ -75,7 +77,7 @@ public class PropertyEditorCustomTree<T extends UIElementBase> extends PropertyE
         }
         
         public UIElementBase realize() throws Exception {
-            Treenode parentItem = (Treenode) item.getParent();
+            Treenode parentItem = item.getParent() instanceof Treenode ? (Treenode) item.getParent() : null;
             UIElementBase parentElement = parentItem == null ? getTarget() : getProxy(parentItem).realize();
             realize(parentElement);
             return getTarget();
@@ -169,7 +171,7 @@ public class PropertyEditorCustomTree<T extends UIElementBase> extends PropertyE
     @WiredComponent
     private BaseComponent gridParent;
     
-    private final PropertyGrid propertyGrid;
+    private PropertyGrid propertyGrid;
     
     private Treenode currentItem;
     
@@ -189,7 +191,7 @@ public class PropertyEditorCustomTree<T extends UIElementBase> extends PropertyE
     
     private final Class<T> childClass;
     
-    private final PluginDefinition definition;
+    private PluginDefinition definition;
     
     /**
      * Create the editor instance.
@@ -210,29 +212,6 @@ public class PropertyEditorCustomTree<T extends UIElementBase> extends PropertyE
         this.childClass = childClass;
         this.labelProperty = labelProperty;
         this.hierarchical = hierarchical;
-        btnRight.setVisible(hierarchical);
-        btnLeft.setVisible(hierarchical);
-        propertyGrid = PropertyGrid.create(null, gridParent);
-        propertyGrid.getWindow().setClosable(true);
-        //TODO: not sure if needed: propertyGrid.registerEventListener(eventType, this);
-        txtLabel.setWidth("95%");
-        //TODO: Needs non blank label constraint: txtLabel.setConstraint(new LabelConstraint());
-        editor.setHeight("400px");
-        editor.setWidth("600px");
-        definition = childClass == null ? null : PluginRegistry.getInstance().get(childClass);
-        
-        IEventListener labelEditorListener = new IEventListener() {
-            
-            @Override
-            public void onEvent(Event event) {
-                event.stopPropagation();
-                editNodeStop();
-            }
-        };
-        
-        txtLabel.addEventListener(ChangeEvent.TYPE, labelEditorListener);
-        txtLabel.addEventListener("blur", labelEditorListener);
-        txtLabel.addEventListener("enter", labelEditorListener);
     }
     
     /**
@@ -274,7 +253,36 @@ public class PropertyEditorCustomTree<T extends UIElementBase> extends PropertyE
     @Override
     protected void init(UIElementBase target, PropertyInfo propInfo, PropertyGrid propGrid) {
         super.init(target, propInfo, propGrid);
+        btnRight.setVisible(hierarchical);
+        btnLeft.setVisible(hierarchical);
+        propertyGrid = PropertyGrid.create(null, gridParent);
+        propertyGrid.getWindow().setClosable(false);
+        propertyGrid.getWindow().addEventListener(ClickEvent.TYPE, (event) -> {
+            propGrid.propertyChanged();
+        });
+        //TODO: not sure if needed: propertyGrid.registerEventListener(eventType, this);
+        txtLabel.setWidth("95%");
+        //TODO: Needs non blank label constraint: txtLabel.setConstraint(new LabelConstraint());
+        definition = childClass == null ? null : PluginRegistry.getInstance().get(childClass);
+        
+        IEventListener labelEditorListener = new IEventListener() {
+            
+            @Override
+            public void onEvent(Event event) {
+                event.stopPropagation();
+                editNodeStop();
+            }
+        };
+        
+        txtLabel.addEventListener(ChangeEvent.TYPE, labelEditorListener);
+        txtLabel.addEventListener("blur", labelEditorListener);
+        txtLabel.addEventListener("enter", labelEditorListener);
         resetTree();
+    }
+    
+    @Override
+    protected void wireController() {
+        popup.wireController(this);
     }
     
     /**
@@ -453,7 +461,8 @@ public class PropertyEditorCustomTree<T extends UIElementBase> extends PropertyE
     /**
      * Occurs when the tree view selection changes.
      */
-    public void onSelect$tree() {
+    @EventHandler(value = "change", target = "@tree")
+    private void onSelect$tree() {
         selectionChanged();
     }
     
@@ -462,7 +471,8 @@ public class PropertyEditorCustomTree<T extends UIElementBase> extends PropertyE
      * 
      * @param event The double click event.
      */
-    public void onDoubleClick$tree(Event event) {
+    @EventHandler(value = "dblclick", target = "@tree")
+    private void onDoubleClick$tree(Event event) {
         BaseComponent target = event.getTarget();
         
         if (target instanceof Treenode) {
@@ -610,7 +620,8 @@ public class PropertyEditorCustomTree<T extends UIElementBase> extends PropertyE
     /**
      * Add a new item.
      */
-    public void onClick$btnAdd() {
+    @EventHandler(value = "click", target = "btnAdd")
+    private void onClick$btnAdd() {
         selectItem(addTreeitem(null, null, tree.getSelectedNode()));
         doChanged(true);
     }
@@ -620,7 +631,8 @@ public class PropertyEditorCustomTree<T extends UIElementBase> extends PropertyE
      * is simply removed from the proxy list. Otherwise, it is marked as deleted, but remains in the
      * list.
      */
-    public void onClick$btnDelete() {
+    @EventHandler(value = "click", target = "@btnDelete")
+    private void onClick$btnDelete() {
         Treenode item = tree.getSelectedNode();
         
         if (item != null) {
@@ -634,7 +646,7 @@ public class PropertyEditorCustomTree<T extends UIElementBase> extends PropertyE
             
             Treenode nextItem = (Treenode) item.getNextSibling();
             nextItem = nextItem == null ? (Treenode) item.getPreviousSibling() : nextItem;
-            item.detach();
+            item.destroy();
             currentItem = null;
             selectItem(nextItem);
             doChanged(true);
@@ -644,7 +656,8 @@ public class PropertyEditorCustomTree<T extends UIElementBase> extends PropertyE
     /**
      * Move the selected tree item up one level.
      */
-    public void onClick$btnUp() {
+    @EventHandler(value = "click", target = "@btnUp")
+    private void onClick$btnUp() {
         Treenode item = tree.getSelectedNode();
         Treenode sib = (Treenode) item.getPreviousSibling();
         swap(sib, item);
@@ -653,7 +666,8 @@ public class PropertyEditorCustomTree<T extends UIElementBase> extends PropertyE
     /**
      * Move the selected tree item down one level.
      */
-    public void onClick$btnDown() {
+    @EventHandler(value = "click", target = "@btnDown")
+    private void onClick$btnDown() {
         Treenode item = tree.getSelectedNode();
         Treenode sib = (Treenode) item.getNextSibling();
         swap(item, sib);
@@ -662,23 +676,23 @@ public class PropertyEditorCustomTree<T extends UIElementBase> extends PropertyE
     /**
      * Promote the selected tree item.
      */
-    public void onClick$btnLeft() {
+    @EventHandler(value = "click", target = "@btnLeft")
+    private void onClick$btnLeft() {
         Treenode item = tree.getSelectedNode();
         Treenode parent = (Treenode) item.getParent();
         parent.getParent().addChild(item, parent.getNextSibling());
         doChanged(true);
-        updateControls();
     }
     
     /**
      * Demote the selected tree item.
      */
-    public void onClick$btnRight() {
+    @EventHandler(value = "click", target = "@btnRight")
+    private void onClick$btnRight() {
         Treenode item = tree.getSelectedNode();
         Treenode sib = (Treenode) item.getPreviousSibling();
         item.getParent().addChild(item, sib);
         doChanged(true);
-        updateControls();
     }
     
     /**
@@ -689,20 +703,9 @@ public class PropertyEditorCustomTree<T extends UIElementBase> extends PropertyE
      */
     private void swap(Treenode item1, Treenode item2) {
         if (item1 != null && item2 != null) {
-            BaseComponent parent = item2.getParent();
-            item2.detach();
-            parent.addChild(item2, item1);
+            item1.getParent().addChild(item2, item1);
             doChanged(true);
         }
-    }
-    
-    /**
-     * Catches onChange events from the grid.
-     * 
-     * @param event The onChange event.
-     */
-    public void onChange(Event event) {
-        doChanged(false);
     }
     
     /**

@@ -110,6 +110,8 @@ public class PropertyGrid implements IAutoWired {
     
     private Window window;
     
+    private ChangeEvent changeEvent;
+    
     @SuppressWarnings("rawtypes")
     private final IComponentRenderer<Row, PropertyEditorBase> rowRenderer = (editor) -> {
         Row row = new RowEx();
@@ -176,6 +178,7 @@ public class PropertyGrid implements IAutoWired {
     @Override
     public void afterInitialized(BaseComponent comp) {
         window = (Window) comp;
+        changeEvent = new ChangeEvent(window, null);
         @SuppressWarnings("rawtypes")
         IModelAndView<Row, PropertyEditorBase> mv = gridProperties.getRows().getModelAndView(PropertyEditorBase.class);
         mv.setRenderer(rowRenderer);
@@ -415,6 +418,7 @@ public class PropertyGrid implements IAutoWired {
     
     public void propertyChanged() {
         disableButtons(false);
+        EventUtil.post(changeEvent);
     }
     
     /**

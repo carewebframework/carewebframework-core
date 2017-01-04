@@ -29,7 +29,6 @@ import org.carewebframework.common.MiscUtil;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.property.PropertyInfo;
-import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.Popup;
 import org.carewebframework.web.component.Popupbox;
 import org.carewebframework.web.event.CloseEvent;
@@ -60,8 +59,7 @@ public abstract class PropertyEditorCustom extends PropertyEditorBase<Popupbox> 
     
     protected PropertyEditorCustom(String template) {
         this();
-        BaseComponent root = PageUtil.createPage(template, popup).get(0);
-        root.wireController(this);
+        PageUtil.createPage(template, popup);
     }
     
     /**

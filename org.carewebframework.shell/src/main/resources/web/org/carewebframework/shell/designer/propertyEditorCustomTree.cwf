@@ -1,8 +1,8 @@
 <?taglib uri="http://www.carewebframework.org/tld/core" prefix="rc"?>
 
-<paneview orientation="horizontal">
-	<pane flex="3" ></pane>
-		<toolbar width="100%">
+<paneview orientation="horizontal" height="400px" width="600px">
+	<pane flex="3" >
+	<toolbar alignment="start" css="##{id}>button {background:transparent;padding:5px}" width="100%">
 			<button name="btnUp" class="flavor:btn-link"
 				hint="${@msg.cwf.shell.designer.propedit.custom.btn.up.hint}"
 				style="background:transparent"

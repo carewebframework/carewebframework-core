@@ -71,6 +71,9 @@ public abstract class PropertyEditorBase<T extends BaseUIComponent> implements C
         this.editor = editor;
         editor.setName("editor");
         editor.setWidth("95%");
+    }
+    
+    protected void wireController() {
         editor.wireController(this);
     }
     
@@ -151,6 +154,7 @@ public abstract class PropertyEditorBase<T extends BaseUIComponent> implements C
         this.propInfo = propInfo;
         this.propGrid = propGrid;
         this.index = propGrid.getEditorCount();
+        wireController();
     }
     
     /**
@@ -216,14 +220,14 @@ public abstract class PropertyEditorBase<T extends BaseUIComponent> implements C
      * 
      * @param event The change event.
      */
-    @EventHandler(value = "change", target = "editor")
+    @EventHandler(value = "change", target = "@editor")
     protected void onChange(ChangeEvent event) {
         if (hasChanged()) {
             propGrid.propertyChanged();
         }
     }
     
-    @EventHandler(value = "focus", target = "editor")
+    @EventHandler(value = "focus", target = "@editor")
     private void onFocus() {
         propGrid.findEditor(propInfo.getName(), true);
     }
