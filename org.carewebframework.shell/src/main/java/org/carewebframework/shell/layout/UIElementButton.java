@@ -56,7 +56,7 @@ public class UIElementButton extends UIElementActionBase {
     }
     
     private void updateStyle() {
-        ThemeUtil.applyThemeClass(component, "btn", style, size);
+        ThemeUtil.applyThemeClass(component, style, size);
     }
     
     @Override

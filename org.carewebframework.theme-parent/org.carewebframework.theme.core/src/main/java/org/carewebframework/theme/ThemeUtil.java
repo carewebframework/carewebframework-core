@@ -41,15 +41,10 @@ public class ThemeUtil {
      * Applies one or more theme classes to a component.
      * 
      * @param component Component to receive the theme classes.
-     * @param baseClass A base theme class (may be null).
      * @param themeClasses A list of theme classes to apply.
      */
-    public static void applyThemeClass(BaseUIComponent component, String baseClass, IThemeClass... themeClasses) {
+    public static void applyThemeClass(BaseUIComponent component, IThemeClass... themeClasses) {
         StringBuilder sb = new StringBuilder();
-        
-        if (baseClass != null) {
-            component.addClass(baseClass);
-        }
         
         for (IThemeClass themeClass : themeClasses) {
             String cls = themeClass == null ? null : themeClass.getThemeClass();

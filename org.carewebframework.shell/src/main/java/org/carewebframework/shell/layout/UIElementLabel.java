@@ -50,7 +50,7 @@ public class UIElementLabel extends UIElementCWFBase {
     }
     
     private void updateStyle() {
-        ThemeUtil.applyThemeClass(label, "label", style, size);
+        ThemeUtil.applyThemeClass(label, style, size);
     }
     
     @Override
