@@ -289,8 +289,8 @@ public class LayoutManager implements IAutoWired {
         return layoutId;
     }
     
-    @EventHandler(value = "upload", target = "@upload")
-    private void onUpload$upload(UploadEvent event) {
+    @EventHandler(value = "upload", target = "@btnImport")
+    private void onUpload$btnImport(UploadEvent event) {
         if (event.getState() == UploadState.DONE) {
             LayoutIdentifier layoutId = importLayout(shared, event.getBlob());
             
