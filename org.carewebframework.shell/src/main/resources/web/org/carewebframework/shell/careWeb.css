@@ -227,6 +227,10 @@
 	position: relative;
 }
 
+.cwf-designmode-active > .cwf_mask {
+	font-size: 75%;
+}
+
 .cwf-about-header {
 	font-size: 150%;
 	white-space: normal;
