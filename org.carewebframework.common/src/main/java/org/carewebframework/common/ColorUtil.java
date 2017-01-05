@@ -149,7 +149,7 @@ public class ColorUtil {
      * @return The converted value.
      */
     public static String toString(Color value) {
-        String rgb = "#" + Integer.toHexString(value.getRGB() | 0xFF000000).substring(2);
+        String rgb = "#" + Integer.toHexString(value.getRGB() | 0xFF000000).substring(2).toUpperCase();
         String name = getNameFromRGB(rgb);
         return name == null ? rgb : name;
     }
