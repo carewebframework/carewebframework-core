@@ -34,7 +34,6 @@ import org.apache.commons.logging.LogFactory;
 import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.layout.UIElementProxy;
 import org.carewebframework.shell.plugins.PluginDefinition;
-import org.carewebframework.shell.plugins.PluginRegistry;
 import org.carewebframework.shell.property.PropertyInfo;
 import org.carewebframework.ui.zk.TreeUtil;
 import org.carewebframework.web.annotation.EventHandler;
@@ -45,12 +44,12 @@ import org.carewebframework.web.component.Textbox;
 import org.carewebframework.web.component.Treenode;
 import org.carewebframework.web.component.Treeview;
 import org.carewebframework.web.event.ChangeEvent;
-import org.carewebframework.web.event.ClickEvent;
 import org.carewebframework.web.event.DblclickEvent;
 import org.carewebframework.web.event.Event;
 import org.carewebframework.web.event.EventUtil;
 import org.carewebframework.web.event.IEventListener;
 import org.springframework.beans.BeanUtils;
+import org.springframework.util.Assert;
 
 /**
  * Abstract class for implementing a custom property editor based on a tree view display of child
@@ -66,7 +65,7 @@ public class PropertyEditorCustomTree<T extends UIElementBase> extends PropertyE
      */
     private class Proxy extends UIElementProxy {
         
-        private Treenode item;
+        private Treenode node;
         
         public Proxy(T child) {
             super(child);
@@ -77,16 +76,16 @@ public class PropertyEditorCustomTree<T extends UIElementBase> extends PropertyE
         }
         
         public UIElementBase realize() throws Exception {
-            Treenode parentItem = item.getParent() instanceof Treenode ? (Treenode) item.getParent() : null;
+            Treenode parentItem = node.getParent() instanceof Treenode ? (Treenode) node.getParent() : null;
             UIElementBase parentElement = parentItem == null ? getTarget() : getProxy(parentItem).realize();
             realize(parentElement);
             return getTarget();
         }
         
-        public void setItem(Treenode item) {
-            this.item = item;
-            item.setData(this);
-            item.setLabel(getLabel());
+        public void setItem(Treenode node) {
+            this.node = node;
+            node.setData(this);
+            node.setLabel(getLabel());
         }
         
         /**
@@ -96,7 +95,7 @@ public class PropertyEditorCustomTree<T extends UIElementBase> extends PropertyE
          */
         public String getLabel() {
             String label = getProperty(labelProperty);
-            label = label == null ? item.getLabel() : label;
+            label = label == null ? node.getLabel() : label;
             
             if (label == null) {
                 label = getDefaultInstanceName();
@@ -108,7 +107,7 @@ public class PropertyEditorCustomTree<T extends UIElementBase> extends PropertyE
         
         public void setLabel(String label) {
             setProperty(labelProperty, label);
-            item.setLabel(label);
+            node.setLabel(label);
         }
         
         /**
@@ -136,7 +135,7 @@ public class PropertyEditorCustomTree<T extends UIElementBase> extends PropertyE
         private String getDefaultInstanceName() {
             String name = getDefinition().getName() + " #";
             int i = 0;
-            Treeview tree = item.getTreeview();
+            Treeview tree = node.getTreeview();
             
             while (TreeUtil.findNodeByLabel(tree, name + ++i, false) != null) {}
             return name + i;
@@ -191,8 +190,6 @@ public class PropertyEditorCustomTree<T extends UIElementBase> extends PropertyE
     
     private final Class<T> childClass;
     
-    private PluginDefinition definition;
-    
     /**
      * Create the editor instance.
      * 
@@ -200,7 +197,7 @@ public class PropertyEditorCustomTree<T extends UIElementBase> extends PropertyE
      *            create new instances of the UI element from within the editor and to restrict the
      *            selection of child elements to that type only.
      *            <p>
-     *            The owner class may be null. In this case, there is no restriction on the child
+     *            The child class may be null. In this case, there is no restriction on the child
      *            type. The user is prompted for an element type when creating a new instance.
      * @param labelProperty This is the name of the property on the child UI element that will be
      *            synchronized with the label of the corresponding tree node. It may be null.
@@ -212,26 +209,6 @@ public class PropertyEditorCustomTree<T extends UIElementBase> extends PropertyE
         this.childClass = childClass;
         this.labelProperty = labelProperty;
         this.hierarchical = hierarchical;
-    }
-    
-    /**
-     * Returns the plugin definition for the proxied object. This is used to for cases where a proxy
-     * is created for a child element that does not yet exist. It enables the proxy to defer
-     * creation of the proxied element until a commit occurs.
-     * <p>
-     * Note that if there is no specified plugin definition, the add component dialog will be
-     * presented, allowing the user to select which definition to use.
-     * 
-     * @return The plugin definition to use. This may be null.
-     */
-    protected PluginDefinition getTargetDefinition() {
-        if (definition != null) {
-            return definition;
-        }
-        
-        PluginDefinition def = null; //TODO: AddComponent.getDefinition(getTarget());
-        editor.open();
-        return def;
     }
     
     /**
@@ -257,14 +234,12 @@ public class PropertyEditorCustomTree<T extends UIElementBase> extends PropertyE
         btnLeft.setVisible(hierarchical);
         propertyGrid = PropertyGrid.create(null, gridParent);
         propertyGrid.getWindow().setClosable(false);
-        propertyGrid.getWindow().addEventListener(ClickEvent.TYPE, (event) -> {
+        propertyGrid.getWindow().addEventListener(ChangeEvent.TYPE, (event) -> {
             propGrid.propertyChanged();
         });
         //TODO: not sure if needed: propertyGrid.registerEventListener(eventType, this);
         txtLabel.setWidth("95%");
         //TODO: Needs non blank label constraint: txtLabel.setConstraint(new LabelConstraint());
-        definition = childClass == null ? null : PluginRegistry.getInstance().get(childClass);
-        
         IEventListener labelEditorListener = new IEventListener() {
             
             @Override
@@ -328,7 +303,7 @@ public class PropertyEditorCustomTree<T extends UIElementBase> extends PropertyE
         proxies.clear();
         tree.destroyChildren();
         initTree(getTarget(), tree);
-        selectItem((Treenode) tree.getFirstChild());
+        selectNode((Treenode) tree.getFirstChild());
         hasChanged = false;
     }
     
@@ -341,42 +316,48 @@ public class PropertyEditorCustomTree<T extends UIElementBase> extends PropertyE
     private void initTree(UIElementBase target, BaseComponent parent) {
         for (UIElementBase child : target.getChildren()) {
             if (childClass == null || childClass.isInstance(child)) {
-                @SuppressWarnings("unchecked")
-                Treenode item = addTreeitem((T) child, parent, null);
+                Treenode node = addTreenode(newProxy(child), parent, null);
                 
                 if (hierarchical) {
-                    initTree(child, item);
+                    initTree(child, node);
                 }
             }
         }
     }
     
+    private void addTreenode(PluginDefinition def) {
+        if (def != null) {
+            Proxy proxy = newProxy(def);
+            selectNode(addTreenode(proxy, null, tree.getSelectedNode()));
+            doChanged(true);
+        }
+    }
+    
     /**
-     * Adds a tree item under the specified parent.
+     * Adds a tree node under the specified parent.
      * 
-     * @param child Child to be associated (via a proxy) with the newly created tree item.
-     * @param parent The tree parent to receive the new tree item.
-     * @param insertAfter Tree item after which new item will be added (may be null).
-     * @return The newly created tree item.
+     * @param proxy The proxy associated with the tree node.
+     * @param parent The tree parent to receive the new tree node.
+     * @param insertAfter Tree node after which new node will be added (may be null).
+     * @return The newly created tree node.
      */
-    protected Treenode addTreeitem(T child, BaseComponent parent, Treenode insertAfter) {
-        Proxy proxy = newProxy(child);
-        Treenode item = null;
+    protected Treenode addTreenode(Proxy proxy, BaseComponent parent, Treenode insertAfter) {
+        Treenode node = null;
         
         if (proxy != null) {
-            item = new Treenode();
+            node = new Treenode();
             parent = parent == null ? (insertAfter == null ? tree : insertAfter.getParent()) : parent;
             BaseComponent refChild = insertAfter == null ? null : insertAfter.getNextSibling();
-            parent.addChild(item, refChild);
-            proxy.setItem(item);
+            parent.addChild(node, refChild);
+            proxy.setItem(node);
             initProxy(proxy);
             
             if (hasLabelProperty(proxy.getDefinition().getClazz())) {
-                item.addEventForward(DblclickEvent.TYPE, tree, null);
+                node.addEventForward(DblclickEvent.TYPE, tree, null);
             }
         }
         
-        return item;
+        return node;
     }
     
     /**
@@ -423,37 +404,38 @@ public class PropertyEditorCustomTree<T extends UIElementBase> extends PropertyE
             
             for (BaseComponent child : tc.getChildren()) {
                 index++;
-                Treenode item = (Treenode) child;
-                UIElementBase target = getProxy(item).getTarget();
+                Treenode node = (Treenode) child;
+                UIElementBase target = getProxy(node).getTarget();
                 target.setParent(parent);
                 target.setIndex(index);
-                resequenceTargets(item, target);
+                resequenceTargets(node, target);
             }
         }
     }
     
     /**
-     * Creates a new proxy for the specified child. If the child is null, a proxy is created for the
-     * child class.
+     * Creates a new proxy for the specified child.
      * 
-     * @param child Element to be proxied. May be null.
+     * @param child Element to be proxied. May not be null.
      * @return The proxy wrapping the specified child.
      */
-    private Proxy newProxy(T child) {
-        Proxy proxy;
-        
-        if (child != null) {
-            proxy = new Proxy(child);
-        } else {
-            PluginDefinition def = getTargetDefinition();
-            
-            if (def == null) {
-                return null;
-            }
-            
-            proxy = new Proxy(def);
-        }
-        
+    private Proxy newProxy(UIElementBase child) {
+        Assert.notNull(child, "Child element may not be null");
+        @SuppressWarnings("unchecked")
+        Proxy proxy = new Proxy((T) child);
+        proxies.add(proxy);
+        return proxy;
+    }
+    
+    /**
+     * Creates a new proxy for a child to be created.
+     * 
+     * @param def Plugin definition for child to be created.
+     * @return The proxy wrapping the specified plugin definition.
+     */
+    private Proxy newProxy(PluginDefinition def) {
+        Assert.notNull(def, "Plugin definition may not be null");
+        Proxy proxy = new Proxy(def);
         proxies.add(proxy);
         return proxy;
     }
@@ -467,7 +449,7 @@ public class PropertyEditorCustomTree<T extends UIElementBase> extends PropertyE
     }
     
     /**
-     * Double-clicking a tree item allows in place editing.
+     * Double-clicking a tree node allows in place editing.
      * 
      * @param event The double click event.
      */
@@ -487,22 +469,22 @@ public class PropertyEditorCustomTree<T extends UIElementBase> extends PropertyE
     }
     
     /**
-     * Place the specified tree item in edit mode. In this mode, the node's label is replaced with a
+     * Place the specified tree node in edit mode. In this mode, the node's label is replaced with a
      * text box containing the label's value.
      * 
-     * @param item Target tree item.
+     * @param node Target tree node.
      */
-    private void editNodeStart(Treenode item) {
-        txtLabel.setAttribute(ITEM_ATTR, item);
+    private void editNodeStart(Treenode node) {
+        txtLabel.setAttribute(ITEM_ATTR, node);
         
-        if (item == null) {
+        if (node == null) {
             txtLabel.detach();
         } else {
-            String label = item.getLabel();
-            item.setAttribute(LABEL_ATTR, label);
+            String label = node.getLabel();
+            node.setAttribute(LABEL_ATTR, label);
             txtLabel.setValue(label);
-            item.setLabel(null);
-            item.getFirstChild().addChild(txtLabel);
+            node.setLabel(null);
+            node.getFirstChild().addChild(txtLabel);
             txtLabel.setFocus(true);
         }
     }
@@ -539,7 +521,8 @@ public class PropertyEditorCustomTree<T extends UIElementBase> extends PropertyE
      * 
      * @param event The close event.
      */
-    public void onClose(Event event) {
+    @EventHandler(value = "close", target = "^")
+    private void onClose(Event event) {
         if (event.getTarget().getAttribute("controller") == propertyGrid) {
             editor.close();
             doClose();
@@ -547,14 +530,14 @@ public class PropertyEditorCustomTree<T extends UIElementBase> extends PropertyE
     }
     
     /**
-     * Returns the proxy associated with the given tree item.
+     * Returns the proxy associated with the given tree node.
      * 
-     * @param item A tree item.
-     * @return The proxy associated with the tree item.
+     * @param node A tree node.
+     * @return The proxy associated with the tree node.
      */
     @SuppressWarnings("unchecked")
-    private Proxy getProxy(Treenode item) {
-        return item == null ? null : (Proxy) item.getData();
+    private Proxy getProxy(Treenode node) {
+        return node == null ? null : (Proxy) node.getData();
     }
     
     /**
@@ -588,19 +571,19 @@ public class PropertyEditorCustomTree<T extends UIElementBase> extends PropertyE
     /**
      * Updates the label for this node.
      * 
-     * @param item A tree item.
+     * @param node A tree node.
      * @param label Updated label.
      */
-    private void updateLabel(Treenode item, String label) {
-        Proxy proxy = getProxy(item);
+    private void updateLabel(Treenode node, String label) {
+        Proxy proxy = getProxy(node);
         
         if (proxy != null) {
             proxy.setLabel(label);
         } else {
-            item.setLabel(label);
+            node.setLabel(label);
         }
         
-        if (item == tree.getSelectedNode() && labelEditor != null) {
+        if (node == tree.getSelectedNode() && labelEditor != null) {
             labelEditor.revert();
         }
         
@@ -608,35 +591,42 @@ public class PropertyEditorCustomTree<T extends UIElementBase> extends PropertyE
     }
     
     /**
-     * Causes a new tree item to be selected and the display state to be updated.
+     * Causes a new tree node to be selected and the display state to be updated.
      * 
-     * @param item = Item to be selected.
+     * @param node = Item to be selected.
      */
-    private void selectItem(Treenode item) {
-        tree.setSelectedNode(item);
+    private void selectNode(Treenode node) {
+        tree.setSelectedNode(node);
         selectionChanged();
     }
     
     /**
-     * Add a new item.
+     * Add a new node.
      */
     @EventHandler(value = "click", target = "btnAdd")
     private void onClick$btnAdd() {
-        selectItem(addTreeitem(null, null, tree.getSelectedNode()));
-        doChanged(true);
+        if (childClass != null) {
+            addTreenode(PluginDefinition.getDefinition(childClass));
+        } else {
+            AddComponent.getDefinition(getTarget(), (def) -> {
+                addTreenode(def);
+                editor.focus();
+                editor.open();
+            });
+        }
     }
     
     /**
-     * Delete the selected item. If the associated proxy does not yet contain a proxied target, it
+     * Delete the selected node. If the associated proxy does not yet contain a proxied target, it
      * is simply removed from the proxy list. Otherwise, it is marked as deleted, but remains in the
      * list.
      */
     @EventHandler(value = "click", target = "@btnDelete")
     private void onClick$btnDelete() {
-        Treenode item = tree.getSelectedNode();
+        Treenode node = tree.getSelectedNode();
         
-        if (item != null) {
-            Proxy proxy = getProxy(item);
+        if (node != null) {
+            Proxy proxy = getProxy(node);
             
             if (proxy.getTarget() == null) {
                 proxies.remove(proxy);
@@ -644,62 +634,62 @@ public class PropertyEditorCustomTree<T extends UIElementBase> extends PropertyE
                 proxy.setDeleted(true);
             }
             
-            Treenode nextItem = (Treenode) item.getNextSibling();
-            nextItem = nextItem == null ? (Treenode) item.getPreviousSibling() : nextItem;
-            item.destroy();
+            Treenode nextItem = (Treenode) node.getNextSibling();
+            nextItem = nextItem == null ? (Treenode) node.getPreviousSibling() : nextItem;
+            node.destroy();
             currentItem = null;
-            selectItem(nextItem);
+            selectNode(nextItem);
             doChanged(true);
         }
     }
     
     /**
-     * Move the selected tree item up one level.
+     * Move the selected tree node up one level.
      */
     @EventHandler(value = "click", target = "@btnUp")
     private void onClick$btnUp() {
-        Treenode item = tree.getSelectedNode();
-        Treenode sib = (Treenode) item.getPreviousSibling();
-        swap(sib, item);
+        Treenode node = tree.getSelectedNode();
+        Treenode sib = (Treenode) node.getPreviousSibling();
+        swap(sib, node);
     }
     
     /**
-     * Move the selected tree item down one level.
+     * Move the selected tree node down one level.
      */
     @EventHandler(value = "click", target = "@btnDown")
     private void onClick$btnDown() {
-        Treenode item = tree.getSelectedNode();
-        Treenode sib = (Treenode) item.getNextSibling();
-        swap(item, sib);
+        Treenode node = tree.getSelectedNode();
+        Treenode sib = (Treenode) node.getNextSibling();
+        swap(node, sib);
     }
     
     /**
-     * Promote the selected tree item.
+     * Promote the selected tree node.
      */
     @EventHandler(value = "click", target = "@btnLeft")
     private void onClick$btnLeft() {
-        Treenode item = tree.getSelectedNode();
-        Treenode parent = (Treenode) item.getParent();
-        parent.getParent().addChild(item, parent.getNextSibling());
+        Treenode node = tree.getSelectedNode();
+        Treenode parent = (Treenode) node.getParent();
+        parent.getParent().addChild(node, parent.getNextSibling());
         doChanged(true);
     }
     
     /**
-     * Demote the selected tree item.
+     * Demote the selected tree node.
      */
     @EventHandler(value = "click", target = "@btnRight")
     private void onClick$btnRight() {
-        Treenode item = tree.getSelectedNode();
-        Treenode sib = (Treenode) item.getPreviousSibling();
-        item.getParent().addChild(item, sib);
+        Treenode node = tree.getSelectedNode();
+        Treenode sib = (Treenode) node.getPreviousSibling();
+        node.getParent().addChild(node, sib);
         doChanged(true);
     }
     
     /**
      * Moves item1 to follow item2.
      * 
-     * @param item1 = A tree item.
-     * @param item2 = A tree item.
+     * @param item1 = A tree node.
+     * @param item2 = A tree node.
      */
     private void swap(Treenode item1, Treenode item2) {
         if (item1 != null && item2 != null) {
@@ -728,21 +718,21 @@ public class PropertyEditorCustomTree<T extends UIElementBase> extends PropertyE
     /**
      * Override to enable promotion of items
      * 
-     * @param item The item to test.
-     * @return True if the item can be promoted.
+     * @param node The node to test.
+     * @return True if the node can be promoted.
      */
-    protected boolean canPromote(Treenode item) {
-        return hierarchical && item.getPreviousSibling() != null;
+    protected boolean canPromote(Treenode node) {
+        return hierarchical && node.getPreviousSibling() != null;
     }
     
     /**
      * Override to enable promotion of items
      * 
-     * @param item The item to test.
-     * @return True if the item can be demoted.
+     * @param node The node to test.
+     * @return True if the node can be demoted.
      */
-    protected boolean canDemote(Treenode item) {
-        return hierarchical && item.getParent() != tree;
+    protected boolean canDemote(Treenode node) {
+        return hierarchical && node.getParent() != tree;
     }
     
     /**
@@ -750,12 +740,12 @@ public class PropertyEditorCustomTree<T extends UIElementBase> extends PropertyE
      */
     private void updateControls() {
         //TODO: TreeUtil.adjustVisibility(tree);
-        Treenode item = tree.getSelectedNode();
-        disableButton(btnDelete, item == null);
-        disableButton(btnRight, item == null || !canPromote(item));
-        disableButton(btnLeft, item == null || !canDemote(item));
-        disableButton(btnUp, item == null || item.getPreviousSibling() == null);
-        disableButton(btnDown, item == null || item.getNextSibling() == null);
+        Treenode node = tree.getSelectedNode();
+        disableButton(btnDelete, node == null);
+        disableButton(btnRight, node == null || !canPromote(node));
+        disableButton(btnLeft, node == null || !canDemote(node));
+        disableButton(btnUp, node == null || node.getPreviousSibling() == null);
+        disableButton(btnDown, node == null || node.getNextSibling() == null);
     }
     
     private void disableButton(Button btn, boolean disabled) {
@@ -779,4 +769,5 @@ public class PropertyEditorCustomTree<T extends UIElementBase> extends PropertyE
     @Override
     protected void setValue(Object value) {
     }
+    
 }

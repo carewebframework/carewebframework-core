@@ -46,7 +46,7 @@ public abstract class PropertyEditorCustom extends PropertyEditorBase<Popupbox> 
         super(new Popupbox());
         //editor.setAutodrop(false);
         editor.setReadonly(true);
-        editor.setValue(StrUtil.getLabel("cwf.shell.designer.propedit.custom.component.prompt"));
+        editor.setPlaceholder(StrUtil.getLabel("cwf.shell.designer.propedit.custom.component.prompt"));
         editor.addEventListener(OpenEvent.class, (event) -> {
             doOpen();
         });

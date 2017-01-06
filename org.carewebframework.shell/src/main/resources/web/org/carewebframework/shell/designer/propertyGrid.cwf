@@ -1,10 +1,9 @@
 <window width="400px" height="500px" style="overflow:visible"
-	css="##{id}-inner{overflow:visible}"
+	class="cwf-propertygrid"
 	controller="org.carewebframework.shell.designer.PropertyGrid">
 	<paneview orientation="vertical" height="100%" width="100%" style="overflow: visible">
 		<pane flex="75" splittable="true" css="##{id}-inner{overflow:visible}">
-			<table name="gridProperties" width="100%"
-				class="cwf-propertygrid-grid">
+			<table name="gridProperties" width="100%">
 				<columns>
 					<column name="colProperty" sortBy="propInfo.name"
 						sortToggle="tristate"
@@ -25,8 +24,8 @@
 				</span>
 			</groupbox>
 		</pane>
-		<pane>
-			<toolbar name="toolbar" alignment="end" width="100%" style="border:none">
+		<pane name="toolbar">
+			<toolbar alignment="end" width="100%" style="border:none">
 				<button name="btnApply" 
 					class="flavor:btn-primary"
 					label="${@msg.cwf.shell.designer.property.grid.btn.apply.label}" />

@@ -551,6 +551,7 @@ public class LayoutDesigner implements IAutoWired {
      * 
      * @param event The drop event.
      */
+    @EventHandler(value = "drop", target = "^")
     private void onDrop(DropEvent event) {
         Treenode target = getTreenode(event.getTarget());
         Treenode dragged = getTreenode(event.getRelatedTarget());

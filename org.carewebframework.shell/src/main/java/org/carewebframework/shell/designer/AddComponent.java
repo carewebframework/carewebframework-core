@@ -67,11 +67,11 @@ public class AddComponent implements IAutoWired {
     
     private UIElementBase childElement;
     
-    private PluginDefinition definition;
-    
     private Window window;
     
     private boolean createChild;
+    
+    private int definitionCount;
     
     private List<String> favorites;
     
@@ -321,6 +321,20 @@ public class AddComponent implements IAutoWired {
         return (PluginDefinition) (tree.getSelectedNode() == null ? null : tree.getSelectedNode().getData());
     }
     
+    private void returnResult(PluginDefinition definition) {
+        if (definition != null) {
+            childElement = createChild ? definition.createElement(parentElement, null) : null;
+            
+            if (childElement != null) {
+                childElement.bringToFront();
+            }
+            
+            window.setAttribute("pluginDefinition", definition);
+            window.setAttribute("childElement", childElement);
+            window.close();
+        }
+    }
+    
     /**
      * Close dialog without further action.
      */
@@ -335,19 +349,7 @@ public class AddComponent implements IAutoWired {
      */
     @EventHandler(value = "click", target = "@btnOK")
     private void onClick$btnOK() {
-        definition = selectedPluginDefinition();
-        
-        if (definition != null) {
-            childElement = createChild ? definition.createElement(parentElement, null) : null;
-            
-            if (childElement != null) {
-                childElement.bringToFront();
-            }
-            
-            window.setAttribute("pluginDefinition", definition);
-            window.setAttribute("childElement", childElement);
-            window.close();
-        }
+        returnResult(selectedPluginDefinition());
     }
     
     /**

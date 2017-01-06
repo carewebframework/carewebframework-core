@@ -1,31 +1,33 @@
 <?taglib uri="http://www.carewebframework.org/tld/core" prefix="rc"?>
 
 <paneview orientation="horizontal" height="400px" width="600px">
-	<pane flex="3" >
-	<toolbar alignment="start" css="##{id}>button {background:transparent;padding:5px}" width="100%">
+	<pane flex="3">
+		<toolbar alignment="start" width="100%"
+			style="border:none;border-bottom:1px solid lightgray" 
+			css="##{id}>button {background:transparent;padding:2px}">
 			<button name="btnUp" class="flavor:btn-link"
-				hint="${@msg.cwf.shell.designer.propedit.custom.btn.up.hint}"
+				hint="${@msg.cwf.shell.designer.propedit.custom.btn.up.hint}" 
 				style="background:transparent"
 				image="${rc.getIconPath('carewebframework:16x16:arrowU.png')}" />
 			<button name="btnDown" class="flavor:btn-link"
 				hint="${@msg.cwf.shell.designer.propedit.custom.btn.down.hint}"
-				style="background:transparent"
+				style="background:transparent" 
 				image="${rc.getIconPath('carewebframework:16x16:arrowD.png')}" />
 			<button name="btnLeft" class="flavor:btn-link"
 				hint="${@msg.cwf.shell.designer.propedit.custom.btn.promote.hint}"
-				style="background:transparent"
+				style="background:transparent" 
 				image="${rc.getIconPath('carewebframework:16x16:arrowL.png')}" />
 			<button name="btnRight" class="flavor:btn-link"
 				hint="${@msg.cwf.shell.designer.propedit.custom.btn.demote.hint}"
-				style="background:transparent"
+				style="background:transparent" 
 				image="${rc.getIconPath('carewebframework:16x16:arrowR.png')}" />
 			<button name="btnAdd" class="flavor:btn-link"
 				hint="${@msg.cwf.shell.designer.propedit.custom.btn.add.hint}"
-				style="background:transparent"
+				style="background:transparent" 
 				image="${rc.getIconPath('carewebframework:16x16:add.png')}" />
 			<button name="btnDelete" class="flavor:btn-link"
 				hint="${@msg.cwf.shell.designer.propedit.custom.btn.delete.hint}"
-				style="background:transparent"
+				style="background:transparent" 
 				image="${rc.getIconPath('carewebframework:16x16:delete.png')}" />
 		</toolbar>
 		<treeview name="tree" flex="1" />

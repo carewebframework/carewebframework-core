@@ -1,4 +1,4 @@
-@CHARSET "UTF-8";
+@charset "UTF-8";
 
 /*
 	Global stylesheet for CareWeb application.  Styles here will be applied to all components.
@@ -205,8 +205,8 @@
 	margin: 0;
 }
 
-.cwf-propertygrid-grid {
-	border: none;
+.cwf-propertygrid > .panel-body {
+	overflow: visible;
 }
 
 .cwf-propertygrid-embedded .panel-heading {
@@ -214,8 +214,8 @@
 	min-height: 43px;
 }
 
-.cwf-propertygrid-selectedrow td {
-    background-color: lightyellow!important;
+.cwf-propertygrid table td {
+    padding: 4px!important;
 }
 
 .cwf-propertygrid-info {
