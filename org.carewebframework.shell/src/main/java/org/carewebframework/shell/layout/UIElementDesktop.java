@@ -68,6 +68,9 @@ public class UIElementDesktop extends UIElementCWFBase {
     private Cell title;
     
     @WiredComponent
+    private Span menubar0;
+    
+    @WiredComponent
     private Span menubar1;
     
     @WiredComponent
@@ -126,7 +129,7 @@ public class UIElementDesktop extends UIElementCWFBase {
         });
         
         if (true || SecurityUtil.isGrantedAny(DesignConstants.DESIGN_MODE_PRIVS)) {
-            DesignMenu.create(this, menubar2);
+            DesignMenu.create(this, menubar0);
         }
         
         addChild(menubar);
