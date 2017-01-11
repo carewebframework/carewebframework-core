@@ -1,11 +1,11 @@
 <div class="cwf-desktop panel panel-default">
 	<div name="titlebar" class="panel-heading">
+		<span name="menubar0" />
 		<span visible="false">
 			<image name="icon" style="padding:5px" />
 		</span>
 		<cell name="title" style="padding-right:10px;font-weight:bold"
 			label="${@msg.cwf.shell.plugin._desktop.title}" />
-		<span name="menubar0" />
 		<span name="menubar1" />
 		<span name="menubar2">
 			<menu name="helpMenu" label="Help">
