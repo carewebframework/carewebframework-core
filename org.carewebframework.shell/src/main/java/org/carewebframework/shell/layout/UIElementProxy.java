@@ -130,17 +130,15 @@ public class UIElementProxy extends UIElementBase implements IPropertyAccessor {
         PluginDefinition def = getDefinition();
         
         for (PropertyInfo propInfo : def.getProperties()) {
-            try {
-                if (fromTarget) {
-                    syncProperty(propInfo, target, this);
-                } else {
-                    syncProperty(propInfo, this, target);
-                }
-            } catch (Exception e) {}
+            if (fromTarget) {
+                syncProperty(propInfo, target, this);
+            } else {
+                syncProperty(propInfo, this, target);
+            }
         }
     }
     
-    private void syncProperty(PropertyInfo propInfo, Object from, Object to) throws Exception {
+    private void syncProperty(PropertyInfo propInfo, Object from, Object to) {
         if (to != null) {
             propInfo.setPropertyValue(to, propInfo.getPropertyValue(from));
         }

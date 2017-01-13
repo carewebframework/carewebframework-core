@@ -40,6 +40,7 @@ import org.carewebframework.web.annotation.EventHandler;
 import org.carewebframework.web.annotation.WiredComponent;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.Button;
+import org.carewebframework.web.component.Popup;
 import org.carewebframework.web.component.Textbox;
 import org.carewebframework.web.component.Treenode;
 import org.carewebframework.web.component.Treeview;
@@ -170,6 +171,12 @@ public class PropertyEditorCustomTree<T extends UIElementBase> extends PropertyE
     @WiredComponent
     private BaseComponent gridParent;
     
+    @WiredComponent
+    private Popup popLabel;
+    
+    @WiredComponent("popLabel.txtLabel")
+    private Textbox txtLabel;
+    
     private PropertyGrid propertyGrid;
     
     private Treenode currentItem;
@@ -181,8 +188,6 @@ public class PropertyEditorCustomTree<T extends UIElementBase> extends PropertyE
     private boolean hasChanged;
     
     private boolean selectionChanging;
-    
-    private final Textbox txtLabel = new Textbox();
     
     private PropertyEditorBase<?> labelEditor;
     
@@ -236,6 +241,7 @@ public class PropertyEditorCustomTree<T extends UIElementBase> extends PropertyE
         propertyGrid.getWindow().setClosable(false);
         propertyGrid.getWindow().addEventListener(ChangeEvent.TYPE, (event) -> {
             propGrid.propertyChanged();
+            hasChanged = true;
         });
         //TODO: not sure if needed: propertyGrid.registerEventListener(eventType, this);
         txtLabel.setWidth("95%");
@@ -265,6 +271,7 @@ public class PropertyEditorCustomTree<T extends UIElementBase> extends PropertyE
      */
     @Override
     public boolean commit() {
+        selectionChanged();
         boolean result = super.commit();
         
         if (result) {
@@ -478,13 +485,13 @@ public class PropertyEditorCustomTree<T extends UIElementBase> extends PropertyE
         txtLabel.setAttribute(ITEM_ATTR, node);
         
         if (node == null) {
-            txtLabel.detach();
+            popLabel.close();
         } else {
             String label = node.getLabel();
             node.setAttribute(LABEL_ATTR, label);
             txtLabel.setValue(label);
             node.setLabel(null);
-            node.getFirstChild().addChild(txtLabel);
+            popLabel.open(node, "left top", "left top");
             txtLabel.setFocus(true);
         }
     }
@@ -496,7 +503,7 @@ public class PropertyEditorCustomTree<T extends UIElementBase> extends PropertyE
     private void editNodeStop() {
         Treenode currentEdit = (Treenode) txtLabel.getAttribute(ITEM_ATTR);
         txtLabel.removeAttribute(ITEM_ATTR);
-        txtLabel.detach();
+        popLabel.close();
         
         if (currentEdit != null) {
             String oldLabel = (String) currentEdit.getAttribute(LABEL_ATTR);
@@ -598,6 +605,16 @@ public class PropertyEditorCustomTree<T extends UIElementBase> extends PropertyE
     private void selectNode(Treenode node) {
         tree.setSelectedNode(node);
         selectionChanged();
+    }
+    
+    @EventHandler(value = "close", target = "@popLabel")
+    private void onClose$popLabel() {
+        this.editNodeStop();
+    }
+    
+    @EventHandler(value = "focusout", target = "@txtLabel")
+    private void onBlur$txtLabel() {
+        this.editNodeStop();
     }
     
     /**
