@@ -34,6 +34,8 @@ import org.carewebframework.api.domain.IUser;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.shell.plugins.PluginContainer;
 import org.carewebframework.shell.plugins.PluginController;
+import org.carewebframework.web.annotation.EventHandler;
+import org.carewebframework.web.annotation.WiredComponent;
 import org.carewebframework.web.client.Session;
 import org.carewebframework.web.client.WebSocketHandler;
 import org.carewebframework.web.component.Label;
@@ -58,10 +60,13 @@ public class MainController extends PluginController {
     
     private IComponentRenderer<Row, Session> sessionTrackerRowRenderer;
     
+    @WiredComponent
     private Label lblSessionSummary;
     
+    @WiredComponent
     private Label lblMessage;
     
+    @WiredComponent
     private Table grid;
     
     private void doDelegationToModel() {
@@ -94,7 +99,8 @@ public class MainController extends PluginController {
      * 
      * @param event Event
      */
-    public void onClick$btnRefreshSessionView(Event event) {
+    @EventHandler(value = "click", target = "btnRefreshSessionView")
+    private void onClick$btnRefreshSessionView(Event event) {
         log.trace("Refreshing active Session/Desktop view");
         doDelegationToModel();
     }

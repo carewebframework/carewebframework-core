@@ -1,39 +1,35 @@
 <page>
-	<borderlayout name="infoPanelRoot" width="100%" height="100%"
-		class="cwf-infopanel" controller="${cwfInfoPanelController}">
-		<center name="infoPanel" autoscroll="true" border="none">
-			<div zclass="panel panel-primary cwf-infopanel-panel"
+	<splitterview name="infoPanelRoot" width="100%" height="100%"
+		class="cwf-infopanel" controller="${@cwfInfoPanelController}">
+		<splitterpane name="infoPanel">
+			<div class="panel panel-primary cwf-infopanel-panel"
 				height="100%">
-				<div name="menuPanel" zclass="panel-heading" visible="false">
+				<div name="menuPanel" class="panel-heading" visible="false">
 					<menubar name="menubar"
 						style="background: none; border: none" height="20px" />
 				</div>
-				<div vflex="1" style="overflow:auto">
-					<div name="dropRoot" style="padding:5px" hflex="1"
-						vflex="1" />
+				<div flex="1" style="overflow:auto">
+					<div name="dropRoot" style="padding:5px" flex="1" />
 				</div>
 			</div>
-		</center>
-		<south name="alertPanel" size="30px" border="none"
-			visible="false">
-			<div zclass="panel panel-danger cwf-infopanel-panel"
+		</splitterpane>
+		<splitterpane name="alertPanel" height="30px" visible="false">
+			<div class="panel panel-danger cwf-infopanel-panel"
 				height="100%">
-				<div zclass="panel-heading"
-					forward="onDoubleClick=alertIcon.onClick">
-					<label name="alertTitle" zclass="panel-title"
+				<div class="panel-heading"
+					forward="dblclick=alertIcon.click">
+					<label name="alertTitle" class="panel-title"
 						value="${@msg.cwf.infopanel.alert.title}" />
 					<span name="alertIcon"
-						zclass="panel-icons panel-icon glyphicon"
-						class="glyphicon-chevron-down" />
+						class="panel-icons panel-icon glyphicon glyphicon-chevron-down" />
 				</div>
-				<grid name="alertGrid" mold="paging" vflex="1"
-					pagingPosition="top" class="cwf-infopanel-alertgrid"
-					pageSize="1">
+				<table name="alertGrid" flex="1"
+					class="cwf-infopanel-alertgrid">
 					<rows name="alertRoot" />
-				</grid>
+				</table>
 			</div>
-		</south>
-	</borderlayout>
+		</splitterpane>
+	</splitterview>
 
 	<style>
 		.cwf-infopanel-panel {

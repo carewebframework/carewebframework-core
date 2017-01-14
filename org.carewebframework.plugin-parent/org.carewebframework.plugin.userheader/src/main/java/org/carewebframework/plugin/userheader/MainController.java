@@ -33,6 +33,8 @@ import org.carewebframework.api.domain.IUser;
 import org.carewebframework.api.security.SecurityUtil;
 import org.carewebframework.shell.CareWebUtil;
 import org.carewebframework.shell.plugins.PluginController;
+import org.carewebframework.web.annotation.EventHandler;
+import org.carewebframework.web.annotation.WiredComponent;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.Hyperlink;
 import org.carewebframework.web.component.Label;
@@ -44,37 +46,42 @@ public class MainController extends PluginController implements IUserContextEven
     
     private static final Log log = LogFactory.getLog(MainController.class);
     
+    @WiredComponent
     private Label userHeader;
     
+    @WiredComponent
     private Hyperlink password;
     
     private IUser currentUser;
     
+    @Override
+    public void afterInitialized(BaseComponent comp) {
+        super.afterInitialized(comp);
+        committed();
+    }
+    
     /**
      * Event handler for logout link
      */
-    public void onClick$logout() {
+    @EventHandler(value = "click", target = "logout")
+    private void onClick$logout() {
         CareWebUtil.getShell().logout();
     }
     
     /**
      * Event handler for lock link
      */
-    public void onClick$lock() {
+    @EventHandler(value = "click", target = "lock")
+    private void onClick$lock() {
         CareWebUtil.getShell().lock();
     }
     
     /**
      * Event handler for change password link
      */
-    public void onClick$password() {
+    @EventHandler(value = "click", target = "password")
+    private void onClick$password() {
         SecurityUtil.getSecurityService().changePassword();
-    }
-    
-    @Override
-    public void afterInitialized(BaseComponent comp) {
-        super.afterInitialized(comp);
-        committed();
     }
     
     /**

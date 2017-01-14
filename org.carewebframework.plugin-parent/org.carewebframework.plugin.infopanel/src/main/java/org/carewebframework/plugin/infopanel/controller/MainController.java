@@ -34,6 +34,7 @@ import org.carewebframework.plugin.infopanel.model.IInfoPanel;
 import org.carewebframework.shell.plugins.PluginContainer;
 import org.carewebframework.shell.plugins.PluginController;
 import org.carewebframework.ui.zk.MenuUtil;
+import org.carewebframework.web.annotation.WiredComponent;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.BaseUIComponent;
 import org.carewebframework.web.component.Label;
@@ -53,20 +54,28 @@ public class MainController extends PluginController implements IInfoPanel {
     
     protected static final String ALERT_ACTION_EVENT = "alertAction";
     
+    @WiredComponent
     private Toolbar menubar;
     
+    @WiredComponent
     private BaseComponent dropRoot;
     
+    @WiredComponent
     private BaseUIComponent alertIcon;
     
+    @WiredComponent
     private BaseUIComponent alertPanel;
     
+    @WiredComponent
     private BaseUIComponent menuPanel;
     
+    @WiredComponent
     private Table alertGrid;
     
+    @WiredComponent
     private Rows alertRoot;
     
+    @WiredComponent
     private Label alertTitle;
     
     private String collapsedAlertPanelHeight;

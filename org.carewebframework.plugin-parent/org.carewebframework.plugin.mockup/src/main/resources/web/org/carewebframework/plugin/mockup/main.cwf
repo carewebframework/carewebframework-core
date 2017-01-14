@@ -1,6 +1,6 @@
 
 <page>
 	
-	<iframe name="iframe" controller="${cwfMockupController}" height="99%" width="99%" />
+	<iframe name="iframe" controller="${@cwfMockupController}" height="99%" width="99%" />
 	
 </page>

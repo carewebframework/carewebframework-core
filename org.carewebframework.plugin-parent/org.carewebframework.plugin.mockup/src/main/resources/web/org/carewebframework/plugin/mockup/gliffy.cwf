@@ -12,5 +12,6 @@
 	<script type="text/javascript">
 		gliffy_did = "${param.ident}"; 
 		embedGliffy(); 
-	</script>	
+	</script>
+		
 </page>

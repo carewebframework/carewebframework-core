@@ -30,6 +30,7 @@ import java.io.IOException;
 import org.apache.commons.lang.StringUtils;
 import org.carewebframework.shell.plugins.PluginContainer;
 import org.carewebframework.shell.plugins.PluginController;
+import org.carewebframework.web.annotation.WiredComponent;
 import org.carewebframework.web.component.Iframe;
 
 /**
@@ -37,6 +38,7 @@ import org.carewebframework.web.component.Iframe;
  */
 public class MainController extends PluginController {
     
+    @WiredComponent
     private Iframe iframe;
     
     private String mockupId;

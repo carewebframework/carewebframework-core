@@ -30,6 +30,7 @@ import java.util.List;
 import org.carewebframework.plugin.infopanel.model.IActionTarget;
 import org.carewebframework.plugin.infopanel.model.IInfoPanel.Action;
 import org.carewebframework.plugin.infopanel.service.InfoPanelService;
+import org.carewebframework.web.annotation.EventHandler;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.Window;
 import org.carewebframework.web.dragdrop.DropUtil;
@@ -163,7 +164,8 @@ public class DropContainer extends Window implements IActionTarget {
      * 
      * @param event The drop event.
      */
-    public void onDrop(DropEvent event) {
+    @EventHandler("drop")
+    private void onDrop(DropEvent event) {
         BaseComponent dragged = event.getRelatedTarget();
         
         if (dragged instanceof DropContainer) {

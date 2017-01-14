@@ -1,7 +1,6 @@
 <page>
-	<panel closable="true" collapsible="true" mold="bootstrap"
-		class="panel-info" width="100%"
+	<window closable="true" minimizable="true" width="100%"
 		impl="org.carewebframework.plugin.infopanel.controller.DropContainer">
-		<panelchildren />
+		<div />
 	</panel>
 </page>
