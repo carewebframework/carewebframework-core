@@ -41,7 +41,7 @@
 		<fileSet filtered="true" packaged="true" encoding="UTF-8">
 			<directory>src/main/resources/web</directory>
 			<includes>
-				<include>**/*.zul</include>
+				<include>**/*.cwf</include>
 				<include>**/*.properties</include>
 			</includes>
 		</fileSet>

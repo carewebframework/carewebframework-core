@@ -4,6 +4,6 @@
 <window sizable="true" height="100%" width="100%" class="panel-danger"
 	mold="bootstrap">
 	<caption label="${@msg.cwf.error.dialog.title}" />
-	<include src="web/org/carewebframework/ui/zk/errorContent.zul"
+	<include src="web/org/carewebframework/ui/zk/errorContent.cwf"
 		zclass="panel-body" />
 </window>

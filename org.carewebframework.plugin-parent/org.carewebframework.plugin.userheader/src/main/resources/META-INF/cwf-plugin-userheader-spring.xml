@@ -10,7 +10,7 @@
 	<beans profile="root">
 
 		<cwp:plugin id="cwfUserHeader" name="Current User Header"
-			url="web/org/carewebframework/plugin/userheader/main.zul">
+			url="web/org/carewebframework/plugin/userheader/main.cwf">
 			<cwp:serialization>
 				<cwp:property name="Background Color" id="color" type="color"
 					description="Sets the background color." />

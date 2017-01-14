@@ -1,6 +1,6 @@
 <?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" ?>
 <?component name="uploaddlg" extends="window"
- class="org.zkoss.zul.impl.FileuploadDlg" 
+ class="org.zkoss.cwf.impl.FileuploadDlg" 
  widgetClass="zul.fud.FileuploadDlg"?>
 <?component name="submit" extends="button" 
  widgetClass="zul.fud.Submit"?>
@@ -14,16 +14,16 @@
 	<label label="${arg.message}" />
     <separator />
 	<fileupload name="fileupload" forward="onUpload=" 
-		label="${c:l('mesg:org.zkoss.zul.mesg.MZul:UPLOAD_BROWSE')}"
+		label="${c:l('mesg:org.zkoss.cwf.mesg.MZul:UPLOAD_BROWSE')}"
 		zclass="btn" class="btn-xs btn-primary"
 		upload="zul.fud.ModalFileViewer,maxsize=${arg.maxsize}${arg['accept'] != null ? c:cat(',accept=', arg['accept']) :''}${arg['native'] ? ',native':''}" />
 	<div name="uploaded" visible="false" />
 	<separator bar="true" />
 	<toolbar name="btns" alignment="end">
-		<submit name="submit" label="${c:l('mesg:org.zkoss.zul.mesg.MZul:UPLOAD_SUBMIT')}"
+		<submit name="submit" label="${c:l('mesg:org.zkoss.cwf.mesg.MZul:UPLOAD_SUBMIT')}"
 			class="flavor:btn-success"
 			w:onClick="this.submit()" />
-		<button label="${c:l('mesg:org.zkoss.zul.mesg.MZul:UPLOAD_CANCEL')}" 
+		<button label="${c:l('mesg:org.zkoss.cwf.mesg.MZul:UPLOAD_CANCEL')}" 
 			class="flavor:btn-danger"
 			w:onClick="this.$o().cancel(true)" />
 	</toolbar>

@@ -46,7 +46,7 @@
 		<splitter />
 		<cell hflex="1">
 			<include name="include"
-				src="web/org/carewebframework/plugin/infopanel/infoPanel.zul" />
+				src="web/org/carewebframework/plugin/infopanel/infoPanel.cwf" />
 		</cell>
 	</hbox>
 </page>

@@ -133,7 +133,7 @@ public class Command {
         dummy.setAttribute(ATTR_DUMMY, true);
         dummy.setVisible(false);
         dummy.setParent(component.getPage());
-        ActionUtil.addAction(dummy, action, CommandEvent.EVENT_NAME);
+        ActionUtil.addAction(dummy, action, CommandEvent.TYPE);
         bind(component, dummy);
     }
     

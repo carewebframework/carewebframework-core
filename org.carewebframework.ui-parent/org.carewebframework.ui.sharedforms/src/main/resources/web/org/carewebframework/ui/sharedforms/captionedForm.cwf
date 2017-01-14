@@ -1,4 +1,4 @@
-<?init class="org.carewebframework.ui.zk.Composition" arg0="web/org/carewebframework/ui/sharedforms/baseForm.zul"?>
+<?init class="org.carewebframework.ui.zk.Composition" arg0="web/org/carewebframework/ui/sharedforms/baseForm.cwf"?>
 
 <page>
 

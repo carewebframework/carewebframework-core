@@ -32,6 +32,8 @@ import org.carewebframework.web.event.Event;
  */
 public class PluginEvent extends Event {
     
+    public static final String TYPE = "action";
+    
     /**
      * Actions that may be performed on the container.
      */
@@ -59,7 +61,7 @@ public class PluginEvent extends Event {
      * @param data Arbitrary data to attach.
      */
     public PluginEvent(PluginContainer container, PluginAction action, Object data) {
-        super("onAction", container, data);
+        super(TYPE, container, data);
         this.action = action;
     }
     

@@ -95,7 +95,7 @@ public class PluginDefinition {
     
     private boolean disabled;
     
-    private Class<? extends UIElementBase> clazz = UIElementPlugin.class;
+    private Class<? extends UIElementBase> clazz;
     
     private final List<IPluginResource> resources = new ArrayList<>();
     
@@ -142,7 +142,7 @@ public class PluginDefinition {
     public PluginDefinition(String name, Class<? extends UIElementBase> clazz) throws ClassNotFoundException {
         super();
         this.name = name;
-        this.clazz = clazz;
+        setClazz(clazz);
     }
     
     /**
@@ -352,6 +352,10 @@ public class PluginDefinition {
      * @return Associated UI element class.
      */
     public Class<? extends UIElementBase> getClazz() {
+        if (clazz == null) {
+            setClazz(UIElementPlugin.class);
+        }
+        
         return clazz;
     }
     
@@ -359,11 +363,16 @@ public class PluginDefinition {
      * Sets the UI element class associated with this definition.
      * 
      * @param clazz The associated class.
-     * @throws ClassNotFoundException If class not found.
      */
-    public void setClazz(Class<? extends UIElementBase> clazz) throws ClassNotFoundException {
+    public void setClazz(Class<? extends UIElementBase> clazz) {
         this.clazz = clazz;
-        Class.forName(clazz.getName()); // Force execution of static initializers
+        
+        try {
+            // Force execution of static initializers
+            Class.forName(clazz.getName());
+        } catch (ClassNotFoundException e) {
+            MiscUtil.toUnchecked(e);
+        }
     }
     
     /**

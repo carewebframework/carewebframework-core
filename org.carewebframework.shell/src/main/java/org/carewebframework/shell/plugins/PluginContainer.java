@@ -46,6 +46,7 @@ import org.carewebframework.ui.FrameworkController;
 import org.carewebframework.ui.command.CommandEvent;
 import org.carewebframework.ui.command.CommandUtil;
 import org.carewebframework.web.ancillary.IDisable;
+import org.carewebframework.web.annotation.EventHandler;
 import org.carewebframework.web.client.ClientUtil;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.BaseUIComponent;
@@ -293,7 +294,8 @@ public class PluginContainer extends Container {
      * 
      * @param event The plugin event containing the action.
      */
-    public void onAction(PluginEvent event) {
+    @EventHandler("action")
+    private void onAction(PluginEvent event) {
         PluginException exception = null;
         PluginAction action = event.getAction();
         boolean debug = log.isDebugEnabled();
@@ -359,11 +361,12 @@ public class PluginContainer extends Container {
     }
     
     /**
-     * Forward onCommand events to first level children of the container.
+     * Forward command events to first level children of the container.
      * 
      * @param event The command event.
      */
-    public void onCommand(CommandEvent event) {
+    @EventHandler("command")
+    private void onCommand(CommandEvent event) {
         if (!disabled) {
             for (BaseComponent child : this.getChildren()) {
                 EventUtil.send(event, child);

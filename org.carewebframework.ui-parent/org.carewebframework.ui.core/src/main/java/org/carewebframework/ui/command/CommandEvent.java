@@ -34,14 +34,14 @@ import org.carewebframework.web.event.Event;
  */
 public class CommandEvent extends Event {
     
-    public static final String EVENT_NAME = "onCommand";
+    public static final String TYPE = "command";
     
     private final Event triggerEvent;
     
     private final String commandName;
     
     public CommandEvent(String commandName, Event triggerEvent, BaseComponent target) {
-        super(EVENT_NAME, target);
+        super(TYPE, target);
         this.commandName = commandName;
         this.triggerEvent = triggerEvent;
     }

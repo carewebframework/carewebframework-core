@@ -11,7 +11,7 @@
 	<beans profile="root">
 
 		<cwp:plugin id="cwfInfoPanel" name="Information Panel"
-			url="web/org/carewebframework/plugin/infopanel/main.zul">
+			url="web/org/carewebframework/plugin/infopanel/main.cwf">
 			<cwp:resource>
 				<cwp:help-resource module="cwfInfoPanelHelp" />
 			</cwp:resource>

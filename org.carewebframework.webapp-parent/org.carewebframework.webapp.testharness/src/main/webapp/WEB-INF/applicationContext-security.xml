@@ -41,7 +41,7 @@
 					access="ROLE_USER" />
 				<security:intercept-url pattern="/login/**"
 					access="IS_AUTHENTICATED_ANONYMOUSLY" />
-				<security:intercept-url pattern="/*.zul"
+				<security:intercept-url pattern="/*.cwf"
 					access="ROLE_USER" />
 			</security:filter-security-metadata-source>
 		</property>
