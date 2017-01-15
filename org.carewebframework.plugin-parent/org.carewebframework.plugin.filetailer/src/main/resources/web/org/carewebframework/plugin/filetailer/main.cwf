@@ -1,23 +1,21 @@
 <page>
 
-	<vlayout controller="${cwfFileTailerController}" vflex="1">
-		<hlayout class="z-toolbar">
-			<combobox name="cboLogFiles" readonly="true" hflex="1" />
-			<span style="float:right">
-				<button name="btnToggle" disabled="true"
-					label="${@msg.cwf.filetailer.btn.toggle.on.label}" />
-				<button name="btnClear"
-					label="${@msg.cwf.filetailer.btn.clear.label}" />
-			</span>
-		</hlayout>
+	<div controller="${@cwfFileTailerController}" flex="1">
+		<toolbar alignment="end">
+			<combobox name="cboLogFiles" readonly="true" flex="1" />
+			<button name="btnToggle" disabled="true"
+				label="${@msg.cwf.filetailer.btn.toggle.on.label}" />
+			<button name="btnClear"
+				label="${@msg.cwf.filetailer.btn.clear.label}" />
+		</toolbar>
 		
-		<label name="lblMessage" style="color: red;font-weight: bold;"
+		<label name="lblMessage" style="color:red;font-weight:bold;"
 			visible="false" />
 			
-		<textbox name="txtOutput" hflex="1" vflex="1" multiline="true"
+		<memobox name="txtOutput"
 			readonly="true" style="border-top:1px solid gray"/>
 			
 		<timer name="timer" running="false" />
-	</vlayout>
+	</div>
 
 </page>

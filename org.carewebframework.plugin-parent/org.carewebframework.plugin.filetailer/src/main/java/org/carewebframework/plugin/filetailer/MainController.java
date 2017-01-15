@@ -40,12 +40,14 @@ import org.carewebframework.api.logging.LogFileTailer;
 import org.carewebframework.api.logging.LogFileTailerListener;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.shell.plugins.PluginController;
+import org.carewebframework.web.annotation.EventHandler;
+import org.carewebframework.web.annotation.WiredComponent;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.Button;
 import org.carewebframework.web.component.Combobox;
 import org.carewebframework.web.component.Comboitem;
 import org.carewebframework.web.component.Label;
-import org.carewebframework.web.component.Textbox;
+import org.carewebframework.web.component.Memobox;
 import org.carewebframework.web.component.Timer;
 
 /**
@@ -61,14 +63,19 @@ public class MainController extends PluginController {
     
     //members
     
+    @WiredComponent
     private Timer timer;
     
-    private Textbox txtOutput;
+    @WiredComponent
+    private Memobox txtOutput;
     
+    @WiredComponent
     private Combobox cboLogFiles;
     
+    @WiredComponent
     private Button btnToggle;
     
+    @WiredComponent
     private Label lblMessage;
     
     private final Deque<String> logFileBuffer = new ArrayDeque<>();
@@ -130,7 +137,8 @@ public class MainController extends PluginController {
     /**
      * Event handler for log file tailer
      */
-    public void onTimer$timer() {
+    @EventHandler(value = "timer", target = "@timer")
+    private void onTimer$timer() {
         log.trace("onTimer event");
         
         StringBuffer lines = new StringBuffer();
@@ -159,7 +167,8 @@ public class MainController extends PluginController {
      * Handles the Button onClick event for changing the state of the
      * {@link org.carewebframework.api.logging.LogFileTailer}
      */
-    public void onClick$btnToggle() {
+    @EventHandler(value = "click", target = "@btnToggle")
+    private void onClick$btnToggle() {
         if (isTailerStarted) {
             stopTailer();
         } else {
@@ -226,7 +235,8 @@ public class MainController extends PluginController {
         }
     }
     
-    public void onSelect$cboLogFiles() {
+    @EventHandler(value = "select", target = "@cboLogFiles")
+    private void onSelect$cboLogFiles() {
         stopTailer();
         btnToggle.setDisabled(cboLogFiles.getSelectedItem() == null);
     }
@@ -234,7 +244,8 @@ public class MainController extends PluginController {
     /**
      * Handles the Button onClick event to clear the log file tailer output.
      */
-    public void onClick$btnClear() {
+    @EventHandler(value = "click", target = "btnClear")
+    private void onClick$btnClear() {
         log.trace("Clearing LogFileTailer output and LogFileBuffer");
         logFileBuffer.clear();
         txtOutput.setValue(null);
