@@ -698,7 +698,7 @@ public class PropertyEditorCustomTree<T extends UIElementBase> extends PropertyE
     private void onClick$btnRight() {
         Treenode node = tree.getSelectedNode();
         Treenode sib = (Treenode) node.getPreviousSibling();
-        node.getParent().addChild(node, sib);
+        sib.addChild(node);
         doChanged(true);
     }
     
@@ -710,7 +710,7 @@ public class PropertyEditorCustomTree<T extends UIElementBase> extends PropertyE
      */
     private void swap(Treenode item1, Treenode item2) {
         if (item1 != null && item2 != null) {
-            item1.getParent().addChild(item2, item1);
+            item1.getParent().swapChildren(item1.getIndex(), item2.getIndex());
             doChanged(true);
         }
     }
