@@ -25,10 +25,17 @@
  */
 package org.carewebframework.shell.layout;
 
+import org.carewebframework.ui.zk.MenuUtil;
+import org.carewebframework.web.component.BaseLabeledImageComponent;
+import org.carewebframework.web.component.Menu;
+import org.carewebframework.web.component.Menuitem;
+
 /**
- * Single menu item for inclusion in a menubar-based tree.
+ * Base class for representing a single menu item. The Menu class has been subclassed (MenuEx) to
+ * allow it to behave as a menu and a menu item. This simplifies the creation and manipulation of
+ * hierarchical menu trees.
  */
-public class UIElementMenuItem extends UIElementMenuItemBase {
+public class UIElementMenuItem extends UIElementActionBase {
     
     static {
         registerAllowedParentClass(UIElementMenuItem.class, UIElementMenubar.class);
@@ -36,10 +43,61 @@ public class UIElementMenuItem extends UIElementMenuItemBase {
         registerAllowedChildClass(UIElementMenuItem.class, UIElementMenuItem.class);
     }
     
+    private BaseLabeledImageComponent menu;
+    
+    private String label;
+    
     public UIElementMenuItem() {
         super();
+        maxChildren = Integer.MAX_VALUE;
         autoHide = false;
-        setOuterComponent(getMenu());
     }
     
+    public String getLabel() {
+        return label;
+    }
+    
+    public void setLabel(String label) {
+        this.label = label;
+        
+        if (menu != null) {
+            menu.setLabel(label);
+        }
+    }
+    
+    /**
+     * The caption label is the instance name.
+     */
+    @Override
+    public String getInstanceName() {
+        return getLabel();
+    }
+    
+    @Override
+    public void bringToFront() {
+        super.bringToFront();
+        
+        if (isDesignMode() && menu instanceof Menu) {
+            MenuUtil.open((Menu) menu);
+        }
+    }
+    
+    @Override
+    protected void bind() {
+        if (getParent() instanceof UIElementMenuItem) {
+            menu = new Menuitem();
+        } else {
+            menu = new Menu();
+        }
+        
+        menu.setLabel(label);
+        setOuterComponent(menu);
+        rebindChildren();
+        super.bind();
+    }
+    
+    @Override
+    protected void unbind() {
+        menu.detach();
+    }
 }

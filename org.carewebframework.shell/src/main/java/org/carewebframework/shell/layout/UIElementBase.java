@@ -483,6 +483,16 @@ public abstract class UIElementBase {
     }
     
     /**
+     * Rebind any children. This may be called if the wrapped UI component is recreated.
+     */
+    protected void rebindChildren() {
+        for (UIElementBase child : getChildren()) {
+            child.unbind();
+            child.bind();
+        }
+    }
+    
+    /**
      * Returns the innermost wrapped UI component. For UI elements that may host child elements,
      * this would be the wrapped UI component that can host the child components. For UI elements
      * that wrap a single UI component, getInnerComponent and getOuterComponent should return the

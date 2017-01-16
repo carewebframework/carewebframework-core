@@ -104,29 +104,6 @@
 			</cwp:serialization>
 		</cwp:plugin>
 
-		<cwp:plugin id="tabmenu" category="${@msg.cwf.shell.plugin.category.stock}"
-			class="org.carewebframework.shell.layout.UIElementTabMenu" name="${@msg.cwf.shell.plugin.tabmenu.name}"
-			description="${@msg.cwf.shell.plugin.tabmenu.description}">
-			<cwp:serialization>
-				<cwp:property id="" type="tabmenuitems"
-					name="${@msg.cwf.shell.plugin.tabmenu.tabmenuitems.name}" description="${@msg.cwf.shell.plugin.tabmenu.tabmenuitems.description}" />
-			</cwp:serialization>
-		</cwp:plugin>
-
-		<cwp:plugin id="tabmenupane" category="${@msg.cwf.shell.plugin.category.stock}"
-			class="org.carewebframework.shell.layout.UIElementTabMenuPane" name="${@msg.cwf.shell.plugin.tabmenupane.name}"
-			description="${@msg.cwf.shell.plugin.tabmenupane.description}">
-			<cwp:serialization>
-				<cwp:property id="label"
-					default="${@msg.cwf.shell.plugin.tabmenupane.label.default}" name="${@msg.cwf.shell.plugin.tabmenupane.label.name}"
-					description="${@msg.cwf.shell.plugin.tabmenupane.label.description}" />
-				<cwp:property id="hint"
-					name="${@msg.cwf.shell.plugin.tabmenupane.hint.name}" description="${@msg.cwf.shell.plugin.tabmenupane.hint.description}" />
-				<cwp:property id="color" type="color"
-					name="${@msg.cwf.shell.plugin.tabmenupane.color.name}" description="${@msg.cwf.shell.plugin.tabmenupane.color.description}" />
-			</cwp:serialization>
-		</cwp:plugin>
-
 		<cwp:plugin id="treeview" category="${@msg.cwf.shell.plugin.category.stock}"
 			class="org.carewebframework.shell.layout.UIElementTreeView" name="${@msg.cwf.shell.plugin.treeview.name}"
 			description="${@msg.cwf.shell.plugin.treeview.description}">

@@ -30,9 +30,9 @@ import org.carewebframework.shell.property.PropertyTypeRegistry;
 import org.carewebframework.web.component.Span;
 
 /**
- * Implements a shared menubar.
+ * Base implementation of a menu bar.
  */
-public class UIElementMenubar extends UIElementMenuBase {
+public class UIElementMenubar extends UIElementCWFBase {
     
     static {
         registerAllowedChildClass(UIElementMenubar.class, UIElementMenuItem.class);
@@ -40,18 +40,25 @@ public class UIElementMenubar extends UIElementMenuBase {
         PropertyTypeRegistry.register("menuitems", PropertyEditorMenubar.class);
     }
     
-    /**
-     * Creates the menu bar UI element. This is simply a span component for hosting menus. A help
-     * menu is automatically created a pre-populated with references to the about dialog and table
-     * of contents. We also attach an onOpen event handler to the help menu and use this to do
-     * just-in-time sorting of dynamically added items.
-     */
+    private final Span menubar;
+    
     public UIElementMenubar() {
         this(new Span());
     }
     
     public UIElementMenubar(Span menubar) {
-        super(menubar);
+        setOuterComponent(this.menubar = menubar);
+        menubar.addClass("cwf-menubar");
+        maxChildren = Integer.MAX_VALUE;
+    }
+    
+    /**
+     * Returns a reference to the menu bar.
+     * 
+     * @return The menu bar.
+     */
+    public Span getMenubar() {
+        return menubar;
     }
     
 }
