@@ -353,6 +353,12 @@
 				<cwp:property id="label"
 					default="${@msg.cwf.shell.plugin.button.label.default}" name="${@msg.cwf.shell.plugin.button.label.name}"
 					description="${@msg.cwf.shell.plugin.button.label.description}" />
+				<cwp:property id="position" type="enum"
+					name="${@msg.cwf.shell.plugin.button.position.name}" description="${@msg.cwf.shell.plugin.button.position.description}">
+					<cwp:config>
+						<cwp:entry key="class">org.carewebframework.web.component.BaseLabeledComponent$LabelPositionHorz</cwp:entry>
+					</cwp:config>
+				</cwp:property>
 				<cwp:property id="icon" type="icon"
 					name="${@msg.cwf.shell.plugin.button.icon.name}" description="${@msg.cwf.shell.plugin.button.icon.description}" />
 				<cwp:property id="hint"
@@ -381,6 +387,12 @@
 				<cwp:property id="label"
 					default="${@msg.cwf.shell.plugin.link.label.default}" name="${@msg.cwf.shell.plugin.link.label.name}"
 					description="${@msg.cwf.shell.plugin.link.label.description}" />
+				<cwp:property id="position" type="enum"
+					name="${@msg.cwf.shell.plugin.link.position.name}" description="${@msg.cwf.shell.plugin.link.position.description}">
+					<cwp:config>
+						<cwp:entry key="class">org.carewebframework.web.component.BaseLabeledComponent$LabelPositionHorz</cwp:entry>
+					</cwp:config>
+				</cwp:property>
 				<cwp:property id="color" type="color"
 					default="${@msg.cwf.shell.plugin.link.color.default}" name="${@msg.cwf.shell.plugin.link.color.name}"
 					description="${@msg.cwf.shell.plugin.link.color.description}" />

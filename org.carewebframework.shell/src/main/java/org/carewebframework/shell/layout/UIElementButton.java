@@ -26,6 +26,7 @@
 package org.carewebframework.shell.layout;
 
 import org.carewebframework.theme.ThemeUtil;
+import org.carewebframework.web.component.BaseLabeledComponent.LabelPositionHorz;
 import org.carewebframework.web.component.Hyperlink;
 
 /**
@@ -98,6 +99,14 @@ public class UIElementButton extends UIElementActionBase {
      */
     public String getIcon() {
         return component.getImage();
+    }
+    
+    public LabelPositionHorz getPosition() {
+        return component.getPosition();
+    }
+    
+    public void setPosition(LabelPositionHorz position) {
+        component.setPosition(position);
     }
     
     public ThemeUtil.ButtonSize getSize() {
