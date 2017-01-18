@@ -26,6 +26,7 @@
 package org.carewebframework.shell.layout;
 
 import org.carewebframework.ui.zk.MenuUtil;
+import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.BaseLabeledImageComponent;
 import org.carewebframework.web.component.Menu;
 import org.carewebframework.web.component.Menuitem;
@@ -84,6 +85,8 @@ public class UIElementMenuItem extends UIElementActionBase {
     
     @Override
     protected void bind() {
+        BaseComponent oldMenu = menu;
+        
         if (getParent() instanceof UIElementMenuItem) {
             menu = new Menuitem();
         } else {
@@ -94,6 +97,10 @@ public class UIElementMenuItem extends UIElementActionBase {
         setOuterComponent(menu);
         rebindChildren();
         super.bind();
+        
+        if (oldMenu != null) {
+            oldMenu.destroy();
+        }
     }
     
     @Override
