@@ -1,39 +1,4 @@
 <page>
-	<paneview height="100%" width="100%" class="cwf-sandbox"
-		controller="${@cwfSandboxController}">
-		<pane width="50%">
-			<toolbar width="100%">
-				<label label="${@msg.cwf.sandbox.title.left}" />
-				<div flex="10" />
-				<combobox name="cboCwf" readonly="true" width="200px"
-					placeholder="${@msg.cwf.sandbox.combobox.placeholder}" />
-				<div flex="10" />
-				<button name="btnFormatContent" class="flavor:btn-info"
-					label="${@msg.cwf.sandbox.btn.format.label}" />
-				<div flex="10" />
-				<button name="btnClearContent" class="flavor:btn-danger"
-					label="${@msg.cwf.btn.clear.label}" />
-				<div flex="1" />
-				<button name="btnRenderContent"
-					class="flavor:btn-success" label="${@msg.cwf.btn.view.label}" />
-			</toolbar>
-			<div flex="1">
-				<codemirror name="editor" mode="xml" height="100%" width="100%"/>
-			</div>
-		</pane>
-		<pane flex="1">
-			<toolbar width="100%">
-				<button name="btnClearView" class="flavor:btn-danger"
-					label="${@msg.cwf.btn.clear.label}" />
-				<div flex="1" />
-				<button name="btnRefreshView" class="flavor:btn-success"
-					label="${@msg.cwf.btn.refresh.label}" />
-				<div flex="10" />
-				<label label="${@msg.cwf.sandbox.title.right}" />
-			</toolbar>
-			<span name="contentParent">
-				<container flex="1" width="100%" style="overflow:auto" />
-			</span>
-		</pane>
-	</paneview>
+	<import src="web/org/carewebframework/web/sandbox/main.cwf"
+		controller="org.carewebframework.plugin.sandbox.MainController" />
 </page>

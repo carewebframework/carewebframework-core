@@ -28,7 +28,6 @@ package org.carewebframework.ui.spring;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashSet;
-import java.util.Locale;
 import java.util.Set;
 
 import javax.servlet.ServletContext;
@@ -38,7 +37,6 @@ import org.carewebframework.api.spring.Constants;
 import org.carewebframework.api.spring.DomainPropertySource;
 import org.carewebframework.api.spring.LabelPropertySource;
 import org.carewebframework.common.Localizer;
-import org.carewebframework.common.Localizer.IMessageSource;
 import org.carewebframework.web.client.ExecutionContext;
 import org.carewebframework.web.component.Page;
 import org.carewebframework.web.spring.ClasspathMessageSource;
@@ -90,13 +88,8 @@ public class AppContextInitializer implements ApplicationContextInitializer<XmlW
             env.getPropertySources().addLast(new DomainPropertySource(ctx));
             env.setDefaultProfiles(Constants.PROFILE_ROOT_DEFAULT);
             ctx.setConfigLocations((String[]) ArrayUtils.addAll(Constants.DEFAULT_LOCATIONS, ctx.getConfigLocations()));
-            Localizer.registerMessageSource(new IMessageSource() {
-                
-                @Override
-                public String getMessage(String id, Locale locale, Object... args) {
-                    return ClasspathMessageSource.getInstance().getMessage(id, args, locale);
-                }
-                
+            Localizer.registerMessageSource((id, locale, args) -> {
+                return ClasspathMessageSource.getInstance().getMessage(id, args, locale);
             });
         }
         
