@@ -44,7 +44,6 @@ import org.carewebframework.web.component.BaseUIComponent;
 import org.carewebframework.web.component.Menu;
 import org.carewebframework.web.component.Menuitem;
 import org.carewebframework.web.core.WebUtil;
-import org.carewebframework.web.event.EventUtil;
 import org.carewebframework.web.page.PageUtil;
 
 /**
@@ -101,16 +100,10 @@ public class DesignMenu implements IAutoWired {
         owner.setDesignMode(enabled);
         updateMenus(enabled);
         
-        if (enabled) {
-            EventUtil.post("afterEnabled", menu, null);
-        } else {
+        if (!enabled) {
             LayoutDesigner.closeDialog();
+            menu.close();
         }
-    }
-    
-    @EventHandler(value = "afterEnabled", target = "@menu")
-    private void onAfterEnabled() {
-        menu.setOpen(true);
     }
     
     /**

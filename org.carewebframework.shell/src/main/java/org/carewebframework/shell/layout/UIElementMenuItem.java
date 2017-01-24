@@ -25,6 +25,7 @@
  */
 package org.carewebframework.shell.layout;
 
+import org.carewebframework.common.MiscUtil;
 import org.carewebframework.ui.zk.MenuUtil;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.BaseLabeledImageComponent;
@@ -44,7 +45,7 @@ public class UIElementMenuItem extends UIElementActionBase {
         registerAllowedChildClass(UIElementMenuItem.class, UIElementMenuItem.class);
     }
     
-    private BaseLabeledImageComponent menu;
+    private BaseLabeledImageComponent<?> menu;
     
     private String label;
     
@@ -85,22 +86,27 @@ public class UIElementMenuItem extends UIElementActionBase {
     
     @Override
     protected void bind() {
-        BaseComponent oldMenu = menu;
+        Class<?> clazz = getParent() instanceof UIElementMenuItem ? Menuitem.class : Menu.class;
         
-        if (getParent() instanceof UIElementMenuItem) {
-            menu = new Menuitem();
-        } else {
-            menu = new Menu();
+        if (menu == null || !clazz.isInstance(menu)) {
+            BaseComponent oldMenu = menu;
+            
+            try {
+                menu = (BaseLabeledImageComponent<?>) clazz.newInstance();
+            } catch (Exception e) {
+                throw MiscUtil.toUnchecked(e);
+            }
+            
+            menu.setLabel(label);
+            setOuterComponent(menu);
+            rebindChildren();
+            
+            if (oldMenu != null) {
+                oldMenu.destroy();
+            }
         }
         
-        menu.setLabel(label);
-        setOuterComponent(menu);
-        rebindChildren();
         super.bind();
-        
-        if (oldMenu != null) {
-            oldMenu.destroy();
-        }
     }
     
     @Override

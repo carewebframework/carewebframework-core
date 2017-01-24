@@ -13,6 +13,7 @@
 	
 	<modules>
 		<module>org.carewebframework.plugin.chat</module>
+		<module>org.carewebframework.plugin.sandbox</module>
 		<module>org.carewebframework.plugin.currentdatetime</module>
 		<module>org.carewebframework.plugin.infopanel</module>
 		<module>org.carewebframework.plugin.statuspanel</module>
