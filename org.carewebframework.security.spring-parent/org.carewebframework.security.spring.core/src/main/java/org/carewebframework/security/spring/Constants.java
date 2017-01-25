@@ -25,7 +25,7 @@
  */
 package org.carewebframework.security.spring;
 
-import org.carewebframework.ui.core.CWFUtil;
+import org.carewebframework.ui.util.CWFUtil;
 
 public class Constants {
     

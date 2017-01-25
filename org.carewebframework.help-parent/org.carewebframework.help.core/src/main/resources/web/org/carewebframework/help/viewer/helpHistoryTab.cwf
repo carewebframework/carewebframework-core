@@ -1,1 +1,1 @@
-<listbox name="lstHistory" vflex="1"/>
+<listbox name="lstHistory" flex="1" />

@@ -29,7 +29,7 @@ import java.util.Collections;
 import java.util.Map;
 
 import org.carewebframework.common.StrUtil;
-import org.carewebframework.ui.core.CWFUtil;
+import org.carewebframework.ui.util.CWFUtil;
 import org.carewebframework.web.ancillary.IAutoWired;
 import org.carewebframework.web.annotation.EventHandler;
 import org.carewebframework.web.annotation.WiredComponent;

@@ -38,8 +38,8 @@ import org.carewebframework.shell.plugins.PluginRegistry;
 import org.carewebframework.ui.FrameworkController;
 import org.carewebframework.ui.action.ActionRegistry;
 import org.carewebframework.ui.action.ActionRegistry.ActionScope;
+import org.carewebframework.ui.util.CWFUtil;
 import org.carewebframework.ui.action.IAction;
-import org.carewebframework.ui.core.CWFUtil;
 import org.carewebframework.web.component.BaseComponent;
 
 /**

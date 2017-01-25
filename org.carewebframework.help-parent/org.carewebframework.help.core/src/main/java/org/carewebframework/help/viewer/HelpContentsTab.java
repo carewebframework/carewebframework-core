@@ -32,7 +32,9 @@ import org.carewebframework.help.HelpTopic;
 import org.carewebframework.help.HelpTopicNode;
 import org.carewebframework.help.HelpViewType;
 import org.carewebframework.help.IHelpView;
-import org.carewebframework.ui.zk.TreeUtil;
+import org.carewebframework.ui.util.TreeUtil;
+import org.carewebframework.web.annotation.EventHandler;
+import org.carewebframework.web.annotation.WiredComponent;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.Treenode;
 import org.carewebframework.web.component.Treeview;
@@ -42,6 +44,7 @@ import org.carewebframework.web.component.Treeview;
  */
 public class HelpContentsTab extends HelpTab {
     
+    @WiredComponent
     private Treeview tree;
     
     private HelpTopic selectedTopic;
@@ -61,7 +64,8 @@ public class HelpContentsTab extends HelpTab {
     /**
      * Change the viewer's active topic when a tree item is selected.
      */
-    public void onSelect$tree() {
+    @EventHandler(value = "change", target = "@tree")
+    private void onChange$tree() {
         Treenode item = tree.getSelectedNode();
         selectedTopic = item == null ? null : (HelpTopic) item.getData();
         setTopic(selectedTopic);

@@ -1,6 +1,6 @@
 package org.carewebframework.ui.manifest;
 
-import org.carewebframework.ui.core.CWFUtil;
+import org.carewebframework.ui.util.CWFUtil;
 import org.carewebframework.web.component.Cell;
 import org.carewebframework.web.component.Column;
 import org.carewebframework.web.component.Row;

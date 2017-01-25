@@ -37,7 +37,7 @@ import org.carewebframework.shell.layout.UIException;
 import org.carewebframework.shell.plugins.PluginDefinition;
 import org.carewebframework.shell.property.PropertyInfo;
 import org.carewebframework.shell.property.PropertyType;
-import org.carewebframework.ui.core.CWFUtil;
+import org.carewebframework.ui.util.CWFUtil;
 import org.carewebframework.web.ancillary.IAutoWired;
 import org.carewebframework.web.ancillary.INamespace;
 import org.carewebframework.web.annotation.EventHandler;

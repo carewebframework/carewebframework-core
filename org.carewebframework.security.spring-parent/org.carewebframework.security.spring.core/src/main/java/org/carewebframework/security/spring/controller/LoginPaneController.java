@@ -35,7 +35,7 @@ import org.carewebframework.api.security.ISecurityDomain;
 import org.carewebframework.api.security.SecurityDomainRegistry;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.security.spring.Constants;
-import org.carewebframework.ui.core.CWFUtil;
+import org.carewebframework.ui.util.CWFUtil;
 import org.carewebframework.web.ancillary.IAutoWired;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.BaseUIComponent;

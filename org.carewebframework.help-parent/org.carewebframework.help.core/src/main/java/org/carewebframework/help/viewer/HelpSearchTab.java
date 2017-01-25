@@ -36,17 +36,20 @@ import org.carewebframework.help.HelpTopic;
 import org.carewebframework.help.HelpViewType;
 import org.carewebframework.help.IHelpSearch.IHelpSearchListener;
 import org.carewebframework.help.IHelpSet;
+import org.carewebframework.web.annotation.EventHandler;
+import org.carewebframework.web.annotation.WiredComponent;
 import org.carewebframework.web.component.Cell;
 import org.carewebframework.web.component.Image;
 import org.carewebframework.web.component.Label;
-import org.carewebframework.web.component.Listbox;
 import org.carewebframework.web.component.Listitem;
+import org.carewebframework.web.component.Row;
+import org.carewebframework.web.component.Table;
 import org.carewebframework.web.component.Textbox;
 import org.carewebframework.web.event.Event;
 import org.carewebframework.web.event.IEventListener;
 import org.carewebframework.web.model.IComponentRenderer;
+import org.carewebframework.web.model.IModelAndView;
 import org.carewebframework.web.model.ListModel;
-import org.carewebframework.web.model.ModelAndView;
 
 /**
  * Tab supporting the help system search function. Consists of a text box into which the user may
@@ -55,17 +58,20 @@ import org.carewebframework.web.model.ModelAndView;
  */
 public class HelpSearchTab extends HelpTab implements IComponentRenderer<Listitem, HelpSearchHit>, IHelpSearchListener {
     
+    @WiredComponent
     private Textbox txtSearch;
     
-    private Listbox lstSrchResults;
+    @WiredComponent
+    private Table tblSrchResults;
     
+    @WiredComponent
     private Label lblNoResultsFound;
     
     private final Image[] icons = new Image[3];
     
     private final List<IHelpSet> helpSets = new ArrayList<>();
     
-    private final ModelAndView<Listitem, HelpSearchHit> modelAndView;
+    private final IModelAndView<Row, HelpSearchHit> modelAndView;
     
     private double tertile1;
     
@@ -102,7 +108,7 @@ public class HelpSearchTab extends HelpTab implements IComponentRenderer<Listite
      */
     public HelpSearchTab(HelpViewer viewer, HelpViewType viewType) {
         super(viewer, viewType, "helpSearchTab.cwf");
-        modelAndView = new ModelAndView<>(lstSrchResults, null, this);
+        modelAndView = tblSrchResults.getRows().getModelAndView(HelpSearchHit.class);
     }
     
     /**
@@ -120,24 +126,27 @@ public class HelpSearchTab extends HelpTab implements IComponentRenderer<Listite
     /**
      * Sets the currently viewed topic when a search result is selected.
      */
-    public void onSelect$lstSrchResults() {
-        Listitem item = lstSrchResults.getSelectedItem();
-        setTopic((HelpTopic) item.getData());
+    @EventHandler(value = "change", target = "@tblSrchResults")
+    private void onSelect$tblSrchResults() {
+        Row row = tblSrchResults.getRows().getSelected().get(0);
+        setTopic((HelpTopic) row.getData());
     }
     
     /**
      * Perform search when user presses enter button.
      */
-    public void onOK$txtSearch() {
+    @EventHandler(value = "enter", target = "txtSearch")
+    private void onEnter$txtSearch() {
         onClick$btnSearch();
     }
     
     /**
      * Perform the search and display the results.
      */
-    public void onClick$btnSearch() {
+    @EventHandler(value = "click", target = "btnSearch")
+    private void onClick$btnSearch() {
         modelAndView.setModel(null);
-        lstSrchResults.destroyChildren();
+        tblSrchResults.getRows().destroyChildren();
         String query = txtSearch.getValue();
         showMessage(null);
         
@@ -177,7 +186,7 @@ public class HelpSearchTab extends HelpTab implements IComponentRenderer<Listite
         message = message == null ? null : StrUtil.getLabel(message);
         lblNoResultsFound.setLabel(message);
         lblNoResultsFound.setVisible(!StringUtils.isEmpty(message));
-        lstSrchResults.setVisible(!lblNoResultsFound.isVisible());
+        tblSrchResults.setVisible(!lblNoResultsFound.isVisible());
     }
     
     /**

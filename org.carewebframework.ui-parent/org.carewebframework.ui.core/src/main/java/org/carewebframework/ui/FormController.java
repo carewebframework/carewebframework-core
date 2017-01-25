@@ -31,9 +31,9 @@ import java.util.Map;
 import java.util.Set;
 
 import org.carewebframework.common.StrUtil;
-import org.carewebframework.ui.core.CWFUtil;
 import org.carewebframework.ui.dialog.DialogUtil;
 import org.carewebframework.ui.dialog.PopupDialog;
+import org.carewebframework.ui.util.CWFUtil;
 import org.carewebframework.web.annotation.WiredComponent;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.BaseUIComponent;

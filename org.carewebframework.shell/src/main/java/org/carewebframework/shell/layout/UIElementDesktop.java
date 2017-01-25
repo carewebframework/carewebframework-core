@@ -35,10 +35,11 @@ import org.carewebframework.shell.designer.DesignMenu;
 import org.carewebframework.shell.plugins.PluginResourceHelp;
 import org.carewebframework.theme.ThemeUtil;
 import org.carewebframework.ui.action.ActionUtil;
-import org.carewebframework.ui.zk.MenuUtil;
+import org.carewebframework.ui.util.MenuUtil;
 import org.carewebframework.web.annotation.EventHandler;
 import org.carewebframework.web.annotation.WiredComponent;
 import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.component.BaseMenuComponent;
 import org.carewebframework.web.component.BaseUIComponent;
 import org.carewebframework.web.component.Cell;
 import org.carewebframework.web.component.Image;
@@ -281,10 +282,9 @@ public class UIElementDesktop extends UIElementCWFBase {
      * @return The menu item added. If the menu parameter was not null, this is the value returned.
      *         Otherwise, it is a reference to the newly created menu item.
      */
-    public Menu addMenu(String namePath, String action, boolean fixed) {
+    public BaseMenuComponent addMenu(String namePath, String action, boolean fixed) {
         BaseComponent menubar = fixed ? menubar2 : menubar1;
-        Menu menu = MenuUtil.addMenuOrMenuItem(namePath, null, menubar, null, Menu.class);
-        //MenuUtil.updateStyles(menu);
+        BaseMenuComponent menu = MenuUtil.addMenuOrMenuItem(namePath, null, menubar, null);
         ActionUtil.addAction(menu, action);
         return menu;
     }
@@ -306,12 +306,12 @@ public class UIElementDesktop extends UIElementCWFBase {
      * @param action The action to be invoked when the menu item is clicked.
      * @return The newly created menu item.
      */
-    public Menu addHelpMenu(String namedPath, String action) {
-        Menu menu = !StringUtils.isEmpty(namedPath) && !StringUtils.isEmpty(action)
-                ? addMenu(helpMenu.getLabel() + "\\" + namedPath, action, true) : null;
-        sortHelpMenu |= menu != null;
-        helpSeparator.setVisible(menu != null || helpSeparator.isVisible());
-        return menu;
+    public Menuitem addHelpMenu(String namedPath, String action) {
+        Menuitem menuitem = !StringUtils.isEmpty(namedPath) && !StringUtils.isEmpty(action)
+                ? (Menuitem) addMenu(helpMenu.getLabel() + "\\" + namedPath, action, true) : null;
+        sortHelpMenu |= menuitem != null;
+        helpSeparator.setVisible(menuitem != null || helpSeparator.isVisible());
+        return menuitem;
     }
     
     /**
@@ -320,10 +320,10 @@ public class UIElementDesktop extends UIElementCWFBase {
      * @param resource The help resource.
      * @return The newly created menu item.
      */
-    public Menu addHelpMenu(PluginResourceHelp resource) {
-        Menu menu = addHelpMenu(resource.getPath(), resource.getAction());
-        mnuTOC.setVisible(menu != null);
-        return menu;
+    public Menuitem addHelpMenu(PluginResourceHelp resource) {
+        Menuitem menuitem = addHelpMenu(resource.getPath(), resource.getAction());
+        mnuTOC.setVisible(menuitem != null);
+        return menuitem;
     }
     
     /**

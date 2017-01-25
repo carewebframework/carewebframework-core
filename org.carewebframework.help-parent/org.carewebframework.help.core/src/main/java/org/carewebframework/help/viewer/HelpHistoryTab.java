@@ -27,6 +27,8 @@ package org.carewebframework.help.viewer;
 
 import org.carewebframework.help.HelpTopic;
 import org.carewebframework.help.HelpViewType;
+import org.carewebframework.web.annotation.EventHandler;
+import org.carewebframework.web.annotation.WiredComponent;
 import org.carewebframework.web.component.Listbox;
 import org.carewebframework.web.model.ModelAndView;
 
@@ -38,6 +40,7 @@ import org.carewebframework.web.model.ModelAndView;
  */
 public class HelpHistoryTab extends HelpTab {
     
+    @WiredComponent
     private Listbox lstHistory;
     
     private final HelpHistory history;
@@ -57,7 +60,8 @@ public class HelpHistoryTab extends HelpTab {
     /**
      * Set the history position to correspond to the new list box selection.
      */
-    public void onSelect$lstHistory() {
+    @EventHandler(value = "change", target = "@lstHistory")
+    private void onChange$lstHistory() {
         history.setPosition(lstHistory.getSelectedIndex());
     }
     

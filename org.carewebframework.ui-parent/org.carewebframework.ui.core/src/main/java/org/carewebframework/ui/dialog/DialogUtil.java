@@ -12,9 +12,9 @@ import static org.carewebframework.ui.dialog.DialogConstants.STYLE_FIXED_FONT;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.carewebframework.ui.core.CWFUtil;
 import org.carewebframework.ui.dialog.DialogControl.IPromptCallback;
 import org.carewebframework.ui.dialog.InputDialog.IInputCallback;
+import org.carewebframework.ui.util.CWFUtil;
 import org.carewebframework.web.ancillary.IResponseCallback;
 import org.carewebframework.web.component.Window;
 import org.carewebframework.web.event.IEventListener;

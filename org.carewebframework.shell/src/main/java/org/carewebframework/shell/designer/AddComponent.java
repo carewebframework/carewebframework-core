@@ -38,7 +38,7 @@ import org.carewebframework.shell.layout.UIElementLayout;
 import org.carewebframework.shell.layout.UIElementPlugin;
 import org.carewebframework.shell.plugins.PluginDefinition;
 import org.carewebframework.shell.plugins.PluginRegistry;
-import org.carewebframework.ui.zk.TreeUtil;
+import org.carewebframework.ui.util.TreeUtil;
 import org.carewebframework.web.ancillary.IAutoWired;
 import org.carewebframework.web.ancillary.IResponseCallback;
 import org.carewebframework.web.annotation.EventHandler;

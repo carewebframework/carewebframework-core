@@ -1,6 +1,6 @@
 package org.carewebframework.ui.dialog;
 
-import org.carewebframework.ui.core.CWFUtil;
+import org.carewebframework.ui.util.CWFUtil;
 
 public class DialogConstants {
     

@@ -34,8 +34,8 @@ import java.util.jar.Manifest;
 
 import org.apache.commons.lang.StringUtils;
 import org.carewebframework.api.ManifestIterator;
-import org.carewebframework.ui.core.CWFUtil;
 import org.carewebframework.ui.dialog.PopupDialog;
+import org.carewebframework.ui.util.CWFUtil;
 import org.carewebframework.web.ancillary.IAutoWired;
 import org.carewebframework.web.annotation.EventHandler;
 import org.carewebframework.web.annotation.WiredComponent;

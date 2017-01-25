@@ -31,7 +31,7 @@ import java.util.List;
 
 import org.carewebframework.api.event.EventManager;
 import org.carewebframework.api.event.IGenericEvent;
-import org.carewebframework.ui.core.CWFUtil;
+import org.carewebframework.ui.util.CWFUtil;
 import org.carewebframework.web.client.ExecutionContext;
 import org.carewebframework.web.component.Label;
 import org.carewebframework.web.component.Page;

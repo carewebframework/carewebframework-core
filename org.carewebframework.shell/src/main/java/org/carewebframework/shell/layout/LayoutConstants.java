@@ -26,7 +26,7 @@
 package org.carewebframework.shell.layout;
 
 import org.carewebframework.shell.Constants;
-import org.carewebframework.ui.core.CWFUtil;
+import org.carewebframework.ui.util.CWFUtil;
 
 /**
  * Package-wide constants.

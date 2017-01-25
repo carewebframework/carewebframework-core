@@ -28,7 +28,7 @@ package org.carewebframework.shell.plugins;
 import org.carewebframework.shell.CareWebShell;
 import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.layout.UIElementPlugin;
-import org.carewebframework.web.component.Menu;
+import org.carewebframework.web.component.BaseMenuComponent;
 
 /**
  * Resource for declaring items to appear on the common menu.
@@ -116,7 +116,7 @@ public class PluginResourceMenu implements IPluginResource {
         if (register) {
             UIElementPlugin plugin = (UIElementPlugin) owner;
             PluginContainer container = plugin.getContainer();
-            Menu menu = container.getShell().addMenu(getPath(), getAction());
+            BaseMenuComponent menu = container.getShell().addMenu(getPath(), getAction());
             container.registerComponent(menu);
             container.registerId(getId(), menu);
         }

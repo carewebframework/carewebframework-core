@@ -39,6 +39,8 @@ import org.carewebframework.help.IHelpView;
 import org.carewebframework.help.IHelpViewer;
 import org.carewebframework.help.viewer.HelpHistory.ITopicListener;
 import org.carewebframework.ui.event.InvocationRequestQueue;
+import org.carewebframework.web.annotation.EventHandler;
+import org.carewebframework.web.annotation.WiredComponent;
 import org.carewebframework.web.client.ClientUtil;
 import org.carewebframework.web.component.Button;
 import org.carewebframework.web.component.Iframe;
@@ -63,18 +65,25 @@ public class HelpViewer extends Window implements IHelpViewer, ITopicListener, I
         }
     };
     
-    private Tabview tbxNavigator;
+    @WiredComponent
+    private Tabview tvNavigator;
     
+    @WiredComponent
     private Iframe iframe;
     
+    @WiredComponent
     private Button btnPrevious;
     
+    @WiredComponent
     private Button btnNext;
     
+    @WiredComponent
     private Button btnPrint;
     
+    @WiredComponent
     private Button btnOpen;
     
+    @WiredComponent
     private Label lblLoading;
     
     private final List<IHelpSet> helpSets = new ArrayList<>();
@@ -98,15 +107,13 @@ public class HelpViewer extends Window implements IHelpViewer, ITopicListener, I
      */
     @Override
     public void show() {
-        try {
-            if (mode == HelpViewerMode.EMBEDDED) {
-                setMode(Mode.MODAL);
-                setHeight(lastHeight + "px");
-                setWidth(lastWidth + "px");
-            } else {
-                ClientUtil.invoke("window.focus");
-            }
-        } catch (Exception e) {}
+        if (mode == HelpViewerMode.EMBEDDED) {
+            setMode(Mode.MODAL);
+            setHeight(lastHeight + "px");
+            setWidth(lastWidth + "px");
+        } else {
+            ClientUtil.invoke("window.focus");
+        }
     }
     
     /**
@@ -192,9 +199,9 @@ public class HelpViewer extends Window implements IHelpViewer, ITopicListener, I
      * cleared, and all tabs are removed.
      */
     private void reset() {
-        tbxNavigator.setVisible(false);
+        tvNavigator.setVisible(false);
         lblLoading.setVisible(true);
-        tbxNavigator.destroyChildren();
+        tvNavigator.destroyChildren();
         helpSets.clear();
         history.clear();
     }
@@ -214,7 +221,7 @@ public class HelpViewer extends Window implements IHelpViewer, ITopicListener, I
         
         findTab(HelpViewType.HISTORY, true).setVisible(false);
         lblLoading.setVisible(false);
-        tbxNavigator.setVisible(true);
+        tvNavigator.setVisible(true);
         selectTab(getTabs().get(0));
         onTopicSelected(null);
     }
@@ -225,7 +232,7 @@ public class HelpViewer extends Window implements IHelpViewer, ITopicListener, I
      * @param tab Tab to select.
      */
     private void selectTab(HelpTab tab) {
-        tbxNavigator.setSelectedTab(tab);
+        tvNavigator.setSelectedTab(tab);
         tab.onSelect();
     }
     
@@ -279,7 +286,7 @@ public class HelpViewer extends Window implements IHelpViewer, ITopicListener, I
      */
     @SuppressWarnings("unchecked")
     private List<HelpTab> getTabs() {
-        return (List<HelpTab>) (List<?>) tbxNavigator.getChildren();
+        return (List<HelpTab>) (List<?>) tvNavigator.getChildren();
     }
     
     /**
@@ -325,21 +332,24 @@ public class HelpViewer extends Window implements IHelpViewer, ITopicListener, I
     /**
      * Moves to the next topic in the view history.
      */
-    public void onClick$btnNext() {
+    @EventHandler(value = "click", target = "@btnNext")
+    private void onClick$btnNext() {
         history.next();
     }
     
     /**
      * Moves to the previous topic in the view history.
      */
-    public void onClick$btnPrevious() {
+    @EventHandler(value = "click", target = "@btnPrevious")
+    private void onClick$btnPrevious() {
         history.previous();
     }
     
     /**
      * Opens the iFrame contents in a separate window.
      */
-    public void onClick$btnOpen() {
+    @EventHandler(value = "click", target = "@btnOpen")
+    private void onClick$btnOpen() {
         HelpUtil.openWindow(iframe.getSrc(), "_blank");
     }
     
@@ -348,7 +358,8 @@ public class HelpViewer extends Window implements IHelpViewer, ITopicListener, I
      * 
      * @param event The change event.
      */
-    public void onURLChange$iframe(Event event) {
+    @EventHandler(value = "load", target = "@iframe")
+    private void onLoad$iframe(Event event) {
         String url = (String) event.getData();
         
         if (url.equals(lastURL)) {
@@ -392,7 +403,7 @@ public class HelpViewer extends Window implements IHelpViewer, ITopicListener, I
      * @return The tab box.
      */
     protected Tabview getTabview() {
-        return tbxNavigator;
+        return tvNavigator;
     }
     
     /**
@@ -419,7 +430,6 @@ public class HelpViewer extends Window implements IHelpViewer, ITopicListener, I
         setMinimizable(!proxied);
         setTitle(proxied ? null : "Help");
         setVisible(proxied);
-        wireController(this);
         //TODO: setWidgetOverride("_cwf_focus", "function() {window.focus();}");
         //TODO: setWidgetOverride("_cwf_close", "function() {window.close();}");
         history.addTopicListener(this);
@@ -444,7 +454,8 @@ public class HelpViewer extends Window implements IHelpViewer, ITopicListener, I
      * 
      * @param event The size event.
      */
-    public void onSize(ResizeEvent event) {
+    @EventHandler("resize")
+    private void onResize(ResizeEvent event) {
         lastHeight = event.getHeight();
         lastWidth = event.getWidth();
     }

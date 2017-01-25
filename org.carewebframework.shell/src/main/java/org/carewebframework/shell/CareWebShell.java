@@ -61,9 +61,9 @@ import org.carewebframework.web.annotation.Component;
 import org.carewebframework.web.annotation.Component.ChildTag;
 import org.carewebframework.web.client.ClientUtil;
 import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.component.BaseMenuComponent;
 import org.carewebframework.web.component.BaseUIComponent;
 import org.carewebframework.web.component.Div;
-import org.carewebframework.web.component.Menu;
 import org.carewebframework.web.component.MessageWindow;
 import org.carewebframework.web.component.Page;
 import org.carewebframework.web.component.Span;
@@ -493,7 +493,7 @@ public class CareWebShell extends Div {
      * @param action Associated action for the menu.
      * @return Created menu item.
      */
-    public Menu addMenu(String path, String action) {
+    public BaseMenuComponent addMenu(String path, String action) {
         return desktop.addMenu(path, action, false);
     }
     

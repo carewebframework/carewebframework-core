@@ -43,8 +43,8 @@ import org.carewebframework.shell.plugins.IPluginResource;
 import org.carewebframework.shell.plugins.PluginDefinition;
 import org.carewebframework.shell.plugins.PluginRegistry;
 import org.carewebframework.shell.property.PropertyInfo;
-import org.carewebframework.ui.core.CWFUtil;
 import org.carewebframework.ui.dialog.DialogUtil;
+import org.carewebframework.ui.util.CWFUtil;
 
 /**
  * This is the base class for all UI elements supported by the CareWeb framework.

@@ -30,7 +30,7 @@ import java.util.Date;
 import org.apache.commons.lang.time.DateUtils;
 import org.carewebframework.common.DateUtil;
 import org.carewebframework.common.StrUtil;
-import org.carewebframework.ui.core.DateTimeUtil;
+import org.carewebframework.ui.util.DateTimeUtil;
 import org.carewebframework.web.ancillary.IAutoWired;
 import org.carewebframework.web.ancillary.INamespace;
 import org.carewebframework.web.annotation.EventHandler;

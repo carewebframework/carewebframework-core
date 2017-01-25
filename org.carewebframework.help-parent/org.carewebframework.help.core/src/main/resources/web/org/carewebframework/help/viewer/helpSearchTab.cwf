@@ -1,18 +1,18 @@
 <page>
-	<toolbar>
-		<hbox width="100%">
-			<textbox name="txtSearch" hflex="1" />
-			<toolbarbutton name="btnSearch" width="16px"
-				iconSclass="glyphicon glyphicon-search" />
-		</hbox>
+	<toolbar width="100%">
+		<textbox name="txtSearch" flex="1" />
+		<button name="btnSearch" width="16px"
+			class="glyphicon glyphicon-search" />
 	</toolbar>
 	<label name="lblNoResultsFound" visible="false"
 		value="${@msg.cwf.help.tab.search.noresults}" />
-	<listbox name="lstSrchResults" visible="false" vflex="1">
-		<listhead sizable="true">
-			<listheader label="" width="30px" sort="auto(confidence)"/>
-			<listheader label="${@msg.cwf.help.tab.search.topic.header}" sort="auto(topic)" />
-			<listheader label="${@msg.cwf.help.tab.search.source.header}" sort="auto(source)" />
-		</listhead>
-	</listbox>
+	<table name="tblSrchResults" visible="false" flex="1">
+		<columns>
+			<column label="" width="30px" sort="auto(confidence)"/>
+			<column label="${@msg.cwf.help.tab.search.topic.header}" />
+			<column label="${@msg.cwf.help.tab.search.source.header}" />
+		</columns>
+		<rows>
+		</rows>
+	</table>
 </page>

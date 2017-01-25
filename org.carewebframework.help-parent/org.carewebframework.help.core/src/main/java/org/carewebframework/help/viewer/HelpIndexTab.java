@@ -37,11 +37,13 @@ import org.carewebframework.help.HelpTopicNode;
 import org.carewebframework.help.HelpViewType;
 import org.carewebframework.help.IHelpView;
 import org.carewebframework.web.annotation.EventHandler;
+import org.carewebframework.web.annotation.WiredComponent;
 import org.carewebframework.web.component.Listbox;
 import org.carewebframework.web.component.Listitem;
 import org.carewebframework.web.component.Textbox;
 import org.carewebframework.web.event.ChangeEvent;
 import org.carewebframework.web.model.IComponentRenderer;
+import org.carewebframework.web.model.IModelAndView;
 import org.carewebframework.web.model.ListModel;
 import org.carewebframework.web.model.ModelAndView;
 
@@ -52,17 +54,20 @@ import org.carewebframework.web.model.ModelAndView;
  */
 public class HelpIndexTab extends HelpTab {
     
+    @WiredComponent
     private Listbox lstKeywords;
     
+    @WiredComponent
     private Listbox lstTopics;
     
+    @WiredComponent
     private Textbox txtFind;
     
     private final Map<String, List<HelpTopic>> topicIndex = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
     
     private ListModel<String> keywordList;
     
-    private final ModelAndView<Listitem, HelpTopic> modelAndView;
+    private final IModelAndView<Listitem, HelpTopic> modelAndView;
     
     private final IComponentRenderer<Listitem, String> keywordRenderer = new IComponentRenderer<Listitem, String>() {
         
@@ -81,14 +86,16 @@ public class HelpIndexTab extends HelpTab {
      */
     public HelpIndexTab(HelpViewer viewer, HelpViewType viewType) {
         super(viewer, viewType, "helpIndexTab.cwf");
-        modelAndView = new ModelAndView<>(lstTopics, null, new HelpTopicRenderer());
+        modelAndView = lstTopics.getModelAndView(HelpTopic.class);
+        modelAndView.setRenderer(new HelpTopicRenderer());
     }
     
     /**
      * Initialize the topic list when a keyword is selected. The last topic selected for the keyword
      * is automatically selected.
      */
-    public void onSelect$lstKeywords() {
+    @EventHandler(value = "change", target = "@lstKeywords")
+    private void onSelect$lstKeywords() {
         Listitem item = lstKeywords.getSelectedItem();
         
         if (item == null) {
@@ -111,7 +118,8 @@ public class HelpIndexTab extends HelpTab {
     /**
      * Set the topic view when a topic selection is made.
      */
-    public void onSelect$lstTopics() {
+    @EventHandler(value = "change", target = "@lstTopics")
+    private void onSelect$lstTopics() {
         Listitem item = lstTopics.getSelectedItem();
         Listitem keywordItem = lstKeywords.getSelectedItem();
         
@@ -134,8 +142,8 @@ public class HelpIndexTab extends HelpTab {
      * 
      * @param event The input event.
      */
-    @EventHandler(value = "change", target = "txtFind")
-    public void onChange$txtFind(ChangeEvent event) {
+    @EventHandler(value = "change", target = "@txtFind")
+    private void onChange$txtFind(ChangeEvent event) {
         String find = event.getValue(String.class).toLowerCase();
         
         if (StringUtils.isEmpty(find)) {

@@ -33,7 +33,7 @@ import org.carewebframework.api.event.IGenericEvent;
 import org.carewebframework.plugin.infopanel.model.IInfoPanel;
 import org.carewebframework.shell.plugins.PluginContainer;
 import org.carewebframework.shell.plugins.PluginController;
-import org.carewebframework.ui.zk.MenuUtil;
+import org.carewebframework.ui.util.MenuUtil;
 import org.carewebframework.web.annotation.WiredComponent;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.BaseUIComponent;
@@ -130,7 +130,7 @@ public class MainController extends PluginController implements IInfoPanel {
      */
     @Override
     public void registerMenuItem(Menuitem menuitem, String path) {
-        MenuUtil.addMenuItem(path + "\\" + menuitem.getLabel(), menuitem, menubar, null);
+        MenuUtil.addMenuOrMenuItem(path + "\\" + menuitem.getLabel(), menuitem, menubar, null);
         menuPanel.setVisible(true);
         
         if (log.isDebugEnabled()) {

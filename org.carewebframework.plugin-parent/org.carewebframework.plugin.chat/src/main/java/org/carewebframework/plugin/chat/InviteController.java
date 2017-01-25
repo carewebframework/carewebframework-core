@@ -33,8 +33,8 @@ import java.util.Map;
 
 import org.carewebframework.api.messaging.IPublisherInfo;
 import org.carewebframework.ui.FrameworkController;
-import org.carewebframework.ui.core.CWFUtil;
 import org.carewebframework.ui.dialog.PopupDialog;
+import org.carewebframework.ui.util.CWFUtil;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.Button;
 import org.carewebframework.web.component.Checkbox;

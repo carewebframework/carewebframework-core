@@ -25,7 +25,7 @@
  */
 package org.carewebframework.ui.xml;
 
-import org.carewebframework.ui.core.CWFUtil;
+import org.carewebframework.ui.util.CWFUtil;
 
 /**
  * Static utility class for XML viewing constants.

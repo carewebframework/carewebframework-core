@@ -23,7 +23,7 @@
  *
  * #L%
  */
-package org.carewebframework.ui.core;
+package org.carewebframework.ui.util;
 
 import java.util.Calendar;
 import java.util.Date;

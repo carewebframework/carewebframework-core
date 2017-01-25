@@ -26,7 +26,7 @@
 package org.carewebframework.shell.designer;
 
 import org.carewebframework.shell.Constants;
-import org.carewebframework.ui.core.CWFUtil;
+import org.carewebframework.ui.util.CWFUtil;
 
 public class DesignConstants {
     

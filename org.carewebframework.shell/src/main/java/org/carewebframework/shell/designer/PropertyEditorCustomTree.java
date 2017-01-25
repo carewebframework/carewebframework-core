@@ -35,7 +35,7 @@ import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.layout.UIElementProxy;
 import org.carewebframework.shell.plugins.PluginDefinition;
 import org.carewebframework.shell.property.PropertyInfo;
-import org.carewebframework.ui.zk.TreeUtil;
+import org.carewebframework.ui.util.TreeUtil;
 import org.carewebframework.web.annotation.EventHandler;
 import org.carewebframework.web.annotation.WiredComponent;
 import org.carewebframework.web.component.BaseComponent;

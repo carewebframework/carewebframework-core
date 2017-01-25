@@ -26,7 +26,6 @@
 package org.carewebframework.shell.layout;
 
 import org.carewebframework.common.MiscUtil;
-import org.carewebframework.ui.zk.MenuUtil;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.BaseLabeledImageComponent;
 import org.carewebframework.web.component.Menu;
@@ -80,7 +79,8 @@ public class UIElementMenuItem extends UIElementActionBase {
         super.bringToFront();
         
         if (isDesignMode() && menu instanceof Menu) {
-            MenuUtil.open((Menu) menu);
+            ((Menu) menu).open();
+            ;
         }
     }
     

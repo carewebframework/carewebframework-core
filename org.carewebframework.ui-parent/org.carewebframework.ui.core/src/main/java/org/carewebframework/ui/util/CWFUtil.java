@@ -1,4 +1,4 @@
-package org.carewebframework.ui.core;
+package org.carewebframework.ui.util;
 
 import java.util.List;
 import java.util.Map;

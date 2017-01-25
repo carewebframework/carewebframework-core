@@ -1,41 +1,34 @@
-<window xmlns:c="client" name="win" border="none" height="80%"
+<window name="win" height="80%" controller="this"
 	impl="org.carewebframework.help.viewer.HelpViewer">
-	<borderlayout>
-		<west size="33%" splittable="true">
+	<paneview>
+		<pane width="33%" splittable="true">
 			<div height="100%" width="100%">
-				<tabbox name="tbxNavigator" height="100%"
-					visible="false">
-					<tabs name="tbViews" />
-					<tabpanels name="tpViews" />
-				</tabbox>
+				<tabview name="tvNavigator" height="100%" visible="false" />
 				<label name="lblLoading"
 					class="z-toolbar cwf-help-viewer-loading" value="Loading..." />
 			</div>
-		</west>
-		<center>
+		</pane>
+		<pane>
 			<div width="100%" height="100%">
 				<toolbar class="cwf-help-viewer-navbar">
-					<toolbarbutton name="btnPrevious"
-						iconSclass="glyphicon glyphicon-chevron-left"
+					<button name="btnPrevious"
+						class="glyphicon glyphicon-chevron-left"
 						hint="${@msg.cwf.help.viewer.btn.previous.hint}" />
-					<toolbarbutton name="btnNext"
-						iconSclass="glyphicon glyphicon-chevron-right"
+					<button name="btnNext"
+						class="glyphicon glyphicon-chevron-right"
 						hint="${@msg.cwf.help.viewer.btn.next.hint}" />
-					<space />
-					<toolbarbutton name="btnOpen" 
-						iconSclass="glyphicon glyphicon-new-window"
+					<div width="40px" />
+					<button name="btnOpen" 
+						class="glyphicon glyphicon-new-window"
 						hint="${@msg.cwf.help.viewer.btn.open.hint}" />
-					<toolbarbutton name="btnPrint" 
-						iconSclass="glyphicon glyphicon-print"
-						hint="${@msg.cwf.help.viewer.btn.print.hint}"
-						c:onClick="jq(this.$f('iframe')).get(0).contentWindow.print();" />
+					<button name="btnPrint" 
+						class="glyphicon glyphicon-print"
+						hint="${@msg.cwf.help.viewer.btn.print.hint}" />
 				</toolbar>
-				<iframe xmlns:ca="client/attribute" name="iframe" name="help_frame" 
-					vflex="1" width="100%" ca:onload="zk.Widget.$(event.target.id).fire('onURLChange', this.src, {toServer:true})">
-				</iframe>
+				<iframe name="iframe" flex="1" width="100%" />
 			</div>
-		</center>
-	</borderlayout>
+		</pane>
+	</paneview>
 	<style>
 		.cwf-help-viewer-loading {
 			font-size: 1.25em;

@@ -23,17 +23,16 @@
  *
  * #L%
  */
-package org.carewebframework.ui.zk;
+package org.carewebframework.ui.util;
 
 import org.carewebframework.common.MiscUtil;
-import org.carewebframework.ui.core.CWFUtil;
-import org.carewebframework.ui.core.CWFUtil.MatchMode;
+import org.carewebframework.ui.util.CWFUtil.MatchMode;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.Treenode;
 import org.carewebframework.web.component.Treeview;
 
 /**
- * Useful ZK tree functions.
+ * Useful tree functions.
  */
 public class TreeUtil {
     

@@ -1,7 +1,5 @@
 <page>
-	<tree name="tree" vflex="true" hflex="1" class="cwf-help-toc-tree">
-		<treechildren />
-	</tree>
+	<treeview name="tree" flex="1" class="cwf-help-toc-tree" />
 	
 	<style>
 		.cwf-help-toc-tree {

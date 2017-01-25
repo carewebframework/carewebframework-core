@@ -25,7 +25,7 @@
  */
 package org.carewebframework.ui;
 
-import org.carewebframework.ui.core.CWFUtil;
+import org.carewebframework.ui.util.CWFUtil;
 
 /**
  * Constants class
