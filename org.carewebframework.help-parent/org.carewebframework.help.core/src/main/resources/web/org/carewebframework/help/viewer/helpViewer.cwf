@@ -1,11 +1,11 @@
-<window name="win" height="80%" controller="this"
+<window name="win" height="80%" controller="self"
 	impl="org.carewebframework.help.viewer.HelpViewer">
 	<paneview>
 		<pane width="33%" splittable="true">
 			<div height="100%" width="100%">
 				<tabview name="tvNavigator" height="100%" visible="false" />
 				<label name="lblLoading"
-					class="z-toolbar cwf-help-viewer-loading" value="Loading..." />
+					class="cwf-help-viewer-loading" value="Loading..." />
 			</div>
 		</pane>
 		<pane>
