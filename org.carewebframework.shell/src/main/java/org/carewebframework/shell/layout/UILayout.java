@@ -27,12 +27,12 @@ package org.carewebframework.shell.layout;
 
 import java.io.InputStream;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.carewebframework.api.property.IPropertyProvider;
 import org.carewebframework.common.MiscUtil;
 import org.carewebframework.common.XMLUtil;
