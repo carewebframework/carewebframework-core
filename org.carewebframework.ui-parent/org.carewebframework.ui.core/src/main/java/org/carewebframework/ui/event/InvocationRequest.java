@@ -25,14 +25,14 @@
  */
 package org.carewebframework.ui.event;
 
-import org.carewebframework.web.event.Event;
-
 /**
  * A single invocation request that will be sent to the target.
  */
-public class InvocationRequest extends Event {
+public class InvocationRequest {
     
     private final String methodName;
+    
+    private final Object[] args;
     
     /**
      * Create a help request.
@@ -41,8 +41,8 @@ public class InvocationRequest extends Event {
      * @param args Arguments to be passed to the method.
      */
     protected InvocationRequest(String methodName, Object... args) {
-        super("invoke", null, args);
         this.methodName = methodName;
+        this.args = args;
     }
     
     /**
@@ -60,6 +60,6 @@ public class InvocationRequest extends Event {
      * @return Method arguments.
      */
     public Object[] getArgs() {
-        return (Object[]) getData();
+        return args;
     }
 }

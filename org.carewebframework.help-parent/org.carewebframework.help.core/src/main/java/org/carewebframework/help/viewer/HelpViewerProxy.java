@@ -49,6 +49,8 @@ public class HelpViewerProxy implements IHelpViewer {
     
     private InvocationRequestQueue remoteQueue;
     
+    private final InvocationRequestQueue proxyQueue;
+    
     private InvocationRequest helpRequest;
     
     private final List<IHelpSet> helpSets = new ArrayList<>();
@@ -65,7 +67,8 @@ public class HelpViewerProxy implements IHelpViewer {
     public HelpViewerProxy(Page owner) {
         super();
         ownerId = owner.getId();
-        remoteWindowName = null; //TODO: new InvocationRequestQueue(owner, this, HelpUtil.closeRequest).getQualifiedQueueName();
+        remoteWindowName = "help" + ownerId;
+        proxyQueue = new InvocationRequestQueue(remoteWindowName, owner, this, HelpUtil.closeRequest);
     }
     
     /**
@@ -220,7 +223,9 @@ public class HelpViewerProxy implements IHelpViewer {
      */
     @Override
     public void close() {
+        proxyQueue.close();
         sendRequest(HelpUtil.closeRequest, false);
+        HelpUtil.removeViewer(this);
     }
     
     /**

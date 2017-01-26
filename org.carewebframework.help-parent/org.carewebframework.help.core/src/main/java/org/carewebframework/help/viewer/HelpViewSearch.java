@@ -46,6 +46,8 @@ import org.carewebframework.web.component.Listitem;
 import org.carewebframework.web.component.Row;
 import org.carewebframework.web.component.Table;
 import org.carewebframework.web.component.Textbox;
+import org.carewebframework.web.event.Event;
+import org.carewebframework.web.event.EventUtil;
 import org.carewebframework.web.model.IComponentRenderer;
 import org.carewebframework.web.model.IModelAndView;
 import org.carewebframework.web.model.ListModel;
@@ -111,6 +113,30 @@ public class HelpViewSearch extends HelpViewBase implements IComponentRenderer<L
     private void onSelect$tblSrchResults() {
         Row row = tblSrchResults.getRows().getSelected().get(0);
         setTopic((HelpTopic) row.getData());
+    }
+    
+    /**
+     * Renders search results in main thread.
+     * 
+     * @param event
+     */
+    @EventHandler(value = "searchComplete", target = "@tblSrchResults")
+    private void onSearchComplete$tblSrchResults(Event event) {
+        @SuppressWarnings("unchecked")
+        List<HelpSearchHit> searchResults = (List<HelpSearchHit>) event.getData();
+        Collections.sort(searchResults);
+        
+        if (searchResults.isEmpty()) {
+            showMessage("cwf.help.tab.search.noresults");
+            return;
+        }
+        
+        double highscore = searchResults.get(0).getConfidence();
+        double lowscore = searchResults.get(searchResults.size() - 1).getConfidence();
+        double interval = (highscore - lowscore) / 3;
+        tertile1 = lowscore + interval;
+        tertile2 = tertile1 + interval;
+        modelAndView.setModel(new ListModel<>(searchResults));
     }
     
     /**
@@ -194,19 +220,7 @@ public class HelpViewSearch extends HelpViewBase implements IComponentRenderer<L
     
     @Override
     public void onSearchComplete(List<HelpSearchHit> searchResults) {
-        Collections.sort(searchResults);
-        
-        if (searchResults.isEmpty()) {
-            showMessage("cwf.help.tab.search.noresults");
-            return;
-        }
-        
-        double highscore = searchResults.get(0).getConfidence();
-        double lowscore = searchResults.get(searchResults.size() - 1).getConfidence();
-        double interval = (highscore - lowscore) / 3;
-        tertile1 = lowscore + interval;
-        tertile2 = tertile1 + interval;
-        modelAndView.setModel(new ListModel<>(searchResults));
+        EventUtil.post(tblSrchResults.getPage(), new Event("searchComplete", tblSrchResults, searchResults));
     }
     
     public void mergeHelpSet(IHelpSet helpSet) {

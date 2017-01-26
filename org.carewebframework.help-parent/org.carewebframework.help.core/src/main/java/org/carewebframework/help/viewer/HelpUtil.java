@@ -145,7 +145,7 @@ public class HelpUtil {
     protected static void removeViewer(IHelpViewer viewer) {
         Page page = getPage();
         
-        if (page.getAttribute(VIEWER_ATTRIB) == viewer) {
+        if (page != null && page.getAttribute(VIEWER_ATTRIB) == viewer) {
             page.removeAttribute(VIEWER_ATTRIB);
         }
     }
@@ -161,9 +161,10 @@ public class HelpUtil {
     }
     
     /**
-     * Returns a URL string representing the root URL and context path.
+     * Returns a URL string representing the root path and context path.
      * 
-     * @return The base url.
+     * @param path
+     * @return The url.
      */
     public static String getUrl(String path) {
         if (path == null) {

@@ -29,7 +29,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.beanutils.MethodUtils;
 import org.apache.commons.lang.StringUtils;
 import org.carewebframework.common.MiscUtil;
 import org.carewebframework.common.StrUtil;
@@ -40,6 +39,7 @@ import org.carewebframework.help.IHelpView;
 import org.carewebframework.help.IHelpViewer;
 import org.carewebframework.help.viewer.HelpHistory.ITopicListener;
 import org.carewebframework.ui.event.InvocationRequestQueue;
+import org.carewebframework.ui.event.InvocationRequestQueueRegistry;
 import org.carewebframework.web.ancillary.IAutoWired;
 import org.carewebframework.web.annotation.EventHandler;
 import org.carewebframework.web.annotation.WiredComponent;
@@ -53,13 +53,12 @@ import org.carewebframework.web.component.Tabview;
 import org.carewebframework.web.component.Window;
 import org.carewebframework.web.component.Window.CloseAction;
 import org.carewebframework.web.event.Event;
-import org.carewebframework.web.event.IEventListener;
 import org.carewebframework.web.event.ResizeEvent;
 
 /**
  * Help content viewer. Supports multiple help formats.
  */
-public class HelpViewer implements IAutoWired, IHelpViewer, ITopicListener, IEventListener {
+public class HelpViewer implements IAutoWired, IHelpViewer, ITopicListener {
     
     public enum HelpViewerMode {
         EMBEDDED, POPUP;
@@ -97,6 +96,8 @@ public class HelpViewer implements IAutoWired, IHelpViewer, ITopicListener, IEve
     
     private final List<HelpViewBase> views = new ArrayList<>();
     
+    private InvocationRequestQueue requestQueue;
+    
     private HelpHistory history;
     
     private HelpViewerMode mode;
@@ -115,7 +116,6 @@ public class HelpViewer implements IAutoWired, IHelpViewer, ITopicListener, IEve
     public void afterInitialized(BaseComponent comp) {
         root = (Window) comp;
         root.setAttribute("controller", this);
-        root.setCloseAction(CloseAction.HIDE);
         _init();
     }
     
@@ -205,9 +205,9 @@ public class HelpViewer implements IAutoWired, IHelpViewer, ITopicListener, IEve
      */
     @Override
     public void close() {
-        if (mode == HelpViewerMode.EMBEDDED) {
-            root.close();
-        } else {
+        root.close();
+        
+        if (mode != HelpViewerMode.EMBEDDED) {
             ClientUtil.invoke("window.close");
         }
     }
@@ -463,7 +463,7 @@ public class HelpViewer implements IAutoWired, IHelpViewer, ITopicListener, IEve
      * Initializes the UI after initial loading.
      */
     private void _init() {
-        String proxyId = null; //TODO: Executions.getCurrent().getParameter("proxy");
+        String proxyId = tvNavigator.getPage().getQueryParam("proxy");
         boolean proxied = proxyId != null;
         mode = proxied ? HelpViewerMode.POPUP : HelpViewerMode.EMBEDDED;
         root.setWidth(proxied ? "100%" : lastWidth + "px");
@@ -479,15 +479,20 @@ public class HelpViewer implements IAutoWired, IHelpViewer, ITopicListener, IEve
         reset();
         
         if (proxied) {
+            root.setCloseAction(CloseAction.DESTROY);
             root.getPage().setTitle("Help");
-            InvocationRequestQueue proxyQueue = null; //TODO: InvocationRequestQueue.getQueue(proxyId, HelpUtil.HELP_QUEUE_PREFIX);
+            InvocationRequestQueue proxyQueue = InvocationRequestQueueRegistry.getInstance().get("help" + proxyId);
             
-            if (proxyQueue == null) {
-                root.destroy();
-                return;
+            if (proxyQueue == null || !proxyQueue.isAlive()) {
+                proxyQueue = null;
+                close();
+            } else {
+                requestQueue = new InvocationRequestQueue("help" + root.getPage().getId(), root.getPage(), this,
+                        HelpUtil.closeRequest);
+                proxyQueue.sendRequest("setRemoteQueue", requestQueue);
             }
-            
-            proxyQueue.sendRequest("setRemoteQueue", new InvocationRequestQueue(root, HelpUtil.closeRequest));
+        } else {
+            root.setCloseAction(CloseAction.HIDE);
         }
         
     }
@@ -509,6 +514,11 @@ public class HelpViewer implements IAutoWired, IHelpViewer, ITopicListener, IEve
     @EventHandler("destroy")
     private void onDestroy() {
         HelpUtil.removeViewer(this);
+        
+        if (requestQueue != null) {
+            requestQueue.close();
+            requestQueue = null;
+        }
     }
     
     /**
@@ -536,16 +546,4 @@ public class HelpViewer implements IAutoWired, IHelpViewer, ITopicListener, IEve
         }
     }
     
-    /**
-     * Process remote help requests.
-     * 
-     * @param event The event object that embodies the request. The event name is the method name to
-     *            be invoked and the event data is an array of the method parameters.
-     */
-    @Override
-    public void onEvent(Event event) {
-        try {
-            MethodUtils.invokeMethod(this, event.getType(), (Object[]) event.getData());
-        } catch (Exception e) {}
-    }
 }

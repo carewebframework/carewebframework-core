@@ -26,6 +26,8 @@
 package org.carewebframework.ui.event;
 
 import org.apache.commons.beanutils.MethodUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.Page;
 import org.carewebframework.web.event.Event;
@@ -36,19 +38,36 @@ import org.carewebframework.web.event.IEventListener;
  * This class implements a queue that allows one page to execute methods on a target on another page
  * (the owner of the queue) via invocation requests.
  */
-public class InvocationRequestQueue implements IEventListener {
+public class InvocationRequestQueue {
     
     private static final int TIMEOUT_INTERVAL = 10000; // Timeout interval in milliseconds
+    
+    private static final Log log = LogFactory.getLog(InvocationRequestQueue.class);
     
     private final Object target;
     
     private final Page page;
     
+    private final String name;
+    
+    private final String eventName;
+    
     private final InvocationRequest onClose;
     
     private boolean closed;
     
-    private long lastKeepAlive;
+    private final IEventListener invocationListener = new IEventListener() {
+        
+        /**
+         * Invokes the method on the target as specified by the event.
+         * 
+         * @param event The invocation request event.
+         */
+        @Override
+        public void onEvent(Event event) {
+            invokeRequest((InvocationRequest) event.getData());
+        }
+    };
     
     /**
      * Create an invocation request.
@@ -64,39 +83,56 @@ public class InvocationRequestQueue implements IEventListener {
     /**
      * Create an invocation request queue for the specified target.
      * 
+     * @param name Unique name for this queue.
      * @param target Target of invocation requests sent to the queue.
      * @param onClose Invocation request to send to the target upon queue closure (may be null).
      */
-    public InvocationRequestQueue(BaseComponent target, InvocationRequest onClose) {
-        this(target.getPage(), target, onClose);
+    public InvocationRequestQueue(String name, BaseComponent target, InvocationRequest onClose) {
+        this(name, target.getPage(), target, onClose);
     }
     
     /**
      * Create a help message queue for the specified page and target.
      * 
+     * @param name Unique name for this queue.
      * @param page Page instance that owns the queue.
      * @param target Target of requests sent to the queue.
      * @param onClose Invocation request to send to the target upon queue closure (may be null).
      */
-    public InvocationRequestQueue(Page page, Object target, InvocationRequest onClose) {
+    public InvocationRequestQueue(String name, Page page, Object target, InvocationRequest onClose) {
         super();
+        this.name = name;
         this.target = target;
         this.page = page;
         this.onClose = onClose;
-        resetKeepAlive();
-        page.addEventListener("invoke", this);
+        eventName = "invoke_" + name;
+        InvocationRequestQueueRegistry.getInstance().register(this);
+        page.addEventListener(eventName, invocationListener);
+    }
+    
+    public String getName() {
+        return name;
+    }
+    
+    private void invokeRequest(InvocationRequest request) {
+        try {
+            MethodUtils.invokeMethod(target, request.getMethodName(), request.getArgs());
+        } catch (Exception e) {
+            log.error("Remote invocation error.", e);
+        }
     }
     
     /**
      * Close the invocation queue.
      */
-    protected void close() {
+    public void close() {
         if (!closed) {
             closed = true;
-            page.removeEventListener("invoke", this);
+            InvocationRequestQueueRegistry.getInstance().unregister(this);
+            page.removeEventListener(eventName, invocationListener);
             
             if (onClose != null) {
-                onEvent(onClose);
+                invokeRequest(onClose);
             }
         }
     }
@@ -117,7 +153,8 @@ public class InvocationRequestQueue implements IEventListener {
      * @param request The event packaging the request.
      */
     public void sendRequest(InvocationRequest request) {
-        EventUtil.post(page, request);
+        EventUtil.post(page, eventName, page, request);
+        page.getSession().ping("wakeup");
     }
     
     /**
@@ -126,37 +163,11 @@ public class InvocationRequestQueue implements IEventListener {
      * @return True if this queue is alive.
      */
     public boolean isAlive() {
-        checkKeepAlive();
-        return !closed && !page.isDead();
-    }
-    
-    /**
-     * Resets the keep-alive timer.
-     */
-    private void resetKeepAlive() {
-        lastKeepAlive = System.currentTimeMillis();
-    }
-    
-    /**
-     * If keep-alive is enabled, check to see if it has exceeded the threshold. If it has, it is
-     * assumed that the owner page is no longer valid and closes the queue.
-     */
-    private void checkKeepAlive() {
-        if (!closed && System.currentTimeMillis() - lastKeepAlive > TIMEOUT_INTERVAL) {
+        if (!closed && page.isDead()) {
             close();
         }
+        
+        return !closed;
     }
     
-    /**
-     * Invokes the method on the target as specified by the event.
-     * 
-     * @param event The invocation request event.
-     */
-    @Override
-    public void onEvent(Event event) {
-        try {
-            InvocationRequest request = (InvocationRequest) event;
-            MethodUtils.invokeMethod(target, request.getMethodName(), request.getArgs());
-        } catch (Throwable e) {}
-    }
 }
