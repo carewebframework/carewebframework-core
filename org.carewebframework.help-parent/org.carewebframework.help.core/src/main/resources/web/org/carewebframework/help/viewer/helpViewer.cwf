@@ -1,6 +1,6 @@
-<window name="win" height="80%"
+<window name="win" height="80%" class="cwf-help-viewer"
 	controller="org.carewebframework.help.viewer.HelpViewer">
-	<paneview>
+	<paneview height="100%" width="100%">
 		<pane width="33%" splittable="true">
 			<div height="100%" width="100%">
 				<tabview name="tvNavigator" height="100%" visible="false" />
@@ -8,9 +8,9 @@
 					class="cwf-help-viewer-loading" label="Loading..." />
 			</div>
 		</pane>
-		<pane>
-			<div width="100%" height="100%">
-				<toolbar class="cwf-help-viewer-navbar">
+		<pane width="67%">
+			<div height="100%" width="100%" class="cwf-help-viewer-content">
+				<toolbar class="cwf-help-viewer-navbar" width="100%">
 					<button name="btnPrevious"
 						class="glyphicon glyphicon-chevron-left"
 						hint="${@msg.cwf.help.viewer.btn.previous.hint}" />
@@ -30,6 +30,11 @@
 		</pane>
 	</paneview>
 	<style>
+		.cwf-help-viewer-content {
+			display: flex;
+			flex-direction: column;
+		}
+			
 		.cwf-help-viewer-loading {
 			font-size: 1.25em;
 			padding-top: 40px;

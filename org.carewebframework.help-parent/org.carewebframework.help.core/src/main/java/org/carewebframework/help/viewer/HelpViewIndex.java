@@ -38,6 +38,7 @@ import org.carewebframework.help.HelpViewType;
 import org.carewebframework.help.IHelpView;
 import org.carewebframework.web.annotation.EventHandler;
 import org.carewebframework.web.annotation.WiredComponent;
+import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.Listbox;
 import org.carewebframework.web.component.Listitem;
 import org.carewebframework.web.component.Textbox;
@@ -52,7 +53,7 @@ import org.carewebframework.web.model.ModelAndView;
  * keywords and one the displays the topics associated with the selected keyword. There is also a
  * quick find feature that allows locating a keyword by entering the first letters of the keyword.
  */
-public class HelpIndexTab extends HelpTab {
+public class HelpViewIndex extends HelpViewBase {
     
     @WiredComponent
     private Listbox lstKeywords;
@@ -67,7 +68,7 @@ public class HelpIndexTab extends HelpTab {
     
     private ListModel<String> keywordList;
     
-    private final IModelAndView<Listitem, HelpTopic> modelAndView;
+    private IModelAndView<Listitem, HelpTopic> modelAndView;
     
     private final IComponentRenderer<Listitem, String> keywordRenderer = new IComponentRenderer<Listitem, String>() {
         
@@ -84,8 +85,13 @@ public class HelpIndexTab extends HelpTab {
      * @param viewer The viewer.
      * @param viewType The help view type.
      */
-    public HelpIndexTab(HelpViewer viewer, HelpViewType viewType) {
+    public HelpViewIndex(HelpViewer viewer, HelpViewType viewType) {
         super(viewer, viewType, "helpIndexTab.cwf");
+    }
+    
+    @Override
+    public void afterInitialized(BaseComponent comp) {
+        super.afterInitialized(comp);
         modelAndView = lstTopics.getModelAndView(HelpTopic.class);
         modelAndView.setRenderer(new HelpTopicRenderer());
     }
@@ -170,7 +176,7 @@ public class HelpIndexTab extends HelpTab {
      * Initialize the tab the first time it is selected. This method creates a model list from the
      * current keyword list and assigns it to the keyword list box.
      * 
-     * @see org.carewebframework.help.viewer.HelpTab#init()
+     * @see org.carewebframework.help.viewer.HelpViewBase#init()
      */
     @Override
     protected void init() {
@@ -182,7 +188,7 @@ public class HelpIndexTab extends HelpTab {
     /**
      * Sets the focus to the quick find text box when the tab is selected.
      * 
-     * @see org.carewebframework.help.viewer.HelpTab#onSelect()
+     * @see org.carewebframework.help.viewer.HelpViewBase#onSelect()
      */
     @Override
     public void onSelect() {
@@ -194,7 +200,7 @@ public class HelpIndexTab extends HelpTab {
     /**
      * Add keywords and topics from the specified view to the tab.
      * 
-     * @see org.carewebframework.help.viewer.HelpTab#addView(IHelpView)
+     * @see org.carewebframework.help.viewer.HelpViewBase#addView(IHelpView)
      */
     @Override
     public void addView(IHelpView view) {

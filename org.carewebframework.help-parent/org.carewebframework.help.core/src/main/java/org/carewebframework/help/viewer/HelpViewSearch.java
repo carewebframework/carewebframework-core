@@ -38,6 +38,7 @@ import org.carewebframework.help.IHelpSearch.IHelpSearchListener;
 import org.carewebframework.help.IHelpSet;
 import org.carewebframework.web.annotation.EventHandler;
 import org.carewebframework.web.annotation.WiredComponent;
+import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.Cell;
 import org.carewebframework.web.component.Image;
 import org.carewebframework.web.component.Label;
@@ -45,8 +46,6 @@ import org.carewebframework.web.component.Listitem;
 import org.carewebframework.web.component.Row;
 import org.carewebframework.web.component.Table;
 import org.carewebframework.web.component.Textbox;
-import org.carewebframework.web.event.Event;
-import org.carewebframework.web.event.IEventListener;
 import org.carewebframework.web.model.IComponentRenderer;
 import org.carewebframework.web.model.IModelAndView;
 import org.carewebframework.web.model.ListModel;
@@ -56,7 +55,7 @@ import org.carewebframework.web.model.ListModel;
  * enter a search expression (including boolean operators) and a list box to display the results of
  * the search.
  */
-public class HelpSearchTab extends HelpTab implements IComponentRenderer<Listitem, HelpSearchHit>, IHelpSearchListener {
+public class HelpViewSearch extends HelpViewBase implements IComponentRenderer<Listitem, HelpSearchHit>, IHelpSearchListener {
     
     @WiredComponent
     private Textbox txtSearch;
@@ -71,34 +70,11 @@ public class HelpSearchTab extends HelpTab implements IComponentRenderer<Listite
     
     private final List<IHelpSet> helpSets = new ArrayList<>();
     
-    private final IModelAndView<Row, HelpSearchHit> modelAndView;
+    private IModelAndView<Row, HelpSearchHit> modelAndView;
     
     private double tertile1;
     
     private double tertile2;
-    
-    private final IEventListener searchListener = new IEventListener() {
-        
-        @Override
-        public void onEvent(Event event) {
-            @SuppressWarnings("unchecked")
-            List<HelpSearchHit> searchResults = (List<HelpSearchHit>) event.getData();
-            Collections.sort(searchResults);
-            
-            if (searchResults.isEmpty()) {
-                showMessage("cwf.help.tab.search.noresults");
-                return;
-            }
-            
-            double highscore = searchResults.get(0).getConfidence();
-            double lowscore = searchResults.get(searchResults.size() - 1).getConfidence();
-            double interval = (highscore - lowscore) / 3;
-            tertile1 = lowscore + interval;
-            tertile2 = tertile1 + interval;
-            modelAndView.setModel(new ListModel<>(searchResults));
-        }
-        
-    };
     
     /**
      * Create the help tab for the specified viewer and viewType.
@@ -106,15 +82,20 @@ public class HelpSearchTab extends HelpTab implements IComponentRenderer<Listite
      * @param viewer The help viewer.
      * @param viewType The view type.
      */
-    public HelpSearchTab(HelpViewer viewer, HelpViewType viewType) {
+    public HelpViewSearch(HelpViewer viewer, HelpViewType viewType) {
         super(viewer, viewType, "helpSearchTab.cwf");
+    }
+    
+    @Override
+    public void afterInitialized(BaseComponent comp) {
+        super.afterInitialized(comp);
         modelAndView = tblSrchResults.getRows().getModelAndView(HelpSearchHit.class);
     }
     
     /**
      * Sets the focus to the search text box when the tab is selected.
      * 
-     * @see org.carewebframework.help.viewer.HelpTab#onSelect()
+     * @see org.carewebframework.help.viewer.HelpViewBase#onSelect()
      */
     @Override
     public void onSelect() {
@@ -212,8 +193,20 @@ public class HelpSearchTab extends HelpTab implements IComponentRenderer<Listite
     }
     
     @Override
-    public void onSearchComplete(List<HelpSearchHit> results) {
-        searchListener.onEvent(new Event("searchComplete", this, results));
+    public void onSearchComplete(List<HelpSearchHit> searchResults) {
+        Collections.sort(searchResults);
+        
+        if (searchResults.isEmpty()) {
+            showMessage("cwf.help.tab.search.noresults");
+            return;
+        }
+        
+        double highscore = searchResults.get(0).getConfidence();
+        double lowscore = searchResults.get(searchResults.size() - 1).getConfidence();
+        double interval = (highscore - lowscore) / 3;
+        tertile1 = lowscore + interval;
+        tertile2 = tertile1 + interval;
+        modelAndView.setModel(new ListModel<>(searchResults));
     }
     
     public void mergeHelpSet(IHelpSet helpSet) {

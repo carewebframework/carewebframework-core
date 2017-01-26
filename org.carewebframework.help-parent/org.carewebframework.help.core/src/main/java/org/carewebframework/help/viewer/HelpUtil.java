@@ -165,9 +165,20 @@ public class HelpUtil {
      * 
      * @return The base url.
      */
-    public static String getBaseUrl() {
+    public static String getUrl(String path) {
+        if (path == null) {
+            return path;
+        }
+        
         ServletContext sc = ExecutionContext.getSession().getServletContext();
-        return sc.getRealPath("");
+        
+        if (path.startsWith("jar:")) {
+            int i = path.indexOf("!");
+            path = i < 0 ? path : path.substring(++i);
+        }
+        
+        path = sc.getContextPath() + path;
+        return path;
     }
     
     /**

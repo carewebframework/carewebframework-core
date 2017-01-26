@@ -42,7 +42,7 @@ import org.carewebframework.web.component.Treeview;
 /**
  * Tab for displaying the table of contents. This is displayed as a tree of topics.
  */
-public class HelpContentsTab extends HelpTab {
+public class HelpViewContents extends HelpViewBase {
     
     @WiredComponent
     private Treeview tree;
@@ -57,7 +57,7 @@ public class HelpContentsTab extends HelpTab {
      * @param viewer The help viewer.
      * @param viewType The view type.
      */
-    public HelpContentsTab(HelpViewer viewer, HelpViewType viewType) {
+    public HelpViewContents(HelpViewer viewer, HelpViewType viewType) {
         super(viewer, viewType, "helpContentsTab.cwf");
     }
     
@@ -74,7 +74,7 @@ public class HelpContentsTab extends HelpTab {
     /**
      * Sort the table of contents before initial display.
      * 
-     * @see HelpTab#init()
+     * @see HelpViewBase#init()
      */
     @Override
     public void init() {
@@ -85,7 +85,7 @@ public class HelpContentsTab extends HelpTab {
     /**
      * When the viewer changes the topic selection, highlight that topic in the tree (if it exists).
      * 
-     * @see HelpTab#onTopicSelected(HelpTopic)
+     * @see HelpViewBase#onTopicSelected(HelpTopic)
      */
     @Override
     public void onTopicSelected(HelpTopic topic) {
@@ -98,7 +98,7 @@ public class HelpContentsTab extends HelpTab {
     /**
      * Merges the table of contents entries from the specified view into the tree.
      * 
-     * @see HelpTab#addView(IHelpView)
+     * @see HelpViewBase#addView(IHelpView)
      */
     @Override
     public void addView(IHelpView view) {

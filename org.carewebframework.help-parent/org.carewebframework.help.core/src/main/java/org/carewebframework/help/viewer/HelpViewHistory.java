@@ -29,8 +29,13 @@ import org.carewebframework.help.HelpTopic;
 import org.carewebframework.help.HelpViewType;
 import org.carewebframework.web.annotation.EventHandler;
 import org.carewebframework.web.annotation.WiredComponent;
+import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.Listbox;
-import org.carewebframework.web.model.ModelAndView;
+import org.carewebframework.web.component.Listitem;
+import org.carewebframework.web.component.Tab;
+import org.carewebframework.web.model.IListModel;
+import org.carewebframework.web.model.IModelAndView;
+import org.carewebframework.web.model.ListModel;
 
 /**
  * Tab that implements a view of the current topic selection history. Unlike other help tabs, this
@@ -38,12 +43,12 @@ import org.carewebframework.web.model.ModelAndView;
  * the current contents of the history list. Because the list box uses the history list directly as
  * its list model, the list box contents changes dynamically as the history changes.
  */
-public class HelpHistoryTab extends HelpTab {
+public class HelpViewHistory extends HelpViewBase {
     
     @WiredComponent
     private Listbox lstHistory;
     
-    private final HelpHistory history;
+    private HelpHistory history;
     
     /**
      * Create the help tab for the specified viewer and viewType.
@@ -51,10 +56,19 @@ public class HelpHistoryTab extends HelpTab {
      * @param viewer The help viewer.
      * @param viewType The view type.
      */
-    public HelpHistoryTab(HelpViewer viewer, HelpViewType viewType) {
+    public HelpViewHistory(HelpViewer viewer, HelpViewType viewType) {
         super(viewer, viewType, "helpHistoryTab.cwf");
-        history = viewer.getHistory();
-        new ModelAndView<>(lstHistory, history.getItems(), new HelpTopicRenderer());
+    }
+    
+    @Override
+    public void afterInitialized(BaseComponent comp) {
+        super.afterInitialized(comp);
+        IModelAndView<Listitem, HelpTopic> mv = lstHistory.getModelAndView(HelpTopic.class);
+        IListModel<HelpTopic> model = new ListModel<>();
+        history = new HelpHistory(model);
+        mv.setModel(model);
+        mv.setRenderer(new HelpTopicRenderer());
+        getViewer().setHelpHistory(history);
     }
     
     /**
@@ -68,7 +82,7 @@ public class HelpHistoryTab extends HelpTab {
     /**
      * Sets focus to the list box when the tab is selected.
      * 
-     * @see org.carewebframework.help.viewer.HelpTab#onSelect()
+     * @see org.carewebframework.help.viewer.HelpViewBase#onSelect()
      */
     @Override
     public void onSelect() {
@@ -79,12 +93,12 @@ public class HelpHistoryTab extends HelpTab {
     /**
      * Updated the list box selection when the history selection changes.
      * 
-     * @see org.carewebframework.help.viewer.HelpTab#onTopicSelected(HelpTopic)
+     * @see org.carewebframework.help.viewer.HelpViewBase#onTopicSelected(HelpTopic)
      */
     @Override
     public void onTopicSelected(HelpTopic topic) {
         lstHistory.setSelectedIndex(history.getPosition());
-        setVisible(!history.getItems().isEmpty());
+        getContainer().getAncestor(Tab.class).setVisible(!history.isEmpty());
     }
     
 }

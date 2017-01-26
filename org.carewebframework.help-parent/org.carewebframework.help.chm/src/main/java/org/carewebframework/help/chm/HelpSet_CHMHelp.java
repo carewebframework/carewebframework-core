@@ -66,8 +66,6 @@ public class HelpSet_CHMHelp extends HelpSetBase {
     
     private final List<IHelpView> helpViews = new ArrayList<>();
     
-    private final boolean jar;
-    
     private String defaultTopic;
     
     public HelpSet_CHMHelp(HelpModule module) throws Exception {
@@ -75,7 +73,6 @@ public class HelpSet_CHMHelp extends HelpSetBase {
         String url = module.getUrl();
         int i = url.lastIndexOf('/');
         baseURL = url.substring(0, i + 1);
-        jar = baseURL.startsWith("/web/");
         loadSystemInfo();
         loadTopics();
         initViews();

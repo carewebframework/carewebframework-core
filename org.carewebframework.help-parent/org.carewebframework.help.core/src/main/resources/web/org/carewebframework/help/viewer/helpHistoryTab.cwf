@@ -1,1 +1,1 @@
-<listbox name="lstHistory" flex="1" />
+<listbox name="lstHistory" width="100%" height="90%" size="100" style="border:none"/>

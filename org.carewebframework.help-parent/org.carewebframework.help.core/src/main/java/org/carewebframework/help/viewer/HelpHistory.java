@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.carewebframework.help.HelpTopic;
-import org.carewebframework.web.model.ListModel;
+import org.carewebframework.web.model.IListModel;
 
 /**
  * This class manages the history of selected topics. There are methods for adding new topics,
@@ -45,16 +45,7 @@ public class HelpHistory {
         void onTopicSelected(HelpTopic topic);
     }
     
-    /**
-     * Class for storing the topic history. It extends ListModel (and can be used as a live
-     * model for a list box) mainly to introduce some convenience methods without any
-     * significant new functionality.
-     */
-    public class HistoryList extends ListModel<HelpTopic> {
-        
-    }
-    
-    private final HistoryList history = new HistoryList();
+    private final IListModel<HelpTopic> history;
     
     private final List<ITopicListener> topicListeners = new ArrayList<>();
     
@@ -62,12 +53,25 @@ public class HelpHistory {
     
     private int position = -1;
     
+    public HelpHistory(IListModel<HelpTopic> history) {
+        this.history = history;
+    }
+    
     /**
      * Clears the history list.
      */
     public void clear() {
         history.clear();
         position = -1;
+    }
+    
+    /**
+     * Returns true if the history list is empty.
+     * 
+     * @return True if the history list is empty.
+     */
+    public boolean isEmpty() {
+        return history.size() == 0;
     }
     
     /**
@@ -83,13 +87,19 @@ public class HelpHistory {
      */
     public void add(HelpTopic topic) {
         if (topic != null && topic.getURL() != null && !sameTopic(topic, getCurrentItem())) {
-            history.removeRange(position + 1, history.size());
-            history.removeRange(0, history.size() - maxsize);
+            removeRange(position + 1, history.size());
+            removeRange(0, history.size() - maxsize);
             position = history.size();
             history.add(topic);
         }
         
         notifyListeners(topic);
+    }
+    
+    private void removeRange(int start, int end) {
+        if (start <= end && !history.isEmpty()) {
+            history.removeRange(start, end);
+        }
     }
     
     /**
@@ -200,12 +210,4 @@ public class HelpHistory {
         }
     }
     
-    /**
-     * Returns a reference to the underlying history list for use as a live list.
-     * 
-     * @return The history list.
-     */
-    public HistoryList getItems() {
-        return history;
-    }
 }

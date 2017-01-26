@@ -25,27 +25,27 @@
  */
 package org.carewebframework.help.viewer;
 
-import java.util.List;
-
-import org.carewebframework.common.StrUtil;
+import org.carewebframework.common.MiscUtil;
 import org.carewebframework.help.HelpTopic;
 import org.carewebframework.help.HelpViewType;
 import org.carewebframework.help.IHelpView;
 import org.carewebframework.help.viewer.HelpHistory.ITopicListener;
-import org.carewebframework.web.ancillary.INamespace;
+import org.carewebframework.web.ancillary.IAutoWired;
 import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.component.Tab;
-import org.carewebframework.web.component.Tabview;
+import org.carewebframework.web.component.BaseUIComponent;
+import org.carewebframework.web.component.Container;
 import org.carewebframework.web.page.PageUtil;
 
 /**
  * Abstract base class for all help tabs. It descends from Tab.
  */
-public abstract class HelpTab extends Tab implements INamespace, ITopicListener {
+public abstract class HelpViewBase implements IAutoWired, ITopicListener {
     
     private final HelpViewType viewType;
     
     private final HelpViewer viewer;
+    
+    private final Container container = new Container();
     
     private boolean initialized;
     
@@ -56,46 +56,46 @@ public abstract class HelpTab extends Tab implements INamespace, ITopicListener 
      * @param viewType The view type supported by the created tab.
      * @return The help tab that supports the specified view type.
      */
-    public static HelpTab createTab(HelpViewer viewer, HelpViewType viewType) {
-        Class<? extends HelpTab> tabClass = viewType == null ? null : getTabClass(viewType);
+    public static HelpViewBase createView(HelpViewer viewer, HelpViewType viewType) {
+        Class<? extends HelpViewBase> viewClass = viewType == null ? null : getViewClass(viewType);
         
-        if (tabClass == null) {
+        if (viewClass == null) {
             return null;
         }
         
         try {
-            return tabClass.getConstructor(HelpViewer.class, HelpViewType.class).newInstance(viewer, viewType);
+            return viewClass.getConstructor(HelpViewer.class, HelpViewType.class).newInstance(viewer, viewType);
         } catch (Exception e) {
-            return null;
+            throw MiscUtil.toUnchecked(e);
         }
     }
     
     /**
-     * Returns the help tab class that services the specified view type. For unsupported view types,
-     * returns null.
+     * Returns the help view class that services the specified view type. For unsupported view
+     * types, returns null.
      * 
      * @param viewType The view type.
      * @return A help tab class.
      */
-    private static Class<? extends HelpTab> getTabClass(HelpViewType viewType) {
+    private static Class<? extends HelpViewBase> getViewClass(HelpViewType viewType) {
         switch (viewType) {
             case TOC:
-                return HelpContentsTab.class;
+                return HelpViewContents.class;
             
             case KEYWORD:
-                return HelpIndexTab.class;
+                return HelpViewIndex.class;
             
             case INDEX:
-                return HelpIndexTab.class;
+                return HelpViewIndex.class;
             
             case SEARCH:
-                return HelpSearchTab.class;
+                return HelpViewSearch.class;
             
             case HISTORY:
-                return HelpHistoryTab.class;
+                return HelpViewHistory.class;
             
             case GLOSSARY:
-                return HelpIndexTab.class;
+                return HelpViewIndex.class;
             
             default:
                 return null;
@@ -107,56 +107,21 @@ public abstract class HelpTab extends Tab implements INamespace, ITopicListener 
      * 
      * @param viewer The help viewer.
      * @param viewType The view type supported by the created tab.
-     * @param zulTemplate The zul page that specifies the layout for the tab.
+     * @param cwfTemplate The template that specifies the layout for the tab.
      */
-    public HelpTab(HelpViewer viewer, HelpViewType viewType, String zulTemplate) {
-        super();
+    public HelpViewBase(HelpViewer viewer, HelpViewType viewType, String cwfTemplate) {
         this.viewer = viewer;
         this.viewType = viewType;
-        addStyle("overflow", "auto");
-        addToTabbox();
-        String label = StrUtil.getLabel("cwf.help.tab." + viewType.name().toLowerCase() + ".label");
-        setLabel(label == null ? viewType.name() : label);
-        
-        if (zulTemplate != null) {
-            PageUtil.createPage(HelpUtil.RESOURCE_PREFIX + zulTemplate, this);
-            wireController(this);
-        }
+        PageUtil.createPage(HelpUtil.RESOURCE_PREFIX + cwfTemplate, container);
+        container.wireController(this);
     }
     
-    /**
-     * Adds this tab to the parent tab box. The view type ordinal value determines the sequencing of
-     * tabs.
-     */
-    private void addToTabbox() {
-        int pos = -1;
-        Tabview parent = viewer.getTabview();
-        List<BaseComponent> children = parent.getChildren();
-        
-        for (int i = 0; i < children.size(); i++) {
-            Object child = children.get(i);
-            
-            if (child instanceof HelpTab) {
-                if (viewType.compareTo(((HelpTab) child).viewType) <= 0) {
-                    pos = i;
-                    break;
-                }
-            }
-        }
-        
-        insertChild(parent, this, pos);
+    @Override
+    public void afterInitialized(BaseComponent comp) {
     }
     
-    /**
-     * Adds the child component to the parent at the specified position.
-     * 
-     * @param parent Parent component to receive the child.
-     * @param child Child component to be added.
-     * @param pos Position for the child component relative to its siblings. If negative, the child
-     *            is added after its siblings.
-     */
-    private void insertChild(BaseComponent parent, BaseComponent child, int pos) {
-        parent.addChild(child, pos);
+    public BaseUIComponent getContainer() {
+        return container;
     }
     
     /**
@@ -202,6 +167,10 @@ public abstract class HelpTab extends Tab implements INamespace, ITopicListener 
      */
     public HelpViewType getViewType() {
         return viewType;
+    }
+    
+    public HelpViewer getViewer() {
+        return viewer;
     }
     
     /**
