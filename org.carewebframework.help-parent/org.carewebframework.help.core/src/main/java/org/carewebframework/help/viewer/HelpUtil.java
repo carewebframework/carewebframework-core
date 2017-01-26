@@ -132,10 +132,14 @@ public class HelpUtil {
             return viewer;
         }
         
-        viewer = getViewerMode(page) == HelpViewerMode.POPUP ? new HelpViewerProxy(page)
-                : (IHelpViewer) PageUtil.createPage(VIEWER_URL, null);
+        viewer = getViewerMode(page) == HelpViewerMode.POPUP ? new HelpViewerProxy(page) : createViewer();
         page.setAttribute(VIEWER_ATTRIB, viewer);
         return viewer;
+    }
+    
+    private static IHelpViewer createViewer() {
+        BaseComponent viewer = PageUtil.createPage(VIEWER_URL, null).get(0);
+        return (IHelpViewer) viewer.getAttribute("controller");
     }
     
     protected static void removeViewer(IHelpViewer viewer) {

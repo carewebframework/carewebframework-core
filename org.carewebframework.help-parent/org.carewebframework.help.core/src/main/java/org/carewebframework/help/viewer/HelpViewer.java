@@ -39,14 +39,17 @@ import org.carewebframework.help.IHelpView;
 import org.carewebframework.help.IHelpViewer;
 import org.carewebframework.help.viewer.HelpHistory.ITopicListener;
 import org.carewebframework.ui.event.InvocationRequestQueue;
+import org.carewebframework.web.ancillary.IAutoWired;
 import org.carewebframework.web.annotation.EventHandler;
 import org.carewebframework.web.annotation.WiredComponent;
 import org.carewebframework.web.client.ClientUtil;
+import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.Button;
 import org.carewebframework.web.component.Iframe;
 import org.carewebframework.web.component.Label;
 import org.carewebframework.web.component.Tabview;
 import org.carewebframework.web.component.Window;
+import org.carewebframework.web.component.Window.Mode;
 import org.carewebframework.web.event.Event;
 import org.carewebframework.web.event.IEventListener;
 import org.carewebframework.web.event.ResizeEvent;
@@ -54,7 +57,7 @@ import org.carewebframework.web.event.ResizeEvent;
 /**
  * Help content viewer. Supports multiple help formats.
  */
-public class HelpViewer extends Window implements IHelpViewer, ITopicListener, IEventListener {
+public class HelpViewer implements IAutoWired, IHelpViewer, ITopicListener, IEventListener {
     
     public enum HelpViewerMode {
         EMBEDDED, POPUP;
@@ -86,6 +89,8 @@ public class HelpViewer extends Window implements IHelpViewer, ITopicListener, I
     @WiredComponent
     private Label lblLoading;
     
+    private Window root;
+    
     private final List<IHelpSet> helpSets = new ArrayList<>();
     
     private final HelpHistory history = new HelpHistory();
@@ -102,15 +107,21 @@ public class HelpViewer extends Window implements IHelpViewer, ITopicListener, I
         super();
     }
     
+    @Override
+    public void afterInitialized(BaseComponent comp) {
+        root = (Window) comp;
+        root.setAttribute("controller", this);
+    }
+    
     /**
      * @see org.carewebframework.help.IHelpViewer#show()
      */
     @Override
     public void show() {
         if (mode == HelpViewerMode.EMBEDDED) {
-            setMode(Mode.MODAL);
-            setHeight(lastHeight + "px");
-            setWidth(lastWidth + "px");
+            root.setMode(Mode.MODAL);
+            root.setHeight(lastHeight + "px");
+            root.setWidth(lastWidth + "px");
         } else {
             ClientUtil.invoke("window.focus");
         }
@@ -188,7 +199,7 @@ public class HelpViewer extends Window implements IHelpViewer, ITopicListener, I
     @Override
     public void close() {
         if (mode == HelpViewerMode.EMBEDDED) {
-            setVisible(false);
+            root.setVisible(false);
         } else {
             ClientUtil.invoke("window.close");
         }
@@ -362,7 +373,7 @@ public class HelpViewer extends Window implements IHelpViewer, ITopicListener, I
     private void onLoad$iframe(Event event) {
         String url = (String) event.getData();
         
-        if (url.equals(lastURL)) {
+        if (url == null || url.equals(lastURL)) {
             return;
         }
         
@@ -422,29 +433,29 @@ public class HelpViewer extends Window implements IHelpViewer, ITopicListener, I
         String proxyId = null; //TODO: Executions.getCurrent().getParameter("proxy");
         boolean proxied = proxyId != null;
         mode = proxied ? HelpViewerMode.POPUP : HelpViewerMode.EMBEDDED;
-        setWidth(proxied ? "100%" : lastWidth + "px");
-        setHeight(proxied ? "100%" : lastHeight + "px");
-        setSizable(!proxied);
-        setClosable(!proxied);
-        setMaximizable(!proxied);
-        setMinimizable(!proxied);
-        setTitle(proxied ? null : "Help");
-        setVisible(proxied);
+        root.setWidth(proxied ? "100%" : lastWidth + "px");
+        root.setHeight(proxied ? "100%" : lastHeight + "px");
+        root.setSizable(!proxied);
+        root.setClosable(!proxied);
+        root.setMaximizable(!proxied);
+        root.setMinimizable(!proxied);
+        root.setTitle(proxied ? null : "Help");
+        root.setVisible(proxied);
         //TODO: setWidgetOverride("_cwf_focus", "function() {window.focus();}");
         //TODO: setWidgetOverride("_cwf_close", "function() {window.close();}");
         history.addTopicListener(this);
         reset();
         
         if (proxied) {
-            getPage().setTitle("Help");
+            root.getPage().setTitle("Help");
             InvocationRequestQueue proxyQueue = null; //TODO: InvocationRequestQueue.getQueue(proxyId, HelpUtil.HELP_QUEUE_PREFIX);
             
             if (proxyQueue == null) {
-                destroy();
+                root.destroy();
                 return;
             }
             
-            proxyQueue.sendRequest("setRemoteQueue", new InvocationRequestQueue(this, HelpUtil.closeRequest));
+            proxyQueue.sendRequest("setRemoteQueue", new InvocationRequestQueue(root, HelpUtil.closeRequest));
         }
         
     }
@@ -463,10 +474,9 @@ public class HelpViewer extends Window implements IHelpViewer, ITopicListener, I
     /**
      * Remove the viewer reference when it is detached.
      */
-    @Override
-    public void onDestroy() {
+    @EventHandler("destroy")
+    private void onDestroy() {
         HelpUtil.removeViewer(this);
-        super.onDestroy();
     }
     
     /**
