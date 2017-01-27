@@ -121,25 +121,42 @@ public class HelpUtil {
     public static IHelpViewer getViewer(boolean forceCreate) {
         Page page = getPage();
         IHelpViewer viewer = (IHelpViewer) page.getAttribute(VIEWER_ATTRIB);
+        return viewer != null ? viewer : forceCreate ? createViewer(page) : null;
+    }
+    
+    /**
+     * Creates an instance of the help viewer, associating it with the specified page.
+     * 
+     * @param page Page owning the help viewer instance.
+     * @return The newly created help viewer.
+     */
+    private static IHelpViewer createViewer(Page page) {
+        IHelpViewer viewer;
         
-        if (viewer != null || !forceCreate) {
-            return viewer;
+        if (getViewerMode(page) == HelpViewerMode.POPUP) {
+            viewer = new HelpViewerProxy(page);
+        } else {
+            BaseComponent root = PageUtil.createPage(VIEWER_URL, page).get(0);
+            viewer = (IHelpViewer) root.getAttribute("controller");
         }
         
-        viewer = getViewerMode(page) == HelpViewerMode.POPUP ? new HelpViewerProxy(page) : createViewer(page);
         page.setAttribute(VIEWER_ATTRIB, viewer);
         return viewer;
     }
     
-    private static IHelpViewer createViewer(Page page) {
-        BaseComponent viewer = PageUtil.createPage(VIEWER_URL, page).get(0);
-        return (IHelpViewer) viewer.getAttribute("controller");
-    }
-    
+    /**
+     * Remove and close the help viewer associated with the current page.
+     */
     public static void removeViewer() {
         removeViewer(getPage(), true);
     }
     
+    /**
+     * Remove and optionally close the help viewer associated with the specified page.
+     * 
+     * @param page The page owning the help viewer.
+     * @param close If true, close the help viewer after removing it.
+     */
     protected static void removeViewer(Page page, boolean close) {
         IHelpViewer viewer = (IHelpViewer) page.removeAttribute(VIEWER_ATTRIB);
         
@@ -148,6 +165,14 @@ public class HelpUtil {
         }
     }
     
+    /**
+     * Remove and optionally close the specified help viewer if is the active viewer for the
+     * specified page.
+     * 
+     * @param page The page owner the help viewer.
+     * @param viewer The viewer to remove.
+     * @param close If true, close the help viewer after removing it.
+     */
     protected static void removeViewer(Page page, IHelpViewer viewer, boolean close) {
         if (viewer != null && viewer == page.getAttribute(VIEWER_ATTRIB)) {
             removeViewer(page, close);
