@@ -29,12 +29,8 @@ import javax.servlet.ServletContext;
 
 import org.carewebframework.api.spring.SpringUtil;
 import org.carewebframework.help.HelpContext;
-import org.carewebframework.help.HelpModule;
-import org.carewebframework.help.HelpModuleRegistry;
-import org.carewebframework.help.HelpSetCache;
 import org.carewebframework.help.HelpViewType;
 import org.carewebframework.help.IHelpSearch;
-import org.carewebframework.help.IHelpSet;
 import org.carewebframework.help.IHelpViewer;
 import org.carewebframework.help.viewer.HelpViewer.HelpViewerMode;
 import org.carewebframework.ui.command.CommandUtil;
@@ -211,7 +207,7 @@ public class HelpUtil {
      *            label.
      */
     public static void show(String module, String topic, String label) {
-        show(new HelpContext(module, topic, label));
+        getViewer(true).show(module, topic, label);
     }
     
     /**
@@ -220,15 +216,7 @@ public class HelpUtil {
      * @param target The help target.
      */
     public static void show(HelpContext target) {
-        HelpModule dx = HelpModuleRegistry.getInstance().get(target.module);
-        IHelpSet hs = dx == null ? null : HelpSetCache.getInstance().get(dx);
-        
-        if (hs != null) {
-            String label = target.label == null && target.topic == null ? dx.getTitle() : target.label;
-            IHelpViewer viewer = getViewer(true);
-            viewer.mergeHelpSet(hs);
-            viewer.show(hs, target.topic, label);
-        }
+        getViewer(true).show(target);
     }
     
     /**

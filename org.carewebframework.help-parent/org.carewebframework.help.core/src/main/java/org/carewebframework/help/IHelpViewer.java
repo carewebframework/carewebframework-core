@@ -100,6 +100,34 @@ public interface IHelpViewer {
     void show(String homeId, String topicId);
     
     /**
+     * Show help for the given module and optional topic.
+     * 
+     * @param module The id of the help module.
+     * @param topic The id of the desired topic. If null, the home topic is shown.
+     * @param label The label to display for the topic. If null, the topic id is displayed as the
+     *            label.
+     */
+    default void show(String module, String topic, String label) {
+        show(new HelpContext(module, topic, label));
+    }
+    
+    /**
+     * Show help for the given help target.
+     * 
+     * @param target The help target.
+     */
+    default void show(HelpContext target) {
+        HelpModule dx = HelpModuleRegistry.getInstance().get(target.module);
+        IHelpSet hs = dx == null ? null : HelpSetCache.getInstance().get(dx);
+        
+        if (hs != null) {
+            String label = target.label == null && target.topic == null ? dx.getTitle() : target.label;
+            mergeHelpSet(hs);
+            show(hs, target.topic, label);
+        }
+    }
+    
+    /**
      * Closes the viewer.
      */
     void close();
