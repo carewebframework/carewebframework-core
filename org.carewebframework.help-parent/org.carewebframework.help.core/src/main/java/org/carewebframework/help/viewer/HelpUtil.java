@@ -65,8 +65,6 @@ public class HelpUtil {
     
     private static final String CSH_TARGET = CSH_PREFIX + "target";
     
-    /*package*/static final String HELP_QUEUE_PREFIX = "Help_Message_Queue";
-    
     /*package*/static final InvocationRequest closeRequest = new InvocationRequest("close");
     
     /**

@@ -71,7 +71,7 @@ public class PluginResourceMenu implements IPluginResource {
     /**
      * Returns the action that will be invoked when the menu item is clicked.
      * 
-     * @return The action to be invoked. This may be a url or a zscript action.
+     * @return The action to be invoked. This may be a url or a groovy script action.
      */
     public String getAction() {
         return action;
@@ -80,7 +80,7 @@ public class PluginResourceMenu implements IPluginResource {
     /**
      * Sets the action that will be invoked when the menu item is clicked.
      * 
-     * @param action The action to be invoked. This may be a url or a zscript action.
+     * @param action The action to be invoked. This may be a url or a groovy script action.
      */
     public void setAction(String action) {
         this.action = action;
