@@ -1,4 +1,4 @@
-<window name="win" height="80%" class="cwf-help-viewer"
+<window name="win" height="80%" class="cwf-help-viewer flavor:panel-info"
 	controller="org.carewebframework.help.viewer.HelpViewer">
 	<paneview height="100%" width="100%">
 		<pane width="33%" splittable="true">
@@ -8,7 +8,7 @@
 					class="cwf-help-viewer-loading" label="Loading..." />
 			</div>
 		</pane>
-		<pane width="67%">
+		<pane flex="1">
 			<div height="100%" width="100%" class="cwf-help-viewer-content">
 				<toolbar class="cwf-help-viewer-navbar" width="100%">
 					<button name="btnPrevious"

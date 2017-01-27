@@ -46,7 +46,6 @@ import org.carewebframework.web.component.BaseUIComponent;
 import org.carewebframework.web.component.Image;
 import org.carewebframework.web.component.Page;
 import org.carewebframework.web.ipc.InvocationRequest;
-import org.carewebframework.web.ipc.InvocationRequestQueue;
 import org.carewebframework.web.page.PageUtil;
 
 /**
@@ -72,7 +71,7 @@ public class HelpUtil {
     
     /*package*/static final String HELP_QUEUE_PREFIX = "Help_Message_Queue";
     
-    /*package*/static final InvocationRequest closeRequest = InvocationRequestQueue.createRequest("close");
+    /*package*/static final InvocationRequest closeRequest = new InvocationRequest("close");
     
     /**
      * Returns the page for the current execution.
@@ -112,41 +111,52 @@ public class HelpUtil {
      */
     public static void setViewerMode(Page page, HelpViewerMode mode) {
         if (getViewerMode(page) != mode) {
-            page.removeAttribute(VIEWER_ATTRIB);
+            removeViewer(page, true);
         }
         
         page.setAttribute(EMBEDDED_ATTRIB, mode);
     }
     
     /**
-     * Returns an instance of the viewer for the current page. If no instance yet exists, one is
-     * created.
+     * Returns an instance of the viewer for the current page. If no instance yet exists and
+     * forceCreate is true, one is created.
      * 
-     * @return The help viewer.
+     * @param forceCreate If true, a viewer instance will be created if it does not exist.
+     * @return The help viewer (may be null).
      */
-    public static IHelpViewer getViewer() {
+    public static IHelpViewer getViewer(boolean forceCreate) {
         Page page = getPage();
         IHelpViewer viewer = (IHelpViewer) page.getAttribute(VIEWER_ATTRIB);
         
-        if (viewer != null) {
+        if (viewer != null || !forceCreate) {
             return viewer;
         }
         
-        viewer = getViewerMode(page) == HelpViewerMode.POPUP ? new HelpViewerProxy(page) : createViewer();
+        viewer = getViewerMode(page) == HelpViewerMode.POPUP ? new HelpViewerProxy(page) : createViewer(page);
         page.setAttribute(VIEWER_ATTRIB, viewer);
         return viewer;
     }
     
-    private static IHelpViewer createViewer() {
-        BaseComponent viewer = PageUtil.createPage(VIEWER_URL, ExecutionContext.getPage()).get(0);
+    private static IHelpViewer createViewer(Page page) {
+        BaseComponent viewer = PageUtil.createPage(VIEWER_URL, page).get(0);
         return (IHelpViewer) viewer.getAttribute("controller");
     }
     
-    protected static void removeViewer(IHelpViewer viewer) {
-        Page page = getPage();
+    public static void removeViewer() {
+        removeViewer(getPage(), true);
+    }
+    
+    protected static void removeViewer(Page page, boolean close) {
+        IHelpViewer viewer = (IHelpViewer) page.removeAttribute(VIEWER_ATTRIB);
         
-        if (page != null && page.getAttribute(VIEWER_ATTRIB) == viewer) {
-            page.removeAttribute(VIEWER_ATTRIB);
+        if (viewer != null && close) {
+            viewer.close();
+        }
+    }
+    
+    protected static void removeViewer(Page page, IHelpViewer viewer, boolean close) {
+        if (viewer != null && viewer == page.getAttribute(VIEWER_ATTRIB)) {
+            removeViewer(page, close);
         }
     }
     
@@ -215,7 +225,7 @@ public class HelpUtil {
         
         if (hs != null) {
             String label = target.label == null && target.topic == null ? dx.getTitle() : target.label;
-            IHelpViewer viewer = getViewer();
+            IHelpViewer viewer = getViewer(true);
             viewer.mergeHelpSet(hs);
             viewer.show(hs, target.topic, label);
         }
@@ -225,7 +235,7 @@ public class HelpUtil {
      * Displays the help viewer's table of contents.
      */
     public static void showTOC() {
-        getViewer().show(HelpViewType.TOC);
+        getViewer(true).show(HelpViewType.TOC);
     }
     
     /**

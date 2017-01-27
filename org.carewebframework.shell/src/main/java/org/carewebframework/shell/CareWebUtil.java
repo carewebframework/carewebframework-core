@@ -94,6 +94,26 @@ public class CareWebUtil {
     }
     
     /**
+     * Shows table of contents in help viewer.
+     */
+    public static void showHelpTOC() {
+        getShell().getHelpViewer();
+        HelpUtil.showTOC();
+    }
+    
+    /**
+     * Shows help topic in help viewer.
+     * 
+     * @param module The id of the help module.
+     * @param topic The id of the desired topic.
+     * @param label The label to display for the topic.
+     */
+    public static void showHelpTopic(String module, String topic, String label) {
+        getShell().getHelpViewer();
+        HelpUtil.show(module, topic, label);
+    }
+    
+    /**
      * Associates help context with a component.
      * 
      * @param component The component.

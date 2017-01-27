@@ -33,6 +33,7 @@ import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.Listbox;
 import org.carewebframework.web.component.Listitem;
 import org.carewebframework.web.component.Tab;
+import org.carewebframework.web.event.ChangeEvent;
 import org.carewebframework.web.model.IListModel;
 import org.carewebframework.web.model.IModelAndView;
 import org.carewebframework.web.model.ListModel;
@@ -75,8 +76,11 @@ public class HelpViewHistory extends HelpViewBase {
      * Set the history position to correspond to the new list box selection.
      */
     @EventHandler(value = "change", target = "@lstHistory")
-    private void onChange$lstHistory() {
-        history.setPosition(lstHistory.getSelectedIndex());
+    private void onChange$lstHistory(ChangeEvent event) {
+        
+        if (event.getValue() == Boolean.TRUE) {
+            history.setPosition(lstHistory.getSelectedIndex());
+        }
     }
     
     /**
@@ -97,8 +101,13 @@ public class HelpViewHistory extends HelpViewBase {
      */
     @Override
     public void onTopicSelected(HelpTopic topic) {
-        lstHistory.setSelectedIndex(history.getPosition());
-        getContainer().getAncestor(Tab.class).setVisible(!history.isEmpty());
+        Listitem item = (Listitem) lstHistory.getChildAt(history.getPosition());
+        lstHistory.setSelectedItem(item);
+        
+        if (item != null) {
+            getContainer().getAncestor(Tab.class).setVisible(true);
+            item.scrollIntoView(false);
+        }
     }
     
 }

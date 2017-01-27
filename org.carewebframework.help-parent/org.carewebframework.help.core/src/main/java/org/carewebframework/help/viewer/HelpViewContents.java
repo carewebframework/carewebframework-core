@@ -106,7 +106,7 @@ public class HelpViewContents extends HelpViewBase {
         HelpTopicNode topNode = view.getTopicTree();
         
         for (HelpTopicNode node : topNode.getChildren()) {
-            addNode(tree, node); //TODO: .getTreerow().setSclass("cwf-help-toc-top");
+            addNode(tree, node).addClass("cwf-help-toc-top");
         }
     }
     
@@ -126,7 +126,7 @@ public class HelpViewContents extends HelpViewBase {
         tc.addChild(parent);
         
         for (HelpTopicNode child : node.getChildren()) {
-            addNode(tc, child);
+            addNode(parent, child);
         }
         
         parent.setCollapsed(false);

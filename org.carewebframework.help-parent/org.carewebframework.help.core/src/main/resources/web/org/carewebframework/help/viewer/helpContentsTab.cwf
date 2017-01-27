@@ -1,5 +1,5 @@
 <page>
-	<treeview name="tree" flex="1" class="cwf-help-toc-tree" />
+	<treeview name="tree" flex="1" showLines="false" showToggles="false" class="cwf-help-toc-tree" />
 	
 	<style>
 		.cwf-help-toc-tree {
@@ -9,7 +9,7 @@
 			border: none
 		}
 		
-		.cwf-help-toc-top .z-treecell-text {
+		.cwf-help-toc-top > a {
 			font-weight: bold;
 			text-decoration: underline;
 		}

@@ -43,7 +43,7 @@ public class HelpViewerProxy implements IHelpViewer {
     
     private static final String SHOW_METHOD = "show";
     
-    private final String ownerId;
+    private final Page owner;
     
     private final String remoteWindowName;
     
@@ -55,9 +55,9 @@ public class HelpViewerProxy implements IHelpViewer {
     
     private final List<IHelpSet> helpSets = new ArrayList<>();
     
-    private final InvocationRequest loadRequest = InvocationRequestQueue.createRequest("load", helpSets);
+    private final InvocationRequest loadRequest = new InvocationRequest("load", helpSets);
     
-    private final InvocationRequest mergeRequest = InvocationRequestQueue.createRequest("mergeHelpSet", helpSets);
+    private final InvocationRequest mergeRequest = new InvocationRequest("mergeHelpSet", helpSets);
     
     /**
      * Creates a proxy for the help viewer with the specified page as owner.
@@ -66,8 +66,8 @@ public class HelpViewerProxy implements IHelpViewer {
      */
     public HelpViewerProxy(Page owner) {
         super();
-        ownerId = owner.getId();
-        remoteWindowName = "help" + ownerId;
+        this.owner = owner;
+        remoteWindowName = "help" + owner.getId();
         proxyQueue = new InvocationRequestQueue(remoteWindowName, owner, this, HelpUtil.closeRequest);
     }
     
@@ -75,7 +75,7 @@ public class HelpViewerProxy implements IHelpViewer {
      * Requests the creation of the remote viewer window, passing it the owner's page id.
      */
     private void startRemoteViewer() {
-        HelpUtil.openWindow(HelpUtil.VIEWER_URL + "?proxy=" + ownerId, remoteWindowName);
+        HelpUtil.openWindow(HelpUtil.VIEWER_URL + "?proxy=" + owner.getId(), remoteWindowName);
     }
     
     /**
@@ -94,7 +94,7 @@ public class HelpViewerProxy implements IHelpViewer {
      * @param params Parameters to pass to the method (may be null).
      */
     private void sendRequest(String methodName, Object... params) {
-        sendRequest(InvocationRequestQueue.createRequest(methodName, params), true);
+        sendRequest(new InvocationRequest(methodName, params), true);
         
     }
     
@@ -225,7 +225,7 @@ public class HelpViewerProxy implements IHelpViewer {
     public void close() {
         proxyQueue.close();
         sendRequest(HelpUtil.closeRequest, false);
-        HelpUtil.removeViewer(this);
+        HelpUtil.removeViewer(owner, this, false);
     }
     
     /**

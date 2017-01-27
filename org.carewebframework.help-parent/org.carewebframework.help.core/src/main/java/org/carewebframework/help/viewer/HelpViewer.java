@@ -42,14 +42,17 @@ import org.carewebframework.web.ancillary.IAutoWired;
 import org.carewebframework.web.annotation.EventHandler;
 import org.carewebframework.web.annotation.WiredComponent;
 import org.carewebframework.web.client.ClientUtil;
+import org.carewebframework.web.client.ExecutionContext;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.Button;
 import org.carewebframework.web.component.Iframe;
 import org.carewebframework.web.component.Label;
+import org.carewebframework.web.component.Page;
 import org.carewebframework.web.component.Tab;
 import org.carewebframework.web.component.Tabview;
 import org.carewebframework.web.component.Window;
 import org.carewebframework.web.component.Window.CloseAction;
+import org.carewebframework.web.component.Window.Size;
 import org.carewebframework.web.event.Event;
 import org.carewebframework.web.event.ResizeEvent;
 import org.carewebframework.web.ipc.InvocationRequestQueue;
@@ -108,8 +111,6 @@ public class HelpViewer implements IAutoWired, IHelpViewer, ITopicListener {
     
     private double lastWidth = 1000;
     
-    private boolean initialized;
-    
     public HelpViewer() {
         super();
     }
@@ -118,7 +119,7 @@ public class HelpViewer implements IAutoWired, IHelpViewer, ITopicListener {
     public void afterInitialized(BaseComponent comp) {
         root = (Window) comp;
         root.setAttribute("controller", this);
-        _init();
+        init();
     }
     
     /**
@@ -132,7 +133,8 @@ public class HelpViewer implements IAutoWired, IHelpViewer, ITopicListener {
         if (mode == HelpViewerMode.EMBEDDED) {
             root.setHeight(lastHeight + "px");
             root.setWidth(lastWidth + "px");
-            root.modal(null);
+            root.setSize(Size.NORMAL);
+            root.popup(null);
         } else {
             ClientUtil.invoke("window.focus");
         }
@@ -464,13 +466,9 @@ public class HelpViewer implements IAutoWired, IHelpViewer, ITopicListener {
     /**
      * Initializes the UI after initial loading.
      */
-    private void _init() {
-        if (initialized) {
-            return;
-        }
-        
-        initialized = true;
-        String proxyId = tvNavigator.getPage().getQueryParam("proxy");
+    private void init() {
+        Page page = ExecutionContext.getPage();
+        String proxyId = page.getQueryParam("proxy");
         boolean proxied = proxyId != null;
         mode = proxied ? HelpViewerMode.POPUP : HelpViewerMode.EMBEDDED;
         root.setWidth(proxied ? "100%" : lastWidth + "px");
@@ -487,15 +485,14 @@ public class HelpViewer implements IAutoWired, IHelpViewer, ITopicListener {
         
         if (proxied) {
             root.setCloseAction(CloseAction.DESTROY);
-            root.getPage().setTitle("Help");
+            page.setTitle("Help");
             InvocationRequestQueue proxyQueue = InvocationRequestQueueRegistry.getInstance().get("help" + proxyId);
             
             if (proxyQueue == null || !proxyQueue.isAlive()) {
                 proxyQueue = null;
                 close();
             } else {
-                requestQueue = new InvocationRequestQueue("help" + root.getPage().getId(), root.getPage(), this,
-                        HelpUtil.closeRequest);
+                requestQueue = new InvocationRequestQueue("help" + page.getId(), page, this, HelpUtil.closeRequest);
                 proxyQueue.sendRequest("setRemoteQueue", requestQueue);
             }
         } else {
@@ -520,7 +517,7 @@ public class HelpViewer implements IAutoWired, IHelpViewer, ITopicListener {
      */
     @EventHandler("destroy")
     private void onDestroy() {
-        HelpUtil.removeViewer(this);
+        HelpUtil.removeViewer(root.getPage(), this, false);
         
         if (requestQueue != null) {
             requestQueue.close();

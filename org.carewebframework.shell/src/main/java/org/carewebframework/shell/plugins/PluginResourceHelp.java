@@ -26,8 +26,8 @@
 package org.carewebframework.shell.plugins;
 
 import org.carewebframework.help.HelpModule;
-import org.carewebframework.help.viewer.HelpUtil;
 import org.carewebframework.shell.CareWebShell;
+import org.carewebframework.shell.CareWebUtil;
 import org.carewebframework.shell.layout.UIElementBase;
 
 /**
@@ -46,7 +46,6 @@ import org.carewebframework.shell.layout.UIElementBase;
  * </ul>
  */
 public class PluginResourceHelp implements IPluginResource {
-    
     
     // Determines where the menu item will appear under the help submenu.
     private String path;
@@ -95,15 +94,15 @@ public class PluginResourceHelp implements IPluginResource {
      * externally derived help content, this value must be explicitly set. Otherwise, it will be
      * determined automatically from the specified help module.
      * 
-     * @return The action to be invoked to display the help content. This may be a url or a zscript
-     *         action.
+     * @return The action to be invoked to display the help content. This may be a url or a groovy
+     *         script action.
      */
     public String getAction() {
         if (action == null) {
             HelpModule module = HelpModule.getModule(id);
             action = module == null ? ""
-                    : "groovy:" + HelpUtil.class.getName() + ".show(\"" + id + "\",\"" + (topic == null ? "" : topic)
-                            + "\",\"" + module.getTitle() + "\");";
+                    : "groovy:" + CareWebUtil.class.getName() + ".showHelpTopic(\"" + id + "\",\""
+                            + (topic == null ? "" : topic) + "\",\"" + module.getTitle() + "\");";
         }
         
         return action;
@@ -115,7 +114,7 @@ public class PluginResourceHelp implements IPluginResource {
      * not set this value. It will be derived automatically from the specified help module.
      * 
      * @param action The action to be invoked to display the help content. This may be a url or a
-     *            zscript action.
+     *            groovy script action.
      */
     public void setAction(String action) {
         this.action = action;

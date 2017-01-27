@@ -27,7 +27,9 @@ package org.carewebframework.shell;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
@@ -46,6 +48,7 @@ import org.carewebframework.common.StrUtil;
 import org.carewebframework.help.HelpModule;
 import org.carewebframework.help.HelpSetCache;
 import org.carewebframework.help.IHelpSet;
+import org.carewebframework.help.IHelpViewer;
 import org.carewebframework.help.viewer.HelpUtil;
 import org.carewebframework.shell.layout.UIElementCWFBase;
 import org.carewebframework.shell.layout.UIElementDesktop;
@@ -92,11 +95,13 @@ public class CareWebShell extends Div {
     
     private final CommandRegistry commandRegistry = SpringUtil.getBean("commandRegistry", CommandRegistry.class);
     
-    private final List<PluginContainer> plugins = new ArrayList<PluginContainer>();
+    private final List<PluginContainer> plugins = new ArrayList<>();
     
-    private final List<HelpModule> helpModules = new ArrayList<HelpModule>();
+    private final Set<HelpModule> helpModules = new HashSet<>();
     
-    private final List<String> propertyGroups = new ArrayList<String>();
+    private final Set<IHelpSet> helpSets = new HashSet<>();
+    
+    private final List<String> propertyGroups = new ArrayList<>();
     
     private UILayout layout = new UILayout();
     
@@ -380,8 +385,9 @@ public class CareWebShell extends Div {
             desktop.activate(false);
             desktop.clear();
             helpModules.clear();
+            helpSets.clear();
             desktop.afterInitialize(false);
-            HelpUtil.getViewer().load(null);
+            HelpUtil.removeViewer();
             propertyGroups.clear();
             registerPropertyGroup("CAREWEB.CONTROLS");
             registeredStyles.destroyChildren();
@@ -424,19 +430,17 @@ public class CareWebShell extends Div {
     public void registerHelpResource(PluginResourceHelp resource) {
         HelpModule def = HelpModule.getModule(resource.getModule());
         
-        if (def != null) {
-            if (helpModules.contains(def)) {
-                return;
-            }
-            
+        if (def != null && helpModules.add(def)) {
             IHelpSet hs = HelpSetCache.getInstance().get(def);
             
-            if (hs == null) {
-                return;
+            if (hs != null) {
+                helpSets.add(hs);
+                IHelpViewer viewer = HelpUtil.getViewer(false);
+                
+                if (viewer != null) {
+                    viewer.mergeHelpSet(hs);
+                }
             }
-            
-            HelpUtil.getViewer().mergeHelpSet(hs);
-            helpModules.add(def);
         }
         
         desktop.addHelpMenu(resource);
@@ -657,4 +661,23 @@ public class CareWebShell extends Div {
         
         return messageWindow;
     }
+    
+    /**
+     * Returns reference to the help viewer. If not already created, one will be created and
+     * initialized with the registered help sets.
+     * 
+     * @return A help viewer reference.
+     */
+    protected IHelpViewer getHelpViewer() {
+        IHelpViewer viewer = HelpUtil.getViewer(false);
+        
+        if (viewer != null) {
+            return viewer;
+        }
+        
+        viewer = HelpUtil.getViewer(true);
+        viewer.load(helpSets);
+        return viewer;
+    }
+    
 }

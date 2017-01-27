@@ -97,8 +97,10 @@ public class HelpHistory {
     }
     
     private void removeRange(int start, int end) {
-        if (start <= end && !history.isEmpty()) {
+        try {
             history.removeRange(start, end);
+        } catch (IndexOutOfBoundsException e) {
+            // Ignore out of bounds exceptions
         }
     }
     
