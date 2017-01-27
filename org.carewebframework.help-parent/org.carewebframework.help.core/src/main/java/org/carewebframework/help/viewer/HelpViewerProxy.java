@@ -31,9 +31,9 @@ import java.util.List;
 import org.carewebframework.help.HelpViewType;
 import org.carewebframework.help.IHelpSet;
 import org.carewebframework.help.IHelpViewer;
-import org.carewebframework.ui.event.InvocationRequest;
-import org.carewebframework.ui.event.InvocationRequestQueue;
 import org.carewebframework.web.component.Page;
+import org.carewebframework.web.ipc.InvocationRequest;
+import org.carewebframework.web.ipc.InvocationRequestQueue;
 
 /**
  * Acts as a proxy for a help viewer instance residing in another browser window. Uses event queues

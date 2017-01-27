@@ -38,8 +38,6 @@ import org.carewebframework.help.IHelpSet;
 import org.carewebframework.help.IHelpViewer;
 import org.carewebframework.help.viewer.HelpViewer.HelpViewerMode;
 import org.carewebframework.ui.command.CommandUtil;
-import org.carewebframework.ui.event.InvocationRequest;
-import org.carewebframework.ui.event.InvocationRequestQueue;
 import org.carewebframework.ui.util.CWFUtil;
 import org.carewebframework.web.client.ClientUtil;
 import org.carewebframework.web.client.ExecutionContext;
@@ -47,6 +45,8 @@ import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.BaseUIComponent;
 import org.carewebframework.web.component.Image;
 import org.carewebframework.web.component.Page;
+import org.carewebframework.web.ipc.InvocationRequest;
+import org.carewebframework.web.ipc.InvocationRequestQueue;
 import org.carewebframework.web.page.PageUtil;
 
 /**
@@ -138,7 +138,7 @@ public class HelpUtil {
     }
     
     private static IHelpViewer createViewer() {
-        BaseComponent viewer = PageUtil.createPage(VIEWER_URL, null).get(0);
+        BaseComponent viewer = PageUtil.createPage(VIEWER_URL, ExecutionContext.getPage()).get(0);
         return (IHelpViewer) viewer.getAttribute("controller");
     }
     

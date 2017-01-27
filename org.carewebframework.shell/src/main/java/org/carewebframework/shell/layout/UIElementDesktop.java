@@ -120,7 +120,7 @@ public class UIElementDesktop extends UIElementCWFBase {
         menubar = new UIElementMenubar(menubar1);
         toolbar = new UIElementToolbar(toolbar1);
         ActionUtil.addAction(mnuAbout, "groovy:org.carewebframework.shell.CareWebUtil.about();");
-        ActionUtil.addAction(mnuTOC, "groovy:org.carewebframework.shell.help.HelpUtil.showTOC();");
+        ActionUtil.addAction(mnuTOC, "groovy:org.carewebframework.help.viewer.HelpUtil.showTOC();");
         fixedHelpItems = helpMenu.getChildCount();
         sortHelpMenu = false;
         helpMenu.addEventListener("open", (event) -> {

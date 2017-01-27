@@ -38,8 +38,6 @@ import org.carewebframework.help.IHelpSet;
 import org.carewebframework.help.IHelpView;
 import org.carewebframework.help.IHelpViewer;
 import org.carewebframework.help.viewer.HelpHistory.ITopicListener;
-import org.carewebframework.ui.event.InvocationRequestQueue;
-import org.carewebframework.ui.event.InvocationRequestQueueRegistry;
 import org.carewebframework.web.ancillary.IAutoWired;
 import org.carewebframework.web.annotation.EventHandler;
 import org.carewebframework.web.annotation.WiredComponent;
@@ -54,6 +52,8 @@ import org.carewebframework.web.component.Window;
 import org.carewebframework.web.component.Window.CloseAction;
 import org.carewebframework.web.event.Event;
 import org.carewebframework.web.event.ResizeEvent;
+import org.carewebframework.web.ipc.InvocationRequestQueue;
+import org.carewebframework.web.ipc.InvocationRequestQueueRegistry;
 
 /**
  * Help content viewer. Supports multiple help formats.
@@ -107,6 +107,8 @@ public class HelpViewer implements IAutoWired, IHelpViewer, ITopicListener {
     private double lastHeight = 600;
     
     private double lastWidth = 1000;
+    
+    private boolean initialized;
     
     public HelpViewer() {
         super();
@@ -463,6 +465,11 @@ public class HelpViewer implements IAutoWired, IHelpViewer, ITopicListener {
      * Initializes the UI after initial loading.
      */
     private void _init() {
+        if (initialized) {
+            return;
+        }
+        
+        initialized = true;
         String proxyId = tvNavigator.getPage().getQueryParam("proxy");
         boolean proxied = proxyId != null;
         mode = proxied ? HelpViewerMode.POPUP : HelpViewerMode.EMBEDDED;
