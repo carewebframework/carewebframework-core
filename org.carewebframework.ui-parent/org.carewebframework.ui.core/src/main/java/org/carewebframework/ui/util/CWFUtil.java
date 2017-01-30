@@ -208,8 +208,8 @@ public class CWFUtil {
         }
     }
     
-    public static BaseLabeledComponent findChildByLabel(BaseComponent parent, String label) {
-        for (BaseLabeledComponent comp : parent.getChildren(BaseLabeledComponent.class)) {
+    public static BaseLabeledComponent<?> findChildByLabel(BaseComponent parent, String label) {
+        for (BaseLabeledComponent<?> comp : parent.getChildren(BaseLabeledComponent.class)) {
             if (label.equals(comp.getLabel())) {
                 return comp;
             }

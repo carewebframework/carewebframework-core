@@ -43,8 +43,6 @@ import org.carewebframework.web.component.Menuitem;
 import org.carewebframework.web.dragdrop.DropUtil;
 import org.carewebframework.web.event.ClickEvent;
 import org.carewebframework.web.event.DblclickEvent;
-import org.carewebframework.web.event.Event;
-import org.carewebframework.web.event.IEventListener;
 
 /**
  * Controller for the test component. This component provides a list box of draggable list items for
