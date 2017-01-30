@@ -25,6 +25,8 @@
  */
 package org.carewebframework.api.context;
 
+import org.carewebframework.api.context.ISurveyResponse.IResponseCallback;
+
 /**
  * Every context object must implement this interface. The context manager uses this interface to
  * manage context changes.
@@ -133,10 +135,9 @@ public interface IManagedContext<DomainClass> extends ISharedContext<DomainClass
      * Survey all subscribers for context change response.
      * 
      * @param silent If true, subscribers should not request user interaction and all subscribers
-     *            will be surveyed regardless of response. If false, a subscriber may request user
-     *            interaction and the first nonempty response will terminate the polling.
-     * @return Result of survey. If empty string, all subscribers acquiesced to the context change
-     *         request.
+     *            will be surveyed regardless of their response. If false, a subscriber may request
+     *            user interaction and the first rejection response will terminate the survey.
+     * @param callback Callback to report subscriber responses to survey.
      */
-    String surveySubscribers(boolean silent);
+    void surveySubscribers(boolean silent, IResponseCallback callback);
 }

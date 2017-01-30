@@ -26,18 +26,18 @@
 package org.carewebframework.api.context;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.Stack;
 import java.util.TreeSet;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.carewebframework.api.AppFramework;
 import org.carewebframework.api.IRegisterEvent;
 import org.carewebframework.api.context.CCOWContextManager.CCOWState;
+import org.carewebframework.api.context.ISurveyResponse.IResponseCallback;
 import org.carewebframework.api.event.IEventManager;
 import org.carewebframework.api.security.IDigitalSignature;
 import org.carewebframework.api.spring.SpringUtil;
@@ -51,7 +51,6 @@ import org.carewebframework.api.spring.SpringUtil;
  * process context change events.
  */
 public class ContextManager implements IContextManager, CCOWContextManager.ICCOWContextEvent, IRegisterEvent {
-    
     
     private static final Log log = LogFactory.getLog(ContextManager.class);
     
@@ -79,7 +78,7 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
      */
     private enum CCOWStatus {
         NONE, DISABLED, CHANGING, JOINED, BROKEN
-    };
+    }
     
     /**
      * Accumulate response values in string buffer.
@@ -135,12 +134,10 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
     
     /**
      * Joins the CCOW common context, if available.
-     * 
-     * @return True if the operation was successful.
      */
-    public boolean ccowJoin() {
+    public void ccowJoin() {
         if (ccowIsActive()) {
-            return true;
+            return;
         }
         
         if (ccowContextManager == null && ccowEnabled) {
@@ -154,13 +151,14 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
                 ccowContextManager.resume();
             }
             
-            if (!init()) {
-                ccowContextManager.suspend();
-            }
+            init(response -> {
+                if (response.rejected()) {
+                    ccowContextManager.suspend();
+                }
+                
+                updateCCOWStatus();
+            });
         }
-        
-        updateCCOWStatus();
-        return ccowIsActive();
     }
     
     /**
@@ -176,43 +174,55 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
      * Initialize context objects to their default state. The default state should match the CCOW
      * context if one exists, or an initial state as determined by the context object.
      * 
-     * @return {@link #init(IManagedContext)}
+     * @param callback Callback to report subscriber responses.
+     * @see {@link #init(IManagedContext)}
      */
-    public boolean init() {
-        return init(null);
+    public void init(IResponseCallback callback) {
+        init(null, callback);
     }
     
     /**
      * Initializes one or all managed contexts to their default state.
      * 
      * @param item Managed context to initialize or, if null, initializes all managed contexts.
-     * @return True if the operation was successful.
+     * @param callback Callback to report subscriber responses.
+     * @see {@link #init(IManagedContext)}
      */
-    public boolean init(IManagedContext<?> item) {
+    public void init(IManagedContext<?> item, IResponseCallback callback) {
         contextItems.clear();
-        boolean result = true;
         
         if (ccowIsActive()) {
             contextItems.addItems(ccowContextManager.getCCOWContext());
         }
         
         if (item != null) {
-            result = initItem(item);
+            initItem(item, callback);
         } else {
-            for (IManagedContext<?> managedContext : managedContexts) {
-                result &= initItem(managedContext);
-            }
+            SurveyResponse response = new SurveyResponse();
+            initItem(managedContexts.iterator(), response, callback);
         }
-        return result;
+    }
+    
+    private void initItem(Iterator<IManagedContext<?>> iter, SurveyResponse response, IResponseCallback callback) {
+        if (iter.hasNext()) {
+            IManagedContext<?> managedContext = iter.next();
+            
+            initItem(managedContext, aresponse -> {
+                response.merge(aresponse);
+                initItem(iter, response, callback);
+            });
+        } else if (callback != null) {
+            callback.response(response);
+        }
     }
     
     /**
      * Initializes the managed context.
      * 
      * @param item Managed context to initialize.
-     * @return True if change was accepted.
+     * @param callback Callback to report subscriber responses.
      */
-    private boolean initItem(IManagedContext<?> item) {
+    private void initItem(IManagedContext<?> item, IResponseCallback callback) {
         try {
             localChangeBegin(item);
             
@@ -222,10 +232,10 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
                 item.init();
             }
             
-            return StringUtils.isEmpty(localChangeEnd(item));
+            localChangeEnd(item, callback);
         } catch (ContextException e) {
             log.error("Error initializing context.", e);
-            return false;
+            execCallback(callback, new SurveyResponse(e.toString()));
         }
     }
     
@@ -288,39 +298,51 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
      * Sets the committed state of all context objects based on the marshaled context.
      * 
      * @param marshaledContext The marshaled context to process.
-     * @return Reason if context change rejected.
+     * @param callback Callback to report subscriber responses.
      */
-    public String setMarshaledContext(ContextItems marshaledContext) {
-        return setMarshaledContext(marshaledContext, true);
+    public void setMarshaledContext(ContextItems marshaledContext, IResponseCallback callback) {
+        setMarshaledContext(marshaledContext, true, callback);
     }
-            
-            /**
-             * Updates managed contexts based on the marshaledContext.
-             * 
-             * @param marshaledContext The marshaled context to process.
-             * @param commit If true the pending contexts are committed.
-             * @return Reason if context change rejected.
-             */
-            /*package*/String setMarshaledContext(ContextItems marshaledContext, boolean commit) {
-        StringBuilder reason = new StringBuilder();
+    
+    /**
+     * Updates managed contexts based on the marshaledContext.
+     * 
+     * @param marshaledContext The marshaled context to process.
+     * @param commit If true the pending contexts are committed.
+     * @param callback Callback to report subscriber responses.
+     */
+    /*package*/void setMarshaledContext(ContextItems marshaledContext, boolean commit, IResponseCallback callback) {
+        ISurveyResponse response = new SurveyResponse();
+        Iterator<IManagedContext<?>> iter = managedContexts.iterator();
         
-        for (IManagedContext<?> managedContext : managedContexts) {
+        setMarshaledContext(marshaledContext, iter, response, __ -> {
+            if (commit) {
+                commitContexts(!response.rejected(), false);
+            }
+        });
+    }
+    
+    private void setMarshaledContext(ContextItems marshaledContext, Iterator<IManagedContext<?>> iter,
+                                     ISurveyResponse response, IResponseCallback callback) {
+        if (iter.hasNext()) {
+            IManagedContext<?> managedContext = iter.next();
+            
             try {
                 if (managedContext.setContextItems(marshaledContext)) {
                     localChangeBegin(managedContext);
-                    appendResponse(reason, localChangeEnd(managedContext, true, true));
+                    localChangeEnd(managedContext, true, true, aresponse -> {
+                        response.merge(aresponse);
+                        setMarshaledContext(marshaledContext, iter, response, callback);
+                    });
                 }
             } catch (Exception e) {
                 log.error("Error processing marshaled context change.", e);
-                appendResponse(reason, e.toString());
+                response.reject(e.toString());
+                setMarshaledContext(marshaledContext, iter, response, callback);
             }
+        } else {
+            execCallback(callback, response);
         }
-        
-        if (commit) {
-            commitContexts(reason.length() == 0, false);
-        }
-        
-        return reason.toString();
     }
     
     /**
@@ -440,8 +462,8 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
      * @see org.carewebframework.api.context.IContextManager#localChangeEnd
      */
     @Override
-    public String localChangeEnd(IManagedContext<?> managedContext) throws ContextException {
-        return localChangeEnd(managedContext, false, false);
+    public void localChangeEnd(IManagedContext<?> managedContext, IResponseCallback callback) throws ContextException {
+        localChangeEnd(managedContext, false, false, callback);
     }
     
     /**
@@ -450,11 +472,11 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
      * @param managedContext The managed context of interest.
      * @param silent If true, this is a silent context change.
      * @param deferCommit If true, don't commit the context change, just survey subscribers.
-     * @return The response(s) returned by subscribers.
+     * @param response Holds the response(s) returned by subscribers.
      * @throws ContextException during illegal context change nesting
      */
-    public String localChangeEnd(IManagedContext<?> managedContext, boolean silent,
-                                 boolean deferCommit) throws ContextException {
+    private void localChangeEnd(IManagedContext<?> managedContext, boolean silent, boolean deferCommit,
+                                IResponseCallback callback) throws ContextException {
         
         if (pendingStack.isEmpty() || pendingStack.peek() != managedContext) {
             throw new ContextException("Illegal context change nesting.");
@@ -462,24 +484,35 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
         
         if (!managedContext.isPending()) {
             pendingStack.pop();
-            return null;
+            return;
         }
         
         commitStack.push(managedContext);
-        String survey = managedContext.surveySubscribers(silent);
-        boolean accept = StringUtils.isEmpty(survey);
-        
-        if (!accept && log.isDebugEnabled()) {
-            log.debug("Survey of managed context " + managedContext.getContextName() + " returned '" + survey + "'.");
+        managedContext.surveySubscribers(silent, response -> {
+            boolean accept = !response.rejected();
+            
+            if (!accept && log.isDebugEnabled()) {
+                log.debug("Survey of managed context " + managedContext.getContextName() + " returned '" + response + "'.");
+            }
+            
+            pendingStack.remove(managedContext);
+            
+            if (!deferCommit && (!accept || pendingStack.isEmpty())) {
+                commitContexts(accept, accept);
+            }
+            
+            execCallback(callback, response);
+        });
+    }
+    
+    private void execCallback(IResponseCallback callback, ISurveyResponse response) {
+        if (callback != null) {
+            callback.response(response);
         }
-        
-        pendingStack.remove(managedContext);
-        
-        if (!deferCommit && (!accept || pendingStack.isEmpty())) {
-            commitContexts(accept, accept);
-        }
-        
-        return survey;
+    }
+    
+    private void execCallback(IResponseCallback callback, Exception e) {
+        execCallback(callback, new SurveyResponse(e.toString()));
     }
     
     /**
@@ -530,22 +563,36 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
      * @see org.carewebframework.api.context.IContextManager#reset
      */
     @Override
-    public boolean reset(boolean silent) {
+    public void reset(boolean silent, IResponseCallback callback) {
         pendingStack.clear();
         commitStack.clear();
-        boolean result = true;
+        SurveyResponse response = new SurveyResponse();
+        Iterator<IManagedContext<?>> iter = managedContexts.iterator();
         
-        for (IManagedContext<?> managedContext : managedContexts) {
-            result &= resetItem(managedContext, silent);
-            
-            if (!silent && !result) {
-                break;
-            }
+        reset(silent, iter, response, __ -> {
+            boolean commit = silent || !response.rejected();
+            commitContexts(commit, commit);
+            execCallback(callback, response);
+        });
+        
+    }
+    
+    private void reset(boolean silent, Iterator<IManagedContext<?>> iter, SurveyResponse response,
+                       IResponseCallback callback) {
+        if (iter.hasNext()) {
+            IManagedContext<?> managedContext = iter.next();
+            resetItem(managedContext, silent, aresponse -> {
+                response.merge(aresponse);
+                
+                if (silent || !response.rejected()) {
+                    reset(silent, iter, response, callback);
+                } else {
+                    execCallback(callback, response);
+                }
+            });
+        } else {
+            execCallback(callback, response);
         }
-        
-        boolean commit = silent || result;
-        commitContexts(commit, commit);
-        return result;
     }
     
     /**
@@ -553,15 +600,14 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
      * 
      * @param item Managed context to reset.
      * @param silent Silent flag.
-     * @return True if change was accepted.
      */
-    private boolean resetItem(IManagedContext<?> item, boolean silent) {
+    private void resetItem(IManagedContext<?> item, boolean silent, IResponseCallback callback) {
         try {
             localChangeBegin(item);
             item.reset();
-            return StringUtils.isEmpty(localChangeEnd(item, silent, true));
+            localChangeEnd(item, silent, true, callback);
         } catch (ContextException e) {
-            return true;
+            execCallback(callback, e);
         }
     }
     
@@ -590,18 +636,16 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
      */
     @Override
     public void ccowPending(CCOWContextManager sender, ContextItems contextItems) {
-        try {
-            ccowTransaction = true;
-            updateCCOWStatus();
-            String reason = setMarshaledContext(contextItems, false);
-            
-            if (!reason.isEmpty()) {
-                sender.setSurveyResponse(reason.toString());
+        ccowTransaction = true;
+        updateCCOWStatus();
+        setMarshaledContext(contextItems, false, response -> {
+            if (response.rejected()) {
+                sender.setSurveyResponse(response.toString());
             }
-        } finally {
+            
             ccowTransaction = false;
             updateCCOWStatus();
-        }
+        });
     }
     
 }

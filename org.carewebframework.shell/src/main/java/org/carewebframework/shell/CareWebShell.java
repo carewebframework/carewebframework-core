@@ -37,6 +37,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.carewebframework.api.AppFramework;
 import org.carewebframework.api.FrameworkUtil;
+import org.carewebframework.api.context.ISurveyResponse;
 import org.carewebframework.api.context.UserContext.IUserContextEvent;
 import org.carewebframework.api.event.EventManager;
 import org.carewebframework.api.event.IEventManager;
@@ -140,16 +141,21 @@ public class CareWebShell extends Div {
          * @see IUserContextEvent#pending
          */
         @Override
-        public String pending(boolean silent) {
-            return null;
-            
-            /* TODO: polling needs to be async
-            if (silent || PromptDialog.confirm(LBL_LOGOUT_CONFIRMATION, LBL_LOGOUT_CONFIRMATION_CAPTION, "LOGOUT.CONFIRM")) {
-                return null;
+        public void pending(ISurveyResponse response) {
+            if (response.isSilent()) {
+                response.accept();
+            } else {
+                response.defer();
+                
+                DialogUtil.confirm(LBL_LOGOUT_CONFIRMATION, LBL_LOGOUT_CONFIRMATION_CAPTION, "LOGOUT.CONFIRM", (confirm) -> {
+                    if (confirm) {
+                        response.accept();
+                    } else {
+                        response.reject(LBL_LOGOUT_CANCEL);
+                    }
+                    
+                });
             }
-            
-            return LBL_LOGOUT_CANCEL;
-            */
         }
         
     };

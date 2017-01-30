@@ -27,6 +27,8 @@ package org.carewebframework.api.context;
 
 import java.util.List;
 
+import org.carewebframework.api.context.ISurveyResponse.IResponseCallback;
+
 /**
  * Interface for access to public context manager services.
  */
@@ -45,10 +47,10 @@ public interface IContextManager {
      * initiates the context change sequence for all pending changes.
      * 
      * @param managedContext The context that is changing.
-     * @return Reason if change was rejected.
+     * @param callback Callback to report response to context change request (may be null).
      * @throws ContextException Context exception.
      */
-    String localChangeEnd(IManagedContext<?> managedContext) throws ContextException;
+    void localChangeEnd(IManagedContext<?> managedContext, IResponseCallback callback) throws ContextException;
     
     /**
      * Returns a list of all registered shared contexts.
@@ -79,7 +81,7 @@ public interface IContextManager {
      * Resets all managed contexts to a null state.
      * 
      * @param silent If true, no user interaction is permitted.
-     * @return True if the operation completed successfully.
+     * @param callback Callback to report response to context change request (may be null).
      */
-    boolean reset(boolean silent);
+    void reset(boolean silent, IResponseCallback callback);
 }

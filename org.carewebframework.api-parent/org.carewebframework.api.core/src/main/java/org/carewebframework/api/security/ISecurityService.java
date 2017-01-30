@@ -40,9 +40,8 @@ public interface ISecurityService {
      * @param force If true, force logout without user interaction.
      * @param target Optional target url for next login.
      * @param message Optional message to indicate reason for logout.
-     * @return True if operation was successful.
      */
-    boolean logout(boolean force, String target, String message);
+    void logout(boolean force, String target, String message);
     
     /**
      * Validates the current user's password.

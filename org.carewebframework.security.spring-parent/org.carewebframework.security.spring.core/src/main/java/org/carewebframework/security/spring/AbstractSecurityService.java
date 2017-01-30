@@ -117,29 +117,35 @@ public abstract class AbstractSecurityService implements ISecurityService {
      * @param force If true, force logout without user interaction.
      * @param target Optional target url for next login.
      * @param message Optional message to indicate reason for logout.
-     * @return True if operation was successful.
      */
     @Override
-    public boolean logout(boolean force, String target, String message) {
+    public void logout(boolean force, String target, String message) {
         log.trace("Logging Out");
         IContextManager contextManager = ContextManager.getInstance();
-        boolean result = contextManager == null || contextManager.reset(force) || force;
         
-        if (result) {
-            if (target == null) {
-                try {
-                    target = WebUtil.getRequestUrl();
-                } catch (Exception e) {}
-            }
-            
-            setLogoutAttributes(target, message);
-            Page contextPage = ExecutionContext.getPage();
-            log.debug("Redirecting Page to logout filter URI: " + contextPage);
-            String queryParam = replaceParam(replaceParam(logoutTarget, "%target%", target), "%message%", message);
-            ClientUtil.redirect(Constants.LOGOUT_URI + queryParam, null);
+        if (contextManager == null) {
+            logout(target, message);
+        } else {
+            contextManager.reset(force, (response) -> {
+                if (force || !response.rejected()) {
+                    logout(target, message);
+                }
+            });
+        }
+    }
+    
+    private void logout(String target, String message) {
+        if (target == null) {
+            try {
+                target = WebUtil.getRequestUrl();
+            } catch (Exception e) {}
         }
         
-        return result;
+        setLogoutAttributes(target, message);
+        Page contextPage = ExecutionContext.getPage();
+        log.debug("Redirecting Page to logout filter URI: " + contextPage);
+        String queryParam = replaceParam(replaceParam(logoutTarget, "%target%", target), "%message%", message);
+        ClientUtil.redirect(Constants.LOGOUT_URI + queryParam, null);
     }
     
     /**

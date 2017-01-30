@@ -27,6 +27,7 @@ package org.carewebframework.plugin.userheader;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.carewebframework.api.context.ISurveyResponse;
 import org.carewebframework.api.context.UserContext;
 import org.carewebframework.api.context.UserContext.IUserContextEvent;
 import org.carewebframework.api.domain.IUser;
@@ -121,8 +122,8 @@ public class MainController extends PluginController implements IUserContextEven
      * @see org.carewebframework.api.context.IContextEvent#pending(boolean)
      */
     @Override
-    public String pending(boolean silent) {
-        return null;
+    public void pending(ISurveyResponse response) {
+        response.accept();
     }
     
 }

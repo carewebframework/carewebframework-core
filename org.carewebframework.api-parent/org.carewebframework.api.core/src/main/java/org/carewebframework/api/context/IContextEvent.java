@@ -34,11 +34,9 @@ public interface IContextEvent {
     /**
      * Survey of context subscriber
      * 
-     * @param silent If true, user interaction is not permitted.
-     * @return Null or empty string if context change should proceed. Any other value constitutes a
-     *         no vote for the context change request.
+     * @param response A response object.
      */
-    String pending(boolean silent);
+    void pending(ISurveyResponse response);
     
     /**
      * Committed context event

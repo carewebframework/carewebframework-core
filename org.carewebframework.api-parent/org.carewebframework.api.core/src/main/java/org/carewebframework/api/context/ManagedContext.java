@@ -27,15 +27,17 @@ package org.carewebframework.api.context;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.carewebframework.api.AppFramework;
 import org.carewebframework.api.IRegisterEvent;
+import org.carewebframework.api.context.ISurveyResponse.IResponseCallback;
+import org.carewebframework.api.context.SurveyResponse.ResponseState;
 import org.carewebframework.api.event.IEventManager;
 import org.carewebframework.common.StopWatchFactory;
 import org.carewebframework.common.StopWatchFactory.IStopWatch;
@@ -380,25 +382,35 @@ public class ManagedContext<DomainClass> implements Comparable<IManagedContext<D
      * @see org.carewebframework.api.context.IManagedContext#surveySubscribers(boolean)
      */
     @Override
-    public String surveySubscribers(boolean silent) {
-        StringBuilder result = new StringBuilder();
-        
-        for (IContextEvent event : getIterable(true)) {
+    public void surveySubscribers(boolean silent, IResponseCallback callback) {
+        SurveyResponse response = new SurveyResponse(silent);
+        Iterator<IContextEvent> iter = getIterable(true).iterator();
+        surveySubscribers(iter, response, callback);
+    }
+    
+    private void surveySubscribers(Iterator<IContextEvent> iter, SurveyResponse response, IResponseCallback callback) {
+        if ((response.isSilent() || !response.rejected()) && iter.hasNext()) {
+            IContextEvent subscriber = iter.next();
+            
+            response.reset(__ -> {
+                surveySubscribers(iter, response, callback);
+            });
+            
             try {
-                ContextManager.appendResponse(result, event.pending(silent));
+                subscriber.pending(response);
             } catch (Throwable e) {
                 log.error("Error during surveysubscribers.", e);
-                ContextManager.appendResponse(result, e.toString());
+                response.reject(e.toString());
             }
             
-            surveyed.add(event); // Add to list of surveyed subscribers.
+            ResponseState state = response.getState();
             
-            if (!silent && result.length() > 0) {
-                break;
+            if (state != ResponseState.DEFERRED) {
+                surveySubscribers(iter, response, callback);
             }
+        } else if (callback != null) {
+            callback.response(response);
         }
-        
-        return result.toString();
     }
     
     // ************************************************************************************************
@@ -421,7 +433,7 @@ public class ManagedContext<DomainClass> implements Comparable<IManagedContext<D
         contextManager.localChangeBegin(this);
         domainObject[CONTEXT_PENDING] = newContextObject;
         isPending = true;
-        contextManager.localChangeEnd(this);
+        contextManager.localChangeEnd(this, null);
     }
     
     /**

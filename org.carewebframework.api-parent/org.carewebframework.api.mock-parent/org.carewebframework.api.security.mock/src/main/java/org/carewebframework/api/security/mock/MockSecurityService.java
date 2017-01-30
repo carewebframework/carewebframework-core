@@ -44,8 +44,8 @@ public class MockSecurityService implements ISecurityService {
     }
     
     @Override
-    public boolean logout(boolean force, String target, String message) {
-        return true;
+    public void logout(boolean force, String target, String message) {
+        // NOP
     }
     
     @Override
