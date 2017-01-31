@@ -3,7 +3,7 @@
 <vlayout name="errorContent" controller="${exceptionController}" spacing="0">
 	<html content="${@msg.cwf.error.dialog.message}" hflex="1" />
 	<div zclass="btn-toolbar" style="text-align:center" hflex="1">
-		<button name="btnDetail" zclass="btn" class="btn-info btn-xs"
+		<button name="btnDetail" zclass="btn" class="btn-info size:btn-xs"
 			style="margin-top: 20px"
 			label="${@msg.cwf.error.dialog.btn.detail.label}" />
 	</div>

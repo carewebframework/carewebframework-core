@@ -11,6 +11,7 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.lang.reflect.FieldUtils;
 import org.carewebframework.common.MiscUtil;
+import org.carewebframework.web.ancillary.IDisable;
 import org.carewebframework.web.client.ExecutionContext;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.BaseInputboxComponent;
@@ -326,6 +327,14 @@ public class CWFUtil {
         }
         
         return (NODE) node;
+    }
+    
+    public static void disableChildren(BaseComponent parent, boolean disable) {
+        for (BaseComponent child : parent.getChildren()) {
+            if (child instanceof IDisable) {
+                ((IDisable) child).setDisabled(disable);
+            }
+        }
     }
     
     private CWFUtil() {

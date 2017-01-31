@@ -40,6 +40,7 @@ import org.carewebframework.ui.thread.ThreadEx;
 import org.carewebframework.ui.thread.ThreadEx.IRunnable;
 import org.carewebframework.web.ancillary.IAutoWired;
 import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.component.BaseUIComponent;
 import org.carewebframework.web.event.Event;
 import org.carewebframework.web.event.IEventListener;
 import org.springframework.context.ApplicationContext;
@@ -58,9 +59,9 @@ public class FrameworkController implements IAutoWired {
     
     private IEventManager eventManager;
     
-    protected BaseComponent root;
+    protected BaseUIComponent root;
     
-    private BaseComponent comp;
+    private BaseUIComponent comp;
     
     private final List<IAbortable> threads = new ArrayList<>();
     
@@ -176,8 +177,8 @@ public class FrameworkController implements IAutoWired {
      */
     @Override
     public void afterInitialized(BaseComponent comp) {
-        root = comp;
-        this.comp = comp;
+        root = (BaseUIComponent) comp;
+        this.comp = root;
         comp.setAttribute(Constants.ATTR_COMPOSER, this);
         comp.addEventListener(ThreadEx.ON_THREAD_COMPLETE, threadCompletionListener);
         appContext = SpringUtil.getAppContext();

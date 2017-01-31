@@ -8,13 +8,13 @@
 					class="panel-primary panel-sm" mold="bootstrap">
 					<toolbar alignment="end">
 						<button name="btnPing" label="Send Ping Request" 
-							zclass="btn" class="btn-xs btn-primary" />
+							zclass="btn" class="size:btn-xs btn-primary" />
 						<separator orient="vertical" width="20px" />
 						<button name="btnReset" label="Reset" 
-							zclass="btn" class="btn-xs btn-danger" />
+							zclass="btn" class="size:btn-xs btn-danger" />
 						<separator orient="vertical" width="20px" />
 						<button name="btnSend" label="Send" 
-							zclass="btn" class="btn-xs btn-success" />
+							zclass="btn" class="size:btn-xs btn-success" />
 						<separator orient="vertical" width="15px" />
 					</toolbar>
 					<panelchildren>
@@ -56,7 +56,7 @@
 					<toolbar>
 						<textbox name="tboxNewEvent" hflex="1" />
 						<button name="btnNewEvent" label="Add Event" 
-							zclass="btn" class="btn-xs btn-success" />
+							zclass="btn" class="size:btn-xs btn-success" />
 					</toolbar>
 					<panelchildren>
 						<listbox name="lboxEventList" checkmark="true"
@@ -75,7 +75,7 @@
 						<checkbox name="chkScrollLock" label="Scroll Lock" />
 						<separator orient="vertical" width="20px" />
 						<button name="btnClear" label="Clear" 
-							zclass="btn" class="btn-xs btn-danger" />
+							zclass="btn" class="size:btn-xs btn-danger" />
 						<separator orient="vertical" width="15px" />
 					</toolbar>
 					<panelchildren>

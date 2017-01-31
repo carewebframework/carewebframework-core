@@ -32,7 +32,7 @@
 						<toolbar height="30px">
 							<label label="Subscriptions" />
 							<button name="btnAddSubscription" label="Add"
-								class="size:btn-xs flavor:btn-primary" />
+								class="size:size:btn-xs flavor:btn-primary" />
 						</toolbar>
 						<listbox name="lboxSubscriptions" checkmark="true" multiple="true"
 							width="100%" vflex="1" />
@@ -45,9 +45,9 @@
 						<toolbar>
 							<label label="Enter Message" />
 							<button name="btnSendMessage" label="Send" disabled="true"
-								zclass="btn" class="size:btn-xs flavor:btn-success" />
+								zclass="btn" class="size:size:btn-xs flavor:btn-success" />
 							<button name="btnClearMessage" label="Clear"
-								zclass="btn" class="size:btn-xs flavor:btn-danger" />
+								zclass="btn" class="size:size:btn-xs flavor:btn-danger" />
 							<combobox name="cboxChannels" readonly="true" />
 							<checkbox name="chkAsEvent" label="Send as event" style="padding-top:5px" />
 						</toolbar>
@@ -60,7 +60,7 @@
 							<label label="Received" />
 							<separator orient="vertical" width="20px" />
 							<button name="btnClearReceived" label="Clear"
-								class="size:btn-xs flavor:btn-danger" />
+								class="size:size:btn-xs flavor:btn-danger" />
 							<checkbox name="chkScrollLock" label="Scroll Lock" style="padding-top:5px" />
 						</toolbar>
 						<listbox name="lboxReceived" width="100%" vflex="1">

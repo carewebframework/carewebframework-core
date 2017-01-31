@@ -34,6 +34,7 @@ import org.carewebframework.common.NumUtil;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.ui.command.CommandUtil;
 import org.carewebframework.ui.util.CWFUtil;
+import org.carewebframework.web.annotation.EventHandler;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.BaseUIComponent;
 import org.carewebframework.web.component.Cell;
@@ -44,6 +45,7 @@ import org.carewebframework.web.component.Paneview;
 import org.carewebframework.web.component.Paneview.Orientation;
 import org.carewebframework.web.component.Row;
 import org.carewebframework.web.component.Rowcell;
+import org.carewebframework.web.component.Rows;
 import org.carewebframework.web.component.Table;
 import org.carewebframework.web.event.ChangeEvent;
 import org.carewebframework.web.event.ClickEvent;
@@ -60,8 +62,6 @@ import org.carewebframework.web.model.ModelAndView;
  */
 public abstract class ListViewForm<DAO> extends CaptionedForm {
     
-    private static final long serialVersionUID = 1L;
-    
     private static final String SORT_TYPE_ATTR = "@sort_type";
     
     private static final String COL_INDEX_ATTR = "@col_index";
@@ -73,6 +73,8 @@ public abstract class ListViewForm<DAO> extends CaptionedForm {
     private Table table;
     
     private Columns columns;
+    
+    private Rows rows;
     
     private Pane detailPane;
     
@@ -442,15 +444,18 @@ public abstract class ListViewForm<DAO> extends CaptionedForm {
         }
     }
     
-    public void onClick$mnuRefresh() {
+    @EventHandler(value = "click", target = "mnuRefresh")
+    private void onClick$mnuRefresh() {
         refresh();
     }
     
-    public void onCommand$table() {
+    @EventHandler(value = "command", target = "@table")
+    private void onCommand$table() {
         refresh();
     }
     
-    public void onChange$table(Event event) {
+    @EventHandler(value = "change", target = "@rows")
+    private void onChange$rows(Event event) {
         if (getShowDetailPane() == (event instanceof ChangeEvent)) {
             itemSelected(getSelectedItem());
         }
