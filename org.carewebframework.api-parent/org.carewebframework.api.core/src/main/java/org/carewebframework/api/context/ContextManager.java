@@ -37,7 +37,7 @@ import org.apache.commons.logging.LogFactory;
 import org.carewebframework.api.AppFramework;
 import org.carewebframework.api.IRegisterEvent;
 import org.carewebframework.api.context.CCOWContextManager.CCOWState;
-import org.carewebframework.api.context.ISurveyResponse.IResponseCallback;
+import org.carewebframework.api.context.ISurveyResponse.ISurveyCallback;
 import org.carewebframework.api.event.IEventManager;
 import org.carewebframework.api.security.IDigitalSignature;
 import org.carewebframework.api.spring.SpringUtil;
@@ -177,7 +177,7 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
      * @param callback Callback to report subscriber responses.
      * @see {@link #init(IManagedContext)}
      */
-    public void init(IResponseCallback callback) {
+    public void init(ISurveyCallback callback) {
         init(null, callback);
     }
     
@@ -188,7 +188,7 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
      * @param callback Callback to report subscriber responses.
      * @see {@link #init(IManagedContext)}
      */
-    public void init(IManagedContext<?> item, IResponseCallback callback) {
+    public void init(IManagedContext<?> item, ISurveyCallback callback) {
         contextItems.clear();
         
         if (ccowIsActive()) {
@@ -203,7 +203,7 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
         }
     }
     
-    private void initItem(Iterator<IManagedContext<?>> iter, SurveyResponse response, IResponseCallback callback) {
+    private void initItem(Iterator<IManagedContext<?>> iter, SurveyResponse response, ISurveyCallback callback) {
         if (iter.hasNext()) {
             IManagedContext<?> managedContext = iter.next();
             
@@ -222,7 +222,7 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
      * @param item Managed context to initialize.
      * @param callback Callback to report subscriber responses.
      */
-    private void initItem(IManagedContext<?> item, IResponseCallback callback) {
+    private void initItem(IManagedContext<?> item, ISurveyCallback callback) {
         try {
             localChangeBegin(item);
             
@@ -300,7 +300,7 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
      * @param marshaledContext The marshaled context to process.
      * @param callback Callback to report subscriber responses.
      */
-    public void setMarshaledContext(ContextItems marshaledContext, IResponseCallback callback) {
+    public void setMarshaledContext(ContextItems marshaledContext, ISurveyCallback callback) {
         setMarshaledContext(marshaledContext, true, callback);
     }
     
@@ -311,7 +311,7 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
      * @param commit If true the pending contexts are committed.
      * @param callback Callback to report subscriber responses.
      */
-    /*package*/void setMarshaledContext(ContextItems marshaledContext, boolean commit, IResponseCallback callback) {
+    /*package*/void setMarshaledContext(ContextItems marshaledContext, boolean commit, ISurveyCallback callback) {
         ISurveyResponse response = new SurveyResponse();
         Iterator<IManagedContext<?>> iter = managedContexts.iterator();
         
@@ -323,7 +323,7 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
     }
     
     private void setMarshaledContext(ContextItems marshaledContext, Iterator<IManagedContext<?>> iter,
-                                     ISurveyResponse response, IResponseCallback callback) {
+                                     ISurveyResponse response, ISurveyCallback callback) {
         if (iter.hasNext()) {
             IManagedContext<?> managedContext = iter.next();
             
@@ -462,7 +462,7 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
      * @see org.carewebframework.api.context.IContextManager#localChangeEnd
      */
     @Override
-    public void localChangeEnd(IManagedContext<?> managedContext, IResponseCallback callback) throws ContextException {
+    public void localChangeEnd(IManagedContext<?> managedContext, ISurveyCallback callback) throws ContextException {
         localChangeEnd(managedContext, false, false, callback);
     }
     
@@ -476,7 +476,7 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
      * @throws ContextException during illegal context change nesting
      */
     private void localChangeEnd(IManagedContext<?> managedContext, boolean silent, boolean deferCommit,
-                                IResponseCallback callback) throws ContextException {
+                                ISurveyCallback callback) throws ContextException {
         
         if (pendingStack.isEmpty() || pendingStack.peek() != managedContext) {
             throw new ContextException("Illegal context change nesting.");
@@ -505,13 +505,13 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
         });
     }
     
-    private void execCallback(IResponseCallback callback, ISurveyResponse response) {
+    private void execCallback(ISurveyCallback callback, ISurveyResponse response) {
         if (callback != null) {
             callback.response(response);
         }
     }
     
-    private void execCallback(IResponseCallback callback, Exception e) {
+    private void execCallback(ISurveyCallback callback, Exception e) {
         execCallback(callback, new SurveyResponse(e.toString()));
     }
     
@@ -563,7 +563,7 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
      * @see org.carewebframework.api.context.IContextManager#reset
      */
     @Override
-    public void reset(boolean silent, IResponseCallback callback) {
+    public void reset(boolean silent, ISurveyCallback callback) {
         pendingStack.clear();
         commitStack.clear();
         SurveyResponse response = new SurveyResponse();
@@ -578,7 +578,7 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
     }
     
     private void reset(boolean silent, Iterator<IManagedContext<?>> iter, SurveyResponse response,
-                       IResponseCallback callback) {
+                       ISurveyCallback callback) {
         if (iter.hasNext()) {
             IManagedContext<?> managedContext = iter.next();
             resetItem(managedContext, silent, aresponse -> {
@@ -601,7 +601,7 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
      * @param item Managed context to reset.
      * @param silent Silent flag.
      */
-    private void resetItem(IManagedContext<?> item, boolean silent, IResponseCallback callback) {
+    private void resetItem(IManagedContext<?> item, boolean silent, ISurveyCallback callback) {
         try {
             localChangeBegin(item);
             item.reset();

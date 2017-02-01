@@ -111,7 +111,7 @@ public class HelpViewSearch extends HelpViewBase implements IComponentRenderer<L
      */
     @EventHandler(value = "change", target = "@tblSrchResults")
     private void onSelect$tblSrchResults() {
-        Row row = tblSrchResults.getRows().getSelected().get(0);
+        Row row = tblSrchResults.getRows().getSelectedRow();
         setTopic((HelpTopic) row.getData());
     }
     

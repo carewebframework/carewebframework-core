@@ -10,7 +10,7 @@ public interface ISurveyResponse {
     /**
      * Callback interface for asynchronous responses.
      */
-    public interface IResponseCallback {
+    public interface ISurveyCallback {
         
         void response(ISurveyResponse response);
     }

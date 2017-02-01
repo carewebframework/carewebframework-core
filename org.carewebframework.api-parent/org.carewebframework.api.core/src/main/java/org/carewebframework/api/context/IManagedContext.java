@@ -25,7 +25,7 @@
  */
 package org.carewebframework.api.context;
 
-import org.carewebframework.api.context.ISurveyResponse.IResponseCallback;
+import org.carewebframework.api.context.ISurveyResponse.ISurveyCallback;
 
 /**
  * Every context object must implement this interface. The context manager uses this interface to
@@ -139,5 +139,5 @@ public interface IManagedContext<DomainClass> extends ISharedContext<DomainClass
      *            user interaction and the first rejection response will terminate the survey.
      * @param callback Callback to report subscriber responses to survey.
      */
-    void surveySubscribers(boolean silent, IResponseCallback callback);
+    void surveySubscribers(boolean silent, ISurveyCallback callback);
 }

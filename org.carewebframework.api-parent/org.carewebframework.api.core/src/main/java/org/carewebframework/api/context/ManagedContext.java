@@ -36,7 +36,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.carewebframework.api.AppFramework;
 import org.carewebframework.api.IRegisterEvent;
-import org.carewebframework.api.context.ISurveyResponse.IResponseCallback;
+import org.carewebframework.api.context.ISurveyResponse.ISurveyCallback;
 import org.carewebframework.api.context.SurveyResponse.ResponseState;
 import org.carewebframework.api.event.IEventManager;
 import org.carewebframework.common.StopWatchFactory;
@@ -382,13 +382,13 @@ public class ManagedContext<DomainClass> implements Comparable<IManagedContext<D
      * @see org.carewebframework.api.context.IManagedContext#surveySubscribers(boolean)
      */
     @Override
-    public void surveySubscribers(boolean silent, IResponseCallback callback) {
+    public void surveySubscribers(boolean silent, ISurveyCallback callback) {
         SurveyResponse response = new SurveyResponse(silent);
         Iterator<IContextEvent> iter = getIterable(true).iterator();
         surveySubscribers(iter, response, callback);
     }
     
-    private void surveySubscribers(Iterator<IContextEvent> iter, SurveyResponse response, IResponseCallback callback) {
+    private void surveySubscribers(Iterator<IContextEvent> iter, SurveyResponse response, ISurveyCallback callback) {
         if ((response.isSilent() || !response.rejected()) && iter.hasNext()) {
             IContextEvent subscriber = iter.next();
             

@@ -441,7 +441,7 @@ public class PropertyGrid implements IAutoWired {
     private void onRowSelect(ChangeEvent event) {
         if (event.getValue(Boolean.class)) {
             Rows rows = gridProperties.getRows();
-            Row selectedRow = rows.getSelectedCount() == 0 ? null : rows.getSelected().get(0);
+            Row selectedRow = rows.getSelectedCount() == 0 ? null : rows.getSelectedRow();
             PropertyEditorBase<?> editor = selectedRow == null ? null
                     : (PropertyEditorBase<?>) (selectedRow.getAttribute(EDITOR_ATTR));
             PropertyInfo propInfo = editor == null ? null : editor.getPropInfo();

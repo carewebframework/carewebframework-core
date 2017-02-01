@@ -18,7 +18,7 @@ public class SurveyResponse implements ISurveyResponse {
     
     private final List<String> responses = new ArrayList<>();
     
-    private IResponseCallback callback;
+    private ISurveyCallback callback;
     
     private final boolean silent;
     
@@ -83,7 +83,7 @@ public class SurveyResponse implements ISurveyResponse {
         }
     }
     
-    protected void reset(IResponseCallback callback) {
+    protected void reset(ISurveyCallback callback) {
         state = ResponseState.NULL;
         this.callback = callback;
     }

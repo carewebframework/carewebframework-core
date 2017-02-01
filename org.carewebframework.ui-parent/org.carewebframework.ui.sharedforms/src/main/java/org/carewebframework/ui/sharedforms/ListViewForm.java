@@ -320,7 +320,7 @@ public abstract class ListViewForm<DAO> extends CaptionedForm {
     }
     
     protected Row getSelectedItem() {
-        return table.getRows().getSelected().get(0);
+        return table.getRows().getSelectedRow();
     }
     
     @SuppressWarnings("unchecked")

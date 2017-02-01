@@ -92,9 +92,8 @@ public class PluginController extends FrameworkController implements IPluginEven
      * 
      * @param comp Target component.
      * @param controller Controller to attach.
-     * @throws Exception Unspecified exception.
      */
-    public void attachController(BaseComponent comp, IAutoWired controller) throws Exception {
+    public void attachController(BaseComponent comp, IAutoWired controller) {
         container.tryRegisterListener(controller, true);
         controller.afterInitialized(comp);
     }
