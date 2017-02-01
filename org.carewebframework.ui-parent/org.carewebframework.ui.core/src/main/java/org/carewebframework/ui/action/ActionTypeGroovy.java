@@ -1,7 +1,7 @@
 package org.carewebframework.ui.action;
 
 import org.carewebframework.common.MiscUtil;
-import org.carewebframework.web.script.GroovyUtil;
+import org.carewebframework.web.script.GroovyScript;
 
 import groovy.lang.Script;
 
@@ -17,7 +17,7 @@ public class ActionTypeGroovy extends ActionTypeBase {
     @Override
     public Script parse(String script) {
         try {
-            return GroovyUtil.getGroovyShell().parse(stripPrefix(script));
+            return GroovyScript.getGroovyShell().parse(stripPrefix(script));
         } catch (Exception e) {
             throw MiscUtil.toUnchecked(e);
         }
