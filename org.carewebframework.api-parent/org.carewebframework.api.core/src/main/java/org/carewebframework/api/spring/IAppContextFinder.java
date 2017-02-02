@@ -35,16 +35,16 @@ public interface IAppContextFinder {
     /**
      * Returns the application context for the current scope. If the application implements
      * hierarchical contexts, this will return the lowest order application context in the
-     * hierarchy. If not, this will return the same value as getRootAppContext.
+     * hierarchy. Otherwise, this will return the same value as getRootAppContext.
      * 
      * @return The application context.
      */
-    ApplicationContext getAppContext();
+    ApplicationContext getChildAppContext();
     
     /**
      * Returns the application root context for the current scope. If the application implements
      * hierarchical contexts, this will return the highest order application context in the
-     * hierarchy. If not, this will return the same value as getAppContext.
+     * hierarchy.
      * 
      * @return The root application context.
      */

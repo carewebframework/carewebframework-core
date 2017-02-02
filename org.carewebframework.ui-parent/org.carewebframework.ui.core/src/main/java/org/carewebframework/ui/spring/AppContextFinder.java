@@ -86,11 +86,11 @@ public class AppContextFinder implements IAppContextFinder {
      * context is associated with the page, looks for an application context registered to the
      * current thread. Failing that, returns the root application context.
      * 
-     * @see org.carewebframework.api.spring.IAppContextFinder#getAppContext()
+     * @see org.carewebframework.api.spring.IAppContextFinder#getChildAppContext()
      * @return An application context.
      */
     @Override
-    public ApplicationContext getAppContext() {
+    public ApplicationContext getChildAppContext() {
         ApplicationContext appContext = getAppContext(ExecutionContext.getPage());
         return appContext == null ? getRootAppContext() : appContext;
     }

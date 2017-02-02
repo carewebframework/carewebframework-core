@@ -1,0 +1,9 @@
+<paneview name="mainView" height="100%" width="100%">
+	<pane name="listPane">
+		<table name="table" height="100%" width="100%">
+			<columns />
+			<rows />
+		</table>
+	</pane>
+	<pane name="detailPane" visible="false" />
+</paneview>

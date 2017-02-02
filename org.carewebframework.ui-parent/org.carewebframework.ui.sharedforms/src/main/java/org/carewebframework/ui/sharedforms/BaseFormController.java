@@ -31,7 +31,7 @@ import org.carewebframework.shell.plugins.PluginController;
 /**
  * Controller for base shared form.
  */
-public class BaseForm extends PluginController {
+public class BaseFormController extends PluginController {
     
     @Override
     public void onLoad(PluginContainer container) {

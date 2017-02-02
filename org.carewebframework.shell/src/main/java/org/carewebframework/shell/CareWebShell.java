@@ -461,7 +461,7 @@ public class CareWebShell extends Div {
     public void registerStyleSheet(String url) {
         if (findStyleSheet(url) == null) {
             Stylesheet ss = new Stylesheet();
-            ss.setHref(url);
+            ss.setSrc(url);
             registeredStyles.addChild(ss);
         }
     }
@@ -476,7 +476,7 @@ public class CareWebShell extends Div {
         for (BaseComponent child : registeredStyles.getChildren()) {
             Stylesheet ss = (Stylesheet) child;
             
-            if (ss.getHref().equals(url)) {
+            if (ss.getSrc().equals(url)) {
                 return ss;
             }
         }

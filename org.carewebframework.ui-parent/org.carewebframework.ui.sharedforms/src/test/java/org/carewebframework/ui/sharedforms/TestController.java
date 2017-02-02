@@ -29,7 +29,7 @@ import java.util.List;
 
 import org.carewebframework.ui.sharedforms.TestController.TestItem;
 
-public class TestController extends ListViewForm<TestItem> {
+public class TestController extends ListFormController<TestItem> {
     
     public class TestItem {
         

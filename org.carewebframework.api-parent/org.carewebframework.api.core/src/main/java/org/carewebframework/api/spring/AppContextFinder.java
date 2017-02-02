@@ -68,7 +68,7 @@ public class AppContextFinder implements IAppContextFinder {
      * scope.
      */
     @Override
-    public ApplicationContext getAppContext() {
+    public ApplicationContext getChildAppContext() {
         return appFramework.getApplicationContext();
     }
     
@@ -79,7 +79,7 @@ public class AppContextFinder implements IAppContextFinder {
      */
     @Override
     public ApplicationContext getRootAppContext() {
-        return getAppContext();
+        return getChildAppContext();
     }
     
 }

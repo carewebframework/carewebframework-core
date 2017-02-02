@@ -1,12 +1,6 @@
-<?init class="org.carewebframework.ui.zk.Composition" arg0="web/org/carewebframework/ui/sharedforms/baseForm.cwf"?>
-
-<page>
-
-	<panel self="@define(sharedFormsBase)" name="panel" closable="false"
-		height="100%" width="100%" border="none"
-		class="sharedForms-captioned">
-		<panelchildren self="@insert(sharedFormsCaptioned)" style="border:none" />
-		<toolbar self="@insert(sharedFormsToolbar)" name="toolbar"
-			visible="false" />
-	</panel>
-</page>
+<window name="panel" height="100%" width="100%" class="sharedForms-captioned">
+	<div name="anchorBase" flex="1" width="100%" />
+	<toolbar name="anchorToolbar" width="100%" visible="false" />
+	<menupopup name="anchorMenu" />
+	<style src="web/org/carewebframework/ui/sharedforms/sharedForms.css" />
+</window>

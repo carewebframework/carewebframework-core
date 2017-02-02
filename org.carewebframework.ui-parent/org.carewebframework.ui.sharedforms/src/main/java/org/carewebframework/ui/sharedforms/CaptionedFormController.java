@@ -33,7 +33,7 @@ import org.carewebframework.web.component.Window;
 /**
  * Controller for captioned form.
  */
-public class CaptionedForm extends BaseForm {
+public class CaptionedFormController extends BaseFormController {
     
     public enum CaptionStyle {
         HIDDEN, TITLE, FRAME, LEFT, RIGHT, CENTER;
@@ -42,7 +42,7 @@ public class CaptionedForm extends BaseForm {
         public String toString() {
             return name().toLowerCase();
         }
-    };
+    }
     
     private CaptionStyle captionStyle = CaptionStyle.HIDDEN;
     

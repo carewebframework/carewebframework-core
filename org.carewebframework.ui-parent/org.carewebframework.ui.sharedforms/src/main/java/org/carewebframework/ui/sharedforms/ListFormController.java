@@ -35,6 +35,7 @@ import org.carewebframework.common.StrUtil;
 import org.carewebframework.ui.command.CommandUtil;
 import org.carewebframework.ui.util.CWFUtil;
 import org.carewebframework.web.annotation.EventHandler;
+import org.carewebframework.web.annotation.WiredComponent;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.BaseUIComponent;
 import org.carewebframework.web.component.Cell;
@@ -50,17 +51,15 @@ import org.carewebframework.web.component.Table;
 import org.carewebframework.web.event.ChangeEvent;
 import org.carewebframework.web.event.ClickEvent;
 import org.carewebframework.web.event.Event;
-import org.carewebframework.web.event.IEventListener;
 import org.carewebframework.web.model.IComponentRenderer;
 import org.carewebframework.web.model.ListModel;
-import org.carewebframework.web.model.ModelAndView;
 
 /**
  * Controller for list view based forms.
  * 
  * @param <DAO> Data access object type.
  */
-public abstract class ListViewForm<DAO> extends CaptionedForm {
+public abstract class ListFormController<DAO> extends CaptionedFormController {
     
     private static final String SORT_TYPE_ATTR = "@sort_type";
     
@@ -68,17 +67,21 @@ public abstract class ListViewForm<DAO> extends CaptionedForm {
     
     private static final String SIZE_ATTR = "@size";
     
+    @WiredComponent
     private Paneview mainView;
     
+    @WiredComponent
     private Table table;
+    
+    @WiredComponent
+    private Pane detailPane;
+    
+    @WiredComponent
+    private Pane listPane;
     
     private Columns columns;
     
     private Rows rows;
-    
-    private Pane detailPane;
-    
-    private Pane listPane;
     
     private Cell status;
     
@@ -100,26 +103,14 @@ public abstract class ListViewForm<DAO> extends CaptionedForm {
     
     protected final ListModel<DAO> model = new ListModel<>();
     
-    protected ModelAndView<Row, DAO> modelAndView;
-    
     private final IComponentRenderer<Row, DAO> renderer = new IComponentRenderer<Row, DAO>() {
         
         @Override
         public Row render(DAO object) {
             Row item = new Row();
             item.addEventForward(ClickEvent.TYPE, table, ChangeEvent.TYPE);
-            ListViewForm.this.renderItem(item, object);
+            ListFormController.this.renderItem(item, object);
             return item;
-        }
-        
-    };
-    
-    private final IEventListener sortListener = new IEventListener() {
-        
-        @Override
-        public void onEvent(Event event) {
-            //TODO: sortAscending = event.isAscending();
-            //sortColumn = (Integer) event.getTarget().getAttribute(COL_INDEX_ATTR);
         }
         
     };
@@ -137,8 +128,11 @@ public abstract class ListViewForm<DAO> extends CaptionedForm {
     @Override
     protected void init() {
         super.init();
-        modelAndView = new ModelAndView<Row, DAO>(table, model, renderer);
         root = detailPane;
+        columns = table.getColumns();
+        rows = table.getRows();
+        rows.setModel(model);
+        rows.setRenderer(renderer);
         setSize(50);
         CommandUtil.associateCommand("REFRESH", table);
         getContainer().registerProperties(this, "allowPrint", "alternateColor", "deferUpdate", "showDetailPane", "layout",
@@ -175,8 +169,6 @@ public abstract class ListViewForm<DAO> extends CaptionedForm {
             } else {
                 lhdr.setWidth(defWidth);
             }
-            
-            lhdr.addEventListener("sort", sortListener);
         }
         
         sortColumn = Math.abs(sortBy) - 1;
@@ -314,7 +306,6 @@ public abstract class ListViewForm<DAO> extends CaptionedForm {
      * Clears the list and status.
      */
     protected void reset() {
-        modelAndView.setModel(null);
         model.clear();
         status(null);
     }
@@ -407,7 +398,6 @@ public abstract class ListViewForm<DAO> extends CaptionedForm {
         } else {
             status(null);
             alphaSort();
-            modelAndView.setModel(model);
         }
     }
     

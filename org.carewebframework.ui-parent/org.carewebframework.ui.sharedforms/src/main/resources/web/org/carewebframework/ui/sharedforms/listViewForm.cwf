@@ -1,22 +1,4 @@
-<?init class="org.carewebframework.ui.zk.Composition" arg0="web/org/carewebframework/ui/sharedforms/captionedForm.cwf"?>
-
-<page>
-
-	<splitterview self="@define(sharedFormsCaptioned)" name="mainView"
-		height="100%" width="100%">
-		<splitterpane name="listPane" relativeSize="100">
-			<listbox name="listbox" hflex="1" vflex="1">
-				<auxhead visible="false">
-					<auxheader name="status" colspan="999" />
-				</auxhead>
-				<listhead name="listhead" sizable="true" />
-			</listbox>
-		</splitterpane>
-		<splitterpane self="@insert(sharedFormsListView)"
-			name="detailPane" visible="false" />
-	</splitterview>
-
-	<menuitem self="@define(sharedFormsMenu)" name="mnuRefresh"
-		label="${@msg.cwf.btn.refresh.label}" />
-
-</page>
+<template src="web/org/carewebframework/ui/sharedforms/captionedForm.cwf">
+	<snippet anchor="anchorBase" src=web/org/carewebframework/ui/sharedforms/listViewForm1.cwf
+	<snippet anchor="anchorMenu" src=web/org/carewebframework/ui/sharedforms/listViewForm2.cwf
+</template>

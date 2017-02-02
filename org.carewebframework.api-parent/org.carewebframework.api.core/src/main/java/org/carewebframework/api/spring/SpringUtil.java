@@ -60,7 +60,7 @@ public class SpringUtil {
      * @return Application context
      */
     public static ApplicationContext getAppContext() {
-        return appContextFinder == null ? null : appContextFinder.getAppContext();
+        return appContextFinder == null ? null : appContextFinder.getChildAppContext();
     }
     
     /**
