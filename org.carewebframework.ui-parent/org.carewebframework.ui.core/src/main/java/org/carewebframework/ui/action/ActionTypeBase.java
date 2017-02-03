@@ -33,4 +33,14 @@ public abstract class ActionTypeBase implements IActionType {
         return script.substring(script.indexOf(':') + 1);
     }
     
+    /**
+     * Returns the action type.
+     * 
+     * @param script The script.
+     * @return The action type.
+     */
+    protected String getType(String script) {
+        return script.substring(0, script.indexOf(':'));
+    }
+    
 }

@@ -5,13 +5,10 @@
 		http://www.springframework.org/schema/beans 
 		http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-	<beans profile="child">
-
-		<bean name="sharedFormBaseController" scope="prototype"
-			class="org.carewebframework.ui.sharedforms.BaseForm" />
+	<beans profile="root">
 
 		<bean name="sharedFormCaptionedController" scope="prototype"
-			class="org.carewebframework.ui.sharedforms.CaptionedForm" />
+			class="org.carewebframework.ui.sharedforms.CaptionedFormController" />
 
 		<bean name="sharedFormListViewController" scope="prototype"
 			destroy-method="destroy" abstract="true">

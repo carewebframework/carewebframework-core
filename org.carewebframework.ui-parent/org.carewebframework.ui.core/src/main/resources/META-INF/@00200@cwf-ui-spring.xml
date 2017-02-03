@@ -56,7 +56,7 @@
 		
 		<bean class="org.carewebframework.ui.action.ActionTypeJavascript" />
 		
-		<bean class="org.carewebframework.ui.action.ActionTypeGroovy" />
+		<bean class="org.carewebframework.ui.action.ActionTypeServerScript" />
 		
 	</beans>
 

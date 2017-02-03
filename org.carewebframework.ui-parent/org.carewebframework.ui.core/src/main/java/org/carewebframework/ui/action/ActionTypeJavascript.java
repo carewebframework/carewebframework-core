@@ -9,7 +9,7 @@ public class ActionTypeJavascript extends ActionTypeBase {
     }
     
     @Override
-    public Object parse(String script) {
+    public String parse(String script) {
         return stripPrefix(script);
     }
     

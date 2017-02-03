@@ -139,7 +139,7 @@ public class FrameworkController implements IAutoWired {
      * @return The associated controller, or null if none found.
      */
     public static Object getController(BaseComponent comp, boolean recurse) {
-        return comp.findAttribute(Constants.ATTR_COMPOSER);
+        return recurse ? comp.findAttribute(Constants.ATTR_COMPOSER) : comp.getAttribute(Constants.ATTR_COMPOSER);
     }
     
     /**

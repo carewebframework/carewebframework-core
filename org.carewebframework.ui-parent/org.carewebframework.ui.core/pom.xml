@@ -25,6 +25,10 @@
 			<groupId>org.carewebframework</groupId>
 			<artifactId>org.carewebframework.web.core</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.carewebframework</groupId>
+			<artifactId>org.carewebframework.web.script.groovy</artifactId>
+		</dependency>
 		<!-- Servlet API -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
