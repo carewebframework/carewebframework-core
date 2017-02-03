@@ -50,7 +50,7 @@ import org.carewebframework.web.component.Column;
 import org.carewebframework.web.component.Label;
 import org.carewebframework.web.component.Row;
 import org.carewebframework.web.component.Rows;
-import org.carewebframework.web.component.Table;
+import org.carewebframework.web.component.Grid;
 import org.carewebframework.web.component.Window;
 import org.carewebframework.web.event.ChangeEvent;
 import org.carewebframework.web.event.ClickEvent;
@@ -74,7 +74,7 @@ public class PropertyGrid implements IAutoWired {
     private static class RowEx extends Row implements INamespace {};
     
     @WiredComponent
-    private Table gridProperties;
+    private Grid gridProperties;
     
     @WiredComponent
     private Label lblPropertyInfo;

@@ -2,7 +2,7 @@
 	title="${@msg.cwf.shell.about.title}" 
 	controller="${@aboutDialogController}">
 	<div style="display:flex;flex:1">
-		<table style="border:none">
+		<grid style="border:none">
 			<columns css="##{id} th {text-align:center;vertical-align:middle;width:50%}">
 				<column>
 					<image name="imgIcon" />
@@ -12,7 +12,7 @@
 				</column>
 			</columns>
 			<rows name="rows" />
-		</table>
+		</grid>
 	</div>
 	<toolbar width="100%" alignment="center">
 		<button

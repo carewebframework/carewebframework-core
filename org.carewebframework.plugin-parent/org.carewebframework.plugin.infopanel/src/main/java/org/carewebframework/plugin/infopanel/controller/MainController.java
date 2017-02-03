@@ -40,7 +40,7 @@ import org.carewebframework.web.component.BaseUIComponent;
 import org.carewebframework.web.component.Label;
 import org.carewebframework.web.component.Menuitem;
 import org.carewebframework.web.component.Rows;
-import org.carewebframework.web.component.Table;
+import org.carewebframework.web.component.Grid;
 import org.carewebframework.web.component.Toolbar;
 import org.carewebframework.web.event.DropEvent;
 import org.carewebframework.web.event.Event;
@@ -70,7 +70,7 @@ public class MainController extends PluginController implements IInfoPanel {
     private BaseUIComponent menuPanel;
     
     @WiredComponent
-    private Table alertGrid;
+    private Grid alertGrid;
     
     @WiredComponent
     private Rows alertRoot;

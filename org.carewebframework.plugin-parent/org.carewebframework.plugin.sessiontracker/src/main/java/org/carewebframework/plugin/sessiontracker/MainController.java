@@ -41,7 +41,7 @@ import org.carewebframework.web.client.WebSocketHandler;
 import org.carewebframework.web.component.Label;
 import org.carewebframework.web.component.Page;
 import org.carewebframework.web.component.Row;
-import org.carewebframework.web.component.Table;
+import org.carewebframework.web.component.Grid;
 import org.carewebframework.web.event.Event;
 import org.carewebframework.web.model.IComponentRenderer;
 import org.carewebframework.web.model.ListModel;
@@ -67,7 +67,7 @@ public class MainController extends PluginController {
     private Label lblMessage;
     
     @WiredComponent
-    private Table grid;
+    private Grid grid;
     
     private void doDelegationToModel() {
         IUser user = UserContext.getActiveUser();

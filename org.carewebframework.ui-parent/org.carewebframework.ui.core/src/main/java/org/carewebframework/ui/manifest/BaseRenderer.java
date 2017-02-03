@@ -5,7 +5,7 @@ import org.carewebframework.web.component.Cell;
 import org.carewebframework.web.component.Column;
 import org.carewebframework.web.component.Row;
 import org.carewebframework.web.component.Span;
-import org.carewebframework.web.component.Table;
+import org.carewebframework.web.component.Grid;
 import org.carewebframework.web.model.IComponentRenderer;
 import org.carewebframework.web.model.Sorting.SortOrder;
 
@@ -16,10 +16,10 @@ import org.carewebframework.web.model.Sorting.SortOrder;
  */
 abstract class BaseRenderer<M> implements IComponentRenderer<Row, M> {
     
-    public abstract void init(Table table);
+    public abstract void init(Grid grid);
     
     /**
-     * Adds a cell with the specified content to the table row.
+     * Adds a cell with the specified content to the grid row.
      * 
      * @param row List row.
      * @param label Content for cell. Auto-detects type of content.
@@ -33,7 +33,7 @@ abstract class BaseRenderer<M> implements IComponentRenderer<Row, M> {
     }
     
     /**
-     * Adds a cell to the table row.
+     * Adds a cell to the grid row.
      * 
      * @param row List row.
      * @param label Label text for cell.
@@ -46,17 +46,17 @@ abstract class BaseRenderer<M> implements IComponentRenderer<Row, M> {
     }
     
     /**
-     * Adds a column to a table.
+     * Adds a column to a grid.
      * 
-     * @param table Table.
+     * @param grid Grid.
      * @param label Label for column.
      * @param width Width for column.
      * @param sortBy Field for sorting.
      * @return Newly created column.
      */
-    public Column addColumn(Table table, String label, String width, String sortBy) {
+    public Column addColumn(Grid grid, String label, String width, String sortBy) {
         Column column = new Column();
-        table.getColumns().addChild(column);
+        grid.getColumns().addChild(column);
         column.setLabel(label);
         column.setWidth(width);
         column.setSortComparator(sortBy);

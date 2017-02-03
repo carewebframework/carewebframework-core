@@ -4,10 +4,10 @@
 	controller="org.carewebframework.ui.manifest.ManifestViewer">
 	<div name="printRoot" flex="1">
 		<label name="caption" />
-		<table name="table">
+		<grid name="grid">
 			<columns />
 			<rows />
-		</table>
+		</grid>
 	</div>
 	<toolbar width="100%">
 		<textbox name="txtSearch" synchronized="true"

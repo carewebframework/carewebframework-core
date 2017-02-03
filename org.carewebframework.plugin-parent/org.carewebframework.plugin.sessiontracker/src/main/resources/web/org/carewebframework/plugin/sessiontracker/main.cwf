@@ -15,7 +15,7 @@
 	</pane>
 	<pane>
 	</pane>
-		<table name="grid">
+		<grid name="grid">
 			<columns sizable="true">
 				<column width="20px" label="${@msg.cwf.sessiontracker.master.col1.label}" />
 				<column hflex="1" label="${@msg.cwf.sessiontracker.master.col2.label}" />
@@ -26,5 +26,5 @@
 				<column hflex="min" label="${@msg.cwf.sessiontracker.master.col7.label}" />
 			</columns>
 			<rows />
-		</table>
+		</grid>
 </paneview>

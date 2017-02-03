@@ -2,7 +2,7 @@ package org.carewebframework.ui.manifest;
 
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.Row;
-import org.carewebframework.web.component.Table;
+import org.carewebframework.web.component.Grid;
 import org.carewebframework.web.event.ClickEvent;
 import org.carewebframework.web.event.Event;
 import org.carewebframework.web.event.EventUtil;
@@ -15,7 +15,7 @@ public class ManifestItemRenderer extends BaseRenderer<ManifestItem> {
         @Override
         public void onEvent(Event event) {
             BaseComponent target = event.getCurrentTarget();
-            Event newEvent = new Event("showManifest", target.getAncestor(Table.class), target.getData());
+            Event newEvent = new Event("showManifest", target.getAncestor(Grid.class), target.getData());
             EventUtil.send(newEvent);
         }
         
@@ -33,10 +33,10 @@ public class ManifestItemRenderer extends BaseRenderer<ManifestItem> {
     }
     
     @Override
-    public void init(Table table) {
-        table.getRows().getModelAndView(ManifestItem.class).setRenderer(this);
-        addColumn(table, "Module", "40%", "@implModule").setSortColumn(true);
-        addColumn(table, "Version", "20%", "@implVersion");
-        addColumn(table, "Author", "40%", "@implVendor");
+    public void init(Grid grid) {
+        grid.getRows().getModelAndView(ManifestItem.class).setRenderer(this);
+        addColumn(grid, "Module", "40%", "@implModule").setSortColumn(true);
+        addColumn(grid, "Version", "20%", "@implVersion");
+        addColumn(grid, "Author", "40%", "@implVendor");
     }
 }

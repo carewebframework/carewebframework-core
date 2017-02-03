@@ -1,6 +1,6 @@
 <popupbox impl="org.carewebframework.ui.dialog.DateTimebox">
 	<popup name="popup">
-		<table class="cwf_datetimebox" width="350px">
+		<grid class="cwf_datetimebox" width="350px">
 			<rows>
 				<row>
 					<datebox name="datebox" />
@@ -23,7 +23,7 @@
 						class="flavor:btn-danger" />
 				</row>
 			</rows>
-		</table>
+		</grid>
 		
 		<style>
 			.cwf_datetimebox {

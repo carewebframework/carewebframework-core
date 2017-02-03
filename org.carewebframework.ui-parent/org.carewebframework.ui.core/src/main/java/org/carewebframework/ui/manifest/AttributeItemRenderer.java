@@ -1,7 +1,7 @@
 package org.carewebframework.ui.manifest;
 
 import org.carewebframework.web.component.Row;
-import org.carewebframework.web.component.Table;
+import org.carewebframework.web.component.Grid;
 
 public class AttributeItemRenderer extends BaseRenderer<AttributeItem> {
     
@@ -15,10 +15,10 @@ public class AttributeItemRenderer extends BaseRenderer<AttributeItem> {
     }
     
     @Override
-    public void init(Table table) {
-        table.getRows().getModelAndView(AttributeItem.class).setRenderer(this);
-        addColumn(table, "Attribute", "30%", "@name");
-        addColumn(table, "Value", "70%", "@value");
+    public void init(Grid grid) {
+        grid.getRows().getModelAndView(AttributeItem.class).setRenderer(this);
+        addColumn(grid, "Attribute", "30%", "@name");
+        addColumn(grid, "Value", "70%", "@value");
     }
     
 }

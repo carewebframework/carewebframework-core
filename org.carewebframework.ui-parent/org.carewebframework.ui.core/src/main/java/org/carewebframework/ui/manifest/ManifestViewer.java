@@ -43,7 +43,7 @@ import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.Column;
 import org.carewebframework.web.component.Label;
 import org.carewebframework.web.component.Row;
-import org.carewebframework.web.component.Table;
+import org.carewebframework.web.component.Grid;
 import org.carewebframework.web.component.Textbox;
 import org.carewebframework.web.component.Window;
 import org.carewebframework.web.event.ChangeEvent;
@@ -71,7 +71,7 @@ public class ManifestViewer implements IAutoWired {
     private Window root;
     
     @WiredComponent
-    private Table table;
+    private Grid grid;
     
     @WiredComponent
     private Label caption;
@@ -130,9 +130,9 @@ public class ManifestViewer implements IAutoWired {
             }
         }
         
-        renderer.init(table);
+        renderer.init(grid);
         filterChanged(null);
-        table.getColumns().getChild(Column.class).sort();
+        grid.getColumns().getChild(Column.class).sort();
     }
     
     /**
@@ -140,7 +140,7 @@ public class ManifestViewer implements IAutoWired {
      * 
      * @param event The triggering event.
      */
-    @EventHandler(value = "showManifest", target = "@table")
+    @EventHandler(value = "showManifest", target = "@grid")
     public void onShowManifest(Event event) {
         ManifestItem manifestItem = (ManifestItem) event.getData();
         
@@ -165,13 +165,13 @@ public class ManifestViewer implements IAutoWired {
         root.close();
     }
     
-    @EventHandler(value = "change", target = "@table")
-    private void onChange$table() {
+    @EventHandler(value = "change", target = "@grid")
+    private void onChange$grid() {
         txtSearch.focus();
     }
     
     public void filterChanged(String filter) {
-        IModelAndView<Row, IMatchable> modelAndView = table.getRows().getModelAndView(IMatchable.class);
+        IModelAndView<Row, IMatchable> modelAndView = grid.getRows().getModelAndView(IMatchable.class);
         modelAndView.setModel(null);
         model.clear();
         

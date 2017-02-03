@@ -6,7 +6,7 @@
 	</toolbar>
 	<label name="lblNoResultsFound" visible="false"
 		value="${@msg.cwf.help.tab.search.noresults}" />
-	<table name="tblSrchResults" visible="false" flex="1">
+	<grid name="tblSrchResults" visible="false" flex="1">
 		<columns>
 			<column label="" width="30px" sort="auto(confidence)"/>
 			<column label="${@msg.cwf.help.tab.search.topic.header}" />
@@ -14,5 +14,5 @@
 		</columns>
 		<rows>
 		</rows>
-	</table>
+	</grid>
 </page>

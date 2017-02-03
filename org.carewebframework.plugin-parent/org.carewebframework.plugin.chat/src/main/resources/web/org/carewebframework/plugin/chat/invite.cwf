@@ -5,13 +5,13 @@
 	<window title="${@msg.cwf.chat.invite.title}" width="500px" 
 		controller="${cwfChatInviteController}">
 		<style src="web/org/carewebframework/plugin/chat/chat.css" />
-		<table name="sessions" flex="1" selectable="multiple">
+		<grid name="sessions" flex="1" selectable="multiple">
 			<columns>
 				<column name="getUserName" width="30px" 
 					label="${@msg.cwf.chat.participant.header.user}" />
 			</columns>
 			<rows />
-		</table>
+		</grid>
 		<toolbar width="100%" alignment="start">
 			<checkbox name="chkHideActive"
 				label="${@msg.cwf.chat.invite.check.hide.label}" />

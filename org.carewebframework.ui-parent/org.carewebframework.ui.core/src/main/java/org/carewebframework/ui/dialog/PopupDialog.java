@@ -100,7 +100,7 @@ public class PopupDialog extends Window {
             }
             
             DialogUtil.showError(e);
-            log.error(e);
+            log.error("Error materializing page", e);
         }
         
         return window;

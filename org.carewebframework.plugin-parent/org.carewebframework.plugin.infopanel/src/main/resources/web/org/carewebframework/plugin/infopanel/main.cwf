@@ -23,10 +23,10 @@
 					<span name="alertIcon"
 						class="panel-icons panel-icon glyphicon glyphicon-chevron-down" />
 				</div>
-				<table name="alertGrid" flex="1"
+				<grid name="alertGrid" flex="1"
 					class="cwf-infopanel-alertgrid">
 					<rows name="alertRoot" />
-				</table>
+				</grid>
 			</div>
 		</splitterpane>
 	</splitterview>

@@ -40,7 +40,7 @@ import org.carewebframework.web.component.Button;
 import org.carewebframework.web.component.Checkbox;
 import org.carewebframework.web.component.Column;
 import org.carewebframework.web.component.Row;
-import org.carewebframework.web.component.Table;
+import org.carewebframework.web.component.Grid;
 import org.carewebframework.web.model.ListModel;
 
 /**
@@ -52,7 +52,7 @@ public class InviteController extends FrameworkController {
     
     private static final String ATTR_HIDE = InviteController.class.getName() + ".HIDE_ACTIVE";
     
-    private Table sessions;
+    private Grid sessions;
     
     private Column getUserName;
     

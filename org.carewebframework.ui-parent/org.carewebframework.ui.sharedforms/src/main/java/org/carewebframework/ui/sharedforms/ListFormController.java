@@ -47,7 +47,7 @@ import org.carewebframework.web.component.Paneview.Orientation;
 import org.carewebframework.web.component.Row;
 import org.carewebframework.web.component.Rowcell;
 import org.carewebframework.web.component.Rows;
-import org.carewebframework.web.component.Table;
+import org.carewebframework.web.component.Grid;
 import org.carewebframework.web.event.ChangeEvent;
 import org.carewebframework.web.event.ClickEvent;
 import org.carewebframework.web.event.Event;
@@ -71,7 +71,7 @@ public abstract class ListFormController<DAO> extends CaptionedFormController {
     private Paneview mainView;
     
     @WiredComponent
-    private Table table;
+    private Grid grid;
     
     @WiredComponent
     private Pane detailPane;
@@ -108,7 +108,7 @@ public abstract class ListFormController<DAO> extends CaptionedFormController {
         @Override
         public Row render(DAO object) {
             Row item = new Row();
-            item.addEventForward(ClickEvent.TYPE, table, ChangeEvent.TYPE);
+            item.addEventForward(ClickEvent.TYPE, grid, ChangeEvent.TYPE);
             ListFormController.this.renderItem(item, object);
             return item;
         }
@@ -129,12 +129,12 @@ public abstract class ListFormController<DAO> extends CaptionedFormController {
     protected void init() {
         super.init();
         root = detailPane;
-        columns = table.getColumns();
-        rows = table.getRows();
+        columns = grid.getColumns();
+        rows = grid.getRows();
         rows.setModel(model);
         rows.setRenderer(renderer);
         setSize(50);
-        CommandUtil.associateCommand("REFRESH", table);
+        CommandUtil.associateCommand("REFRESH", grid);
         getContainer().registerProperties(this, "allowPrint", "alternateColor", "deferUpdate", "showDetailPane", "layout",
             "horizontal");
     }
@@ -311,7 +311,7 @@ public abstract class ListFormController<DAO> extends CaptionedFormController {
     }
     
     protected Row getSelectedItem() {
-        return table.getRows().getSelectedRow();
+        return grid.getRows().getSelectedRow();
     }
     
     @SuppressWarnings("unchecked")
@@ -439,8 +439,8 @@ public abstract class ListFormController<DAO> extends CaptionedFormController {
         refresh();
     }
     
-    @EventHandler(value = "command", target = "@table")
-    private void onCommand$table() {
+    @EventHandler(value = "command", target = "@grid")
+    private void onCommand$grid() {
         refresh();
     }
     

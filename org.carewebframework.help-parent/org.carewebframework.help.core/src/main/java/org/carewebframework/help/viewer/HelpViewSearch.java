@@ -44,7 +44,7 @@ import org.carewebframework.web.component.Image;
 import org.carewebframework.web.component.Label;
 import org.carewebframework.web.component.Listitem;
 import org.carewebframework.web.component.Row;
-import org.carewebframework.web.component.Table;
+import org.carewebframework.web.component.Grid;
 import org.carewebframework.web.component.Textbox;
 import org.carewebframework.web.event.Event;
 import org.carewebframework.web.event.EventUtil;
@@ -63,7 +63,7 @@ public class HelpViewSearch extends HelpViewBase implements IComponentRenderer<L
     private Textbox txtSearch;
     
     @WiredComponent
-    private Table tblSrchResults;
+    private Grid tblSrchResults;
     
     @WiredComponent
     private Label lblNoResultsFound;

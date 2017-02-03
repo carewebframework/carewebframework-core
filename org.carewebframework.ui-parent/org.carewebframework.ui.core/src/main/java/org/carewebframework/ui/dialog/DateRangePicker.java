@@ -159,7 +159,7 @@ public class DateRangePicker extends Combobox {
         
         for (int i = items.size() - 1; i >= 0; i--) {
             if (items.get(i) != customItem) {
-                items.remove(i);
+                items.get(i).destroy();
             }
         }
     }
