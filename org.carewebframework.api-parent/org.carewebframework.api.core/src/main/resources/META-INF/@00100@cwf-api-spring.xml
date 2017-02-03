@@ -30,6 +30,10 @@
 			<property name="appFramework" ref="appFramework" />
 		</bean>
 
+		<bean class="org.carewebframework.api.spring.BeanResolver">
+			<constructor-arg ref="appContextFinder" />
+		</bean>
+		
 		<!-- Maintains an iterable list of all manifests in the class path. -->
 		<bean id="manifestIterator" class="org.carewebframework.api.ManifestIterator"
 			factory-method="getInstance" init-method="init" />
