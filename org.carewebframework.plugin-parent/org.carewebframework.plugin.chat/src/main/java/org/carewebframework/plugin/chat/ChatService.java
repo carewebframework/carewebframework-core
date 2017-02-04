@@ -100,7 +100,7 @@ public class ChatService implements IParticipantUpdate {
         this.eventManager = eventManager;
         self = ((ILocalEventDispatcher) eventManager).getGlobalEventDispatcher().getPublisherInfo();
         ActionRegistry.register(false, "chat.create.session", "@cwf.chat.action.create.session",
-            "groovy:" + ChatService.class.getName() + ".getInstance().createSession();");
+            "sscript-groovy:" + ChatService.class.getName() + ".getInstance().createSession();");
     }
     
     /**
