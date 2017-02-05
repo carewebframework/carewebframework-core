@@ -2,7 +2,7 @@
 	class="cwf-propertygrid"
 	controller="org.carewebframework.shell.designer.PropertyGrid">
 	<paneview orientation="vertical" height="100%" width="100%" style="overflow: visible">
-		<pane flex="75" splittable="true" css="##{id}-inner{overflow:visible}">
+		<pane flex="75" splittable="true">
 			<grid name="gridProperties" width="100%">
 				<columns>
 					<column name="colProperty" sortBy="propInfo.name"
