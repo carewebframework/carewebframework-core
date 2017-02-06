@@ -50,7 +50,7 @@ import org.carewebframework.web.annotation.EventHandler;
 import org.carewebframework.web.client.ClientUtil;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.BaseUIComponent;
-import org.carewebframework.web.component.Container;
+import org.carewebframework.web.component.Namespace;
 import org.carewebframework.web.event.EventUtil;
 import org.carewebframework.web.page.PageUtil;
 import org.springframework.util.StringUtils;
@@ -58,7 +58,7 @@ import org.springframework.util.StringUtils;
 /**
  * Container that manages CareWeb plugins
  */
-public class PluginContainer extends Container {
+public class PluginContainer extends Namespace {
     
     private static final Log log = LogFactory.getLog(PluginContainer.class);
     
@@ -112,7 +112,7 @@ public class PluginContainer extends Container {
     
     private String color;
     
-    private class ToolbarContainer extends Container {
+    private class ToolbarContainer extends Namespace {
         
         public ToolbarContainer() {
             super();

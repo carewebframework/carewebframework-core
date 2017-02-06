@@ -31,6 +31,10 @@ import java.util.List;
 
 import org.carewebframework.api.property.PropertyUtil;
 import org.carewebframework.common.DateRange;
+import org.carewebframework.web.annotation.Component;
+import org.carewebframework.web.annotation.Component.ChildTag;
+import org.carewebframework.web.annotation.Component.PropertyGetter;
+import org.carewebframework.web.annotation.Component.PropertySetter;
 import org.carewebframework.web.annotation.EventHandler;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.Combobox;
@@ -42,6 +46,7 @@ import org.carewebframework.web.event.EventUtil;
 /**
  * Generic component for choosing date ranges.
  */
+@Component(value = "datepicker", widgetClass = "Combobox", parentTag = "*", childTag = @ChildTag("datepickeritem"))
 public class DateRangePicker extends Combobox {
     
     public static final String ON_SELECT_RANGE = "selectRange";
@@ -49,17 +54,19 @@ public class DateRangePicker extends Combobox {
     private static final String[] DEFAULT_CHOICES = { "All Dates", "Today|T|T", "Last Week|T|T-7", "Last Month|T|T-30|1",
             "Last Year|T|T-365", "Last Two Years|T|T-730" };
     
-    private final Comboitem customItem;
+    @Component(value = "datepickeritem", widgetClass = "Comboitem", parentTag = "datepicker")
+    public static class Dateitem extends Comboitem {
+        
+    }
     
-    private Comboitem lastSelectedItem;
+    private final Dateitem customItem;
     
-    private String prompt = "Select a date range...";
+    private Dateitem lastSelectedItem;
     
     public DateRangePicker() {
         super();
         setReadonly(true);
-        setHint(prompt);
-        customItem = new Comboitem();
+        customItem = new Dateitem();
         customItem.setLabel("Custom...");
         addChild(customItem);
         setAllowCustom(false);
@@ -114,8 +121,8 @@ public class DateRangePicker extends Combobox {
      *            item exists, it will not be added.
      * @return combo box item that was added (or found if duplicate custom item).
      */
-    public Comboitem addChoice(DateRange range, boolean isCustom) {
-        Comboitem item;
+    public Dateitem addChoice(DateRange range, boolean isCustom) {
+        Dateitem item;
         
         if (isCustom) {
             item = findMatchingItem(range);
@@ -125,7 +132,7 @@ public class DateRangePicker extends Combobox {
             }
         }
         
-        item = new Comboitem();
+        item = new Dateitem();
         item.setLabel(range.getLabel());
         item.setData(range);
         addChild(item, isCustom ? null : customItem);
@@ -146,7 +153,7 @@ public class DateRangePicker extends Combobox {
      *            item exists, it will not be added.
      * @return combo box item that was added (or found if duplicate custom item).
      */
-    public Comboitem addChoice(String range, boolean isCustom) {
+    public Dateitem addChoice(String range, boolean isCustom) {
         return addChoice(new DateRange(range), isCustom);
     }
     
@@ -170,10 +177,10 @@ public class DateRangePicker extends Combobox {
      * @param range The date range to locate.
      * @return A comboitem containing the date range, or null if not found.
      */
-    public Comboitem findMatchingItem(DateRange range) {
+    public Dateitem findMatchingItem(DateRange range) {
         for (BaseComponent item : getChildren()) {
             if (range.equals(item.getData())) {
-                return (Comboitem) item;
+                return (Dateitem) item;
             }
         }
         
@@ -187,9 +194,9 @@ public class DateRangePicker extends Combobox {
      * @param label Label text to find.
      * @return A comboitem with a matching label., or null if not found.
      */
-    public Comboitem findMatchingItem(String label) {
+    public Dateitem findMatchingItem(String label) {
         for (BaseComponent child : getChildren()) {
-            Comboitem item = (Comboitem) child;
+            Dateitem item = (Dateitem) child;
             
             if (label.equalsIgnoreCase(item.getLabel())) {
                 return item;
@@ -217,6 +224,7 @@ public class DateRangePicker extends Combobox {
      * 
      * @param allowCustom Determines whether or not custom entries are allowed.
      */
+    @PropertySetter("allowCustom")
     public void setAllowCustom(boolean allowCustom) {
         customItem.setVisible(allowCustom);
         
@@ -234,27 +242,9 @@ public class DateRangePicker extends Combobox {
      * 
      * @return True if custom ranges are allowed.
      */
+    @PropertyGetter("allowCustom")
     public boolean isAllowCustom() {
         return customItem.isVisible();
-    }
-    
-    /**
-     * Returns the prompt to display when there is no selection.
-     * 
-     * @return The prompt
-     */
-    public String getPrompt() {
-        return prompt;
-    }
-    
-    /**
-     * Sets the prompt to display when there is no selection.
-     * 
-     * @param prompt The prompt to set
-     */
-    public void setPrompt(String prompt) {
-        this.prompt = prompt;
-        setHint(prompt);
     }
     
     /**
@@ -263,7 +253,7 @@ public class DateRangePicker extends Combobox {
      * @return Selected date range item, or null if none selected.
      */
     public DateRange getSelectedRange() {
-        Comboitem selected = getSelectedItem();
+        Dateitem selected = getSelectedItem();
         return selected == null ? null : (DateRange) selected.getData();
     }
     
@@ -296,7 +286,7 @@ public class DateRangePicker extends Combobox {
      * @param suppressEvent If true, onSelectRange event is not fired.
      */
     private void checkSelection(boolean suppressEvent) {
-        Comboitem selectedItem = getSelectedItem();
+        Dateitem selectedItem = getSelectedItem();
         
         if (selectedItem == null) {
             selectedItem = lastSelectedItem;
@@ -312,14 +302,18 @@ public class DateRangePicker extends Combobox {
         updateSelection();
     }
     
+    @Override
+    public Dateitem getSelectedItem() {
+        return (Dateitem) super.getSelectedItem();
+    }
+    
     /**
      * Updates the visual appearance of the current selection.
      */
     private void updateSelection() {
-        Comboitem selectedItem = getSelectedItem();
+        Dateitem selectedItem = getSelectedItem();
         
         if (selectedItem == null) {
-            setValue(prompt);
             addStyle("color", "gray");
         } else {
             addStyle("color", "inherit");

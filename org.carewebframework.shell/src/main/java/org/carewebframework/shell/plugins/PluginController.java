@@ -95,7 +95,7 @@ public class PluginController extends FrameworkController implements IPluginEven
      */
     public void attachController(BaseComponent comp, IAutoWired controller) {
         container.tryRegisterListener(controller, true);
-        controller.afterInitialized(comp);
+        comp.wireController(controller);
     }
     
     /**

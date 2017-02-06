@@ -1,4 +1,4 @@
-<container controller="org.carewebframework.shell.designer.DesignMenu">
+<namespace controller="org.carewebframework.shell.designer.DesignMenu">
 	<menu name="menu">
 		<menuitem name="mnuDesignMode" checkable="true"
 			label="${@msg.cwf.shell.designer.menu.designmode.label}" 
@@ -29,5 +29,5 @@
 			label="${@msg.cwf.shell.designer.menu.logout.label}"
 			hint="${@msg.cwf.shell.designer.menu.logout.hint}" />
 	</menu>
-</container>
+</namespace>
 

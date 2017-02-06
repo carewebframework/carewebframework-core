@@ -58,6 +58,16 @@
 		
 		<bean class="org.carewebframework.ui.action.ActionTypeServerScript" />
 		
+		<bean class="org.springframework.beans.factory.config.MethodInvokingBean">
+			<property name="targetObject" ref="cwf_ComponentScanner" />
+			<property name="targetMethod" value="scan" />
+			<property name="arguments">
+				<list>
+					<value type="java.lang.String">org.carewebframework.ui.dialog</value>
+				</list>
+			</property>
+		</bean>
+		
 	</beans>
 
 	<beans profile="child">

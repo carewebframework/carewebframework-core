@@ -33,7 +33,7 @@ import org.carewebframework.help.viewer.HelpHistory.ITopicListener;
 import org.carewebframework.web.ancillary.IAutoWired;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.BaseUIComponent;
-import org.carewebframework.web.component.Container;
+import org.carewebframework.web.component.Namespace;
 import org.carewebframework.web.page.PageUtil;
 
 /**
@@ -45,7 +45,7 @@ public abstract class HelpViewBase implements IAutoWired, ITopicListener {
     
     private final HelpViewer viewer;
     
-    private final Container container = new Container();
+    private final Namespace container = new Namespace();
     
     private boolean initialized;
     
