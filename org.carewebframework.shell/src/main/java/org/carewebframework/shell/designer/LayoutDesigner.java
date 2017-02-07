@@ -25,6 +25,8 @@
  */
 package org.carewebframework.shell.designer;
 
+import java.util.Collections;
+
 import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.layout.UILayout;
 import org.carewebframework.ui.dialog.DialogUtil;
@@ -159,7 +161,6 @@ public class LayoutDesigner implements IAutoWired {
     
     @Override
     public void afterInitialized(BaseComponent comp) {
-        //TODO: setWidgetOverride("_cwf_highlight", "function(comp) {jq(comp).effect('pulsate',{times:1}).effect('highlight');}");
         window = (Window) comp;
         window.setCloseAction(CloseAction.HIDE);
         comp.setAttribute("controller", this);
@@ -190,7 +191,7 @@ public class LayoutDesigner implements IAutoWired {
      * @param comp Component to highlight.
      */
     private void highlight(BaseComponent comp) {
-        //TODO: response(new AuInvoke(this, "_cwf_highlight", comp));
+        comp.invoke("widget$.effect", "pulsate", Collections.singletonMap("times", 1));
     }
     
     /**

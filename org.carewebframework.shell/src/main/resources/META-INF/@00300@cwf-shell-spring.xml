@@ -181,7 +181,7 @@
 						<cwp:entry key="false">${@msg.cwf.shell.plugin.splitterpane.relative.no}</cwp:entry>
 					</cwp:config>
 				</cwp:property>
-				<cwp:property id="size" type="double" editable="false"
+				<cwp:property id="size" type="int" editable="false"
 					name="${@msg.cwf.shell.plugin.splitterpane.size.name}" description="${@msg.cwf.shell.plugin.splitterpane.size.description}" />
 			</cwp:serialization>
 		</cwp:plugin>

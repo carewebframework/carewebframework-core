@@ -48,14 +48,26 @@ public class UIElementSplitterView extends UIElementCWFBase {
     
     public UIElementSplitterView() {
         super();
+        fullSize(root);
         maxChildren = Integer.MAX_VALUE;
         setOrientation("horizontal");
         setOuterComponent(root);
     }
     
     public void setOrientation(String orientation) {
-        this.orientation = Orientation.valueOf(orientation);
+        this.orientation = Orientation.valueOf(orientation.toUpperCase());
         root.setOrientation(this.orientation);
+        boolean isHorizontal = isHorizontal();
+        
+        for (UIElementSplitterPane child : this.getChildren(UIElementSplitterPane.class)) {
+            child.updateSize(isHorizontal);
+        }
+    }
+    
+    @Override
+    protected void afterAddChild(UIElementBase child) {
+        super.afterAddChild(child);
+        ((UIElementSplitterPane) child).updateState();
     }
     
     public String getOrientation() {

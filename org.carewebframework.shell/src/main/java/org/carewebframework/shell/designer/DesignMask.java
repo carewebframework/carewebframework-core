@@ -40,7 +40,7 @@ public class DesignMask {
     
     private final UIElementCWFBase element;
     
-    private MaskMode mode = MaskMode.AUTO;
+    private MaskMode mode = MaskMode.DISABLE;
     
     private boolean visible;
     

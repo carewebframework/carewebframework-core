@@ -232,7 +232,7 @@ public class DateRangePicker extends Combobox {
             BaseComponent sibling;
             
             while ((sibling = customItem.getNextSibling()) != null) {
-                removeChild(sibling);
+                sibling.destroy();
             }
         }
     }

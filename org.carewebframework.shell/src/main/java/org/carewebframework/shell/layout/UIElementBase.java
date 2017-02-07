@@ -709,6 +709,17 @@ public abstract class UIElementBase {
     }
     
     /**
+     * Returns an iterable of this component's children.
+     * 
+     * @param clazz Expected class of children.
+     * @return Iterable of this component's children.
+     */
+    @SuppressWarnings("unchecked")
+    public <T extends UIElementBase> Iterable<T> getChildren(Class<T> clazz) {
+        return (Iterable<T>) children;
+    }
+    
+    /**
      * Returns an iterable of this component's serializable children. By default, this calls
      * getChildren() but may be overridden to accommodate specialized serialization needs.
      * 

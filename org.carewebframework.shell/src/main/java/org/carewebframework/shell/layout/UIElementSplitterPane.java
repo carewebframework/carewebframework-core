@@ -39,14 +39,15 @@ public class UIElementSplitterPane extends UIElementCWFBase {
     
     private final Pane pane = new Pane();
     
-    private int size;
+    private int size = 1;
     
-    private boolean relative;
+    private boolean relative = true;
     
     public UIElementSplitterPane() {
         super();
-        setRelative(true);
+        pane.setSplittable(true);
         setOuterComponent(pane);
+        updateSize(true);
     }
     
     public void setSize(int size) {
@@ -80,11 +81,15 @@ public class UIElementSplitterPane extends UIElementCWFBase {
         pane.setTitle(caption);
     }
     
+    /*package*/ void updateSize(boolean isHorizontal) {
+        pane.setFlex(relative ? Integer.toString(size) : null);
+        pane.setHeight(relative || isHorizontal ? null : size + "px");
+        pane.setWidth(relative || !isHorizontal ? null : size + "px");
+    }
+    
     private void updateSize() {
-        if (relative) {
-            pane.addStyle("flex", Integer.toString(size));
-        } else {
-            pane.setHeight(size + "px");
+        if (getParent() != null) {
+            updateSize(((UIElementSplitterView) getParent()).isHorizontal());
         }
     }
 }
