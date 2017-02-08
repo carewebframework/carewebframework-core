@@ -26,6 +26,7 @@
 package org.carewebframework.shell.layout;
 
 import org.carewebframework.shell.AboutDialog;
+import org.carewebframework.shell.designer.DesignMask.MaskMode;
 import org.carewebframework.shell.plugins.PluginContainer;
 import org.carewebframework.shell.plugins.PluginDefinition;
 import org.carewebframework.shell.property.IPropertyAccessor;
@@ -49,6 +50,7 @@ public class UIElementPlugin extends UIElementCWFBase implements IDisable, IProp
      */
     public UIElementPlugin() {
         super();
+        setMaskMode(MaskMode.ENABLE);
         setOuterComponent(container);
         container.registerAction(this);
     }
