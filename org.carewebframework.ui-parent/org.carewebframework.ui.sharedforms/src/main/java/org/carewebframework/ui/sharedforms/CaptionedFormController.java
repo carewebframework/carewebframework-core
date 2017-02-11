@@ -28,6 +28,7 @@ package org.carewebframework.ui.sharedforms;
 import java.util.Arrays;
 
 import org.carewebframework.common.StrUtil;
+import org.carewebframework.web.annotation.WiredComponent;
 import org.carewebframework.web.component.Window;
 
 /**
@@ -46,6 +47,7 @@ public class CaptionedFormController extends BaseFormController {
     
     private CaptionStyle captionStyle = CaptionStyle.HIDDEN;
     
+    @WiredComponent("^")
     private Window panel;
     
     private String color1;
@@ -54,9 +56,9 @@ public class CaptionedFormController extends BaseFormController {
     
     @Override
     protected void init() {
+        //panel = (Window) root;
         super.init();
         getContainer().registerProperties(this, "caption", "captionStyle", "icon", "color1", "color2");
-        root = panel;
         updateStyle();
     }
     

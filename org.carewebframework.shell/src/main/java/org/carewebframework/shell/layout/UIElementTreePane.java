@@ -296,8 +296,14 @@ public class UIElementTreePane extends UIElementCWFBase {
      * Only the node needs to be resequenced, since pane sequencing is arbitrary.
      */
     @Override
-    public void afterMoveTo(int index) {
-        moveChild(node, getParent() == treeView ? index : index + 1);
+    protected void afterMoveChild(UIElementBase child, UIElementBase before) {
+        UIElementTreePane childpane = (UIElementTreePane) child;
+        UIElementTreePane beforepane = (UIElementTreePane) before;
+        moveChild(childpane.node, beforepane.node);
+    }
+    
+    /*package*/ Span getNode() {
+        return node;
     }
     
     /**

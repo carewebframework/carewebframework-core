@@ -200,6 +200,7 @@ public class PluginContainer extends Namespace {
                 registeredComponents = null;
             }
         }
+        super.destroy();
     }
     
     /**

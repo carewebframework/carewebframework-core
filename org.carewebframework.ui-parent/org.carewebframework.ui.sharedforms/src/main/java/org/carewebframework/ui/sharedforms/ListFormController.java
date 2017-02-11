@@ -37,20 +37,18 @@ import org.carewebframework.ui.util.CWFUtil;
 import org.carewebframework.web.annotation.EventHandler;
 import org.carewebframework.web.annotation.WiredComponent;
 import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.component.BaseUIComponent;
-import org.carewebframework.web.component.Cell;
 import org.carewebframework.web.component.Column;
 import org.carewebframework.web.component.Columns;
+import org.carewebframework.web.component.Grid;
+import org.carewebframework.web.component.Label;
 import org.carewebframework.web.component.Pane;
 import org.carewebframework.web.component.Paneview;
 import org.carewebframework.web.component.Paneview.Orientation;
 import org.carewebframework.web.component.Row;
 import org.carewebframework.web.component.Rowcell;
 import org.carewebframework.web.component.Rows;
-import org.carewebframework.web.component.Grid;
 import org.carewebframework.web.event.ChangeEvent;
 import org.carewebframework.web.event.ClickEvent;
-import org.carewebframework.web.event.Event;
 import org.carewebframework.web.model.IComponentRenderer;
 import org.carewebframework.web.model.ListModel;
 
@@ -79,11 +77,14 @@ public abstract class ListFormController<DAO> extends CaptionedFormController {
     @WiredComponent
     private Pane listPane;
     
+    @WiredComponent
     private Columns columns;
     
+    @WiredComponent
     private Rows rows;
     
-    private Cell status;
+    @WiredComponent
+    private Label status;
     
     private boolean allowPrint;
     
@@ -109,7 +110,7 @@ public abstract class ListFormController<DAO> extends CaptionedFormController {
         public Row render(DAO object) {
             Row item = new Row();
             item.addEventForward(ClickEvent.TYPE, grid, ChangeEvent.TYPE);
-            ListFormController.this.renderItem(item, object);
+            ListFormController.this.renderRow(item, object);
             return item;
         }
         
@@ -129,8 +130,6 @@ public abstract class ListFormController<DAO> extends CaptionedFormController {
     protected void init() {
         super.init();
         root = detailPane;
-        columns = grid.getColumns();
-        rows = grid.getRows();
         rows.setModel(model);
         rows.setRenderer(renderer);
         setSize(50);
@@ -197,16 +196,7 @@ public abstract class ListFormController<DAO> extends CaptionedFormController {
     }
     
     public void setShowDetailPane(boolean value) {
-        if (getShowDetailPane() != value) {
-            if (value) {
-                //listPane.setRelativeSize(getSize());
-            } else {
-                //setSize(listPane.getRelativeSize());
-                //listPane.setRelativeSize(100);
-            }
-            
-            detailPane.setVisible(value);
-        }
+        detailPane.setVisible(value);
     }
     
     public boolean getAllowPrint() {
@@ -350,12 +340,12 @@ public abstract class ListFormController<DAO> extends CaptionedFormController {
     protected abstract void render(DAO dao, List<Object> columns);
     
     /**
-     * Render a single item.
+     * Render a single row.
      * 
-     * @param item List item being rendered.
+     * @param row Row being rendered.
      * @param dao DAO object
      */
-    protected void renderItem(Row item, DAO dao) {
+    protected void renderRow(Row row, DAO dao) {
         List<Object> columns = new ArrayList<>();
         boolean error = false;
         
@@ -367,10 +357,13 @@ public abstract class ListFormController<DAO> extends CaptionedFormController {
             error = true;
         }
         
-        item.setVisible(!columns.isEmpty());
+        row.setVisible(!columns.isEmpty());
         
         for (Object colData : columns) {
-            Rowcell cell = null;//TODO: renderer.createCell(item, transformData(colData));
+            Object data = transformData(colData);
+            Rowcell cell = new Rowcell();
+            cell.setLabel(data == null ? null : data.toString());
+            row.addChild(cell);
             cell.setData(colData);
             
             if (error) {
@@ -426,15 +419,17 @@ public abstract class ListFormController<DAO> extends CaptionedFormController {
         if (message != null) {
             status.setLabel(StrUtil.piece(message, StrUtil.U));
             status.setHint(StrUtil.piece(message, StrUtil.U, 2, 999));
-            ((BaseUIComponent) status.getParent()).setVisible(true);
-            columns.setVisible(false);
+            status.setVisible(true);
+            grid.setVisible(false);
         } else {
-            ((BaseUIComponent) status.getParent()).setVisible(false);
-            columns.setVisible(true);
+            status.setVisible(false);
+            status.setLabel(null);
+            status.setHint(null);
+            grid.setVisible(true);
         }
     }
     
-    @EventHandler(value = "click", target = "mnuRefresh")
+    @EventHandler(value = "click", target = "menupopup.mnuRefresh")
     private void onClick$mnuRefresh() {
         refresh();
     }
@@ -445,9 +440,9 @@ public abstract class ListFormController<DAO> extends CaptionedFormController {
     }
     
     @EventHandler(value = "change", target = "@rows")
-    private void onChange$rows(Event event) {
-        if (getShowDetailPane() == (event instanceof ChangeEvent)) {
-            itemSelected(getSelectedItem());
+    private void onChange$rows(ChangeEvent event) {
+        if (getShowDetailPane()) {
+            rowSelected(getSelectedItem());
         }
     }
     
@@ -456,7 +451,7 @@ public abstract class ListFormController<DAO> extends CaptionedFormController {
      * 
      * @param li Selected list item.
      */
-    protected void itemSelected(Row li) {
+    protected void rowSelected(Row li) {
         
     }
     

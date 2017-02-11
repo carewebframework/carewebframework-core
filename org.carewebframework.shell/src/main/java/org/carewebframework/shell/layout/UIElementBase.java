@@ -535,16 +535,6 @@ public abstract class UIElementBase {
     }
     
     /**
-     * Element has been moved to a different position under its parent. Descendant classes should
-     * make any necessary adjustments to wrapped components.
-     * 
-     * @param index New position for element.
-     */
-    protected void afterMoveTo(int index) {
-        
-    }
-    
-    /**
      * Return the definition used to create this instance.
      * 
      * @return The plugin definition.
@@ -890,6 +880,26 @@ public abstract class UIElementBase {
         return parent == null ? -1 : parent.indexOfChild(this);
     }
     
+    public void moveChild(int from, int to) {
+        UIElementBase child = children.get(from);
+        UIElementBase ref = children.get(to);
+        children.remove(from);
+        to = children.indexOf(ref);
+        children.add(to, child);
+        afterMoveChild(child, ref);
+    }
+    
+    /**
+     * Element has been moved to a different position under this parent. Descendant classes should
+     * make any necessary adjustments to wrapped components.
+     * 
+     * @param child Child element that was moved.
+     * @param before Child element was moved before this one.
+     */
+    protected void afterMoveChild(UIElementBase child, UIElementBase before) {
+        
+    }
+    
     /**
      * Sets this element's index to the specified value. This effectively changes the position of
      * the element relative to its siblings.
@@ -909,13 +919,7 @@ public abstract class UIElementBase {
             return;
         }
         
-        if (index >= parent.children.size() || index < 0) {
-            raise("Index out of range.");
-        }
-        
-        parent.children.remove(currentIndex);
-        parent.children.add(index, this);
-        afterMoveTo(index);
+        parent.moveChild(currentIndex, index);
     }
     
     /**

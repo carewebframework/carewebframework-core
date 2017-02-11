@@ -62,6 +62,16 @@ public class UIElementTreeView extends UIElementCWFBase {
     }
     
     /**
+     * Only the node needs to be resequenced, since pane sequencing is arbitrary.
+     */
+    @Override
+    protected void afterMoveChild(UIElementBase child, UIElementBase before) {
+        UIElementTreePane childpane = (UIElementTreePane) child;
+        UIElementTreePane beforepane = (UIElementTreePane) before;
+        moveChild(childpane.getNode(), beforepane.getNode());
+    }
+    
+    /**
      * Sets the caption of the selector pane.
      *
      * @param value Selector pane caption.

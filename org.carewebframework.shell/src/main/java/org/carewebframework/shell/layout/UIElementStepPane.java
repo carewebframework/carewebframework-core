@@ -80,6 +80,10 @@ public class UIElementStepPane extends UIElementCWFBase {
         updateVisibility();
     }
     
+    /*package*/ Span getStep() {
+        return step;
+    }
+    
     /**
      * Add the UI components of the child pane to their respective parent components in the view.
      * 
@@ -112,18 +116,6 @@ public class UIElementStepPane extends UIElementCWFBase {
     public void bringToFront() {
         super.bringToFront();
         ((UIElementStepView) getParent()).setActivePane(this);
-    }
-    
-    /**
-     * Changes the ordering of a button and its separator.
-     * 
-     * @see org.carewebframework.shell.layout.UIElementCWFBase#afterMoveTo(int)
-     */
-    @Override
-    protected void afterMoveTo(int index) {
-        super.afterMoveTo(index);
-        moveChild(step, index);
-        updateParentState();
     }
     
     /**

@@ -247,6 +247,14 @@ public class UIElementStepView extends UIElementCWFBase {
         return idx == -1 ? null : (UIElementStepPane) getChild(idx);
     }
     
+    @Override
+    protected void afterMoveChild(UIElementBase child, UIElementBase before) {
+        super.afterMoveChild(child, before);
+        UIElementStepPane childpane = (UIElementStepPane) child;
+        UIElementStepPane beforepane = (UIElementStepPane) before;
+        moveChild(childpane.getStep(), beforepane.getStep());
+    }
+    
     /**
      * Navigate one pane forward or backward.
      * 

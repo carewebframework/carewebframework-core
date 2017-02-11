@@ -28,6 +28,7 @@ package org.carewebframework.shell.designer;
 import java.util.Collections;
 
 import org.carewebframework.shell.layout.UIElementBase;
+import org.carewebframework.shell.layout.UIElementCWFBase;
 import org.carewebframework.shell.layout.UILayout;
 import org.carewebframework.ui.dialog.DialogUtil;
 import org.carewebframework.web.ancillary.IAutoWired;
@@ -46,6 +47,7 @@ import org.carewebframework.web.event.DblclickEvent;
 import org.carewebframework.web.event.DropEvent;
 import org.carewebframework.web.event.Event;
 import org.carewebframework.web.event.EventUtil;
+import org.carewebframework.web.event.IEventListener;
 
 /**
  * Controller for dialog for managing the current layout.
@@ -118,6 +120,12 @@ public class LayoutDesigner implements IAutoWired {
     
     private boolean bringToFront;
     
+    private final IEventListener layoutListener = (event) -> {
+        if (UIElementCWFBase.getAssociatedUIElement(event.getRelatedTarget()) != null) {
+            requestRefresh();
+        }
+    };
+    
     /**
      * Display the Layout Manager dialog
      * 
@@ -168,9 +176,7 @@ public class LayoutDesigner implements IAutoWired {
         layoutChangedEvent = new LayoutChangedEvent(comp, null);
         contextMenu.setListener(comp);
         clipboard.addListener(comp);
-        comp.getPage().addEventListener("register unregister", (event) -> {
-            //refresh();
-        });
+        comp.getPage().addEventListener("register unregister", layoutListener);
     }
     
     /**
@@ -297,18 +303,18 @@ public class LayoutDesigner implements IAutoWired {
      * Update control states for current selection.
      */
     private void updateControls() {
-        Treenode selectedItem = tree.getSelectedNode();
-        UIElementBase selectedElement = getElement(selectedItem);
+        Treenode selectedNode = tree.getSelectedNode();
+        UIElementBase selectedElement = getElement(selectedNode);
         contextMenu.updateStates(selectedElement, btnAdd, btnDelete, btnCopy, btnCut, btnPaste, btnProperties, btnAbout);
-        BaseComponent parent = selectedItem == null ? null : selectedItem.getParent();
-        parent = parent == null ? null : parent.getParent();
+        BaseComponent parent = selectedNode == null ? null : selectedNode.getParent();
+        //parent = parent == null ? null : parent.getParent();
         Treenode target = parent instanceof Treenode ? (Treenode) parent : null;
-        btnLeft.setDisabled(movementType(selectedItem, target, false) == MovementType.INVALID);
-        target = selectedItem == null ? null : (Treenode) selectedItem.getPreviousSibling();
-        btnRight.setDisabled(movementType(selectedItem, target, false) == MovementType.INVALID);
-        btnUp.setDisabled(movementType(selectedItem, target, true) == MovementType.INVALID);
-        target = selectedItem == null ? null : (Treenode) selectedItem.getNextSibling();
-        btnDown.setDisabled(movementType(selectedItem, target, true) == MovementType.INVALID);
+        btnLeft.setDisabled(movementType(selectedNode, target, false) == MovementType.INVALID);
+        target = selectedNode == null ? null : (Treenode) selectedNode.getPreviousSibling();
+        btnRight.setDisabled(movementType(selectedNode, target, false) == MovementType.INVALID);
+        btnUp.setDisabled(movementType(selectedNode, target, true) == MovementType.INVALID);
+        target = selectedNode == null ? null : (Treenode) selectedNode.getNextSibling();
+        btnDown.setDisabled(movementType(selectedNode, target, true) == MovementType.INVALID);
         btnToFront.addStyle("opacity", bringToFront ? null : "0.5");
         
         if (selectedElement != null) {
@@ -316,9 +322,9 @@ public class LayoutDesigner implements IAutoWired {
             contextMenu.setOwner(selectedElement);
         }
         
-        if (selectedItem != null) {
-            selectedItem.setSelected(false);
-            selectedItem.setSelected(true);
+        if (selectedNode != null) {
+            selectedNode.setSelected(false);
+            selectedNode.setSelected(true);
         }
     }
     
@@ -589,9 +595,10 @@ public class LayoutDesigner implements IAutoWired {
     /**
      * Remove all listeners upon close.
      */
+    @EventHandler("close")
     private void onClose(Event event) {
         Page page = window.getPage();
-        //TODO: page.removeEventListener(layoutListener);
+        page.removeEventListener("register unregister", layoutListener);
         page.removeAttribute(CWF_PAGE);
         page.setAttribute(ATTR_BRING_TO_FRONT, bringToFront);
         clipboard.removeListener(window);

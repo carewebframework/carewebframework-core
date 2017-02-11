@@ -218,34 +218,24 @@ public abstract class UIElementCWFBase extends UIElementBase {
     }
     
     /**
-     * Moves a child to the position specified by an index.
+     * Moves a child to before another component.
      * 
      * @param child Child to move
-     * @param index Move child to this position.
+     * @param before Move child to this component.
      */
-    protected void moveChild(BaseComponent child, int index) {
-        child.setIndex(index);
+    protected void moveChild(BaseComponent child, BaseComponent before) {
+        child.getParent().addChild(child, before);
     }
     
-    /**
-     * Swaps the position of the two child components.
-     * 
-     * @param child1 The first child.
-     * @param child2 The second child.
-     */
-    protected void swapChildren(BaseComponent child1, BaseComponent child2) {
-        child1.getParent().swapChildren(child1.getIndex(), child2.getIndex());
-    }
-    
-    /**
-     * Provides a default behavior for resequencing this element relative to its siblings. This
-     * assumes there is one wrapped component and it is that component whose position is to be
-     * changed.
-     */
     @Override
-    protected void afterMoveTo(int index) {
-        moveChild(getOuterComponent(), index);
+    public void moveChild(int from, int to) {
+        super.moveChild(from, to);
         updateMasks();
+    }
+    
+    @Override
+    protected void afterMoveChild(UIElementBase child, UIElementBase before) {
+        moveChild((BaseComponent) child.getOuterComponent(), (BaseComponent) before.getOuterComponent());
     }
     
     @Override
@@ -362,7 +352,7 @@ public abstract class UIElementCWFBase extends UIElementBase {
     
     @Override
     protected void unbind() {
-        getOuterComponent().detach();
+        getOuterComponent().destroy();
     }
     
     /**

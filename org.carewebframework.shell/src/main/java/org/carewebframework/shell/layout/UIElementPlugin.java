@@ -115,17 +115,6 @@ public class UIElementPlugin extends UIElementCWFBase implements IDisable, IProp
     }
     
     /**
-     * Passes the destroy event to the container.
-     * 
-     * @see org.carewebframework.shell.layout.UIElementBase#destroy()
-     */
-    @Override
-    public void destroy() {
-        container.destroy();
-        super.destroy();
-    }
-    
-    /**
      * Passes design mode setting to the container.
      * 
      * @see org.carewebframework.shell.layout.UIElementCWFBase#setDesignMode
