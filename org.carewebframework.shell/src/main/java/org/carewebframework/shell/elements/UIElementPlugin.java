@@ -23,7 +23,7 @@
  *
  * #L%
  */
-package org.carewebframework.shell.layout;
+package org.carewebframework.shell.elements;
 
 import org.carewebframework.shell.AboutDialog;
 import org.carewebframework.shell.designer.DesignMask.MaskMode;
@@ -58,7 +58,7 @@ public class UIElementPlugin extends UIElementBase implements IDisable, IPropert
     /**
      * Also passes the plugin definition to the container.
      * 
-     * @see org.carewebframework.shell.layout.UIElementBase#setDefinition(org.carewebframework.shell.plugins.PluginDefinition)
+     * @see org.carewebframework.shell.elements.UIElementBase#setDefinition(org.carewebframework.shell.plugins.PluginDefinition)
      */
     @Override
     public void setDefinition(PluginDefinition definition) {
@@ -76,7 +76,7 @@ public class UIElementPlugin extends UIElementBase implements IDisable, IPropert
     }
     
     /**
-     * @see org.carewebframework.shell.layout.UIElementBase#about()
+     * @see org.carewebframework.shell.elements.UIElementBase#about()
      */
     @Override
     public void about() {
@@ -86,7 +86,7 @@ public class UIElementPlugin extends UIElementBase implements IDisable, IPropert
     /**
      * Passes the activation request to the container.
      * 
-     * @see org.carewebframework.shell.layout.UIElementBase#activateChildren(boolean)
+     * @see org.carewebframework.shell.elements.UIElementBase#activateChildren(boolean)
      */
     @Override
     public void activateChildren(boolean active) {
@@ -103,7 +103,7 @@ public class UIElementPlugin extends UIElementBase implements IDisable, IPropert
      * Additional processing of the plugin after it is initialized.
      * 
      * @throws Exception Unspecified exception.
-     * @see org.carewebframework.shell.layout.UIElementBase#afterInitialize
+     * @see org.carewebframework.shell.elements.UIElementBase#afterInitialize
      */
     @Override
     public void afterInitialize(boolean deserializing) throws Exception {
@@ -117,7 +117,7 @@ public class UIElementPlugin extends UIElementBase implements IDisable, IPropert
     /**
      * Passes design mode setting to the container.
      * 
-     * @see org.carewebframework.shell.layout.UIElementBase#setDesignMode
+     * @see org.carewebframework.shell.elements.UIElementBase#setDesignMode
      */
     @Override
     public void setDesignMode(boolean designMode) {

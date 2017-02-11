@@ -25,7 +25,7 @@
  */
 package org.carewebframework.shell.designer;
 
-import org.carewebframework.shell.layout.UIElementSplitterPane;
+import org.carewebframework.shell.elements.UIElementSplitterPane;
 
 /**
  * Property editor for managing splitter panes.

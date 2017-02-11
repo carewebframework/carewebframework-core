@@ -25,8 +25,7 @@
  */
 package org.carewebframework.shell.designer;
 
-import org.carewebframework.shell.layout.UIElementBase;
-import org.carewebframework.shell.layout.UIElementBase;
+import org.carewebframework.shell.elements.UIElementBase;
 import org.carewebframework.web.component.BaseUIComponent;
 import org.carewebframework.web.component.Menupopup;
 

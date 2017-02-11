@@ -26,8 +26,8 @@
 package org.carewebframework.shell.plugins;
 
 import org.carewebframework.shell.CareWebShell;
-import org.carewebframework.shell.layout.UIElementBase;
-import org.carewebframework.shell.layout.UIElementPlugin;
+import org.carewebframework.shell.elements.UIElementBase;
+import org.carewebframework.shell.elements.UIElementPlugin;
 import org.carewebframework.web.component.BaseMenuComponent;
 
 /**

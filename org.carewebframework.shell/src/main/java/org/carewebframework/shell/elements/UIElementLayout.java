@@ -23,10 +23,14 @@
  *
  * #L%
  */
-package org.carewebframework.shell.layout;
+package org.carewebframework.shell.elements;
 
 import java.util.Collections;
 
+import org.carewebframework.shell.ancillary.UIException;
+import org.carewebframework.shell.layout.LayoutIdentifier;
+import org.carewebframework.shell.layout.LayoutUtil;
+import org.carewebframework.shell.layout.UILayout;
 import org.carewebframework.shell.plugins.PluginDefinition;
 import org.carewebframework.web.component.Div;
 import org.springframework.util.StringUtils;
@@ -100,7 +104,7 @@ public class UIElementLayout extends UIElementBase {
             String xml = LayoutUtil.getLayoutContent(new LayoutIdentifier(layoutName, shared));
             
             if (StringUtils.isEmpty(xml)) {
-                raise("Unknown layout: " + layoutName);
+                UIException.raise("Unknown layout: " + layoutName);
             }
             
             layout.loadFromText(xml);
@@ -180,7 +184,7 @@ public class UIElementLayout extends UIElementBase {
                 lockDescendants(true);
             }
         } catch (Exception e) {
-            raise("Error loading layout.", e);
+            UIException.raise("Error loading layout.", e);
         }
     }
     
@@ -192,7 +196,7 @@ public class UIElementLayout extends UIElementBase {
         
         while ((layout = layout.getAncestor(UIElementLayout.class)) != null) {
             if (layout.linked && layout.shared == shared && layout.layoutName.equals(layoutName)) {
-                raise("Circular reference to layout " + layoutName);
+                UIException.raise("Circular reference to layout " + layoutName);
             }
         }
     }

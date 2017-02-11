@@ -42,7 +42,7 @@
 			
 		<!-- Stock UI component definitions follow. -->
 		<cwp:plugin id="_desktop"
-			class="org.carewebframework.shell.layout.UIElementDesktop" name="${@msg.cwf.shell.plugin._desktop.name}"
+			class="org.carewebframework.shell.elements.UIElementDesktop" name="${@msg.cwf.shell.plugin._desktop.name}"
 			description="${@msg.cwf.shell.plugin._desktop.description}">
 			<cwp:serialization>
 				<cwp:property id="style" type="enum"
@@ -72,7 +72,7 @@
 		</cwp:plugin>
 
 		<cwp:plugin id="tabview" category="${@msg.cwf.shell.plugin.category.stock}"
-			class="org.carewebframework.shell.layout.UIElementTabView" name="${@msg.cwf.shell.plugin.tabview.name}"
+			class="org.carewebframework.shell.elements.UIElementTabView" name="${@msg.cwf.shell.plugin.tabview.name}"
 			description="${@msg.cwf.shell.plugin.tabview.description}">
 			<cwp:serialization>
 				<cwp:property id="orientation" type="choice"
@@ -89,7 +89,7 @@
 		</cwp:plugin>
 
 		<cwp:plugin id="tabpane" category="${@msg.cwf.shell.plugin.category.stock}"
-			class="org.carewebframework.shell.layout.UIElementTabPane" name="${@msg.cwf.shell.plugin.tabpane.name}"
+			class="org.carewebframework.shell.elements.UIElementTabPane" name="${@msg.cwf.shell.plugin.tabpane.name}"
 			description="${@msg.cwf.shell.plugin.tabpane.description}">
 			<cwp:serialization>
 				<cwp:property id="label"
@@ -105,7 +105,7 @@
 		</cwp:plugin>
 
 		<cwp:plugin id="treeview" category="${@msg.cwf.shell.plugin.category.stock}"
-			class="org.carewebframework.shell.layout.UIElementTreeView" name="${@msg.cwf.shell.plugin.treeview.name}"
+			class="org.carewebframework.shell.elements.UIElementTreeView" name="${@msg.cwf.shell.plugin.treeview.name}"
 			description="${@msg.cwf.shell.plugin.treeview.description}">
 			<cwp:serialization>
 				<cwp:property id="caption"
@@ -134,7 +134,7 @@
 		</cwp:plugin>
 
 		<cwp:plugin id="treepane" category="${@msg.cwf.shell.plugin.category.stock}"
-			class="org.carewebframework.shell.layout.UIElementTreePane" name="${@msg.cwf.shell.plugin.treepane.name}"
+			class="org.carewebframework.shell.elements.UIElementTreePane" name="${@msg.cwf.shell.plugin.treepane.name}"
 			description="${@msg.cwf.shell.plugin.treepane.description}">
 			<cwp:serialization>
 				<cwp:property id="label"
@@ -149,7 +149,7 @@
 		</cwp:plugin>
 
 		<cwp:plugin id="splitterview" category="${@msg.cwf.shell.plugin.category.stock}"
-			class="org.carewebframework.shell.layout.UIElementSplitterView" name="${@msg.cwf.shell.plugin.splitterview.name}"
+			class="org.carewebframework.shell.elements.UIElementSplitterView" name="${@msg.cwf.shell.plugin.splitterview.name}"
 			description="${@msg.cwf.shell.plugin.splitterview.description}">
 			<cwp:serialization>
 				<cwp:property id="orientation" type="choice"
@@ -167,7 +167,7 @@
 		</cwp:plugin>
 
 		<cwp:plugin id="splitterpane" category="${@msg.cwf.shell.plugin.category.stock}"
-			class="org.carewebframework.shell.layout.UIElementSplitterPane" name="${@msg.cwf.shell.plugin.splitterpane.name}"
+			class="org.carewebframework.shell.elements.UIElementSplitterPane" name="${@msg.cwf.shell.plugin.splitterpane.name}"
 			description="${@msg.cwf.shell.plugin.splitterpane.description}">
 			<cwp:serialization>
 				<cwp:property id="caption"
@@ -187,7 +187,7 @@
 		</cwp:plugin>
 
 		<cwp:plugin id="stepview" category="${@msg.cwf.shell.plugin.category.stock}"
-			class="org.carewebframework.shell.layout.UIElementStepView" name="${@msg.cwf.shell.plugin.stepview.name}"
+			class="org.carewebframework.shell.elements.UIElementStepView" name="${@msg.cwf.shell.plugin.stepview.name}"
 			description="${@msg.cwf.shell.plugin.stepview.description}">
 			<cwp:serialization>
 				<cwp:property id="caption"
@@ -218,7 +218,7 @@
 		</cwp:plugin>
 
 		<cwp:plugin id="steppane" category="${@msg.cwf.shell.plugin.category.stock}"
-			class="org.carewebframework.shell.layout.UIElementStepPane" name="${@msg.cwf.shell.plugin.steppane.name}"
+			class="org.carewebframework.shell.elements.UIElementStepPane" name="${@msg.cwf.shell.plugin.steppane.name}"
 			description="${@msg.cwf.shell.plugin.steppane.description}">
 			<cwp:serialization>
 				<cwp:property id="label"
@@ -233,7 +233,7 @@
 		</cwp:plugin>
 
 		<cwp:plugin id="toolbar" category="${@msg.cwf.shell.plugin.category.stock}"
-			class="org.carewebframework.shell.layout.UIElementToolbar" name="${@msg.cwf.shell.plugin.toolbar.name}"
+			class="org.carewebframework.shell.elements.UIElementToolbar" name="${@msg.cwf.shell.plugin.toolbar.name}"
 			description="${@msg.cwf.shell.plugin.toolbar.description}">
 			<cwp:serialization>
 				<cwp:property id="alignment" type="enum"
@@ -250,7 +250,7 @@
 		</cwp:plugin>
 
 		<cwp:plugin id="_toolbar" category="${@msg.cwf.shell.plugin.category.internal}"
-			class="org.carewebframework.shell.layout.UIElementToolbar" name="${@msg.cwf.shell.plugin._toolbar.name}"
+			class="org.carewebframework.shell.elements.UIElementToolbar" name="${@msg.cwf.shell.plugin._toolbar.name}"
 			description="${@msg.cwf.shell.plugin.toolbar.description}">
 			<cwp:serialization>
 				<cwp:property id="alignment" type="enum"
@@ -266,7 +266,7 @@
 		</cwp:plugin>
 
 		<cwp:plugin id="menubar" category="${@msg.cwf.shell.plugin.category.stock}"
-			class="org.carewebframework.shell.layout.UIElementMenubar" name="${@msg.cwf.shell.plugin.menubar.name}"
+			class="org.carewebframework.shell.elements.UIElementMenubar" name="${@msg.cwf.shell.plugin.menubar.name}"
 			description="${@msg.cwf.shell.plugin.menubar.description}">
 			<cwp:serialization>
 				<cwp:property id="" type="menuitems"
@@ -276,7 +276,7 @@
 		</cwp:plugin>
 
 		<cwp:plugin id="_menubar" category="${@msg.cwf.shell.plugin.category.internal}"
-			class="org.carewebframework.shell.layout.UIElementMenubar" name="${@msg.cwf.shell.plugin._menubar.name}"
+			class="org.carewebframework.shell.elements.UIElementMenubar" name="${@msg.cwf.shell.plugin._menubar.name}"
 			description="${@msg.cwf.shell.plugin._menubar.description}">
 			<cwp:serialization>
 				<cwp:property id="" type="menuitems"
@@ -285,7 +285,7 @@
 		</cwp:plugin>
 
 		<cwp:plugin id="menuitem" category="${@msg.cwf.shell.plugin.category.stock}"
-			class="org.carewebframework.shell.layout.UIElementMenuItem" name="${@msg.cwf.shell.plugin.menuitem.name}"
+			class="org.carewebframework.shell.elements.UIElementMenuItem" name="${@msg.cwf.shell.plugin.menuitem.name}"
 			description="${@msg.cwf.shell.plugin.menuitem.description}">
 			<cwp:serialization>
 				<cwp:property id="label"
@@ -301,7 +301,7 @@
 		</cwp:plugin>
 
 		<cwp:plugin id="frame" category="${@msg.cwf.shell.plugin.category.stock}"
-			class="org.carewebframework.shell.layout.UIElementFrame" name="${@msg.cwf.shell.plugin.frame.name}"
+			class="org.carewebframework.shell.elements.UIElementFrame" name="${@msg.cwf.shell.plugin.frame.name}"
 			description="${@msg.cwf.shell.plugin.frame.description}">
 			<cwp:serialization>
 				<cwp:property id="url" name="${@msg.cwf.shell.plugin.frame.url.name}"
@@ -310,7 +310,7 @@
 		</cwp:plugin>
 
 		<cwp:plugin id="image" category="${@msg.cwf.shell.plugin.category.stock}"
-			class="org.carewebframework.shell.layout.UIElementImage" name="${@msg.cwf.shell.plugin.image.name}"
+			class="org.carewebframework.shell.elements.UIElementImage" name="${@msg.cwf.shell.plugin.image.name}"
 			description="${@msg.cwf.shell.plugin.image.description}">
 			<cwp:serialization>
 				<cwp:property id="url"
@@ -323,7 +323,7 @@
 		</cwp:plugin>
 
 		<cwp:plugin id="label" category="${@msg.cwf.shell.plugin.category.stock}"
-			class="org.carewebframework.shell.layout.UIElementLabel" name="${@msg.cwf.shell.plugin.label.name}"
+			class="org.carewebframework.shell.elements.UIElementLabel" name="${@msg.cwf.shell.plugin.label.name}"
 			description="${@msg.cwf.shell.plugin.label.description}">
 			<cwp:serialization>
 				<cwp:property id="label"
@@ -347,7 +347,7 @@
 		</cwp:plugin>
 
 		<cwp:plugin id="button" category="${@msg.cwf.shell.plugin.category.stock}"
-			class="org.carewebframework.shell.layout.UIElementButton" name="${@msg.cwf.shell.plugin.button.name}"
+			class="org.carewebframework.shell.elements.UIElementButton" name="${@msg.cwf.shell.plugin.button.name}"
 			description="${@msg.cwf.shell.plugin.button.description}">
 			<cwp:serialization>
 				<cwp:property id="label"
@@ -381,7 +381,7 @@
 		</cwp:plugin>
 
 		<cwp:plugin id="link" category="${@msg.cwf.shell.plugin.category.stock}"
-			class="org.carewebframework.shell.layout.UIElementLink" name="${@msg.cwf.shell.plugin.link.name}"
+			class="org.carewebframework.shell.elements.UIElementLink" name="${@msg.cwf.shell.plugin.link.name}"
 			description="${@msg.cwf.shell.plugin.link.description}">
 			<cwp:serialization>
 				<cwp:property id="label"
@@ -412,7 +412,7 @@
 		</cwp:plugin>
 
 		<cwp:plugin id="layout"
-			class="org.carewebframework.shell.layout.UIElementLayout" name="${@msg.cwf.shell.plugin.layout.name}"
+			class="org.carewebframework.shell.elements.UIElementLayout" name="${@msg.cwf.shell.plugin.layout.name}"
 			description="${@msg.cwf.shell.plugin.layout.description}">
 			<cwp:serialization>
 				<cwp:property id="shared" type="boolean" editable="false"

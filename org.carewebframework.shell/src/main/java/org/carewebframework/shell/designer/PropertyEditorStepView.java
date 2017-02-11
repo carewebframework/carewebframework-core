@@ -25,7 +25,7 @@
  */
 package org.carewebframework.shell.designer;
 
-import org.carewebframework.shell.layout.UIElementStepPane;
+import org.carewebframework.shell.elements.UIElementStepPane;
 
 /**
  * Property editor for step view.

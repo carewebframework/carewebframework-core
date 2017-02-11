@@ -27,7 +27,7 @@ package org.carewebframework.shell.designer;
 
 import org.carewebframework.common.MiscUtil;
 import org.carewebframework.common.StrUtil;
-import org.carewebframework.shell.layout.UIElementBase;
+import org.carewebframework.shell.elements.UIElementBase;
 import org.carewebframework.shell.property.PropertyInfo;
 import org.carewebframework.web.component.Popup;
 import org.carewebframework.web.component.Popupbox;

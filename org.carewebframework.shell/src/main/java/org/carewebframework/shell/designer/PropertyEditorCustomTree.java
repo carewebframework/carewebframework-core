@@ -31,8 +31,8 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.carewebframework.shell.layout.UIElementBase;
-import org.carewebframework.shell.layout.UIElementProxy;
+import org.carewebframework.shell.elements.UIElementBase;
+import org.carewebframework.shell.elements.UIElementProxy;
 import org.carewebframework.shell.plugins.PluginDefinition;
 import org.carewebframework.shell.property.PropertyInfo;
 import org.carewebframework.ui.util.TreeUtil;

@@ -25,7 +25,7 @@
  */
 package org.carewebframework.shell.designer;
 
-import org.carewebframework.shell.layout.UIElementBase;
+import org.carewebframework.shell.elements.UIElementBase;
 
 /**
  * Property editor for managing a component with ordered children.

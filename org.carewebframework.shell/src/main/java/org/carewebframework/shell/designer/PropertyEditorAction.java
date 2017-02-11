@@ -30,7 +30,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.carewebframework.api.security.SecurityUtil;
-import org.carewebframework.shell.layout.UIElementBase;
+import org.carewebframework.shell.elements.UIElementBase;
 import org.carewebframework.shell.property.PropertyInfo;
 import org.carewebframework.ui.action.ActionEntry;
 import org.carewebframework.ui.action.ActionRegistry;

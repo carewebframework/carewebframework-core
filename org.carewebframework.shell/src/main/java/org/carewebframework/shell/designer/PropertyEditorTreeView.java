@@ -25,7 +25,7 @@
  */
 package org.carewebframework.shell.designer;
 
-import org.carewebframework.shell.layout.UIElementTreePane;
+import org.carewebframework.shell.elements.UIElementTreePane;
 
 /**
  * Property editor for managing tree nodes.

@@ -23,7 +23,7 @@
  *
  * #L%
  */
-package org.carewebframework.shell.layout;
+package org.carewebframework.shell.elements;
 
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.Div;
@@ -87,7 +87,7 @@ public class UIElementStepPane extends UIElementBase {
     /**
      * Add the UI components of the child pane to their respective parent components in the view.
      * 
-     * @see org.carewebframework.shell.layout.UIElementBase#bind
+     * @see org.carewebframework.shell.elements.UIElementBase#bind
      */
     @Override
     protected void bind() {
@@ -99,7 +99,7 @@ public class UIElementStepPane extends UIElementBase {
     /**
      * Detach the UI components of the child pane the UI.
      * 
-     * @see org.carewebframework.shell.layout.UIElementBase#unbind
+     * @see org.carewebframework.shell.elements.UIElementBase#unbind
      */
     @Override
     protected void unbind() {
@@ -110,7 +110,7 @@ public class UIElementStepPane extends UIElementBase {
     /**
      * Brings this UI element to the front of the UI by making it the active pane.
      * 
-     * @see org.carewebframework.shell.layout.UIElementBase#bringToFront()
+     * @see org.carewebframework.shell.elements.UIElementBase#bringToFront()
      */
     @Override
     public void bringToFront() {
@@ -121,7 +121,7 @@ public class UIElementStepPane extends UIElementBase {
     /**
      * Returns the instance name to use in the designer.
      * 
-     * @see org.carewebframework.shell.layout.UIElementBase#getInstanceName()
+     * @see org.carewebframework.shell.elements.UIElementBase#getInstanceName()
      */
     @Override
     public String getInstanceName() {
@@ -131,7 +131,7 @@ public class UIElementStepPane extends UIElementBase {
     /**
      * Apply color changes to button and pane only.
      * 
-     * @see org.carewebframework.shell.layout.UIElementBase#applyColor()
+     * @see org.carewebframework.shell.elements.UIElementBase#applyColor()
      */
     @Override
     protected void applyColor() {

@@ -23,13 +23,22 @@
  *
  * #L%
  */
-package org.carewebframework.shell.layout;
+package org.carewebframework.shell.elements;
 
-public class UIException extends RuntimeException {
+import org.carewebframework.theme.ThemeUtil;
+import org.carewebframework.web.component.Hyperlink;
+
+/**
+ * Simple hyperlink stock object.
+ */
+public class UIElementLink extends UIElementButton {
     
-    private static final long serialVersionUID = 1L;
-    
-    public UIException(String text) {
-        super(text);
+    static {
+        registerAllowedParentClass(UIElementLink.class, UIElementBase.class);
     }
-};
+    
+    public UIElementLink() {
+        super(new Hyperlink(), ThemeUtil.ButtonSize.SMALL, ThemeUtil.ButtonStyle.LINK);
+    }
+    
+}

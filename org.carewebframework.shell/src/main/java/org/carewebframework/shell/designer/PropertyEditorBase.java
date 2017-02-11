@@ -25,7 +25,7 @@
  */
 package org.carewebframework.shell.designer;
 
-import org.carewebframework.shell.layout.UIElementBase;
+import org.carewebframework.shell.elements.UIElementBase;
 import org.carewebframework.shell.property.PropertyInfo;
 import org.carewebframework.ui.util.CWFUtil;
 import org.carewebframework.web.annotation.EventHandler;

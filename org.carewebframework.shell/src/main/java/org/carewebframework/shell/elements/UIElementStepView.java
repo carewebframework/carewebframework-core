@@ -23,9 +23,10 @@
  *
  * #L%
  */
-package org.carewebframework.shell.layout;
+package org.carewebframework.shell.elements;
 
 import org.carewebframework.shell.designer.PropertyEditorStepView;
+import org.carewebframework.shell.layout.LayoutConstants;
 import org.carewebframework.shell.property.PropertyTypeRegistry;
 import org.carewebframework.theme.ThemeUtil;
 import org.carewebframework.web.component.BaseComponent;
@@ -93,7 +94,7 @@ public class UIElementStepView extends UIElementBase {
     /**
      * Activates the active pane. If no pane is currently active, activate the first pane.
      * 
-     * @see org.carewebframework.shell.layout.UIElementBase#activateChildren(boolean)
+     * @see org.carewebframework.shell.elements.UIElementBase#activateChildren(boolean)
      */
     @Override
     public void activateChildren(boolean activate) {
@@ -177,7 +178,7 @@ public class UIElementStepView extends UIElementBase {
      * Updates the state of child components. This logic ensures that the separator following the
      * last button in the step sequence is hidden.
      * 
-     * @see org.carewebframework.shell.layout.UIElementBase#updateState()
+     * @see org.carewebframework.shell.elements.UIElementBase#updateState()
      */
     @Override
     protected void updateState() {

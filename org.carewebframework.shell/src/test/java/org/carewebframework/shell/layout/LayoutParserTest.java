@@ -32,6 +32,10 @@ import static org.junit.Assert.assertTrue;
 
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.shell.CareWebShell;
+import org.carewebframework.shell.elements.UIElementBase;
+import org.carewebframework.shell.elements.UIElementDesktop;
+import org.carewebframework.shell.elements.UIElementMenubar;
+import org.carewebframework.shell.elements.UIElementTreeView;
 import org.carewebframework.shell.plugins.PluginContainer;
 import org.carewebframework.shell.plugins.PluginDefinition;
 import org.carewebframework.shell.plugins.TestPluginController;

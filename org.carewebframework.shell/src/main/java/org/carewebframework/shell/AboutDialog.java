@@ -34,7 +34,7 @@ import java.util.jar.Manifest;
 
 import org.apache.commons.lang.StringUtils;
 import org.carewebframework.common.StrUtil;
-import org.carewebframework.shell.layout.UIElementBase;
+import org.carewebframework.shell.elements.UIElementBase;
 import org.carewebframework.shell.plugins.PluginDefinition;
 import org.carewebframework.ui.FrameworkController;
 import org.carewebframework.ui.dialog.DialogUtil;

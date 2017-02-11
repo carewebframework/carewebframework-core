@@ -23,7 +23,7 @@
  *
  * #L%
  */
-package org.carewebframework.shell.layout;
+package org.carewebframework.shell.elements;
 
 import org.carewebframework.theme.ThemeUtil;
 import org.carewebframework.web.component.BaseComponent;

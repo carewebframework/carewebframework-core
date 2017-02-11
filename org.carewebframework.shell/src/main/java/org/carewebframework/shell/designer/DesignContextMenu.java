@@ -26,8 +26,7 @@
 package org.carewebframework.shell.designer;
 
 import org.carewebframework.common.StrUtil;
-import org.carewebframework.shell.layout.UIElementBase;
-import org.carewebframework.shell.layout.UIElementBase;
+import org.carewebframework.shell.elements.UIElementBase;
 import org.carewebframework.shell.layout.UILayout;
 import org.carewebframework.web.ancillary.IAutoWired;
 import org.carewebframework.web.ancillary.IDisable;

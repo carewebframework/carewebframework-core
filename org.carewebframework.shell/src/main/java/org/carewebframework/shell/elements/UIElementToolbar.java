@@ -23,7 +23,7 @@
  *
  * #L%
  */
-package org.carewebframework.shell.layout;
+package org.carewebframework.shell.elements;
 
 import org.carewebframework.shell.designer.PropertyEditorOrderedChildren;
 import org.carewebframework.shell.property.PropertyTypeRegistry;

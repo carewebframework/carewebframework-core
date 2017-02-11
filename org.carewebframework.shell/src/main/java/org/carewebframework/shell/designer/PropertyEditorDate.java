@@ -28,7 +28,7 @@ package org.carewebframework.shell.designer;
 import java.util.Date;
 
 import org.carewebframework.common.DateUtil;
-import org.carewebframework.shell.layout.UIElementBase;
+import org.carewebframework.shell.elements.UIElementBase;
 import org.carewebframework.shell.property.PropertyInfo;
 import org.carewebframework.web.component.Datebox;
 

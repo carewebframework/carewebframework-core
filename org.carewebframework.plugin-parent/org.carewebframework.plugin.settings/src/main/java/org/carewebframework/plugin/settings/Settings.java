@@ -25,7 +25,7 @@
  */
 package org.carewebframework.plugin.settings;
 
-import org.carewebframework.shell.layout.UIElementBase;
+import org.carewebframework.shell.elements.UIElementBase;
 import org.carewebframework.shell.property.IPropertyAccessor;
 import org.carewebframework.shell.property.PropertyInfo;
 

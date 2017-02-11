@@ -25,7 +25,7 @@
  */
 package org.carewebframework.shell.designer;
 
-import org.carewebframework.shell.layout.UIElementMenuItem;
+import org.carewebframework.shell.elements.UIElementMenuItem;
 
 /**
  * Property editor for managing menus.

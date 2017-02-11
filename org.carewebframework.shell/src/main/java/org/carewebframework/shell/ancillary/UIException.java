@@ -23,22 +23,23 @@
  *
  * #L%
  */
-package org.carewebframework.shell.layout;
+package org.carewebframework.shell.ancillary;
 
-import org.carewebframework.theme.ThemeUtil;
-import org.carewebframework.web.component.Hyperlink;
+import org.carewebframework.ui.util.CWFUtil;
 
-/**
- * Simple hyperlink stock object.
- */
-public class UIElementLink extends UIElementButton {
+public class UIException extends RuntimeException {
     
-    static {
-        registerAllowedParentClass(UIElementLink.class, UIElementBase.class);
+    private static final long serialVersionUID = 1L;
+    
+    public static void raise(String text, Throwable t) throws UIException {
+        raise(text + "\n" + CWFUtil.formatExceptionForDisplay(t));
     }
     
-    public UIElementLink() {
-        super(new Hyperlink(), ThemeUtil.ButtonSize.SMALL, ThemeUtil.ButtonStyle.LINK);
+    public static void raise(String text) throws UIException {
+        throw new UIException(text);
     }
     
+    public UIException(String text) {
+        super(text);
+    }
 }

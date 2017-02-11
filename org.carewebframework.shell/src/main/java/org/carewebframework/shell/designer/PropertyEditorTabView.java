@@ -25,7 +25,7 @@
  */
 package org.carewebframework.shell.designer;
 
-import org.carewebframework.shell.layout.UIElementTabPane;
+import org.carewebframework.shell.elements.UIElementTabPane;
 
 /**
  * Property editor for managing tabs.

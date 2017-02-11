@@ -27,7 +27,7 @@ package org.carewebframework.shell.plugins;
 
 import org.carewebframework.api.spring.BeanRegistry;
 import org.carewebframework.common.AbstractRegistry;
-import org.carewebframework.shell.layout.UIElementBase;
+import org.carewebframework.shell.elements.UIElementBase;
 
 /**
  * Registry of all known plugins.

@@ -35,8 +35,9 @@ import org.carewebframework.api.ManifestIterator;
 import org.carewebframework.api.property.IPropertyProvider;
 import org.carewebframework.api.security.SecurityUtil;
 import org.carewebframework.common.MiscUtil;
-import org.carewebframework.shell.layout.UIElementBase;
-import org.carewebframework.shell.layout.UIElementPlugin;
+import org.carewebframework.shell.ancillary.UIException;
+import org.carewebframework.shell.elements.UIElementBase;
+import org.carewebframework.shell.elements.UIElementPlugin;
 import org.carewebframework.shell.layout.UILayout;
 import org.carewebframework.shell.property.PropertyInfo;
 import org.springframework.beans.BeanUtils;
@@ -624,7 +625,7 @@ public class PluginDefinition {
                 }
                 
                 if (element == null) {
-                    UIElementBase.raise("Failed to create UI element " + id + ".");
+                    UIException.raise("Failed to create UI element " + id + ".");
                 }
                 
                 element.setDefinition(this);
