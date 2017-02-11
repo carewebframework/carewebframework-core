@@ -79,13 +79,13 @@ public abstract class UIElementBase {
     
     private final NotificationListeners childListeners = new NotificationListeners();
     
+    private final List<UIElementBase> children = new ArrayList<>();
+    
     protected int maxChildren = 1;
     
     protected boolean autoHide = true;
     
     protected boolean autoEnable = true;
-    
-    private final List<UIElementBase> children = new ArrayList<>();
     
     private UIElementBase parent;
     
@@ -101,6 +101,8 @@ public abstract class UIElementBase {
     
     private boolean designMode;
     
+    private final DesignMask mask;
+    
     private BaseUIComponent innerComponent;
     
     private BaseUIComponent outerComponent;
@@ -112,8 +114,6 @@ public abstract class UIElementBase {
     private String color;
     
     private IEventManager eventManager;
-    
-    private final DesignMask mask;
     
     /**
      * A UIElementBase subclass should call this in its static initializer block to register any
@@ -188,6 +188,69 @@ public abstract class UIElementBase {
     }
     
     /**
+     * Returns the URL of the default template to use in createFromTemplate. Override this method to
+     * provide an alternate default URL.
+     * 
+     * @return The template URL.
+     */
+    protected String getTemplateUrl() {
+        return "web/" + getClass().getName().replace(".", "/") + ".cwf";
+    }
+    
+    /**
+     * Create wrapped component(s) from a template (a cwf page). Performs autowiring of variables
+     * and events. The template URL is derived from the class name. For example, if the class is
+     * "org.carewebframework.xxx.Clazz", the template URL is assumed to be
+     * "web/org/carewebframework/xxx/Clazz.cwf".
+     * 
+     * @return Top level component.
+     */
+    protected BaseUIComponent createFromTemplate() {
+        return createFromTemplate(null);
+    }
+    
+    /**
+     * Create wrapped component(s) from specified template (a cwf page). Performs autowiring of
+     * variables and events.
+     * 
+     * @param template URL of cwf page that will serve as a template. If a path is not specified, it
+     *            is derived from the package. If the URL is not specified, the template name is
+     *            obtained from getTemplateUrl.
+     * @return Top level component.
+     */
+    protected BaseUIComponent createFromTemplate(String template) {
+        return createFromTemplate(template, null, this);
+    }
+    
+    /**
+     * Create wrapped component(s) from specified template (a cwf page).
+     * 
+     * @param template URL of cwf page that will serve as a template. If the URL is not specified,
+     *            the template name is obtained from getTemplateUrl.
+     * @param parent The component that will become the parent.
+     * @param controller If specified, events and variables are autowired to the controller.
+     * @return Top level component.
+     */
+    protected BaseUIComponent createFromTemplate(String template, BaseComponent parent, Object controller) {
+        if (StringUtils.isEmpty(template)) {
+            template = getTemplateUrl();
+        } else if (!template.startsWith("web/")) {
+            template = CWFUtil.getResourcePath(getClass()) + template;
+        }
+        
+        BaseUIComponent top = null;
+        
+        try {
+            top = (BaseUIComponent) PageUtil.createPage(template, parent).get(0);
+            top.wireController(controller);
+        } catch (Exception e) {
+            UIException.raise("Error creating element from template.", e);
+        }
+        
+        return top;
+    }
+    
+    /**
      * Associates the specified CWF component with this UI element.
      * 
      * @param component CWF component to associate.
@@ -240,22 +303,19 @@ public abstract class UIElementBase {
      * context menu, any existing context menu is saved. When removing the context menu, any saved
      * context menu is restored.
      * 
-     * @param component BaseComponent to which to apply/remove the design context menu.
+     * @param component Component to which to apply/remove the design context menu.
      * @param contextMenu The design menu if design mode is activated, or null if it is not.
      */
-    protected void setDesignContextMenu(BaseComponent component, Menupopup contextMenu) {
-        if (component instanceof BaseUIComponent) {
-            BaseUIComponent comp = (BaseUIComponent) component;
-            comp.setAttribute(CONTEXT_MENU, contextMenu);
-            
-            if (contextMenu == null) {
-                SavedState.restore(comp);
-                applyHint();
-            } else {
-                new SavedState(comp);
-                comp.setContext(contextMenu);
-                comp.setHint(getDefinition().getName());
-            }
+    protected void setDesignContextMenu(BaseUIComponent component, Menupopup contextMenu) {
+        component.setAttribute(CONTEXT_MENU, contextMenu);
+        
+        if (contextMenu == null) {
+            SavedState.restore(component);
+            applyHint();
+        } else {
+            new SavedState(component);
+            component.setContext(contextMenu);
+            component.setHint(getDefinition().getName());
         }
     }
     
@@ -286,7 +346,6 @@ public abstract class UIElementBase {
      * @param child Element to add as a child.
      */
     public void addChild(UIElementBase child) {
-        mask.update();
         addChild(child, true);
     }
     
@@ -328,6 +387,7 @@ public abstract class UIElementBase {
      * @param child The child element added.
      */
     protected void afterAddChild(UIElementBase child) {
+        mask.update();
     }
     
     /**
@@ -445,7 +505,7 @@ public abstract class UIElementBase {
     }
     
     /**
-     * Remove all children associated with this element.
+     * Remove and destroy all children associated with this element.
      */
     public void removeChildren() {
         for (int i = children.size() - 1; i >= 0; i--) {
@@ -553,7 +613,7 @@ public abstract class UIElementBase {
                 return;
             }
             
-            throw new UIException("Cannot modify plugin definition.");
+            UIException.raise("Cannot modify plugin definition.");
         }
         
         this.definition = definition;
@@ -891,19 +951,27 @@ public abstract class UIElementBase {
         return parent == null ? -1 : parent.indexOfChild(this);
     }
     
+    /**
+     * Moves a child from one position to another under the same parent.
+     * 
+     * @param from Current position of child.
+     * @param to New position of child.
+     */
     public void moveChild(int from, int to) {
-        UIElementBase child = children.get(from);
-        UIElementBase ref = children.get(to);
-        children.remove(from);
-        to = children.indexOf(ref);
-        children.add(to, child);
-        afterMoveChild(child, ref);
-        updateMasks();
+        if (from != to) {
+            UIElementBase child = children.get(from);
+            UIElementBase ref = children.get(to);
+            children.remove(from);
+            to = children.indexOf(ref);
+            children.add(to, child);
+            afterMoveChild(child, ref);
+            updateMasks();
+        }
     }
     
     /**
-     * Element has been moved to a different position under this parent. Descendant classes should
-     * make any necessary adjustments to wrapped components.
+     * Element has been moved to a different position under this parent. Adjust wrapped components
+     * accordingly.
      * 
      * @param child Child element that was moved.
      * @param before Child element was moved before this one.
@@ -1082,69 +1150,6 @@ public abstract class UIElementBase {
         if (!getDefinition().isInternal()) {
             getOuterComponent().setVisible(visible && activated);
         }
-    }
-    
-    /**
-     * Returns the URL of the default template to use in createFromTemplate. Override this method to
-     * provide an alternate default URL.
-     * 
-     * @return The template URL.
-     */
-    protected String getTemplateUrl() {
-        return "web/" + getClass().getName().replace(".", "/") + ".cwf";
-    }
-    
-    /**
-     * Create wrapped component(s) from a template (a zul page). Performs autowiring of variables
-     * and events. The template URL is derived from the class name. For example, if the class is
-     * "org.carewebframework.xxx.Clazz", the template URL is assumed to be
-     * "web/org/carewebframework/xxx/Clazz.cwf".
-     * 
-     * @return Top level component.
-     */
-    protected BaseUIComponent createFromTemplate() {
-        return createFromTemplate(null);
-    }
-    
-    /**
-     * Create wrapped component(s) from specified template (a zul page). Performs autowiring of
-     * variables and events.
-     * 
-     * @param template URL of zul page that will serve as a template. If a path is not specified, it
-     *            is derived from the package. If the URL is not specified, the template name is
-     *            obtained from getTemplateUrl.
-     * @return Top level component.
-     */
-    protected BaseUIComponent createFromTemplate(String template) {
-        return createFromTemplate(template, null, this);
-    }
-    
-    /**
-     * Create wrapped component(s) from specified template (a zul page).
-     * 
-     * @param template URL of zul page that will serve as a template. If the URL is not specified,
-     *            the template name is obtained from getTemplateUrl.
-     * @param parent The component that will become the parent.
-     * @param controller If specified, events and variables are autowired to the controller.
-     * @return Top level component.
-     */
-    protected BaseUIComponent createFromTemplate(String template, BaseComponent parent, Object controller) {
-        if (StringUtils.isEmpty(template)) {
-            template = getTemplateUrl();
-        } else if (!template.startsWith("web/")) {
-            template = CWFUtil.getResourcePath(getClass()) + template;
-        }
-        
-        BaseUIComponent top = null;
-        
-        try {
-            top = (BaseUIComponent) PageUtil.createPage(template, parent).get(0);
-            top.wireController(controller);
-        } catch (Exception e) {
-            UIException.raise("Error creating element from template.", e);
-        }
-        
-        return top;
     }
     
     /**
