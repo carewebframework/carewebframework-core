@@ -33,7 +33,7 @@ import org.carewebframework.web.component.Import;
 /**
  * UI element that encapsulates an iframe or an include (as determined by URL).
  */
-public class UIElementFrame extends UIElementCWFBase {
+public class UIElementFrame extends UIElementBase {
     
     static {
         registerAllowedParentClass(UIElementFrame.class, UIElementBase.class);

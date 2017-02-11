@@ -39,7 +39,7 @@ import org.carewebframework.shell.CareWebShell;
 import org.carewebframework.shell.CareWebUtil;
 import org.carewebframework.shell.Constants;
 import org.carewebframework.shell.layout.UIElementBase;
-import org.carewebframework.shell.layout.UIElementCWFBase;
+import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.plugins.PluginEvent.PluginAction;
 import org.carewebframework.shell.property.PropertyInfo;
 import org.carewebframework.ui.FrameworkController;
@@ -221,7 +221,7 @@ public class PluginContainer extends Namespace {
      * @return The hosting UI element (could be null).
      */
     public UIElementBase getHost() {
-        return UIElementCWFBase.getAssociatedUIElement(this);
+        return UIElementBase.getAssociatedUIElement(this);
     }
     
     /**

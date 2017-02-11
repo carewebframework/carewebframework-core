@@ -30,7 +30,7 @@ import org.carewebframework.web.component.Pane;
 /**
  * A child of the UIElementSplitterView.
  */
-public class UIElementSplitterPane extends UIElementCWFBase {
+public class UIElementSplitterPane extends UIElementBase {
     
     static {
         registerAllowedParentClass(UIElementSplitterPane.class, UIElementSplitterView.class);

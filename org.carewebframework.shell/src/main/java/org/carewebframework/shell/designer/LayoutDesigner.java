@@ -28,7 +28,7 @@ package org.carewebframework.shell.designer;
 import java.util.Collections;
 
 import org.carewebframework.shell.layout.UIElementBase;
-import org.carewebframework.shell.layout.UIElementCWFBase;
+import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.layout.UILayout;
 import org.carewebframework.ui.dialog.DialogUtil;
 import org.carewebframework.web.ancillary.IAutoWired;
@@ -121,7 +121,7 @@ public class LayoutDesigner implements IAutoWired {
     private boolean bringToFront;
     
     private final IEventListener layoutListener = (event) -> {
-        if (UIElementCWFBase.getAssociatedUIElement(event.getRelatedTarget()) != null) {
+        if (UIElementBase.getAssociatedUIElement(event.getRelatedTarget()) != null) {
             requestRefresh();
         }
     };

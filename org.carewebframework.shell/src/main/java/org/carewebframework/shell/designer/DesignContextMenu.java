@@ -27,7 +27,7 @@ package org.carewebframework.shell.designer;
 
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.shell.layout.UIElementBase;
-import org.carewebframework.shell.layout.UIElementCWFBase;
+import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.layout.UILayout;
 import org.carewebframework.web.ancillary.IAutoWired;
 import org.carewebframework.web.ancillary.IDisable;
@@ -215,7 +215,7 @@ public class DesignContextMenu implements IAutoWired {
     private void onOpen(Event event) {
         if (listener == null) {
             BaseComponent ref = event.getRelatedTarget();
-            setOwner(UIElementCWFBase.getAssociatedUIElement(ref));
+            setOwner(UIElementBase.getAssociatedUIElement(ref));
         }
         
         if (owner == null) {

@@ -31,7 +31,7 @@ import org.carewebframework.web.component.Label;
 /**
  * Simple button stock object.
  */
-public class UIElementLabel extends UIElementCWFBase {
+public class UIElementLabel extends UIElementBase {
     
     static {
         registerAllowedParentClass(UIElementLabel.class, UIElementBase.class);

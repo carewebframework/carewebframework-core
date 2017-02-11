@@ -36,7 +36,7 @@ import org.carewebframework.web.ancillary.IDisable;
 /**
  * This class is used for all container-hosted plugins.
  */
-public class UIElementPlugin extends UIElementCWFBase implements IDisable, IPropertyAccessor {
+public class UIElementPlugin extends UIElementBase implements IDisable, IPropertyAccessor {
     
     static {
         registerAllowedParentClass(UIElementPlugin.class, UIElementBase.class);
@@ -117,7 +117,7 @@ public class UIElementPlugin extends UIElementCWFBase implements IDisable, IProp
     /**
      * Passes design mode setting to the container.
      * 
-     * @see org.carewebframework.shell.layout.UIElementCWFBase#setDesignMode
+     * @see org.carewebframework.shell.layout.UIElementBase#setDesignMode
      */
     @Override
     public void setDesignMode(boolean designMode) {

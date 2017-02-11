@@ -31,7 +31,7 @@ import org.carewebframework.web.component.Image;
 /**
  * Simple button stock object.
  */
-public class UIElementImage extends UIElementCWFBase {
+public class UIElementImage extends UIElementBase {
     
     static {
         registerAllowedParentClass(UIElementImage.class, UIElementBase.class);

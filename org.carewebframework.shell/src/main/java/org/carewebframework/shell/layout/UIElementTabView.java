@@ -35,7 +35,7 @@ import org.carewebframework.web.event.ChangeEvent;
  * Wraps the Tabview component. This UI element can only accept UIElementTabPane elements as
  * children and only one of those can be active at a time.
  */
-public class UIElementTabView extends UIElementCWFBase {
+public class UIElementTabView extends UIElementBase {
     
     static {
         registerAllowedParentClass(UIElementTabView.class, UIElementBase.class);

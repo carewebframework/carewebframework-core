@@ -31,7 +31,7 @@ import org.carewebframework.web.component.Tabview;
 /**
  * Wraps the Tab component.
  */
-public class UIElementTabPane extends UIElementCWFBase {
+public class UIElementTabPane extends UIElementBase {
     
     static {
         registerAllowedParentClass(UIElementTabPane.class, UIElementTabView.class);

@@ -34,7 +34,7 @@ import org.carewebframework.web.component.Paneview.Orientation;
  * A splitter view has either a vertical or horizontal orientation and can contain any number of
  * splitter panes which are placed side-by-side with splitter bars in between for manual sizing.
  */
-public class UIElementSplitterView extends UIElementCWFBase {
+public class UIElementSplitterView extends UIElementBase {
     
     static {
         registerAllowedParentClass(UIElementSplitterView.class, UIElementBase.class);

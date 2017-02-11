@@ -39,7 +39,7 @@ import org.carewebframework.web.event.MouseEvent;
  * A child of a UIElementTreeView, this UI element specifies the tree path where its associated tree
  * node is to reside in the parent's tree.
  */
-public class UIElementTreePane extends UIElementCWFBase {
+public class UIElementTreePane extends UIElementBase {
     
     static {
         registerAllowedParentClass(UIElementTreePane.class, UIElementTreeView.class);

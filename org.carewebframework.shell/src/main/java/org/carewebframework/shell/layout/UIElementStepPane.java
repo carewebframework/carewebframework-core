@@ -35,7 +35,7 @@ import org.carewebframework.web.component.Span;
  * A step-oriented UI Element. This is a composite element consisting of a button and its separator
  * with an associated pane. Clicking on a button activates its corresponding pane.
  */
-public class UIElementStepPane extends UIElementCWFBase {
+public class UIElementStepPane extends UIElementBase {
     
     static {
         registerAllowedParentClass(UIElementStepPane.class, UIElementStepView.class);
@@ -87,7 +87,7 @@ public class UIElementStepPane extends UIElementCWFBase {
     /**
      * Add the UI components of the child pane to their respective parent components in the view.
      * 
-     * @see org.carewebframework.shell.layout.UIElementCWFBase#bind
+     * @see org.carewebframework.shell.layout.UIElementBase#bind
      */
     @Override
     protected void bind() {
@@ -99,7 +99,7 @@ public class UIElementStepPane extends UIElementCWFBase {
     /**
      * Detach the UI components of the child pane the UI.
      * 
-     * @see org.carewebframework.shell.layout.UIElementCWFBase#unbind
+     * @see org.carewebframework.shell.layout.UIElementBase#unbind
      */
     @Override
     protected void unbind() {
@@ -131,7 +131,7 @@ public class UIElementStepPane extends UIElementCWFBase {
     /**
      * Apply color changes to button and pane only.
      * 
-     * @see org.carewebframework.shell.layout.UIElementCWFBase#applyColor()
+     * @see org.carewebframework.shell.layout.UIElementBase#applyColor()
      */
     @Override
     protected void applyColor() {

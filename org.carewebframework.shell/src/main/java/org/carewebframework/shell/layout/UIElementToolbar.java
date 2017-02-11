@@ -36,7 +36,7 @@ import org.carewebframework.web.component.Toolbar.Alignment;
 /**
  * Implements a shared toolbar.
  */
-public class UIElementToolbar extends UIElementCWFBase {
+public class UIElementToolbar extends UIElementBase {
     
     static {
         registerAllowedChildClass(UIElementToolbar.class, UIElementBase.class);

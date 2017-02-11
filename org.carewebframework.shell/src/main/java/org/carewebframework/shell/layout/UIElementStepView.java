@@ -38,7 +38,7 @@ import org.carewebframework.web.component.Window;
  * A step-oriented UI Element. This is implemented as a window component with a top toolbar
  * containing sequential steps as a sequence of buttons.
  */
-public class UIElementStepView extends UIElementCWFBase {
+public class UIElementStepView extends UIElementBase {
     
     static {
         registerAllowedParentClass(UIElementStepView.class, UIElementBase.class);

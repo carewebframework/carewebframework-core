@@ -52,7 +52,7 @@ import org.carewebframework.web.component.Toolbar;
 /**
  * This is the topmost component of the layout.
  */
-public class UIElementDesktop extends UIElementCWFBase {
+public class UIElementDesktop extends UIElementBase {
     
     static {
         registerAllowedChildClass(UIElementDesktop.class, UIElementBase.class);

@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.carewebframework.api.event.EventManager;
@@ -39,12 +40,22 @@ import org.carewebframework.api.event.IEventManager;
 import org.carewebframework.shell.AboutDialog;
 import org.carewebframework.shell.CareWebShell;
 import org.carewebframework.shell.CareWebUtil;
+import org.carewebframework.shell.designer.DesignContextMenu;
+import org.carewebframework.shell.designer.DesignMask;
+import org.carewebframework.shell.designer.DesignMask.MaskMode;
+import org.carewebframework.shell.designer.PropertyGrid;
 import org.carewebframework.shell.plugins.IPluginResource;
 import org.carewebframework.shell.plugins.PluginDefinition;
 import org.carewebframework.shell.plugins.PluginRegistry;
 import org.carewebframework.shell.property.PropertyInfo;
 import org.carewebframework.ui.dialog.DialogUtil;
 import org.carewebframework.ui.util.CWFUtil;
+import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.component.BaseLabeledComponent;
+import org.carewebframework.web.component.BaseUIComponent;
+import org.carewebframework.web.component.Menupopup;
+import org.carewebframework.web.component.Popup;
+import org.carewebframework.web.page.PageUtil;
 
 /**
  * This is the base class for all UI elements supported by the CareWeb framework.
@@ -166,6 +177,50 @@ public abstract class UIElementBase {
         
     };
     
+    /**
+     * Saves various states of a component prior to configuring it for design mode. The restore
+     * method then restores to the saved state.
+     */
+    private static class SavedState {
+        
+        final BaseUIComponent component;
+        
+        final String hint;
+        
+        final Popup contextMenu;
+        
+        public SavedState(BaseUIComponent component) {
+            this.component = component;
+            hint = component.getHint();
+            contextMenu = component.getContext();
+            component.setAttribute(SAVED_STATE, this);
+            component.addClass("cwf-designmode-active");
+        }
+        
+        private void restore() {
+            component.setHint(hint);
+            component.setContext(contextMenu);
+            component.removeAttribute(SAVED_STATE);
+            component.removeClass("cwf-designmode-active");
+        }
+        
+        public static void restore(BaseUIComponent comp) {
+            SavedState ss = (SavedState) comp.getAttribute(SAVED_STATE);
+            
+            if (ss != null) {
+                ss.restore();
+            }
+        }
+    }
+    
+    private static final String ATTR_PREFIX = UIElementBase.class.getName() + ".";
+    
+    private static final String ASSOC_ELEMENT = ATTR_PREFIX + "AssociatedUIElement";
+    
+    private static final String SAVED_STATE = ATTR_PREFIX + "SavedState";
+    
+    private static final String CONTEXT_MENU = ATTR_PREFIX + "ContextMenu";
+    
     private static final RelatedClassMap allowedParentClasses = new RelatedClassMap();
     
     private static final RelatedClassMap allowedChildClasses = new RelatedClassMap();
@@ -196,9 +251,9 @@ public abstract class UIElementBase {
     
     private boolean designMode;
     
-    private Object innerComponent;
+    private BaseUIComponent innerComponent;
     
-    private Object outerComponent;
+    private BaseUIComponent outerComponent;
     
     private String rejectReason;
     
@@ -207,6 +262,8 @@ public abstract class UIElementBase {
     private String color;
     
     private IEventManager eventManager;
+    
+    private final DesignMask mask;
     
     /**
      * A UIElementBase subclass should call this in its static initializer block to register any
@@ -265,6 +322,41 @@ public abstract class UIElementBase {
     }
     
     /**
+     * Returns the UI element that registered the CWF component.
+     * 
+     * @param component The CWF component of interest.
+     * @return The associated UI element.
+     */
+    public static UIElementBase getAssociatedUIElement(BaseComponent component) {
+        return component == null ? null : (UIElementBase) component.getAttribute(ASSOC_ELEMENT);
+    }
+    
+    /**
+     * Returns the design context menu currently bound to the component.
+     * 
+     * @param component The CWF component of interest.
+     * @return The associated design context menu, or null if none.
+     */
+    public static Menupopup getDesignContextMenu(BaseComponent component) {
+        return component == null ? null : (Menupopup) component.getAttribute(CONTEXT_MENU);
+    }
+    
+    public UIElementBase() {
+        mask = new DesignMask(this);
+    }
+    
+    /**
+     * Associates the specified CWF component with this UI element.
+     * 
+     * @param component CWF component to associate.
+     */
+    public void associateComponent(BaseComponent component) {
+        if (component != null) {
+            component.setAttribute(ASSOC_ELEMENT, this);
+        }
+    }
+    
+    /**
      * Returns design mode status.
      * 
      * @return True if design mode is active.
@@ -280,12 +372,69 @@ public abstract class UIElementBase {
      */
     public void setDesignMode(boolean designMode) {
         this.designMode = designMode;
+        setDesignContextMenu(designMode ? DesignContextMenu.getInstance().getMenupopup() : null);
         
         for (UIElementBase child : children) {
             child.setDesignMode(designMode);
         }
         
         updateState();
+        mask.update();
+    }
+    
+    /**
+     * Apply/remove the design context menu to/from CWF components. This default implementation
+     * applies the design context menu to the outer CWF component only. It may be overridden to
+     * modify this default behavior.
+     * 
+     * @param contextMenu The design menu if design mode is activated, or null if it is not.
+     */
+    protected void setDesignContextMenu(Menupopup contextMenu) {
+        setDesignContextMenu(getOuterComponent(), contextMenu);
+    }
+    
+    /**
+     * Apply/remove the design context menu to/from the specified component. If applying the design
+     * context menu, any existing context menu is saved. When removing the context menu, any saved
+     * context menu is restored.
+     * 
+     * @param component BaseComponent to which to apply/remove the design context menu.
+     * @param contextMenu The design menu if design mode is activated, or null if it is not.
+     */
+    protected void setDesignContextMenu(BaseComponent component, Menupopup contextMenu) {
+        if (component instanceof BaseUIComponent) {
+            BaseUIComponent comp = (BaseUIComponent) component;
+            comp.setAttribute(CONTEXT_MENU, contextMenu);
+            
+            if (contextMenu == null) {
+                SavedState.restore(comp);
+                applyHint();
+            } else {
+                new SavedState(comp);
+                comp.setContext(contextMenu);
+                comp.setHint(getDefinition().getName());
+            }
+        }
+    }
+    
+    /**
+     * Returns the component that will receive the design mode mask. Override if necessary.
+     * 
+     * @return The component that will receive the design mode mask.
+     */
+    public BaseUIComponent getMaskTarget() {
+        return getOuterComponent();
+    }
+    
+    /**
+     * Updates mask for this element and its children.
+     */
+    private void updateMasks() {
+        mask.update();
+        
+        for (UIElementBase child : getChildren()) {
+            child.updateMasks();
+        }
     }
     
     /**
@@ -295,6 +444,7 @@ public abstract class UIElementBase {
      * @param child Element to add as a child.
      */
     public void addChild(UIElementBase child) {
+        mask.update();
         addChild(child, true);
     }
     
@@ -381,6 +531,7 @@ public abstract class UIElementBase {
      * @param child The child UI element.
      */
     protected void afterRemoveChild(UIElementBase child) {
+        mask.update();
     }
     
     /**
@@ -472,14 +623,14 @@ public abstract class UIElementBase {
      * Override to bind wrapped components to the UI.
      */
     protected void bind() {
-        
+        getParent().getInnerComponent().addChild(getOuterComponent());
     }
     
     /**
      * Override to unbind wrapped components from the UI.
      */
     protected void unbind() {
-        
+        getOuterComponent().destroy();
     }
     
     /**
@@ -500,7 +651,7 @@ public abstract class UIElementBase {
      * 
      * @return The inner component.
      */
-    public Object getInnerComponent() {
+    public BaseUIComponent getInnerComponent() {
         return innerComponent == null ? outerComponent : innerComponent;
     }
     
@@ -509,8 +660,9 @@ public abstract class UIElementBase {
      * 
      * @param value The innermost wrapped UI component.
      */
-    protected void setInnerComponent(Object value) {
+    protected void setInnerComponent(BaseUIComponent value) {
         innerComponent = value;
+        associateComponent(value);
     }
     
     /**
@@ -521,7 +673,7 @@ public abstract class UIElementBase {
      * 
      * @return The outer component.
      */
-    public Object getOuterComponent() {
+    public BaseUIComponent getOuterComponent() {
         return outerComponent == null ? innerComponent : outerComponent;
     }
     
@@ -530,8 +682,9 @@ public abstract class UIElementBase {
      * 
      * @param value The outermost wrapped UI component.
      */
-    protected void setOuterComponent(Object value) {
+    protected void setOuterComponent(BaseUIComponent value) {
         outerComponent = value;
+        associateComponent(value);
     }
     
     /**
@@ -597,12 +750,24 @@ public abstract class UIElementBase {
     }
     
     /**
-     * Displays a property editor for the component. The default behavior is to display a message
-     * that no property editor is defined. Subclasses must override this to implement a property
-     * editor appropriate for the component.
+     * Invokes the property grid with this element as its target.
      */
     public void editProperties() {
-        DialogUtil.confirm("@cwf.shell.designer.propedit.none.message", "@cwf.shell.designer.propedit.none.caption", null);
+        try {
+            PropertyGrid.create(this, null);
+        } catch (Exception e) {
+            DialogUtil.showError("Displaying property grid: \r\n" + e.toString());
+        }
+    }
+    
+    /**
+     * Set width and height of a component to 100%.
+     * 
+     * @param component BaseComponent
+     */
+    protected void fullSize(BaseUIComponent component) {
+        component.setWidth("100%");
+        component.setHeight("100%");
     }
     
     /**
@@ -620,6 +785,10 @@ public abstract class UIElementBase {
         updateVisibility();
         getEventManager().fireLocalEvent(
             activate ? LayoutConstants.EVENT_ELEMENT_ACTIVATE : LayoutConstants.EVENT_ELEMENT_INACTIVATE, this);
+        
+        if (activate) {
+            mask.update();
+        }
     }
     
     /**
@@ -887,6 +1056,7 @@ public abstract class UIElementBase {
         to = children.indexOf(ref);
         children.add(to, child);
         afterMoveChild(child, ref);
+        updateMasks();
     }
     
     /**
@@ -897,7 +1067,7 @@ public abstract class UIElementBase {
      * @param before Child element was moved before this one.
      */
     protected void afterMoveChild(UIElementBase child, UIElementBase before) {
-        
+        moveChild(child.getOuterComponent(), before.getOuterComponent());
     }
     
     /**
@@ -1067,6 +1237,82 @@ public abstract class UIElementBase {
      * @param activated The current activation state.
      */
     protected void updateVisibility(boolean visible, boolean activated) {
+        if (!getDefinition().isInternal()) {
+            getOuterComponent().setVisible(visible && activated);
+        }
+    }
+    
+    /**
+     * Returns the URL of the default template to use in createFromTemplate. Override this method to
+     * provide an alternate default URL.
+     * 
+     * @return The template URL.
+     */
+    protected String getTemplateUrl() {
+        return "web/" + getClass().getName().replace(".", "/") + ".cwf";
+    }
+    
+    /**
+     * Create wrapped component(s) from a template (a zul page). Performs autowiring of variables
+     * and events. The template URL is derived from the class name. For example, if the class is
+     * "org.carewebframework.xxx.Clazz", the template URL is assumed to be
+     * "web/org/carewebframework/xxx/Clazz.cwf".
+     * 
+     * @return Top level component.
+     */
+    protected BaseUIComponent createFromTemplate() {
+        return createFromTemplate(null);
+    }
+    
+    /**
+     * Create wrapped component(s) from specified template (a zul page). Performs autowiring of
+     * variables and events.
+     * 
+     * @param template URL of zul page that will serve as a template. If a path is not specified, it
+     *            is derived from the package. If the URL is not specified, the template name is
+     *            obtained from getTemplateUrl.
+     * @return Top level component.
+     */
+    protected BaseUIComponent createFromTemplate(String template) {
+        return createFromTemplate(template, null, this);
+    }
+    
+    /**
+     * Create wrapped component(s) from specified template (a zul page).
+     * 
+     * @param template URL of zul page that will serve as a template. If the URL is not specified,
+     *            the template name is obtained from getTemplateUrl.
+     * @param parent The component that will become the parent.
+     * @param controller If specified, events and variables are autowired to the controller.
+     * @return Top level component.
+     */
+    protected BaseUIComponent createFromTemplate(String template, BaseComponent parent, Object controller) {
+        if (StringUtils.isEmpty(template)) {
+            template = getTemplateUrl();
+        } else if (!template.startsWith("web/")) {
+            template = CWFUtil.getResourcePath(getClass()) + template;
+        }
+        
+        BaseUIComponent top = null;
+        
+        try {
+            top = (BaseUIComponent) PageUtil.createPage(template, parent).get(0);
+            top.wireController(controller);
+        } catch (Exception e) {
+            raise("Error creating element from template.", e);
+        }
+        
+        return top;
+    }
+    
+    /**
+     * Moves a child to before another component.
+     * 
+     * @param child Child to move
+     * @param before Move child to this component.
+     */
+    protected void moveChild(BaseUIComponent child, BaseUIComponent before) {
+        child.getParent().addChild(child, before);
     }
     
     /**
@@ -1113,12 +1359,18 @@ public abstract class UIElementBase {
     }
     
     /**
-     * Applies the current color setting to the wrapped component. Subclasses that support this
-     * capability should override this to supply the proper implementation.
+     * Applies the current color setting to the target component. If the target implements a custom
+     * method for performing this operation, that method will be invoked. Otherwise, the background
+     * color of the target is set. Override this method to provide alternate implementations.
      * 
-     * @param component Component to receive the color setting.
+     * @param comp Component to receive the color setting.
      */
-    protected void applyColor(Object component) {
+    protected void applyColor(BaseUIComponent comp) {
+        if (comp instanceof BaseLabeledComponent) {
+            comp.invoke(comp.sub("lbl"), "css", "color", getColor());
+        } else {
+            comp.addStyle("background-color", getColor());
+        }
     }
     
     /**
@@ -1157,12 +1409,12 @@ public abstract class UIElementBase {
     }
     
     /**
-     * Applies the current hint text to the wrapped component. Subclasses that support this
-     * capability should override this to supply the proper implementation.
+     * Applies the current hint text to the target component.
      * 
-     * @param component Component to receive the hint text.
+     * @param comp Component to receive the hint text.
      */
-    protected void applyHint(Object component) {
+    protected void applyHint(BaseUIComponent comp) {
+        comp.setHint(getHint());
     }
     
     /**
@@ -1406,6 +1658,47 @@ public abstract class UIElementBase {
         for (IPluginResource resource : getDefinition().getResources()) {
             resource.register(shell, this, register);
         }
+    }
+    
+    /**
+     * Returns true if the design mode mask is to be used. This mask is used to cover the underlying
+     * outer component when in design mode.
+     * 
+     * @return True if the design mode mask is enabled.
+     */
+    protected MaskMode getMaskMode() {
+        return mask.getMode();
+    }
+    
+    /**
+     * Sets whether to use the design mode mask.
+     * 
+     * @param mode True to enable the design mode mask.
+     */
+    protected void setMaskMode(MaskMode mode) {
+        mask.setMode(mode);
+    }
+    
+    /**
+     * Returns true if any associated UI elements in the component subtree are visible.
+     * 
+     * @param component Component subtree to examine.
+     * @return True if any associated UI element in the subtree is visible.
+     */
+    protected boolean hasVisibleElements(BaseUIComponent component) {
+        for (BaseUIComponent child : component.getChildren(BaseUIComponent.class)) {
+            UIElementBase ele = getAssociatedUIElement(child);
+            
+            if (ele != null && ele.isVisible()) {
+                return true;
+            }
+            
+            if (hasVisibleElements(child)) {
+                return true;
+            }
+        }
+        
+        return false;
     }
     
     /**

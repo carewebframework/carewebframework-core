@@ -25,7 +25,8 @@
  */
 package org.carewebframework.shell.designer;
 
-import org.carewebframework.shell.layout.UIElementCWFBase;
+import org.carewebframework.shell.layout.UIElementBase;
+import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.web.component.BaseUIComponent;
 import org.carewebframework.web.component.Menupopup;
 
@@ -38,13 +39,13 @@ public class DesignMask {
         AUTO, ENABLE, DISABLE
     };
     
-    private final UIElementCWFBase element;
+    private final UIElementBase element;
     
     private MaskMode mode = MaskMode.DISABLE;
     
     private boolean visible;
     
-    public DesignMask(UIElementCWFBase element) {
+    public DesignMask(UIElementBase element) {
         this.element = element;
     }
     
@@ -84,7 +85,7 @@ public class DesignMask {
             BaseUIComponent target = element.getMaskTarget();
             
             if (visible) {
-                Menupopup contextMenu = UIElementCWFBase.getDesignContextMenu(target);
+                Menupopup contextMenu = UIElementBase.getDesignContextMenu(target);
                 String displayName = element.getDisplayName();
                 target.addMask(displayName, contextMenu);
             } else {

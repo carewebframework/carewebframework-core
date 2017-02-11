@@ -32,7 +32,7 @@ import org.carewebframework.ui.action.ActionUtil;
 /**
  * Base class for UI elements that support an associated action.
  */
-public class UIElementActionBase extends UIElementCWFBase {
+public class UIElementActionBase extends UIElementBase {
     
     private String action;
     

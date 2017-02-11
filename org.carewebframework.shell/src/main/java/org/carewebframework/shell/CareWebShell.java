@@ -51,7 +51,7 @@ import org.carewebframework.help.HelpSetCache;
 import org.carewebframework.help.IHelpSet;
 import org.carewebframework.help.IHelpViewer;
 import org.carewebframework.help.viewer.HelpUtil;
-import org.carewebframework.shell.layout.UIElementCWFBase;
+import org.carewebframework.shell.layout.UIElementBase;
 import org.carewebframework.shell.layout.UIElementDesktop;
 import org.carewebframework.shell.layout.UILayout;
 import org.carewebframework.shell.plugins.PluginContainer;
@@ -558,7 +558,7 @@ public class CareWebShell extends Div {
     public PluginContainer getActivatedPlugin(String id) {
         for (PluginContainer plugin : plugins) {
             if (id.equals(plugin.getPluginDefinition().getId())
-                    && UIElementCWFBase.getAssociatedUIElement(plugin).isActivated()) {
+                    && UIElementBase.getAssociatedUIElement(plugin).isActivated()) {
                 return plugin;
             }
         }
@@ -589,7 +589,7 @@ public class CareWebShell extends Div {
         }
         
         for (PluginContainer plugin : plugins) {
-            if (UIElementCWFBase.getAssociatedUIElement(plugin).isActivated()) {
+            if (UIElementBase.getAssociatedUIElement(plugin).isActivated()) {
                 list.add(plugin);
             }
         }

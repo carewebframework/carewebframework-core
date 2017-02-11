@@ -36,7 +36,7 @@ import org.carewebframework.web.component.Pane;
  * area on the right where tree panes are positioned. Clicking on a node in the tree activates the
  * associated tree pane.
  */
-public class UIElementTreeView extends UIElementCWFBase {
+public class UIElementTreeView extends UIElementBase {
     
     static {
         registerAllowedParentClass(UIElementTreeView.class, UIElementBase.class);

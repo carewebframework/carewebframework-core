@@ -34,7 +34,7 @@ import org.springframework.util.StringUtils;
 /**
  * Wrapper for a UI layout component.
  */
-public class UIElementLayout extends UIElementCWFBase {
+public class UIElementLayout extends UIElementBase {
     
     static {
         registerAllowedParentClass(UIElementLayout.class, UIElementBase.class);

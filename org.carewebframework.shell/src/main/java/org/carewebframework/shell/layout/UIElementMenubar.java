@@ -32,7 +32,7 @@ import org.carewebframework.web.component.Span;
 /**
  * Base implementation of a menu bar.
  */
-public class UIElementMenubar extends UIElementCWFBase {
+public class UIElementMenubar extends UIElementBase {
     
     static {
         registerAllowedChildClass(UIElementMenubar.class, UIElementMenuItem.class);
