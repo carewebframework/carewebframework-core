@@ -25,6 +25,8 @@
  */
 package org.carewebframework.shell.plugins;
 
+import org.carewebframework.shell.elements.UIElementPlugin;
+
 /**
  * CareWeb plugins may implement this interface to respond to container-based events.
  */
@@ -33,9 +35,9 @@ public interface IPluginEvent {
     /**
      * Fired when the plugin is first loaded
      * 
-     * @param container PluginContainer
+     * @param plugin The plugin.
      */
-    void onLoad(PluginContainer container); // 
+    void onLoad(UIElementPlugin plugin);
     
     /**
      * Fired when the plugin is activated in the UI

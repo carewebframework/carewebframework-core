@@ -23,26 +23,16 @@
  *
  * #L%
  */
-package org.carewebframework.ui.sharedforms;
+package org.carewebframework.shell.test;
 
-import org.carewebframework.shell.elements.UIElementPlugin;
-import org.carewebframework.shell.plugins.PluginController;
+import org.carewebframework.ui.spring.FrameworkAppContext;
+import org.carewebframework.web.test.MockEnvironment;
+import org.springframework.web.context.support.XmlWebApplicationContext;
 
-/**
- * Controller for base shared form.
- */
-public class BaseFormController extends PluginController {
+public class MockShellEnvironment extends MockEnvironment {
     
     @Override
-    public void onLoad(UIElementPlugin plugin) {
-        super.onLoad(plugin);
-        init();
-    }
-    
-    /**
-     * Override to perform initializations after form is instantiated.
-     */
-    protected void init() {
-        
+    protected XmlWebApplicationContext createApplicationContext() {
+        return new FrameworkAppContext();
     }
 }

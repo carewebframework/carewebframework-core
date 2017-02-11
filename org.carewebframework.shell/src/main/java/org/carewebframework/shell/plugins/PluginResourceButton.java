@@ -154,14 +154,13 @@ public class PluginResourceButton implements IPluginResource {
     public void register(CareWebShell shell, UIElementBase owner, boolean register) {
         if (register) {
             UIElementPlugin plugin = (UIElementPlugin) owner;
-            PluginContainer container = plugin.getContainer();
             Button button = new Button(getCaption());
             button.setName(getName());
             button.setHint(getHint());
             button.setImage(getIcon());
             ActionUtil.addAction(button, getAction());
-            container.addToolbarComponent(button);
-            container.registerId(getName(), button);
+            plugin.addToolbarComponent(button);
+            plugin.registerId(getName(), button);
         }
     }
     

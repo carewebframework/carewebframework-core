@@ -35,18 +35,19 @@ import org.carewebframework.shell.CareWebShell;
 import org.carewebframework.shell.elements.UIElementBase;
 import org.carewebframework.shell.elements.UIElementDesktop;
 import org.carewebframework.shell.elements.UIElementMenubar;
+import org.carewebframework.shell.elements.UIElementPlugin;
+import org.carewebframework.shell.elements.UIElementPlugin.PluginContainer;
 import org.carewebframework.shell.elements.UIElementTreeView;
-import org.carewebframework.shell.plugins.PluginContainer;
 import org.carewebframework.shell.plugins.PluginDefinition;
 import org.carewebframework.shell.plugins.TestPluginController;
 import org.carewebframework.shell.property.PropertyInfo;
+import org.carewebframework.shell.test.MockShellTest;
 import org.carewebframework.ui.FrameworkController;
 import org.carewebframework.web.event.ClickEvent;
 import org.carewebframework.web.event.EventUtil;
-import org.carewebframework.web.test.MockTest;
 import org.junit.Test;
 
-public class LayoutParserTest extends MockTest {
+public class LayoutParserTest extends MockShellTest {
     
     private final UILayout layout = new UILayout();
     
@@ -80,20 +81,21 @@ public class LayoutParserTest extends MockTest {
         UIElementBase element = layout.deserialize(root);
         assertTrue(element instanceof UIElementMenubar);
         assertTrue(element.hasAncestor(root));
-        PluginContainer container1 = shell.getLoadedPlugin("testplugin1");
-        assertNotNull(container1);
+        UIElementPlugin plugin1 = shell.getLoadedPlugin("testplugin1");
+        assertNotNull(plugin1);
+        PluginContainer container1 = (PluginContainer) plugin1.getOuterComponent();
         TestPluginController controller = (TestPluginController) FrameworkController
                 .getController(container1.getFirstChild());
         assertNotNull(controller);
-        assertEquals(container1, controller.getContainer());
+        assertEquals(plugin1, controller.getPlugin());
         testPlugin(controller, 1, 1, 0, 0);
         root.activate(false);
         testPlugin(controller, 1, 1, 1, 0);
         root.activate(true);
         testPlugin(controller, 1, 2, 1, 0);
-        testProperty(container1, "prop1", "value1");
-        testProperty(container1, "prop2", 123);
-        testProperty(container1, "prop3", true);
+        testProperty(plugin1, "prop1", "value1");
+        testProperty(plugin1, "prop2", 123);
+        testProperty(plugin1, "prop3", true);
         root.removeChildren();
         testPlugin(controller, 1, 2, 1, 1);
         // Test auto-wire
@@ -107,8 +109,8 @@ public class LayoutParserTest extends MockTest {
         assertEquals(controller.mnuTest, container1.getAttribute("mnuTest"));
     }
     
-    private void testProperty(PluginContainer container, String propertyName, Object expectedValue) throws Exception {
-        PluginDefinition def = container.getPluginDefinition();
+    private void testProperty(UIElementPlugin plugin, String propertyName, Object expectedValue) throws Exception {
+        PluginDefinition def = plugin.getDefinition();
         PropertyInfo propInfo = null;
         
         for (PropertyInfo pi : def.getProperties()) {
@@ -119,7 +121,7 @@ public class LayoutParserTest extends MockTest {
         }
         
         assertNotNull("Property not found: " + propertyName, propInfo);
-        assertEquals(expectedValue, container.getPropertyValue(propInfo));
+        assertEquals(expectedValue, plugin.getPropertyValue(propInfo));
     }
     
     private void testPlugin(TestPluginController controller, int loadCount, int activateCount, int inactivateCount,

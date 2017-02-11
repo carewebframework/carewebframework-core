@@ -28,7 +28,7 @@ package org.carewebframework.plugin.mockup;
 import java.io.IOException;
 
 import org.apache.commons.lang.StringUtils;
-import org.carewebframework.shell.plugins.PluginContainer;
+import org.carewebframework.shell.elements.UIElementPlugin;
 import org.carewebframework.shell.plugins.PluginController;
 import org.carewebframework.web.annotation.WiredComponent;
 import org.carewebframework.web.component.Iframe;
@@ -55,9 +55,9 @@ public class MainController extends PluginController {
      * Register published properties.
      */
     @Override
-    public void onLoad(PluginContainer container) {
-        super.onLoad(container);
-        container.registerProperties(this, "mockupType", "mockupId");
+    public void onLoad(UIElementPlugin plugin) {
+        super.onLoad(plugin);
+        plugin.registerProperties(this, "mockupType", "mockupId");
     }
     
     /**

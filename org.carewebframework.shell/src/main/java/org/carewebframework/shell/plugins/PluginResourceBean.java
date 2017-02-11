@@ -34,7 +34,6 @@ import org.carewebframework.shell.elements.UIElementPlugin;
  */
 public class PluginResourceBean implements IPluginResource {
     
-    
     private String bean;
     
     private boolean required = true;
@@ -86,7 +85,7 @@ public class PluginResourceBean implements IPluginResource {
     public void register(CareWebShell shell, UIElementBase owner, boolean register) {
         if (register) {
             UIElementPlugin plugin = (UIElementPlugin) owner;
-            plugin.getContainer().registerBean(getBean(), isRequired());
+            plugin.registerBean(getBean(), isRequired());
         }
     }
     

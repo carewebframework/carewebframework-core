@@ -32,16 +32,16 @@ import org.apache.commons.logging.LogFactory;
 import org.carewebframework.api.context.UserContext;
 import org.carewebframework.api.domain.IUser;
 import org.carewebframework.common.StrUtil;
-import org.carewebframework.shell.plugins.PluginContainer;
+import org.carewebframework.shell.elements.UIElementPlugin;
 import org.carewebframework.shell.plugins.PluginController;
 import org.carewebframework.web.annotation.EventHandler;
 import org.carewebframework.web.annotation.WiredComponent;
 import org.carewebframework.web.client.Session;
 import org.carewebframework.web.client.WebSocketHandler;
+import org.carewebframework.web.component.Grid;
 import org.carewebframework.web.component.Label;
 import org.carewebframework.web.component.Page;
 import org.carewebframework.web.component.Row;
-import org.carewebframework.web.component.Grid;
 import org.carewebframework.web.event.Event;
 import org.carewebframework.web.model.IComponentRenderer;
 import org.carewebframework.web.model.ListModel;
@@ -120,19 +120,13 @@ public class MainController extends PluginController {
         }
     }
     
-    /**
-     * @see org.carewebframework.shell.plugins.IPluginEvent#onLoad(org.carewebframework.shell.plugins.PluginContainer)
-     */
     @Override
-    public void onLoad(PluginContainer container) {
+    public void onLoad(UIElementPlugin plugin) {
         log.trace("onLoad");
-        super.onLoad(container);
+        super.onLoad(plugin);
         isDelegationToModelDeferred = true;// onLoad happens prior to activation, defer until activated
     }
     
-    /**
-     * @see org.carewebframework.shell.plugins.IPluginEvent#onActivate()
-     */
     @Override
     public void onActivate() {
         log.trace("Plugin Activated");

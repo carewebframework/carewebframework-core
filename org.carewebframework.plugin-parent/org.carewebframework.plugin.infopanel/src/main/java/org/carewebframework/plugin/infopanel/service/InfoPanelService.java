@@ -33,7 +33,7 @@ import org.carewebframework.plugin.infopanel.model.IInfoPanel;
 import org.carewebframework.plugin.infopanel.model.IInfoPanel.Action;
 import org.carewebframework.shell.elements.UIElementBase;
 import org.carewebframework.shell.elements.UIElementPlugin;
-import org.carewebframework.shell.plugins.PluginContainer;
+import org.carewebframework.shell.elements.UIElementPlugin.PluginContainer;
 import org.carewebframework.ui.FrameworkController;
 import org.carewebframework.web.component.BaseComponent;
 
@@ -135,12 +135,14 @@ public class InfoPanelService {
      * @return The associated active info panel, or null if there is none.
      */
     private static IInfoPanel getInfoPanel(UIElementBase element, boolean activeOnly) {
-        if ((element instanceof UIElementPlugin) && (!activeOnly || element.isActivated())
-                && ((UIElementPlugin) element).getDefinition().getId().equals("infoPanelPlugin")) {
-            PluginContainer container = ((UIElementPlugin) element).getContainer();
-            container.load();
-            BaseComponent top = container.findByName("infoPanelRoot");
-            return (IInfoPanel) FrameworkController.getController(top);
+        if (element instanceof UIElementPlugin) {
+            UIElementPlugin plugin = (UIElementPlugin) element;
+            
+            if ((!activeOnly || plugin.isActivated()) && (plugin.getDefinition().getId().equals("infoPanelPlugin"))) {
+                plugin.load();
+                BaseComponent top = plugin.getOuterComponent().findByName("infoPanelRoot");
+                return (IInfoPanel) FrameworkController.getController(top);
+            }
         }
         
         return null;

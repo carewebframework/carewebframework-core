@@ -29,7 +29,7 @@ import java.util.Calendar;
 
 import org.apache.commons.lang.time.FastDateFormat;
 import org.carewebframework.common.DateUtil;
-import org.carewebframework.shell.plugins.PluginContainer;
+import org.carewebframework.shell.elements.UIElementPlugin;
 import org.carewebframework.shell.plugins.PluginController;
 import org.carewebframework.web.annotation.EventHandler;
 import org.carewebframework.web.annotation.WiredComponent;
@@ -90,9 +90,9 @@ public class MainController extends PluginController {
     }
     
     @Override
-    public void onLoad(PluginContainer container) {
-        super.onLoad(container);
-        container.registerProperties(this, "format", "color");
+    public void onLoad(UIElementPlugin plugin) {
+        super.onLoad(plugin);
+        plugin.registerProperties(this, "format", "color");
     }
     
 }

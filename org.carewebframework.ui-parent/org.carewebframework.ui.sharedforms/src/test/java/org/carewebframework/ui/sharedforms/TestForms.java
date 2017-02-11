@@ -27,7 +27,7 @@ package org.carewebframework.ui.sharedforms;
 
 import static org.junit.Assert.assertEquals;
 
-import org.carewebframework.shell.plugins.PluginContainer;
+import org.carewebframework.shell.elements.UIElementPlugin;
 import org.carewebframework.ui.FrameworkController;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.Label;
@@ -42,7 +42,7 @@ public class TestForms extends MockTest {
     public void testForm() throws Exception {
         BaseComponent root = PageUtil.createPage("web/org/carewebframework/ui/sharedforms/testForm.cwf", null).get(0);
         TestController controller = (TestController) FrameworkController.getController(root);
-        PluginContainer dummy = new PluginContainer();
+        UIElementPlugin dummy = new UIElementPlugin();
         controller.onLoad(dummy);
         controller.requestData();
         assertEquals(10, controller.model.size());

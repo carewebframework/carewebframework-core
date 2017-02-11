@@ -25,6 +25,7 @@
  */
 package org.carewebframework.shell.plugins;
 
+import org.carewebframework.shell.elements.UIElementPlugin;
 import org.carewebframework.web.event.Event;
 
 /**
@@ -39,29 +40,32 @@ public class PluginEvent extends Event {
      */
     public enum PluginAction {
         SUBSCRIBE, LOAD, ACTIVATE, INACTIVATE, UNLOAD, UNSUBSCRIBE
-    };
+    }
     
     private final PluginAction action;
     
+    private final UIElementPlugin plugin;
+    
     /**
-     * Creates an event to encapsulate an action on the specified container.
+     * Creates an event to encapsulate an action on the specified plugin.
      * 
-     * @param container Container receiving the action.
+     * @param plugin Plugin receiving the action.
      * @param action The action performed.
      */
-    public PluginEvent(PluginContainer container, PluginAction action) {
-        this(container, action, null);
+    public PluginEvent(UIElementPlugin plugin, PluginAction action) {
+        this(plugin, action, null);
     }
     
     /**
-     * Creates an event to encapsulate an action on the specified container.
+     * Creates an event to encapsulate an action on the specified plugin.
      * 
-     * @param container Container receiving the action.
+     * @param plugin Plugin receiving the action.
      * @param action The action performed.
      * @param data Arbitrary data to attach.
      */
-    public PluginEvent(PluginContainer container, PluginAction action, Object data) {
-        super(TYPE, container, data);
+    public PluginEvent(UIElementPlugin plugin, PluginAction action, Object data) {
+        super(TYPE, plugin.getOuterComponent(), data);
+        this.plugin = plugin;
         this.action = action;
     }
     
@@ -75,11 +79,11 @@ public class PluginEvent extends Event {
     }
     
     /**
-     * Returns the container upon which the action is performed.
+     * Returns the plugin upon which the action is performed.
      * 
-     * @return The container.
+     * @return The plugin.
      */
-    public PluginContainer getContainer() {
-        return (PluginContainer) getTarget();
+    public UIElementPlugin getPlugin() {
+        return plugin;
     }
 }

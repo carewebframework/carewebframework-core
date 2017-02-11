@@ -34,7 +34,7 @@ import org.carewebframework.api.messaging.IMessageConsumer.IMessageCallback;
 import org.carewebframework.api.messaging.IMessageProducer;
 import org.carewebframework.api.messaging.Message;
 import org.carewebframework.api.messaging.ProducerService;
-import org.carewebframework.shell.plugins.PluginContainer;
+import org.carewebframework.shell.elements.UIElementPlugin;
 import org.carewebframework.shell.plugins.PluginController;
 import org.carewebframework.ui.dialog.DialogUtil;
 import org.carewebframework.ui.dialog.InputDialog.IInputCallback;
@@ -111,8 +111,8 @@ public class MainController extends PluginController {
     }
     
     @Override
-    public void onLoad(PluginContainer container) {
-        super.onLoad(container);
+    public void onLoad(UIElementPlugin plugin) {
+        super.onLoad(plugin);
         ListModel<IMessageProducer> providers = new ListModel<>(getProviders());
         //providers.setMultiple(true);
         new ModelAndView<Listitem, IMessageProducer>(lboxProviders, providers, new MessageProviderRenderer());

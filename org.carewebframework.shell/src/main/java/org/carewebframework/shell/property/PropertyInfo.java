@@ -174,12 +174,24 @@ public class PropertyInfo {
      * @return The object's property value.
      */
     public Object getPropertyValue(Object instance) {
+        return getPropertyValue(instance, false);
+    }
+    
+    /**
+     * Returns the property value for a specified object instance.
+     * 
+     * @param instance The object instance.
+     * @param forceDirect If true, a forces a direct read on the instance even if it implements
+     *            IPropertyAccessor
+     * @return The object's property value.
+     */
+    public Object getPropertyValue(Object instance, boolean forceDirect) {
         try {
             if (instance == null) {
                 return dflt == null || !isSerializable() ? null : getPropertyType().getSerializer().deserialize(dflt);
             }
             
-            if (instance instanceof IPropertyAccessor) {
+            if (!forceDirect && instance instanceof IPropertyAccessor) {
                 return ((IPropertyAccessor) instance).getPropertyValue(this);
             }
             
@@ -197,8 +209,20 @@ public class PropertyInfo {
      * @param value The value to assign.
      */
     public void setPropertyValue(Object instance, Object value) {
+        setPropertyValue(instance, value, false);
+    }
+    
+    /**
+     * Sets the property value for a specified object instance.
+     * 
+     * @param instance The object instance.
+     * @param value The value to assign.
+     * @param forceDirect If true, a forces a direct write to the instance even if it implements
+     *            IPropertyAccessor
+     */
+    public void setPropertyValue(Object instance, Object value, boolean forceDirect) {
         try {
-            if (instance instanceof IPropertyAccessor) {
+            if (!forceDirect && instance instanceof IPropertyAccessor) {
                 ((IPropertyAccessor) instance).setPropertyValue(this, value);
                 return;
             }

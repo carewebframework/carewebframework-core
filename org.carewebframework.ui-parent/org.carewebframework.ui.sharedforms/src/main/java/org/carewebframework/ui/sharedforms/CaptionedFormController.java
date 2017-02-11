@@ -58,7 +58,7 @@ public class CaptionedFormController extends BaseFormController {
     protected void init() {
         //panel = (Window) root;
         super.init();
-        getContainer().registerProperties(this, "caption", "captionStyle", "icon", "color1", "color2");
+        getPlugin().registerProperties(this, "caption", "captionStyle", "icon", "color1", "color2");
         updateStyle();
     }
     

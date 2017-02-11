@@ -23,26 +23,24 @@
  *
  * #L%
  */
-package org.carewebframework.ui.sharedforms;
+package org.carewebframework.shell.test;
 
-import org.carewebframework.shell.elements.UIElementPlugin;
-import org.carewebframework.shell.plugins.PluginController;
+import org.carewebframework.web.test.MockTest;
+import org.junit.BeforeClass;
 
-/**
- * Controller for base shared form.
- */
-public class BaseFormController extends PluginController {
+public class MockShellTest extends MockTest {
     
-    @Override
-    public void onLoad(UIElementPlugin plugin) {
-        super.onLoad(plugin);
-        init();
+    private static final String[] CONFIG_LOCATIONS = { "classpath:/META-INF/cwf-dispatcher-servlet.xml",
+            "classpath*:**/META-INF/*-spring.xml" };
+    
+    private static final String[] PROFILES = { "root", "root-test", "child", "child-test" };
+    
+    @BeforeClass
+    public static void beforeClass() throws Exception {
+        MockTest.configLocations = CONFIG_LOCATIONS;
+        MockTest.profiles = PROFILES;
+        MockTest.mockEnvironmentClass = MockShellEnvironment.class;
+        MockTest.beforeClass();
     }
     
-    /**
-     * Override to perform initializations after form is instantiated.
-     */
-    protected void init() {
-        
-    }
 }

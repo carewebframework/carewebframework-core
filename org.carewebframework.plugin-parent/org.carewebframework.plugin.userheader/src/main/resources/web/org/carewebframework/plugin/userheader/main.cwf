@@ -1,19 +1,18 @@
 <page>
-
-	<vlayout controller="${@cwfUserHeaderController}" spacing="0" height="100%"
-		width="100%">
-		<hlayout class="cwf-header-row" hflex="1" vflex="1">
+	<div controller="${@cwfUserHeaderController}" class="cwf-layout-vertical" 
+		height="100%" width="100%">
+		<div class="cwf-layout-horizontal" flex="1">
 			<label name="userHeader" />
-		</hlayout>
-		<hlayout class="cwf-header-row" hflex="1" vflex="1">
+		</div>
+		<div class="cwf-layout-horizontal" flex="1">
 			<a name="password" label="${@msg.cwf.userheader.password.label}"
 				hint="${@msg.cwf.userheader.password.hint}" visible="true" />
-			<space flex="1" />
+			<div flex="1" />
 			<a name="lock" label="${@msg.cwf.userheader.lock.label}"
 				hint="${@msg.cwf.userheader.lock.hint}" />
-			<space />
+			<div width="10px" />
 			<a name="logout" label="${@msg.cwf.userheader.logout.label}"
 				hint="${@msg.cwf.userheader.logout.hint}" />
-		</hlayout>
-	</vlayout>
+		</div>
+	</div>
 </page>

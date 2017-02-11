@@ -25,6 +25,7 @@
  */
 package org.carewebframework.shell.plugins;
 
+import org.carewebframework.shell.elements.UIElementPlugin;
 import org.carewebframework.web.component.Button;
 import org.carewebframework.web.component.Menu;
 
@@ -65,9 +66,9 @@ public class TestPluginController extends PluginController {
     }
     
     @Override
-    public void onLoad(PluginContainer container) {
-        super.onLoad(container);
-        container.registerProperties(this, "prop1", "prop2", "prop3");
+    public void onLoad(UIElementPlugin plugin) {
+        super.onLoad(plugin);
+        plugin.registerProperties(this, "prop1", "prop2", "prop3");
         loadCount++;
     }
     

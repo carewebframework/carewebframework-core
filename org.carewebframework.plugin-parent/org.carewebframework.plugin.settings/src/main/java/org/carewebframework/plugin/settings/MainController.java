@@ -52,7 +52,7 @@ public class MainController extends PluginController {
     public void afterInitialized(BaseComponent comp) {
         super.afterInitialized(comp);
         propertyGrid = PropertyGrid.create(null, comp, true);
-        getContainer().registerProperties(this, "provider", "group");
+        getPlugin().registerProperties(this, "provider", "group");
     }
     
     /**

@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.carewebframework.api.FrameworkUtil;
+import org.carewebframework.shell.elements.UIElementPlugin;
 
 /**
  * Base class for defining logic that determines when a plugin should be enabled. Plugin authors may
@@ -36,7 +37,7 @@ import org.carewebframework.api.FrameworkUtil;
  */
 public abstract class PluginStatus implements IPluginEventListener {
     
-    private final List<PluginContainer> containers = new ArrayList<>();
+    private final List<UIElementPlugin> plugins = new ArrayList<>();
     
     private boolean disabled;
     
@@ -103,16 +104,18 @@ public abstract class PluginStatus implements IPluginEventListener {
      */
     @Override
     public void onPluginEvent(PluginEvent event) {
+        UIElementPlugin plugin = event.getPlugin();
+        
         switch (event.getAction()) {
             case SUBSCRIBE:
                 init();
-                containers.add(event.getContainer());
-                event.getContainer().setDisabled(isDisabled());
+                plugins.add(plugin);
+                plugin.setDisabled(isDisabled());
                 break;
             
             case UNSUBSCRIBE:
-                containers.remove(event.getContainer());
-                event.getContainer().setDisabled(false);
+                plugins.remove(plugin);
+                plugin.setDisabled(false);
                 break;
         }
     }
@@ -121,10 +124,10 @@ public abstract class PluginStatus implements IPluginEventListener {
      * Updates the disabled status of all registered containers.
      */
     protected void updateStatus() {
-        if (!containers.isEmpty()) {
+        if (!plugins.isEmpty()) {
             boolean disabled = isDisabled();
             
-            for (PluginContainer container : containers) {
+            for (UIElementPlugin container : plugins) {
                 container.setDisabled(disabled);
             }
         }

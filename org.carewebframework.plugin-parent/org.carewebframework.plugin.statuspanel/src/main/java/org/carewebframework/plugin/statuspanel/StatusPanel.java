@@ -77,7 +77,7 @@ public class StatusPanel extends FrameworkController implements IGenericEvent<Ob
     /**
      * Create a new status pane and associated label.
      * 
-     * @param label Name of pane (becomes the id of the label).
+     * @param label Name of pane (becomes the name of the label).
      * @return The newly created label.
      */
     private Label createLabel(String label) {
@@ -86,6 +86,17 @@ public class StatusPanel extends FrameworkController implements IGenericEvent<Ob
         Label lbl = new Label();
         lbl.setName(label);
         pane.addChild(lbl);
+        adjustPanes();
         return lbl;
+    }
+    
+    private void adjustPanes() {
+        boolean first = true;
+        
+        for (Pane pane : root.getChildren(Pane.class)) {
+            pane.setFlex(first ? "1" : null);
+            pane.setWidth(null);
+            first = false;
+        }
     }
 }

@@ -31,16 +31,16 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.carewebframework.api.event.IGenericEvent;
 import org.carewebframework.plugin.infopanel.model.IInfoPanel;
-import org.carewebframework.shell.plugins.PluginContainer;
+import org.carewebframework.shell.elements.UIElementPlugin;
 import org.carewebframework.shell.plugins.PluginController;
 import org.carewebframework.ui.util.MenuUtil;
 import org.carewebframework.web.annotation.WiredComponent;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.BaseUIComponent;
+import org.carewebframework.web.component.Grid;
 import org.carewebframework.web.component.Label;
 import org.carewebframework.web.component.Menuitem;
 import org.carewebframework.web.component.Rows;
-import org.carewebframework.web.component.Grid;
 import org.carewebframework.web.component.Toolbar;
 import org.carewebframework.web.event.DropEvent;
 import org.carewebframework.web.event.Event;
@@ -275,7 +275,8 @@ public class MainController extends PluginController implements IInfoPanel {
      * Subscribe to drop request events.
      */
     @Override
-    public void onLoad(PluginContainer container) {
+    public void onLoad(UIElementPlugin plugin) {
+        super.onLoad(plugin);
         getEventManager().subscribe(EVENT_NAME, dropListener);
     }
     
@@ -284,6 +285,7 @@ public class MainController extends PluginController implements IInfoPanel {
      */
     @Override
     public void onUnload() {
+        super.onUnload();
         getEventManager().unsubscribe(EVENT_NAME, dropListener);
     }
     

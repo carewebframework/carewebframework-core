@@ -26,27 +26,31 @@
 package org.carewebframework.shell.plugins;
 
 import org.carewebframework.api.thread.IAbortable;
+import org.carewebframework.shell.elements.UIElementBase;
+import org.carewebframework.shell.elements.UIElementPlugin;
+import org.carewebframework.shell.elements.UIElementPlugin.PluginContainer;
 import org.carewebframework.ui.FrameworkController;
 import org.carewebframework.web.ancillary.IAutoWired;
 import org.carewebframework.web.component.BaseComponent;
 
 /**
  * Base controller for plugins. Offers convenience methods for determining activation state,
- * accessing the plugin container, and managing background threads.
+ * accessing the plugin plugin, and managing background threads.
  */
 public class PluginController extends FrameworkController implements IPluginEvent {
     
     private boolean isActive;
     
-    private PluginContainer container;
+    private UIElementPlugin plugin;
     
     /**
-     * Wire controller from toolbar components first, then from container.
+     * Wire controller from toolbar components first, then from plugin.
      */
     @Override
     public void afterInitialized(BaseComponent comp) {
         super.afterInitialized(comp);
-        container = PluginContainer.getContainer(comp);
+        PluginContainer container = comp.getAncestor(PluginContainer.class, true);
+        plugin = (UIElementPlugin) UIElementBase.getAssociatedUIElement(container);
     }
     
     /**
@@ -55,12 +59,12 @@ public class PluginController extends FrameworkController implements IPluginEven
      * @param message The message.
      */
     public void showBusy(String message) {
-        container.setBusy(message);
+        plugin.setBusy(message);
     }
     
     @Override
-    public void onLoad(PluginContainer container) {
-        this.container = container;
+    public void onLoad(UIElementPlugin plugin) {
+        this.plugin = plugin;
     }
     
     @Override
@@ -82,20 +86,20 @@ public class PluginController extends FrameworkController implements IPluginEven
         return isActive;
     }
     
-    public PluginContainer getContainer() {
-        return container;
-    }
-    
     /**
      * Attaches a controller to the specified component and registers any recognized listeners to
-     * the container.
+     * the plugin.
      * 
      * @param comp Target component.
      * @param controller Controller to attach.
      */
     public void attachController(BaseComponent comp, IAutoWired controller) {
-        container.tryRegisterListener(controller, true);
+        plugin.tryRegisterListener(controller, true);
         comp.wireController(controller);
+    }
+    
+    public UIElementPlugin getPlugin() {
+        return plugin;
     }
     
     /**

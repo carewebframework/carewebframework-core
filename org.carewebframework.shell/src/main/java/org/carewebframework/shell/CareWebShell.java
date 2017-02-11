@@ -51,10 +51,9 @@ import org.carewebframework.help.HelpSetCache;
 import org.carewebframework.help.IHelpSet;
 import org.carewebframework.help.IHelpViewer;
 import org.carewebframework.help.viewer.HelpUtil;
-import org.carewebframework.shell.elements.UIElementBase;
 import org.carewebframework.shell.elements.UIElementDesktop;
+import org.carewebframework.shell.elements.UIElementPlugin;
 import org.carewebframework.shell.layout.UILayout;
-import org.carewebframework.shell.plugins.PluginContainer;
 import org.carewebframework.shell.plugins.PluginDefinition;
 import org.carewebframework.shell.plugins.PluginResourceHelp;
 import org.carewebframework.ui.command.CommandEvent;
@@ -66,7 +65,6 @@ import org.carewebframework.web.annotation.Component.ChildTag;
 import org.carewebframework.web.client.ClientUtil;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.BaseMenuComponent;
-import org.carewebframework.web.component.BaseUIComponent;
 import org.carewebframework.web.component.Div;
 import org.carewebframework.web.component.MessageWindow;
 import org.carewebframework.web.component.Page;
@@ -96,7 +94,7 @@ public class CareWebShell extends Div {
     
     private final CommandRegistry commandRegistry = SpringUtil.getBean("commandRegistry", CommandRegistry.class);
     
-    private final List<PluginContainer> plugins = new ArrayList<>();
+    private final List<UIElementPlugin> plugins = new ArrayList<>();
     
     private final Set<HelpModule> helpModules = new HashSet<>();
     
@@ -222,10 +220,9 @@ public class CareWebShell extends Div {
      */
     public void onKeycapture(KeycaptureEvent event) {
         String shortcut = event.getKeycapture();
-        Collection<? extends BaseUIComponent> plugins = getActivatedPlugins(null);
         
-        if (!plugins.isEmpty()) {
-            commandRegistry.fireCommands(shortcut, event, plugins);
+        for (UIElementPlugin plugin : getActivatedPlugins(null)) {
+            commandRegistry.fireCommands(shortcut, event, plugin.getOuterComponent());
         }
     }
     
@@ -255,8 +252,8 @@ public class CareWebShell extends Div {
         String initialPlugin = PropertyUtil.getValue("CAREWEB.INITIAL.SECTION", getApplicationName());
         
         if (!StringUtils.isEmpty(initialPlugin)) {
-            for (PluginContainer plugin : plugins) {
-                if (initialPlugin.equals(plugin.getPluginDefinition().getId())) {
+            for (UIElementPlugin plugin : plugins) {
+                if (initialPlugin.equals(plugin.getDefinition().getId())) {
                     plugin.bringToFront();
                     break;
                 }
@@ -406,7 +403,7 @@ public class CareWebShell extends Div {
      * 
      * @param plugin Plugin to register.
      */
-    public void registerPlugin(PluginContainer plugin) {
+    public void registerPlugin(UIElementPlugin plugin) {
         plugins.add(plugin);
     }
     
@@ -415,7 +412,7 @@ public class CareWebShell extends Div {
      * 
      * @param plugin Plugin to unregister.
      */
-    public void unregisterPlugin(PluginContainer plugin) {
+    public void unregisterPlugin(UIElementPlugin plugin) {
         plugins.remove(plugin);
     }
     
@@ -512,7 +509,7 @@ public class CareWebShell extends Div {
      * 
      * @return Currently loaded plugins.
      */
-    public Iterable<PluginContainer> getLoadedPlugins() {
+    public Iterable<UIElementPlugin> getLoadedPlugins() {
         return plugins;
     }
     
@@ -522,9 +519,9 @@ public class CareWebShell extends Div {
      * @param id Id of plugin to locate.
      * @return A reference to the loaded plugin, or null if not found.
      */
-    public PluginContainer getLoadedPlugin(String id) {
-        for (PluginContainer plugin : plugins) {
-            if (id.equals(plugin.getPluginDefinition().getId())) {
+    public UIElementPlugin getLoadedPlugin(String id) {
+        for (UIElementPlugin plugin : plugins) {
+            if (id.equals(plugin.getDefinition().getId())) {
                 return plugin;
             }
         }
@@ -539,8 +536,8 @@ public class CareWebShell extends Div {
      * @param forceInit If true the plugin will be initialized if not already so.
      * @return A reference to the loaded and fully initialized plugin, or null if not found.
      */
-    public PluginContainer getLoadedPlugin(String id, boolean forceInit) {
-        PluginContainer plugin = getLoadedPlugin(id);
+    public UIElementPlugin getLoadedPlugin(String id, boolean forceInit) {
+        UIElementPlugin plugin = getLoadedPlugin(id);
         
         if (plugin != null && forceInit) {
             plugin.load();
@@ -555,10 +552,9 @@ public class CareWebShell extends Div {
      * @param id Id of plugin to locate.
      * @return The requested plugin, or null if not found.
      */
-    public PluginContainer getActivatedPlugin(String id) {
-        for (PluginContainer plugin : plugins) {
-            if (id.equals(plugin.getPluginDefinition().getId())
-                    && UIElementBase.getAssociatedUIElement(plugin).isActivated()) {
+    public UIElementPlugin getActivatedPlugin(String id) {
+        for (UIElementPlugin plugin : plugins) {
+            if (id.equals(plugin.getDefinition().getId()) && plugin.isActivated()) {
                 return plugin;
             }
         }
@@ -571,7 +567,7 @@ public class CareWebShell extends Div {
      * 
      * @return List of all active plugins.
      */
-    public Iterable<PluginContainer> getActivatedPlugins() {
+    public Iterable<UIElementPlugin> getActivatedPlugins() {
         return getActivatedPlugins(null);
     }
     
@@ -581,15 +577,15 @@ public class CareWebShell extends Div {
      * @param list The list to be populated. If null, a new list is created.
      * @return A list of active plugins.
      */
-    public Collection<PluginContainer> getActivatedPlugins(Collection<PluginContainer> list) {
+    public Collection<UIElementPlugin> getActivatedPlugins(Collection<UIElementPlugin> list) {
         if (list == null) {
-            list = new ArrayList<PluginContainer>();
+            list = new ArrayList<UIElementPlugin>();
         } else {
             list.clear();
         }
         
-        for (PluginContainer plugin : plugins) {
-            if (UIElementBase.getAssociatedUIElement(plugin).isActivated()) {
+        for (UIElementPlugin plugin : plugins) {
+            if (plugin.isActivated()) {
                 list.add(plugin);
             }
         }
@@ -607,8 +603,8 @@ public class CareWebShell extends Div {
     public Iterable<PluginDefinition> getLoadedPluginDefinitions() {
         List<PluginDefinition> result = new ArrayList<PluginDefinition>();
         
-        for (PluginContainer plugin : plugins) {
-            PluginDefinition def = plugin.getPluginDefinition();
+        for (UIElementPlugin plugin : plugins) {
+            PluginDefinition def = plugin.getDefinition();
             
             if (!result.contains(def)) {
                 result.add(def);

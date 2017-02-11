@@ -115,10 +115,9 @@ public class PluginResourceMenu implements IPluginResource {
     public void register(CareWebShell shell, UIElementBase owner, boolean register) {
         if (register) {
             UIElementPlugin plugin = (UIElementPlugin) owner;
-            PluginContainer container = plugin.getContainer();
-            BaseMenuComponent menu = container.getShell().addMenu(getPath(), getAction());
-            container.registerComponent(menu);
-            container.registerId(getId(), menu);
+            BaseMenuComponent menu = plugin.getShell().addMenu(getPath(), getAction());
+            plugin.registerComponent(menu);
+            plugin.registerId(getId(), menu);
         }
     }
     

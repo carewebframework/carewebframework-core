@@ -134,7 +134,7 @@ public abstract class ListFormController<DAO> extends CaptionedFormController {
         rows.setRenderer(renderer);
         setSize(50);
         CommandUtil.associateCommand("REFRESH", grid);
-        getContainer().registerProperties(this, "allowPrint", "alternateColor", "deferUpdate", "showDetailPane", "layout",
+        getPlugin().registerProperties(this, "allowPrint", "alternateColor", "deferUpdate", "showDetailPane", "layout",
             "horizontal");
     }
     
