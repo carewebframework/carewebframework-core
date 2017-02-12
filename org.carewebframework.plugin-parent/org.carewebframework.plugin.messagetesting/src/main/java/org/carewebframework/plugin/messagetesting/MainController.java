@@ -37,20 +37,21 @@ import org.carewebframework.api.messaging.ProducerService;
 import org.carewebframework.shell.elements.UIElementPlugin;
 import org.carewebframework.shell.plugins.PluginController;
 import org.carewebframework.ui.dialog.DialogUtil;
-import org.carewebframework.ui.dialog.InputDialog.IInputCallback;
 import org.carewebframework.ui.util.CWFUtil;
+import org.carewebframework.web.annotation.EventHandler;
+import org.carewebframework.web.annotation.WiredComponent;
 import org.carewebframework.web.component.Button;
 import org.carewebframework.web.component.Checkbox;
 import org.carewebframework.web.component.Combobox;
 import org.carewebframework.web.component.Comboitem;
+import org.carewebframework.web.component.Grid;
 import org.carewebframework.web.component.Listbox;
 import org.carewebframework.web.component.Listitem;
-import org.carewebframework.web.component.Textbox;
+import org.carewebframework.web.component.Memobox;
 import org.carewebframework.web.event.ChangeEvent;
 import org.carewebframework.web.event.Event;
 import org.carewebframework.web.event.IEventListener;
 import org.carewebframework.web.model.ListModel;
-import org.carewebframework.web.model.ModelAndView;
 
 /**
  * Controller class for ActiveMQ Tester.
@@ -59,17 +60,12 @@ public class MainController extends PluginController {
     
     private final IMessageCallback messageCallback = new IMessageCallback() {
         
-        private final IEventListener eventListener = new IEventListener() {
+        private final IEventListener eventListener = (event) -> {
+            received.add((Message) event.getData());
             
-            @Override
-            public void onEvent(Event event) {
-                received.add((Message) event.getData());
-                
-                if (!chkScrollLock.isChecked()) {
-                    org.carewebframework.web.event.EventUtil.post("onScrollToBottom", root, null);
-                }
+            if (!chkScrollLock.isChecked()) {
+                org.carewebframework.web.event.EventUtil.post("scrollToBottom", root, null);
             }
-            
         };
         
         @Override
@@ -79,20 +75,28 @@ public class MainController extends PluginController {
         
     };
     
+    @WiredComponent
     private Listbox lboxProviders;
     
+    @WiredComponent
     private Listbox lboxSubscriptions;
     
-    private Listbox lboxReceived;
+    @WiredComponent
+    private Grid gridReceived;
     
+    @WiredComponent
     private Combobox cboxChannels;
     
-    private Textbox tboxMessage;
+    @WiredComponent
+    private Memobox memoMessage;
     
+    @WiredComponent
     private Button btnSendMessage;
     
+    @WiredComponent
     private Checkbox chkAsEvent;
     
+    @WiredComponent
     private Checkbox chkScrollLock;
     
     private final ConsumerService consumerService;
@@ -115,11 +119,14 @@ public class MainController extends PluginController {
         super.onLoad(plugin);
         ListModel<IMessageProducer> providers = new ListModel<>(getProviders());
         //providers.setMultiple(true);
-        new ModelAndView<Listitem, IMessageProducer>(lboxProviders, providers, new MessageProviderRenderer());
-        new ModelAndView<Listitem, Message>(lboxReceived, received, new ReceivedMessageRenderer());
+        lboxProviders.setModel(providers);
+        lboxProviders.setRenderer(new MessageProviderRenderer());
+        gridReceived.getRows().setModel(received);
+        gridReceived.getRows().setRenderer(new ReceivedMessageRenderer(gridReceived));
         //channels.setMultiple(true);
-        new ModelAndView<Listitem, String>(lboxSubscriptions, channels, new SubscriptionRenderer());
-        //TODO: cboxChannels.setModel(channels2);
+        lboxSubscriptions.setModel(channels);
+        lboxSubscriptions.setRenderer(new SubscriptionRenderer());
+        cboxChannels.setModel(channels2);
     }
     
     private Collection<IMessageProducer> getProviders() {
@@ -137,22 +144,19 @@ public class MainController extends PluginController {
         }
     }
     
-    public void onClick$btnAddSubscription() {
-        DialogUtil.input("Enter the name of the channel to subscribe to:", "Subscribe to Channel", new IInputCallback() {
-            
-            @Override
-            public void onComplete(String channel) {
-                if (channel != null && !channels.contains(channel)) {
-                    channels.add(channel);
-                    channels2.add(channel);
-                    subscribe(channel, true);
-                }
+    @EventHandler(value = "click", target = "btnAddSubscription")
+    private void onClick$btnAddSubscription() {
+        DialogUtil.input("Enter the name of the channel to subscribe to:", "Subscribe to Channel", (channel) -> {
+            if (channel != null && !channels.contains(channel)) {
+                channels.add(channel);
+                channels2.add(channel);
+                subscribe(channel, true);
             }
-            
         });
     }
     
-    public void onClick$btnRemoveSubscription() {
+    @EventHandler(value = "click", target = "btnRemoveSubscription")
+    private void onClick$btnRemoveSubscription() {
         Listitem item = lboxSubscriptions.getSelectedItem();
         
         if (item != null) {
@@ -164,36 +168,42 @@ public class MainController extends PluginController {
         }
     }
     
-    public void onClick$btnClearMessage() {
-        tboxMessage.setValue(null);
+    @EventHandler(value = "click", target = "btnClearMessage")
+    private void onClick$btnClearMessage() {
+        memoMessage.setValue(null);
     }
     
-    public void onClick$btnSendMessage() {
+    @EventHandler(value = "click", target = "btnSendMessage")
+    private void onClick$btnSendMessage() {
         Comboitem item = cboxChannels.getSelectedItem();
         
         if (item != null) {
             String type = item.getLabel();
             String channel = chkAsEvent.isChecked() ? EventUtil.getChannelName(type) : type;
-            Message message = chkAsEvent.isChecked() ? new EventMessage(type, tboxMessage.getValue())
-                    : new Message(channel, tboxMessage.getValue());
+            Message message = chkAsEvent.isChecked() ? new EventMessage(type, memoMessage.getValue())
+                    : new Message(channel, memoMessage.getValue());
             producerService.publish(channel, message);
         }
     }
     
-    public void onClick$btnClearReceived() {
+    @EventHandler(value = "click", target = "btnClearReceived")
+    private void onClick$btnClearReceived() {
         received.clear();
     }
     
-    public void onChange$cboxChannels(ChangeEvent event) {
+    @EventHandler(value = "change", target = "cboxChannels")
+    private void onChange$cboxChannels(ChangeEvent event) {
         btnSendMessage.setDisabled(false);
     }
     
-    public void onChange$lboxSubscriptions(ChangeEvent event) {
+    @EventHandler(value = "change", target = "lboxSubscriptions")
+    private void onChange$lboxSubscriptions(ChangeEvent event) {
         Listitem item = (Listitem) event.getTarget();
         subscribe(item.getLabel(), item.isSelected());
     }
     
-    public void onChange$lboxProviders(ChangeEvent event) {
+    @EventHandler(value = "change", target = "lboxProviders")
+    private void onChange$lboxProviders(ChangeEvent event) {
         Listitem item = (Listitem) event.getTarget();
         IMessageProducer producer = (IMessageProducer) item.getData();
         
@@ -205,7 +215,7 @@ public class MainController extends PluginController {
     }
     
     public void onScrollToBottom() {
-        Listitem item = (Listitem) lboxReceived.getChildAt(lboxReceived.getChildCount() - 1);
+        Listitem item = (Listitem) gridReceived.getChildAt(gridReceived.getChildCount() - 1);
         item.scrollIntoView(false);
     }
     

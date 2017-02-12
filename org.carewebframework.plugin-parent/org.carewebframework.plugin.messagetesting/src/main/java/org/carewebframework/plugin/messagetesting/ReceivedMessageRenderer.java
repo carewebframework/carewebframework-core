@@ -27,29 +27,36 @@ package org.carewebframework.plugin.messagetesting;
 
 import org.carewebframework.api.messaging.Message;
 import org.carewebframework.web.component.Cell;
+import org.carewebframework.web.component.Grid;
 import org.carewebframework.web.component.Label;
-import org.carewebframework.web.component.Listitem;
+import org.carewebframework.web.component.Row;
 import org.carewebframework.web.event.DblclickEvent;
 import org.carewebframework.web.model.IComponentRenderer;
 
-public class ReceivedMessageRenderer implements IComponentRenderer<Listitem, Message> {
+public class ReceivedMessageRenderer implements IComponentRenderer<Row, Message> {
     
-    @Override
-    public Listitem render(Message message) {
-        Listitem item = new Listitem();
-        createCell(item, message.getCreated());
-        createCell(item, message.getMetadata("cwf.pub.channel"));
-        createCell(item, message.getType());
-        createCell(item, message.getId());
-        Cell cell = createCell(item, message.getPayload());
-        cell.setHint(cell.getChild(Label.class).getLabel());
-        item.addEventForward(DblclickEvent.TYPE, item.getListbox(), null);
-        return item;
+    private final Grid grid;
+    
+    public ReceivedMessageRenderer(Grid grid) {
+        this.grid = grid;
     }
     
-    public Cell createCell(Listitem item, Object value) {
+    @Override
+    public Row render(Message message) {
+        Row row = new Row();
+        createCell(row, message.getCreated());
+        createCell(row, message.getMetadata("cwf.pub.channel"));
+        createCell(row, message.getType());
+        createCell(row, message.getId());
+        Cell cell = createCell(row, message.getPayload());
+        cell.setHint(cell.getChild(Label.class).getLabel());
+        row.addEventForward(DblclickEvent.TYPE, grid, null);
+        return row;
+    }
+    
+    public Cell createCell(Row row, Object value) {
         Cell cell = new Cell(value == null ? null : value.toString());
-        item.addChild(cell);
+        row.addChild(cell);
         return cell;
     }
 }

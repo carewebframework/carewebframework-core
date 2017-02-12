@@ -1,79 +1,62 @@
 <page>
-
-	<style>
-		.cwf-messagetesting-root .z-toolbar-content>* { 
-			float: right; 
-			margin-left: 4px;
-		}
-
-		.cwf-messagetesting-root .z-toolbar-content>.z-label {
-			float: left; 
-			font-weight: bold; 
-			zoom: 110%
-		}
-
-	</style>
-
 	<window title="Messaging Test Plugin - Warning:  Do not use this in a production system."
 		class="flavor:panel-danger" height="100%" width="100%"
-		controller="${cwfMessageTestingController}">
+		controller="${@cwfMessageTestingController}">
 		<paneview orientation="vertical" class="cwf-messagetesting-root" height="100%">
 			<pane splittable="true">
-				<hbox vflex="1">
-					<cell width="50%">
+				<paneview flex="1">
+					<pane width="50%" splittable="true">
 						<toolbar height="30px">
 							<label label="Messaging Providers" />
 						</toolbar>
-						<listbox name="lboxProviders" checkmark="true" multiple="true"
-							width="100%" vflex="1" />
-					</cell>
-					<splitter />
-					<cell width="50%">
+						<listbox name="lboxProviders" multiple="true"
+							width="100%" flex="1" />
+					</pane>
+					<pane flex="1">
 						<toolbar height="30px">
 							<label label="Subscriptions" />
 							<button name="btnAddSubscription" label="Add"
 								class="size:size:btn-xs flavor:btn-primary" />
 						</toolbar>
-						<listbox name="lboxSubscriptions" checkmark="true" multiple="true"
-							width="100%" vflex="1" />
-					</cell>
-				</hbox>
+						<listbox name="lboxSubscriptions"  multiple="true"
+							width="100%" flex="1" />
+					</pane>
+				</paneview>
 			</pane>
 			<pane height="50%">
-				<hbox vflex="1">
-					<cell width="50%">
+				<paneview flex="1">
+					<pane width="50%" splittable="true">
 						<toolbar>
 							<label label="Enter Message" />
 							<button name="btnSendMessage" label="Send" disabled="true"
-								zclass="btn" class="size:size:btn-xs flavor:btn-success" />
+								class="size:btn-xs flavor:btn-success" />
 							<button name="btnClearMessage" label="Clear"
-								zclass="btn" class="size:size:btn-xs flavor:btn-danger" />
+								class="size:btn-xs flavor:btn-danger" />
 							<combobox name="cboxChannels" readonly="true" />
 							<checkbox name="chkAsEvent" label="Send as event" style="padding-top:5px" />
 						</toolbar>
-						<textbox name="tboxMessage" multiline="true" vflex="1"
-							width="100%" />
-					</cell>
-					<splitter />
-					<cell width="50%">
+						<memobox name="memoMessage" flex="1" width="100%" />
+					</pane>
+					<pane flex="1">
 						<toolbar>
 							<label label="Received" />
-							<separator orient="vertical" width="20px" />
+							<div width="20px" />
 							<button name="btnClearReceived" label="Clear"
-								class="size:size:btn-xs flavor:btn-danger" />
+								class="size:btn-xs flavor:btn-danger" />
 							<checkbox name="chkScrollLock" label="Scroll Lock" style="padding-top:5px" />
 						</toolbar>
-						<listbox name="lboxReceived" width="100%" vflex="1">
-							<listhead>
-								<listheader label="Time" />
-								<listheader label="Channel" />
-								<listheader label="Type" />
-								<listheader label="ID" />
-								<listheader label="Payload" />
-							</listhead>
-						</listbox>
-					</cell>
-				</hbox>
+						<grid name="gridReceived" width="100%" flex="1">
+							<columns>
+								<column label="Time" />
+								<column label="Channel" />
+								<column label="Type" />
+								<column label="ID" />
+								<column label="Payload" />
+							</columns>
+							<rows />
+						</grid>
+					</pane>
+				</paneview>
 			</pane>
 		</paneview>
 	</window>
