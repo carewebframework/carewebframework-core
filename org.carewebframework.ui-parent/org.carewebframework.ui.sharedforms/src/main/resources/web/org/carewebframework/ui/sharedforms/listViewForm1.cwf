@@ -1,9 +1,0 @@
-<paneview name="mainView" height="100%" width="100%">
-	<pane name="listPane" flex="1">
-		<grid name="grid" height="100%" width="100%">
-			<columns />
-			<rows />
-		</grid>
-	</pane>
-	<pane name="detailPane" visible="false" />
-</paneview>

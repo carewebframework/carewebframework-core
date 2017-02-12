@@ -1,0 +1,19 @@
+<window name="panel" height="100%" width="100%" class="sharedForms-captioned">
+	<paneview name="mainView" height="100%" width="100%">
+		<pane name="listPane" flex="1">
+			<grid name="grid" height="100%" width="100%">
+				<columns name="columns" />
+				<rows name="rows" selectable="single" />
+			</grid>
+			<label name="status" visible="false" width="100%"/>
+		</pane>
+		<pane name="detailPane" visible="false" width="50%">
+			<html name="detailView" />
+		</pane>
+	</paneview>
+	<toolbar name="toolbar" width="100%" visible="false" />
+	<menupopup name="menupopup">
+		<menuitem name="mnuRefresh" label="${@msg.cwf.btn.refresh.label}" />
+	</menupopup>
+	<stylesheet src="web/org/carewebframework/ui/sharedforms/sharedForms.css" />
+</window>

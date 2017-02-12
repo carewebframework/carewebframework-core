@@ -108,10 +108,11 @@ public abstract class ListFormController<DAO> extends CaptionedFormController {
         
         @Override
         public Row render(DAO object) {
-            Row item = new Row();
-            item.addEventForward(ClickEvent.TYPE, grid, ChangeEvent.TYPE);
-            ListFormController.this.renderRow(item, object);
-            return item;
+            Row row = new Row();
+            row.setData(object);
+            row.addEventForward(ClickEvent.TYPE, grid, ChangeEvent.TYPE);
+            ListFormController.this.renderRow(row, object);
+            return row;
         }
         
     };
@@ -300,13 +301,13 @@ public abstract class ListFormController<DAO> extends CaptionedFormController {
         status(null);
     }
     
-    protected Row getSelectedItem() {
+    protected Row getSelectedRow() {
         return grid.getRows().getSelectedRow();
     }
     
     @SuppressWarnings("unchecked")
     protected DAO getSelectedValue() {
-        Row item = getSelectedItem();
+        Row item = getSelectedRow();
         
         if (item != null) {
             return (DAO) item.getData();
@@ -442,7 +443,7 @@ public abstract class ListFormController<DAO> extends CaptionedFormController {
     @EventHandler(value = "change", target = "@rows")
     private void onChange$rows(ChangeEvent event) {
         if (getShowDetailPane()) {
-            rowSelected(getSelectedItem());
+            rowSelected(getSelectedRow());
         }
     }
     

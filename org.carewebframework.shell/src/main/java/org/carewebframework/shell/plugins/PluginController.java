@@ -37,7 +37,7 @@ import org.carewebframework.web.component.BaseComponent;
  * Base controller for plugins. Offers convenience methods for determining activation state,
  * accessing the plugin plugin, and managing background threads.
  */
-public class PluginController extends FrameworkController implements IPluginEvent {
+public class PluginController extends FrameworkController implements IPluginController, IPluginEvent {
     
     private boolean isActive;
     

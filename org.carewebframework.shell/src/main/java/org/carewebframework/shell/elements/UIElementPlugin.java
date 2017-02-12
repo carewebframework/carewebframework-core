@@ -38,6 +38,7 @@ import org.carewebframework.shell.CareWebShell;
 import org.carewebframework.shell.CareWebUtil;
 import org.carewebframework.shell.Constants;
 import org.carewebframework.shell.designer.DesignMask.MaskMode;
+import org.carewebframework.shell.plugins.IPluginController;
 import org.carewebframework.shell.plugins.IPluginEvent;
 import org.carewebframework.shell.plugins.IPluginEventListener;
 import org.carewebframework.shell.plugins.PluginDefinition;
@@ -90,6 +91,8 @@ public class UIElementPlugin extends UIElementBase implements IDisable, IPropert
     private List<IPluginEvent> pluginEventListeners1;
     
     private List<IPluginEventListener> pluginEventListeners2;
+    
+    private List<IPluginController> pluginControllers;
     
     private List<BaseUIComponent> registeredComponents;
     
@@ -551,15 +554,24 @@ public class UIElementPlugin extends UIElementBase implements IDisable, IPropert
         PluginDefinition definition = getDefinition();
         
         if (!initialized && definition != null) {
+            BaseComponent top;
+            
             try {
                 initialized = true;
+                top = container.getFirstChild();
                 
-                if (getFirstChild() == null) {
-                    PageUtil.createPage(definition.getUrl(), container);
+                if (top == null) {
+                    top = PageUtil.createPage(definition.getUrl(), container).get(0);
                 }
             } catch (Throwable e) {
                 container.destroyChildren();
                 throw createChainedException("Initialize", e, null);
+            }
+            
+            if (pluginControllers != null) {
+                for (Object controller : pluginControllers) {
+                    top.wireController(controller);
+                }
             }
             
             findListeners(container);
@@ -715,6 +727,21 @@ public class UIElementPlugin extends UIElementBase implements IDisable, IPropert
     }
     
     /**
+     * Registers an object as a controller if it implements the IPluginController interface.
+     * 
+     * @param object Object to register.
+     */
+    public void tryRegisterController(Object object) {
+        if (object instanceof IPluginController) {
+            if (pluginControllers == null) {
+                pluginControllers = new ArrayList<>();
+            }
+            
+            pluginControllers.add((IPluginController) object);
+        }
+    }
+    
+    /**
      * Registers one or more named properties to the container. Using this, a plugin can expose
      * properties for serialization and deserialization.
      * 
@@ -800,6 +827,7 @@ public class UIElementPlugin extends UIElementBase implements IDisable, IPropert
         } else {
             registeredBeans.put(beanId, bean);
             tryRegisterListener(bean, true);
+            tryRegisterController(bean);
         }
     }
     

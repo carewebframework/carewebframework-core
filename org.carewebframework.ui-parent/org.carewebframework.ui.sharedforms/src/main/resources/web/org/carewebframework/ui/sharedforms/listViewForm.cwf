@@ -1,4 +1,0 @@
-<template src="web/org/carewebframework/ui/sharedforms/captionedForm.cwf">
-	<snippet anchor="anchorBase" src=web/org/carewebframework/ui/sharedforms/listViewForm1.cwf
-	<snippet anchor="anchorMenu" src=web/org/carewebframework/ui/sharedforms/listViewForm2.cwf
-</template>

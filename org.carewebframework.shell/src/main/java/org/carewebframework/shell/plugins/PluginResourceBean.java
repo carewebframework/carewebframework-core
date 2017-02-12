@@ -85,7 +85,7 @@ public class PluginResourceBean implements IPluginResource {
     public void register(CareWebShell shell, UIElementBase owner, boolean register) {
         if (register) {
             UIElementPlugin plugin = (UIElementPlugin) owner;
-            plugin.registerBean(getBean(), isRequired());
+            plugin.registerBean(bean, required);
         }
     }
     

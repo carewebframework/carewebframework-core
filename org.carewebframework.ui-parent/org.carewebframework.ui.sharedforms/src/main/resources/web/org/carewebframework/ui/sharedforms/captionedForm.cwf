@@ -1,6 +1,6 @@
 <window name="panel" height="100%" width="100%" class="sharedForms-captioned">
-	<div name="anchorBase" flex="1" width="100%" />
-	<toolbar name="anchorToolbar" width="100%" visible="false" />
-	<menupopup name="anchorMenu" />
+	<div name="mainView" flex="1" width="100%" />
+	<toolbar name="toolbar" width="100%" visible="false" />
+	<menupopup name="menupopup" />
 	<style src="web/org/carewebframework/ui/sharedforms/sharedForms.css" />
 </window>
