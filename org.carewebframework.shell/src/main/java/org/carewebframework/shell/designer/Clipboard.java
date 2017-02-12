@@ -38,7 +38,7 @@ import org.carewebframework.web.event.EventUtil;
  */
 public class Clipboard {
     
-    public static final String ON_CLIPBOARD_CHANGE = "clipboardChange";
+    public static final String CLIPBOARD_CHANGE_EVENT = "clipboardChange";
     
     private static final Clipboard instance = new Clipboard();
     
@@ -88,7 +88,7 @@ public class Clipboard {
     
     private void fireChange() {
         for (BaseComponent comp : new ArrayList<>(listeners)) {
-            EventUtil.post(new Event(ON_CLIPBOARD_CHANGE, comp, data));
+            EventUtil.post(new Event(CLIPBOARD_CHANGE_EVENT, comp, data));
         }
     }
 }

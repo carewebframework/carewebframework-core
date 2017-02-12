@@ -243,6 +243,14 @@
 	border-top: 1px solid gray;
 }
 
+.cwf-addcomponent .cwf_treenode img {
+    opacity: .7;    
+}
+
+.cwf-addcomponent .cwf_treenode img:hover {
+    opacity: 1;    
+}
+
 @media print {
 }
 

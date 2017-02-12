@@ -1,4 +1,4 @@
-<window width="400px" height="400px"
+<window width="400px" height="400px" class="cwf-addcomponent"
 	controller="org.carewebframework.shell.designer.AddComponent">
 	<treeview name="tree" flex="1" >
 		<treenode name="tnFavorites" visible="false"

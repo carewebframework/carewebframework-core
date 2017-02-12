@@ -27,8 +27,11 @@ package org.carewebframework.shell.designer;
 
 import java.util.Collections;
 
+import org.apache.commons.lang.StringUtils;
+import org.carewebframework.common.StrUtil;
 import org.carewebframework.shell.elements.UIElementBase;
 import org.carewebframework.shell.layout.UILayout;
+import org.carewebframework.shell.plugins.PluginDefinition;
 import org.carewebframework.ui.dialog.DialogUtil;
 import org.carewebframework.web.ancillary.IAutoWired;
 import org.carewebframework.web.annotation.EventHandler;
@@ -53,9 +56,11 @@ import org.carewebframework.web.event.IEventListener;
  */
 public class LayoutDesigner implements IAutoWired {
     
-    private static final String CWF_PAGE = DesignConstants.RESOURCE_PREFIX + "layoutDesigner.cwf";
+    private static final String DIALOG = DesignConstants.RESOURCE_PREFIX + "layoutDesigner.cwf";
     
-    private static final String ATTR_BRING_TO_FRONT = CWF_PAGE + ".BTF";
+    private static final String ATTR_BRING_TO_FRONT = DIALOG + ".BTF";
+    
+    private final String noDescriptionHint = StrUtil.getLabel("cwf.shell.designer.add.component.description.missing.hint");
     
     private enum MovementType {
         INVALID, // Invalid movement type
@@ -119,6 +124,9 @@ public class LayoutDesigner implements IAutoWired {
     
     private boolean bringToFront;
     
+    /**
+     * Listens for changes to the UI, filtering out all but those associated with a UI element.
+     */
     private final IEventListener layoutListener = (event) -> {
         if (UIElementBase.getAssociatedUIElement(event.getRelatedTarget()) != null) {
             requestRefresh();
@@ -156,11 +164,11 @@ public class LayoutDesigner implements IAutoWired {
      */
     private static Window getInstance(boolean autoCreate) {
         Page page = ExecutionContext.getPage();
-        Window dlg = page.getAttribute(CWF_PAGE, Window.class);
+        Window dlg = page.getAttribute(DIALOG, Window.class);
         
         if (autoCreate && dlg == null) {
-            dlg = DialogUtil.popup(CWF_PAGE, true, true, false);
-            page.setAttribute(CWF_PAGE, dlg);
+            dlg = DialogUtil.popup(DIALOG, true, true, false);
+            page.setAttribute(DIALOG, dlg);
         }
         
         return dlg;
@@ -226,76 +234,78 @@ public class LayoutDesigner implements IAutoWired {
      * Refresh a subtree of the component tree. Called recursively.
      * 
      * @param root Root UI element of the subtree.
-     * @param parentNode Tree item that will be the parent node of the subtree.
+     * @param parentNode Tree node that will be the parent node of the subtree.
      * @param selectedElement The currently selected element.
      */
     private void buildTree(UIElementBase root, Treenode parentNode, UIElementBase selectedElement) {
-        Treenode item = createItem(root);
-        item.setParent(parentNode == null ? tree : parentNode);
+        Treenode node = createNode(root);
+        node.setParent(parentNode == null ? tree : parentNode);
         
         if (root == selectedElement) {
-            tree.setSelectedNode(item);
+            tree.setSelectedNode(node);
         }
         
         for (UIElementBase child : root.getChildren()) {
-            buildTree(child, item, selectedElement);
+            buildTree(child, node, selectedElement);
         }
     }
     
     /**
-     * Creates a tree item associated with the specified UI element.
+     * Creates a tree node associated with the specified UI element.
      * 
      * @param ele UI element
-     * @return Newly created tree item.
+     * @return Newly created tree node.
      */
-    private Treenode createItem(UIElementBase ele) {
+    private Treenode createNode(UIElementBase ele) {
         String label = ele.getDisplayName();
         String instanceName = ele.getInstanceName();
+        PluginDefinition def = ele.getDefinition();
         
         if (!label.equalsIgnoreCase(instanceName)) {
             label += " - " + instanceName;
         }
         
-        Treenode item = new Treenode();
-        item.setLabel(label);
-        item.setData(ele);
-        item.addEventForward(DropEvent.class, window, null);
-        item.addEventForward(DblclickEvent.class, btnProperties, ClickEvent.TYPE);
+        Treenode node = new Treenode();
+        node.setLabel(label);
+        node.setData(ele);
+        node.setHint(StringUtils.defaultString(def.getDescription(), noDescriptionHint));
+        node.addEventForward(DropEvent.class, window, null);
+        node.addEventForward(DblclickEvent.class, btnProperties, ClickEvent.TYPE);
         
-        if (!ele.isLocked() && !ele.getDefinition().isInternal()) {
-            item.setDragid("d" + dragId++);
+        if (!ele.isLocked() && !def.isInternal()) {
+            node.setDragid("d" + dragId++);
         }
         
-        return item;
+        return node;
     }
     
     /**
-     * Returns the tree item containing the component.
+     * Returns the tree node containing the component.
      * 
-     * @param cmpt The component whose containing tree item is sought.
-     * @return The tree item.
+     * @param comp The component whose containing tree node is sought.
+     * @return The tree node.
      */
-    private Treenode getTreenode(BaseComponent cmpt) {
-        return (Treenode) (cmpt instanceof Treenode ? cmpt : cmpt.getAncestor(Treenode.class));
+    private Treenode getTreenode(BaseComponent comp) {
+        return (Treenode) (comp instanceof Treenode ? comp : comp.getAncestor(Treenode.class));
     }
     
     /**
      * Returns currently selected UI element, or null if none selected.
      * 
-     * @return Currently selected item (may be null).
+     * @return Currently selected element (may be null).
      */
     private UIElementBase selectedElement() {
         return getElement(tree.getSelectedNode());
     }
     
     /**
-     * Returns the UI element associated with the given tree item.
+     * Returns the UI element associated with the given tree node.
      * 
-     * @param item A tree item.
-     * @return The UI element associated with the tree item.
+     * @param node A tree node.
+     * @return The UI element associated with the tree node.
      */
-    private UIElementBase getElement(Treenode item) {
-        return (UIElementBase) (item == null ? rootElement : item.getData());
+    private UIElementBase getElement(Treenode node) {
+        return (UIElementBase) (node == null ? rootElement : node.getData());
     }
     
     /**
@@ -363,32 +373,32 @@ public class LayoutDesigner implements IAutoWired {
         return MovementType.INVALID;
     }
     
-    private boolean canMove(Treenode item) {
-        return item != null && item.getDragid() != null;
+    private boolean canMove(Treenode node) {
+        return node != null && node.getDragid() != null;
     }
     
     /**
-     * Updates the drop ids for all tree items.
+     * Updates the drop ids for all tree nodes.
      */
     private void updateDroppable() {
-        Iterable<Treenode> items = tree.getChildren(Treenode.class);
+        Iterable<Treenode> nodes = tree.getChildren(Treenode.class);
         
-        for (Treenode item : items) {
-            updateDroppable(item, items);
+        for (Treenode node : nodes) {
+            updateDroppable(node, nodes);
         }
     }
     
     /**
      * Update the drop id for the specified target.
      * 
-     * @param target Target tree item.
-     * @param items Item list.
+     * @param target Target tree node.
+     * @param nodes Node list.
      */
-    private void updateDroppable(Treenode target, Iterable<Treenode> items) {
+    private void updateDroppable(Treenode target, Iterable<Treenode> nodes) {
         StringBuilder sb = new StringBuilder();
         
         if (canMove(target)) {
-            for (Treenode dragged : items) {
+            for (Treenode dragged : nodes) {
                 if (movementType(dragged, target, true) != MovementType.INVALID) {
                     String id = dragged.getDragid();
                     sb.append(sb.length() > 0 ? "," : "").append(id);
@@ -426,7 +436,7 @@ public class LayoutDesigner implements IAutoWired {
     }
     
     /**
-     * Performs a cut operation on the selected item.
+     * Performs a cut operation on the selected node.
      */
     @EventHandler(value = "click", target = "@btnCut")
     private void onClick$btnCut() {
@@ -435,7 +445,7 @@ public class LayoutDesigner implements IAutoWired {
     }
     
     /**
-     * Performs a copy operation on the selected item.
+     * Performs a copy operation on the selected node.
      */
     @EventHandler(value = "click", target = "@btnCopy")
     private void onClick$btnCopy() {
@@ -478,7 +488,7 @@ public class LayoutDesigner implements IAutoWired {
     }
     
     /**
-     * Displays the property grid for the currently selected item.
+     * Displays the property grid for the currently selected node.
      */
     @EventHandler(value = "click", target = "@btnProperties")
     private void onClick$btnProperties() {
@@ -515,26 +525,26 @@ public class LayoutDesigner implements IAutoWired {
     
     @EventHandler(value = "click", target = "@btnUp")
     private void onClick$btnUp() {
-        Treenode item = tree.getSelectedNode();
-        doDrop(item, (Treenode) item.getPreviousSibling(), true);
+        Treenode node = tree.getSelectedNode();
+        doDrop(node, (Treenode) node.getPreviousSibling(), true);
     }
     
     @EventHandler(value = "click", target = "@btnDown")
     private void onClick$btnDown() {
-        Treenode item = tree.getSelectedNode();
-        doDrop((Treenode) item.getNextSibling(), item, true);
+        Treenode node = tree.getSelectedNode();
+        doDrop((Treenode) node.getNextSibling(), node, true);
     }
     
     @EventHandler(value = "click", target = "@btnRight")
     private void onClick$btnRight() {
-        Treenode item = tree.getSelectedNode();
-        doDrop(item, (Treenode) item.getPreviousSibling(), false);
+        Treenode node = tree.getSelectedNode();
+        doDrop(node, (Treenode) node.getPreviousSibling(), false);
     }
     
     @EventHandler(value = "click", target = "@btnLeft")
     private void onClick$btnLeft() {
-        Treenode item = tree.getSelectedNode();
-        doDrop(item, (Treenode) item.getParent().getParent(), false);
+        Treenode node = tree.getSelectedNode();
+        doDrop(node, (Treenode) node.getParent().getParent(), false);
     }
     
     /**
@@ -548,6 +558,7 @@ public class LayoutDesigner implements IAutoWired {
     /**
      * Invoked when the clipboard contents changes.
      */
+    @EventHandler(value = Clipboard.CLIPBOARD_CHANGE_EVENT)
     private void onClipboardChange() {
         updateControls();
     }
@@ -598,7 +609,7 @@ public class LayoutDesigner implements IAutoWired {
     private void onClose(Event event) {
         Page page = window.getPage();
         page.removeEventListener("register unregister", layoutListener);
-        page.removeAttribute(CWF_PAGE);
+        page.removeAttribute(DIALOG);
         page.setAttribute(ATTR_BRING_TO_FRONT, bringToFront);
         clipboard.removeListener(window);
     }

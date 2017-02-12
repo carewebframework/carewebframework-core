@@ -25,6 +25,7 @@
  */
 package org.carewebframework.shell.designer;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,15 +39,14 @@ import org.carewebframework.shell.elements.UIElementPlugin;
 import org.carewebframework.shell.layout.LayoutUtil;
 import org.carewebframework.shell.plugins.PluginDefinition;
 import org.carewebframework.shell.plugins.PluginRegistry;
+import org.carewebframework.ui.icon.IconUtil;
 import org.carewebframework.ui.util.TreeUtil;
 import org.carewebframework.web.ancillary.IAutoWired;
 import org.carewebframework.web.ancillary.IResponseCallback;
 import org.carewebframework.web.annotation.EventHandler;
 import org.carewebframework.web.annotation.WiredComponent;
 import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.component.BaseUIComponent;
 import org.carewebframework.web.component.Button;
-import org.carewebframework.web.component.Span;
 import org.carewebframework.web.component.Treenode;
 import org.carewebframework.web.component.Treeview;
 import org.carewebframework.web.component.Window;
@@ -71,17 +71,11 @@ public class AddComponent implements IAutoWired {
     
     private boolean createChild;
     
-    private int definitionCount;
-    
     private List<String> favorites;
     
     private boolean favoritesChanged;
     
     private final String favoritesCategory = StrUtil.getLabel("cwf.shell.plugin.category.favorite");
-    
-    private final String favoritesAddHint = StrUtil.getLabel("cwf.shell.designer.add.component.favorite.add.hint");
-    
-    private final String favoritesRemoveHint = StrUtil.getLabel("cwf.shell.designer.add.component.favorite.remove.hint");
     
     private final String noDescriptionHint = StrUtil.getLabel("cwf.shell.designer.add.component.description.missing.hint");
     
@@ -100,7 +94,7 @@ public class AddComponent implements IAutoWired {
     private final IEventListener favoriteListener1 = (event) -> {
         Treenode node = (Treenode) event.getTarget();
         String path = (String) node.getAttribute("path");
-        boolean isFavorite = !(Boolean) node.getAttribute("favorite");
+        boolean isFavorite = !node.getAttribute("favorite", false);
         Treenode other = (Treenode) node.getAttribute("other");
         favoritesChanged = true;
         
@@ -239,6 +233,7 @@ public class AddComponent implements IAutoWired {
     private void loadFavorites() {
         try {
             favorites = PropertyUtil.getValues(DesignConstants.DESIGN_FAVORITES_PROPERTY);
+            favorites = favorites == null ? new ArrayList<>() : favorites;
         } catch (Exception e) {
             favorites = null;
         }
@@ -268,6 +263,11 @@ public class AddComponent implements IAutoWired {
         Treenode node = TreeUtil.findNode(tree, path, true);
         node.setData(def);
         node.setHint(StringUtils.defaultString(def.getDescription(), noDescriptionHint));
+        node.addEventListener(ClickEvent.TYPE, (event) -> {
+            if (event.getTargetId().endsWith("-img")) {
+                EventUtil.send(ON_FAVORITE, event.getTarget(), null);
+            }
+        });
         
         if (disabled) {
             node.setDisabled(true);
@@ -276,12 +276,6 @@ public class AddComponent implements IAutoWired {
         }
         
         if (favorites != null) {
-            Span image = new Span();
-            image.addClass("glyphicon");
-            image.addStyle("float", "left");
-            BaseComponent cell = node.getFirstChild();
-            cell.addChild(image, cell.getFirstChild());
-            image.addEventForward(ClickEvent.TYPE, node, ON_FAVORITE);
             node.addEventListener(ON_FAVORITE, other == null ? favoriteListener1 : favoriteListener2);
             
             if (isFavorite && other == null) {
@@ -290,26 +284,22 @@ public class AddComponent implements IAutoWired {
             
             node.setAttribute("other", other);
             node.setAttribute("path", path);
-            node.setAttribute("image", image);
             setFavoriteStatus(node, isFavorite);
         }
         return node;
     }
     
     /**
-     * Updates the tree item according to the favorite status.
+     * Updates the tree node according to the favorite status.
      * 
-     * @param item Tree item to update.
-     * @param isFavorite If true, the item is a favorite.
-     * @return The original image.
+     * @param node Tree node to update.
+     * @param isFavorite If true, the node is a favorite.
      */
-    private BaseUIComponent setFavoriteStatus(Treenode item, boolean isFavorite) {
-        BaseUIComponent image = (BaseUIComponent) item.getAttribute("image");
-        image.addClass(isFavorite ? "glyphicon-star text-primary" : "glyphicon-star-empty text-muted");
-        image.setHint(isFavorite ? favoritesRemoveHint : favoritesAddHint);
-        item.setAttribute("favorite", isFavorite);
+    private void setFavoriteStatus(Treenode node, boolean isFavorite) {
+        String img = IconUtil.getIconPath(isFavorite ? "starOn.png" : "starOff.png", "16x16", null);
+        node.setImage(img);
+        node.setAttribute("favorite", isFavorite);
         tnFavorites.setVisible(isFavorite || tnFavorites.getFirstChild() != null);
-        return image;
     }
     
     /**
@@ -359,4 +349,5 @@ public class AddComponent implements IAutoWired {
     private void onChange$tree() {
         btnOK.setDisabled(selectedPluginDefinition() == null);
     }
+    
 }
