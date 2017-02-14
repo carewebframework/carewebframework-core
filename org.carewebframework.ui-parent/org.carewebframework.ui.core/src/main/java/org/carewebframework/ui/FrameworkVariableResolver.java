@@ -25,11 +25,12 @@
  */
 package org.carewebframework.ui;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.carewebframework.api.FrameworkUtil;
 import org.carewebframework.api.spring.SpringUtil;
-
+import org.carewebframework.ui.zk.ZKUtil;
 import org.springframework.context.ApplicationContext;
-
 import org.zkoss.xel.VariableResolver;
 import org.zkoss.xel.XelException;
 
@@ -38,6 +39,8 @@ import org.zkoss.xel.XelException;
  * ZK page during desktop initialization.
  */
 public class FrameworkVariableResolver implements VariableResolver {
+    
+    private static final Log log = LogFactory.getLog(FrameworkVariableResolver.class);
     
     private ApplicationContext appContext;
     
@@ -78,7 +81,7 @@ public class FrameworkVariableResolver implements VariableResolver {
                 object = appContext.getBean(name);
             }
         } catch (Exception e) {
-            
+            log.warn("Error resolving variable " + name + ": " + ZKUtil.formatExceptionForDisplay(e));
         }
         
         return object;
