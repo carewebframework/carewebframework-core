@@ -27,7 +27,6 @@ package org.carewebframework.api.context;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.carewebframework.api.domain.IUser;
 
 /**
@@ -95,14 +94,14 @@ public class UserContext extends ManagedContext<IUser> {
     }
     
     /**
-     * Returns a priority value of -100. Among concurrent context change transactions, a user
-     * context change should generally occur last, therefore it has a negative priority value.
+     * Returns a priority value of 1000. Among concurrent context change transactions, a user
+     * context change should generally occur last.
      * 
      * @return Priority value for context manager.
      */
     @Override
     public int getPriority() {
-        return -100;
+        return 1000;
     }
     
 }
