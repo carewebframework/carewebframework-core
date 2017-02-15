@@ -40,17 +40,4 @@
 
 	</beans>
 
-	<beans profile="desktop">
-
-		<!-- globalEventDispatcher: Mediates communications between the local and 
-			the global event manager, in this case a AMQP messaging server. -->
-		<bean id="globalEventDispatcher" init-method="init"
-			destroy-method="destroy" cwf:override="always"
-			class="org.carewebframework.messaging.amqp.rabbitmq.GlobalEventDispatcher">
-			<property name="localEventDispatcher" ref="eventManager" />
-			<property name="broker" ref="amqpBroker" />
-		</bean>
-
-	</beans>
-
 </beans>
