@@ -82,7 +82,7 @@ public class IconPicker extends Div {
     
     public void setIconLibrary(IIconLibrary iconLibrary) {
         this.iconLibrary = iconLibrary;
-        Comboitem item = (Comboitem) cboLibrary.getChildByData(iconLibrary);
+        Comboitem item = (Comboitem) cboLibrary.findChildByData(iconLibrary);
         
         if (item != null) {
             cboLibrary.setSelectedItem(item);

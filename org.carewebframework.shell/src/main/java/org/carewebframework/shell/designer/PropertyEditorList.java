@@ -130,7 +130,7 @@ public class PropertyEditorList extends PropertyEditorBase<Combobox> {
     
     @Override
     protected void setValue(Object value) {
-        Comboitem item = (Comboitem) editor.getChildByData(value);
+        Comboitem item = (Comboitem) editor.findChildByData(value);
         editor.setSelectedItem(item);
         
         if (item == null) {
