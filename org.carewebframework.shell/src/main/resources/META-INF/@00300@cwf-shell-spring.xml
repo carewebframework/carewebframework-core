@@ -13,7 +13,18 @@
 		http://www.carewebframework.org/schema/theme/theme-extensions.xsd">
 
 	<beans profile="root">
-		<!-- pluginRegistry: Represents a registry of all known CareWeb plugins. -->
+		<!-- Register shell components -->
+		<bean class="org.springframework.beans.factory.config.MethodInvokingBean">
+			<property name="targetObject" ref="cwf_ComponentScanner" />
+			<property name="targetMethod" value="scan" />
+			<property name="arguments">
+				<list>
+					<value type="java.lang.String">org.carewebframework.shell</value>
+				</list>
+			</property>
+		</bean>
+		
+		<!-- A registry of all known CareWeb plugins. -->
 		<bean id="pluginRegistry" class="org.carewebframework.shell.plugins.PluginRegistry"
 			factory-method="getInstance" />
 
@@ -22,6 +33,7 @@
 			<constructor-arg ref="propertyService" />
 		</bean>
 
+		<!-- Default icon library -->
 		<bean class="org.carewebframework.ui.icon.IconLibraryBase">
 			<constructor-arg value="carewebframework" />
 			<constructor-arg value="/org/carewebframework/shell/images/" />
@@ -181,7 +193,7 @@
 						<cwp:entry key="false">${@msg.cwf.shell.plugin.splitterpane.relative.no}</cwp:entry>
 					</cwp:config>
 				</cwp:property>
-				<cwp:property id="size" type="int" editable="false"
+				<cwp:property id="size" type="integer" editable="false"
 					name="${@msg.cwf.shell.plugin.splitterpane.size.name}" description="${@msg.cwf.shell.plugin.splitterpane.size.description}" />
 			</cwp:serialization>
 		</cwp:plugin>

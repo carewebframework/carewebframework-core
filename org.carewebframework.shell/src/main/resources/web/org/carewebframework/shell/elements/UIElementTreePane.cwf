@@ -1,5 +1,3 @@
-<page>
-	<span class="cwf-treeview-node">
-		<a label="item" />
-	</span>
-</page>
+<span class="cwf-treeview-node">
+	<a label="item"/>
+</span>

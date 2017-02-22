@@ -7,15 +7,15 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  * This Source Code Form is also subject to the terms of the Health-Related
  * Additional Disclaimer of Warranty and Limitation of Liability available at
  *
@@ -62,6 +62,8 @@ import org.carewebframework.ui.command.CommandUtil;
 import org.carewebframework.ui.dialog.DialogUtil;
 import org.carewebframework.web.annotation.Component;
 import org.carewebframework.web.annotation.Component.ChildTag;
+import org.carewebframework.web.annotation.Component.PropertyGetter;
+import org.carewebframework.web.annotation.Component.PropertySetter;
 import org.carewebframework.web.client.ClientUtil;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.BaseMenuComponent;
@@ -75,7 +77,7 @@ import org.carewebframework.web.event.KeycaptureEvent;
 /**
  * Implements a generic UI shell that can be dynamically extended with plug-ins.
  */
-@Component(value = "cwfshell", widgetClass = "Div", parentTag = "*", childTag = @ChildTag("*"))
+@Component(value = "cwfShell", widgetClass = "Div", parentTag = "*", childTag = @ChildTag("*"))
 public class CareWebShell extends Div {
     
     protected static final Log log = LogFactory.getLog(CareWebShell.class);
@@ -135,7 +137,7 @@ public class CareWebShell extends Div {
         
         /**
          * Prompt user for logout confirmation (unless suppressed).
-         * 
+         *
          * @see IUserContextEvent#pending
          */
         @Override
@@ -160,7 +162,7 @@ public class CareWebShell extends Div {
     
     /**
      * Returns the application name for this instance of the CareWeb shell.
-     * 
+     *
      * @return Application name, or null if not set.
      */
     public static String getApplicationName() {
@@ -203,7 +205,7 @@ public class CareWebShell extends Div {
     
     /**
      * Handle help requests.
-     * 
+     *
      * @param event A command event.
      */
     public void onCommand(CommandEvent event) {
@@ -215,7 +217,7 @@ public class CareWebShell extends Div {
     
     /**
      * Capture unhandled shortcut key press events.
-     * 
+     *
      * @param event Control key event.
      */
     public void onKeycapture(KeycaptureEvent event) {
@@ -228,7 +230,7 @@ public class CareWebShell extends Div {
     
     /**
      * Returns a reference to the current UI desktop.
-     * 
+     *
      * @return The current UI desktop.
      */
     public UIElementDesktop getUIDesktop() {
@@ -237,7 +239,7 @@ public class CareWebShell extends Div {
     
     /**
      * Returns a reference to the current UI layout.
-     * 
+     *
      * @return The current UI layout.
      */
     public UILayout getUILayout() {
@@ -269,7 +271,7 @@ public class CareWebShell extends Div {
     
     /**
      * Loads a layout from the specified resource.
-     * 
+     *
      * @param resource URL of the resource containing the layout configuration.
      *            <p>
      *            If url of format "app:xxx", then layout associated with application id "xxx" is
@@ -290,7 +292,7 @@ public class CareWebShell extends Div {
     
     /**
      * Loads the layout associated with the given application id.
-     * 
+     *
      * @param appId An application id.
      * @throws Exception Unspecified exception.
      */
@@ -306,7 +308,7 @@ public class CareWebShell extends Div {
     
     /**
      * Loads a layout based on the appId query parameter setting.
-     * 
+     *
      * @throws Exception Unspecified exception.
      */
     public void loadLayoutByAppId() throws Exception {
@@ -315,9 +317,10 @@ public class CareWebShell extends Div {
     
     /**
      * Returns the name of the layout to be loaded.
-     * 
+     *
      * @return Name of layout to be loaded.
      */
+    @PropertyGetter("layout")
     public String getLayout() {
         return defaultLayoutName;
     }
@@ -325,10 +328,11 @@ public class CareWebShell extends Div {
     /**
      * Sets the layout to be loaded. If null, the layout specified by the configuration will be
      * loaded.
-     * 
+     *
      * @param defaultLayoutName The default layout name.
      * @throws Exception Unspecified exception.
      */
+    @PropertySetter("layout")
     public void setLayout(String defaultLayoutName) throws Exception {
         this.defaultLayoutName = defaultLayoutName;
         
@@ -339,7 +343,7 @@ public class CareWebShell extends Div {
     
     /**
      * Returns the auto-start setting.
-     * 
+     *
      * @return True if the start method is to be called automatically after loading a layout. False
      *         if the start method must be called manually.
      */
@@ -349,7 +353,7 @@ public class CareWebShell extends Div {
     
     /**
      * Sets the auto-start setting.
-     * 
+     *
      * @param autoStart True if the start method is to be called automatically after loading a
      *            layout. False if the start method must be called manually.
      */
@@ -359,7 +363,7 @@ public class CareWebShell extends Div {
     
     /**
      * Build the UI based on the specified layout.
-     * 
+     *
      * @param layout Layout for building UI.
      */
     public void buildUI(UILayout layout) {
@@ -400,7 +404,7 @@ public class CareWebShell extends Div {
     
     /**
      * Registers a plugin and its resources. Called internally when a plugin is instantiated.
-     * 
+     *
      * @param plugin Plugin to register.
      */
     public void registerPlugin(UIElementPlugin plugin) {
@@ -409,7 +413,7 @@ public class CareWebShell extends Div {
     
     /**
      * Unregisters a plugin and its resources. Called internally when a plugin is destroyed.
-     * 
+     *
      * @param plugin Plugin to unregister.
      */
     public void unregisterPlugin(UIElementPlugin plugin) {
@@ -418,7 +422,7 @@ public class CareWebShell extends Div {
     
     /**
      * Adds a component to the common tool bar.
-     * 
+     *
      * @param component Component to add
      */
     public void addToolbarComponent(BaseComponent component) {
@@ -427,7 +431,7 @@ public class CareWebShell extends Div {
     
     /**
      * Registers a help resource.
-     * 
+     *
      * @param resource Resource defining the help menu item to be added.
      */
     public void registerHelpResource(PluginResourceHelp resource) {
@@ -452,7 +456,7 @@ public class CareWebShell extends Div {
     /**
      * Registers an external style sheet. If the style sheet has not already been registered,
      * creates a style component and adds it to the current page.
-     * 
+     *
      * @param url URL of style sheet.
      */
     public void registerStyleSheet(String url) {
@@ -465,7 +469,7 @@ public class CareWebShell extends Div {
     
     /**
      * Returns the style sheet associated with the specified URL.
-     * 
+     *
      * @param url URL of style sheet.
      * @return The associated style sheet, or null if not found.
      */
@@ -483,7 +487,7 @@ public class CareWebShell extends Div {
     
     /**
      * Registers a property group.
-     * 
+     *
      * @param propertyGroup Property group to register.
      */
     public void registerPropertyGroup(String propertyGroup) {
@@ -495,7 +499,7 @@ public class CareWebShell extends Div {
     
     /**
      * Adds a menu.
-     * 
+     *
      * @param path Path for the menu.
      * @param action Associated action for the menu.
      * @return Created menu item.
@@ -506,7 +510,7 @@ public class CareWebShell extends Div {
     
     /**
      * Returns a list of all plugins currently loaded into the UI.
-     * 
+     *
      * @return Currently loaded plugins.
      */
     public Iterable<UIElementPlugin> getLoadedPlugins() {
@@ -515,7 +519,7 @@ public class CareWebShell extends Div {
     
     /**
      * Locates a loaded plugin with the specified id.
-     * 
+     *
      * @param id Id of plugin to locate.
      * @return A reference to the loaded plugin, or null if not found.
      */
@@ -531,7 +535,7 @@ public class CareWebShell extends Div {
     
     /**
      * Locates a loaded plugin with the specified id.
-     * 
+     *
      * @param id Id of plugin to locate.
      * @param forceInit If true the plugin will be initialized if not already so.
      * @return A reference to the loaded and fully initialized plugin, or null if not found.
@@ -548,7 +552,7 @@ public class CareWebShell extends Div {
     
     /**
      * Locates an activated plugin with the specified id.
-     * 
+     *
      * @param id Id of plugin to locate.
      * @return The requested plugin, or null if not found.
      */
@@ -564,7 +568,7 @@ public class CareWebShell extends Div {
     
     /**
      * Returns a list of all active plugins.
-     * 
+     *
      * @return List of all active plugins.
      */
     public Iterable<UIElementPlugin> getActivatedPlugins() {
@@ -573,13 +577,13 @@ public class CareWebShell extends Div {
     
     /**
      * Populates a list of all activated plugins.
-     * 
+     *
      * @param list The list to be populated. If null, a new list is created.
      * @return A list of active plugins.
      */
     public Collection<UIElementPlugin> getActivatedPlugins(Collection<UIElementPlugin> list) {
         if (list == null) {
-            list = new ArrayList<UIElementPlugin>();
+            list = new ArrayList<>();
         } else {
             list.clear();
         }
@@ -596,12 +600,12 @@ public class CareWebShell extends Div {
     /**
      * Returns a list of all plugin definitions that are currently in use (i.e., have associated
      * plugins loaded) in the environment.
-     * 
+     *
      * @return List of PluginDefinition objects that have corresponding plugins loaded in the
      *         environment. May be empty, but never null.
      */
     public Iterable<PluginDefinition> getLoadedPluginDefinitions() {
-        List<PluginDefinition> result = new ArrayList<PluginDefinition>();
+        List<PluginDefinition> result = new ArrayList<>();
         
         for (UIElementPlugin plugin : plugins) {
             PluginDefinition def = plugin.getDefinition();
@@ -617,7 +621,7 @@ public class CareWebShell extends Div {
     /**
      * Returns a list of property groups bound to loaded plugins. Guarantees each group name will
      * appear at most once in the list.
-     * 
+     *
      * @return List of all property groups bound to loaded plugins.
      */
     public List<String> getPropertyGroups() {
@@ -649,7 +653,7 @@ public class CareWebShell extends Div {
     
     /**
      * Returns the message window instance for managing slide-down messages.
-     * 
+     *
      * @return A message window instance.
      */
     public MessageWindow getMessageWindow() {
@@ -667,7 +671,7 @@ public class CareWebShell extends Div {
     /**
      * Returns reference to the help viewer. If not already created, one will be created and
      * initialized with the registered help sets.
-     * 
+     *
      * @return A help viewer reference.
      */
     protected IHelpViewer getHelpViewer() {

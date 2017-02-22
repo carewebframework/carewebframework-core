@@ -7,15 +7,15 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  * This Source Code Form is also subject to the terms of the Health-Related
  * Additional Disclaimer of Warranty and Limitation of Liability available at
  *
@@ -118,7 +118,7 @@ public abstract class UIElementBase {
     /**
      * A UIElementBase subclass should call this in its static initializer block to register any
      * subclasses that may act as a parent.
-     * 
+     *
      * @param clazz Class whose valid parent classes are to be registered.
      * @param parentClass Class that may act as a parent to clazz.
      */
@@ -130,7 +130,7 @@ public abstract class UIElementBase {
     /**
      * A UIElementBase subclass should call this in its static initializer block to register any
      * subclasses that may be a child.
-     * 
+     *
      * @param clazz Class whose valid child classes are to be registered.
      * @param childClass Class that may be a child of clazz.
      */
@@ -141,7 +141,7 @@ public abstract class UIElementBase {
     
     /**
      * Returns true if childClass can be a child of the parentClass.
-     * 
+     *
      * @param parentClass Parent class
      * @param childClass Child class
      * @return True if childClass can be a child of the parentClass.
@@ -153,7 +153,7 @@ public abstract class UIElementBase {
     
     /**
      * Returns true if parentClass can be a parent of childClass.
-     * 
+     *
      * @param childClass The child class.
      * @param parentClass The parent class.
      * @return True if parentClass can be a parent of childClass.
@@ -165,7 +165,7 @@ public abstract class UIElementBase {
     
     /**
      * Returns the UI element that registered the CWF component.
-     * 
+     *
      * @param component The CWF component of interest.
      * @return The associated UI element.
      */
@@ -175,7 +175,7 @@ public abstract class UIElementBase {
     
     /**
      * Returns the design context menu currently bound to the component.
-     * 
+     *
      * @param component The CWF component of interest.
      * @return The associated design context menu, or null if none.
      */
@@ -190,7 +190,7 @@ public abstract class UIElementBase {
     /**
      * Returns the URL of the default template to use in createFromTemplate. Override this method to
      * provide an alternate default URL.
-     * 
+     *
      * @return The template URL.
      */
     protected String getTemplateUrl() {
@@ -202,7 +202,7 @@ public abstract class UIElementBase {
      * and events. The template URL is derived from the class name. For example, if the class is
      * "org.carewebframework.xxx.Clazz", the template URL is assumed to be
      * "web/org/carewebframework/xxx/Clazz.cwf".
-     * 
+     *
      * @return Top level component.
      */
     protected BaseUIComponent createFromTemplate() {
@@ -212,7 +212,7 @@ public abstract class UIElementBase {
     /**
      * Create wrapped component(s) from specified template (a cwf page). Performs autowiring of
      * variables and events.
-     * 
+     *
      * @param template URL of cwf page that will serve as a template. If a path is not specified, it
      *            is derived from the package. If the URL is not specified, the template name is
      *            obtained from getTemplateUrl.
@@ -224,7 +224,7 @@ public abstract class UIElementBase {
     
     /**
      * Create wrapped component(s) from specified template (a cwf page).
-     * 
+     *
      * @param template URL of cwf page that will serve as a template. If the URL is not specified,
      *            the template name is obtained from getTemplateUrl.
      * @param parent The component that will become the parent.
@@ -252,7 +252,7 @@ public abstract class UIElementBase {
     
     /**
      * Associates the specified CWF component with this UI element.
-     * 
+     *
      * @param component CWF component to associate.
      */
     public void associateComponent(BaseComponent component) {
@@ -263,7 +263,7 @@ public abstract class UIElementBase {
     
     /**
      * Returns design mode status.
-     * 
+     *
      * @return True if design mode is active.
      */
     public boolean isDesignMode() {
@@ -272,7 +272,7 @@ public abstract class UIElementBase {
     
     /**
      * Sets design mode status for this component and all its children.
-     * 
+     *
      * @param designMode The design mode flag.
      */
     public void setDesignMode(boolean designMode) {
@@ -291,7 +291,7 @@ public abstract class UIElementBase {
      * Apply/remove the design context menu to/from CWF components. This default implementation
      * applies the design context menu to the outer CWF component only. It may be overridden to
      * modify this default behavior.
-     * 
+     *
      * @param contextMenu The design menu if design mode is activated, or null if it is not.
      */
     protected void setDesignContextMenu(Menupopup contextMenu) {
@@ -302,7 +302,7 @@ public abstract class UIElementBase {
      * Apply/remove the design context menu to/from the specified component. If applying the design
      * context menu, any existing context menu is saved. When removing the context menu, any saved
      * context menu is restored.
-     * 
+     *
      * @param component Component to which to apply/remove the design context menu.
      * @param contextMenu The design menu if design mode is activated, or null if it is not.
      */
@@ -321,7 +321,7 @@ public abstract class UIElementBase {
     
     /**
      * Returns the component that will receive the design mode mask. Override if necessary.
-     * 
+     *
      * @return The component that will receive the design mode mask.
      */
     public BaseUIComponent getMaskTarget() {
@@ -342,7 +342,7 @@ public abstract class UIElementBase {
     /**
      * Adds the specified child element. The validity of the operation is first tested and an
      * exception thrown if the element is not a valid child for this parent.
-     * 
+     *
      * @param child Element to add as a child.
      */
     public void addChild(UIElementBase child) {
@@ -352,7 +352,7 @@ public abstract class UIElementBase {
     /**
      * Adds the specified child element. The validity of the operation is first tested and an
      * exception thrown if the element is not a valid child for this parent.
-     * 
+     *
      * @param child Element to add as a child.
      * @param doEvent Fires the add child events if true.
      */
@@ -383,7 +383,7 @@ public abstract class UIElementBase {
     
     /**
      * Called after a child is logically added to the parent.
-     * 
+     *
      * @param child The child element added.
      */
     protected void afterAddChild(UIElementBase child) {
@@ -392,7 +392,7 @@ public abstract class UIElementBase {
     
     /**
      * Called before a child is logically added to the parent.
-     * 
+     *
      * @param child The new child element.
      */
     protected void beforeAddChild(UIElementBase child) {
@@ -400,7 +400,7 @@ public abstract class UIElementBase {
     
     /**
      * Removes the specified element as a child of this parent.
-     * 
+     *
      * @param child Child element to remove.
      * @param destroy If true the child is explicitly destroyed.
      */
@@ -429,7 +429,7 @@ public abstract class UIElementBase {
     
     /**
      * Called after a child is logically removed from the parent.
-     * 
+     *
      * @param child The child UI element.
      */
     protected void afterRemoveChild(UIElementBase child) {
@@ -438,7 +438,7 @@ public abstract class UIElementBase {
     
     /**
      * Called before a child is logically removed from the parent.
-     * 
+     *
      * @param child The child UI element.
      */
     protected void beforeRemoveChild(UIElementBase child) {
@@ -446,7 +446,7 @@ public abstract class UIElementBase {
     
     /**
      * Changes the assigned parent, firing parent changed events if appropriate.
-     * 
+     *
      * @param newParent The new parent.
      */
     private void updateParent(UIElementBase newParent) {
@@ -479,7 +479,7 @@ public abstract class UIElementBase {
     
     /**
      * Called after the parent has been changed.
-     * 
+     *
      * @param oldParent The value of the parent property prior to the change.
      */
     protected void afterParentChanged(UIElementBase oldParent) {
@@ -487,7 +487,7 @@ public abstract class UIElementBase {
     
     /**
      * Called before the parent has been changed.
-     * 
+     *
      * @param newParent The value of the parent property prior to the change.
      */
     protected void beforeParentChanged(UIElementBase newParent) {
@@ -495,7 +495,7 @@ public abstract class UIElementBase {
     
     /**
      * Removes this element from its parent and optionally destroys it.
-     * 
+     *
      * @param destroy If true, the element is also destroyed.
      */
     public void remove(boolean destroy) {
@@ -550,7 +550,7 @@ public abstract class UIElementBase {
      * this would be the wrapped UI component that can host the child components. For UI elements
      * that wrap a single UI component, getInnerComponent and getOuterComponent should return the
      * same value.
-     * 
+     *
      * @return The inner component.
      */
     public BaseUIComponent getInnerComponent() {
@@ -559,7 +559,7 @@ public abstract class UIElementBase {
     
     /**
      * Sets the innermost wrapped UI component.
-     * 
+     *
      * @param value The innermost wrapped UI component.
      */
     protected void setInnerComponent(BaseUIComponent value) {
@@ -572,7 +572,7 @@ public abstract class UIElementBase {
      * will be the direct child of the UI component wrapped by the parent element. For UI elements
      * that wrap a single UI component, getInnerComponent and getOuterComponent should return the
      * same value.
-     * 
+     *
      * @return The outer component.
      */
     public BaseUIComponent getOuterComponent() {
@@ -581,7 +581,7 @@ public abstract class UIElementBase {
     
     /**
      * Sets the outermost wrapped UI component.
-     * 
+     *
      * @param value The outermost wrapped UI component.
      */
     protected void setOuterComponent(BaseUIComponent value) {
@@ -591,7 +591,7 @@ public abstract class UIElementBase {
     
     /**
      * Return the definition used to create this instance.
-     * 
+     *
      * @return The plugin definition.
      */
     public final PluginDefinition getDefinition() {
@@ -604,7 +604,7 @@ public abstract class UIElementBase {
     
     /**
      * Sets the plugin definition for this element.
-     * 
+     *
      * @param definition The plugin definition.
      */
     public void setDefinition(PluginDefinition definition) {
@@ -637,7 +637,7 @@ public abstract class UIElementBase {
     /**
      * Sets the plugin definition based on the specified class. Typically this would be the same
      * class as the element itself, but in certain cases (as in the UIElementProxy class) it is not.
-     * 
+     *
      * @param clazz The UI element class.
      */
     public void setDefinition(Class<? extends UIElementBase> clazz) {
@@ -664,7 +664,7 @@ public abstract class UIElementBase {
     
     /**
      * Set width and height of a component to 100%.
-     * 
+     *
      * @param component BaseComponent
      */
     protected void fullSize(BaseUIComponent component) {
@@ -678,7 +678,7 @@ public abstract class UIElementBase {
      * change in activation state, it should override the updateVisibility method. If a UI element
      * requires special activation logic for its children (e.g., if it allows only one child to be
      * active at a time), it should override the activateChildren method.
-     * 
+     *
      * @param activate The activate status.
      */
     public void activate(boolean activate) {
@@ -696,7 +696,7 @@ public abstract class UIElementBase {
     /**
      * Default behavior is to pass activation/inactivation event to children. Override to restrict
      * propagation of the event.
-     * 
+     *
      * @param activate The activate status.
      */
     protected void activateChildren(boolean activate) {
@@ -707,7 +707,7 @@ public abstract class UIElementBase {
     
     /**
      * Returns the activation status of the element.
-     * 
+     *
      * @return The activation status.
      */
     public final boolean isActivated() {
@@ -716,7 +716,7 @@ public abstract class UIElementBase {
     
     /**
      * Returns instance of the event manager.
-     * 
+     *
      * @return Event manager instance.
      */
     protected IEventManager getEventManager() {
@@ -729,7 +729,7 @@ public abstract class UIElementBase {
     
     /**
      * Gets the UI element child at the specified index.
-     * 
+     *
      * @param index Index of the child to retrieve.
      * @return The child at the specified index.
      */
@@ -740,7 +740,7 @@ public abstract class UIElementBase {
     /**
      * Locates and returns a child that is an instance of the specified class. If none is found,
      * returns null.
-     * 
+     *
      * @param <T> The type of child being sought.
      * @param clazz Class of the child being sought.
      * @param last If specified, the search begins after this child. If null, the search begins with
@@ -762,7 +762,7 @@ public abstract class UIElementBase {
     
     /**
      * Returns an iterable of this component's children.
-     * 
+     *
      * @return Iterable of this component's children.
      */
     public Iterable<UIElementBase> getChildren() {
@@ -771,7 +771,7 @@ public abstract class UIElementBase {
     
     /**
      * Returns an iterable of this component's children.
-     * 
+     *
      * @param clazz Expected class of children.
      * @return Iterable of this component's children.
      */
@@ -783,7 +783,7 @@ public abstract class UIElementBase {
     /**
      * Returns an iterable of this component's serializable children. By default, this calls
      * getChildren() but may be overridden to accommodate specialized serialization needs.
-     * 
+     *
      * @return Iterable of this component's serializable children.
      */
     public Iterable<UIElementBase> getSerializableChildren() {
@@ -792,7 +792,7 @@ public abstract class UIElementBase {
     
     /**
      * Returns the number of children.
-     * 
+     *
      * @return Number of children.
      */
     public int getChildCount() {
@@ -801,7 +801,7 @@ public abstract class UIElementBase {
     
     /**
      * Returns the first child, or null if there are no children.
-     * 
+     *
      * @return First child, or null if none.
      */
     public UIElementBase getFirstChild() {
@@ -810,7 +810,7 @@ public abstract class UIElementBase {
     
     /**
      * Returns the first visible child.
-     * 
+     *
      * @return First visible child, or null if none;
      */
     public UIElementBase getFirstVisibleChild() {
@@ -819,7 +819,7 @@ public abstract class UIElementBase {
     
     /**
      * Returns the last child, or null if there are no children.
-     * 
+     *
      * @return Last child, or null if none.
      */
     public UIElementBase getLastChild() {
@@ -828,7 +828,7 @@ public abstract class UIElementBase {
     
     /**
      * Returns the last visible child.
-     * 
+     *
      * @return Last visible child, or null if none;
      */
     public UIElementBase getLastVisibleChild() {
@@ -837,7 +837,7 @@ public abstract class UIElementBase {
     
     /**
      * Returns first or last visible child.
-     * 
+     *
      * @param first If true, find first visible child; if false, last visible child.
      * @return Visible child, or null if none found.
      */
@@ -857,7 +857,7 @@ public abstract class UIElementBase {
     
     /**
      * Returns this element's next sibling.
-     * 
+     *
      * @param visibleOnly If true, skip any non-visible siblings.
      * @return The next sibling, or null if none.
      */
@@ -878,7 +878,7 @@ public abstract class UIElementBase {
     /**
      * Returns the index of the specified child. If the specified component is not a child, -1 is
      * returned.
-     * 
+     *
      * @param child The child component whose index is sought.
      * @return The child's index or -1 if not found.
      */
@@ -888,7 +888,7 @@ public abstract class UIElementBase {
     
     /**
      * Returns true if the specified element is a child of this element.
-     * 
+     *
      * @param element The UI element to test.
      * @return True if the element is a child.
      */
@@ -898,7 +898,7 @@ public abstract class UIElementBase {
     
     /**
      * Recurses the component subtree for a child belonging to the specified class.
-     * 
+     *
      * @param <T> The type of child being sought.
      * @param clazz Class of child being sought.
      * @return A child of the specified class, or null if not found.
@@ -924,7 +924,7 @@ public abstract class UIElementBase {
     
     /**
      * Returns true if specified element is an ancestor of this element.
-     * 
+     *
      * @param element A UI element.
      * @return True if the specified element is an ancestor of this element.
      */
@@ -944,7 +944,7 @@ public abstract class UIElementBase {
     /**
      * Returns this element's index in its parent's list of children. If this element has no parent,
      * returns -1.
-     * 
+     *
      * @return This element's index.
      */
     public int getIndex() {
@@ -953,7 +953,7 @@ public abstract class UIElementBase {
     
     /**
      * Moves a child from one position to another under the same parent.
-     * 
+     *
      * @param from Current position of child.
      * @param to New position of child.
      */
@@ -972,7 +972,7 @@ public abstract class UIElementBase {
     /**
      * Element has been moved to a different position under this parent. Adjust wrapped components
      * accordingly.
-     * 
+     *
      * @param child Child element that was moved.
      * @param before Child element was moved before this one.
      */
@@ -983,7 +983,7 @@ public abstract class UIElementBase {
     /**
      * Sets this element's index to the specified value. This effectively changes the position of
      * the element relative to its siblings.
-     * 
+     *
      * @param index The index.
      */
     public void setIndex(int index) {
@@ -1016,7 +1016,7 @@ public abstract class UIElementBase {
     /**
      * Returns the display name of this element. By default, the definition name is returned, but
      * subclasses may override this to return some other name suitable for display in the design UI.
-     * 
+     *
      * @return The display name.
      */
     public String getDisplayName() {
@@ -1027,7 +1027,7 @@ public abstract class UIElementBase {
      * Returns the instance name of this element. By default, this is the same as the display name,
      * but subclasses may override this to provide additional information that would distinguish
      * multiple instances of the same UI element.
-     * 
+     *
      * @return The instance name.
      */
     public String getInstanceName() {
@@ -1037,7 +1037,7 @@ public abstract class UIElementBase {
     /**
      * Returns the class of the property editor associated with this UI element. Null means no
      * property editor exists.
-     * 
+     *
      * @return The class of the associated property editor.
      */
     public Class<? extends Object> getPropEditClass() {
@@ -1047,7 +1047,7 @@ public abstract class UIElementBase {
     /**
      * Returns true if the element is locked. When an element is locked, it may not be manipulated
      * within the designer.
-     * 
+     *
      * @return True if the element is locked.
      */
     public boolean isLocked() {
@@ -1057,7 +1057,7 @@ public abstract class UIElementBase {
     /**
      * Sets the locked status of the element. When an element is locked, it may not be manipulated
      * within the designer.
-     * 
+     *
      * @param locked The locked status.
      */
     public void setLocked(boolean locked) {
@@ -1066,7 +1066,7 @@ public abstract class UIElementBase {
     
     /**
      * Returns the parent of this element. May be null.
-     * 
+     *
      * @return This element's parent.
      */
     public UIElementBase getParent() {
@@ -1075,7 +1075,7 @@ public abstract class UIElementBase {
     
     /**
      * Sets the parent of this element, subject to the parent/child constraints applicable to each.
-     * 
+     *
      * @param parent The new parent.
      */
     public final void setParent(UIElementBase parent) {
@@ -1098,7 +1098,7 @@ public abstract class UIElementBase {
      * Sets the enabled state of the component. This base implementation only sets the internal flag
      * and notifies the parent of the state change. Each UI element is responsible for overriding
      * this method and reflecting the enabled state in their wrapped UI components.
-     * 
+     *
      * @param enabled The enabled state.
      */
     public void setEnabled(boolean enabled) {
@@ -1110,7 +1110,7 @@ public abstract class UIElementBase {
     
     /**
      * Returns the enabled state of the UI element.
-     * 
+     *
      * @return True if the UI element is enabled.
      */
     public final boolean isEnabled() {
@@ -1121,7 +1121,7 @@ public abstract class UIElementBase {
      * Sets the visibility state of the component. This base implementation only sets the internal
      * flag and notifies the parent of the state change. Each UI element is responsible for
      * overriding this method and reflecting the visibility state in their wrapped UI components.
-     * 
+     *
      * @param visible The visibility state.
      */
     public final void setVisible(boolean visible) {
@@ -1142,7 +1142,7 @@ public abstract class UIElementBase {
     /**
      * Override to set the visibility of wrapped components. Invoked when visibility or activation
      * states change.
-     * 
+     *
      * @param visible The current visibility state.
      * @param activated The current activation state.
      */
@@ -1154,7 +1154,7 @@ public abstract class UIElementBase {
     
     /**
      * Moves a child to before another component.
-     * 
+     *
      * @param child Child to move
      * @param before Move child to this component.
      */
@@ -1164,7 +1164,7 @@ public abstract class UIElementBase {
     
     /**
      * Returns the visible state of the UI element.
-     * 
+     *
      * @return True if the UI element is visible.
      */
     public final boolean isVisible() {
@@ -1173,7 +1173,7 @@ public abstract class UIElementBase {
     
     /**
      * Returns the color (as an HTML-formatted RGB string) for this element.
-     * 
+     *
      * @return An HTML-formatted color specification (e.g., #0F134E). May be null.
      */
     public final String getColor() {
@@ -1185,7 +1185,7 @@ public abstract class UIElementBase {
      * allow components to easily expose a color property in the property editor. It may not be
      * appropriate for all subclasses. To change which UI elements are affected, override the
      * applyColor() method.
-     * 
+     *
      * @param value A correctly formatted HTML color specification.
      */
     public final void setColor(String value) {
@@ -1209,7 +1209,7 @@ public abstract class UIElementBase {
      * Applies the current color setting to the target component. If the target implements a custom
      * method for performing this operation, that method will be invoked. Otherwise, the background
      * color of the target is set. Override this method to provide alternate implementations.
-     * 
+     *
      * @param comp Component to receive the color setting.
      */
     protected void applyColor(BaseUIComponent comp) {
@@ -1222,7 +1222,7 @@ public abstract class UIElementBase {
     
     /**
      * Returns the tool tip text.
-     * 
+     *
      * @return The tool tip text.
      */
     public final String getHint() {
@@ -1231,7 +1231,7 @@ public abstract class UIElementBase {
     
     /**
      * Sets the tool tip text.
-     * 
+     *
      * @param value The tool tip text.
      */
     public final void setHint(String value) {
@@ -1257,7 +1257,7 @@ public abstract class UIElementBase {
     
     /**
      * Applies the current hint text to the target component.
-     * 
+     *
      * @param comp Component to receive the hint text.
      */
     protected void applyHint(BaseUIComponent comp) {
@@ -1306,7 +1306,7 @@ public abstract class UIElementBase {
     
     /**
      * Returns true if this UI element can contain other UI elements.
-     * 
+     *
      * @return True if this UI element can contain other UI elements.
      */
     public boolean isContainer() {
@@ -1315,7 +1315,7 @@ public abstract class UIElementBase {
     
     /**
      * Returns true if this element may accept a child. Updates the reject reason with the result.
-     * 
+     *
      * @return True if this element may accept a child. Updates the reject reason with the result.
      */
     public boolean canAcceptChild() {
@@ -1333,7 +1333,7 @@ public abstract class UIElementBase {
     /**
      * Returns true if this element may accept a child of the specified class. Updates the reject
      * reason with the result.
-     * 
+     *
      * @param clazz Child class to test.
      * @return True if this element may accept a child of the specified class.
      */
@@ -1354,7 +1354,7 @@ public abstract class UIElementBase {
     /**
      * Returns true if this element may accept the specified child. Updates the reject reason with
      * the result.
-     * 
+     *
      * @param child Child instance to test.
      * @return True if this element may accept the specified child.
      */
@@ -1374,7 +1374,7 @@ public abstract class UIElementBase {
     
     /**
      * Returns true if this element may accept a parent. Updates the reject reason with the result.
-     * 
+     *
      * @return True if this element may accept a parent.
      */
     public boolean canAcceptParent() {
@@ -1386,7 +1386,7 @@ public abstract class UIElementBase {
     /**
      * Returns true if this element may accept a parent of the specified class. Updates the reject
      * reason with the result.
-     * 
+     *
      * @param clazz Parent class to test.
      * @return True if this element may accept a parent of the specified class.
      */
@@ -1403,7 +1403,7 @@ public abstract class UIElementBase {
     /**
      * Returns true if this element may accept the specified element as a parent. Updates the reject
      * reason with the result.
-     * 
+     *
      * @param parent Parent instance to test.
      * @return True if this element may accept the specified element as a parent.
      */
@@ -1423,7 +1423,7 @@ public abstract class UIElementBase {
     
     /**
      * Sets the reject reason to the specified value.
-     * 
+     *
      * @param rejectReason Reason for rejection.
      */
     public void setRejectReason(String rejectReason) {
@@ -1432,7 +1432,7 @@ public abstract class UIElementBase {
     
     /**
      * Returns the reject reason. This is updated by the canAcceptParent and canAcceptChild calls.
-     * 
+     *
      * @return The reject reason.
      */
     public String getRejectReason() {
@@ -1441,7 +1441,7 @@ public abstract class UIElementBase {
     
     /**
      * Returns the UI element at the root of the component tree.
-     * 
+     *
      * @return Root UI element.
      */
     public UIElementBase getRoot() {
@@ -1456,7 +1456,7 @@ public abstract class UIElementBase {
     
     /**
      * Returns the first ancestor corresponding to the specified class.
-     * 
+     *
      * @param <T> The type of ancestor sought.
      * @param clazz Class of ancestor sought.
      * @return An ancestor of the specified class or null if not found.
@@ -1475,7 +1475,7 @@ public abstract class UIElementBase {
     /**
      * Subclasses may override this to implement any additional operations that are necessary before
      * this element is initialized (i.e., before property values and parent element are set).
-     * 
+     *
      * @param deserializing If true, initialization is occurring as a result of deserialization.
      * @throws Exception Unspecified exception.
      */
@@ -1486,7 +1486,7 @@ public abstract class UIElementBase {
     /**
      * Subclasses may override this to implement any additional operations that are necessary after
      * this element is initialized (i.e., after property values and parent element are set).
-     * 
+     *
      * @param deserializing If true, initialization is occurring as a result of deserialization.
      * @throws Exception Unspecified exception.
      */
@@ -1496,7 +1496,7 @@ public abstract class UIElementBase {
     
     /**
      * Process all associated resources.
-     * 
+     *
      * @param register If true, resources will be registered; if false, unregistered.
      */
     private void processResources(boolean register) {
@@ -1510,7 +1510,7 @@ public abstract class UIElementBase {
     /**
      * Returns true if the design mode mask is to be used. This mask is used to cover the underlying
      * outer component when in design mode.
-     * 
+     *
      * @return True if the design mode mask is enabled.
      */
     protected MaskMode getMaskMode() {
@@ -1519,7 +1519,7 @@ public abstract class UIElementBase {
     
     /**
      * Sets whether to use the design mode mask.
-     * 
+     *
      * @param mode True to enable the design mode mask.
      */
     protected void setMaskMode(MaskMode mode) {
@@ -1528,7 +1528,7 @@ public abstract class UIElementBase {
     
     /**
      * Returns true if any associated UI elements in the component subtree are visible.
-     * 
+     *
      * @param component Component subtree to examine.
      * @return True if any associated UI element in the subtree is visible.
      */
@@ -1550,7 +1550,7 @@ public abstract class UIElementBase {
     
     /**
      * Allows a child element to notify its parent of an event of interest.
-     * 
+     *
      * @param eventName Name of the event.
      * @param eventData Data associated with the event.
      * @param recurse If true, recurse up the parent chain.
@@ -1566,7 +1566,7 @@ public abstract class UIElementBase {
     
     /**
      * Register/unregister a child notification listener.
-     * 
+     *
      * @param eventName The event name.
      * @param listener A notification listener. If null, any existing listener is removed. If not
      *            null and a listener is already registered, it will be replaced.
@@ -1577,7 +1577,7 @@ public abstract class UIElementBase {
     
     /**
      * Allows a parent element to notify its children of an event of interest.
-     * 
+     *
      * @param eventName Name of the event.
      * @param eventData Data associated with the event.
      * @param recurse If true, recurse over all child levels.
@@ -1596,7 +1596,7 @@ public abstract class UIElementBase {
     
     /**
      * Register/unregister a parent notification listener.
-     * 
+     *
      * @param eventName The event name.
      * @param listener A notification listener. If null, any existing listener is removed. If not
      *            null and a listener is already registered, it will be replaced.

@@ -28,7 +28,7 @@
 						<button name="btnUnlock"
 							class="flavor:btn-success"
 							label="${@msg.cwf.timeout.unlock.label}" />
-						<space />
+						<div width="20px" />
 						<button name="btnLogout"
 							class="flavor:btn-danger"
 							label="${@msg.cwf.timeout.logout.label}" />

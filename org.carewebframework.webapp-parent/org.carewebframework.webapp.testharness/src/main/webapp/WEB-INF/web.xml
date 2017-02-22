@@ -1,68 +1,35 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<web-app id="WebApp_ID" version="2.4"
-	xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
-	<display-name>CareWeb</display-name>
-	<!--
-		- Loads the root application context of this web app at startup, - by
-		default from "/WEB-INF/applicationContext.xml". - Note that you need
-		to fall back to Spring's ContextLoaderServlet for - J2EE servers that
-		do not follow the Servlet 2.4 initialization order. - - Use
-		WebApplicationContextUtils.getWebApplicationContext(servletContext) -
-		to access it anywhere in the web application, outside of the
-		framework. - - The root context is the parent of all servlet-specific
-		contexts. - This means that its beans are automatically available in
-		these child contexts, - both for getBean(name) calls and (external)
-		bean references.
-		
-		We specify a subclass of the XmlWebApplicationContext that simply disallows
-		overriding bean definitions.
-	-->
-	<context-param>
-		<param-name>contextClass</param-name>
-		<param-value>org.carewebframework.ui.spring.FrameworkAppContext</param-value>
-	</context-param>
-	
-	<listener>
-		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-	</listener>
-
-	<listener>
-		<listener-class>
-			org.springframework.web.context.request.RequestContextListener</listener-class>
-	</listener>
-
-	<!--
-     - Spring Security Filter Chains
-     -->
-	<filter>
-		<filter-name>filterChainProxy</filter-name>
-		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
-	</filter>
-
-	<filter-mapping>
-		<filter-name>filterChainProxy</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
+<web-app xmlns="http://java.sun.com/xml/ns/javaee" version="2.5">
+	<display-name>CareWeb Framework Test Harness</display-name>
 
 	<servlet>
-		<description>
-  		Framework servlet to receive requests from components and then delegate to an implementation of org.carewebframework.ui.IRequestProcessor for actual processing.
-  		</description>
-		<servlet-name>requestProcessingServlet</servlet-name>
-		<servlet-class>org.carewebframework.ui.RequestProcessingServlet</servlet-class>
+		<servlet-name>dispatcher</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<async-supported>true</async-supported>
+		<load-on-startup>1</load-on-startup>
+		
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>classpath:/META-INF/cwf-dispatcher-servlet.xml</param-value>
+		</init-param>
+
+		<init-param>
+			<param-name>contextClass</param-name>
+			<param-value>org.carewebframework.ui.spring.FrameworkAppContext</param-value>
+		</init-param>
+		
+		<init-param>
+			<param-name>contextInitializerClasses</param-name>
+			<param-value>org.carewebframework.ui.spring.AppContextInitializer</param-value>
+		</init-param>
 	</servlet>
-	
+
 	<servlet-mapping>
-		<servlet-name>requestProcessingServlet</servlet-name>
-		<url-pattern>/processor/*</url-pattern>
+		<servlet-name>dispatcher</servlet-name>
+		<url-pattern>/*</url-pattern>
 	</servlet-mapping>
 
-	<session-config>
-		<session-timeout>15</session-timeout>
-	</session-config>
-	
-	<welcome-file-list>
-		<welcome-file>index.cwf</welcome-file>
-	</welcome-file-list>
+	<context-param>
+		<param-name>cwf.debug</param-name>
+		<param-value>true</param-value>
+	</context-param>
 </web-app>
