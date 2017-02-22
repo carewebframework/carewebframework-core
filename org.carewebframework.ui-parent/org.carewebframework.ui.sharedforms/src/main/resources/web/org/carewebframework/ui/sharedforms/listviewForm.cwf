@@ -1,7 +1,7 @@
 <window name="panel" height="100%" width="100%" class="sharedForms-captioned">
 	<paneview name="mainView" height="100%" width="100%">
 		<pane name="listPane" flex="1">
-			<grid name="grid" height="100%" width="100%">
+			<grid name="grid" max-height="100%" width="100%">
 				<columns name="columns" />
 				<rows name="rows" selectable="single" />
 			</grid>

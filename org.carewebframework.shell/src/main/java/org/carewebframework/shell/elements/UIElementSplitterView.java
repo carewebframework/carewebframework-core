@@ -49,7 +49,7 @@ public class UIElementSplitterView extends UIElementBase {
     public UIElementSplitterView() {
         super();
         setOuterComponent(root);
-        fullSize(root);
+        root.setFlex("1");
         maxChildren = Integer.MAX_VALUE;
         setOrientation("horizontal");
     }
@@ -67,7 +67,7 @@ public class UIElementSplitterView extends UIElementBase {
     @Override
     protected void afterAddChild(UIElementBase child) {
         super.afterAddChild(child);
-        ((UIElementSplitterPane) child).updateState();
+        ((UIElementSplitterPane) child).updateSize(isHorizontal());
     }
 
     public String getOrientation() {

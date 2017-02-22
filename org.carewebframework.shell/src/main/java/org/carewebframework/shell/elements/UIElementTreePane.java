@@ -32,7 +32,6 @@ import org.carewebframework.web.component.Hyperlink;
 import org.carewebframework.web.component.Menupopup;
 import org.carewebframework.web.component.Span;
 import org.carewebframework.web.event.IEventListener;
-import org.carewebframework.web.event.MouseEvent;
 
 /**
  * A child of a UIElementTreeView, this UI element specifies the tree path where its associated tree
@@ -65,27 +64,33 @@ public class UIElementTreePane extends UIElementBase {
     private boolean canOpen;
 
     /**
-     * Handler for node click events. Click will either select the node or toggle its drop down
-     * state, depending on the click position and presence of child panes.
+     * Handler for node click events. Click will select the node and associated pane.
      */
     private final IEventListener clickListener = (event) -> {
-        if (canOpen && ((MouseEvent) event).getPageX() < 20) {
+        treeView.setActivePane(UIElementTreePane.this);
+    };
+
+    /**
+     * Handler for node double click events. Double click will toggle the node's drop down state
+     */
+    private final IEventListener dblclickListener = (event) -> {
+        if (canOpen) {
             setOpen(!open);
-        } else {
-            treeView.setActivePane(UIElementTreePane.this);
         }
     };
 
     public UIElementTreePane() {
         super();
         maxChildren = Integer.MAX_VALUE;
-        fullSize(pane);
+        //fullSize(pane);
+        pane.setFlex("1");
         pane.setVisible(false);
         setOuterComponent(pane);
         node = (Span) createFromTemplate();
         associateComponent(node);
         anchor = (Hyperlink) node.getFirstChild();
         anchor.addEventListener("click", clickListener);
+        anchor.addEventListener("dblclick", dblclickListener);
         associateComponent(anchor);
     }
 

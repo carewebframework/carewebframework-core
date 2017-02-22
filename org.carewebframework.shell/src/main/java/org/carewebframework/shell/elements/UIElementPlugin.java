@@ -7,15 +7,15 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  * This Source Code Form is also subject to the terms of the Health-Related
  * Additional Disclaimer of Warranty and Limitation of Liability available at
  *
@@ -65,49 +65,49 @@ import org.springframework.util.StringUtils;
  * This class is used for all container-hosted plugins.
  */
 public class UIElementPlugin extends UIElementBase implements IDisable, IPropertyAccessor {
-    
+
     static {
         registerAllowedParentClass(UIElementPlugin.class, UIElementBase.class);
     }
-    
+
     private class ToolbarContainer extends Namespace {
-        
+
         public ToolbarContainer() {
             super();
             addClass("cwf-toolbar-container");
         }
     }
-    
+
     public class PluginContainer extends Namespace {};
-    
+
     private final PluginContainer container = new PluginContainer();
-    
+
     private final CareWebShell shell;
-    
+
     private List<IDisable> registeredActions;
-    
+
     private ToolbarContainer tbarContainer;
-    
+
     private List<IPluginEvent> pluginEventListeners1;
-    
+
     private List<IPluginEventListener> pluginEventListeners2;
-    
+
     private List<IPluginController> pluginControllers;
-    
+
     private List<BaseUIComponent> registeredComponents;
-    
+
     private Map<String, Object> registeredProperties;
-    
+
     private Map<String, Object> registeredBeans;
-    
+
     private boolean initialized;
-    
+
     private String busyMessage;
-    
+
     private boolean busyPending;
-    
+
     private boolean busyDisabled;
-    
+
     /**
      * Sets the container as the wrapped component and registers itself to receive action
      * notifications from the container.
@@ -121,7 +121,7 @@ public class UIElementPlugin extends UIElementBase implements IDisable, IPropert
         fullSize(container);
         container.wireController(this);
     }
-    
+
     /**
      * @see org.carewebframework.shell.elements.UIElementBase#about()
      */
@@ -129,10 +129,10 @@ public class UIElementPlugin extends UIElementBase implements IDisable, IPropert
     public void about() {
         AboutDialog.execute(getDefinition());
     }
-    
+
     /**
      * Passes the activation request to the container.
-     * 
+     *
      * @see org.carewebframework.shell.elements.UIElementBase#activateChildren(boolean)
      */
     @Override
@@ -145,39 +145,39 @@ public class UIElementPlugin extends UIElementBase implements IDisable, IPropert
             }
         }
     }
-    
+
     /**
      * Activate the plugin.
      */
     public void activate() {
         load();
         executeAction(PluginAction.ACTIVATE, true);
-        setVisible(true);
+        container.setVisible(true);
     }
-    
+
     /**
      * Inactivate the plugin.
      */
     public void inactivate() {
-        setVisible(false);
+        container.setVisible(false);
         executeAction(PluginAction.INACTIVATE, true);
     }
-    
+
     /**
      * Additional processing of the plugin after it is initialized.
-     * 
+     *
      * @throws Exception Unspecified exception.
      * @see org.carewebframework.shell.elements.UIElementBase#afterInitialize
      */
     @Override
     public void afterInitialize(boolean deserializing) throws Exception {
         super.afterInitialize(deserializing);
-        
+
         if (!getDefinition().isLazyLoad()) {
             load();
         }
     }
-    
+
     /**
      * Release contained resources.
      */
@@ -186,43 +186,43 @@ public class UIElementPlugin extends UIElementBase implements IDisable, IPropert
         shell.unregisterPlugin(this);
         executeAction(PluginAction.UNLOAD, false);
         CommandUtil.dissociateAll(container);
-        
+
         if (pluginEventListeners1 != null) {
             pluginEventListeners1.clear();
             pluginEventListeners1 = null;
         }
-        
+
         if (pluginEventListeners2 != null) {
             executeAction(PluginAction.UNSUBSCRIBE, false);
             pluginEventListeners2.clear();
             pluginEventListeners2 = null;
         }
-        
+
         if (registeredProperties != null) {
             registeredProperties.clear();
             registeredProperties = null;
         }
-        
+
         if (registeredBeans != null) {
             registeredBeans.clear();
             registeredBeans = null;
         }
-        
+
         if (registeredComponents != null) {
             for (BaseComponent component : registeredComponents) {
                 component.destroy();
             }
-            
+
             registeredComponents.clear();
             registeredComponents = null;
         }
-        
+
         super.destroy();
     }
-    
+
     /**
      * Passes design mode setting to the container.
-     * 
+     *
      * @param designMode If true, associated actions and busy mask are disabled.
      */
     @Override
@@ -231,10 +231,10 @@ public class UIElementPlugin extends UIElementBase implements IDisable, IPropert
         disableActions(designMode);
         disableBusy(designMode);
     }
-    
+
     /**
      * Returns the value for a registered property.
-     * 
+     *
      * @param propInfo Property info.
      * @return The property value.
      * @throws Exception Unspecified exception.
@@ -242,7 +242,7 @@ public class UIElementPlugin extends UIElementBase implements IDisable, IPropert
     @Override
     public Object getPropertyValue(PropertyInfo propInfo) throws Exception {
         Object obj = registeredProperties == null ? null : registeredProperties.get(propInfo.getId());
-        
+
         if (obj instanceof PropertyProxy) {
             Object value = ((PropertyProxy) obj).getValue();
             return value instanceof String ? propInfo.getPropertyType().getSerializer().deserialize((String) value) : value;
@@ -250,10 +250,10 @@ public class UIElementPlugin extends UIElementBase implements IDisable, IPropert
             return obj == null ? null : propInfo.getPropertyValue(obj, obj == this);
         }
     }
-    
+
     /**
      * Sets a value for a registered property.
-     * 
+     *
      * @param propInfo Property info.
      * @param value The value to set.
      * @throws Exception Unspecified exception.
@@ -262,7 +262,7 @@ public class UIElementPlugin extends UIElementBase implements IDisable, IPropert
     public void setPropertyValue(PropertyInfo propInfo, Object value) throws Exception {
         String propId = propInfo.getId();
         Object obj = registeredProperties == null ? null : registeredProperties.get(propId);
-        
+
         if (obj == null) {
             obj = new PropertyProxy(propInfo, value);
             registerProperties(obj, propId);
@@ -272,27 +272,27 @@ public class UIElementPlugin extends UIElementBase implements IDisable, IPropert
             propInfo.setPropertyValue(obj, value, obj == this);
         }
     }
-    
+
     @Override
     public boolean isDisabled() {
         return !isEnabled();
     }
-    
+
     @Override
     public void setDisabled(boolean disabled) {
         setEnabled(!disabled);
         disableActions(disabled);
     }
-    
+
     /**
      * Sets the visibility of the contained resource and any registered components.
-     * 
+     *
      * @param visible Visibility state to set
      */
     @Override
     protected void updateVisibility(boolean visible, boolean activated) {
         super.updateVisibility(visible, activated);
-        
+
         if (registeredComponents != null) {
             for (BaseUIComponent component : registeredComponents) {
                 if (!visible) {
@@ -303,51 +303,51 @@ public class UIElementPlugin extends UIElementBase implements IDisable, IPropert
                 }
             }
         }
-        
+
         if (visible) {
             checkBusy();
         }
-        
+
     }
-    
+
     /**
      * Sets the plugin definition the container will use to instantiate the plugin. If there is a
      * status bean associated with the plugin, it is registered with the container at this time. If
      * there are style sheet resources associated with the plugin, they will be added to the
      * container at this time.
-     * 
+     *
      * @param definition The plugin definition.
      */
     @Override
     public void setDefinition(PluginDefinition definition) {
         super.setDefinition(definition);
-        
+
         if (definition != null) {
             container.addClass("cwf-plugin-" + definition.getId());
             shell.registerPlugin(this);
         }
     }
-    
+
     /**
      * Registers an action element. Action elements implement the Disable interface and are
      * automatically enabled/disabled when the owning container is enabled/disabled.
-     * 
+     *
      * @param actionElement A component implementing the Disable interface.
      */
     public void registerAction(IDisable actionElement) {
         if (registeredActions == null) {
             registeredActions = new ArrayList<>();
         }
-        
+
         registeredActions.add(actionElement);
         actionElement.setDisabled(isDisabled());
     }
-    
+
     /**
      * Enables/disables registered actions elements. Note that if the container is disabled, the
      * action elements will not be enabled by this call. It may be used, however, to temporarily
      * disable action elements that would otherwise be enabled.
-     * 
+     *
      * @param disable The disable status.
      */
     public void disableActions(boolean disable) {
@@ -357,10 +357,10 @@ public class UIElementPlugin extends UIElementBase implements IDisable, IPropert
             }
         }
     }
-    
+
     /**
      * Temporarily disables setBusy function.
-     * 
+     *
      * @param disable If true, disable setBusy function. If false, enables the function and
      *            processes any pending busy operation.
      */
@@ -369,7 +369,7 @@ public class UIElementPlugin extends UIElementBase implements IDisable, IPropert
         busyPending |= disable;
         checkBusy();
     }
-    
+
     /**
      * Processes any pending busy operation if enabled.
      */
@@ -378,16 +378,16 @@ public class UIElementPlugin extends UIElementBase implements IDisable, IPropert
             setBusy(busyMessage);
         }
     }
-    
+
     /**
      * If message is not null, disables the plugin and displays the busy message. If message is
      * null, removes any previous message and returns the plugin to its previous state.
-     * 
+     *
      * @param message The message to display, or null to clear previous message.
      */
     public void setBusy(String message) {
         busyMessage = message = StrUtil.formatMessage(message);
-        
+
         if (busyDisabled) {
             busyPending = true;
         } else if (message != null) {
@@ -400,29 +400,29 @@ public class UIElementPlugin extends UIElementBase implements IDisable, IPropert
             busyPending = false;
         }
     }
-    
+
     /**
      * Returns true if any plugin event listeners are registered.
-     * 
+     *
      * @return True if any plugin event listeners are registered.
      */
     private boolean hasListeners() {
         return pluginEventListeners1 != null || pluginEventListeners2 != null;
     }
-    
+
     /**
      * Notify all plugin callbacks of the specified action.
-     * 
+     *
      * @param action Action to perform.
      * @param async If true, callbacks are done asynchronously.
      */
     private void executeAction(PluginAction action, boolean async) {
         executeAction(action, async, null);
     }
-    
+
     /**
      * Notify all plugin callbacks of the specified action.
-     * 
+     *
      * @param action Action to perform.
      * @param data Event-dependent data (may be null).
      * @param async If true, callbacks are done asynchronously.
@@ -430,7 +430,7 @@ public class UIElementPlugin extends UIElementBase implements IDisable, IPropert
     private void executeAction(PluginAction action, boolean async, Object data) {
         if (hasListeners() || action == PluginAction.LOAD) {
             PluginEvent event = new PluginEvent(this, action, data);
-            
+
             if (async) {
                 EventUtil.post(event);
             } else {
@@ -438,10 +438,10 @@ public class UIElementPlugin extends UIElementBase implements IDisable, IPropert
             }
         }
     }
-    
+
     /**
      * Notify listeners of plugin events.
-     * 
+     *
      * @param event The plugin event containing the action.
      */
     @EventHandler("action")
@@ -449,7 +449,7 @@ public class UIElementPlugin extends UIElementBase implements IDisable, IPropert
         PluginException exception = null;
         PluginAction action = event.getAction();
         boolean debug = log.isDebugEnabled();
-        
+
         if (pluginEventListeners1 != null) {
             for (IPluginEvent listener : new ArrayList<>(pluginEventListeners1)) {
                 try {
@@ -457,20 +457,20 @@ public class UIElementPlugin extends UIElementBase implements IDisable, IPropert
                         log.debug("Invoking IPluginEvent.on" + WordUtils.capitalizeFully(action.name()) + " for listener "
                                 + listener);
                     }
-                    
+
                     switch (action) {
                         case LOAD:
                             listener.onLoad(this);
                             continue;
-                        
+
                         case UNLOAD:
                             listener.onUnload();
                             continue;
-                        
+
                         case ACTIVATE:
                             listener.onActivate();
                             continue;
-                        
+
                         case INACTIVATE:
                             listener.onInactivate();
                             continue;
@@ -480,7 +480,7 @@ public class UIElementPlugin extends UIElementBase implements IDisable, IPropert
                 }
             }
         }
-        
+
         if (pluginEventListeners2 != null) {
             for (IPluginEventListener listener : new ArrayList<>(pluginEventListeners2)) {
                 try {
@@ -493,26 +493,26 @@ public class UIElementPlugin extends UIElementBase implements IDisable, IPropert
                 }
             }
         }
-        
+
         if (action == PluginAction.LOAD) {
             doAfterLoad();
         }
-        
+
         if (exception != null) {
             throw exception;
         }
     }
-    
+
     /**
      * Actions to perform after the container is loaded.
      */
     protected void doAfterLoad() {
         registerProperty(this, "color", false);
     }
-    
+
     /**
      * Forward command events to first level children of the container.
-     * 
+     *
      * @param event The command event.
      */
     @EventHandler("command")
@@ -520,17 +520,17 @@ public class UIElementPlugin extends UIElementBase implements IDisable, IPropert
         if (isEnabled()) {
             for (BaseComponent child : container.getChildren()) {
                 EventUtil.send(event, child);
-                
+
                 if (event.isStopped()) {
                     break;
                 }
             }
         }
     }
-    
+
     /**
      * Creates a chained exception.
-     * 
+     *
      * @param action Action being performed at the time of the exception.
      * @param newException Exception just thrown.
      * @param previousException Previous exception (may be null).
@@ -545,21 +545,21 @@ public class UIElementPlugin extends UIElementBase implements IDisable, IPropert
         wrapper.setStackTrace(newException.getStackTrace());
         return wrapper;
     }
-    
+
     /**
      * Initializes a plugin, if not already done. This loads the plugin's principal zul page,
      * attaches any event listeners, and sends a load event to subscribers.
      */
     public void load() {
         PluginDefinition definition = getDefinition();
-        
+
         if (!initialized && definition != null) {
             BaseComponent top;
-            
+
             try {
                 initialized = true;
                 top = container.getFirstChild();
-                
+
                 if (top == null) {
                     top = PageUtil.createPage(definition.getUrl(), container).get(0);
                 }
@@ -567,22 +567,22 @@ public class UIElementPlugin extends UIElementBase implements IDisable, IPropert
                 container.destroyChildren();
                 throw createChainedException("Initialize", e, null);
             }
-            
+
             if (pluginControllers != null) {
                 for (Object controller : pluginControllers) {
                     top.wireController(controller);
                 }
             }
-            
+
             findListeners(container);
             executeAction(PluginAction.LOAD, true);
         }
     }
-    
+
     /**
      * Search the plugin's component tree for components (or their controllers) implementing the
      * IPluginEvent interface. Those that are found are registered as listeners.
-     * 
+     *
      * @param cmpt BaseComponent to search
      */
     private void findListeners(BaseComponent cmpt) {
@@ -592,11 +592,11 @@ public class UIElementPlugin extends UIElementBase implements IDisable, IPropert
             findListeners(child);
         }
     }
-    
+
     /**
      * Adds the specified component to the toolbar container. The component is registered to this
      * container and will visible only when the container is active.
-     * 
+     *
      * @param component BaseComponent to add.
      */
     public void addToolbarComponent(BaseComponent component) {
@@ -605,30 +605,30 @@ public class UIElementPlugin extends UIElementBase implements IDisable, IPropert
             shell.addToolbarComponent(tbarContainer);
             registerComponent(tbarContainer);
         }
-        
+
         tbarContainer.addChild(component);
     }
-    
+
     /**
      * Register a component with the container. The container will control the visibility of the
      * component according to when it is active/inactive.
-     * 
+     *
      * @param component BaseComponent to register.
      */
     public void registerComponent(BaseUIComponent component) {
         if (registeredComponents == null) {
             registeredComponents = new ArrayList<>();
         }
-        
+
         registeredComponents.add(component);
         component.setAttribute(Constants.ATTR_CONTAINER, this);
         component.setAttribute(Constants.ATTR_VISIBLE, component.isVisible());
         component.setVisible(isVisible());
     }
-    
+
     /**
      * Allows auto-wire to work even if component is not a child of the container.
-     * 
+     *
      * @param id BaseComponent id.
      * @param component BaseComponent to be registered.
      */
@@ -637,43 +637,43 @@ public class UIElementPlugin extends UIElementBase implements IDisable, IPropert
             container.setAttribute(id, component);
         }
     }
-    
+
     /**
      * Registers a listener for the IPluginEvent callback event. If the listener has already been
      * registered, the request is ignored.
-     * 
+     *
      * @param listener Listener to be registered.
      */
     public void registerListener(IPluginEvent listener) {
         if (pluginEventListeners1 == null) {
             pluginEventListeners1 = new ArrayList<>();
         }
-        
+
         if (!pluginEventListeners1.contains(listener)) {
             pluginEventListeners1.add(listener);
         }
     }
-    
+
     /**
      * Registers a listener for the IPluginEventListener callback event. If the listener has already
      * been registered, the request is ignored.
-     * 
+     *
      * @param listener Listener to be registered.
      */
     public void registerListener(IPluginEventListener listener) {
         if (pluginEventListeners2 == null) {
             pluginEventListeners2 = new ArrayList<>();
         }
-        
+
         if (!pluginEventListeners2.contains(listener)) {
             pluginEventListeners2.add(listener);
             listener.onPluginEvent(new PluginEvent(this, PluginAction.SUBSCRIBE));
         }
     }
-    
+
     /**
      * Unregisters a listener for the IPluginEvent callback event.
-     * 
+     *
      * @param listener Listener to be unregistered.
      */
     public void unregisterListener(IPluginEvent listener) {
@@ -681,10 +681,10 @@ public class UIElementPlugin extends UIElementBase implements IDisable, IPropert
             pluginEventListeners1.remove(listener);
         }
     }
-    
+
     /**
      * Unregisters a listener for the IPluginEvent callback event.
-     * 
+     *
      * @param listener Listener to be unregistered.
      */
     public void unregisterListener(IPluginEventListener listener) {
@@ -693,10 +693,10 @@ public class UIElementPlugin extends UIElementBase implements IDisable, IPropert
             listener.onPluginEvent(new PluginEvent(this, PluginAction.UNSUBSCRIBE));
         }
     }
-    
+
     /**
      * Attempts to register or unregister an object as an event listener.
-     * 
+     *
      * @param object Object to register/unregister.
      * @param register If true, we are attempting to register. If false, unregister.
      * @return True if operation was successful. False if the object supports none of the recognized
@@ -704,7 +704,7 @@ public class UIElementPlugin extends UIElementBase implements IDisable, IPropert
      */
     public boolean tryRegisterListener(Object object, boolean register) {
         boolean success = false;
-        
+
         if (object instanceof IPluginEvent) {
             if (register) {
                 registerListener((IPluginEvent) object);
@@ -713,7 +713,7 @@ public class UIElementPlugin extends UIElementBase implements IDisable, IPropert
             }
             success = true;
         }
-        
+
         if (object instanceof IPluginEventListener) {
             if (register) {
                 registerListener((IPluginEventListener) object);
@@ -722,13 +722,13 @@ public class UIElementPlugin extends UIElementBase implements IDisable, IPropert
             }
             success = true;
         }
-        
+
         return success;
     }
-    
+
     /**
      * Registers an object as a controller if it implements the IPluginController interface.
-     * 
+     *
      * @param object Object to register.
      */
     public void tryRegisterController(Object object) {
@@ -736,15 +736,15 @@ public class UIElementPlugin extends UIElementBase implements IDisable, IPropert
             if (pluginControllers == null) {
                 pluginControllers = new ArrayList<>();
             }
-            
+
             pluginControllers.add((IPluginController) object);
         }
     }
-    
+
     /**
      * Registers one or more named properties to the container. Using this, a plugin can expose
      * properties for serialization and deserialization.
-     * 
+     *
      * @param instance The object instance holding the property accessors. If null, any existing
      *            registration will be removed.
      * @param propertyNames One or more property names to register.
@@ -754,11 +754,11 @@ public class UIElementPlugin extends UIElementBase implements IDisable, IPropert
             registerProperty(instance, propertyName, true);
         }
     }
-    
+
     /**
      * Registers a named property to the container. Using this, a plugin can expose a property for
      * serialization and deserialization.
-     * 
+     *
      * @param instance The object instance holding the property accessors. If null, any existing
      *            registration will be removed.
      * @param propertyName Name of property to register.
@@ -769,19 +769,19 @@ public class UIElementPlugin extends UIElementBase implements IDisable, IPropert
         if (registeredProperties == null) {
             registeredProperties = new HashMap<>();
         }
-        
+
         if (instance == null) {
             registeredProperties.remove(propertyName);
         } else {
             Object oldInstance = registeredProperties.get(propertyName);
             PropertyProxy proxy = oldInstance instanceof PropertyProxy ? (PropertyProxy) oldInstance : null;
-            
+
             if (!override && oldInstance != null && proxy == null) {
                 return;
             }
-            
+
             registeredProperties.put(propertyName, instance);
-            
+
             // If previous registrant was a property proxy, transfer its value to new registrant.
             if (proxy != null) {
                 try {
@@ -792,10 +792,10 @@ public class UIElementPlugin extends UIElementBase implements IDisable, IPropert
             }
         }
     }
-    
+
     /**
      * Registers a helper bean with this container.
-     * 
+     *
      * @param beanId The bean's id.
      * @param isRequired If true and the bean is not found, an exception is raised.
      */
@@ -803,25 +803,25 @@ public class UIElementPlugin extends UIElementBase implements IDisable, IPropert
         if (beanId == null || beanId.isEmpty()) {
             return;
         }
-        
+
         Object bean = SpringUtil.getBean(beanId);
-        
+
         if (bean == null && isRequired) {
             throw new PluginException("Required bean resouce not found: " + beanId);
         }
-        
+
         Object oldBean = getAssociatedBean(beanId);
-        
+
         if (bean == oldBean) {
             return;
         }
-        
+
         if (registeredBeans == null) {
             registeredBeans = new HashMap<>();
         }
-        
+
         tryRegisterListener(oldBean, false);
-        
+
         if (bean == null) {
             registeredBeans.remove(beanId);
         } else {
@@ -830,24 +830,24 @@ public class UIElementPlugin extends UIElementBase implements IDisable, IPropert
             tryRegisterController(bean);
         }
     }
-    
+
     /**
      * Returns a bean that has been associated (via registerBean) with this plugin.
-     * 
+     *
      * @param beanId The id of the bean.
      * @return The bean instance, or null if not found.
      */
     public Object getAssociatedBean(String beanId) {
         return registeredBeans == null ? null : registeredBeans.get(beanId);
     }
-    
+
     /**
      * Returns the shell instance that hosts this container.
-     * 
+     *
      * @return The shell instance.
      */
     public CareWebShell getShell() {
         return shell;
     }
-    
+
 }

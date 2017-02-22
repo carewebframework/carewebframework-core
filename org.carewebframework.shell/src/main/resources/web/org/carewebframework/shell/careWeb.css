@@ -40,7 +40,8 @@
 
 .cwf-plugin-container {
 	position: relative;
-	overflow: auto
+	overflow: auto;
+	padding: 0!important;
 }
 
 .cwf-anchor {
