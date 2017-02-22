@@ -7,15 +7,15 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  * This Source Code Form is also subject to the terms of the Health-Related
  * Additional Disclaimer of Warranty and Limitation of Liability available at
  *
@@ -28,6 +28,7 @@ package org.carewebframework.shell.elements;
 import org.carewebframework.shell.designer.PropertyEditorTreeView;
 import org.carewebframework.shell.property.PropertyTypeRegistry;
 import org.carewebframework.theme.ThemeUtil;
+import org.carewebframework.web.annotation.WiredComponent;
 import org.carewebframework.web.component.Div;
 import org.carewebframework.web.component.Pane;
 
@@ -37,30 +38,33 @@ import org.carewebframework.web.component.Pane;
  * associated tree pane.
  */
 public class UIElementTreeView extends UIElementBase {
-    
+
     static {
         registerAllowedParentClass(UIElementTreeView.class, UIElementBase.class);
         registerAllowedChildClass(UIElementTreeView.class, UIElementTreePane.class);
         PropertyTypeRegistry.register("nodes", PropertyEditorTreeView.class);
     }
-    
+
+    @WiredComponent
     private Div innerPane;
-    
+
+    @WiredComponent
     private Div selector;
-    
+
+    @WiredComponent
     private Pane selectorPane;
-    
+
     private UIElementTreePane activePane;
-    
+
     private ThemeUtil.ButtonStyle selectionStyle = ThemeUtil.ButtonStyle.PRIMARY;
-    
+
     public UIElementTreeView() throws Exception {
         super();
         maxChildren = Integer.MAX_VALUE;
         setOuterComponent(createFromTemplate());
         setInnerComponent(innerPane);
     }
-    
+
     /**
      * Only the node needs to be resequenced, since pane sequencing is arbitrary.
      */
@@ -70,7 +74,7 @@ public class UIElementTreeView extends UIElementBase {
         UIElementTreePane beforepane = (UIElementTreePane) before;
         moveChild(childpane.getNode(), beforepane.getNode());
     }
-    
+
     /**
      * Sets the caption of the selector pane.
      *
@@ -79,7 +83,7 @@ public class UIElementTreeView extends UIElementBase {
     public void setCaption(String value) {
         selectorPane.setTitle(value);
     }
-    
+
     /**
      * Returns the caption of the selector pane.
      *
@@ -88,7 +92,7 @@ public class UIElementTreeView extends UIElementBase {
     public String getCaption() {
         return selectorPane.getTitle();
     }
-    
+
     /**
      * Opens or closes the selector pane.
      *
@@ -97,7 +101,7 @@ public class UIElementTreeView extends UIElementBase {
     public void setOpen(boolean value) {
         //TODO: selectorPane.setOpen(value);
     }
-    
+
     /**
      * Returns true if the selector pane is open.
      *
@@ -106,29 +110,29 @@ public class UIElementTreeView extends UIElementBase {
     public boolean isOpen() {
         return true; //TODO: selectorPane.isOpen();
     }
-    
+
     /**
      * Returns the button style to use for selected nodes.
-     * 
+     *
      * @return Button style for selected nodes.
      */
     public ThemeUtil.ButtonStyle getSelectionStyle() {
         return selectionStyle;
     }
-    
+
     /**
      * Sets the button style to use for selected nodes.
-     * 
+     *
      * @param selectionStyle Button style for selected nodes.
      */
     public void setSelectionStyle(ThemeUtil.ButtonStyle selectionStyle) {
         if (activePane != null) {
             activePane.updateSelectionStyle(this.selectionStyle, selectionStyle);
         }
-        
+
         this.selectionStyle = selectionStyle;
     }
-    
+
     /**
      * Remove the associated tree node when a tree pane is removed.
      */
@@ -139,16 +143,16 @@ public class UIElementTreeView extends UIElementBase {
         }
         super.afterRemoveChild(child);
     }
-    
+
     /**
      * Returns the selector pane's container.
-     * 
+     *
      * @return The selector pane container.
      */
     /*package*/Div getSelector() {
         return selector;
     }
-    
+
     /**
      * Only the active pane should receive the activation request.
      */
@@ -158,12 +162,12 @@ public class UIElementTreeView extends UIElementBase {
             UIElementBase active = getFirstVisibleChild();
             setActivePane((UIElementTreePane) active);
         }
-        
+
         if (activePane != null) {
             activePane.activate(activate);
         }
     }
-    
+
     /**
      * Activates the specified pane. Any previously active pane will be deactivated.
      *
@@ -173,13 +177,13 @@ public class UIElementTreeView extends UIElementBase {
         if (pane == activePane) {
             return;
         }
-        
+
         if (activePane != null) {
             activePane.makeActivePane(false);
         }
-        
+
         activePane = pane;
-        
+
         if (activePane != null) {
             activePane.makeActivePane(true);
         }
