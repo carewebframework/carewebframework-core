@@ -1,92 +1,67 @@
 <page>
-	<window title="Event Testing - Warning:  Do not use this in a production system." 
-		class="panel-danger" mold="bootstrap" height="100%" width="100%" 
-		controller="${cwfEventTestingController}">
-		<borderlayout height="100%">
-			<west splittable="true" size="50%">
-				<panel title="Publish Test Events" height="100%"
-					class="panel-primary panel-sm" mold="bootstrap">
-					<toolbar alignment="end">
-						<button name="btnPing" label="Send Ping Request" 
-							zclass="btn" class="size:btn-xs btn-primary" />
-						<separator orient="vertical" width="20px" />
-						<button name="btnReset" label="Reset" 
-							zclass="btn" class="size:btn-xs btn-danger" />
-						<separator orient="vertical" width="20px" />
-						<button name="btnSend" label="Send" 
-							zclass="btn" class="size:btn-xs btn-success" />
-						<separator orient="vertical" width="15px" />
-					</toolbar>
-					<panelchildren>
-						<grid width="100%" height="100%" sizedByContent="true">
-							<columns>
-								<column align="right" />
-								<column align="left" hflex="1" />
-							</columns>
-							<rows>
-								<row>
-									<label label="Event Name:" />
-									<textbox name="tboxEventName"
-										width="100%" />
-								</row>
-								<row>
-									<label label="Event Recipients:" />
-									<textbox name="tboxEventRecipients"
-										width="100%" />
-								</row>
-								<row>
-									<div>
-										<label label="Event Data:" />
-										<separator orient="horizontal"
-											height="30px" />
-										<checkbox name="chkAutoGenerate"
-											label="Auto generate" />
-									</div>
-									<textbox name="tboxEventData"
-										multiline="true" width="100%" height="300px" />
-								</row>
-							</rows>
-						</grid>
-					</panelchildren>
-				</panel>
-			</west>
-			<center>
-				<panel title="Subscribe/Unsubscribe" height="100%"
-					class="panel-primary panel-sm" mold="bootstrap">
-					<toolbar>
-						<textbox name="tboxNewEvent" hflex="1" />
-						<button name="btnNewEvent" label="Add Event" 
-							zclass="btn" class="size:btn-xs btn-success" />
-					</toolbar>
-					<panelchildren>
-						<listbox name="lboxEventList" checkmark="true"
-							multiple="true" height="100%">
-							<listitem label="PING" checkable="true" />
-							<listitem label="POPUP" checkable="true" />
-							<listitem label="STATUS" checkable="true" />
-						</listbox>
-					</panelchildren>
-				</panel>
-			</center>
-			<east splittable="true" size="25%">
-				<panel title="Received Events" height="100%"
-					class="panel-primary panel-sm" mold="bootstrap">
-					<toolbar alignment="end">
-						<checkbox name="chkScrollLock" label="Scroll Lock" />
-						<separator orient="vertical" width="20px" />
-						<button name="btnClear" label="Clear" 
-							zclass="btn" class="size:btn-xs btn-danger" />
-						<separator orient="vertical" width="15px" />
-					</toolbar>
-					<panelchildren>
-						<textbox name="tboxEventResults" multiline="true" style="white-space:pre"
-							width="100%" height="100%" readonly="true" />
-					</panelchildren>
-				</panel>
-			</east>
-			<south size="5%">
-				<label name="lblInfo" />
-			</south>
-		</borderlayout>
+	<window title="Event Testing - Warning:  Do not use this in a production system."
+		class="flavor:panel-danger" height="100%" width="100%"
+		controller="${@cwfEventTestingController}">
+		<paneview height="100%">
+			<pane splittable="true" width="50%" title="Publish Test Events">
+				<toolbar alignment="end">
+					<button name="btnPing" label="Send Ping Request"
+						class="size:btn-xs flavor:btn-primary"/>
+					<div width="20px"/>
+					<button name="btnReset" label="Reset" class="size:btn-xs flavor:btn-danger"/>
+					<div width="20px"/>
+					<button name="btnSend" label="Send" class="size:btn-xs flavor:btn-success"/>
+					<div width="15px"/>
+				</toolbar>
+				<grid width="100%">
+					<columns>
+						<column class="text-align:right"/>
+						<column class="text-align:left" flex="1"/>
+					</columns>
+					<rows>
+						<row>
+							<label label="Event Name:"/>
+							<textbox name="tboxEventName" width="100%"/>
+						</row>
+						<row>
+							<label label="Event Recipients:"/>
+							<textbox name="tboxEventRecipients" width="100%"/>
+						</row>
+						<row>
+							<div>
+								<label label="Event Data:"/>
+								<div height="30px"/>
+								<checkbox name="chkAutoGenerate" label="Auto generate"/>
+							</div>
+							<memobox name="tboxEventData" width="100%" height="300px"/>
+						</row>
+					</rows>
+				</grid>
+			</pane>
+			<pane title="Subscribe/Unsubscribe">
+				<toolbar>
+					<textbox name="tboxNewEvent" flex="1"/>
+					<button name="btnNewEvent" label="Add Event" 
+						class="size:btn-xs flavor:btn-success"/>
+				</toolbar>
+				<listbox name="lboxEventList" multiple="true" height="100%">
+					<listitem label="PING"/>
+					<listitem label="POPUP"/>
+					<listitem label="STATUS"/>
+				</listbox>
+			</pane>
+			<pane splittable="true" width="25%" title="Received Events">
+				<toolbar alignment="end">
+					<checkbox name="chkScrollLock" label="Scroll Lock"/>
+					<div width="20px"/>
+					<button name="btnClear" label="Clear" 
+						class="size:btn-xs flavor:btn-danger"/>
+					<div width="15px"/>
+				</toolbar>
+				<memobox name="tboxEventResults" style="white-space:pre"
+					width="100%" flex="1" readonly="true"/>
+			</pane>
+		</paneview>
+		<label name="lblInfo"/>
 	</window>
 </page>

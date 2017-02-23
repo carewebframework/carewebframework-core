@@ -14,10 +14,16 @@
 			category="${@msg.cwf.shell.plugin.category.system}"
 			url="web/org/carewebframework/plugin/eventtesting/main.cwf">
 			<cwp:security requiresAll="false">
+				<!--
 				<cwp:authority name="PRIV_MONITOR_SYSTEM" />
+				-->
 			</cwp:security>
 		</cwp:plugin>
 
+	</beans>
+	
+	<beans profile="child">
+		
 		<bean id="cwfEventTestingController" scope="prototype"
 			class="org.carewebframework.plugin.eventtesting.MainController" />
 
