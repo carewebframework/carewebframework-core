@@ -7,15 +7,15 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  * This Source Code Form is also subject to the terms of the Health-Related
  * Additional Disclaimer of Warranty and Limitation of Liability available at
  *
@@ -54,13 +54,13 @@ public class UIElementTabView extends UIElementBase {
         setOuterComponent(tabview);
         tabview.addClass("cwf-tabview");
         tabview.addEventListener(ChangeEvent.TYPE, (event) -> {
-            setActivePane((UIElementTabPane) getAssociatedUIElement(event.getTarget()));
+            setActivePane((UIElementTabPane) getAssociatedUIElement(tabview.getSelectedTab()));
         });
     }
     
     /**
      * Sets the orientation which can be horizontal or vertical.
-     * 
+     *
      * @param orientation Orientation setting.
      */
     public void setOrientation(String orientation) {
@@ -69,7 +69,7 @@ public class UIElementTabView extends UIElementBase {
     
     /**
      * Returns the orientation (horizontal, vertical, top, or bottom).
-     * 
+     *
      * @return Orientation setting.
      */
     public String getOrientation() {
@@ -88,7 +88,7 @@ public class UIElementTabView extends UIElementBase {
     
     /**
      * Sets the active (visible) pane.
-     * 
+     *
      * @param pane The pane to become active.
      */
     protected void setActivePane(UIElementTabPane pane) {

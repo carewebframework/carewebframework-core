@@ -3,7 +3,7 @@
 		class="flavor:panel-danger" height="100%" width="100%"
 		controller="${@cwfMessageTestingController}">
 		<paneview orientation="vertical" class="cwf-messagetesting-root" height="100%">
-			<pane splittable="true">
+			<pane splittable="true" height="50%">
 				<paneview flex="1">
 					<pane width="50%" splittable="true">
 						<toolbar height="30px">
@@ -16,14 +16,16 @@
 						<toolbar height="30px">
 							<label label="Subscriptions" />
 							<button name="btnAddSubscription" label="Add"
-								class="size:size:btn-xs flavor:btn-primary" />
+								class="size:btn-xs flavor:btn-success" />
+							<button name="btnRemoveSubscription" label="Remove"
+								class="size:btn-xs flavor:btn-danger" />
 						</toolbar>
 						<listbox name="lboxSubscriptions"  multiple="true"
 							width="100%" flex="1" />
 					</pane>
 				</paneview>
 			</pane>
-			<pane height="50%">
+			<pane flex="1">
 				<paneview flex="1">
 					<pane width="50%" splittable="true">
 						<toolbar>

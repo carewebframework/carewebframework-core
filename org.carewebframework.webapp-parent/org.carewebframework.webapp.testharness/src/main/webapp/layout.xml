@@ -6,7 +6,7 @@
 			<cwfUserHeader />
 		</splitterpane>
 		<splitterpane size="90" relative="true">
-			<tabview orientation="horizontal">
+			<tabview orientation="top">
 				<tabpane label="Test Harness">
 					<treeview caption="Plugins:" open="true" />
 				</tabpane>
