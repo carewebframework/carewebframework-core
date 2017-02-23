@@ -3,7 +3,7 @@
 		class="flavor:panel-danger" height="100%" width="100%"
 		controller="${@cwfMessageTestingController}">
 		<paneview orientation="vertical" class="cwf-messagetesting-root" height="100%">
-			<pane splittable="true" height="50%">
+			<pane splittable="true" flex="1">
 				<paneview flex="1">
 					<pane width="50%" splittable="true">
 						<toolbar height="30px">
