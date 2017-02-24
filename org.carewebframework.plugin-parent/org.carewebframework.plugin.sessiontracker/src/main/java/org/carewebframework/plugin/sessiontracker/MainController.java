@@ -7,15 +7,15 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  * This Source Code Form is also subject to the terms of the Health-Related
  * Additional Disclaimer of Warranty and Limitation of Liability available at
  *
@@ -25,28 +25,24 @@
  */
 package org.carewebframework.plugin.sessiontracker;
 
-import java.util.Collection;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.carewebframework.api.context.UserContext;
-import org.carewebframework.api.domain.IUser;
 import org.carewebframework.common.StrUtil;
-import org.carewebframework.shell.elements.UIElementPlugin;
 import org.carewebframework.shell.plugins.PluginController;
 import org.carewebframework.web.annotation.EventHandler;
 import org.carewebframework.web.annotation.WiredComponent;
+import org.carewebframework.web.client.ISessionTracker;
 import org.carewebframework.web.client.Session;
 import org.carewebframework.web.client.WebSocketHandler;
+import org.carewebframework.web.component.Checkbox;
 import org.carewebframework.web.component.Grid;
 import org.carewebframework.web.component.Label;
-import org.carewebframework.web.component.Page;
 import org.carewebframework.web.component.Row;
+import org.carewebframework.web.component.Rows;
 import org.carewebframework.web.event.Event;
+import org.carewebframework.web.event.EventUtil;
 import org.carewebframework.web.model.IComponentRenderer;
 import org.carewebframework.web.model.ListModel;
-import org.carewebframework.web.model.ModelAndView;
-import org.carewebframework.web.page.PageRegistry;
 
 /**
  * Controller class for session tracker.
@@ -55,10 +51,30 @@ public class MainController extends PluginController {
     
     private static final Log log = LogFactory.getLog(MainController.class);
     
-    //members
-    private boolean isDelegationToModelDeferred;
+    private boolean needsRefresh = true;
     
-    private IComponentRenderer<Row, Session> sessionTrackerRowRenderer;
+    private IComponentRenderer<Row, Session> sessionRenderer;
+
+    private final ListModel<Session> model = new ListModel<>();
+    
+    private final ISessionTracker sessionTracker = new ISessionTracker() {
+
+        @Override
+        public void onSessionCreate(Session session) {
+            fireEvent("sessionCreate", session);
+        }
+
+        @Override
+        public void onSessionDestroy(Session session) {
+            fireEvent("sessionDestroy", session);
+        }
+        
+        private void fireEvent(String type, Session session) {
+            Event event = new Event(type, root, session);
+            EventUtil.post(event);
+        }
+        
+    };
     
     @WiredComponent
     private Label lblSessionSummary;
@@ -69,45 +85,67 @@ public class MainController extends PluginController {
     @WiredComponent
     private Grid grid;
     
-    private void doDelegationToModel() {
-        IUser user = UserContext.getActiveUser();
+    @WiredComponent
+    private Checkbox chkAutoRefresh;
+    
+    @Override
+    public void refresh() {
+        needsRefresh = false;
         showMessage(null);
+        Rows rows = grid.getRows();
+        rows.setRenderer(sessionRenderer);
+        model.clear();
+        model.addAll(WebSocketHandler.getActiveSessions());
+        rows.setModel(model);
+        lblSessionSummary.setLabel(StrUtil.formatMessage("@cwf.sessiontracker.msg.sessions.total", model.size()));
+    }
+    
+    @EventHandler(value = "sessionCreate")
+    @EventHandler(value = "sessionDestroy")
+    private void onSessionUpdate(Event event) {
+        Session session = (Session) event.getData();
         
-        if (user != null) {
-            log.trace("Establishing ListModelList for Grid");
-            
-            Collection<Page> pages = PageRegistry.getPages();
-            
-            if (!pages.isEmpty()) {
-                ListModel<Session> model = new ListModel<>(WebSocketHandler.getActiveSessions());
-                new ModelAndView<Row, Session>(grid.getRows(), model, sessionTrackerRowRenderer);
-                lblSessionSummary.setVisible(true);
-                int size = pages.size();
-                lblSessionSummary.setLabel(StrUtil.formatMessage("@cwf.sessiontracker.msg.sessions.total", size));
-                
-            } else { //shouldn't happen
-                String message = StrUtil.formatMessage("@cwf.sessiontracker.msg.session.none");
-                log.trace(message);
-                showMessage(message);
-            }
+        if ("sessionCreate".equals(event.getType())) {
+            model.add(session);
+        } else {
+            model.remove(session);
         }
-        
     }
     
     /**
      * Event handler for refreshing session list
-     * 
+     *
      * @param event Event
      */
     @EventHandler(value = "click", target = "btnRefreshSessionView")
     private void onClick$btnRefreshSessionView(Event event) {
         log.trace("Refreshing active Session/Desktop view");
-        doDelegationToModel();
+        refresh();
     }
     
+    @Override
+    public void onUnload() {
+        super.onUnload();
+        enableAutoRefresh(false);
+    }
+    
+    @EventHandler(value = "change", target = "chkAutoRefresh")
+    private void onCheck$chkAutoRefresh() {
+        enableAutoRefresh(chkAutoRefresh.isChecked());
+    }
+    
+    private void enableAutoRefresh(boolean enable) {
+        if (enable) {
+            WebSocketHandler.registerSessionTracker(sessionTracker);
+            refresh();
+        } else {
+            WebSocketHandler.unregisterSessionTracker(sessionTracker);
+        }
+    }
+
     /**
      * Displays message to client
-     * 
+     *
      * @param message Message to display to client.
      * @param params Message parameters.
      */
@@ -121,30 +159,21 @@ public class MainController extends PluginController {
     }
     
     @Override
-    public void onLoad(UIElementPlugin plugin) {
-        log.trace("onLoad");
-        super.onLoad(plugin);
-        isDelegationToModelDeferred = true;// onLoad happens prior to activation, defer until activated
-    }
-    
-    @Override
     public void onActivate() {
-        log.trace("Plugin Activated");
         super.onActivate();
         
-        if (isDelegationToModelDeferred) {
-            doDelegationToModel();
-            isDelegationToModelDeferred = false;
+        if (needsRefresh) {
+            refresh();
         }
     }
     
     /**
-     * Setter for RowRenderer
-     * 
-     * @param sessionTrackerRowRenderer RowRenderer
+     * Setter for session renderer
+     *
+     * @param sessionRenderer The session renderer.
      */
-    public void setSessionTrackerRowRenderer(IComponentRenderer<Row, Session> sessionTrackerRowRenderer) {
-        this.sessionTrackerRowRenderer = sessionTrackerRowRenderer;
+    public void setSessionRenderer(IComponentRenderer<Row, Session> sessionRenderer) {
+        this.sessionRenderer = sessionRenderer;
     }
     
 }

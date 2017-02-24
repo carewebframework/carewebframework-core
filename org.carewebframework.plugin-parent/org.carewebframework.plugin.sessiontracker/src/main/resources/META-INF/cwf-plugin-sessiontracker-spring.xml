@@ -13,7 +13,9 @@
 			category="${@msg.cwf.shell.plugin.category.system}"
 			url="web/org/carewebframework/plugin/sessiontracker/main.cwf">
 			<cwp:security requiresAll="false">
+				<!--
 				<cwp:authority name="PRIV_MONITOR_SYSTEM" />
+				-->
 			</cwp:security>
 		</cwp:plugin>
 
@@ -25,8 +27,8 @@
 		<bean id="cwfSessionTrackerController"
 			class="org.carewebframework.plugin.sessiontracker.MainController"
 			scope="prototype">
-			<property name="sessionTrackerRowRenderer">
-				<bean class="org.carewebframework.plugin.sessiontracker.MainRowRenderer" />
+			<property name="sessionRenderer">
+				<bean class="org.carewebframework.plugin.sessiontracker.SessionRenderer" />
 			</property>
 		</bean>
 

@@ -35,7 +35,7 @@ import org.carewebframework.web.model.IComponentRenderer;
 /**
  * RowRenderer to define rows within the Session/Desktop Tracking Grid
  */
-public class MainRowRenderer implements IComponentRenderer<Row, Session> {
+public class SessionRenderer implements IComponentRenderer<Row, Session> {
     
     @Override
     public Row render(Session session) {
