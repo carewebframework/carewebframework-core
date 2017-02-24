@@ -1,49 +1,44 @@
-<page xmlns="http://www.carewebframework.org/schema/cwf"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.carewebframework.org/schema/cwf http://www.carewebframework.org/schema/cwf/cwf.xsd">
-	
-	<window width="500px" height="500px" title="${this.title}" visible="false"
-		controller="${cwfChatSessionController}">
-		<style src="web/org/carewebframework/plugin/chat/chat.css" />
-		<paneview width="100%" height="100%" orientation="horizontal">
-			<pane width="50%">
-				<groupbox closable="false" height="100%" 
-					title="${@msg.cwf.chat.session.group.dialog.caption}" />
-					<div name="pnlDialog" class="chat-dialog" />
-					<toolbar alignment="end">
-						<button name="btnClearDialog"
-							label="${@msg.cwf.chat.session.button.clear.dialog.label}" />
-					</toolbar>
-				</groupbox>
-			</panel>
-			<pane width="50%" splittable="true">
-				<paneview width="100%" height="100%" orientation="vertical">
-					<pane flex="1">
-						<groupbox
-							title="${@msg.cwf.chat.session.group.participants.caption}" />
-							<listbox name="lstParticipants" style="border:none" />
-							<toolbar alignment="end">
-								<button name="btnRefresh" 
-									label="${@msg.cwf.chat.session.button.refresh.label}" />
-								<button name="btnInvite"
-									label="${@msg.cwf.chat.session.button.invite.label}" />
-							</toolbar>
-						</groupbox>
-					</pane>
-					<pane flex="1">
-						<groupbox height="100%"
-							title="${@msg.cwf.chat.session.group.message.caption}" />
-							<memobox name="txtMessage" width="100%" style="border:none" />
-							<toolbar alignment="end">
-								<button name="btnClearMessage" 
-									label="${@msg.cwf.chat.session.button.clear.message.label}" />
-								<button name="btnSendMessage"
-									label="${@msg.cwf.chat.session.button.send.message.label}" />
-							</toolbar>
-						</groupbox>
-					</cell>
-				</paneview>
-			</pane>
-		</paneview>
-	</window>
-</page>
+<window width="500px" height="500px" title="${self.title}" visible="false"
+	closeAction="destroy" controller="${@cwfChatSessionController}">
+	<stylesheet src="web/org/carewebframework/plugin/chat/chat.css" />
+	<paneview width="100%" height="100%" orientation="horizontal">
+		<pane flex="1" splittable="true">
+			<groupbox height="100%" 
+				title="${@msg.cwf.chat.session.group.dialog.caption}">
+				<div name="pnlDialog" class="chat-dialog" />
+				<toolbar alignment="end">
+					<button name="btnClearDialog"
+						label="${@msg.cwf.chat.session.button.clear.dialog.label}" />
+				</toolbar>
+			</groupbox>
+		</pane>
+		<pane flex="1">
+			<paneview width="100%" height="100%" orientation="vertical">
+				<pane flex="1">
+					<groupbox
+						title="${@msg.cwf.chat.session.group.participants.caption}">
+						<listbox name="lstParticipants" style="border:none" />
+						<toolbar alignment="end">
+							<button name="btnRefresh" 
+								label="${@msg.cwf.chat.session.button.refresh.label}" />
+							<button name="btnInvite"
+								label="${@msg.cwf.chat.session.button.invite.label}" />
+						</toolbar>
+					</groupbox>
+				</pane>
+				<pane flex="1">
+					<groupbox height="100%"
+						title="${@msg.cwf.chat.session.group.message.caption}">
+						<memobox name="txtMessage" width="100%" style="border:none" />
+						<toolbar alignment="end">
+							<button name="btnClearMessage" 
+								label="${@msg.cwf.chat.session.button.clear.message.label}" />
+							<button name="btnSendMessage"
+								label="${@msg.cwf.chat.session.button.send.message.label}" />
+						</toolbar>
+					</groupbox>
+				</pane>
+			</paneview>
+		</pane>
+	</paneview>
+</window>

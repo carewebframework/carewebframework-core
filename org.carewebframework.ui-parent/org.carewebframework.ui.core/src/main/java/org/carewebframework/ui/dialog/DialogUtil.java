@@ -12,23 +12,25 @@ import static org.carewebframework.ui.dialog.DialogConstants.STYLE_FIXED_FONT;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.carewebframework.ui.dialog.DialogControl.IPromptCallback;
 import org.carewebframework.ui.dialog.InputDialog.IInputCallback;
 import org.carewebframework.ui.util.CWFUtil;
 import org.carewebframework.web.ancillary.IResponseCallback;
 import org.carewebframework.web.component.Window;
 import org.carewebframework.web.event.IEventListener;
 
+/**
+ * Static convenience methods for displaying dialogs.
+ */
 public class DialogUtil {
     
     public interface IConfirmCallback extends IResponseCallback<Boolean> {};
     
-    /********************* Confirmation Dialogs *********************/
+    /* ---------------------- Confirmation Dialogs ---------------------- */
     
     /**
      * Present a confirmation (OK/Cancel) dialog with the specified prompt and return the user
      * response.
-     * 
+     *
      * @param message Prompt to present to the user.
      * @param callback Callback to receive dialog response.
      */
@@ -39,7 +41,7 @@ public class DialogUtil {
     /**
      * Present a confirmation (OK/Cancel) dialog with the specified prompt and return the user
      * response.
-     * 
+     *
      * @param message Prompt to present to the user.
      * @param title Caption of prompt dialog.
      * @param callback Callback to receive dialog response.
@@ -51,7 +53,7 @@ public class DialogUtil {
     /**
      * Present a confirmation (OK/Cancel) dialog with the specified prompt and return the user
      * response.
-     * 
+     *
      * @param message Prompt to present to the user.
      * @param title Caption of prompt dialog.
      * @param responseId Optional response id if user response is to be cached. If null, the
@@ -60,22 +62,34 @@ public class DialogUtil {
      * @param callback Callback to receive dialog response.
      */
     public static void confirm(String message, String title, String responseId, IConfirmCallback callback) {
-        PromptDialog.show(message, title, STYLES_QUESTION, LABEL_IDS_OK_CANCEL, LABEL_ID_CANCEL, null, responseId,
-            callback == null ? null : new IPromptCallback<String>() {
-                
-                @Override
-                public void onComplete(DialogResponse<String> response) {
-                    callback.onComplete(response != null && response.isOk());
-                }
-                
-            });
+        prompt(message, title, STYLES_QUESTION, LABEL_IDS_OK_CANCEL, LABEL_ID_CANCEL, null, responseId, (response) -> {
+            IResponseCallback.invoke(callback, response != null && response.isOk());
+        });
     }
     
-    /********************* Informational Dialogs *********************/
+    /* ---------------------- Prompt Dialogs ---------------------- */
+    
+    public static void prompt(String message, String title, String responses,
+                              IResponseCallback<DialogResponse<String>> callback) {
+        prompt(message, title, null, responses, null, null, null, callback);
+    }
+
+    public static void prompt(String message, String title, String styles, String responses, String exclusions,
+                              String defaultResponse, String responseId,
+                              IResponseCallback<DialogResponse<String>> callback) {
+        DialogControl<String> ctl = DialogControl.create(message, title, styles, responses, exclusions, defaultResponse,
+            responseId, (response) -> {
+                IResponseCallback.invoke(callback, response);
+            });
+        
+        PromptDialog.show(ctl);
+    }
+
+    /* ---------------------- Informational Dialogs ---------------------- */
     
     /**
      * Show an informational message with the specified title.
-     * 
+     *
      * @param message Text message
      * @param title Title of dialog
      */
@@ -85,7 +99,7 @@ public class DialogUtil {
     
     /**
      * Show an informational message with the default title.
-     * 
+     *
      * @param message Text message
      */
     public static void showInfo(String message) {
@@ -94,7 +108,7 @@ public class DialogUtil {
     
     /**
      * Show a warning message with the specified title.
-     * 
+     *
      * @param message Text message
      * @param title Title of dialog
      */
@@ -104,7 +118,7 @@ public class DialogUtil {
     
     /**
      * Show a warning message with the default title.
-     * 
+     *
      * @param message Text message
      */
     public static void showWarning(String message) {
@@ -113,7 +127,7 @@ public class DialogUtil {
     
     /**
      * Show an error message with the specified title.
-     * 
+     *
      * @param message Text message
      * @param title Title of dialog
      */
@@ -123,7 +137,7 @@ public class DialogUtil {
     
     /**
      * Show an error message with the default title.
-     * 
+     *
      * @param message Text message
      */
     public static void showError(String message) {
@@ -132,7 +146,7 @@ public class DialogUtil {
     
     /**
      * Show an exception message with the default title.
-     * 
+     *
      * @param e Exception to display.
      */
     public static void showError(Throwable e) {
@@ -141,7 +155,7 @@ public class DialogUtil {
     
     /**
      * Show a text message with the specified title and using a fixed pitch font.
-     * 
+     *
      * @param message Text message
      * @param title Title of dialog
      */
@@ -150,14 +164,15 @@ public class DialogUtil {
     }
     
     private static void showDialog(String message, String title, String style) {
-        PromptDialog.show(message, title, style, LABEL_ID_OK, null, null, null, null);
+        DialogControl<String> ctl = DialogControl.create(message, title, style, LABEL_ID_OK, null, null, null, null);
+        PromptDialog.show(ctl);
     }
     
-    /********************* Report Dialogs *********************/
+    /* ---------------------- Report Dialogs ---------------------- */
     
     /**
      * Displays the dialog amodally.
-     * 
+     *
      * @param text The text or HTML content. HTML content is indicated by prefixing with the html
      *            tag.
      * @param title Dialog title.
@@ -170,7 +185,7 @@ public class DialogUtil {
     
     /**
      * Displays the dialog modally.
-     * 
+     *
      * @param text The text or HTML content. HTML content is indicated by prefixing with the html
      *            tag.
      * @param title Dialog title.
@@ -182,11 +197,11 @@ public class DialogUtil {
         return ReportDialog.show(text, title, allowPrint, true, callback);
     }
     
-    /********************* Input Dialogs *********************/
+    /* ---------------------- Input Dialogs ---------------------- */
     
     /**
      * Prompt user for input.
-     * 
+     *
      * @param prompt Prompt message to display.
      * @param title Text to display.
      * @param callback The callback to receive the text input. If the dialog was cancelled, the text
@@ -198,7 +213,7 @@ public class DialogUtil {
     
     /**
      * Prompt user for input.
-     * 
+     *
      * @param prompt Prompt message to display.
      * @param title Text to display.
      * @param oldValue Old value of input.
@@ -213,11 +228,11 @@ public class DialogUtil {
         InputDialog.show(args, callback);
     }
     
-    /********************* Popup Dialogs *********************/
+    /* ---------------------- Popup Dialogs ---------------------- */
     
     /**
      * Opens any arbitrary page in a modal window.
-     * 
+     *
      * @param cwfPage Url of page.
      * @return Reference to the opened window, if successful.
      */
@@ -227,7 +242,7 @@ public class DialogUtil {
     
     /**
      * Can be used to popup any page as a modal dialog.
-     * 
+     *
      * @param cwfPage Url of page.
      * @param closable If true, window closure button appears.
      * @param sizable If true, window sizing grips appear.
@@ -239,7 +254,7 @@ public class DialogUtil {
     
     /**
      * Can be used to popup any page as a modal dialog.
-     * 
+     *
      * @param cwfPage Url of page.
      * @param closable If true, window closure button appears.
      * @param sizable If true, window sizing grips appear.

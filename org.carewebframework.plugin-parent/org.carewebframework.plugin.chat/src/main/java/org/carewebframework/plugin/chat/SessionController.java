@@ -7,15 +7,15 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  * This Source Code Form is also subject to the terms of the Health-Related
  * Additional Disclaimer of Warranty and Limitation of Liability available at
  *
@@ -25,7 +25,6 @@
  */
 package org.carewebframework.plugin.chat;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -38,47 +37,52 @@ import org.carewebframework.plugin.chat.SessionService.ISessionUpdate;
 import org.carewebframework.ui.FrameworkController;
 import org.carewebframework.ui.dialog.PopupDialog;
 import org.carewebframework.ui.util.CWFUtil;
+import org.carewebframework.web.ancillary.IResponseCallback;
+import org.carewebframework.web.annotation.EventHandler;
+import org.carewebframework.web.annotation.WiredComponent;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.Button;
 import org.carewebframework.web.component.Label;
 import org.carewebframework.web.component.Listbox;
 import org.carewebframework.web.component.Memobox;
-import org.carewebframework.web.component.Row;
 import org.carewebframework.web.component.Window;
-import org.carewebframework.web.event.InputEvent;
+import org.carewebframework.web.event.ChangeEvent;
 import org.carewebframework.web.model.ListModel;
-import org.carewebframework.web.model.ModelAndView;
 
 /**
  * Controller for an individual chat session.
  */
 public class SessionController extends FrameworkController implements ISessionUpdate {
-    
+
     private static final String DIALOG = CWFUtil.getResourcePath(SessionController.class) + "session.cwf";
-    
+
     private String sessionId;
-    
+
     private ChatService chatService;
+
+    private Window window;
     
+    @WiredComponent
     private Listbox lstParticipants;
-    
+
+    @WiredComponent
     private BaseComponent pnlDialog;
-    
+
+    @WiredComponent
     private Memobox txtMessage;
-    
+
+    @WiredComponent
     private Button btnSendMessage;
-    
+
     private final ListModel<IPublisherInfo> model = new ListModel<>();
-    
+
     private final Set<IPublisherInfo> outstandingInvitations = new HashSet<>();
-    
-    private ModelAndView<Row, IPublisherInfo> modelAndView;
-    
+
     private SessionService sessionService;
-    
+
     /**
      * Creates a chat session bound to the specified session id.
-     * 
+     *
      * @param sessionId The chat session id.
      * @param originator If true, this user is originating the chat session.
      * @return The controller for the chat session.
@@ -89,49 +93,57 @@ public class SessionController extends FrameworkController implements ISessionUp
         args.put("title", StrUtil.formatMessage("@cwf.chat.session.title"));
         args.put("originator", originator ? true : null);
         Window dlg = PopupDialog.show(DIALOG, args, true, true, false, null);
-        
-        if (dlg.hasAttribute("closed")) {
-            dlg.detach();
-            return null;
-        }
-        
-        dlg.popup(null);
         return (SessionController) FrameworkController.getController(dlg);
     }
-    
+
     /**
      * Initialize the dialog.
      */
     @Override
     public void afterInitialized(BaseComponent comp) {
         super.afterInitialized(comp);
+        window = (Window) comp;
         sessionId = (String) comp.getAttribute("id");
-        modelAndView = new ModelAndView<Row, IPublisherInfo>(lstParticipants);
-        modelAndView.setRenderer(new ParticipantRenderer(chatService.getSelf(), null));
+        lstParticipants.setRenderer(new ParticipantRenderer(chatService.getSelf(), null));
         model.add(chatService.getSelf());
-        modelAndView.setModel(model);
+        lstParticipants.setModel(model);
         clearMessage();
-        
-        if (comp.getAttribute("originator") != null && !invite()) {
-            close();
+
+        if (comp.getAttribute("originator") != null) {
+            invite((result) -> {
+                if (!result) {
+                    close();
+                } else {
+                    initSession();
+                }
+            });
+        } else {
+            initSession();
         }
     }
-    
+
+    private void initSession() {
+        sessionService = SessionService.create(chatService.getSelf(), sessionId, getEventManager(), this);
+        sessionService.setActive(true);
+        window.popup(null);
+    }
+
     /**
      * Extend chat invitation.
-     * 
-     * @return True if invitations were sent.
+     *
+     * @param callback Reports true if invitations were sent.
      */
-    private boolean invite() {
-        Collection<IPublisherInfo> invitees = InviteController.show(sessionId, model);
-        
-        if (invitees != null) {
-            outstandingInvitations.addAll(invitees);
-        }
-        
-        return invitees != null;
+    private void invite(IResponseCallback<Boolean> callback) {
+        InviteController.show(sessionId, model, (invitees) -> {
+            if (invitees != null) {
+                outstandingInvitations.addAll(invitees);
+                IResponseCallback.invoke(callback, true);
+            } else {
+                IResponseCallback.invoke(callback, false);
+            }
+        });
     }
-    
+
     /**
      * Refreshes the participant list.
      */
@@ -141,7 +153,7 @@ public class SessionController extends FrameworkController implements ISessionUp
         model.add(chatService.getSelf());
         sessionService.refresh();
     }
-    
+
     /**
      * Clear any text in the message text box.
      */
@@ -149,65 +161,71 @@ public class SessionController extends FrameworkController implements ISessionUp
         txtMessage.setValue(null);
         updateControls(true);
     }
-    
+
     /**
      * Updates control status.
-     * 
+     *
      * @param disableSend If true, disable the send button.
      */
     private void updateControls(boolean disableSend) {
         btnSendMessage.setDisabled(disableSend);
         txtMessage.setFocus(true);
     }
-    
+
     /**
      * Clear the message text.
      */
-    public void onClick$btnClearMessage() {
+    @EventHandler(value = "click", target = "btnClearMessage")
+    private void onClick$btnClearMessage() {
         clearMessage();
     }
-    
+
     /**
      * Send the message text.
      */
-    public void onClick$btnSendMessage() {
+    @EventHandler(value = "click", target = "btnSendMessage")
+    private void onClick$btnSendMessage() {
         addDialog(sessionService.sendMessage(txtMessage.getValue().trim()), true);
         clearMessage();
     }
-    
+
     /**
      * Clear the dialog panel.
      */
-    public void onClick$btnClearDialog() {
+    @EventHandler(value = "click", target = "btnClearDialog")
+    private void onClick$btnClearDialog() {
         pnlDialog.destroyChildren();
     }
-    
+
     /**
      * Refresh the display.
      */
-    public void onClick$btnRefresh() {
+    @EventHandler(value = "click", target = "btnRefresh")
+    private void onClick$btnRefresh() {
         refresh();
     }
-    
+
     /**
      * Invokes the participate invitation dialog.
      */
-    public void onClick$btnInvite() {
-        invite();
+    @EventHandler(value = "click", target = "btnInvite")
+    private void onClick$btnInvite() {
+        invite(null);
     }
-    
+
     /**
      * Enables the send button when text is present in the message text box.
-     * 
+     *
      * @param event The input event.
      */
-    public void onChanging$txtMessage(InputEvent event) {
-        updateControls(event.getValue().trim().isEmpty());
+    @EventHandler(value = "change", target = "txtMessage")
+    private void onChange$txtMessage(ChangeEvent event) {
+        updateControls(event.getValue(String.class).trim().isEmpty());
     }
-    
+
     /**
      * Adds a message to the dialog panel.
-     * 
+     *
      * @param chatMessage Message to add.
      * @param self True if this user is the message author.
      */
@@ -217,10 +235,10 @@ public class SessionController extends FrameworkController implements ISessionUp
             addDialog(header, chatMessage.message, self);
         }
     }
-    
+
     /**
      * Adds a dialog fragment to the dialog panel.
-     * 
+     *
      * @param header Header for the fragment.
      * @param text Text for the fragment.
      * @param self If true, this message comes from oneself.
@@ -230,10 +248,10 @@ public class SessionController extends FrameworkController implements ISessionUp
         newLabel(header, "chat-dialog-header" + selfStyle);
         newLabel(text, "chat-dialog-text" + selfStyle);
     }
-    
+
     /**
      * Adds a text entry to the dialog panel.
-     * 
+     *
      * @param text Text to add.
      * @param sclass SClass of the added text.
      */
@@ -245,10 +263,10 @@ public class SessionController extends FrameworkController implements ISessionUp
         pnlDialog.addChild(lbl);
         lbl.scrollIntoView(true);
     }
-    
+
     /**
      * Adds a newly joined participant to the active participant list.
-     * 
+     *
      * @param participant Participant to add.
      */
     @Override
@@ -256,13 +274,13 @@ public class SessionController extends FrameworkController implements ISessionUp
         if (model.add(participant) && !fromRefresh && !participant.equals(chatService.getSelf())) {
             addDialog(StrUtil.formatMessage("@cwf.chat.session.event.join", participant.getUserName()), null, false);
         }
-        
+
         outstandingInvitations.remove(participant);
     }
-    
+
     /**
      * Remove a participant from the list;
-     * 
+     *
      * @param participant Participant to remove.
      */
     @Override
@@ -271,7 +289,7 @@ public class SessionController extends FrameworkController implements ISessionUp
             addDialog(StrUtil.formatMessage("@cwf.chat.session.event.leave", participant.getUserName()), null, false);
         }
     }
-    
+
     /**
      * Handles chat message receipt.
      */
@@ -279,54 +297,43 @@ public class SessionController extends FrameworkController implements ISessionUp
     public void onMessageReceived(ChatMessage chatMessage) {
         addDialog(chatMessage, false);
     }
-    
+
     /**
      * Returns the id of the session to which this controller is bound.
-     * 
+     *
      * @return The session id.
      */
     public String getSessionId() {
         return sessionId;
     }
-    
+
     /**
      * Catch the close event.
      */
-    public void onClose() {
-        close();
+    @EventHandler("close")
+    private void onClose() {
+        if (sessionService != null) {
+            sessionService.setActive(false);
+        }
+
+        chatService.invite(sessionId, outstandingInvitations, true);
+        chatService.onSessionClosed(this);
     }
-    
+
     /**
      * Closes the chat dialog. Unsubscribes from all events and notifies the chat service.
      */
     public void close() {
-        if (sessionService != null) {
-            sessionService.setActive(false);
-        }
-        
-        root.detach();
-        root.setAttribute("closed", true);
-        chatService.invite(sessionId, outstandingInvitations, true);
-        chatService.onSessionClosed(this);
+        window.fireEvent("close");
     }
-    
+
     /**
      * Allows IOC container to inject chat service.
-     * 
+     *
      * @param chatService The chat service.
      */
     public void setChatService(ChatService chatService) {
         this.chatService = chatService;
     }
-    
-    /**
-     * Provided by chat service during chat session creation.
-     * 
-     * @param sessionService The session service.
-     */
-    protected void setSessionService(SessionService sessionService) {
-        this.sessionService = sessionService;
-        sessionService.setActive(true);
-    }
-    
+
 }

@@ -7,15 +7,15 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  * This Source Code Form is also subject to the terms of the Health-Related
  * Additional Disclaimer of Warranty and Limitation of Liability available at
  *
@@ -37,7 +37,6 @@ import org.apache.commons.logging.LogFactory;
 import org.carewebframework.common.MiscUtil;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.ui.dialog.DialogControl.ChoiceFormat;
-import org.carewebframework.ui.dialog.DialogControl.IPromptCallback;
 import org.carewebframework.web.ancillary.IAutoWired;
 import org.carewebframework.web.annotation.WiredComponent;
 import org.carewebframework.web.client.ExecutionContext;
@@ -61,68 +60,15 @@ import org.carewebframework.web.page.PageUtil;
  */
 public class PromptDialog implements IAutoWired {
     
-    protected static final Log log = LogFactory.getLog(PromptDialog.class.getClass());
+    private static final Log log = LogFactory.getLog(PromptDialog.class.getClass());
     
     /**
      * Display the prompt dialog.
-     * 
-     * @param <T> The type of response object.
-     * @param message Text message
-     * @param title Title of dialog
-     * @param styles Style classes for icon, message text, and panel (pipe-delimited)
-     * @param responses Responses for the dialog.
-     * @param excludeResponses Only applies if saveResponseId is specified. This is a list of
-     *            responses that will not be saved.
-     * @param defaultResponse Default response for the dialog.
-     * @param saveResponseId Uniquely identifies this response for purposes of saving and retrieving
-     *            the last response. If not specified (null or empty), the response is not saved.
-     *            Otherwise, if a saved response exists, it is returned without displaying the
-     *            dialog. If a saved response does not exist, the user is prompted in the normal
-     *            manner with the addition of a check box on the dialog asking if the response is to
-     *            be saved. If this box is checked, the user's response is then saved as a user
-     *            preference.
-     * @param callback Callback to receive response.
-     */
-    public static <T> void show(String message, String title, String styles, T[] responses, T[] excludeResponses,
-                                T defaultResponse, String saveResponseId, IPromptCallback<T> callback) {
-        show(new DialogControl<T>(message, title, styles, responses, excludeResponses, defaultResponse, saveResponseId,
-                callback));
-    }
-    
-    /**
-     * Display the prompt dialog.
-     * 
-     * @param message Text message
-     * @param title Title of dialog
-     * @param styles Style classes for icon, message text, and panel (pipe-delimited)
-     * @param responses Response text (pipe-delimited)
-     * @param excludeResponses Only applies if saveResponseId is specified. This is a list of
-     *            responses that will not be saved and is specified in the same format as the
-     *            buttonCaptions parameter.
-     * @param defaultResponse Default response text
-     * @param saveResponseId Uniquely identifies this response for purposes of saving and retrieving
-     *            the last response. If not specified (null or empty), the response is not saved.
-     *            Otherwise, if a saved response exists, it is returned without displaying the
-     *            dialog. If a saved response does not exist, the user is prompted in the normal
-     *            manner with the addition of a check box on the dialog asking if the response is to
-     *            be saved. If this box is checked, the user's response is then saved as a user
-     *            preference.
-     * @param callback Callback to receive response.
-     */
-    public static void show(String message, String title, String styles, String responses, String excludeResponses,
-                            String defaultResponse, String saveResponseId, IPromptCallback<String> callback) {
-        show(DialogControl.toDialogParameters(message, title, styles, responses, excludeResponses, defaultResponse,
-            saveResponseId, callback));
-    }
-    
-    /**
-     * Display the prompt dialog.
-     * 
-     * @param <T> The type of response object.
+     *
      * @param control The dialog control.
      */
-    public static <T> void show(DialogControl<T> control) {
-        DialogResponse<T> response = control.getLastResponse();
+    public static void show(DialogControl<?> control) {
+        DialogResponse<?> response = control.getLastResponse();
         
         if (response != null) {
             control.callback(response);
@@ -155,7 +101,7 @@ public class PromptDialog implements IAutoWired {
         /**
          * When a response component is clicked, return its associated response and close the
          * dialog.
-         * 
+         *
          * @param event Click event.
          */
         @Override
@@ -261,7 +207,7 @@ public class PromptDialog implements IAutoWired {
     
     /**
      * Retrieve the response and close the dialog.
-     * 
+     *
      * @param component The component associated with the response.
      */
     private void close(BaseComponent component) {

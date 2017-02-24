@@ -12,17 +12,17 @@
 	
 	<style>
 		.cwf_inputdialog {
-		text-align: center;
+			text-align: center;
 		}
 		
 		.cwf_inputdialog > .cwf_cell {
-		display: block;
-		white-space: pre-wrap;
+			display: block;
+			white-space: pre-wrap;
 		}
 		
 		.cwf_inputdialog > .cwf_textbox {
-		width: 200pt;
-		margin: 5px 0 5px;
+			width: 200pt;
+			margin: 5px 0 5px;
 		}
 	</style>
 	

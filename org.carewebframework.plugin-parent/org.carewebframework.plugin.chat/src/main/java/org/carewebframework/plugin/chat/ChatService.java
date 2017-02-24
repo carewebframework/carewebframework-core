@@ -7,15 +7,15 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  * This Source Code Form is also subject to the terms of the Health-Related
  * Additional Disclaimer of Warranty and Limitation of Liability available at
  *
@@ -84,7 +84,7 @@ public class ChatService implements IParticipantUpdate {
     
     /**
      * Returns an instance of the chat service.
-     * 
+     *
      * @return The chat service.
      */
     public static ChatService getInstance() {
@@ -93,7 +93,7 @@ public class ChatService implements IParticipantUpdate {
     
     /**
      * Creates the chat service, supplying event manager instance.
-     * 
+     *
      * @param eventManager The event manager.
      */
     public ChatService(IEventManager eventManager) {
@@ -157,7 +157,7 @@ public class ChatService implements IParticipantUpdate {
     
     /**
      * Creates a session listener.
-     * 
+     *
      * @param sessionId Chat session identifier.
      * @param callback The callback interface to invoke when a session update event has been
      *            received.
@@ -169,7 +169,7 @@ public class ChatService implements IParticipantUpdate {
     
     /**
      * Returns the root identifier for sessions created by this service.
-     * 
+     *
      * @return Session root.
      */
     public String getSessionRoot() {
@@ -179,7 +179,7 @@ public class ChatService implements IParticipantUpdate {
     
     /**
      * Creates a new session id.
-     * 
+     *
      * @return New session id.
      */
     private String newSessionId() {
@@ -188,41 +188,30 @@ public class ChatService implements IParticipantUpdate {
     
     /**
      * Creates a new session with a new session id.
-     * 
-     * @return The newly created session.
      */
-    public SessionController createSession() {
-        return createSession(null);
+    public void createSession() {
+        createSession(null);
     }
     
     /**
      * Creates a new session with the specified session id.
-     * 
+     *
      * @param sessionId The session id to associate with the new session.
-     * @return The newly created session.
      */
-    public SessionController createSession(String sessionId) {
+    public void createSession(String sessionId) {
         boolean newSession = sessionId == null;
         sessionId = newSession ? newSessionId() : sessionId;
         SessionController controller = sessions.get(sessionId);
         
-        if (controller != null) {
-            return controller;
-        }
-        
-        controller = SessionController.create(sessionId, newSession);
-        
-        if (controller != null) {
-            controller.setSessionService(SessionService.create(self, sessionId, eventManager, controller));
+        if (controller == null) {
+            controller = SessionController.create(sessionId, newSession);
             sessions.put(sessionId, controller);
         }
-        
-        return controller;
     }
     
     /**
      * Returns this user's publisher info.
-     * 
+     *
      * @return The user's publisher info.
      */
     public IPublisherInfo getSelf() {
@@ -231,7 +220,7 @@ public class ChatService implements IParticipantUpdate {
     
     /**
      * Called by a session controller when it closes.
-     * 
+     *
      * @param session Session being closed.
      */
     protected void onSessionClosed(SessionController session) {
@@ -240,7 +229,7 @@ public class ChatService implements IParticipantUpdate {
     
     /**
      * Returns true if the service is actively listening for events.
-     * 
+     *
      * @return The active state.
      */
     public boolean isActive() {
@@ -250,7 +239,7 @@ public class ChatService implements IParticipantUpdate {
     /**
      * Sets the listening state of the service. When set to false, the service stops listening to
      * all events.
-     * 
+     *
      * @param active The active state.
      */
     public void setActive(boolean active) {
@@ -266,7 +255,7 @@ public class ChatService implements IParticipantUpdate {
     
     /**
      * Returns a list of candidate participants.
-     * 
+     *
      * @return Candidate participant list.
      */
     public Collection<IPublisherInfo> getChatCandidates() {
@@ -275,7 +264,7 @@ public class ChatService implements IParticipantUpdate {
     
     /**
      * Sends an invitation request to the specified invitees.
-     * 
+     *
      * @param sessionId The id of the chat session making the invitation.
      * @param invitees The list of invitees. This will be used to constraint delivery of the
      *            invitation event to only those subscribers.
