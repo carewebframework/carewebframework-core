@@ -36,7 +36,6 @@ import org.carewebframework.web.client.Session;
 import org.carewebframework.web.client.WebSocketHandler;
 import org.carewebframework.web.component.Checkbox;
 import org.carewebframework.web.component.Grid;
-import org.carewebframework.web.component.Label;
 import org.carewebframework.web.component.Row;
 import org.carewebframework.web.component.Rows;
 import org.carewebframework.web.event.Event;
@@ -77,12 +76,6 @@ public class MainController extends PluginController {
     };
     
     @WiredComponent
-    private Label lblSessionSummary;
-    
-    @WiredComponent
-    private Label lblMessage;
-    
-    @WiredComponent
     private Grid grid;
     
     @WiredComponent
@@ -91,15 +84,18 @@ public class MainController extends PluginController {
     @Override
     public void refresh() {
         needsRefresh = false;
-        showMessage(null);
         Rows rows = grid.getRows();
         rows.setRenderer(sessionRenderer);
         model.clear();
         model.addAll(WebSocketHandler.getActiveSessions());
         rows.setModel(model);
-        lblSessionSummary.setLabel(StrUtil.formatMessage("@cwf.sessiontracker.msg.sessions.total", model.size()));
+        updateCount();
     }
     
+    private void updateCount() {
+        grid.setTitle(StrUtil.formatMessage("@cwf.sessiontracker.msg.sessions.total", model.size()));
+    }
+
     @EventHandler(value = "sessionCreate")
     @EventHandler(value = "sessionDestroy")
     private void onSessionUpdate(Event event) {
@@ -110,6 +106,8 @@ public class MainController extends PluginController {
         } else {
             model.remove(session);
         }
+
+        updateCount();
     }
     
     /**
@@ -143,21 +141,6 @@ public class MainController extends PluginController {
         }
     }
 
-    /**
-     * Displays message to client
-     *
-     * @param message Message to display to client.
-     * @param params Message parameters.
-     */
-    private void showMessage(String message, Object... params) {
-        if (message == null) {
-            lblMessage.setVisible(false);
-        } else {
-            lblMessage.setVisible(true);
-            lblMessage.setLabel(StrUtil.formatMessage(message, params));
-        }
-    }
-    
     @Override
     public void onActivate() {
         super.onActivate();

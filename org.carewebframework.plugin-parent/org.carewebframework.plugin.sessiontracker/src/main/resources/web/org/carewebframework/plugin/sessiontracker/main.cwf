@@ -1,25 +1,19 @@
-<paneview orientation="vertical" controller="${@cwfSessionTrackerController}">
-	<pane>
-		<toolbar width="100%">
-			<label name="lblSessionSummary" style="font-weight:bold"/>
-			<div flex="1"/>
-			<checkbox name="chkAutoRefresh" label="${@msg.cwf.sessiontracker.autorefresh.label}" />
-			<button name="btnRefreshSessionView" label="${@msg.cwf.btn.refresh.label}"/>
-		</toolbar>
-	</pane>
-	<pane>
-		<label name="lblMessage" style="color: red;font-weight: bold;" visible="false"/>
-	</pane>
-	<pane>
-		<grid name="grid">
-			<columns>
-				<column flex="1" label="${@msg.cwf.sessiontracker.master.session_id.label}"/>
-				<column flex="1" label="${@msg.cwf.sessiontracker.master.client_address.label}"/>
-				<column label="${@msg.cwf.sessiontracker.master.creation_time.label}"/>
-				<column label="${@msg.cwf.sessiontracker.master.last_accessed.label}"/>
-				<column label="${@msg.cwf.sessiontracker.master.timeout.label}"/>
-			</columns>
-			<rows/>
-		</grid>
-	</pane>
-</paneview>
+<div width="100%" height="100%" class="cwf-layout-vertical"
+		controller="${@cwfSessionTrackerController}">
+	<toolbar width="100%">
+		<label name="lblSessionSummary" style="font-weight:bold"/>
+		<div flex="1"/>
+		<checkbox name="chkAutoRefresh" label="${@msg.cwf.sessiontracker.autorefresh.label}" />
+		<button name="btnRefreshSessionView" label="${@msg.cwf.btn.refresh.label}"/>
+	</toolbar>
+	<grid name="grid" flex="1">
+		<columns>
+			<column flex="1" label="${@msg.cwf.sessiontracker.master.session_id.label}"/>
+			<column flex="1" label="${@msg.cwf.sessiontracker.master.client_address.label}"/>
+			<column label="${@msg.cwf.sessiontracker.master.creation_time.label}"/>
+			<column label="${@msg.cwf.sessiontracker.master.last_accessed.label}"/>
+			<column label="${@msg.cwf.sessiontracker.master.timeout.label}"/>
+		</columns>
+		<rows/>
+	</grid>
+</div>
