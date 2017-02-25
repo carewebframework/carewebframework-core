@@ -36,18 +36,18 @@ import org.carewebframework.web.event.ChangeEvent;
  * children and only one of those can be active at a time.
  */
 public class UIElementTabView extends UIElementBase {
-    
+
     static {
         registerAllowedParentClass(UIElementTabView.class, UIElementBase.class);
         registerAllowedChildClass(UIElementTabView.class, UIElementTabPane.class);
         PropertyTypeRegistry.register("tabs", PropertyEditorTabView.class);
     }
-    
+
     private final Tabview tabview = new Tabview();
-    
+
     private UIElementTabPane activePane;
-    
-    public UIElementTabView() throws Exception {
+
+    public UIElementTabView() {
         super();
         maxChildren = Integer.MAX_VALUE;
         fullSize(tabview);
@@ -57,7 +57,7 @@ public class UIElementTabView extends UIElementBase {
             setActivePane((UIElementTabPane) getAssociatedUIElement(tabview.getSelectedTab()));
         });
     }
-    
+
     /**
      * Sets the orientation which can be horizontal or vertical.
      *
@@ -66,7 +66,7 @@ public class UIElementTabView extends UIElementBase {
     public void setOrientation(String orientation) {
         tabview.setTabPosition(TabPosition.valueOf(orientation.toUpperCase()));
     }
-    
+
     /**
      * Returns the orientation (horizontal, vertical, top, or bottom).
      *
@@ -75,7 +75,7 @@ public class UIElementTabView extends UIElementBase {
     public String getOrientation() {
         return tabview.getTabPosition().name().toLowerCase();
     }
-    
+
     /**
      * Need to detach both the tab and the tab panel of the child component.
      */
@@ -85,7 +85,7 @@ public class UIElementTabView extends UIElementBase {
             setActivePane(null);
         }
     }
-    
+
     /**
      * Sets the active (visible) pane.
      *
@@ -95,15 +95,24 @@ public class UIElementTabView extends UIElementBase {
         if (pane == activePane) {
             return;
         }
-        
+
         if (activePane != null) {
             activePane.activate(false);
         }
-        
+
         activePane = pane;
-        
+
         if (activePane != null) {
             activePane.activate(true);
+        }
+    }
+
+    @Override
+    protected void updateVisibility(boolean visible, boolean activated) {
+        super.updateVisibility(visible, activated);
+
+        if (activated && visible && activePane == null && getChildCount() > 0) {
+            setActivePane((UIElementTabPane) getChild(0));
         }
     }
     
@@ -115,10 +124,10 @@ public class UIElementTabView extends UIElementBase {
         if (activePane == null) {
             activePane = (UIElementTabPane) getAssociatedUIElement(tabview.getSelectedTab());
         }
-        
+
         if (activePane != null) {
             activePane.activate(activate);
         }
     }
-    
+
 }

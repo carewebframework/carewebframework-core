@@ -7,7 +7,7 @@
 		</splitterpane>
 		<splitterpane size="90" relative="true">
 			<tabview orientation="top">
-				<tabpane label="Test Harness" selected="true">
+				<tabpane label="Test Harness">
 					<treeview caption="Plugins:" open="true" />
 				</tabpane>
 			</tabview>
