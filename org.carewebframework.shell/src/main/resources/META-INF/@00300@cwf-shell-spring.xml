@@ -4,25 +4,20 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	xmlns:cwp="http://www.carewebframework.org/schema/plugin"
 	xmlns:cwt="http://www.carewebframework.org/schema/theme"
+	xmlns:cwc="http://www.carewebframework.org/schema/component"
 	xsi:schemaLocation="
 		http://www.springframework.org/schema/beans
 		http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.carewebframework.org/schema/plugin
 		http://www.carewebframework.org/schema/plugin/plugin-extensions.xsd
 		http://www.carewebframework.org/schema/theme
-		http://www.carewebframework.org/schema/theme/theme-extensions.xsd">
+		http://www.carewebframework.org/schema/theme/theme-extensions.xsd
+		http://www.carewebframework.org/schema/component
+		http://www.carewebframework.org/schema/component/component-extensions.xsd">
 
 	<beans profile="root">
 		<!-- Register shell components -->
-		<bean class="org.springframework.beans.factory.config.MethodInvokingBean">
-			<property name="targetObject" ref="cwf_ComponentScanner" />
-			<property name="targetMethod" value="scan" />
-			<property name="arguments">
-				<list>
-					<value type="java.lang.String">org.carewebframework.shell</value>
-				</list>
-			</property>
-		</bean>
+		<cwc:component-scan package="org.carewebframework.shell" />
 		
 		<!-- A registry of all known CareWeb plugins. -->
 		<bean id="pluginRegistry" class="org.carewebframework.shell.plugins.PluginRegistry"
