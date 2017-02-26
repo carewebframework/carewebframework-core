@@ -33,7 +33,7 @@ import org.carewebframework.web.annotation.EventHandler;
 import org.carewebframework.web.annotation.WiredComponent;
 import org.carewebframework.web.client.ISessionTracker;
 import org.carewebframework.web.client.Session;
-import org.carewebframework.web.client.WebSocketHandler;
+import org.carewebframework.web.client.Sessions;
 import org.carewebframework.web.component.Checkbox;
 import org.carewebframework.web.component.Grid;
 import org.carewebframework.web.component.Row;
@@ -47,69 +47,71 @@ import org.carewebframework.web.model.ListModel;
  * Controller class for session tracker.
  */
 public class MainController extends PluginController {
-    
+
     private static final Log log = LogFactory.getLog(MainController.class);
-    
+
     private boolean needsRefresh = true;
-    
+
+    private final Sessions sessions = Sessions.getInstance();
+
     private IComponentRenderer<Row, Session> sessionRenderer;
-
-    private final ListModel<Session> model = new ListModel<>();
     
-    private final ISessionTracker sessionTracker = new ISessionTracker() {
+    private final ListModel<Session> model = new ListModel<>();
 
+    private final ISessionTracker sessionTracker = new ISessionTracker() {
+        
         @Override
         public void onSessionCreate(Session session) {
             fireEvent("sessionCreate", session);
         }
-
+        
         @Override
         public void onSessionDestroy(Session session) {
             fireEvent("sessionDestroy", session);
         }
-        
+
         private void fireEvent(String type, Session session) {
             Event event = new Event(type, root, session);
             EventUtil.post(event);
         }
-        
+
     };
-    
+
     @WiredComponent
     private Grid grid;
-    
+
     @WiredComponent
     private Checkbox chkAutoRefresh;
-    
+
     @Override
     public void refresh() {
         needsRefresh = false;
         Rows rows = grid.getRows();
         rows.setRenderer(sessionRenderer);
         model.clear();
-        model.addAll(WebSocketHandler.getActiveSessions());
+        model.addAll(sessions.getActiveSessions());
         rows.setModel(model);
         updateCount();
     }
-    
+
     private void updateCount() {
         grid.setTitle(StrUtil.formatMessage("@cwf.sessiontracker.msg.sessions.total", model.size()));
     }
-
+    
     @EventHandler(value = "sessionCreate")
     @EventHandler(value = "sessionDestroy")
     private void onSessionUpdate(Event event) {
         Session session = (Session) event.getData();
-        
+
         if ("sessionCreate".equals(event.getType())) {
             model.add(session);
         } else {
             model.remove(session);
         }
-
+        
         updateCount();
     }
-    
+
     /**
      * Event handler for refreshing session list
      *
@@ -120,36 +122,36 @@ public class MainController extends PluginController {
         log.trace("Refreshing active Session/Desktop view");
         refresh();
     }
-    
+
     @Override
     public void onUnload() {
         super.onUnload();
         enableAutoRefresh(false);
     }
-    
+
     @EventHandler(value = "change", target = "chkAutoRefresh")
     private void onCheck$chkAutoRefresh() {
         enableAutoRefresh(chkAutoRefresh.isChecked());
     }
-    
+
     private void enableAutoRefresh(boolean enable) {
         if (enable) {
-            WebSocketHandler.registerSessionTracker(sessionTracker);
+            sessions.registerSessionTracker(sessionTracker);
             refresh();
         } else {
-            WebSocketHandler.unregisterSessionTracker(sessionTracker);
+            sessions.unregisterSessionTracker(sessionTracker);
         }
     }
-
+    
     @Override
     public void onActivate() {
         super.onActivate();
-        
+
         if (needsRefresh) {
             refresh();
         }
     }
-    
+
     /**
      * Setter for session renderer
      *
@@ -158,5 +160,5 @@ public class MainController extends PluginController {
     public void setSessionRenderer(IComponentRenderer<Row, Session> sessionRenderer) {
         this.sessionRenderer = sessionRenderer;
     }
-    
+
 }
