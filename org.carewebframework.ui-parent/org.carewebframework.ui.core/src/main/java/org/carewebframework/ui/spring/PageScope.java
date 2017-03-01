@@ -27,10 +27,10 @@ package org.carewebframework.ui.spring;
 
 import org.carewebframework.api.spring.ScopeContainer;
 import org.carewebframework.web.client.ExecutionContext;
-import org.carewebframework.web.client.ISessionTracker;
-import org.carewebframework.web.client.Session;
-import org.carewebframework.web.client.Sessions;
 import org.carewebframework.web.component.Page;
+import org.carewebframework.web.websocket.ISessionTracker;
+import org.carewebframework.web.websocket.Session;
+import org.carewebframework.web.websocket.Sessions;
 
 /**
  * Implements a custom Spring scope based on the CWF page.

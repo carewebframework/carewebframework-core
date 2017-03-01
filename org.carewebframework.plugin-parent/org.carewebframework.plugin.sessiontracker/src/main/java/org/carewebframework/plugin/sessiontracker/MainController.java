@@ -31,9 +31,6 @@ import org.carewebframework.common.StrUtil;
 import org.carewebframework.shell.plugins.PluginController;
 import org.carewebframework.web.annotation.EventHandler;
 import org.carewebframework.web.annotation.WiredComponent;
-import org.carewebframework.web.client.ISessionTracker;
-import org.carewebframework.web.client.Session;
-import org.carewebframework.web.client.Sessions;
 import org.carewebframework.web.component.Checkbox;
 import org.carewebframework.web.component.Grid;
 import org.carewebframework.web.component.Row;
@@ -42,6 +39,9 @@ import org.carewebframework.web.event.Event;
 import org.carewebframework.web.event.EventUtil;
 import org.carewebframework.web.model.IComponentRenderer;
 import org.carewebframework.web.model.ListModel;
+import org.carewebframework.web.websocket.ISessionTracker;
+import org.carewebframework.web.websocket.Session;
+import org.carewebframework.web.websocket.Sessions;
 
 /**
  * Controller class for session tracker.

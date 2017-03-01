@@ -46,8 +46,6 @@ import org.carewebframework.common.DateUtil.TimeUnit;
 import org.carewebframework.ui.util.CWFUtil;
 import org.carewebframework.common.MiscUtil;
 import org.carewebframework.common.StrUtil;
-import org.carewebframework.web.client.ISessionTracker;
-import org.carewebframework.web.client.Session;
 import org.carewebframework.web.component.BaseUIComponent;
 import org.carewebframework.web.component.Label;
 import org.carewebframework.web.component.Page;
@@ -56,6 +54,8 @@ import org.carewebframework.web.component.Window;
 import org.carewebframework.web.event.Event;
 import org.carewebframework.web.event.IEventListener;
 import org.carewebframework.web.page.PageUtil;
+import org.carewebframework.web.websocket.ISessionTracker;
+import org.carewebframework.web.websocket.Session;
 
 /**
  * Page timeout thread that evaluates ZK's Page and the time a request was last sent. Used to notify

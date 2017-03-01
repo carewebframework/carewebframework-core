@@ -27,10 +27,10 @@ package org.carewebframework.plugin.sessiontracker;
 
 import java.util.Date;
 
-import org.carewebframework.web.client.Session;
 import org.carewebframework.web.component.Cell;
 import org.carewebframework.web.component.Row;
 import org.carewebframework.web.model.IComponentRenderer;
+import org.carewebframework.web.websocket.Session;
 
 /**
  * RowRenderer to define rows within the Session/Desktop Tracking Grid
