@@ -1,9 +1,0 @@
-<?page title="Popup Dialog Test" contentType="text/html;charset=UTF-8"?>
-<page>
-<vbox>
-<div width="400px" style="background:lightgreen">
-This is a test of a popup window.  This div should be 400px wide and have a light green background.
-</div>
-<button label="Popup Another" forward="onClick=onTest"/>
-</vbox>
-</page>

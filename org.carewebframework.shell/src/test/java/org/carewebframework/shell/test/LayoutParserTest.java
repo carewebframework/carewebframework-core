@@ -7,15 +7,15 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  * This Source Code Form is also subject to the terms of the Health-Related
  * Additional Disclaimer of Warranty and Limitation of Liability available at
  *
@@ -23,7 +23,7 @@
  *
  * #L%
  */
-package org.carewebframework.shell.layout;
+package org.carewebframework.shell.test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -38,22 +38,22 @@ import org.carewebframework.shell.elements.UIElementMenubar;
 import org.carewebframework.shell.elements.UIElementPlugin;
 import org.carewebframework.shell.elements.UIElementPlugin.PluginContainer;
 import org.carewebframework.shell.elements.UIElementTreeView;
+import org.carewebframework.shell.layout.UILayout;
 import org.carewebframework.shell.plugins.PluginDefinition;
-import org.carewebframework.shell.plugins.TestPluginController;
 import org.carewebframework.shell.property.PropertyInfo;
-import org.carewebframework.shell.test.MockShellTest;
 import org.carewebframework.ui.FrameworkController;
 import org.carewebframework.web.event.ClickEvent;
 import org.carewebframework.web.event.EventUtil;
+import org.carewebframework.web.test.MockTest;
 import org.junit.Test;
 
-public class LayoutParserTest extends MockShellTest {
-    
+public class LayoutParserTest {
+
     private final UILayout layout = new UILayout();
-    
+
     @Test
     public void ParserTest() throws Exception {
-        String xml = getTextFromResource("LayoutParserTest1.xml");
+        String xml = MockTest.getTextFromResource("LayoutParserTest1.xml");
         layout.loadFromText(xml);
         assertFalse(layout.isEmpty());
         testNode(1, "_menubar");
@@ -63,7 +63,7 @@ public class LayoutParserTest extends MockShellTest {
         testProperty("size", "90");
         testProperty("relative", "true");
         testNode(1, "tabview");
-        testProperty("orientation", "horizontal");
+        testProperty("orientation", "top");
         testNode(1, "tabpane");
         testNode(1, "treeview");
         testProperty("open", "true");
@@ -77,6 +77,7 @@ public class LayoutParserTest extends MockShellTest {
         UIElementBase ele = def.createElement(null, null);
         assertTrue(ele instanceof UIElementTreeView);
         CareWebShell shell = new CareWebShell();
+        shell.setParent(MockTest.mockEnvironment.getSession().getPage());
         UIElementDesktop root = shell.getUIDesktop();
         UIElementBase element = layout.deserialize(root);
         assertTrue(element instanceof UIElementMenubar);
@@ -92,12 +93,11 @@ public class LayoutParserTest extends MockShellTest {
         root.activate(false);
         testPlugin(controller, 1, 1, 1, 0);
         root.activate(true);
+        MockTest.mockEnvironment.flushEvents();
         testPlugin(controller, 1, 2, 1, 0);
         testProperty(plugin1, "prop1", "value1");
         testProperty(plugin1, "prop2", 123);
         testProperty(plugin1, "prop3", true);
-        root.removeChildren();
-        testPlugin(controller, 1, 2, 1, 1);
         // Test auto-wire
         assertNotNull(controller.btnTest);
         assertNotNull(controller.mnuTest);
@@ -105,52 +105,52 @@ public class LayoutParserTest extends MockShellTest {
         EventUtil.send(ClickEvent.TYPE, controller.mnuTest, null);
         assertEquals(1, controller.getClickButtonCount());
         assertEquals(1, controller.getClickMenuCount());
-        assertEquals(controller.btnTest, container1.getAttribute("btnTest"));
-        assertEquals(controller.mnuTest, container1.getAttribute("mnuTest"));
+        root.removeChildren();
+        testPlugin(controller, 1, 2, 1, 1);
     }
-    
+
     private void testProperty(UIElementPlugin plugin, String propertyName, Object expectedValue) throws Exception {
         PluginDefinition def = plugin.getDefinition();
         PropertyInfo propInfo = null;
-        
+
         for (PropertyInfo pi : def.getProperties()) {
             if (pi.getId().equals(propertyName)) {
                 propInfo = pi;
                 break;
             }
         }
-        
+
         assertNotNull("Property not found: " + propertyName, propInfo);
         assertEquals(expectedValue, plugin.getPropertyValue(propInfo));
     }
-    
+
     private void testPlugin(TestPluginController controller, int loadCount, int activateCount, int inactivateCount,
                             int unloadCount) {
-        mockEnvironment.flushEvents();
+        MockTest.mockEnvironment.flushEvents();
         assertEquals(loadCount, controller.getLoadCount());
         assertEquals(activateCount, controller.getActivateCount());
         assertEquals(inactivateCount, controller.getInactivateCount());
         assertEquals(unloadCount, controller.getUnloadCount());
     }
-    
+
     private void testNode(int dir, String name) {
         switch (dir) {
             case 1:
                 layout.moveDown();
                 break;
-            
+
             case -1:
                 layout.moveUp();
                 break;
-            
+
             case 0:
                 layout.moveNext();
                 break;
         }
-        
+
         assertEquals(layout.getObjectName(), name);
     }
-    
+
     private void testProperty(String key, String value) {
         assertEquals(layout.getProperty(key), value);
     }

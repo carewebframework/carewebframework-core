@@ -3,7 +3,7 @@
 	<_toolbar />
 	<splitterview orientation="vertical">
 		<splitterpane relative="true" size="90">
-			<tabview orientation="horizontal">
+			<tabview orientation="top">
 				<tabpane label="Tabpane Label">
 					<treeview caption="Treeview Caption" open="true">
 						<treepane path="Pane 1" />

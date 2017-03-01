@@ -1,0 +1,4 @@
+<window>
+    <button name="btnTest" />
+    <menu name="mnuTest" />
+</window>

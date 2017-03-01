@@ -1,0 +1,9 @@
+<page>
+    <div class="cwf-layout-vertical">
+        <div width="400px" style="background:lightgreen"> 
+            This is a test of a popup window. This div
+            should be 400px wide and have a light green background. 
+        </div>
+        <button label="Popup Another" forward="click=test"/>
+    </div>
+</page>

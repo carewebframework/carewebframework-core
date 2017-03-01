@@ -49,8 +49,8 @@ public class PluginResourceButton implements IPluginResource {
     // The url of the icon to appear on the button.
     private String icon;
     
-    // Optional component name.
-    private String name;
+    // Optional component id.
+    private String id;
     
     /**
      * Returns the value of the button's caption text.
@@ -126,21 +126,21 @@ public class PluginResourceButton implements IPluginResource {
     }
     
     /**
-     * Returns the name to be assigned to the newly created component.
+     * Returns the id to be assigned to the newly created component.
      * 
-     * @return Component name (may be null).
+     * @return Component id (may be null).
      */
-    public String getName() {
-        return name;
+    public String getId() {
+        return id;
     }
     
     /**
-     * Sets the name to be assigned to the newly created component.
+     * Sets the id to be assigned to the newly created component.
      * 
-     * @param name Component name (may be null).
+     * @param id Component id (may be null).
      */
-    public void setName(String name) {
-        this.name = name;
+    public void setId(String id) {
+        this.id = id;
     }
     
     /**
@@ -155,12 +155,12 @@ public class PluginResourceButton implements IPluginResource {
         if (register) {
             UIElementPlugin plugin = (UIElementPlugin) owner;
             Button button = new Button(getCaption());
-            button.setName(getName());
+            button.setName(getId());
             button.setHint(getHint());
             button.setImage(getIcon());
             ActionUtil.addAction(button, getAction());
             plugin.addToolbarComponent(button);
-            plugin.registerId(getName(), button);
+            plugin.registerId(getId(), button);
         }
     }
     

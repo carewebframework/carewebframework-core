@@ -11,7 +11,7 @@
 	<beans profile="root-test">
 
 		<cwp:plugin id="testplugin1" name="Test Plugin 1"
-			url="web/org/carewebframework/shell/plugins/testplugin1.cwf"
+			url="web/org/carewebframework/shell/test/testplugin1.cwf"
 			description="Plugin for unit tests">
 			<cwp:serialization>
 				<cwp:property id="prop1" name="Test Property #1"
@@ -22,11 +22,17 @@
 					description="Test Boolean property" getter="isProp3" />
 			</cwp:serialization>
 			<cwp:resource>
-				<cwp:button-resource id="btnTest" caption="Test Button" />
-				<cwp:menu-resource id="mnuTest" path="Test Menu" />
+				<cwp:bean-resource bean="pluginTestController" />
 			</cwp:resource>
 		</cwp:plugin>
 
+	</beans>
+	
+	<beans profile="child-test">
+		
+		<bean id="pluginTestController" scope="prototype" 
+			class="org.carewebframework.shell.test.TestPluginController" />
+		
 	</beans>
 
 </beans>

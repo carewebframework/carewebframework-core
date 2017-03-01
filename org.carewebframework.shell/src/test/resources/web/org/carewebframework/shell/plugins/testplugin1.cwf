@@ -1,3 +1,0 @@
-<page>
-	<window controller="org.carewebframework.shell.plugins.TestPluginController" />
-</page>
