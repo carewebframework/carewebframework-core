@@ -1,7 +1,0 @@
-<?init class="org.carewebframework.ui.zk.Composition" arg0="web/org/carewebframework/ui/sharedforms/listViewForm.cwf"?>
-
-<page>
-
-	<div self="@insert(sharedFormsRoot)" height="100%" width="100%"
-		controller="org.carewebframework.ui.sharedforms.TestController" />
-</page>

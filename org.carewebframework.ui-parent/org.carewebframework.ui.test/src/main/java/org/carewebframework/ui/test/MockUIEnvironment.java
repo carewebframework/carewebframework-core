@@ -23,7 +23,7 @@
  *
  * #L%
  */
-package org.carewebframework.shell.test;
+package org.carewebframework.ui.test;
 
 import org.carewebframework.api.spring.DomainPropertySource;
 import org.carewebframework.api.spring.LabelPropertySource;
@@ -34,7 +34,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.web.context.support.XmlWebApplicationContext;
 
-public class MockShellEnvironment extends MockEnvironment {
+public class MockUIEnvironment extends MockEnvironment {
 
     private static class MockAppContextFinder extends AppContextFinder {
         

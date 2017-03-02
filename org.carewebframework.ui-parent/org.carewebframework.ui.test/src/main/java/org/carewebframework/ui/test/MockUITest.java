@@ -23,12 +23,12 @@
  *
  * #L%
  */
-package org.carewebframework.shell.test;
+package org.carewebframework.ui.test;
 
 import org.carewebframework.web.test.MockTest;
 import org.junit.BeforeClass;
 
-public class MockShellTest extends MockTest {
+public class MockUITest extends MockTest {
     
     private static final String[] CONFIG_LOCATIONS = { "classpath:/META-INF/cwf-dispatcher-servlet.xml",
             "classpath*:**/META-INF/*-spring.xml" };
@@ -39,7 +39,7 @@ public class MockShellTest extends MockTest {
     public static void beforeClass() throws Exception {
         MockTest.configLocations = CONFIG_LOCATIONS;
         MockTest.profiles = PROFILES;
-        MockTest.mockEnvironmentClass = MockShellEnvironment.class;
+        MockTest.mockEnvironmentClass = MockUIEnvironment.class;
         MockTest.beforeClass();
     }
     

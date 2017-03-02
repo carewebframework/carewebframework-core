@@ -151,7 +151,7 @@
 		</bean>
 
 		<bean id="globalEventDispatcher" class="org.carewebframework.api.event.GlobalEventDispatcher"
-			init-method="init" destroy-method="destroy">
+			init-method="init" destroy-method="destroy" depends-on="securityService">
 			<constructor-arg ref="eventManager" />
 			<constructor-arg ref="messageProducerService" />
 			<constructor-arg ref="messageConsumerService" />

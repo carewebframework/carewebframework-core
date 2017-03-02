@@ -3,26 +3,22 @@
 	
 	<parent>
 		<groupId>org.carewebframework</groupId>
-		<artifactId>org.carewebframework.api-parent</artifactId>
+		<artifactId>org.carewebframework.ui-parent</artifactId>
 		<version>6.0.0-SNAPSHOT</version>
 	</parent>
 	
-	<artifactId>org.carewebframework.api.test</artifactId>
-	<name>CWF API Test Framework</name>
+	<name>CWF UI Test Support</name>
+	<artifactId>org.carewebframework.ui.test</artifactId>
 	
 	<dependencies>
-      <dependency>
-        <groupId>javax.servlet</groupId>
-        <artifactId>javax.servlet-api</artifactId>
-        <scope>compile</scope>
-      </dependency>
 		<dependency>
 			<groupId>org.carewebframework</groupId>
-			<artifactId>org.carewebframework.api.security.mock</artifactId>
+			<artifactId>org.carewebframework.ui.core</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.carewebframework</groupId>
-			<artifactId>org.carewebframework.api.property.mock</artifactId>
+			<artifactId>org.carewebframework.api.test</artifactId>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
@@ -30,9 +26,9 @@
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-test</artifactId>
-			<scope>compile</scope>
+			<groupId>org.carewebframework</groupId>
+			<artifactId>org.carewebframework.web.test</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 </project>

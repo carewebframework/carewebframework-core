@@ -7,15 +7,15 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  * This Source Code Form is also subject to the terms of the Health-Related
  * Additional Disclaimer of Warranty and Limitation of Liability available at
  *
@@ -30,20 +30,21 @@ import static org.junit.Assert.assertNull;
 
 import org.carewebframework.api.domain.IUser;
 import org.carewebframework.api.security.SecurityDomainRegistry;
-import org.carewebframework.api.test.CommonTest;
+import org.carewebframework.api.spring.SpringUtil;
+import org.carewebframework.ui.test.MockUITest;
 import org.junit.Test;
 
-public class TestSecurity extends CommonTest {
+public class TestSecurity extends MockUITest {
     
     @Test
     public void testService() throws Exception {
         String dir = System.getProperty("java.io.tmpdir") + "cwf";
         System.out.println("Test database is at: " + dir);
-        SecurityDomainDAO sdao = appContext.getBean(SecurityDomainDAO.class);
+        SecurityDomainDAO sdao = SpringUtil.getAppContext().getBean(SecurityDomainDAO.class);
         setupDomains(sdao);
         sdao.init();
         assertEquals(3, SecurityDomainRegistry.getInstance().getAll().size());
-        UserDAO udao = appContext.getBean(UserDAO.class);
+        UserDAO udao = SpringUtil.getAppContext().getBean(UserDAO.class);
         setupUsers(udao);
         SecurityDomain domain = getSecurityDomain("1");
         authenticate(domain, "DOCTOR123", "DOCTOR321$", "1");
