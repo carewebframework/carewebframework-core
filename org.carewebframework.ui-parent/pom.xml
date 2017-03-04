@@ -13,6 +13,7 @@
 	<name>CWF UI Support Aggregator POM</name>
 	
 	<modules>
+		<module>org.carewebframework.ui.thymeleaf</module>
 		<module>org.carewebframework.ui.core</module>
 		<module>org.carewebframework.ui.test</module>
 		<module>org.carewebframework.ui.popupsupport</module>

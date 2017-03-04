@@ -23,7 +23,7 @@
  *
  * #L%
  */
-package org.carewebframework.ui.spring;
+package org.carewebframework.ui.thymeleaf;
 
 import org.carewebframework.common.Localizer;
 import org.thymeleaf.context.ITemplateContext;
