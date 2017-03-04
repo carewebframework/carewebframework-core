@@ -1,17 +1,14 @@
-<?page name="CWF_Login" automaticTimeout="true"?>
-<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
-
-<page xmlns="http://www.zkoss.org/2005/zul"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:h="http://www.w3.org/1999/xhtml"
-	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd ">
-
-	<div controller="${securityLoginWindowController}" zclass="cwf-login-main">
-		<h:form name="loginForm" name="loginForm"
-			action="${c:encodeURL('/login/j_spring_security_check')}"
-			method="POST" autocomplete="off">
-		</h:form>
-		<timer name="timer" running="false" repeats="true" />
+<page>
+	<div controller="${@securityLoginWindowController}" class="cwf-login-main">
+		<html>
+			<![CDATA[
+			<form name="loginForm" name="loginForm"
+				action="/login/j_spring_security_check"
+				method="POST" autocomplete="off">
+			</form>
+			]]>
+		</html>
+		<timer name="timer" running="false" />
 	</div>
 	
 	<style>

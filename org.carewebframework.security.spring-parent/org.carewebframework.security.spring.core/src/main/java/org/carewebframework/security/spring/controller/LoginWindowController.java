@@ -7,15 +7,15 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  * This Source Code Form is also subject to the terms of the Health-Related
  * Additional Disclaimer of Warranty and Limitation of Liability available at
  *
@@ -25,11 +25,18 @@
  */
 package org.carewebframework.security.spring.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.carewebframework.api.domain.IUser;
 import org.carewebframework.api.security.SecurityUtil;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.security.spring.Constants;
 import org.carewebframework.web.ancillary.IAutoWired;
+import org.carewebframework.web.annotation.EventHandler;
+import org.carewebframework.web.annotation.WiredComponent;
 import org.carewebframework.web.client.ClientUtil;
+import org.carewebframework.web.client.ExecutionContext;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.BaseInputComponent;
 import org.carewebframework.web.component.Button;
@@ -39,7 +46,10 @@ import org.carewebframework.web.component.Timer;
 import org.carewebframework.web.event.Event;
 import org.carewebframework.web.event.EventUtil;
 import org.carewebframework.web.event.IEventListener;
+import org.carewebframework.web.page.PageUtil;
+import org.springframework.security.authentication.CredentialsExpiredException;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.WebAttributes;
 import org.springframework.security.web.savedrequest.SavedRequest;
 
 /**
@@ -49,6 +59,7 @@ public class LoginWindowController implements IAutoWired {
     
     private BaseComponent loginForm;
     
+    @WiredComponent
     private Timer timer;
     
     private SavedRequest savedRequest;
@@ -57,19 +68,14 @@ public class LoginWindowController implements IAutoWired {
     
     private final String passwordPaneUrl;
     
-    private final IEventListener changeListener = new IEventListener() {
-        
-        @Override
-        public void onEvent(Event event) {
-            resetTimer();
-        }
-        
+    private final IEventListener changeListener = (event) -> {
+        resetTimer();
     };
     
     /**
      * If this authentication exception (or its cause) is of the expected type, return it.
      * Otherwise, return null.
-     * 
+     *
      * @param <T> The desired type.
      * @param exc The authentication exception.
      * @param clazz The desired type.
@@ -95,16 +101,19 @@ public class LoginWindowController implements IAutoWired {
     
     /**
      * Initialize the login form.
-     * 
+     *
      * @param root The top level component.
      */
     @Override
     public void afterInitialized(BaseComponent root) {
-        /*timer.setDelay(execution.getSession().getMaxInactiveInterval() * 500);
-        savedRequest = (SavedRequest) session.removeAttribute(org.carewebframework.security.spring.Constants.SAVED_REQUEST);
-        AuthenticationException authError = (AuthenticationException) session
-                .removeAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
-        IUser user = (IUser) session.removeAttribute(org.carewebframework.security.spring.Constants.SAVED_USER);
+        Map<String, Object> attributes = ExecutionContext.getSession().getSocket().getAttributes();
+        //timer.setInterval(execution.getSession().getMaxInactiveInterval() * 500);
+        timer.setInterval(60000);
+        timer.setRepeat(0);
+        savedRequest = (SavedRequest) attributes.remove(org.carewebframework.security.spring.Constants.SAVED_REQUEST);
+        AuthenticationException authError = (AuthenticationException) attributes
+                .remove(WebAttributes.AUTHENTICATION_EXCEPTION);
+        IUser user = (IUser) attributes.remove(org.carewebframework.security.spring.Constants.SAVED_USER);
         Map<String, Object> args = new HashMap<>();
         args.put("savedRequest", savedRequest);
         args.put("authError", authError);
@@ -124,12 +133,11 @@ public class LoginWindowController implements IAutoWired {
         wireListener(PageUtil.createPage(form, loginForm, args).get(0));
         root.getPage().setTitle(StrUtil.getLabel(title));
         resetTimer();
-        */
     }
     
     /**
      * Wire change listener to all input elements of child form.
-     * 
+     *
      * @param root Root element.
      */
     private void wireListener(BaseComponent root) {
@@ -159,7 +167,8 @@ public class LoginWindowController implements IAutoWired {
     /**
      * Invoked when inactivity timeout has occurred.
      */
-    public void onTimer$timer() {
+    @EventHandler(value = "timer", target = "timer")
+    private void onTimer$timer() {
         close(StrUtil.getLabel(Constants.LBL_LOGIN_FORM_TIMEOUT_MESSAGE));
     }
     
@@ -174,7 +183,7 @@ public class LoginWindowController implements IAutoWired {
     
     /**
      * Process a close request from another controller.
-     * 
+     *
      * @param event Close event. Data field contains message to display.
      */
     public void onClose(Event event) {
@@ -183,7 +192,7 @@ public class LoginWindowController implements IAutoWired {
     
     /**
      * Close the dialog and display the specified message.
-     * 
+     *
      * @param message The message text.
      */
     private void close(String message) {

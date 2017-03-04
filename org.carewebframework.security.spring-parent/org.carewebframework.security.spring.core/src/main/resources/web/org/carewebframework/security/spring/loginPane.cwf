@@ -1,90 +1,87 @@
-<page xmlns="http://www.zkoss.org/2005/zul"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd ">
+<page>
 
 	<div name="loginRoot" width="600px"
-		controller="${securityLoginPaneController}"
+		controller="${@securityLoginPaneController}"
 		style="margin-left:auto;margin-right:auto;border:2px solid black">
 		<div width="100%" height="90px">
-			<image name="imgDomain" style="padding:5px;float:left"
-				align="right" src="${@msg.login.form.title.image}" />
-			<vbox height="100%" pack="middle"
-				class="cwf-login-domain">
+			<image name="imgDomain" style="padding:5px;float:left;text-align:right"
+				src="${@msg.login.form.title.image}" />
+			<div height="100%"
+				class="cwf-layout-vertical cwf-login-domain">
 				<label name="lblDomain"
-					value="${@msg.login.form.domain.name.label}"
+					label="${@msg.login.form.domain.name.label}"
 					style="font-size:1.2em;font-weight:bold;display:block" />
 				<label name="lblTitle"
-					value="${@msg.login.form.title.label}" />
-			</vbox>
+					label="${@msg.login.form.title.label}" />
+			</div>
 		</div>
-		<vbox width="100%" align="center" spacing="10px"
-			style="border-top:solid 2px" class="bg-success">
-			<vlayout name="loginPrompts" hflex="1"
-				class="cwf-login-banner" style="margin: 30px 80px 0 80px">
-				<hlayout name="cmpDomainList" visible="false" valign="middle">
+		<div width="100%"
+			style="border-top:solid 2px" class="cwf-layout-vertical bg-success">
+			<div name="loginPrompts" flex="1"
+				class="cwf-layout-vertical cwf-login-banner" style="margin: 30px 80px 0 80px">
+				<div name="cmpDomainList" visible="false" class="cwf-layout-horizontal">
 					<div hflex="1" align="right">
 						${@msg.login.form.domain.label}
 					</div>
 					<listbox name="lstDomain" name="domain" hflex="2"
 						mold="select" />
 					<div hflex="1" />
-				</hlayout>
-				<hlayout valign="middle">
-					<div hflex="1" align="right">
+				</div>
+				<div class="cwf-layout-horizontal">
+					<div flex="1" style="text-align:right">
 						${@msg.login.form.username.label}
 					</div>
-					<textbox name="txtUsername" name="username"
-						focus="true" hflex="2" />
-					<div hflex="1" />
-				</hlayout>
-				<hlayout valign="middle">
-					<div hflex="1" align="right">
+					<textbox name="txtUsername" value="username"
+						focus="true" flex="2" />
+					<div flex="1" />
+				</div>
+				<div class="cwf-layout-horizontal">
+					<div flex="1" style="text-align:right">
 						${@msg.login.form.password.label}
 					</div>
-					<textbox name="txtPassword" name="password"
-						type="password" hflex="2" />
-					<div hflex="1">
+					<textbox name="txtPassword" value="password"
+						masked="true" flex="2" />
+					<div flex="1">
 						<button name="btnLogin" class="flavor:btn-success"
 							label="${@msg.login.form.button.login.label}" />
 					</div>
-				</hlayout>
-				<div name="divDomain" hflex="1">
+				</div>
+				<div name="divDomain" flex="1">
 					<button name="btnDomain" class="flavor:btn-link"
 						label="${@msg.login.form.domain.alternate.label}" />
 				</div>
-			</vlayout>
-			<label name="lblStatus" visible="false" />
-			<div hflex="1" zclass="panel panel-danger"
-				align="center" visible="false">
-				<label name="lblMessage" multiline="true"
-					zclass="text-danger" />
 			</div>
-			<label name="lblHeader" multiline="true" visible="false"
+			<label name="lblStatus" visible="false" />
+			<div flex="1" class="panel panel-danger"
+				style="text-align:center" visible="false">
+				<label name="lblMessage" class="text-danger" />
+			</div>
+			<label name="lblHeader" visible="false"
 				style="margin: 20px" />
 			<html name="htmlHeader" visible="false" style="margin: 20px" />
-			<separator height="20px" bar="true" />
+			<div height="20px" style="border-top: 1px solid black" />
 			<div name="divInfo" class="cwf-login-banner">
 				<label name="lblInfoTitle"
 					style="font-weight:bold;font-size:1.1em;display:block"
-					value="${@msg.login.form.info.title.label}" />
-				<separator height="10px" bar="true" />
+					label="${@msg.login.form.info.title.label}" />
+				<div height="10px" style="border-top: 1px solid black" />
 				<label name="lblInfo" style="padding: 20px"
-					multiline="true" value="${@msg.login.form.info.label}" />
+					label="${@msg.login.form.info.label}" />
 				<html name="htmlInfo" style="padding: 20px"
 					visible="false" />
 			</div>
 			<label label="${@msg.login.form.footer.label}" />
-			<hlayout class="panel-footer" hflex="1" valign="middle"
-				style="text-align: left; padding-left: 20px">
+			<div class="cwf-layout-horizontal panel-footer" flex="1"
+				style="text-align: left; padding-left: 20px; vertical-align: middle">
 				<label label="${@msg.login.form.copyright.prefix}"
 					style="font-style:italic" />
-				<image width="30px" height="30px" align="center"
-					style="background:transparent;margin:1px 5px 1px 5px"
+				<image width="30px" height="30px"
+					style="text-align: center;background:transparent;margin:1px 5px 1px 5px"
 					src="${@msg.login.form.copyright.image}" />
 				<label label="${@msg.login.form.copyright.label}"
 					style="font-weight:bold" />
-			</hlayout>
-		</vbox>
+			</div>
+		</div>
 	</div>
 
 	<style>

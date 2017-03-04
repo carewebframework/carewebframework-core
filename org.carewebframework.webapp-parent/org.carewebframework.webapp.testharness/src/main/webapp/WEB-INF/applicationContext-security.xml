@@ -35,13 +35,11 @@
 			<security:filter-security-metadata-source use-expressions="false">
 				<security:intercept-url pattern="/admin/**"
 					access="ROLE_ADMINISTRATOR" />
-				<security:intercept-url pattern="/secure/**"
-					access="ROLE_USER" />
-				<security:intercept-url pattern="/test/**"
-					access="ROLE_USER" />
 				<security:intercept-url pattern="/login/**"
 					access="IS_AUTHENTICATED_ANONYMOUSLY" />
 				<security:intercept-url pattern="/*.cwf"
+					access="ROLE_USER" />
+				<security:intercept-url pattern="/ws"
 					access="ROLE_USER" />
 			</security:filter-security-metadata-source>
 		</property>

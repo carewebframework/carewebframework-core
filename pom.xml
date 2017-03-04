@@ -47,6 +47,7 @@
 		<org.carewebframework.core.version>6.0.0-SNAPSHOT</org.carewebframework.core.version>
 		<org.springframework.version>4.3.6.RELEASE</org.springframework.version>
 		<org.springframework.security.version>4.0.4.RELEASE</org.springframework.security.version>
+		<org.thymeleaf.version>3.0.3.RELEASE</org.thymeleaf.version>
 		<ehcache.version>2.10.2.2.21</ehcache.version>
 		<jackson.version>2.6.2</jackson.version>
 		<servlet.api.version>3.1.0</servlet.api.version>
@@ -765,6 +766,17 @@
 				<artifactId>javax.servlet-api</artifactId>
 				<version>${servlet.api.version}</version>
 				<scope>provided</scope>
+			</dependency>
+			<!-- Thymeleaf -->
+			<dependency>
+				<groupId>org.thymeleaf</groupId>
+				<artifactId>thymeleaf</artifactId>
+				<version>${org.thymeleaf.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.thymeleaf</groupId>
+				<artifactId>thymeleaf-spring4</artifactId>
+				<version>${org.thymeleaf.version}</version>
 			</dependency>
 			<!-- Java Messaging Service Specification -->
 			<dependency>

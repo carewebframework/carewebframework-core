@@ -20,6 +20,8 @@
 
 	<beans profile="root">
 
+		<bean class="org.carewebframework.security.spring.controller.AccessDeniedController"/>
+		
 		<bean
 			class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
 			<property name="targetClass"
@@ -66,7 +68,15 @@
 
 		<bean id="securityAuthenticationProvider" 
 			class="org.carewebframework.security.spring.BaseAuthenticationProvider" />
-	
+		
+		<bean id="securityContextRepository"
+			class="org.springframework.security.web.context.HttpSessionSecurityContextRepository" />
+
+		<bean id="securityContextPersistenceFilter"
+			class="org.springframework.security.web.context.SecurityContextPersistenceFilter">
+			<constructor-arg ref="securityContextRepository" />
+		</bean>
+		
 		<bean id="securityAccessDeniedHandler"
 			class="org.springframework.security.web.access.AccessDeniedHandlerImpl">
 			<property name="errorPage"
