@@ -1,14 +1,14 @@
 <?variable-resolver class="org.carewebframework.ui.FrameworkVariableResolver"?>
 
-<vlayout name="errorContent" controller="${exceptionController}" spacing="0">
-	<html content="${@msg.cwf.error.dialog.message}" hflex="1" />
-	<div zclass="btn-toolbar" style="text-align:center" hflex="1">
-		<button name="btnDetail" zclass="btn" class="btn-info size:btn-xs"
+<div name="errorContent" controller="${@exceptionController}" class="cwf-layout-vertical">
+	<html content="${@msg.cwf.error.dialog.message}" flex="1" />
+	<toolbar alignment="center" flex="1">
+		<button name="btnDetail" class="flavor:btn-info size:btn-xs"
 			style="margin-top: 20px"
 			label="${@msg.cwf.error.dialog.btn.detail.label}" />
-	</div>
-	<grid name="detail" fixedLayout="true" visible="false">
-		<columns sizable="false" visible="false">
+	</toolbar>
+	<grid name="detail" visible="false">
+		<columns visible="false">
 			<column width="20%" />
 			<column width="80%" />
 		</columns>
@@ -22,18 +22,14 @@
 				<label name="lblMessage" />
 			</row>
 			<row>
-				<label label="${@msg.cwf.error.dialog.code.label}" />
-				<label name="lblCode" />
-			</row>
-			<row>
 				<label label="${@msg.cwf.error.dialog.status.label}" />
 				<label name="lblStatusCode" />
 			</row>
-			<row valign="top">
+			<row style="vertical-align:top">
 				<label label="${@msg.cwf.error.dialog.trace.label}" />
-				<textbox name="txtStackTrace" rows="15" hflex="1"
+				<textbox name="txtStackTrace" rows="15" flex="1"
 					readonly="true" />
 			</row>
 		</rows>
 	</grid>
-</vlayout>
+</div>

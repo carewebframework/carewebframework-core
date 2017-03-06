@@ -1,29 +1,27 @@
 <page>
-	<window zclass="cwf-timeout">
-		<vlayout>
-			<div name="timeoutPanel" zclass="cwf-timeout-panel alert">
+	<window class="cwf-timeout">
+		<div class="cwf-layout-vertical">
+			<div name="timeoutPanel" class="cwf-timeout-panel alert">
 				<label name="lblDuration" style="font-weight:bold"
 					class="alert-link" />
-				<separator orient="vertical" width="40px" />
-				<button name="btnKeepOpen" class="alert-link"
+				<div width="40px" />
+				<button name="btnKeepOpen" class="flavor:alert-link"
 					label="${@msg.cwf.timeout.keepalive.label}" />
 			</div>
-			<div zclass="cwf-timeout-lock-panel">
-				<panel name="lockPanel" mold="bootstrap"
+			<div class="cwf-timeout-lock-panel">
+				<div name="lockPanel" class="cwf-layout-vertical"
 					title="${@msg.cwf.timeout.lock.title}">
-					<panelchildren>
-						<hlayout>
-							<span
-								zclass="glyphicon glyphicon-lock text-danger"
-								style="font-size:300%;margin:20px 30px 0 0" />
-							<label name="lblLocked" />
-							<span
-								zclass="glyphicon glyphicon-lock text-danger"
-								style="font-size:300%;margin:20px 0 0 30px" />
-						</hlayout>
-					</panelchildren>
+					<div class="cwf-layout-horizontal">
+						<span
+							class="glyphicon glyphicon-lock text-danger"
+							style="font-size:300%;margin:20px 30px 0 0" />
+						<label name="lblLocked" />
+						<span
+							class="glyphicon glyphicon-lock text-danger"
+							style="font-size:300%;margin:20px 0 0 30px" />
+					</div>
 					<toolbar alignment="center">
-						<textbox name="txtPassword" type="password"
+						<textbox name="txtPassword" masked="true"
 							forward="enter=btnUnlock.click" />
 						<button name="btnUnlock"
 							class="flavor:btn-success"
@@ -35,8 +33,8 @@
 						<label name="lblInfo"
 							style="display:block;color:red;font-weight:bold;padding-top:5px" />
 					</toolbar>
-				</panel>
+				</div>
 			</div>
-		</vlayout>
+		</div>
 	</window>
 </page>
