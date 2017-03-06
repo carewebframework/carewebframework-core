@@ -32,7 +32,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 
 /**
- * Controller for login page.
+ * Controller for mock login page.
  */
 @Controller
 public class MockLoginWindowController {

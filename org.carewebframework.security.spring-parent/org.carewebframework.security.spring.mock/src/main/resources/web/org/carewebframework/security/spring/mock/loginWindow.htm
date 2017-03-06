@@ -3,10 +3,9 @@
    		<form id="login_form" th:action="${action}" method="POST">
    			<input type="hidden" name="username" th:value="${username}"/>
    			<input type="hidden" name="password" th:value="${password}"/>
-   			<input type="submit">
    		</form>
 		<script type="text/javascript">
-			//document.getElementById("login_form").submit();	
+			document.getElementById("login_form").submit();	
 		</script>
 	</body>	
 </html>
