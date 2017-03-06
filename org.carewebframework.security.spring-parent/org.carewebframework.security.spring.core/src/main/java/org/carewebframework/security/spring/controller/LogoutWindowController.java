@@ -26,30 +26,26 @@
 package org.carewebframework.security.spring.controller;
 
 import org.carewebframework.common.StrUtil;
-import org.carewebframework.security.spring.AbstractSecurityService;
 import org.carewebframework.security.spring.Constants;
-import org.carewebframework.web.ancillary.IAutoWired;
-import org.carewebframework.web.annotation.WiredComponent;
-import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.component.Hyperlink;
-import org.carewebframework.web.component.Label;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * Controller for logout page.
  */
-public class LogoutController implements IAutoWired {
+@Controller
+public class LogoutWindowController {
 
-    @WiredComponent
-    private Label lblMessage;
-
-    @WiredComponent
-    private Hyperlink btnLogin;
-
-    @Override
-    public void afterInitialized(BaseComponent comp) {
-        lblMessage.setLabel(AbstractSecurityService.getLogoutAttribute(Constants.LOGOUT_WARNING_ATTR,
-            StrUtil.getLabel(Constants.LBL_LOGOUT_MESSAGE_DEFAULT)));
-        btnLogin.setHref(AbstractSecurityService.getLogoutAttribute(Constants.LOGOUT_TARGET_ATTR, "/"));
+    @RequestMapping("security/logout")
+    public String logout(ModelMap model, @RequestParam(name = "message", required = false) String message,
+                         @RequestParam(name = "target", required = false) String target) {
+        model.addAttribute("message",
+            StringUtils.isEmpty(message) ? StrUtil.getLabel(Constants.LBL_LOGOUT_MESSAGE_DEFAULT) : message);
+        model.addAttribute("target", StringUtils.isEmpty(target) ? "/" : target);
+        return "classpath:/web/org/carewebframework/security/spring/logoutWindow.htm";
     }
 
 }

@@ -23,15 +23,6 @@
 			<constructor-arg value="${mock.authorities}" />
 		</bean>
 
-		<bean id="securityLoginPaneController" 
-			class="org.carewebframework.security.spring.controller.LoginPaneController"
-			scope="prototype" cwf:override="always">
-			<property name="securityDomainRegistry" ref="securityDomainRegistry" />
-			<property name="defaultUsername" value="${mock.username}" />
-			<property name="defaultPassword" value="${mock.password}" />
-			<property name="autoLogin" value="${mock.autologin}" />
-		</bean>
-
 	</beans>
 
 </beans>

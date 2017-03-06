@@ -1,0 +1,25 @@
+<html xmlns:th="http://www.thymeleaf.org">
+	<link rel="stylesheet" type="text/css"
+	 	href="../webjars/bootstrap/css/bootstrap.css" />
+
+	<body class="text-center">
+		<div style="display:inline-block;height:100%;width:100%">
+			<div class="panel panel-primary" style="display:inline-block;position:relative;top:20px">
+				<div class="panel-heading text-left">
+					<div class="panel-title" th:text="#{security.logout.window.title}"></div>
+				</div>
+				<div class="panel-body text-center">
+					<span class="text-danger" th:text="${message}"></span>
+				</div>
+				<div class="panel-footer">
+					<div class="btn-toolbar" role="toolbar" style="display:flex;justify-content:center">
+						<a class="btn btn-primary" 
+							th:href="${target}"
+							th:text="#{security.logout.form.button.login.label}">
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

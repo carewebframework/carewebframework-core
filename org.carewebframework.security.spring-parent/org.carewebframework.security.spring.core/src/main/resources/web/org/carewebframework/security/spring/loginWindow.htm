@@ -1,0 +1,76 @@
+<html xmlns:th="http://www.thymeleaf.org">
+	<link rel="stylesheet" type="text/css" href="../webjars/bootstrap/css/bootstrap.css" />
+
+	<link rel="stylesheet" type="text/css" href="loginPane.css" />
+
+	<style th:text="'background-img:' + #{security.login.form.background.image}">
+	</style>
+	
+	<body>
+		<div id="cwf-login-root">
+			<div id="cwf-header">
+				<img id="cwf-title-img" th:src="#{security.login.form.title.img}" />
+				<div>
+					<label id="cwf-domain-name" th:text="#{security.login.form.domain.name.label}"></label>
+					<label id="cwf-title" th:text="#{security.login.form.title.label}"></label>
+				</div>
+			</div>
+			<div id="cwf-body" class="bg-success">
+				<div id="cwf-form">
+					<form name="loginForm" action="/login/j_spring_security_check" method="POST"
+						autocomplete="off">
+						<div th:class="'cwf-prompt' + (!${showDomains} ? 'hidden')">
+							<div th:text="#{security.login.form.domain.label}"></div>
+							<select name="domain" 
+								th:each="domain: ${domains}">
+								<option th:text="${domain.name}" th:value="${domain.id}"></option>
+							</select>
+							<div></div>
+						</div>
+						<div class="cwf-prompt">
+							<div th:text="#{security.login.form.username.label}"></div>
+							<input type="text" name="username" />
+							<div></div>
+						</div>
+						<div class="cwf-prompt">
+							<div th:text="#{security.login.form.password.label}"></div>
+							<input type="password" name="password" />
+							<div>
+								<input type="submit" class="btn btn-success"
+									th:text="#{security.login.form.button.login.label}" />
+							</div>
+						</div>
+						<div style="flex:1" th:class="${showDomains} ? 'hidden'">
+							<a class="btn btn-link"
+								th:text="#{security.login.form.domain.alternate.label}"></a>
+						</div>
+					</form>
+				</div>
+				<label id="cwf-status"></label>
+				<div class="panel panel-danger" style="flex:1; text-align:center">
+					<label class="text-danger"></label>
+				</div>
+				<label id="cwf-header-text" style="margin: 20px"></label>
+				<div id="cwf-header-html" style="margin: 20px"></div>
+				<div style="height:20px; border-top: 1px solid black"></div>
+				<div id="cwf-info">
+					<label id="cwf-info-title"
+						th:text="#{security.login.form.info.title.label}"></label>
+					<div></div>
+					<label id="cwf-info-label" 
+						th:text="#{security.login.form.info.label}"></label>
+					<div id="cwf-info-html"></div>
+				</div>
+				<label th:text="#{security.login.form.footer.label}"></label>
+				<div id="cwf-copyright" class="cwf-layout-horizontal panel-footer">
+					<label id="cwf-copyright-prefix" 
+						th:text="#{security.login.form.copyright.prefix}"></label>
+					<img id="cwf-copyright-img"
+						th:src="#{security.login.form.copyright.img}" />
+					<label id="cwf-copyright-text" 
+						th:text="#{security.login.form.copyright.label}"></label>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

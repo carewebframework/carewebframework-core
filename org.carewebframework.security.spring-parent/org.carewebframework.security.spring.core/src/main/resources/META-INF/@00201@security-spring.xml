@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:util="http://www.springframework.org/schema/util" 
 	xmlns:security="http://www.springframework.org/schema/security"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
 	xsi:schemaLocation="
 		http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/util
         http://www.springframework.org/schema/util/spring-util.xsd
         http://www.springframework.org/schema/security
-        http://www.springframework.org/schema/security/spring-security-4.0.xsd">
+        http://www.springframework.org/schema/security/spring-security-4.2.xsd
+        http://www.springframework.org/schema/context  
+        http://www.springframework.org/schema/context/spring-context.xsd">
 
 	<!-- These are the default configurations for Spring security. They may
 		be overridden if desired, but for most applications these will suffice. At
@@ -20,7 +23,7 @@
 
 	<beans profile="root">
 
-		<bean class="org.carewebframework.security.spring.controller.AccessDeniedController"/>
+		<context:component-scan base-package="org.carewebframework.security.spring" />
 		
 		<bean
 			class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
@@ -80,7 +83,7 @@
 		<bean id="securityAccessDeniedHandler"
 			class="org.springframework.security.web.access.AccessDeniedHandlerImpl">
 			<property name="errorPage"
-				value="${org.carewebframework.security.access.denied.url}" />
+				value="/${org.carewebframework.security.access.denied.url}" />
 		</bean>
 
 		<bean id="securityExceptionTranslationFilter"
@@ -95,7 +98,7 @@
 		<bean id="securityAuthenticationFailureHandler"
 			class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler">
 			<property name="defaultFailureUrl"
-				value="${org.carewebframework.security.login.url}" />
+				value="/${org.carewebframework.security.login.url}" />
 		</bean>
 
 		<!-- Process form-based authentication. -->
@@ -107,7 +110,7 @@
 				Here it is the custom authenticationManager, login magic goes here -->
 			<property name="authenticationDetailsSource" ref="securityAuthenticationDetailsSource" />
 			<property name="allowSessionCreation" value="true" /> <!--Allow the application to create sessions -->
-			<property name="filterProcessesUrl" value="/login/j_spring_security_check" />
+			<property name="filterProcessesUrl" value="security/login" />
 		</bean>
 
 		<!-- Logout filter removes the authentication from the security context
@@ -131,7 +134,7 @@
 					</bean>
 				</list>
 			</constructor-arg>
-			<property name="filterProcessesUrl" value="/logout" />
+			<property name="filterProcessesUrl" value="/security/logout" />
 		</bean>
 
 		<!-- Additional authentication providers may be registered here -->
@@ -155,23 +158,6 @@
 		<!-- Automatically receives AuthenticationEvent messages -->
 		<bean id="securityLoggerListener"
 			class="org.springframework.security.authentication.event.LoggerListener" />
-
-		<!-- Controllers -->
-		<bean id="securityLoginWindowController" class="org.carewebframework.security.spring.controller.LoginWindowController"
-			scope="prototype">
-			<constructor-arg value="${org.carewebframework.security.login.pane.url}" />
-			<constructor-arg value="${org.carewebframework.security.password.change.url}" />
-		</bean>
-
-		<bean id="securityLoginPaneController" class="org.carewebframework.security.spring.controller.LoginPaneController"
-			scope="prototype">
-			<property name="securityDomainRegistry" ref="securityDomainRegistry" />
-		</bean>
-
-		<bean id="securityPasswordChangeController" class="org.carewebframework.security.spring.controller.PasswordChangeController"
-			scope="prototype">
-			<property name="securityService" ref="securityService" />
-		</bean>
 
 	</beans>
 

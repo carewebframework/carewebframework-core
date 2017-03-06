@@ -47,7 +47,6 @@ import org.carewebframework.web.component.Label;
 import org.carewebframework.web.component.Listbox;
 import org.carewebframework.web.component.Listitem;
 import org.carewebframework.web.component.Textbox;
-import org.carewebframework.web.core.WebUtil;
 import org.carewebframework.web.event.EventUtil;
 import org.springframework.security.authentication.CredentialsExpiredException;
 import org.springframework.security.authentication.DisabledException;
@@ -57,78 +56,79 @@ import org.springframework.security.web.savedrequest.SavedRequest;
 /**
  * Controller for the login component.
  */
-public class LoginPaneController implements IAutoWired {
-
+public class OldLoginPaneController implements IAutoWired {
+    
     private enum DomainSelectionMode {
         ALLOW, DISALLOW, OPTIONAL
     }
-
-    protected static final String DIALOG_LOGIN_PANE = CWFUtil.getResourcePath(LoginPaneController.class) + "loginPane.cwf";
-
+    
+    protected static final String DIALOG_LOGIN_PANE = CWFUtil.getResourcePath(OldLoginPaneController.class)
+            + "loginPane.cwf";
+    
     @WiredComponent
     protected Listbox lstDomain;
-
+    
     @WiredComponent
     protected Textbox txtUsername;
-
+    
     @WiredComponent
     protected Textbox txtPassword;
-
+    
     @WiredComponent
     private Label lblMessage;
-
+    
     @WiredComponent
     private Label lblStatus;
-
+    
     @WiredComponent
     private Image imgDomain;
-
+    
     @WiredComponent
     private Label lblDomain;
-
+    
     @WiredComponent
     private BaseUIComponent cmpDomainList;
-
+    
     @WiredComponent
     private BaseUIComponent divDomain;
-
+    
     @WiredComponent
     private BaseUIComponent divInfo;
-
+    
     @WiredComponent
     private Label lblHeader;
-
+    
     @WiredComponent
     private Html htmlHeader;
-
+    
     @WiredComponent
     private Label lblInfo;
-
+    
     @WiredComponent
     private Html htmlInfo;
-
+    
     @WiredComponent
     private BaseUIComponent loginPrompts;
-
+    
     @WiredComponent
     private BaseUIComponent loginRoot;
-
+    
     private SecurityDomainRegistry securityDomainRegistry;
-
+    
     private SavedRequest savedRequest;
-
+    
     private String defaultUsername;
-
+    
     private String defaultPassword;
-
+    
     private String defaultDomain;
-
+    
     private String defaultLogoUrl;
-
+    
     private boolean autoLogin;
-
+    
     private BaseUIComponent pane;
-
+    
     /**
      * Initialize the login form.
      *
@@ -140,40 +140,40 @@ public class LoginPaneController implements IAutoWired {
         savedRequest = (SavedRequest) comp.getAttribute("savedRequest");
         AuthenticationException authError = (AuthenticationException) comp.getAttribute("authError");
         String loginFailureMessage = StrUtil.getLabel(Constants.LBL_LOGIN_ERROR);//reset back to default
-
-        if (LoginWindowController.getException(authError, CredentialsExpiredException.class) != null) {
+        
+        if (OldLoginWindowController.getException(authError, CredentialsExpiredException.class) != null) {
             loginFailureMessage = StrUtil.getLabel(Constants.LBL_LOGIN_ERROR_EXPIRED_USER);//override generic UserLoginException default
-        } else if (LoginWindowController.getException(authError, DisabledException.class) != null) {
+        } else if (OldLoginWindowController.getException(authError, DisabledException.class) != null) {
             loginFailureMessage = authError.getMessage();//override generic UserLoginException default
         }
-
+        
         String username = null; //(String) session.removeAttribute(Constants.DEFAULT_USERNAME);
         username = authError == null ? defaultUsername : username;
         showMessage(authError == null ? null : loginFailureMessage);
         txtUsername.setValue(username);
         txtPassword.setValue(defaultPassword);
-
+        
         if (StringUtils.isEmpty(username)) {
             txtUsername.setFocus(true);
         } else {
             txtPassword.setFocus(true);
         }
-
+        
         List<ISecurityDomain> securityDomains = new ArrayList<>(securityDomainRegistry.getAll());
         Collections.sort(securityDomains, (sd1, sd2) -> {
             return sd1.getName().compareToIgnoreCase(sd2.getName());
         });
-
+        
         String securityDomainId = securityDomains.size() == 1 ? securityDomains.get(0).getLogicalId() : null;
-
+        
         if (StringUtils.isEmpty(securityDomainId)) {
             //securityDomainId = (String) session.getAttribute(Constants.DEFAULT_SECURITY_DOMAIN);
         }
-
+        
         if (StringUtils.isEmpty(securityDomainId)) {
             if (savedRequest != null) {
                 String params[] = savedRequest.getParameterValues(Constants.DEFAULT_SECURITY_DOMAIN);
-
+                
                 if (params != null && params.length > 0) {
                     securityDomainId = params[0];
                 }
@@ -181,33 +181,33 @@ public class LoginPaneController implements IAutoWired {
                 //securityDomainId = execution.getParameter(Constants.DEFAULT_SECURITY_DOMAIN);
             }
         }
-
+        
         if (StringUtils.isEmpty(securityDomainId)) {
             securityDomainId = defaultDomain;
         }
-
+        
         switch (securityDomains.size()) {
             case 0:
                 showStatus(StrUtil.getLabel(Constants.LBL_LOGIN_NO_VALID_DOMAINS));
                 return;
-
+            
             case 1:
                 setDomainSelectionMode(DomainSelectionMode.DISALLOW);
                 break;
-
+            
             default:
                 setDomainSelectionMode(DomainSelectionMode.OPTIONAL);
                 break;
         }
-
+        
         boolean defaultSet = false;
-
+        
         for (ISecurityDomain securityDomain : securityDomains) {
             Listitem li = new Listitem();
             li.setData(securityDomain);
             lstDomain.addChild(li);
             li.addChild(new Cell(securityDomain.getName()));
-
+            
             if (!defaultSet) {
                 if ((securityDomainId != null && securityDomainId.equals(securityDomain.getLogicalId()))
                         || (securityDomainId == null && securityDomain.getAttribute("default") != null)) {
@@ -216,21 +216,21 @@ public class LoginPaneController implements IAutoWired {
                 }
             }
         }
-
+        
         if (lstDomain.getSelectedIndex() == -1) {
             lstDomain.setSelectedIndex(0);
         }
-
+        
         defaultLogoUrl = imgDomain.getSrc();
         domainChanged();
-
+        
         if (authError == null && autoLogin) {
             ((BaseUIComponent) comp).addStyle("display", "none");
             EventUtil.post("onSubmit", comp, null);
         }
-
+        
     }
-
+    
     /**
      * Username enter event handler.
      */
@@ -238,7 +238,7 @@ public class LoginPaneController implements IAutoWired {
     private void onEnter$txtUsername() {
         txtPassword.setFocus(true);
     }
-
+    
     /**
      * Password enter event handler.
      */
@@ -247,7 +247,7 @@ public class LoginPaneController implements IAutoWired {
     private void onEnter$txtPassword() {
         onSubmit();
     }
-
+    
     /**
      * Authority change event handler.
      */
@@ -256,7 +256,7 @@ public class LoginPaneController implements IAutoWired {
         domainChanged();
         txtUsername.setFocus(true);
     }
-
+    
     /**
      * Enable domain selection.
      */
@@ -264,17 +264,17 @@ public class LoginPaneController implements IAutoWired {
     private void onClick$btnDomain() {
         setDomainSelectionMode(DomainSelectionMode.ALLOW);
     }
-
+    
     /**
      * Enables/disables selection of the domain.
-     * 
+     *
      * @param mode Domain selection mode.
      */
     private void setDomainSelectionMode(DomainSelectionMode mode) {
         cmpDomainList.setVisible(mode == DomainSelectionMode.ALLOW);
         divDomain.setVisible(mode == DomainSelectionMode.OPTIONAL);
     }
-
+    
     /**
      * Returns the selected security domain, if any.
      *
@@ -284,7 +284,7 @@ public class LoginPaneController implements IAutoWired {
         Listitem item = lstDomain.getSelectedItem();
         return item == null ? null : (ISecurityDomain) item.getData();
     }
-
+    
     /**
      * Submits the authentication request.
      */
@@ -294,16 +294,16 @@ public class LoginPaneController implements IAutoWired {
         String securityDomainId = securityDomain == null ? null : securityDomain.getLogicalId();
         String username = txtUsername.getValue().trim();
         String password = txtPassword.getValue();
-
+        
         if (username.contains("\\")) {
             String[] pcs = username.split("\\\\", 2);
             securityDomainId = pcs[0];
             username = pcs[1];
         }
-
+        
         if (!username.isEmpty() && !password.isEmpty() && !securityDomainId.isEmpty()) {
             //session.setAttribute(Constants.DEFAULT_SECURITY_DOMAIN, securityDomainId);
-            WebUtil.setCookie(Constants.DEFAULT_SECURITY_DOMAIN, securityDomainId);
+            //WebUtil.setCookie(Constants.DEFAULT_SECURITY_DOMAIN, securityDomainId);
             //session.setAttribute(Constants.DEFAULT_USERNAME, username);
             txtUsername.setValue(securityDomainId + "\\" + username);
             showStatus(StrUtil.getLabel(Constants.LBL_LOGIN_PROGRESS));
@@ -314,7 +314,7 @@ public class LoginPaneController implements IAutoWired {
             pane.setVisible(true);
         }
     }
-
+    
     /**
      * Displays the specified message text on the form.
      *
@@ -324,7 +324,7 @@ public class LoginPaneController implements IAutoWired {
         lblMessage.setLabel(text);
         ((BaseUIComponent) lblMessage.getParent()).setVisible(!StringUtils.isEmpty(text));
     }
-
+    
     /**
      * Disable all user input elements.
      *
@@ -335,7 +335,7 @@ public class LoginPaneController implements IAutoWired {
         loginPrompts.setVisible(false);
         lblStatus.setVisible(true);
     }
-
+    
     /**
      * Update dependent UI elements when security domain selection has changed.
      */
@@ -347,7 +347,7 @@ public class LoginPaneController implements IAutoWired {
         setMessageText(securityDomain.getAttribute(Constants.PROP_LOGIN_HEADER), lblHeader, htmlHeader, null);
         setMessageText(securityDomain.getAttribute(Constants.PROP_LOGIN_INFO), lblInfo, htmlInfo, divInfo);
     }
-
+    
     /**
      * Sets the message text to the specified value. If the text starts with an html tag, it will be
      * rendered as such.
@@ -363,18 +363,18 @@ public class LoginPaneController implements IAutoWired {
         boolean notEmpty = !value.isEmpty();
         plainText.setVisible(notEmpty && !isHtml);
         //htmlText.setVisible(notEmpty && isHtml);
-
+        
         if (parent != null) {
             parent.setVisible(notEmpty);
         }
-
+        
         if (isHtml) {
             htmlText.setContent(value);
         } else {
             plainText.setLabel(value);
         }
     }
-
+    
     /**
      * Sets the security domain registry.
      *
@@ -383,7 +383,7 @@ public class LoginPaneController implements IAutoWired {
     public void setSecurityDomainRegistry(SecurityDomainRegistry securityDomainRegistry) {
         this.securityDomainRegistry = securityDomainRegistry;
     }
-
+    
     /**
      * Sets the default username (for testing/debugging only).
      *
@@ -392,7 +392,7 @@ public class LoginPaneController implements IAutoWired {
     public void setDefaultUsername(String value) {
         defaultUsername = value;
     }
-
+    
     /**
      * Sets the default password (for testing/debugging only)
      *
@@ -401,7 +401,7 @@ public class LoginPaneController implements IAutoWired {
     public void setDefaultPassword(String value) {
         defaultPassword = value;
     }
-
+    
     /**
      * Sets the default security domain.
      *
@@ -410,7 +410,7 @@ public class LoginPaneController implements IAutoWired {
     public void setDefaultDomain(String value) {
         defaultDomain = value;
     }
-
+    
     /**
      * If true, login proceeds without user input.
      *

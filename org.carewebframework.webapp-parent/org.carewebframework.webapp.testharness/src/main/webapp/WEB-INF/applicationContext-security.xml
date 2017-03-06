@@ -8,7 +8,7 @@
    		http://www.springframework.org/schema/beans
 		http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/security
-		http://www.springframework.org/schema/security/spring-security-4.0.xsd">
+		http://www.springframework.org/schema/security/spring-security-4.2.xsd">
 
 	<!-- ******************** Security Management Layer ********************* -->
 	<!-- Filter chain proxy determines which filter chain applies for a given 
@@ -35,7 +35,7 @@
 			<security:filter-security-metadata-source use-expressions="false">
 				<security:intercept-url pattern="/admin/**"
 					access="ROLE_ADMINISTRATOR" />
-				<security:intercept-url pattern="/login/**"
+				<security:intercept-url pattern="/security/**"
 					access="IS_AUTHENTICATED_ANONYMOUSLY" />
 				<security:intercept-url pattern="/*.cwf"
 					access="ROLE_USER" />

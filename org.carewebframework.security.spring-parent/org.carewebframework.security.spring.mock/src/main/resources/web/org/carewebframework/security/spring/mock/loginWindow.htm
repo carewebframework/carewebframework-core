@@ -1,0 +1,11 @@
+<html xmlns:th="http://www.thymeleaf.org">
+	<body style="display:none">
+   		<form id="login_form" th:action="${action}" method="POST">
+   			<input type="text" name="username" th:value="${username}"/>
+   			<input type="password" name="password" th:value="${password}"/>
+   		</form>
+		<script type="text/javascript">
+			document.getElementById("login_form").submit();	
+		</script>
+	</body>	
+</html>

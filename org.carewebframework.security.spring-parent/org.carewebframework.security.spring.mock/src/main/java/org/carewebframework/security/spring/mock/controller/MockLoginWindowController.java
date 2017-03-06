@@ -23,21 +23,26 @@
  *
  * #L%
  */
-package org.carewebframework.security.spring.controller;
+package org.carewebframework.security.spring.mock.controller;
 
+import org.carewebframework.api.spring.SpringUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 
 /**
  * Controller for login page.
  */
 @Controller
-public class LoginWindowController {
+public class MockLoginWindowController {
     
-    @RequestMapping("security/login")
+    @GetMapping("security/mock/login")
     public String login(ModelMap model) {
-        return "classpath:/web/org/carewebframework/security/spring/loginWindow.htm";
+        model.addAttribute("action", "/" + SpringUtil.getProperty("org.carewebframework.security.login.url"));
+        model.addAttribute("username", SpringUtil.getProperty("mock.user"));
+        model.addAttribute("password", SpringUtil.getProperty("mock.password"));
+        model.addAttribute("domain", SpringUtil.getProperty("mock.domain"));
+        return "classpath:/web/org/carewebframework/security/spring/mock/loginWindow.htm";
     }
     
 }
