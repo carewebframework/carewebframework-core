@@ -1,0 +1,32 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:cwf="http://www.carewebframework.org/schema/spring"
+	xmlns:sec="http://www.springframework.org/schema/security"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.carewebframework.org/schema/spring
+	http://www.carewebframework.org/schema/spring/spring-extensions.xsd
+	http://www.springframework.org/schema/security
+	http://www.springframework.org/schema/security/spring-security-4.2.xsd">
+	
+	<bean id="securityAuthenticationProvider" 
+		class="org.carewebframework.security.spring.BaseAuthenticationProvider" />
+	
+	<bean id="securityService" 
+		class="org.carewebframework.security.spring.base.SecurityService"
+		cwf:override="never">
+		<property name="logoutTarget" value="${org.carewebframework.security.logout.url}" />
+	</bean>
+	
+	<sec:http use-expressions="false">
+		<sec:intercept-url pattern="/security/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+		<sec:intercept-url pattern="/**" access="ROLE_USER" />
+		<sec:form-login login-page="/security/login" default-target-url='/index.cwf'/>
+		<sec:logout />		
+	</sec:http>
+	
+	<sec:authentication-manager>
+		<sec:authentication-provider ref="securityAuthenticationProvider" />
+	</sec:authentication-manager>
+</beans>

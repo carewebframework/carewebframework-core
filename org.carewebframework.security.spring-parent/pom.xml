@@ -13,6 +13,7 @@
 	
 	<modules>
 		<module>org.carewebframework.security.spring.core</module>
+		<module>org.carewebframework.security.spring.basic</module>
 		<module>org.carewebframework.security.spring.mock</module>
 	</modules>
 </project>

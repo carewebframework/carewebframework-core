@@ -1,28 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-	xmlns:cwf="http://www.carewebframework.org/schema/spring" 
+	xmlns:cwf="http://www.carewebframework.org/schema/spring"
+	xmlns:sec="http://www.springframework.org/schema/security"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="
-		http://www.springframework.org/schema/beans 
-		http://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.carewebframework.org/schema/spring 
-		http://www.carewebframework.org/schema/spring/spring-extensions.xsd">
-
+	http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.carewebframework.org/schema/spring
+	http://www.carewebframework.org/schema/spring/spring-extensions.xsd
+	http://www.springframework.org/schema/security
+	http://www.springframework.org/schema/security/spring-security-4.2.xsd">
+	
+	<!-- Mock Security Configuration -->
+	
 	<beans profile="root">
 
 		<bean id="securityService" 
-			class="org.carewebframework.security.spring.mock.MockSecurityService"
+			class="org.carewebframework.api.security.mock.MockSecurityService"
 			cwf:override="never">
-			<property name="logoutTarget" value="${org.carewebframework.security.logout.url}" />
+			<constructor-arg ref="securityMockUser" />
 		</bean>
 		
-		<bean 
+		<bean id="securityMockUser"
+			depends-on="securityMockDomainLoader"
+			class="org.carewebframework.api.security.mock.MockUser">
+			<constructor-arg value="${org.carewebframework.security.mock.userid}" />
+			<constructor-arg value="${org.carewebframework.security.mock.fullname}" />
+			<constructor-arg value="${org.carewebframework.security.mock.username}" />
+			<constructor-arg value="${org.carewebframework.security.mock.password}" />
+			<constructor-arg value="${org.carewebframework.security.mock.domain:1}" />
+		</bean>
+		
+		<bean id="securityAuthenticationProvider" 
+			class="org.carewebframework.security.spring.BaseAuthenticationProvider" />
+		
+		<bean id="securityAuthenticationDetailsSource"
+			class="org.carewebframework.security.spring.CWFAuthenticationDetailsSource" />
+		
+		<bean id="securityMockDomainLoader"
 			class="org.carewebframework.api.security.mock.MockSecurityDomainLoader"
 			cwf:override="never">
-			<constructor-arg value="${mock.domains}" />
-			<constructor-arg value="${mock.authorities}" />
+			<constructor-arg value="${org.carewebframework.security.mock.domains}" />
+			<constructor-arg value="${org.carewebframework.security.mock.authorities}" />
 		</bean>
 
+			
+		<sec:http use-expressions="false">
+			<sec:intercept-url pattern="/security/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+			<sec:intercept-url pattern="/**" access="ROLE_USER" />
+			<sec:form-login 
+				login-processing-url="/security/mock/login" 
+				login-page="/security/mock/login" 
+				default-target-url='/index.cwf'
+				authentication-details-source-ref="securityAuthenticationDetailsSource" />
+			<sec:logout />		
+		</sec:http>
+		
+		<sec:authentication-manager>
+			<sec:authentication-provider ref="securityAuthenticationProvider" />
+		</sec:authentication-manager>
+		
 	</beans>
 
 </beans>

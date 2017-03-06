@@ -13,7 +13,6 @@
 	<description>Plugin Test Harness for the CareWeb Framework.</description>
 	
 	<properties>
-		<org.carewebframework.security.profile>org.carewebframework.security.spring.mock</org.carewebframework.security.profile>
 		<exclude-war-builds>false</exclude-war-builds>
 	</properties>
 	
@@ -72,7 +71,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.carewebframework</groupId>
-			<artifactId>${org.carewebframework.security.profile}</artifactId>
+			<artifactId>org.carewebframework.security.spring.mock</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
@@ -93,11 +92,6 @@
 			<groupId>org.carewebframework</groupId>
 			<artifactId>org.carewebframework.theme.bootstrap</artifactId>
 			<version>${project.parent.version}</version>
-		</dependency>
-		<!-- Security -->
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-config</artifactId>
 		</dependency>
 	</dependencies>
 </project>

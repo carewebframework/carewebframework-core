@@ -2,163 +2,17 @@
 
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:util="http://www.springframework.org/schema/util" 
-	xmlns:security="http://www.springframework.org/schema/security"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xsi:schemaLocation="
 		http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd
-        http://www.springframework.org/schema/util
-        http://www.springframework.org/schema/util/spring-util.xsd
-        http://www.springframework.org/schema/security
-        http://www.springframework.org/schema/security/spring-security-4.2.xsd
         http://www.springframework.org/schema/context  
         http://www.springframework.org/schema/context/spring-context.xsd">
-
-	<!-- These are the default configurations for Spring security. They may
-		be overridden if desired, but for most applications these will suffice. At
-		a minimum, you must provide implementations for the securityAuthenticationProvider
-		and securityService beans (typically in the security adapter package) and
-		configure the security filters (typically in the applicationContext.xml). -->
 
 	<beans profile="root">
 
 		<context:component-scan base-package="org.carewebframework.security.spring" />
 		
-		<bean
-			class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
-			<property name="targetClass"
-				value="org.springframework.security.core.context.SecurityContextHolder" />
-			<property name="targetMethod" value="setStrategyName" />
-			<property name="arguments" value="MODE_THREADLOCAL" />
-		</bean>
-
-		<!-- This defines security requirements for specific URL patterns. -->
-		<bean id="securityFilterSecurityInterceptorBase"
-			class="org.springframework.security.web.access.intercept.FilterSecurityInterceptor"
-			abstract="true">
-			<property name="authenticationManager" ref="securityAuthenticationManager" />
-			<property name="accessDecisionManager" ref="securityAccessDecisionManager" />
-		</bean>
-
-		<bean id="securityAccessDecisionManager"
-			class="org.springframework.security.access.vote.AffirmativeBased">
-			<constructor-arg>
-				<list>
-					<bean class="org.springframework.security.access.vote.RoleVoter" />
-					<bean class="org.springframework.security.access.vote.AuthenticatedVoter" />
-				</list>
-			</constructor-arg>
-		</bean>
-
-		<bean id="securityAnonymousAuthenticationFilter"
-			class="org.springframework.security.web.authentication.AnonymousAuthenticationFilter">
-			<constructor-arg value="ANONYMOUS" />
-			<constructor-arg value="ANONYMOUS_USER" />
-			<constructor-arg>
-				<bean class="org.springframework.security.core.authority.AuthorityUtils" 
-					factory-method="createAuthorityList">
-					<constructor-arg value="ROLE_ANONYMOUS" />
-				</bean>
-			</constructor-arg>
-			<property name="authenticationDetailsSource" ref="securityAuthenticationDetailsSource" />
-		</bean>
-
-		<bean id="securityAnonymousAuthenticationProvider"
-			class="org.springframework.security.authentication.AnonymousAuthenticationProvider">
-			<constructor-arg value="ANONYMOUS" />
-		</bean>
-
-		<bean id="securityAuthenticationProvider" 
-			class="org.carewebframework.security.spring.BaseAuthenticationProvider" />
-		
-		<bean id="securityContextRepository"
-			class="org.springframework.security.web.context.HttpSessionSecurityContextRepository" />
-
-		<bean id="securityContextPersistenceFilter"
-			class="org.springframework.security.web.context.SecurityContextPersistenceFilter">
-			<constructor-arg ref="securityContextRepository" />
-		</bean>
-		
-		<bean id="securityAccessDeniedHandler"
-			class="org.springframework.security.web.access.AccessDeniedHandlerImpl">
-			<property name="errorPage"
-				value="/${org.carewebframework.security.access.denied.url}" />
-		</bean>
-
-		<bean id="securityExceptionTranslationFilter"
-			class="org.springframework.security.web.access.ExceptionTranslationFilter">
-			<constructor-arg ref="securityAuthenticationEntryPoint" />
-			<property name="accessDeniedHandler" ref="securityAccessDeniedHandler" />
-		</bean>
-
-		<bean id="securityAuthenticationDetailsSource"
-			class="org.carewebframework.security.spring.CWFAuthenticationDetailsSource" />
-
-		<bean id="securityAuthenticationFailureHandler"
-			class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler">
-			<property name="defaultFailureUrl"
-				value="/${org.carewebframework.security.login.url}" />
-		</bean>
-
-		<!-- Process form-based authentication. -->
-		<bean id="securityAuthenticationProcessingFilter"
-			class="org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter">
-			<property name="authenticationFailureHandler" ref="securityAuthenticationFailureHandler" /><!--
-				Authentication failed? take to error page -->
-			<property name="authenticationManager" ref="securityAuthenticationManager" /><!--
-				Here it is the custom authenticationManager, login magic goes here -->
-			<property name="authenticationDetailsSource" ref="securityAuthenticationDetailsSource" />
-			<property name="allowSessionCreation" value="true" /> <!--Allow the application to create sessions -->
-			<property name="filterProcessesUrl" value="security/login" />
-		</bean>
-
-		<!-- Logout filter removes the authentication from the security context
-			and redirects to original URL. -->
-		<bean id="securityLogoutFilter"
-			class="org.springframework.security.web.authentication.logout.LogoutFilter">
-			<constructor-arg index="0">
-				<bean
-					class="org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler">
-					<property name="targetUrlParameter">
-						<util:constant
-							static-field="org.carewebframework.security.spring.Constants.DEFAULT_TARGET_PARAMETER" />
-					</property>
-				</bean>
-			</constructor-arg>
-			<constructor-arg index="1">
-				<list>
-					<bean
-						class="org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler">
-						<property name="invalidateHttpSession" value="false" />
-					</bean>
-				</list>
-			</constructor-arg>
-			<property name="filterProcessesUrl" value="/security/logout" />
-		</bean>
-
-		<!-- Additional authentication providers may be registered here -->
-		<security:authentication-manager
-			alias="securityAuthenticationManager">
-			<security:authentication-provider
-				ref="securityAuthenticationProvider" />
-		</security:authentication-manager>
-
-		<!--Custom authentication entry point allows for pattern-based login form
-			redirection. -->
-		<bean id="securityAuthenticationEntryPoint"
-			class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
-			<constructor-arg value="${org.carewebframework.security.login.url}" />
-			<property name="forceHttps" value="false" />
-		</bean>
-
-		<security:global-method-security
-			secured-annotations="enabled" />
-
-		<!-- Automatically receives AuthenticationEvent messages -->
-		<bean id="securityLoggerListener"
-			class="org.springframework.security.authentication.event.LoggerListener" />
-
 	</beans>
 
 </beans>
