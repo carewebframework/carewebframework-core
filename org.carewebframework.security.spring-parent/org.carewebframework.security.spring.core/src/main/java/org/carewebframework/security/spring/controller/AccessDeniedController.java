@@ -2,6 +2,7 @@ package org.carewebframework.security.spring.controller;
 
 import org.carewebframework.api.domain.IUser;
 import org.carewebframework.api.security.SecurityUtil;
+import org.carewebframework.common.StrUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,9 +20,9 @@ public class AccessDeniedController {
         model.addAttribute("authenticated", user != null);
         
         if (user == null) {
-            model.addAttribute("message", "You do not have access to the requested resource.");
+            model.addAttribute("message", StrUtil.getLabel("security.denied.message.anonymous"));
         } else {
-            model.addAttribute("message", user.getLoginName() + " does not have access to the requested resource.");
+            model.addAttribute("message", StrUtil.getLabel("security.denied.message.authenticated", user.getLoginName()));
         }
 
         return "classpath:/web/org/carewebframework/security/spring/accessDenied.htm";

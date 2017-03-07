@@ -49,8 +49,8 @@
 			<sec:intercept-url pattern="/security/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
 			<sec:intercept-url pattern="/**" access="ROLE_USER" />
 			<sec:form-login 
-				login-processing-url="/security/mock/login" 
-				login-page="/security/mock/login" 
+				login-processing-url="/security/login" 
+				login-page="/security/login" 
 				default-target-url='/index.cwf'
 				authentication-details-source-ref="securityAuthenticationDetailsSource" />
 			<sec:logout />		

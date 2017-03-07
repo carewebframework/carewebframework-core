@@ -44,6 +44,7 @@ import org.carewebframework.api.domain.IUser;
 import org.carewebframework.api.security.ISecurityService;
 import org.carewebframework.api.security.SecurityUtil;
 import org.carewebframework.common.StrUtil;
+import org.carewebframework.security.spring.controller.PasswordChangeController;
 import org.carewebframework.ui.dialog.DialogUtil;
 import org.carewebframework.web.client.ClientUtil;
 import org.carewebframework.web.core.WebUtil;
@@ -60,8 +61,6 @@ public abstract class AbstractSecurityService implements ISecurityService {
     private static final Log log = LogFactory.getLog(AbstractSecurityService.class);
 
     private String logoutTarget;
-
-    private String passwordChangeUrl;
 
     private final AliasType authorityAlias = AliasTypeRegistry.getType(ALIAS_TYPE_AUTHORITY);
 
@@ -298,24 +297,12 @@ public abstract class AbstractSecurityService implements ISecurityService {
     }
 
     /**
-     * Sets the url of the password change dialog.
-     *
-     * @param passwordChangeUrl Url of the password change dialog.
-     */
-    public void setPasswordChangeUrl(String passwordChangeUrl) {
-        this.passwordChangeUrl = passwordChangeUrl;
-    }
-
-    /**
      * @see org.carewebframework.api.security.ISecurityService#changePassword()
      */
     @Override
     public void changePassword() {
         if (canChangePassword()) {
-            if (DialogUtil.popup(passwordChangeUrl, false, false) == null) {
-                DialogUtil.showError(StrUtil.getLabel("password.change.dialog.unavailable"));
-            }
-
+            PasswordChangeController.show();
         } else {
             DialogUtil.showWarning(StrUtil.getLabel(Constants.LBL_PASSWORD_CHANGE_UNAVAILABLE));
         }
@@ -326,7 +313,7 @@ public abstract class AbstractSecurityService implements ISecurityService {
      */
     @Override
     public boolean canChangePassword() {
-        return passwordChangeUrl != null;
+        return true;
     }
 
     /**

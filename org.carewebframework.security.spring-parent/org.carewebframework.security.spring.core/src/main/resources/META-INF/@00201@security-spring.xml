@@ -14,5 +14,14 @@
 		<context:component-scan base-package="org.carewebframework.security.spring" />
 		
 	</beans>
+	
+	<beans profile="child">
+	
+		<bean id="securityPasswordChangeController" scope="prototype"
+			class="org.carewebframework.security.spring.controller.PasswordChangeController">
+			<property name="securityService" ref="securityService" />
+		</bean>
+
+	</beans>
 
 </beans>

@@ -23,7 +23,7 @@
  *
  * #L%
  */
-package org.carewebframework.security.spring.controller;
+package org.carewebframework.security.spring.basic.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -34,10 +34,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Controller
 public class LoginWindowController {
-    
+
     @RequestMapping("security/login")
     public String login(ModelMap model) {
-        return "classpath:/web/org/carewebframework/security/spring/loginWindow.htm";
+        return "classpath:/web/org/carewebframework/security/spring/basic/loginWindow.htm";
     }
-    
+
 }

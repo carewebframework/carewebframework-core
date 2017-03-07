@@ -23,7 +23,7 @@
  *
  * #L%
  */
-package org.carewebframework.security.spring.controller;
+package org.carewebframework.security.spring.basic.controller;
 
 import java.util.HashMap;
 import java.util.Map;
