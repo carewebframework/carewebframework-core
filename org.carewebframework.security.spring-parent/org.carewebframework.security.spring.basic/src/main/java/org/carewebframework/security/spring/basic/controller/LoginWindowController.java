@@ -37,6 +37,7 @@ public class LoginWindowController {
 
     @RequestMapping("security/login")
     public String login(ModelMap model) {
+        model.addAttribute("timeout", 30000);
         return "classpath:/web/org/carewebframework/security/spring/basic/loginWindow.htm";
     }
 

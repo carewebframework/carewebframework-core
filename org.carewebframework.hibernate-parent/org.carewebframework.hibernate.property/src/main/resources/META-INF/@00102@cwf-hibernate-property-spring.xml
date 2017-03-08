@@ -16,7 +16,6 @@
 			init-method="init" destroy-method="destroy"
 			class="org.carewebframework.hibernate.property.PropertyService">
 			<constructor-arg ref="propertyDAO" />
-			<constructor-arg ref="securityService" />	
 		</bean>
 		
 	</beans>

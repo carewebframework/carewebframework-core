@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-	xmlns:cwf="http://www.carewebframework.org/schema/spring" 
+	xmlns:cwf="http://www.carewebframework.org/schema/spring"
+	xmlns:sec="http://www.springframework.org/schema/security"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="
-		http://www.springframework.org/schema/beans 
-		http://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.carewebframework.org/schema/spring 
-		http://www.carewebframework.org/schema/spring/spring-extensions.xsd">
-
+	http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.carewebframework.org/schema/spring
+	http://www.carewebframework.org/schema/spring/spring-extensions.xsd
+	http://www.springframework.org/schema/security
+	http://www.springframework.org/schema/security/spring-security-4.2.xsd">
+	
 	<beans profile="root">
 
 		<bean id="securityService" cwf:override="always"
@@ -26,6 +29,27 @@
 			<constructor-arg ref="cwfHibernateSessionFactory" />
 		</bean>
 
+		<bean id="securityAuthenticationProvider" 
+			class="org.carewebframework.security.spring.BaseAuthenticationProvider" />
+		
+		<bean id="securityAuthenticationDetailsSource"
+			class="org.carewebframework.security.spring.CWFAuthenticationDetailsSource" />
+		
+		<sec:http use-expressions="false">
+			<sec:intercept-url pattern="/security/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+			<sec:intercept-url pattern="/**" access="ROLE_USER" />
+			<sec:form-login 
+				login-processing-url="/security/login" 
+				login-page="/security/login" 
+				default-target-url='/index.cwf'
+				authentication-details-source-ref="securityAuthenticationDetailsSource" />
+			<sec:logout />		
+		</sec:http>
+		
+		<sec:authentication-manager>
+			<sec:authentication-provider ref="securityAuthenticationProvider" />
+		</sec:authentication-manager>
+		
 	</beans>
 
 </beans>

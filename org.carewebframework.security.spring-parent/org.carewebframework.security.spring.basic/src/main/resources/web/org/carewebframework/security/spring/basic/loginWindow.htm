@@ -1,10 +1,20 @@
 <html xmlns:th="http://www.thymeleaf.org">
-	<link rel="stylesheet" type="text/css" href="../webjars/bootstrap/css/bootstrap.css" />
 
-	<link rel="stylesheet" type="text/css" href="loginPane.css" />
-
+<head>
+	<title th:text="#{security.login.form.title.label}"></title>
 	<style th:text="'background-img:' + #{security.login.form.background.image}">
 	</style>
+</head>
+
+<body>
+	<script src='web/require/require.js'></script>
+	
+	<script type="text/javascript" th:inline="javascript">
+		require(['cwf-login'], function(sec) {
+			sec.init(/*[[${timeout}]]*/, './logout?message=Login form has timed out')	
+		});
+
+	</script>
 	
 	<body>
 		<div id="cwf-login-root">
@@ -17,8 +27,7 @@
 			</div>
 			<div id="cwf-body" class="bg-success">
 				<div id="cwf-form">
-					<form name="loginForm" action="/login/j_spring_security_check" method="POST"
-						autocomplete="off">
+					<form name="loginForm" action="./login" method="POST" autocomplete="off">
 						<div th:class="'cwf-prompt' + (!${showDomains} ? 'hidden')">
 							<div th:text="#{security.login.form.domain.label}"></div>
 							<select name="domain" 

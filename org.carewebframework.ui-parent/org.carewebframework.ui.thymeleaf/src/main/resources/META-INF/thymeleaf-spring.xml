@@ -13,7 +13,7 @@
 			class="org.thymeleaf.spring4.templateresolver.SpringResourceTemplateResolver">
 			<property name="prefix" value="" />
 			<property name="suffix" value="" />
-			<property name="templateMode" value="HTML5" />
+			<property name="templateMode" value="HTML" />
 		</bean>
 		
 		<bean id="thymeleafMessageResolver"

@@ -10,6 +10,23 @@
 	<artifactId>org.carewebframework.security.spring.basic</artifactId>
 	<name>CWF Basic Spring Security Profile</name>
 	
+	<properties>
+		<webjar.name>cwf-login</webjar.name>
+		<webjar.version>${project.version}</webjar.version>
+        <requirejs>
+        {
+			'paths': {
+				'cwf-login': 'js/loginWindow',
+			},
+			'map': {
+				'*': {
+					'css': 'web/require-css/css'
+				}
+			}
+		}
+        </requirejs>
+	</properties>
+	
 	<dependencies>
 		<dependency>
 			<groupId>org.carewebframework</groupId>

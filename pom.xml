@@ -137,14 +137,6 @@
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-resources-plugin</artifactId>
-					<version>2.7</version>
-					<configuration>
-						<overwrite>true</overwrite>
-					</configuration>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-site-plugin</artifactId>
 					<version>3.4</version>
 				</plugin>
@@ -340,6 +332,79 @@
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>versions-maven-plugin</artifactId>
 					<version>2.1</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-resources-plugin</artifactId>
+					<version>3.0.1</version>
+					<executions>
+						<execution>
+							<id>copy-resources</id>
+							<phase>process-resources</phase>
+							<goals>
+								<goal>copy-resources</goal>
+							</goals>
+							<configuration>
+								<outputDirectory>
+									${project.build.directory}/classes/META-INF/resources/webjars/${webjar.name}/${webjar.version}
+								</outputDirectory>
+								<resources>
+									<resource>
+										<directory>${basedir}/src/main/webjar</directory>
+									</resource>
+								</resources>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>com.samaxes.maven</groupId>
+					<artifactId>minify-maven-plugin</artifactId>
+					<version>1.7.6</version>
+					<executions>
+						<execution>
+							<id>default-minify</id>
+							<configuration>
+								<skipMerge>true</skipMerge>
+								<yuiNoMunge>true</yuiNoMunge>
+								<closureLanguageIn>ECMASCRIPT5_STRICT</closureLanguageIn>
+								<webappSourceDir>${basedir}/src/main/webjar</webappSourceDir>
+								<webappTargetDir>
+									${project.build.directory}/classes/META-INF/resources/webjars/${webjar.name}/${webjar.version}
+								</webappTargetDir>
+								<cssFinalFile>${webjar.name}.css</cssFinalFile>
+								<cssSourceIncludes>
+									<cssSourceInclude>**/*.css</cssSourceInclude>
+								</cssSourceIncludes>
+								<cssSourceExcludes>
+									<cssSourceExclude>**/*.min.css</cssSourceExclude>
+								</cssSourceExcludes>
+								<jsFinalFile>${webjar.name}.js</jsFinalFile>
+								<jsSourceIncludes>
+									<jsSourceInclude>**/*.js</jsSourceInclude>
+								</jsSourceIncludes>
+								<jsSourceExcludes>
+									<jsSourceExclude>**/*.min.js</jsSourceExclude>
+								</jsSourceExcludes>
+							</configuration>
+							<phase>process-resources</phase>
+							<goals>
+								<goal>minify</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>exec-maven-plugin</artifactId>
+					<version>1.5.0</version>
+					<executions>
+						<execution>
+							<phase>package</phase>
+							<goals>
+								<goal>java</goal>
+							</goals>
+						</execution>
+					</executions>
 				</plugin>
 				<!-- End common build plugins -->
 				<plugin>
