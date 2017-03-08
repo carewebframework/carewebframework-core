@@ -5,6 +5,10 @@
 	border:2px solid black;
 }
 
+#cwf-login-root * {
+	min-height: 0;
+}
+
 #cwf-header {
 	width: 100%;
 	height: 90px;
@@ -19,6 +23,7 @@
 #cwf-header > div {
 	display: flex;
 	flex-direction: column;
+	justify-content: center;
 	height: 100%;
 	float: right;
 	color: #405C69;
@@ -40,10 +45,9 @@
 	border-top: solid 2px;
 }
 
-#cwf-form {
+#cwf-form-container {
 	display: flex;
 	flex-direction: column;
-	flex: 1;
 	margin: 30px 80px 0 80px;
 	padding: 10px;
 	background: white !important;
@@ -52,17 +56,20 @@
 
 .cwf-prompt {
      display: flex;
-     flex-direction: column;
+     flex-direction: row;
+     padding-bottom: 10px;
 }
 
 .cwf-prompt > div {
-    flex: 1; 
+    width: 20%; 
     text-align: right;
+    padding-right: 10px;
 }
 
 .cwf-prompt > input,
 .cwf-prompt > select {
-    flex: 2;
+    width: 50%;
+    height: 2em;
 }
 
 
@@ -77,6 +84,7 @@
 }
 
 #cwf-info {
+    overflow: auto;
     padding: 10px;
     margin: 10px;
     background: white !important;
@@ -84,12 +92,13 @@
 }
 
 #cwf-info-title {
+    text-align: center;
     font-weight: bold; 
     font-size: 1.1em; 
     display: block;
 }
 
-#cwf-info-label {
+#cwf-info-content {
     padding: 20px;
 }
 
@@ -98,15 +107,11 @@
     border-top: 1px solid black;
 }
 
-#cwf-info-html {
-    padding: 20px;
-}
-
 #cwf-copyright {
-	flex: 1;
-	text-align: left; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
 	padding-left: 20px; 
-	vertical-align: middle;
 }
 
 #cwf-copyright-prefix {
@@ -123,6 +128,10 @@
 
 #cwf-copyright-text {
     font-weight: bold;
+}
+
+#cwf-error:empty {
+	margin: 0;
 }
 
 body {

@@ -25,6 +25,8 @@
  */
 package org.carewebframework.security.controller;
 
+import javax.servlet.http.HttpSession;
+
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.security.Constants;
 import org.springframework.stereotype.Controller;
@@ -38,14 +40,15 @@ import org.springframework.web.bind.annotation.RequestParam;
  */
 @Controller
 public class LogoutWindowController {
-    
+
     @RequestMapping("security/logout")
     public String logout(ModelMap model, @RequestParam(name = "message", required = false) String message,
-                         @RequestParam(name = "target", required = false) String target) {
+                         @RequestParam(name = "target", required = false) String target, HttpSession session) {
         model.addAttribute("message",
             StringUtils.isEmpty(message) ? StrUtil.getLabel(Constants.LBL_LOGOUT_MESSAGE_DEFAULT) : message);
         model.addAttribute("target", StringUtils.isEmpty(target) ? "/" : target);
+        session.invalidate();
         return "classpath:/web/org/carewebframework/security/logoutWindow.htm";
     }
-    
+
 }

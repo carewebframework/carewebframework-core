@@ -25,6 +25,17 @@
  */
 package org.carewebframework.security.basic.controller;
 
+import java.util.Collection;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.carewebframework.api.security.ISecurityDomain;
+import org.carewebframework.api.security.ISecurityService;
+import org.carewebframework.api.security.SecurityDomainRegistry;
+import org.carewebframework.common.StrUtil;
+import org.carewebframework.web.client.WebJarLocator;
+import org.carewebframework.web.core.RequestUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,9 +46,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class LoginWindowController {
 
+    @Autowired
+    private ISecurityService securityService;
+
     @RequestMapping("security/login")
-    public String login(ModelMap model) {
-        model.addAttribute("timeout", 30000);
+    public String login(ModelMap model, HttpServletRequest request) {
+        Collection<ISecurityDomain> domains = SecurityDomainRegistry.getInstance().getAll();
+        model.addAttribute("baseUrl", RequestUtil.getBaseURL(request));
+        model.addAttribute("webjarInit", WebJarLocator.getInstance().getWebJarInit());
+        model.addAttribute("timeout", 30000000);
+        model.addAttribute("domainCount", domains.size());
+        model.addAttribute("domains", domains);
+        
+        String error = request.getParameter("error");
+        model.addAttribute("error",
+            error == null ? null : error.isEmpty() ? StrUtil.getLabel("security.login.error") : error);
         return "classpath:/web/org/carewebframework/security/basic/loginWindow.htm";
     }
 

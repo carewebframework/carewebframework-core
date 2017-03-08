@@ -57,13 +57,13 @@ import org.springframework.util.ObjectUtils;
  * Base Spring Security implementation.
  */
 public abstract class AbstractSecurityService implements ISecurityService {
-    
+
     private static final Log log = LogFactory.getLog(AbstractSecurityService.class);
-    
+
     private String logoutTarget;
-    
+
     private final AliasType authorityAlias = AliasTypeRegistry.getType(ALIAS_TYPE_AUTHORITY);
-    
+
     /**
      * Returns Spring security Authentication object via
      * <code>SpringContextHolder.getContext().getAuthentication()</code>.
@@ -73,7 +73,7 @@ public abstract class AbstractSecurityService implements ISecurityService {
     public static Authentication getAuthentication() {
         return SecurityContextHolder.getContext().getAuthentication();
     }
-    
+
     /**
      * Gets the specified logout attribute value. The value is obtained from a cookie which is then
      * deleted.
@@ -91,7 +91,13 @@ public abstract class AbstractSecurityService implements ISecurityService {
         WebUtil.setCookie(attributeName, null, response, request);
         return StringUtils.isEmpty(value) ? deflt : value;
     }
-    
+
+    public String getLogoutUrl(String target, String message) {
+        target = target == null ? WebUtil.getRequestUrl() : target;
+        String url = replaceParam(logoutTarget, "%target%", target);
+        return replaceParam(url, "%message%", message);
+    }
+
     /**
      * Logout out the current page instance.
      *
@@ -103,7 +109,7 @@ public abstract class AbstractSecurityService implements ISecurityService {
     public void logout(boolean force, String target, String message) {
         log.trace("Logging Out");
         IContextManager contextManager = ContextManager.getInstance();
-        
+
         if (contextManager == null) {
             logout(target, message);
         } else {
@@ -114,14 +120,11 @@ public abstract class AbstractSecurityService implements ISecurityService {
             });
         }
     }
-    
+
     private void logout(String target, String message) {
-        target = target == null ? WebUtil.getRequestUrl() : target;
-        String url = replaceParam(logoutTarget, "%target%", target);
-        url = replaceParam(url, "%message%", message);
-        ClientUtil.redirect(url);
+        ClientUtil.redirect(getLogoutUrl(target, message));
     }
-    
+
     /**
      * Replaces the inline parameter with the specified value.
      *
@@ -141,7 +144,7 @@ public abstract class AbstractSecurityService implements ISecurityService {
         }
         return text;
     }
-    
+
     /**
      * Register an alias for an authority.
      *
@@ -152,7 +155,7 @@ public abstract class AbstractSecurityService implements ISecurityService {
     public void setAuthorityAlias(String authority, String alias) {
         authorityAlias.register(authority, alias);
     }
-    
+
     /**
      * Returns whether the current context has authenticated
      *
@@ -161,17 +164,17 @@ public abstract class AbstractSecurityService implements ISecurityService {
     @Override
     public boolean isAuthenticated() {
         Authentication auth = getAuthentication();
-        
+
         if (auth == null) {
             return false;
         }
-        
+
         Object principal = auth.getPrincipal();
         String username = principal instanceof String ? (String) principal
                 : ((org.springframework.security.core.userdetails.User) principal).getUsername();
         return (username != null && !username.equals(Constants.ANONYMOUS_USER));
     }
-    
+
     /**
      * Returns the authenticated user object from the current security context.
      *
@@ -184,7 +187,7 @@ public abstract class AbstractSecurityService implements ISecurityService {
         return (details instanceof CWFAuthenticationDetails) ? (IUser) ((CWFAuthenticationDetails) details).getDetail("user")
                 : null;
     }
-    
+
     /**
      * <p>
      * Returns true if the Authentication object is granted debug privilege (determined by the role
@@ -197,7 +200,7 @@ public abstract class AbstractSecurityService implements ISecurityService {
     public boolean hasDebugRole() {
         return isGranted(Constants.PRIV_DEBUG);
     }
-    
+
     /**
      * <p>
      * Returns true if the Authentication object has the specified <code>grantedAuthority</code>
@@ -213,7 +216,7 @@ public abstract class AbstractSecurityService implements ISecurityService {
     public boolean isGranted(String grantedAuthority) {
         return isGranted(grantedAuthority, getAuthentication());
     }
-    
+
     /**
      * Checks the current SecurityContext for the specified authorities.
      *
@@ -225,17 +228,17 @@ public abstract class AbstractSecurityService implements ISecurityService {
     @Override
     public boolean isGranted(String grantedAuthorities, boolean checkAllRoles) {
         Authentication authentication = getAuthentication();
-        
+
         if (authentication == null) {
             log.info("Authentication context was null during check for granted authorities '"
                     + ObjectUtils.nullSafeToString(grantedAuthorities) + "'.");
             return false;
         }
-        
+
         if (grantedAuthorities == null) {
             return false;
         }
-        
+
         for (String desiredAuthority : grantedAuthorities.split(",")) {
             if (!desiredAuthority.isEmpty()) {
                 if (isGranted(desiredAuthority, authentication) != checkAllRoles) {
@@ -243,10 +246,10 @@ public abstract class AbstractSecurityService implements ISecurityService {
                 }
             }
         }
-        
+
         return checkAllRoles;
     }
-    
+
     /**
      * Determine if the granted authority exists within the authentication context.
      *
@@ -259,17 +262,17 @@ public abstract class AbstractSecurityService implements ISecurityService {
             log.info("Authentication context was null during check for granted authority '" + grantedAuthority + "'.");
             return false;
         }
-        
+
         boolean result = authentication.getAuthorities().contains(new SimpleGrantedAuthority(grantedAuthority));
-        
+
         if (!result) {
             String alias = authorityAlias.get(grantedAuthority);
             return alias != null && isGranted(alias, authentication);
         }
-        
+
         return result;
     }
-    
+
     /**
      * Override to implement login restrictions.
      */
@@ -277,7 +280,7 @@ public abstract class AbstractSecurityService implements ISecurityService {
     public String loginDisabled() {
         return null;
     }
-    
+
     /**
      * Returns the logout target url.
      *
@@ -286,7 +289,7 @@ public abstract class AbstractSecurityService implements ISecurityService {
     public String getLogoutTarget() {
         return logoutTarget;
     }
-    
+
     /**
      * Sets the logout target url.
      *
@@ -295,7 +298,7 @@ public abstract class AbstractSecurityService implements ISecurityService {
     public void setLogoutTarget(String logoutTarget) {
         this.logoutTarget = logoutTarget;
     }
-    
+
     /**
      * @see org.carewebframework.api.security.ISecurityService#changePassword()
      */
@@ -307,7 +310,7 @@ public abstract class AbstractSecurityService implements ISecurityService {
             DialogUtil.showWarning(StrUtil.getLabel(Constants.LBL_PASSWORD_CHANGE_UNAVAILABLE));
         }
     }
-    
+
     /**
      * @see org.carewebframework.api.security.ISecurityService#canChangePassword()
      */
@@ -315,7 +318,7 @@ public abstract class AbstractSecurityService implements ISecurityService {
     public boolean canChangePassword() {
         return true;
     }
-    
+
     /**
      * Generates a new random password Length of password dictated by
      * {@link Constants#LBL_PASSWORD_RANDOM_LENGTH} and
@@ -329,7 +332,7 @@ public abstract class AbstractSecurityService implements ISecurityService {
         return SecurityUtil.generateRandomPassword(len, len,
             StrUtil.getLabel(Constants.LBL_PASSWORD_RANDOM_CONSTRAINTS).split("\n"));
     }
-    
+
     /**
      * Returns the minimum length for random password.
      *
@@ -338,5 +341,5 @@ public abstract class AbstractSecurityService implements ISecurityService {
     protected int getRandomPasswordLength() {
         return NumberUtils.toInt(StrUtil.getLabel(Constants.LBL_PASSWORD_RANDOM_LENGTH), 12);
     }
-    
+
 }

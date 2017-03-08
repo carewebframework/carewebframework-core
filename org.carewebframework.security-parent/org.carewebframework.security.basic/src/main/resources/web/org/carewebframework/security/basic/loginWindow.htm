@@ -2,84 +2,107 @@
 
 <head>
 	<title th:text="#{security.login.form.title.label}"></title>
-	<style th:text="'background-img:' + #{security.login.form.background.image}">
+	<base th:href='${baseUrl}' target='#'>
+	<style th:inline="css">
+		body {
+			background-image: url("[[#{security.login.form.background.image}]]");
+		}
 	</style>
 </head>
 
 <body>
-	<script src='web/require/require.js'></script>
+	<script type="text/javascript" src='web/require/require.js'></script>
 	
-	<script type="text/javascript" th:inline="javascript">
-		require(['cwf-login'], function(sec) {
-			sec.init(/*[[${timeout}]]*/, './logout?message=Login form has timed out')	
-		});
-
+	<script th:inline="javascript">
+		require([], function() {
+	        require.config(
+	        	[(${webjarInit})]
+	        );
+	        
+			require(['cwf-login'], function(sec) {
+				var msg = [[#{security.login.form.timeout.message}]],
+				logout = 'security/logout?target=./login&message=' + encodeURIComponent(msg);
+				sec.init([(${timeout})], logout, [[#{security.login.required.fields}]]);	
+			});
+		});	
 	</script>
 	
-	<body>
-		<div id="cwf-login-root">
-			<div id="cwf-header">
-				<img id="cwf-title-img" th:src="#{security.login.form.title.img}" />
-				<div>
-					<label id="cwf-domain-name" th:text="#{security.login.form.domain.name.label}"></label>
-					<label id="cwf-title" th:text="#{security.login.form.title.label}"></label>
-				</div>
-			</div>
-			<div id="cwf-body" class="bg-success">
-				<div id="cwf-form">
-					<form name="loginForm" action="./login" method="POST" autocomplete="off">
-						<div th:class="'cwf-prompt' + (!${showDomains} ? 'hidden')">
-							<div th:text="#{security.login.form.domain.label}"></div>
-							<select name="domain" 
-								th:each="domain: ${domains}">
-								<option th:text="${domain.name}" th:value="${domain.id}"></option>
-							</select>
-							<div></div>
-						</div>
-						<div class="cwf-prompt">
-							<div th:text="#{security.login.form.username.label}"></div>
-							<input type="text" name="username" />
-							<div></div>
-						</div>
-						<div class="cwf-prompt">
-							<div th:text="#{security.login.form.password.label}"></div>
-							<input type="password" name="password" />
-							<div>
-								<input type="submit" class="btn btn-success"
-									th:text="#{security.login.form.button.login.label}" />
-							</div>
-						</div>
-						<div style="flex:1" th:class="${showDomains} ? 'hidden'">
-							<a class="btn btn-link"
-								th:text="#{security.login.form.domain.alternate.label}"></a>
-						</div>
-					</form>
-				</div>
-				<label id="cwf-status"></label>
-				<div class="panel panel-danger" style="flex:1; text-align:center">
-					<label class="text-danger"></label>
-				</div>
-				<label id="cwf-header-text" style="margin: 20px"></label>
-				<div id="cwf-header-html" style="margin: 20px"></div>
-				<div style="height:20px; border-top: 1px solid black"></div>
-				<div id="cwf-info">
-					<label id="cwf-info-title"
-						th:text="#{security.login.form.info.title.label}"></label>
-					<div></div>
-					<label id="cwf-info-label" 
-						th:text="#{security.login.form.info.label}"></label>
-					<div id="cwf-info-html"></div>
-				</div>
-				<label th:text="#{security.login.form.footer.label}"></label>
-				<div id="cwf-copyright" class="cwf-layout-horizontal panel-footer">
-					<label id="cwf-copyright-prefix" 
-						th:text="#{security.login.form.copyright.prefix}"></label>
-					<img id="cwf-copyright-img"
-						th:src="#{security.login.form.copyright.img}" />
-					<label id="cwf-copyright-text" 
-						th:text="#{security.login.form.copyright.label}"></label>
-				</div>
+	<div id="cwf-login-root" style="display:none">
+		<div id="cwf-header">
+			<img id="cwf-title-img" th:src="#{security.login.form.title.image}" />
+			<div>
+				<label id="cwf-domain-name"
+					th:text="#{security.login.form.domain.name.label}"></label> 
+				<label id="cwf-title" 
+					th:text="#{security.login.form.title.label}"></label>
 			</div>
 		</div>
-	</body>
+		<div id="cwf-body" class="bg-success">
+			<div id="cwf-form-container">
+				<form id="cwf-form" name="loginForm" action="security/login" method="POST"
+					target="_self" autocomplete="off">
+					<div id="cwf-domains" class="cwf-prompt" style="display:none">
+						<div th:text="#{security.login.form.domain.label}"></div>
+						<select id="cwf-domain" name="domain">
+							<option 
+							 	th:each="domain: ${domains}"
+								th:text="${domain.name}" 
+								th:value="${domain.logicalId}"
+								th:selected="${domain.getAttribute('default')}"
+								th:attr="data-logo=${domain.getAttribute('LOGIN.LOGO')},data-header=${domain.getAttribute('LOGIN.HEADER')},data-info=${domain.getAttribute('LOGIN.INFO')}">
+							</option>
+						</select>
+						<div></div>
+					</div>
+					<div class="cwf-prompt">
+						<div th:text="#{security.login.form.username.label}"></div>
+						<input id="cwf-username" type="text" autofocus />
+						<div></div>
+					</div>
+					<div class="cwf-prompt">
+						<div th:text="#{security.login.form.password.label}"></div>
+						<input id="cwf-password" type="password" name="password" />
+						<div style="flex:1">
+							<input type="submit" class="btn btn-success"
+								th:value="#{security.login.form.button.login.label}" />
+						</div>
+					</div>
+					<div style="flex: 1" th:class="${domainCount} > 1 ? '' : 'hidden'">
+						<a id="cwf-alternate" class="btn btn-link"
+							th:text="#{security.login.form.domain.alternate.label}"></a>
+					</div>
+					<input id="cwf-username-real" type="hidden" name="username" />
+					<input type="hidden" 
+						th:name="${_csrf.parameterName}" 
+						th:value="${_csrf.token}" />
+				</form>
+			</div>
+			<label id="cwf-status"></label>
+			<div class="bg-danger text-center">
+				<label id="cwf-error" class="text-danger"
+					th:text="${error}">
+				</label>
+			</div>
+			<label id="cwf-header-text" style="margin: 20px"></label>
+			<div style="height: 20px; border-top: 1px solid black"></div>
+			<div id="cwf-info">
+				<label id="cwf-info-title"
+					th:text="#{security.login.form.info.title.label}"></label>
+				<div></div>
+				<div id="cwf-info-content"
+					th:text="#{security.login.form.info.label}"></div>
+			</div>
+			<label class="text-center" 
+				th:text="#{security.login.form.footer.label}"></label>
+			<div id="cwf-copyright" class="cwf-layout-horizontal panel-footer">
+				<label id="cwf-copyright-prefix"
+					th:text="#{security.login.form.copyright.prefix}"></label> <img
+					id="cwf-copyright-img"
+					th:src="#{security.login.form.copyright.image}" /> <label
+					id="cwf-copyright-text"
+					th:text="#{security.login.form.copyright.label}"></label>
+			</div>
+		</div>
+	</div>
+</body>
 </html>

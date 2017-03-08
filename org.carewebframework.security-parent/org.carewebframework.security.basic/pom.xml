@@ -16,12 +16,8 @@
         <requirejs>
         {
 			'paths': {
-				'cwf-login': 'js/loginWindow',
-			},
-			'map': {
-				'*': {
-					'css': 'web/require-css/css'
-				}
+				'cwf-login': 'js/login',
+				'cwf-login-css': 'css/login'
 			}
 		}
         </requirejs>
