@@ -18,7 +18,8 @@
 		</dependency>
 		<dependency>
 			<groupId>org.carewebframework</groupId>
-			<artifactId>org.carewebframework.security.spring.core</artifactId>
+			<artifactId>org.carewebframework.security.basic</artifactId>
+			<version>${org.carewebframework.core.version}</version>
 		</dependency>
 		<!-- Unit testing -->
 		<dependency>

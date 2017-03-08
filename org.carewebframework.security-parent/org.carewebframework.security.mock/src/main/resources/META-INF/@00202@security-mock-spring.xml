@@ -11,30 +11,40 @@
 	http://www.springframework.org/schema/security
 	http://www.springframework.org/schema/security/spring-security-4.2.xsd">
 	
+	<!-- Mock Security Configuration -->
+	
 	<beans profile="root">
 
-		<bean id="securityService" cwf:override="always"
-			class="org.carewebframework.hibernate.security.SecurityService">
-			<constructor-arg ref="cwfHibernateUserDAO" />
-			<property name="logoutTarget" value="${org.carewebframework.security.logout.url}" />
+		<bean id="securityMockUser"
+			depends-on="securityMockDomainLoader"
+			class="org.carewebframework.api.security.mock.MockUser">
+			<constructor-arg value="${org.carewebframework.security.mock.userid}" />
+			<constructor-arg value="${org.carewebframework.security.mock.fullname}" />
+			<constructor-arg value="${org.carewebframework.security.mock.username}" />
+			<constructor-arg value="${org.carewebframework.security.mock.password}" />
+			<constructor-arg value="${org.carewebframework.security.mock.domain:1}" />
 		</bean>
 		
-		<bean id="cwfHibernateUserDAO"
-			class="org.carewebframework.hibernate.security.UserDAO">
-			<constructor-arg ref="cwfHibernateSessionFactory" />
+		<bean id="securityService" 
+			class="org.carewebframework.api.security.mock.MockSecurityService"
+			cwf:override="never">
+			<constructor-arg ref="securityMockUser" />
 		</bean>
 		
-		<bean init-method="init"
-			class="org.carewebframework.hibernate.security.SecurityDomainDAO">
-			<constructor-arg ref="cwfHibernateSessionFactory" />
-		</bean>
-
 		<bean id="securityAuthenticationProvider" 
 			class="org.carewebframework.security.BaseAuthenticationProvider" />
 		
 		<bean id="securityAuthenticationDetailsSource"
 			class="org.carewebframework.security.CWFAuthenticationDetailsSource" />
 		
+		<bean id="securityMockDomainLoader"
+			class="org.carewebframework.api.security.mock.MockSecurityDomainLoader"
+			cwf:override="never">
+			<constructor-arg value="${org.carewebframework.security.mock.domains}" />
+			<constructor-arg value="${org.carewebframework.security.mock.authorities}" />
+		</bean>
+
+			
 		<sec:http use-expressions="false">
 			<sec:intercept-url pattern="/security/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
 			<sec:intercept-url pattern="/**" access="ROLE_USER" />

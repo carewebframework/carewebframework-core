@@ -71,7 +71,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.carewebframework</groupId>
-			<artifactId>org.carewebframework.security.spring.mock</artifactId>
+			<artifactId>org.carewebframework.security.mock</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
