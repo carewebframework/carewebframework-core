@@ -39,7 +39,7 @@
 		</div>
 		<div id="cwf-body" class="bg-success">
 			<div id="cwf-form-container">
-				<form id="cwf-form" name="loginForm" action="security/login" method="POST"
+				<form id="cwf-form" name="loginForm" th:action="${action}" method="POST"
 					target="_self" autocomplete="off">
 					<div id="cwf-domains" class="cwf-prompt" style="display:none">
 						<div th:text="#{security.login.form.domain.label}"></div>
@@ -72,17 +72,12 @@
 							th:text="#{security.login.form.domain.alternate.label}"></a>
 					</div>
 					<input id="cwf-username-real" type="hidden" name="username" />
-					<input type="hidden" 
-						th:name="${_csrf.parameterName}" 
-						th:value="${_csrf.token}" />
 				</form>
 			</div>
 			<label id="cwf-status"></label>
-			<div class="bg-danger text-center">
-				<label id="cwf-error" class="text-danger"
-					th:text="${error}">
-				</label>
-			</div>
+			<label id="cwf-error" class="bg-danger text-center text-danger"
+				th:text="${error}">
+			</label>
 			<label id="cwf-header-text" style="margin: 20px"></label>
 			<div style="height: 20px; border-top: 1px solid black"></div>
 			<div id="cwf-info">

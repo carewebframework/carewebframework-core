@@ -45,10 +45,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Controller
 public class LoginWindowController {
-
+    
     @Autowired
     private ISecurityService securityService;
-
+    
     @RequestMapping("security/login")
     public String login(ModelMap model, HttpServletRequest request) {
         Collection<ISecurityDomain> domains = SecurityDomainRegistry.getInstance().getAll();
@@ -57,11 +57,12 @@ public class LoginWindowController {
         model.addAttribute("timeout", 30000000);
         model.addAttribute("domainCount", domains.size());
         model.addAttribute("domains", domains);
-        
+        model.addAttribute("action", "security/login");
+
         String error = request.getParameter("error");
         model.addAttribute("error",
             error == null ? null : error.isEmpty() ? StrUtil.getLabel("security.login.error") : error);
         return "classpath:/web/org/carewebframework/security/basic/loginWindow.htm";
     }
-
+    
 }

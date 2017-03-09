@@ -47,10 +47,11 @@ import org.carewebframework.common.StrUtil;
 import org.carewebframework.security.controller.PasswordChangeController;
 import org.carewebframework.ui.dialog.DialogUtil;
 import org.carewebframework.web.client.ClientUtil;
+import org.carewebframework.web.client.ExecutionContext;
 import org.carewebframework.web.core.WebUtil;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.util.ObjectUtils;
 
 /**
@@ -64,6 +65,10 @@ public abstract class AbstractSecurityService implements ISecurityService {
 
     private final AliasType authorityAlias = AliasTypeRegistry.getType(ALIAS_TYPE_AUTHORITY);
 
+    public static SecurityContext getSecurityContext() {
+        return (SecurityContext) ExecutionContext.getSession().getSocket().getAttributes().get("SPRING_SECURITY_CONTEXT");
+    }
+    
     /**
      * Returns Spring security Authentication object via
      * <code>SpringContextHolder.getContext().getAuthentication()</code>.
@@ -71,7 +76,7 @@ public abstract class AbstractSecurityService implements ISecurityService {
      * @return Authentication or null if no authentication information is found
      */
     public static Authentication getAuthentication() {
-        return SecurityContextHolder.getContext().getAuthentication();
+        return getSecurityContext().getAuthentication();
     }
 
     /**

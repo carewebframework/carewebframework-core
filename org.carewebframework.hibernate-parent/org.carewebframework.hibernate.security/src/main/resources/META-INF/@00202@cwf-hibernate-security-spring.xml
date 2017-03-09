@@ -48,7 +48,10 @@
 				default-target-url='/index.cwf'
 				authentication-details-source-ref="securityAuthenticationDetailsSource" />
 			<sec:logout 
-				logout-success-url="/security/logout" />		
+				logout-success-url="/security/logout" 
+				delete-cookies="JSESSIONID" />	
+			<sec:access-denied-handler 
+				error-page="/security/accessDenied" />
 		</sec:http>
 		
 		<sec:authentication-manager>
