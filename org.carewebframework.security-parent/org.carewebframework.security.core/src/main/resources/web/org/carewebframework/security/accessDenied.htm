@@ -15,7 +15,7 @@
 					<a class="btn btn-success" 
 						th:unless="${authenticated}" 
 						th:text="#{security.denied.button.login.label}"
-						href="/security/login/loginWindow">
+						href="login">
 					</a>
 					<a class="btn btn-primary" 
 						th:if="${authenticated}"

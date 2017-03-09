@@ -30,12 +30,10 @@ import java.util.Collection;
 import javax.servlet.http.HttpServletRequest;
 
 import org.carewebframework.api.security.ISecurityDomain;
-import org.carewebframework.api.security.ISecurityService;
 import org.carewebframework.api.security.SecurityDomainRegistry;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.web.client.WebJarLocator;
 import org.carewebframework.web.core.RequestUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,10 +43,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Controller
 public class LoginWindowController {
-    
-    @Autowired
-    private ISecurityService securityService;
-    
+
     @RequestMapping("security/login")
     public String login(ModelMap model, HttpServletRequest request) {
         Collection<ISecurityDomain> domains = SecurityDomainRegistry.getInstance().getAll();
@@ -58,11 +53,11 @@ public class LoginWindowController {
         model.addAttribute("domainCount", domains.size());
         model.addAttribute("domains", domains);
         model.addAttribute("action", "security/login");
-
+        
         String error = request.getParameter("error");
         model.addAttribute("error",
             error == null ? null : error.isEmpty() ? StrUtil.getLabel("security.login.error") : error);
         return "classpath:/web/org/carewebframework/security/basic/loginWindow.htm";
     }
-    
+
 }
