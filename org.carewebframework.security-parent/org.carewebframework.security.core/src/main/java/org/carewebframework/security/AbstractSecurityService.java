@@ -49,11 +49,13 @@ import org.carewebframework.ui.dialog.DialogUtil;
 import org.carewebframework.web.client.ClientUtil;
 import org.carewebframework.web.client.ExecutionContext;
 import org.carewebframework.web.core.WebUtil;
+import org.carewebframework.web.websocket.Session;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.util.ObjectUtils;
+import org.springframework.web.socket.WebSocketSession;
 
 /**
  * Base Spring Security implementation.
@@ -66,9 +68,17 @@ public abstract class AbstractSecurityService implements ISecurityService {
 
     private final AliasType authorityAlias = AliasTypeRegistry.getType(ALIAS_TYPE_AUTHORITY);
 
+    /**
+     * Returns the security context from the execution context.
+     *
+     * @return The security context, or null if one cannot be determined.
+     */
     public static SecurityContext getSecurityContext() {
-        return (SecurityContext) ExecutionContext.getSession().getSocket().getAttributes()
-                .get(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY);
+        Session session = ExecutionContext.getSession();
+        @SuppressWarnings("resource")
+        WebSocketSession ws = session == null ? null : session.getSocket();
+        return ws == null ? null
+                : (SecurityContext) ws.getAttributes().get(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY);
     }
     
     /**
@@ -78,7 +88,8 @@ public abstract class AbstractSecurityService implements ISecurityService {
      * @return Authentication or null if no authentication information is found
      */
     public static Authentication getAuthentication() {
-        return getSecurityContext().getAuthentication();
+        SecurityContext sc = getSecurityContext();
+        return sc == null ? null : sc.getAuthentication();
     }
 
     /**
