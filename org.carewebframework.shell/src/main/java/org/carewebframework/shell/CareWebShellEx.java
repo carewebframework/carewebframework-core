@@ -306,8 +306,7 @@ public class CareWebShellEx extends CareWebShell {
      * @throws Exception Unspecified exception.
      */
     public void registerLayout(String path, String resource) throws Exception {
-        UILayout layout = new UILayout();
-        layout.loadFromResource(resource);
+        UILayout layout = UILayout.load(resource);
         UIElementBase parent = parentFromPath(path);
         
         if (parent != null) {
