@@ -52,6 +52,7 @@ import org.carewebframework.web.core.WebUtil;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.util.ObjectUtils;
 
 /**
@@ -66,7 +67,8 @@ public abstract class AbstractSecurityService implements ISecurityService {
     private final AliasType authorityAlias = AliasTypeRegistry.getType(ALIAS_TYPE_AUTHORITY);
 
     public static SecurityContext getSecurityContext() {
-        return (SecurityContext) ExecutionContext.getSession().getSocket().getAttributes().get("SPRING_SECURITY_CONTEXT");
+        return (SecurityContext) ExecutionContext.getSession().getSocket().getAttributes()
+                .get(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY);
     }
     
     /**
