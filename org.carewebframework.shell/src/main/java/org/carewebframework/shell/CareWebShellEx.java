@@ -53,24 +53,24 @@ import org.carewebframework.web.annotation.Component.ChildTag;
  */
 @Component(value = "cwfShellEx", widgetClass = "Div", parentTag = "*", childTag = @ChildTag("*"))
 public class CareWebShellEx extends CareWebShell {
-
+    
     public static final String TOOLBAR_PATH = "@toolbar";
-
+    
     private static final String delim = "\\\\";
-
+    
     private static final Log log = LogFactory.getLog(CareWebShellEx.class);
-
+    
     private static final String EXC_UNKNOWN_PLUGIN = "@cwf.shell.error.plugin.unknown";
-
+    
     /**
      * Locates the plugin's parent UI element given a tab pane and a path.
      */
     public class PathResolver {
-
+        
         private final Class<? extends UIElementBase> rootClass;
-
+        
         private final Class<? extends UIElementBase> childClass;
-
+        
         /**
          * Creates a path resolver.
          *
@@ -86,7 +86,7 @@ public class CareWebShellEx extends CareWebShell {
             this.rootClass = rootClass;
             this.childClass = childClass;
         }
-
+        
         /**
          * Resolves the path, returning the UI element to be used as the parent of the plugin.
          *
@@ -97,7 +97,7 @@ public class CareWebShellEx extends CareWebShell {
         protected UIElementBase resolvePath(UIElementTabPane tabPane, String path) {
             return getElement(path, getRoot(tabPane), childClass);
         }
-
+        
         /**
          * Returns the root for the specified tab pane. If the tab pane does not yet have a root,
          * one will be created for it.
@@ -107,7 +107,7 @@ public class CareWebShellEx extends CareWebShell {
          */
         protected UIElementBase getRoot(UIElementTabPane tabPane) {
             UIElementBase root = tabPane.findChildElement(rootClass);
-
+            
             if (root == null) {
                 try {
                     root = rootClass.newInstance();
@@ -116,24 +116,24 @@ public class CareWebShellEx extends CareWebShell {
                     throw MiscUtil.toUnchecked(e);
                 }
             }
-
+            
             return root;
         }
-
+        
     }
-
+    
     private UIElementTabView tabView;
-
+    
     private String defaultPluginId;
-
+    
     private PathResolver pathResolver;
-
+    
     private final PluginRegistry pluginRegistry = PluginRegistry.getInstance();
-
+    
     public CareWebShellEx() {
         super();
     }
-
+    
     /**
      * Registers the plugin with the specified id and path. If a tree path is absent, the plugin is
      * associated with the tab itself.
@@ -146,7 +146,7 @@ public class CareWebShellEx extends CareWebShell {
     public UIElementBase registerFromId(String path, String id) throws Exception {
         return registerFromId(path, id, null);
     }
-
+    
     /**
      * Registers the plugin with the specified id and path. If a tree path is absent, the plugin is
      * associated with the tab itself.
@@ -160,7 +160,7 @@ public class CareWebShellEx extends CareWebShell {
     public UIElementBase registerFromId(String path, String id, IPropertyProvider propertySource) throws Exception {
         return register(path, pluginById(id), propertySource);
     }
-
+    
     /**
      * Lookup a plugin definition by its id. Raises a runtime exception if the plugin is not found.
      *
@@ -169,14 +169,14 @@ public class CareWebShellEx extends CareWebShell {
      */
     private PluginDefinition pluginById(String id) {
         PluginDefinition def = pluginRegistry.get(id);
-
+        
         if (def == null) {
             throw new PluginException(EXC_UNKNOWN_PLUGIN, null, null, id);
         }
-
+        
         return def;
     }
-
+    
     /**
      * Register a plugin by specifying a path and a url.
      *
@@ -188,7 +188,7 @@ public class CareWebShellEx extends CareWebShell {
     public UIElementBase register(String path, String url) throws Exception {
         return register(path, url, null);
     }
-
+    
     /**
      * Register a plugin by specifying a path and a url.
      *
@@ -203,7 +203,7 @@ public class CareWebShellEx extends CareWebShell {
         def.setUrl(url);
         return register(path, def, propertySource);
     }
-
+    
     /**
      * Register a menu.
      *
@@ -216,44 +216,44 @@ public class CareWebShellEx extends CareWebShell {
         menu.setAction(action);
         return menu;
     }
-
+    
     private <T extends UIElementBase> T getElement(String path, UIElementBase root, Class<T> childClass) {
         UIElementBase parent = root;
         T ele = null;
-
+        
         try {
             for (String pc : path.split("\\\\")) {
                 ele = null;
-
+                
                 for (UIElementBase child : parent.getChildren()) {
                     if (!childClass.isInstance(child)) {
                         continue;
                     }
-
+                    
                     @SuppressWarnings("unchecked")
                     T ele2 = (T) child;
-
+                    
                     if (pc.equalsIgnoreCase(BeanUtils.getProperty(ele2, "label"))) {
                         ele = ele2;
                         break;
                     }
                 }
-
+                
                 if (ele == null) {
                     ele = childClass.newInstance();
                     ele.setParent(parent);
                     BeanUtils.setProperty(ele, "label", pc);
                 }
-
+                
                 parent = ele;
             }
         } catch (Exception e) {
             throw MiscUtil.toUnchecked(e);
         }
-
+        
         return ele;
     }
-
+    
     /**
      * Registers the plugin with the specified definition with the specified path. If a tree path is
      * absent, the plugin is associated with the tab itself.
@@ -266,7 +266,7 @@ public class CareWebShellEx extends CareWebShell {
     public UIElementBase register(String path, PluginDefinition def) throws Exception {
         return register(path, def, null);
     }
-
+    
     /**
      * Registers the plugin with the specified definition with the specified path. If a tree path is
      * absent, the plugin is associated with the tab itself.
@@ -282,23 +282,23 @@ public class CareWebShellEx extends CareWebShell {
             log.info("Access to plugin " + def.getName() + " is restricted.");
             return null;
         }
-
+        
         if (def.isDisabled()) {
             log.info("Plugin " + def.getName() + " is disabled.");
             return null;
         }
-
+        
         UIElementBase parent = parentFromPath(path);
         UIElementBase plugin = parent == null ? null : def.createElement(parent, propertySource);
         String defPluginId = getDefaultPluginId();
-
+        
         if (!defPluginId.isEmpty()
                 && (defPluginId.equalsIgnoreCase(def.getId()) || defPluginId.equalsIgnoreCase(def.getName()))) {
             plugin.activate(true);
         }
         return plugin;
     }
-
+    
     /**
      * Registers a layout at the specified path.
      *
@@ -307,15 +307,14 @@ public class CareWebShellEx extends CareWebShell {
      * @throws Exception Unspecified exception.
      */
     public void registerLayout(String path, String resource) throws Exception {
-        UILayout layout = new UILayout();
-        layout.loadFromResource(resource);
+        UILayout layout = UILayout.load(resource);
         UIElementBase parent = parentFromPath(path);
-
+        
         if (parent != null) {
             layout.deserialize(parent);
         }
     }
-
+    
     /**
      * Returns the parent UI element based on the provided path.
      *
@@ -327,13 +326,13 @@ public class CareWebShellEx extends CareWebShell {
         if (TOOLBAR_PATH.equalsIgnoreCase(path)) {
             return getUIDesktop().getToolbar();
         }
-
+        
         String[] pieces = path.split(delim, 2);
         UIElementTabPane tabPane = pieces.length == 0 ? null : findTabPane(pieces[0]);
         UIElementBase parent = pieces.length < 2 ? null : getPathResolver().resolvePath(tabPane, pieces[1]);
         return parent == null ? tabPane : parent;
     }
-
+    
     /**
      * Locate the tab with the corresponding label, or create one if not found.
      *
@@ -344,19 +343,19 @@ public class CareWebShellEx extends CareWebShell {
     private UIElementTabPane findTabPane(String name) throws Exception {
         UIElementTabView tabView = getTabView();
         UIElementTabPane tabPane = null;
-
+        
         while ((tabPane = tabView.getChild(UIElementTabPane.class, tabPane)) != null) {
             if (name.equalsIgnoreCase(tabPane.getLabel())) {
                 return tabPane;
             }
         }
-
+        
         tabPane = new UIElementTabPane();
         tabPane.setParent(tabView);
         tabPane.setLabel(name);
         return tabPane;
     }
-
+    
     /**
      * Returns the tab view that will receive plug-ins. Searches the UI desktop for the first
      * occurrence of a tab view that it finds. The result is cached. This may return null if a tab
@@ -368,10 +367,10 @@ public class CareWebShellEx extends CareWebShell {
         if (tabView == null) {
             tabView = getUIDesktop().findChildElement(UIElementTabView.class);
         }
-
+        
         return tabView;
     }
-
+    
     /**
      * Returns the default plugin id as a user preference.
      *
@@ -381,7 +380,7 @@ public class CareWebShellEx extends CareWebShell {
         if (defaultPluginId == null) {
             try {
                 defaultPluginId = PropertyUtil.getValue("CAREWEB.INITIAL.SECTION", null);
-
+                
                 if (defaultPluginId == null) {
                     defaultPluginId = "";
                 }
@@ -389,10 +388,10 @@ public class CareWebShellEx extends CareWebShell {
                 defaultPluginId = "";
             }
         }
-
+        
         return defaultPluginId;
     }
-
+    
     /**
      * Returns the path resolver implementation. This implementation determines where in the layout
      * the plugin should be placed based on a path. A default implementation is provided.
@@ -403,10 +402,10 @@ public class CareWebShellEx extends CareWebShell {
         if (pathResolver == null) {
             pathResolver = new PathResolver(UIElementTreeView.class, UIElementTreePane.class);
         }
-
+        
         return pathResolver;
     }
-
+    
     /**
      * Sets the path resolver implementation. This must be set before any resources are registered.
      *
@@ -416,8 +415,8 @@ public class CareWebShellEx extends CareWebShell {
         if (this.pathResolver != null) {
             throw new UIException("A path resolver can only be set once.");
         }
-
+        
         this.pathResolver = pathResolver;
     }
-
+    
 }

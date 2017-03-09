@@ -194,7 +194,7 @@ public class CareWebShell extends Div {
                     : getAppProperty("layout", "CAREWEB.LAYOUT.DEFAULT");
             
             if (!StringUtils.isEmpty(layout)) {
-                loadLayoutFromResource(layout);
+                loadLayout(layout);
             }
             
         } catch (Exception e) {
@@ -272,47 +272,18 @@ public class CareWebShell extends Div {
     /**
      * Loads a layout from the specified resource.
      *
-     * @param resource URL of the resource containing the layout configuration.
-     *            <p>
-     *            If url of format "app:xxx", then layout associated with application id "xxx" is
-     *            loaded.
-     *            <p>
-     *            If url of format "shared:xxx", then shared layout named "xxx" is loaded.
-     *            <p>
-     *            If url of format "private:xxx", then user layout named "xxx" is loaded.
-     *            <p>
-     *            Otherwise, resource is assumed to be a resource url.
+     * @param resource The layout resource to load.
      * @throws Exception Unspecified exception.
      */
-    public void loadLayoutFromResource(String resource) throws Exception {
-        layout.loadFromResource(resource);
+    public void loadLayout(String resource) throws Exception {
+        layout = UILayout.load(resource);
         FrameworkUtil.setAppName(layout.getName());
-        buildUI(layout);
-    }
-    
-    /**
-     * Loads the layout associated with the given application id.
-     *
-     * @param appId An application id.
-     * @throws Exception Unspecified exception.
-     */
-    public void loadLayoutByAppId(String appId) throws Exception {
-        FrameworkUtil.setAppName(appId);
         
-        if (!layout.loadByAppId(appId).isEmpty()) {
-            buildUI(layout);
-        } else {
+        if (layout.isEmpty()) {
             DialogUtil.showError(LBL_NO_LAYOUT);
+        } else {
+            buildUI(layout);
         }
-    }
-    
-    /**
-     * Loads a layout based on the appId query parameter setting.
-     *
-     * @throws Exception Unspecified exception.
-     */
-    public void loadLayoutByAppId() throws Exception {
-        loadLayoutByAppId(getAppProperty("appId", "CAREWEB.APPID.DEFAULT"));
     }
     
     /**
@@ -337,7 +308,7 @@ public class CareWebShell extends Div {
         this.defaultLayoutName = defaultLayoutName;
         
         if (desktop != null && !StringUtils.isEmpty(defaultLayoutName)) {
-            loadLayoutFromResource(defaultLayoutName);
+            loadLayout(defaultLayoutName);
         }
     }
     

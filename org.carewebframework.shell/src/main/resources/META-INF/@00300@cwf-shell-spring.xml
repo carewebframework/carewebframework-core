@@ -22,7 +22,19 @@
 		<!-- A registry of all known CareWeb plugins. -->
 		<bean id="pluginRegistry" class="org.carewebframework.shell.plugins.PluginRegistry"
 			factory-method="getInstance" />
-
+		
+		<!-- A registry of layout loaders. -->
+		<bean id="layoutLoaderRegistry" class="org.carewebframework.shell.layout.LayoutLoaderRegistry"
+			factory-method="getInstance" />
+		
+		<!-- Layout loaders -->
+		
+		<bean class="org.carewebframework.shell.layout.LayoutLoaderApp" />
+		
+		<bean class="org.carewebframework.shell.layout.LayoutLoaderPrivate" />
+		
+		<bean class="org.carewebframework.shell.layout.LayoutLoaderShared" />
+		
 		<!-- Default layout service implementation. -->
 		<bean id="layoutService" class="org.carewebframework.shell.layout.LayoutService">
 			<constructor-arg ref="propertyService" />
