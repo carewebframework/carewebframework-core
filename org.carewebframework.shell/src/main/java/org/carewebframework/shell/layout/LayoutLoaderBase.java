@@ -29,21 +29,16 @@ package org.carewebframework.shell.layout;
  * Abstract base class for implementing layout loaders.
  */
 public abstract class LayoutLoaderBase implements ILayoutLoader {
-
+    
     private final String id;
-
+    
     protected LayoutLoaderBase(String id) {
         this.id = id;
     }
-
+    
     @Override
     public String getId() {
         return id;
     }
-
-    protected UILayout createLayout(String name) {
-        UILayout layout = new UILayout();
-        layout.setName(name);
-        return layout;
-    }
+    
 }

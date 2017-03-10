@@ -134,7 +134,8 @@
 #cwf-error {
 	height: 2em;
 	padding-top: 4px;
-}
+    border-top: 1px solid;
+    border-bottom: 1px solid;}
 
 #cwf-error:empty {
 	visibility: hidden;

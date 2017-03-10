@@ -37,11 +37,11 @@
 		
 		<sec:http use-expressions="false">
 			<sec:intercept-url pattern="/security/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+			<sec:intercept-url pattern="/webjars/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
 			<sec:intercept-url pattern="/**/*.jpg" access="IS_AUTHENTICATED_ANONYMOUSLY" />
 			<sec:intercept-url pattern="/**/*.png" access="IS_AUTHENTICATED_ANONYMOUSLY" />
 			<sec:intercept-url pattern="/**/*.js" access="IS_AUTHENTICATED_ANONYMOUSLY" />
 			<sec:intercept-url pattern="/**/*.css" access="IS_AUTHENTICATED_ANONYMOUSLY" />
-			<sec:intercept-url pattern="/**/*.map" access="IS_AUTHENTICATED_ANONYMOUSLY" />
 			<sec:intercept-url pattern="/**" access="ROLE_USER" />
 			<sec:form-login 
 				login-processing-url="/security/login" 

@@ -31,17 +31,17 @@ import org.carewebframework.api.spring.BeanRegistry;
  * Registry for layout loaders.
  */
 public class LayoutLoaderRegistry extends BeanRegistry<String, ILayoutLoader> {
-    
+
     private static LayoutLoaderRegistry instance = new LayoutLoaderRegistry();
-    
+
     public static LayoutLoaderRegistry getInstance() {
         return instance;
     }
-    
-    protected LayoutLoaderRegistry() {
+
+    private LayoutLoaderRegistry() {
         super(ILayoutLoader.class);
     }
-    
+
     @Override
     protected String getKey(ILayoutLoader loader) {
         return loader.getId();

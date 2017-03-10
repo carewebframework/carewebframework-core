@@ -29,8 +29,19 @@ package org.carewebframework.shell.layout;
  * Interface for implementing a layout loader.
  */
 public interface ILayoutLoader {
-    
-    String getId();
 
-    UILayout loadLayout(String layout);
+    /**
+     * The unique identifier for this loader.
+     *
+     * @return
+     */
+    String getId();
+    
+    /**
+     * Loads the named layout.
+     *
+     * @param layoutName The layout name.
+     * @return The loaded layout.
+     */
+    UILayout loadLayout(String layoutName);
 }
