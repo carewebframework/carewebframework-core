@@ -47,19 +47,19 @@ import org.zkoss.zk.ui.Executions;
  * Represents the layout of the visual interface.
  */
 public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
-
+    
     private static final Log log = LogFactory.getLog(UILayout.class);
-
+    
     private static final String NULL_VALUE = "\\null\\";
-
+    
     private Document document;
-
+    
     private Node currentNode;
-
+    
     private String layoutName;
-
+    
     private String version;
-
+    
     /**
      * Loads a layout from the specified resource, using a registered layout loader or, failing
      * that, using the default loadFromUrl method.
@@ -69,22 +69,22 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
      */
     public static UILayout load(String resource) {
         int i = resource.indexOf(":");
-        
+
         if (i > 0) {
             String loaderId = resource.substring(0, i);
             ILayoutLoader layoutLoader = LayoutLoaderRegistry.getInstance().get(loaderId);
-            
+
             if (layoutLoader != null) {
                 String name = resource.substring(i + 1);
                 return layoutLoader.loadLayout(name);
             }
         }
-        
+
         UILayout layout = new UILayout();
         layout.loadFromUrl(resource);
         return layout;
     }
-    
+
     /**
      * Serializes the UI element hierarchy under and including the specified element.
      *
@@ -97,12 +97,16 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
         layout.internalSerialize(parent);
         return layout;
     }
-
+    
     public UILayout() {
-        super();
         clear();
     }
 
+    public UILayout(String layoutName) {
+        this();
+        setName(layoutName);
+    }
+    
     /**
      * Deserializes the layout, under the specified parent, starting from the layout origin.
      *
@@ -114,14 +118,14 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
         moveTop();
         moveDown();
         UIElementBase element = internalDeserialize(parent, !(parent instanceof UIElementDesktop));
-
+        
         if (element != null) {
             element.getRoot().activate(true);
         }
-
+        
         return element;
     }
-
+    
     /**
      * Deserializes the layout, under the specified parent. This method manipulates the current
      * position within the layout and is called recursively in a depth-first traversal of the XML
@@ -135,25 +139,25 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
     private UIElementBase internalDeserialize(UIElementBase parent, boolean ignoreInternal) throws Exception {
         String id = getObjectName();
         PluginDefinition def = PluginDefinition.getDefinition(id);
-
+        
         if (def == null) {
             log.error("Unrecognized tag '" + id + "' encountered in layout.");
         }
-
+        
         UIElementBase element = def == null ? null
                 : ignoreInternal && def.isInternal() ? null : def.createElement(parent, this);
-
+        
         if (element != null && moveDown()) {
             internalDeserialize(element, false);
             moveUp();
         }
-
+        
         while (moveNext()) {
             internalDeserialize(parent, ignoreInternal);
         }
         return element;
     }
-
+    
     /**
      * Serializes the specified UI element (parent). This is called recursively for the specified
      * element and all its subordinates.
@@ -164,29 +168,29 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
     private void internalSerialize(UIElementBase parent) throws Exception {
         PluginDefinition def = parent.getDefinition();
         boolean isRoot = parent.getParent() == null;
-
+        
         if (!isRoot) {
             newChild(def.getId());
         }
-
+        
         for (PropertyInfo propInfo : def.getProperties()) {
             Object value = propInfo.isSerializable() ? propInfo.getPropertyValue(parent) : null;
             String val = value == null ? null : propInfo.getPropertyType().getSerializer().serialize(value);
-
+            
             if (!ObjectUtils.equals(value, propInfo.getDefault())) {
                 writeString(propInfo.getId(), val);
             }
         }
-
+        
         for (UIElementBase child : parent.getSerializableChildren()) {
             internalSerialize(child);
         }
-
+        
         if (!isRoot) {
             moveUp();
         }
     }
-
+    
     /**
      * Returns the object name (i.e., the element tag) of the currently selected node.
      *
@@ -195,7 +199,7 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
     public String getObjectName() {
         return currentNode.getNodeName();
     }
-
+    
     /**
      * Returns the name of the currently loaded layout, or null if none loaded.
      *
@@ -204,7 +208,7 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
     public String getName() {
         return layoutName;
     }
-
+    
     /**
      * Sets the name of the current layout.
      *
@@ -214,7 +218,7 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
         layoutName = value;
         setAttributeValue("name", value, document.getDocumentElement());
     }
-
+    
     /**
      * Returns the version of the layout.
      *
@@ -223,7 +227,7 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
     public String getVersion() {
         return version;
     }
-
+    
     /**
      * Sets the version of the current layout.
      *
@@ -233,22 +237,22 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
         version = value;
         setAttributeValue("version", value, document.getDocumentElement());
     }
-
+    
     /**
      * Performs some simple validation of the newly loaded layout.
      */
     private void validateDocument() {
         currentNode = document.getDocumentElement();
-
+        
         if (!LayoutConstants.LAYOUT_ROOT.equals(currentNode.getNodeName())) {
             throw new RuntimeException("Expected signature not found.");
         }
-
+        
         layoutName = readString("name", "");
         version = readString("version", "");
         moveDown();
     }
-
+    
     /**
      * Reset the layout to not loaded state.
      */
@@ -258,7 +262,7 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
         layoutName = null;
         version = null;
     }
-
+    
     /**
      * Load the layout from a file.
      *
@@ -266,15 +270,15 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
      */
     public void loadFromUrl(String url) {
         InputStream strm = null;
-
+        
         try {
             reset();
             strm = Executions.getCurrent().getDesktop().getWebApp().getResourceAsStream(url);
-
+            
             if (strm == null) {
                 throw new UIException("Unable to locate layout resource: " + url);
             }
-
+            
             document = XMLUtil.parseXMLFromStream(strm);
             validateDocument();
         } catch (Exception e) {
@@ -284,7 +288,7 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
             IOUtils.closeQuietly(strm);
         }
     }
-
+    
     /**
      * Load the layout from a string.
      *
@@ -302,7 +306,7 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
             throw MiscUtil.toUnchecked(e);
         }
     }
-
+    
     /**
      * Load the layout from a stored property.
      *
@@ -315,7 +319,7 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
         this.layoutName = layoutId.name;
         return this;
     }
-
+    
     /**
      * Load the layout associated with the specified application id.
      *
@@ -326,7 +330,7 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
         String xml = LayoutUtil.getLayoutContentByAppId(appId);
         return loadFromText(xml);
     }
-
+    
     /**
      * Saves the layout as a property value using the specified identifier.
      *
@@ -336,17 +340,17 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
     public boolean saveToProperty(LayoutIdentifier layoutId) {
         setName(layoutId.name);
         setVersion(LayoutConstants.LAYOUT_VERSION);
-
+        
         try {
             LayoutUtil.saveLayout(layoutId, toString());
         } catch (Exception e) {
             log.error("Error saving application layout.", e);
             return false;
         }
-
+        
         return true;
     }
-
+    
     /**
      * Sets the current node to the specified value. If the value is not an element node, sets the
      * current node to the first sibling node that is an element.
@@ -362,10 +366,10 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
             }
             node = node.getNextSibling();
         }
-
+        
         return false;
     }
-
+    
     /**
      * Clears the current document.
      */
@@ -376,10 +380,10 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
         } catch (Exception e) {
             reset();
         }
-
+        
         currentNode = document.getDocumentElement();
     }
-
+    
     /**
      * Returns the class of the element at the root of the layout.
      *
@@ -392,7 +396,7 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
         PluginDefinition def = id == null ? null : PluginDefinition.getDefinition(id);
         return def == null ? null : def.getClazz();
     }
-
+    
     /**
      * Move current node down one level.
      *
@@ -401,7 +405,7 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
     public boolean moveDown() {
         return currentNode != null && currentNode.hasChildNodes() && setCurrentNode(currentNode.getFirstChild());
     }
-
+    
     /**
      * Moves to next sibling node.
      *
@@ -410,7 +414,7 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
     public boolean moveNext() {
         return setCurrentNode(currentNode.getNextSibling());
     }
-
+    
     /**
      * Move to the top element in the document.
      *
@@ -420,7 +424,7 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
         currentNode = document.getDocumentElement();
         return !StringUtils.isEmpty(layoutName);
     }
-
+    
     /**
      * Move up one level.
      *
@@ -429,7 +433,7 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
     public boolean moveUp() {
         return setCurrentNode(currentNode.getParentNode());
     }
-
+    
     /**
      * Returns value of named attribute as a boolean.
      *
@@ -440,7 +444,7 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
     public boolean readBoolean(String name, boolean deflt) {
         return Boolean.parseBoolean(readString(name, Boolean.toString(deflt)));
     }
-
+    
     /**
      * Return value of named attribute as an integer;
      *
@@ -451,7 +455,7 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
     public int readInteger(String name, int deflt) {
         return NumberUtils.toInt(readString(name, null), deflt);
     }
-
+    
     /**
      * Return value of named attribute as a string.
      *
@@ -463,7 +467,7 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
         String value = hasProperty(name) ? currentNode.getAttributes().getNamedItem(name).getNodeValue() : deflt;
         return NULL_VALUE.equals(value) ? null : value;
     }
-
+    
     /**
      * Create a new element node as the child of the current node and make it the current node.
      *
@@ -472,15 +476,15 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
     public void newChild(String name) {
         currentNode = currentNode.appendChild(document.createElement(name));
     }
-
+    
     public void writeBoolean(String name, boolean value) {
         writeString(name, Boolean.toString(value));
     }
-
+    
     public void writeInteger(String name, int value) {
         writeString(name, Integer.toString(value));
     }
-
+    
     /**
      * Sets an attribute value.
      *
@@ -490,7 +494,7 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
     public void writeString(String name, String value) {
         setAttributeValue(name, value == null ? NULL_VALUE : value, currentNode);
     }
-
+    
     /**
      * Returns true if the layout has no content.
      *
@@ -500,7 +504,7 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
         Node root = document == null ? null : document.getElementsByTagName(LayoutConstants.LAYOUT_ROOT).item(0);
         return root == null || !root.hasChildNodes();
     }
-
+    
     /**
      * Sets the specified attribute value for the specified element.
      *
@@ -510,15 +514,15 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
      */
     private void setAttributeValue(String name, String value, Node element) {
         Node node = element.getAttributes().getNamedItem(name);
-
+        
         if (node == null) {
             node = document.createAttribute(name);
             element.getAttributes().setNamedItem(node);
         }
-
+        
         node.setNodeValue(value);
     }
-
+    
     /**
      * Returns the layout as an xml-formatted string.
      */
@@ -526,7 +530,7 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
     public String toString() {
         return document == null ? null : XMLUtil.toString(document);
     }
-
+    
     /**
      * @see org.carewebframework.api.property.IPropertyProvider#getProperty(String)
      */
@@ -534,7 +538,7 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
     public String getProperty(String key) {
         return readString(key, null);
     }
-
+    
     /**
      * Returns true if the specified attribute exists in the current node.
      *
@@ -545,7 +549,7 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
     public boolean hasProperty(String name) {
         return currentNode == null ? false : currentNode.getAttributes().getNamedItem(name) != null;
     }
-
+    
     /**
      * Converts to clipboard format.
      */
@@ -553,7 +557,7 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
     public String toClipboard() {
         return toString();
     }
-
+    
     /**
      * Converts from clipboard format.
      *
