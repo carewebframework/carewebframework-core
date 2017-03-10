@@ -29,14 +29,14 @@ package org.carewebframework.shell.layout;
  * Interface for implementing a layout loader.
  */
 public interface ILayoutLoader {
-
+    
     /**
      * The unique identifier for this loader.
      *
-     * @return
+     * @return Return the unique identifier for this loader.
      */
     String getId();
-    
+
     /**
      * Loads the named layout.
      *
