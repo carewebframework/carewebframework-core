@@ -99,6 +99,8 @@
 }
 
 .cwf-treeview-node > a {
+    text-overflow: ellipsis;
+    overflow: hidden;
 	background-image: none;
 	width: 100%;
 	border: none;

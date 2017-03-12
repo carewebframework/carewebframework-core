@@ -1,0 +1,4 @@
+<page>
+	<combobox name="cboLibrary" readonly="true" style="margin-bottom:1px" />
+	<imagepicker name="imgPicker" showText="true" />
+</page>

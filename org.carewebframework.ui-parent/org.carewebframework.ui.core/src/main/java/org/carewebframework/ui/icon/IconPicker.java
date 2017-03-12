@@ -27,43 +27,42 @@ package org.carewebframework.ui.icon;
 
 import java.util.List;
 
+import org.carewebframework.ui.Constants;
+import org.carewebframework.web.annotation.EventHandler;
+import org.carewebframework.web.annotation.OnFailure;
+import org.carewebframework.web.annotation.WiredComponent;
 import org.carewebframework.web.component.Combobox;
 import org.carewebframework.web.component.Comboitem;
-import org.carewebframework.web.component.Div;
 import org.carewebframework.web.component.ImagePicker;
 import org.carewebframework.web.component.ImagePicker.ImagePickeritem;
+import org.carewebframework.web.component.Namespace;
 import org.carewebframework.web.event.ChangeEvent;
+import org.carewebframework.web.page.PageUtil;
 
 /**
  * Extends the icon picker by adding the ability to pick an icon library from which to choose.
  */
-public class IconPicker extends Div {
+public class IconPicker extends Namespace {
 
     private final IconLibraryRegistry iconRegistry = IconLibraryRegistry.getInstance();
 
+    @WiredComponent
+    private Combobox cboLibrary;
+
+    @WiredComponent
+    private ImagePicker imgPicker;
+    
     private IIconLibrary iconLibrary;
-
-    private final Combobox cboLibrary = new Combobox();
-
-    private final ImagePicker imagePicker = new ImagePicker();
-
+    
     private boolean selectorVisible;
 
     private String dimensions = "16x16";
 
     public IconPicker() {
-        cboLibrary.setReadonly(true);
-        cboLibrary.addStyle("margin-bottom", "1px");
-        addChild(cboLibrary);
-        addChild(imagePicker);
         addStyle("overflow", "visible");
-        imagePicker.addEventForward(ChangeEvent.class, this, null);
-        imagePicker.setShowText(true);
-
-        cboLibrary.addEventListener(ChangeEvent.class, (event) -> {
-            iconLibrary = (IIconLibrary) cboLibrary.getSelectedItem().getData();
-            libraryChanged();
-        });
+        addStyle("display", "inline-block");
+        PageUtil.createPage(Constants.RESOURCE_PREFIX + "cwf/iconPicker.cwf", this);
+        wireController(this);
 
         for (IIconLibrary lib : iconRegistry) {
             Comboitem item = new Comboitem(lib.getId());
@@ -110,30 +109,32 @@ public class IconPicker extends Div {
     }
 
     public String getValue() {
-        return imagePicker.getValue();
+        return imgPicker.getValue();
     }
 
     public void setValue(String value) {
-        imagePicker.setValue(value);
+        imgPicker.setValue(value);
     }
 
     public ImagePicker getImagePicker() {
-        return imagePicker;
+        return imgPicker;
     }
 
     private void libraryChanged() {
-        imagePicker.clear();
-        imagePicker.destroyChildren();
-        imagePicker.addChild(new ImagePickeritem());
+        imgPicker.clear();
+        imgPicker.destroyChildren();
+        imgPicker.addChild(new ImagePickeritem());
 
         for (String lib : iconLibrary.getMatching("*", dimensions)) {
-            imagePicker.addChild(new ImagePickeritem(lib));
+            imgPicker.addChild(new ImagePickeritem(lib));
         }
+        
+        fireEvent(ChangeEvent.TYPE);
     }
 
     public void addIconByUrl(String url) {
         ImagePickeritem item = new ImagePickeritem(url);
-        imagePicker.addChild(item);
+        imgPicker.addChild(item);
     }
 
     public void addIconsByUrl(List<String> urls) {
@@ -142,4 +143,14 @@ public class IconPicker extends Div {
         }
     }
 
+    @EventHandler(value = "change", target = "@imgPicker", onFailure = OnFailure.IGNORE)
+    private void onChange$imgPicker(ChangeEvent event) {
+        fireEvent(event);
+    }
+
+    @EventHandler(value = "change", target = "@cboLibrary", onFailure = OnFailure.IGNORE)
+    private void onChange$cboLibrary() {
+        iconLibrary = (IIconLibrary) cboLibrary.getSelectedItem().getData();
+        libraryChanged();
+    }
 }

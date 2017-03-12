@@ -17,7 +17,7 @@ define('cwf-login', ['jquery', 'lodash', 'css!cwf-login-css.css', 'css!bootstrap
 			$('#cwf-alternate').one('click', this.alternateHandler.bind(this));
 			this.domainHandler();
 			this.resetTimeout();
-			$('#cwf-login-root').show();
+			$('body').show();
 		},
 		
 		resetTimeout: function() {
