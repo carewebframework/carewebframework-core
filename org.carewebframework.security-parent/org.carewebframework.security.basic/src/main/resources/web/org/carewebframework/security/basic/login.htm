@@ -21,8 +21,12 @@
 	        
 			require(['cwf-login'], function(sec) {
 				var msg = [[#{security.login.form.timeout.message}]],
-				logout = 'security/logout?target=./login&message=' + encodeURIComponent(msg);
-				sec.init([(${timeout})], logout, [[#{security.login.required.fields}]]);	
+				logout = 'security/logout_success?target=./login&message=' + encodeURIComponent(msg);
+				sec.init(
+					[(${timeout})], 
+					logout, 
+					[[#{security.login.required.fields}]],
+					[[${disabled}]]);	
 			});
 		});	
 	</script>
@@ -82,9 +86,9 @@
 			<div style="height: 20px; border-top: 1px solid black"></div>
 			<div id="cwf-info">
 				<label id="cwf-info-title"
-					th:text="#{security.login.form.info.title.label}"></label>
+					th:text="#{security.login.form.info.title}"></label>
 				<div id="cwf-info-content"
-					th:text="#{security.login.form.info.label}"></div>
+					th:text="#{security.login.form.info.content}"></div>
 			</div>
 			<label class="text-center" 
 				th:text="#{security.login.form.footer.label}"></label>

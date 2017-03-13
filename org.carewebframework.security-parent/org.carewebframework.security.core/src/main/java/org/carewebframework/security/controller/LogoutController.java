@@ -41,21 +41,20 @@ import org.springframework.web.bind.annotation.RequestParam;
  */
 @Controller
 public class LogoutController {
-
+    
     @GetMapping("security/logout")
     public String logout(ModelMap model, HttpServletRequest request) {
         model.addAttribute("action", request.getRequestURI() + "?" + request.getQueryString());
         return "classpath:/web/org/carewebframework/security/logout.htm";
     }
-    
+
     @GetMapping("security/logout_success")
     public String logoutSuccess(ModelMap model, @RequestParam(name = "message", required = false) String message,
                                 @RequestParam(name = "target", required = false) String target, HttpSession session) {
         model.addAttribute("message",
             StringUtils.isEmpty(message) ? StrUtil.getLabel(Constants.LBL_LOGOUT_MESSAGE_DEFAULT) : message);
         model.addAttribute("target", StringUtils.isEmpty(target) ? "/" : target);
-        session.invalidate();
         return "classpath:/web/org/carewebframework/security/logoutSuccess.htm";
     }
-
+    
 }

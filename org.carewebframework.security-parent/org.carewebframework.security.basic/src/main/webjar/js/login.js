@@ -3,7 +3,7 @@
 define('cwf-login', ['jquery', 'lodash', 'css!cwf-login-css.css', 'css!bootstrap-css.css'], function($) {
 	return {
 	
-		init: function(timeout, logoutUrl, required) {
+		init: function(timeout, logoutUrl, required, disabled) {
 			this._timeout = timeout;
 			this._logoutUrl = logoutUrl;
 			this._required = required;
@@ -17,6 +17,12 @@ define('cwf-login', ['jquery', 'lodash', 'css!cwf-login-css.css', 'css!bootstrap
 			$('#cwf-alternate').one('click', this.alternateHandler.bind(this));
 			this.domainHandler();
 			this.resetTimeout();
+			
+			if (disabled) {
+				$('#cwf-login-root').addClass('cwf-login-disabled');
+				$('#cwf-error').text(disabled);
+			}
+			
 			$('body').show();
 		},
 		

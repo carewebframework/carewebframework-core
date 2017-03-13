@@ -9,6 +9,11 @@
 	min-height: 0;
 }
 
+.cwf-login-disabled #cwf-info,
+.cwf-login-disabled #cwf-form-container {
+    display: none;
+}
+
 #cwf-header {
 	width: 100%;
 	height: 90px;
