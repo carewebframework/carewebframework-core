@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:sec="http://www.springframework.org/schema/security"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/security
+	http://www.springframework.org/schema/security/spring-security-4.2.xsd">
+	
+	<sec:http use-expressions="false">
+		<sec:intercept-url pattern="/security/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+		<sec:intercept-url pattern="/webjars/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+		<sec:intercept-url pattern="/**/*.jpg" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+		<sec:intercept-url pattern="/**/*.png" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+		<sec:intercept-url pattern="/**/*.js" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+		<sec:intercept-url pattern="/**/*.css" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+		<sec:intercept-url pattern="/**" access="ROLE_USER" />
+		<sec:headers>
+			<sec:frame-options policy="SAMEORIGIN" />
+		</sec:headers>
+		<sec:form-login 
+			login-processing-url="/security/login" 
+			login-page="/security/login" 
+			default-target-url='/index.cwf'
+			authentication-details-source-ref="securityAuthenticationDetailsSource" />
+		<sec:logout 
+			logout-url="/security/logout"
+			success-handler-ref="securityLogoutSuccessHandler"
+			delete-cookies="JSESSIONID" />	
+		<sec:access-denied-handler 
+			error-page="/security/accessDenied" />
+	</sec:http>
+	
+	<sec:authentication-manager>
+		<sec:authentication-provider ref="securityAuthenticationProvider" />
+	</sec:authentication-manager>
+			
+</beans>

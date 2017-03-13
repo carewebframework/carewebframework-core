@@ -35,22 +35,22 @@ import org.springframework.web.bind.annotation.GetMapping;
  * Controller for mock login page.
  */
 @Controller
-public class MockLoginWindowController {
-    
+public class MockLoginController {
+
     @Value("#{securityMockUser}")
     private IUser mockUser;
-    
+
     @GetMapping("security/login")
     public String login(ModelMap model) {
         model.addAttribute("action", "./login");
         model.addAttribute("username", getUsername());
         model.addAttribute("password", mockUser.getPassword());
-        return "classpath:/web/org/carewebframework/security/mock/loginWindow.htm";
+        return "classpath:/web/org/carewebframework/security/mock/login.htm";
     }
-
+    
     private String getUsername() {
         String domain = mockUser.getSecurityDomain().getLogicalId();
         return (domain.isEmpty() ? "" : domain + "\\") + mockUser.getLoginName();
     }
-    
+
 }

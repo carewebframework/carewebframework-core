@@ -34,24 +34,24 @@ import org.carewebframework.web.component.Import;
  * UI element that encapsulates an iframe or an include (as determined by URL).
  */
 public class UIElementFrame extends UIElementBase {
-    
+
     static {
         registerAllowedParentClass(UIElementFrame.class, UIElementBase.class);
     }
-    
+
     private final Div root = new Div();
-    
+
     private BaseUIComponent child;
-    
+
     private String url;
-    
+
     public UIElementFrame() {
         super();
         root.addClass("cwf-plugin-container");
         fullSize(root);
         setOuterComponent(root);
     }
-    
+
     /**
      * Sets the URL of the content to be retrieved. If the URL starts with "http", it is fetched
      * into an iframe. Otherwise, an include component is created and used to fetch the content.
@@ -60,12 +60,12 @@ public class UIElementFrame extends UIElementBase {
      */
     public void setUrl(String url) {
         this.url = url;
-        
+
         if (child != null) {
-            child.detach();
+            child.destroy();
             child = null;
         }
-        
+
         if (url.startsWith("http") || !url.endsWith(".cwf")) {
             child = new Iframe();
             ((Iframe) child).setSrc(url);
@@ -73,11 +73,11 @@ public class UIElementFrame extends UIElementBase {
             child = new Import();
             ((Import) child).setSrc(url);
         }
-        
+
         fullSize(child);
         root.addChild(child);
     }
-    
+
     /**
      * Returns the URL of the content.
      *
@@ -86,5 +86,5 @@ public class UIElementFrame extends UIElementBase {
     public String getUrl() {
         return url;
     }
-    
+
 }

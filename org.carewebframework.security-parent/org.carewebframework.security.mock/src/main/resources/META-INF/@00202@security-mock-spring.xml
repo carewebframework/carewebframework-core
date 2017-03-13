@@ -31,12 +31,6 @@
 			<constructor-arg ref="securityMockUser" />
 		</bean>
 		
-		<bean id="securityAuthenticationProvider" 
-			class="org.carewebframework.security.BaseAuthenticationProvider" />
-		
-		<bean id="securityAuthenticationDetailsSource"
-			class="org.carewebframework.security.CWFAuthenticationDetailsSource" />
-		
 		<bean id="securityMockDomainLoader"
 			class="org.carewebframework.api.security.mock.MockSecurityDomainLoader"
 			cwf:override="never">
@@ -44,23 +38,6 @@
 			<constructor-arg value="${org.carewebframework.security.mock.authorities}" />
 		</bean>
 
-			
-		<sec:http use-expressions="false">
-			<sec:intercept-url pattern="/security/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
-			<sec:intercept-url pattern="/webjars/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
-			<sec:intercept-url pattern="/**" access="ROLE_USER" />
-			<sec:form-login 
-				login-processing-url="/security/login" 
-				login-page="/security/login" 
-				default-target-url='/index.cwf'
-				authentication-details-source-ref="securityAuthenticationDetailsSource" />
-			<sec:logout />		
-		</sec:http>
-		
-		<sec:authentication-manager>
-			<sec:authentication-provider ref="securityAuthenticationProvider" />
-		</sec:authentication-manager>
-		
 	</beans>
 
 </beans>

@@ -39,8 +39,6 @@ public class Constants {
     
     public static final String ANONYMOUS_USER = "ANONYMOUS_USER";
     
-    public static final String DEFAULT_TARGET_PARAMETER = "spring-security-redirect";
-    
     public static final String SAVED_REQUEST = "SPRING_SECURITY_SAVED_REQUEST";
     
     public static final String SAVED_USER = "SPRING_SECURITY_SAVED_USER";
@@ -56,6 +54,8 @@ public class Constants {
     public static final String PROP_LOGOUT_URL = "org.carewebframework.security.logout.url";
     
     public static final String LBL_LOGOUT_MESSAGE_DEFAULT = "security.logout.message.default";
+    
+    public static final String TARGET_URL_PARAMETER = "TARGET_URL";
     
     // Login constants
     

@@ -25,6 +25,7 @@
  */
 package org.carewebframework.security.controller;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.carewebframework.common.StrUtil;
@@ -32,23 +33,29 @@ import org.carewebframework.security.Constants;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
- * Controller for logout page.
+ * Controller for logout and logout success pages.
  */
 @Controller
-public class LogoutWindowController {
+public class LogoutController {
 
-    @RequestMapping("security/logout")
-    public String logout(ModelMap model, @RequestParam(name = "message", required = false) String message,
-                         @RequestParam(name = "target", required = false) String target, HttpSession session) {
+    @GetMapping("security/logout")
+    public String logout(ModelMap model, HttpServletRequest request) {
+        model.addAttribute("action", request.getRequestURI() + "?" + request.getQueryString());
+        return "classpath:/web/org/carewebframework/security/logout.htm";
+    }
+    
+    @GetMapping("security/logout_success")
+    public String logoutSuccess(ModelMap model, @RequestParam(name = "message", required = false) String message,
+                                @RequestParam(name = "target", required = false) String target, HttpSession session) {
         model.addAttribute("message",
             StringUtils.isEmpty(message) ? StrUtil.getLabel(Constants.LBL_LOGOUT_MESSAGE_DEFAULT) : message);
         model.addAttribute("target", StringUtils.isEmpty(target) ? "/" : target);
         session.invalidate();
-        return "classpath:/web/org/carewebframework/security/logoutWindow.htm";
+        return "classpath:/web/org/carewebframework/security/logoutSuccess.htm";
     }
 
 }

@@ -11,6 +11,7 @@
 			<param-name>contextConfigLocation</param-name>
 			<param-value>
 				classpath:/META-INF/cwf-dispatcher-servlet.xml
+				/WEB-INF/security-spring.xml
 			</param-value>
 		</init-param>
 

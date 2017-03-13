@@ -36,15 +36,15 @@ import org.carewebframework.web.client.WebJarLocator;
 import org.carewebframework.web.core.RequestUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 
 /**
  * Controller for login page.
  */
 @Controller
-public class LoginWindowController {
+public class LoginController {
 
-    @RequestMapping("security/login")
+    @GetMapping("security/login")
     public String login(ModelMap model, HttpServletRequest request) {
         Collection<ISecurityDomain> domains = SecurityDomainRegistry.getInstance().getAll();
         model.addAttribute("baseUrl", RequestUtil.getBaseURL(request));
@@ -57,7 +57,7 @@ public class LoginWindowController {
         String error = request.getParameter("error");
         model.addAttribute("error",
             error == null ? null : error.isEmpty() ? StrUtil.getLabel("security.login.error") : error);
-        return "classpath:/web/org/carewebframework/security/basic/loginWindow.htm";
+        return "classpath:/web/org/carewebframework/security/basic/login.htm";
     }
 
 }

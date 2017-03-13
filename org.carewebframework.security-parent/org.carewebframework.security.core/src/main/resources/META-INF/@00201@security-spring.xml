@@ -13,14 +13,17 @@
 
 		<context:component-scan base-package="org.carewebframework.security" />
 		
-		<bean
-			class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
-			<property name="targetClass"
-				value="org.springframework.security.core.context.SecurityContextHolder" />
-			<property name="targetMethod" value="setStrategyName" />
-			<property name="arguments" value="MODE_INHERITABLETHREADLOCAL" />
+		<bean id="securityAuthenticationDetailsSource"
+			class="org.carewebframework.security.CWFAuthenticationDetailsSource" />
+		
+		<bean id="securityLogoutSuccessHandler"
+			class="org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler">
+			<property name="targetUrlParameter" value="TARGET_URL" />
 		</bean>
-
+		
+		<bean id="securityAuthenticationProvider" 
+			class="org.carewebframework.security.BaseAuthenticationProvider" />
+		
 	</beans>
 	
 	<beans profile="child">

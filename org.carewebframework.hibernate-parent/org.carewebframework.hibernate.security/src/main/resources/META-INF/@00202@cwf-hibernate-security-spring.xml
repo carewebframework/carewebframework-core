@@ -16,7 +16,7 @@
 		<bean id="securityService" cwf:override="always"
 			class="org.carewebframework.hibernate.security.SecurityService">
 			<constructor-arg ref="cwfHibernateUserDAO" />
-			<property name="logoutTarget" value="${org.carewebframework.security.logout.url}" />
+			<property name="logoutTarget" value="${org.carewebframework.security.logout.success.url}" />
 		</bean>
 		
 		<bean id="cwfHibernateUserDAO"
@@ -29,36 +29,6 @@
 			<constructor-arg ref="cwfHibernateSessionFactory" />
 		</bean>
 
-		<bean id="securityAuthenticationProvider" 
-			class="org.carewebframework.security.BaseAuthenticationProvider" />
-		
-		<bean id="securityAuthenticationDetailsSource"
-			class="org.carewebframework.security.CWFAuthenticationDetailsSource" />
-		
-		<sec:http use-expressions="false">
-			<sec:intercept-url pattern="/security/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
-			<sec:intercept-url pattern="/webjars/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
-			<sec:intercept-url pattern="/**/*.jpg" access="IS_AUTHENTICATED_ANONYMOUSLY" />
-			<sec:intercept-url pattern="/**/*.png" access="IS_AUTHENTICATED_ANONYMOUSLY" />
-			<sec:intercept-url pattern="/**/*.js" access="IS_AUTHENTICATED_ANONYMOUSLY" />
-			<sec:intercept-url pattern="/**/*.css" access="IS_AUTHENTICATED_ANONYMOUSLY" />
-			<sec:intercept-url pattern="/**" access="ROLE_USER" />
-			<sec:form-login 
-				login-processing-url="/security/login" 
-				login-page="/security/login" 
-				default-target-url='/index.cwf'
-				authentication-details-source-ref="securityAuthenticationDetailsSource" />
-			<sec:logout 
-				logout-success-url="/security/logout" 
-				delete-cookies="JSESSIONID" />	
-			<sec:access-denied-handler 
-				error-page="/security/accessDenied" />
-		</sec:http>
-		
-		<sec:authentication-manager>
-			<sec:authentication-provider ref="securityAuthenticationProvider" />
-		</sec:authentication-manager>
-		
 	</beans>
 
 </beans>
