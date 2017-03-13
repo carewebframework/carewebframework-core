@@ -30,9 +30,9 @@ import java.util.Collection;
 import javax.servlet.http.HttpServletRequest;
 
 import org.carewebframework.api.security.ISecurityDomain;
+import org.carewebframework.api.security.ISecurityService;
 import org.carewebframework.api.security.SecurityDomainRegistry;
 import org.carewebframework.common.StrUtil;
-import org.carewebframework.security.AbstractSecurityService;
 import org.carewebframework.web.client.WebJarLocator;
 import org.carewebframework.web.core.RequestUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,10 +45,10 @@ import org.springframework.web.bind.annotation.GetMapping;
  */
 @Controller
 public class LoginController {
-
+    
     @Autowired
-    private AbstractSecurityService securityService;
-
+    private ISecurityService securityService;
+    
     @GetMapping("security/login")
     public String login(ModelMap model, HttpServletRequest request) {
         Collection<ISecurityDomain> domains = SecurityDomainRegistry.getInstance().getAll();
@@ -59,11 +59,11 @@ public class LoginController {
         model.addAttribute("domains", domains);
         model.addAttribute("disabled", securityService.loginDisabled());
         model.addAttribute("action", "security/login");
-        
+
         String error = request.getParameter("error");
         model.addAttribute("error",
             error == null ? null : error.isEmpty() ? StrUtil.getLabel("security.login.error") : error);
         return "classpath:/web/org/carewebframework/security/basic/login.htm";
     }
-
+    
 }
