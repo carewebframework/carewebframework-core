@@ -33,6 +33,10 @@
 	margin-right: 10px;
 }
 
+#cwf-header-text:empty {
+	display: none;
+}
+
 #cwf-domain-name {
 	font-size: 1.2em;
 	font-weight: bold;
@@ -85,11 +89,16 @@
 }
 
 #cwf-info {
+	max-height: 200px;
     overflow: auto;
     padding: 10px;
     margin: 10px;
     background: white !important;
     border: solid 2px #405C69 !important;
+}
+
+#cwf-info *:empty {
+    display: none;
 }
 
 #cwf-info-title {
@@ -101,11 +110,6 @@
 
 #cwf-info-content {
     padding: 20px;
-}
-
-#cwf-info > div:first-child {
-    height: 10px; 
-    border-top: 1px solid black;
 }
 
 #cwf-copyright {
