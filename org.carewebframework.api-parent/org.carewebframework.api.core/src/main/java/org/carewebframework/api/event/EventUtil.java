@@ -7,15 +7,15 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  * This Source Code Form is also subject to the terms of the Health-Related
  * Additional Disclaimer of Warranty and Limitation of Liability available at
  *
@@ -38,11 +38,13 @@ public class EventUtil {
     
     private static final Log log = LogFactory.getLog(EventUtil.class);
     
+    private static final String EVENT_PREFIX = "cwf-event-";
+
     public static final String STATUS_EVENT = "STATUS";
     
     /**
      * Returns the event manager for this application context.
-     * 
+     *
      * @return IEventManager
      */
     public static IEventManager getEventManager() {
@@ -59,7 +61,7 @@ public class EventUtil {
     
     /**
      * Fires a generic event of type STATUS to update any object that subscribes to it.
-     * 
+     *
      * @param statusText Text associated with the status change.
      */
     public static void status(String statusText) {
@@ -72,7 +74,7 @@ public class EventUtil {
     
     /**
      * Fires a ping request to specified or all recipients.
-     * 
+     *
      * @param responseEvent Event to use for response.
      * @param filters Response filters (null for none).
      * @param recipients The list of ping recipients (or none for all recipients).
@@ -88,18 +90,29 @@ public class EventUtil {
     
     /**
      * Returns the messaging channel name from the event name.
-     * 
+     *
      * @param eventName The event name.
      * @return The channel name.
      */
     public static String getChannelName(String eventName) {
-        return eventName == null ? null : "cwf-event-" + eventName.split("\\.", 2)[0];
+        return eventName == null ? null : EVENT_PREFIX + eventName.split("\\.", 2)[0];
+    }
+    
+    /**
+     * Returns the event name from the channel name.
+     *
+     * @param channelName The channel name.
+     * @return The event name.
+     */
+    public static String getEventName(String channelName) {
+        int i = channelName.indexOf(EVENT_PREFIX);
+        return i < 0 ? channelName : channelName.substring(i + EVENT_PREFIX.length());
     }
     
     /**
      * Enforce static class.
      */
     private EventUtil() {
-    };
+    }
     
 }
