@@ -10,12 +10,12 @@
 						class="flavor:btn-success" />
 				</row>
 				<row>
-					<a name="btnToday" 
+					<link name="btnToday" 
 						label="${@msg.cwf.datetime.btn.today.label}" />
 					<div>
-						<a name="btnNow" 
+						<link name="btnNow" 
 							label="${@msg.cwf.datetime.btn.now.label}" />
-						<a name="btnTimeClear" 
+						<link name="btnTimeClear" 
 							label="${@msg.cwf.datetime.btn.clear.label}" />
 					</div>
 					<button name="btnCancel"

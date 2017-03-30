@@ -5,13 +5,13 @@
 			<label name="userHeader" />
 		</div>
 		<div class="cwf-layout-horizontal" flex="1">
-			<a name="password" label="${@msg.cwf.userheader.password.label}"
+			<link name="password" label="${@msg.cwf.userheader.password.label}"
 				hint="${@msg.cwf.userheader.password.hint}" visible="true" />
 			<div flex="1" />
-			<a name="lock" label="${@msg.cwf.userheader.lock.label}"
+			<link name="lock" label="${@msg.cwf.userheader.lock.label}"
 				hint="${@msg.cwf.userheader.lock.hint}" />
 			<div width="10px" />
-			<a name="logout" label="${@msg.cwf.userheader.logout.label}"
+			<link name="logout" label="${@msg.cwf.userheader.logout.label}"
 				hint="${@msg.cwf.userheader.logout.hint}" />
 		</div>
 	</div>

@@ -6,7 +6,7 @@
 	<div>
 		<datebox name="startDate"
 			hint="${@msg.cwf.date.range.start.date.dbx.hint}" />
-		<a name="btnSameAsEnd" 
+		<link name="btnSameAsEnd" 
 			class="glyphicon glyphicon-chevron-left"
 			hint="${@msg.cwf.date.range.start.date.btn.hint}" />
 	</div>
@@ -15,7 +15,7 @@
 	<div>
 		<datebox name="endDate"
 			hint="${@msg.cwf.date.range.end.date.dbx.hint}" />
-		<a name="btnSameAsStart" 
+		<link name="btnSameAsStart" 
 			class="glyphicon glyphicon-chevron-left"
 			hint="${@msg.cwf.date.range.end.date.btn.hint}" />
 	</div>
