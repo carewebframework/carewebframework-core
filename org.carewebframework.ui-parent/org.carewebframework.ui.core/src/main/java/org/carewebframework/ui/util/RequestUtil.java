@@ -84,19 +84,48 @@ public class RequestUtil {
      *         request.
      */
     public static Bridge startExecution(HttpServletRequest request, HttpServletResponse response) {
-        Desktop desktop = getDesktop(request);
+        return startExecution(request, response, null);
+    }
+    
+    /**
+     * Starts an execution context for specialized http requests.
+     *
+     * @param request The request.
+     * @param response The response
+     * @param dtid The id of the target desktop. If null, the id is assumed to be in a request
+     *            parameter named "dtid".
+     * @return The bridge handling the request, or null if unable to handle the request. You must
+     *         call the <code>close</code> method on the returned object after processing the
+     *         request.
+     */
+    public static Bridge startExecution(HttpServletRequest request, HttpServletResponse response, String dtid) {
+        Desktop desktop = getDesktop(request, dtid);
         return desktop == null ? null : Bridge.start(request.getServletContext(), request, response, desktop);
+    }
+    
+    /**
+     * Returns the desktop associated with a request. The desktop id must be available as a request
+     * parameter named "dtid".
+     *
+     * @param request The request.
+     * @return The associated desktop, or null if none.
+     */
+    public static Desktop getDesktop(HttpServletRequest request) {
+        return getDesktop(request, null);
     }
     
     /**
      * Returns the desktop associated with a request.
      *
      * @param request The request.
+     * @param dtid The desktop id to locate, or null to obtain the id from a request parameter named
+     *            "dtid".
      * @return The associated desktop, or null if none.
      */
-    public static Desktop getDesktop(HttpServletRequest request) {
+    public static Desktop getDesktop(HttpServletRequest request, String dtid) {
         try {
-            return Bridge.getDesktop(request.getServletContext(), request, request.getParameter("dtid"));
+            dtid = dtid == null ? request.getParameter("dtid") : dtid;
+            return Bridge.getDesktop(request.getServletContext(), request, dtid);
         } catch (Exception e) {
             log.error("Error discovering desktop from request", e);
             return null;
