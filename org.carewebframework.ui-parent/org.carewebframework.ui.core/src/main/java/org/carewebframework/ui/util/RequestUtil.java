@@ -7,15 +7,15 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  * This Source Code Form is also subject to the terms of the Health-Related
  * Additional Disclaimer of Warranty and Limitation of Liability available at
  *
@@ -31,19 +31,20 @@ import java.util.Enumeration;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.carewebframework.api.domain.IUser;
 import org.carewebframework.api.security.SecurityUtil;
 import org.carewebframework.ui.FrameworkWebSupport;
-
 import org.springframework.util.Assert;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.zkoss.zk.ui.Desktop;
+import org.zkoss.zkplus.embed.Bridge;
 
 /**
  * Utilities for dealing with <code>ServletRequest</code>s and <code>Execution</code>s.
@@ -54,45 +55,73 @@ import org.springframework.web.context.request.ServletRequestAttributes;
  */
 public class RequestUtil {
     
-    
     private static Log log = LogFactory.getLog(RequestUtil.class);
-    
+
     /**
      * Return current HttpServletRequest. Note that this will return null when invoked outside the
      * scope of an execution/request.
-     * 
+     *
      * @see RequestContextHolder#currentRequestAttributes()
      * @return HttpServletRequest, null when invoked outside the scope of an
      *         Execution/ServletRequest
      */
     public static HttpServletRequest getRequest() {
         ServletRequestAttributes requestAttrs = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        
+
         if (requestAttrs == null) {
             return null;
         }
         return requestAttrs.getRequest();
     }
+
+    /**
+     * Starts an execution context for specialized http requests.
+     *
+     * @param request The request.
+     * @param response The response
+     * @return The bridge handling the request, or null if unable to handle the request. You must
+     *         call the <code>close</code> method on the returned object after processing the
+     *         request.
+     */
+    public static Bridge startExecution(HttpServletRequest request, HttpServletResponse response) {
+        Desktop desktop = getDesktop(request);
+        return desktop == null ? null : Bridge.start(request.getServletContext(), request, response, desktop);
+    }
+    
+    /**
+     * Returns the desktop associated with a request.
+     *
+     * @param request The request.
+     * @return The associated desktop, or null if none.
+     */
+    public static Desktop getDesktop(HttpServletRequest request) {
+        try {
+            return Bridge.getDesktop(request.getServletContext(), request, request.getParameter("dtid"));
+        } catch (Exception e) {
+            log.error("Error discovering desktop from request", e);
+            return null;
+        }
+    }
     
     /**
      * Return current HttpSession
-     * 
+     *
      * @return HttpSession, null when invoked outside the scope of an Execution/ServletRequest
      */
     public static HttpSession getSession() {
         return getSession(getRequest());
     }
-    
+
     /**
      * Return current HttpSession given request.
-     * 
+     *
      * @param request Http servlet request object.
      * @return HttpSession, null when invoked outside the scope of an Execution/ServletRequest
      */
     public static HttpSession getSession(HttpServletRequest request) {
         return request == null ? null : request.getSession(false);
     }
-    
+
     /**
      * Logs at trace level the request headers
      */
@@ -108,10 +137,10 @@ public class RequestUtil {
             }
         }
     }
-    
+
     /**
      * Return server name.
-     * 
+     *
      * @see HttpServletRequest#getServerName()
      * @return server name
      */
@@ -122,11 +151,11 @@ public class RequestUtil {
         }
         return request.getServerName();
     }
-    
+
     /**
      * Return local host IP. Note: HttpServletRequest#getLocalAddr() doesn't seem to be consistent.
      * This method uses java.net.InetAddress.
-     * 
+     *
      * @see InetAddress#getHostAddress()
      * @return server IP
      */
@@ -138,12 +167,12 @@ public class RequestUtil {
             return null;
         }
     }
-    
+
     /**
      * Return client's ip address. Returns null if invoked outside scope of Execution/ServletRequest
      * <p>
      * This considers header X-FORWARDED-FOR (i.e. useful if behind a proxy)
-     * 
+     *
      * @return the client's IP
      */
     public static String getRemoteAddress() {
@@ -169,22 +198,22 @@ public class RequestUtil {
         }
         return ipAddress;
     }
-    
+
     /**
      * Get current request's session id or null if session has not yet been created or if invoked
      * outside the scope of an Execution/ServletRequest.
-     * 
+     *
      * @return String representing session id or null if session has not yet been created
      */
     public static String getSessionId() {
         HttpSession session = getSession(getRequest());
         return session == null ? null : session.getId();
     }
-    
+
     /**
      * Return request, throwing IllegalStateException if invoked outside the scope of an
      * Execution/ServletRequest
-     * 
+     *
      * @return HttpServletRequest
      * @throws IllegalStateException if called outside scope of an HttpServletRequest
      */
@@ -193,11 +222,11 @@ public class RequestUtil {
         Assert.state(request != null, "Method must be invoked within the scope of an Execution/ServletRequest");
         return request;
     }
-    
+
     private static boolean isEmpty(String s) {
         return StringUtils.isEmpty(s) || "unknown".equalsIgnoreCase(s);
     }
-    
+
     /**
      * <p>
      * As convenience, constructs the following diagnostic context, as an ordered List.
@@ -208,7 +237,7 @@ public class RequestUtil {
      * <li>Client Remote Address</li>
      * <li>Server Name</li>
      * </ul>
-     * 
+     *
      * @return order List of Strings representing the diagnostic context
      */
     public static List<String> getStandardDiagnosticContext() {
@@ -221,7 +250,7 @@ public class RequestUtil {
         dc.add(getLocalHostAddress());
         return dc;
     }
-    
+
     /**
      * Enforce static class.
      */
