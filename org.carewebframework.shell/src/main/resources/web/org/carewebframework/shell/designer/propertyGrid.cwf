@@ -16,13 +16,11 @@
 				<rows name="rowProperties" selectable="single" />
 			</grid>
 		</pane>
-		<pane class="cwf-propertygrid-info" flex="25">
-			<groupbox width="100%"
-				title="${@msg.cwf.shell.designer.property.grid.gbox.caption}">
-				<span class="help-block" style="margin:0">
-					<label name="lblPropertyInfo" />
-				</span>
-			</groupbox>
+		<pane name="propInfo" class="cwf-propertygrid-info" flex="25"
+			title="${@msg.cwf.shell.designer.property.grid.info.caption}">
+			<div class="help-block" style="margin:0;overflow:auto" flex="1">
+				<label name="lblPropertyInfo" />
+			</div>
 		</pane>
 		<pane name="toolbar">
 			<toolbar alignment="end" width="100%" style="border:none">

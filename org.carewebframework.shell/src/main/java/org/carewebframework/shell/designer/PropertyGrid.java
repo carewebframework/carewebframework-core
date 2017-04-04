@@ -7,15 +7,15 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  * This Source Code Form is also subject to the terms of the Health-Related
  * Additional Disclaimer of Warranty and Limitation of Liability available at
  *
@@ -47,10 +47,11 @@ import org.carewebframework.web.component.BaseUIComponent;
 import org.carewebframework.web.component.Button;
 import org.carewebframework.web.component.Cell;
 import org.carewebframework.web.component.Column;
+import org.carewebframework.web.component.Grid;
 import org.carewebframework.web.component.Label;
+import org.carewebframework.web.component.Pane;
 import org.carewebframework.web.component.Row;
 import org.carewebframework.web.component.Rows;
-import org.carewebframework.web.component.Grid;
 import org.carewebframework.web.component.Window;
 import org.carewebframework.web.event.ChangeEvent;
 import org.carewebframework.web.event.ClickEvent;
@@ -97,6 +98,9 @@ public class PropertyGrid implements IAutoWired {
     @WiredComponent
     private BaseUIComponent toolbar;
     
+    @WiredComponent
+    private Pane propInfo;
+
     @SuppressWarnings("rawtypes")
     private final IListModel<PropertyEditorBase> model = new ListModel<>();
     
@@ -139,7 +143,7 @@ public class PropertyGrid implements IAutoWired {
     
     /**
      * Creates a property grid for the given target UI element.
-     * 
+     *
      * @param target UI element whose properties are to be edited.
      * @param parent Parent component for property grid (may be null).
      * @return Newly created PropertyGrid instance.
@@ -150,7 +154,7 @@ public class PropertyGrid implements IAutoWired {
     
     /**
      * Creates a property grid for the given target UI element.
-     * 
+     *
      * @param target UI element whose properties are to be edited.
      * @param parent Parent component for property grid (may be null).
      * @param embedded If true, the property grid is embedded within another component.
@@ -172,7 +176,7 @@ public class PropertyGrid implements IAutoWired {
     
     /**
      * Initializes the property grid.
-     * 
+     *
      * @param comp The root component.
      */
     @Override
@@ -207,7 +211,7 @@ public class PropertyGrid implements IAutoWired {
     /**
      * Sets the target UI element for the property grid. Iterates throw the target's property
      * definitions and presents a row for each editable property.
-     * 
+     *
      * @param target UI element whose properties are to be edited.
      */
     public void setTarget(UIElementBase target) {
@@ -245,7 +249,7 @@ public class PropertyGrid implements IAutoWired {
     
     /**
      * Adds a property editor to the grid for the specified property definition.
-     * 
+     *
      * @param propInfo Property definition information.
      * @param append If true, the property editor is appended to the end of the grid. Otherwise, it
      *            is inserted at the beginning.
@@ -277,7 +281,7 @@ public class PropertyGrid implements IAutoWired {
     
     /**
      * Commit or revert all pending changes to the target object.
-     * 
+     *
      * @param commit True to commit. False to revert.
      * @return True if all operations completed successfully.
      */
@@ -310,7 +314,7 @@ public class PropertyGrid implements IAutoWired {
     
     /**
      * Returns the editor associated with the named property, or null if none found.
-     * 
+     *
      * @param propName The property name.
      * @param select If true, select editor's the containing row.
      * @return The associated property editor (may be null).
@@ -336,7 +340,7 @@ public class PropertyGrid implements IAutoWired {
     
     /**
      * Returns number of editors in this property grid.
-     * 
+     *
      * @return Number of editors.
      */
     public int getEditorCount() {
@@ -345,7 +349,7 @@ public class PropertyGrid implements IAutoWired {
     
     /**
      * Change button enable states to reflect whether or not pending changes exist.
-     * 
+     *
      * @param disable The disable status.
      */
     private void disableButtons(boolean disable) {
@@ -357,7 +361,7 @@ public class PropertyGrid implements IAutoWired {
     
     /**
      * Returns true if there are uncommitted edits.
-     * 
+     *
      * @return True if there are uncommitted edits.
      */
     public boolean hasPendingChanges() {
@@ -370,7 +374,7 @@ public class PropertyGrid implements IAutoWired {
     
     /**
      * Returns the target UI element.
-     * 
+     *
      * @return The target UI element.
      */
     public UIElementBase getTarget() {
@@ -423,35 +427,33 @@ public class PropertyGrid implements IAutoWired {
     
     /**
      * Displays the description information for a property.
-     * 
+     *
      * @param propertyName Property name.
      * @param propertyDescription Property description.
      */
     private void setPropertyDescription(String propertyName, String propertyDescription) {
-        //capPropertyName.setLabel(StrUtil.formatMessage(propertyName));
+        propInfo.setTitle(StrUtil.formatMessage(propertyName));
         lblPropertyInfo.setLabel(StrUtil.formatMessage(propertyDescription));
     }
     
     /**
      * Handles the selection of a row in the property grid.
-     * 
+     *
      * @param event Row selection event.
      */
     @EventHandler(value = "change", target = "rowProperties")
     private void onRowSelect(ChangeEvent event) {
-        if (event.getValue(Boolean.class)) {
-            Rows rows = gridProperties.getRows();
-            Row selectedRow = rows.getSelectedCount() == 0 ? null : rows.getSelectedRow();
-            PropertyEditorBase<?> editor = selectedRow == null ? null
-                    : (PropertyEditorBase<?>) (selectedRow.getAttribute(EDITOR_ATTR));
-            PropertyInfo propInfo = editor == null ? null : editor.getPropInfo();
-            setPropertyDescription(
-                propInfo == null ? "@cwf.shell.designer.property.grid.propdx.some.caption" : propInfo.getName(),
-                propInfo == null ? " " : propInfo.getDescription());
-            
-            if (editor != null) {
-                editor.setFocus();
-            }
+        Rows rows = gridProperties.getRows();
+        Row selectedRow = rows.getSelectedCount() == 0 ? null : rows.getSelectedRow();
+        PropertyEditorBase<?> editor = selectedRow == null ? null
+                : (PropertyEditorBase<?>) (selectedRow.getAttribute(EDITOR_ATTR));
+        PropertyInfo propInfo = editor == null ? null : editor.getPropInfo();
+        setPropertyDescription(
+            propInfo == null ? "@cwf.shell.designer.property.grid.propdx.some.caption" : propInfo.getName(),
+            propInfo == null ? " " : propInfo.getDescription());
+
+        if (editor != null) {
+            editor.setFocus();
         }
     }
     
