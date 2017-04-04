@@ -39,6 +39,7 @@
 }
 
 .cwf-plugin-container {
+    display: block;
 	position: relative;
 	overflow: auto;
 	padding: 0!important;
