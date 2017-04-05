@@ -7,15 +7,15 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  * This Source Code Form is also subject to the terms of the Health-Related
  * Additional Disclaimer of Warranty and Limitation of Liability available at
  *
@@ -28,13 +28,15 @@ package org.carewebframework.ui.sharedforms;
 import java.util.Arrays;
 
 import org.carewebframework.common.StrUtil;
+import org.carewebframework.shell.elements.UIElementPlugin;
+import org.carewebframework.shell.plugins.PluginController;
 import org.carewebframework.web.annotation.WiredComponent;
 import org.carewebframework.web.component.Window;
 
 /**
  * Controller for captioned form.
  */
-public class CaptionedFormController extends BaseFormController {
+public class CaptionedFormController extends PluginController {
     
     public enum CaptionStyle {
         HIDDEN, TITLE, FRAME, LEFT, RIGHT, CENTER;
@@ -55,10 +57,10 @@ public class CaptionedFormController extends BaseFormController {
     private String color2;
     
     @Override
-    protected void init() {
+    public void onLoad(UIElementPlugin plugin) {
         //panel = (Window) root;
-        super.init();
-        getPlugin().registerProperties(this, "caption", "captionStyle", "icon", "color1", "color2");
+        super.onLoad(plugin);
+        plugin.registerProperties(this, "caption", "captionStyle", "icon", "color1", "color2");
         updateStyle();
     }
     
@@ -113,7 +115,7 @@ public class CaptionedFormController extends BaseFormController {
     
     /**
      * Returns css gradient specifier.
-     * 
+     *
      * @param colors List of colors for gradient.
      * @return The gradient specifier.
      */
@@ -123,7 +125,7 @@ public class CaptionedFormController extends BaseFormController {
     
     /**
      * Get first color in gradient range.
-     * 
+     *
      * @return First color in gradient range.
      */
     public String getColor1() {
@@ -132,7 +134,7 @@ public class CaptionedFormController extends BaseFormController {
     
     /**
      * Set first color in gradient range.
-     * 
+     *
      * @param color1 First color in gradient range.
      */
     public void setColor1(String color1) {
@@ -142,7 +144,7 @@ public class CaptionedFormController extends BaseFormController {
     
     /**
      * Get second color in gradient range.
-     * 
+     *
      * @return Second color in gradient range.
      */
     public String getColor2() {
@@ -151,7 +153,7 @@ public class CaptionedFormController extends BaseFormController {
     
     /**
      * Set second color in gradient range.
-     * 
+     *
      * @param color2 Second color in gradient range.
      */
     public void setColor2(String color2) {
@@ -161,7 +163,7 @@ public class CaptionedFormController extends BaseFormController {
     
     /**
      * Return the current caption.
-     * 
+     *
      * @return Current caption.
      */
     public String getCaption() {
@@ -170,7 +172,7 @@ public class CaptionedFormController extends BaseFormController {
     
     /**
      * Set the current caption.
-     * 
+     *
      * @param caption Current caption.
      */
     public void setCaption(String caption) {
@@ -179,7 +181,7 @@ public class CaptionedFormController extends BaseFormController {
     
     /**
      * Return the caption icon URL.
-     * 
+     *
      * @return Caption icon URL.
      */
     public String getIcon() {
@@ -188,7 +190,7 @@ public class CaptionedFormController extends BaseFormController {
     
     /**
      * Set the caption icon.
-     * 
+     *
      * @param image URL of icon.
      */
     public void setIcon(String image) {
