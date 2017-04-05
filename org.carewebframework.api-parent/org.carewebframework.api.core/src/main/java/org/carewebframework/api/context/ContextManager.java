@@ -51,27 +51,27 @@ import org.carewebframework.api.spring.SpringUtil;
  * process context change events.
  */
 public class ContextManager implements IContextManager, CCOWContextManager.ICCOWContextEvent, IRegisterEvent {
-
+    
     private static final Log log = LogFactory.getLog(ContextManager.class);
-
+    
     private final Set<IManagedContext<?>> managedContexts = new TreeSet<>();
-
+    
     private final Stack<IManagedContext<?>> pendingStack = new Stack<>();
-
+    
     private Stack<IManagedContext<?>> commitStack = new Stack<>();
-
+    
     private CCOWContextManager ccowContextManager;
-
+    
     private final ContextItems contextItems = new ContextItems();
-
+    
     private boolean ccowEnabled;
-
+    
     private boolean ccowTransaction;
-
+    
     private IEventManager eventManager;
-
+    
     private AppFramework appFramework;
-
+    
     /**
      * Represents the different CCOW statuses that can be represented by the official CCOW status
      * icons.
@@ -79,7 +79,7 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
     private enum CCOWStatus {
         NONE, DISABLED, CHANGING, JOINED, BROKEN
     }
-
+    
     /**
      * Accumulate response values in string buffer.
      *
@@ -91,11 +91,11 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
             if (buffer.length() > 0) {
                 buffer.append("\r\n");
             }
-
+            
             buffer.append(response);
         }
     }
-
+    
     /**
      * Returns the context manager for this application context.
      *
@@ -104,7 +104,7 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
     public static IContextManager getInstance() {
         return SpringUtil.getBean("contextManager", IContextManager.class);
     }
-
+    
     /**
      * Set the event manager instance.
      *
@@ -113,7 +113,7 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
     public void setEventManager(IEventManager eventManager) {
         this.eventManager = eventManager;
     }
-
+    
     /**
      * Set the application framework instance.
      *
@@ -122,7 +122,7 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
     public void setAppFramework(AppFramework appFramework) {
         this.appFramework = appFramework;
     }
-
+    
     /**
      * Checks if a CCOW context manager is active.
      *
@@ -131,7 +131,7 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
     private boolean ccowIsActive() {
         return ccowContextManager != null && ccowContextManager.isActive();
     }
-
+    
     /**
      * Joins the CCOW common context, if available.
      */
@@ -139,28 +139,28 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
         if (ccowIsActive()) {
             return;
         }
-
+        
         if (ccowContextManager == null && ccowEnabled) {
             ccowContextManager = new CCOWContextManager();
             ccowContextManager.subscribe(this);
             ccowContextManager.run("CareWebFramework#", "", true, "*");
         }
-
+        
         if (ccowContextManager != null) {
             if (!ccowContextManager.isActive()) {
                 ccowContextManager.resume();
             }
-
+            
             init(response -> {
                 if (response.rejected()) {
                     ccowContextManager.suspend();
                 }
-
+                
                 updateCCOWStatus();
             });
         }
     }
-
+    
     /**
      * Leave the CCOW common context.
      */
@@ -169,7 +169,7 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
             ccowContextManager.suspend();
         }
     }
-
+    
     /**
      * Initialize context objects to their default state. The default state should match the CCOW
      * context if one exists, or an initial state as determined by the context object.
@@ -180,7 +180,7 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
     public void init(ISurveyCallback callback) {
         init(null, callback);
     }
-
+    
     /**
      * Initializes one or all managed contexts to their default state.
      *
@@ -190,11 +190,11 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
      */
     public void init(IManagedContext<?> item, ISurveyCallback callback) {
         contextItems.clear();
-
+        
         if (ccowIsActive()) {
             contextItems.addItems(ccowContextManager.getCCOWContext());
         }
-
+        
         if (item != null) {
             initItem(item, callback);
         } else {
@@ -202,11 +202,11 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
             initItem(managedContexts.iterator(), response, callback);
         }
     }
-
+    
     private void initItem(Iterator<IManagedContext<?>> iter, SurveyResponse response, ISurveyCallback callback) {
         if (iter.hasNext()) {
             IManagedContext<?> managedContext = iter.next();
-
+            
             initItem(managedContext, aresponse -> {
                 response.merge(aresponse);
                 initItem(iter, response, callback);
@@ -215,7 +215,7 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
             callback.response(response);
         }
     }
-
+    
     /**
      * Initializes the managed context.
      *
@@ -225,20 +225,20 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
     private void initItem(IManagedContext<?> item, ISurveyCallback callback) {
         try {
             localChangeBegin(item);
-
+            
             if (hasSubject(item.getContextName())) {
                 item.setContextItems(contextItems);
             } else {
                 item.init();
             }
-
+            
             localChangeEnd(item, callback);
         } catch (ContextException e) {
             log.error("Error initializing context.", e);
             execCallback(callback, new SurveyResponse(e.toString()));
         }
     }
-
+    
     /**
      * Returns true if the CCOW context contains context settings pertaining to the named subject.
      *
@@ -249,18 +249,18 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
         boolean result = false;
         String s = subject + ".";
         int c = s.length();
-
+        
         for (String propName : contextItems.getItemNames()) {
             result = s.equalsIgnoreCase(propName.substring(0, c));
-
+            
             if (result) {
                 break;
             }
         }
-
+        
         return result;
     }
-
+    
     /**
      * Commit or cancel all pending context changes.
      *
@@ -281,7 +281,7 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
             stack.pop().notifySubscribers(accept, all);
         }
     }
-
+    
     /**
      * Surveys all CCOW participants.
      *
@@ -293,7 +293,7 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
         return true;
         // TODO: finish
     }
-
+    
     /**
      * Sets the committed state of all context objects based on the marshaled context.
      *
@@ -303,7 +303,7 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
     public void setMarshaledContext(ContextItems marshaledContext, ISurveyCallback callback) {
         setMarshaledContext(marshaledContext, true, callback);
     }
-
+    
     /**
      * Updates managed contexts based on the marshaledContext.
      *
@@ -314,19 +314,19 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
     /*package*/void setMarshaledContext(ContextItems marshaledContext, boolean commit, ISurveyCallback callback) {
         ISurveyResponse response = new SurveyResponse();
         Iterator<IManagedContext<?>> iter = managedContexts.iterator();
-
+        
         setMarshaledContext(marshaledContext, iter, response, __ -> {
             if (commit) {
                 commitContexts(!response.rejected(), false);
             }
         });
     }
-
+    
     private void setMarshaledContext(ContextItems marshaledContext, Iterator<IManagedContext<?>> iter,
                                      ISurveyResponse response, ISurveyCallback callback) {
         if (iter.hasNext()) {
             IManagedContext<?> managedContext = iter.next();
-
+            
             try {
                 if (managedContext.setContextItems(marshaledContext)) {
                     localChangeBegin(managedContext);
@@ -344,7 +344,7 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
             execCallback(callback, response);
         }
     }
-
+    
     /**
      * Enables or disables CCOW support.
      *
@@ -352,15 +352,15 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
      */
     public void setCCOWEnabled(boolean ccowEnabled) {
         this.ccowEnabled = ccowEnabled;
-
+        
         if (!ccowEnabled && ccowContextManager != null) {
             ccowContextManager.suspend();
             ccowContextManager = null;
         }
-
+        
         updateCCOWStatus();
     }
-
+    
     /**
      * Returns the marshaled context representing the state of all shared contexts.
      *
@@ -368,14 +368,14 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
      */
     public ContextItems getMarshaledContext() {
         ContextItems marshaledContext = new ContextItems();
-
+        
         for (IManagedContext<?> managedContext : managedContexts) {
             marshaledContext.addItems(managedContext.getContextItems(false));
         }
-
+        
         return marshaledContext;
     }
-
+    
     /**
      * Returns the current status of the CCOW common context. Return values correspond to possible
      * states of the standard CCOW status icon.
@@ -398,7 +398,7 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
             }
         }
     }
-
+    
     /**
      * Notifies subscribers of a change in the CCOW status via a generic event.
      */
@@ -407,11 +407,11 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
             eventManager.fireLocalEvent("CCOW", Integer.toString(getCCOWStatus().ordinal()));
         }
     }
-
+    
     // ************************************************************************************************
     // * IRegisterEvent implementation
     // ***********************************************************************************************/
-
+    
     /**
      * Register an object with the context manager if it implements the IManagedContext interface.
      *
@@ -423,7 +423,7 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
             managedContexts.add((IManagedContext<?>) object);
         }
     }
-
+    
     /**
      * Unregister an object from the context manager.
      *
@@ -433,19 +433,19 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
     public void unregisterObject(Object object) {
         if (object instanceof IContextEvent) {
             for (IManagedContext<?> managedContext : managedContexts) {
-                managedContext.removeSubscriber(object);
+                managedContext.removeSubscriber((IContextEvent) object);
             }
         }
-
+        
         if (object instanceof IManagedContext) {
             managedContexts.remove(object);
         }
     }
-
+    
     // ************************************************************************************************
     // * IContextManager implementation
     // ***********************************************************************************************/
-
+    
     /**
      * @see org.carewebframework.api.context.IContextManager#localChangeBegin
      */
@@ -454,10 +454,10 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
         if (pendingStack.contains(managedContext) || commitStack.contains(managedContext)) {
             throw new ContextException("Circular context change detected.");
         }
-
+        
         pendingStack.push(managedContext);
     }
-
+    
     /**
      * @see org.carewebframework.api.context.IContextManager#localChangeEnd
      */
@@ -465,7 +465,7 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
     public void localChangeEnd(IManagedContext<?> managedContext, ISurveyCallback callback) throws ContextException {
         localChangeEnd(managedContext, false, false, callback);
     }
-
+    
     /**
      * Commits a pending context change.
      *
@@ -478,44 +478,44 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
      */
     private void localChangeEnd(IManagedContext<?> managedContext, boolean silent, boolean deferCommit,
                                 ISurveyCallback callback) throws ContextException {
-
+        
         if (pendingStack.isEmpty() || pendingStack.peek() != managedContext) {
             throw new ContextException("Illegal context change nesting.");
         }
-
+        
         if (!managedContext.isPending()) {
             pendingStack.pop();
             return;
         }
-
+        
         commitStack.push(managedContext);
         managedContext.surveySubscribers(silent, response -> {
             boolean accept = !response.rejected();
-
+            
             if (!accept && log.isDebugEnabled()) {
                 log.debug("Survey of managed context " + managedContext.getContextName() + " returned '" + response + "'.");
             }
-
+            
             pendingStack.remove(managedContext);
-
+            
             if (!deferCommit && (!accept || pendingStack.isEmpty())) {
                 commitContexts(accept, accept);
             }
-
+            
             execCallback(callback, response);
         });
     }
-
+    
     private void execCallback(ISurveyCallback callback, ISurveyResponse response) {
         if (callback != null) {
             callback.response(response);
         }
     }
-
+    
     private void execCallback(ISurveyCallback callback, Exception e) {
         execCallback(callback, new SurveyResponse(e.toString()));
     }
-
+    
     /**
      * @see org.carewebframework.api.context.IContextManager#getSharedContexts
      */
@@ -523,7 +523,7 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
     public List<ISharedContext<?>> getSharedContexts() {
         return new ArrayList<>(managedContexts);
     }
-
+    
     /**
      * @see org.carewebframework.api.context.IContextManager#getSharedContext
      */
@@ -531,13 +531,13 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
     public ISharedContext<?> getSharedContext(String className) {
         try {
             Class<?> contextClass = Class.forName(className);
-
+            
             for (ISharedContext<?> sharedContext : managedContexts) {
                 if (contextClass.isInstance(sharedContext)) {
                     return sharedContext;
                 }
             }
-
+            
             IManagedContext<?> ctx = (IManagedContext<?>) contextClass.newInstance();
             registerObject(ctx);
             return ctx;
@@ -545,7 +545,7 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
             throw new ContextException(e.getMessage());
         }
     }
-
+    
     /**
      * @see org.carewebframework.api.context.IContextManager#getContextMarshaller
      */
@@ -559,7 +559,7 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
                     "An exception occurred while trying to access a context marshaller for the specified key store.", e);
         }
     }
-
+    
     /**
      * @see org.carewebframework.api.context.IContextManager#reset
      */
@@ -569,22 +569,22 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
         commitStack.clear();
         SurveyResponse response = new SurveyResponse();
         Iterator<IManagedContext<?>> iter = managedContexts.iterator();
-
+        
         reset(silent, iter, response, __ -> {
             boolean commit = silent || !response.rejected();
             commitContexts(commit, commit);
             execCallback(callback, response);
         });
-
+        
     }
-
+    
     private void reset(boolean silent, Iterator<IManagedContext<?>> iter, SurveyResponse response,
                        ISurveyCallback callback) {
         if (iter.hasNext()) {
             IManagedContext<?> managedContext = iter.next();
             resetItem(managedContext, silent, aresponse -> {
                 response.merge(aresponse);
-
+                
                 if (silent || !response.rejected()) {
                     reset(silent, iter, response, callback);
                 } else {
@@ -595,7 +595,7 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
             execCallback(callback, response);
         }
     }
-
+    
     /**
      * Resets the managed context.
      *
@@ -612,11 +612,11 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
             execCallback(callback, e);
         }
     }
-
+    
     // ************************************************************************************************
     // * ICCOWContextEvent implementation
     // ***********************************************************************************************/
-
+    
     /**
      * Callback to handle canceled context change request from the CCOW context manager.
      */
@@ -624,7 +624,7 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
     public void ccowCanceled(CCOWContextManager sender) {
         commitContexts(false, false);
     }
-
+    
     /**
      * Callback to handle committed context change request from the CCOW context manager.
      */
@@ -632,7 +632,7 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
     public void ccowCommitted(CCOWContextManager sender) {
         commitContexts(true, false);
     }
-
+    
     /**
      * Callback to handle a polling request from the CCOW context manager.
      */
@@ -644,10 +644,10 @@ public class ContextManager implements IContextManager, CCOWContextManager.ICCOW
             if (response.rejected()) {
                 sender.setSurveyResponse(response.toString());
             }
-
+            
             ccowTransaction = false;
             updateCCOWStatus();
         });
     }
-
+    
 }

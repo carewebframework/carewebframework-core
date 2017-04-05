@@ -7,15 +7,15 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  * This Source Code Form is also subject to the terms of the Health-Related
  * Additional Disclaimer of Warranty and Limitation of Liability available at
  *
@@ -39,6 +39,7 @@ import org.carewebframework.api.IRegisterEvent;
 import org.carewebframework.api.context.ISurveyResponse.ISurveyCallback;
 import org.carewebframework.api.context.SurveyResponse.ResponseState;
 import org.carewebframework.api.event.IEventManager;
+import org.carewebframework.api.event.IGenericEvent;
 import org.carewebframework.common.StopWatchFactory;
 import org.carewebframework.common.StopWatchFactory.IStopWatch;
 
@@ -48,7 +49,7 @@ import org.carewebframework.common.StopWatchFactory.IStopWatch;
  * IManagedContext interface, the management of this shared context is delegated to the
  * ContextManager class which orchestrates polling and notifying subscribers when changes in the
  * shared context occur.
- * 
+ *
  * @param <DomainClass> Class of underlying domain object.
  */
 public class ManagedContext<DomainClass> implements Comparable<IManagedContext<DomainClass>>, IRegisterEvent, IManagedContext<DomainClass> {
@@ -82,7 +83,7 @@ public class ManagedContext<DomainClass> implements Comparable<IManagedContext<D
     /**
      * Every managed context must specify a unique context name and the context change event
      * interface it supports.
-     * 
+     *
      * @param contextName Unique name for this context.
      * @param eventInterface The context change interface supported by this managed context.
      */
@@ -93,7 +94,7 @@ public class ManagedContext<DomainClass> implements Comparable<IManagedContext<D
     /**
      * Every managed context must specify a unique context name and the context change event
      * interface it supports.
-     * 
+     *
      * @param contextName Unique name for this context.
      * @param eventInterface The context change interface supported by this managed context.
      * @param initialContext The initial context state. May be null.
@@ -108,7 +109,7 @@ public class ManagedContext<DomainClass> implements Comparable<IManagedContext<D
     /**
      * Extracts and returns the CCOW context from the specified domain object. Each subclass should
      * override this and supply their own implementation.
-     * 
+     *
      * @param domainObject The domain object.
      * @return Context items extracted from the domain object.
      */
@@ -119,7 +120,7 @@ public class ManagedContext<DomainClass> implements Comparable<IManagedContext<D
     /**
      * Creates a local context based on the specified CCOW context. Each subclass should override
      * this and supply their own implementation.
-     * 
+     *
      * @param contextItems Map containing CCOW-compliant context settings.
      * @return Instance of the domain object that matches the CCOW context. Return null if this is
      *         not supported or the CCOW context is not valid for this context object.
@@ -130,7 +131,7 @@ public class ManagedContext<DomainClass> implements Comparable<IManagedContext<D
     
     /**
      * Sets the pending state to the specified domain object.
-     * 
+     *
      * @param domainObject The domain object.
      */
     protected void setPending(DomainClass domainObject) {
@@ -142,7 +143,7 @@ public class ManagedContext<DomainClass> implements Comparable<IManagedContext<D
      * Compares whether two domain objects are the same. This is used to determine whether a context
      * change request really represents a different context. It may be overridden if the default
      * implementation is inadequate.
-     * 
+     *
      * @param domainObject1 First domain object for comparison.
      * @param domainObject2 Second domain object for comparison.
      * @return True if the two objects represent the same context.
@@ -153,7 +154,7 @@ public class ManagedContext<DomainClass> implements Comparable<IManagedContext<D
     
     /**
      * Sets the context manager instance.
-     * 
+     *
      * @param contextManager The context manager.
      */
     public void setContextManager(IContextManager contextManager) {
@@ -162,7 +163,7 @@ public class ManagedContext<DomainClass> implements Comparable<IManagedContext<D
     
     /**
      * Sets the event manager instance.
-     * 
+     *
      * @param eventManager The event manager.
      */
     public void setEventManager(IEventManager eventManager) {
@@ -171,7 +172,7 @@ public class ManagedContext<DomainClass> implements Comparable<IManagedContext<D
     
     /**
      * Sets the application framework instance.
-     * 
+     *
      * @param appFramework The application framework.
      */
     public void setAppFramework(AppFramework appFramework) {
@@ -264,18 +265,16 @@ public class ManagedContext<DomainClass> implements Comparable<IManagedContext<D
      * @see org.carewebframework.api.context.IManagedContext#addSubscriber(java.lang.Object)
      */
     @Override
-    public boolean addSubscriber(Object subscriber) {
+    public boolean addSubscriber(IContextEvent subscriber) {
         if (!eventInterface.isInstance(subscriber)) {
             return false;
         }
         
-        IContextEvent event = (IContextEvent) subscriber;
-        
-        if (subscribers.contains(event)) {
+        if (subscribers.contains(subscriber)) {
             return false;
         }
         
-        subscribers.add(event);
+        subscribers.add(subscriber);
         return true;
     }
     
@@ -283,10 +282,10 @@ public class ManagedContext<DomainClass> implements Comparable<IManagedContext<D
      * @see org.carewebframework.api.context.IManagedContext#addSubscribers(java.lang.Iterable)
      */
     @Override
-    public boolean addSubscribers(Iterable<Object> subscribers) {
+    public boolean addSubscribers(Iterable<IContextEvent> subscribers) {
         boolean result = false;
         
-        for (Object subscriber : subscribers) {
+        for (IContextEvent subscriber : subscribers) {
             result |= addSubscriber(subscriber);
         }
         
@@ -297,7 +296,7 @@ public class ManagedContext<DomainClass> implements Comparable<IManagedContext<D
      * @see org.carewebframework.api.context.IManagedContext#removeSubscriber(java.lang.Object)
      */
     @Override
-    public void removeSubscriber(Object subscriber) {
+    public void removeSubscriber(IContextEvent subscriber) {
         if (eventInterface.isInstance(subscriber)) {
             subscribers.remove(subscriber);
             surveyed.remove(subscriber);
@@ -308,8 +307,8 @@ public class ManagedContext<DomainClass> implements Comparable<IManagedContext<D
      * @see org.carewebframework.api.context.IManagedContext#removeSubscribers(java.lang.Iterable)
      */
     @Override
-    public void removeSubscribers(Iterable<Object> subscribers) {
-        for (Object subscriber : subscribers) {
+    public void removeSubscribers(Iterable<IContextEvent> subscribers) {
+        for (IContextEvent subscriber : subscribers) {
             removeSubscriber(subscriber);
         }
     }
@@ -363,13 +362,13 @@ public class ManagedContext<DomainClass> implements Comparable<IManagedContext<D
         surveyed.clear();
         
         if (accept) {
-            eventManager.fireLocalEvent("CONTEXT.CHANGED." + getContextName(), getContextObject(false));
+            eventManager.fireLocalEvent(getEventName(), getContextObject(false));
         }
     }
     
     /**
      * Returns a callback list that is safe for iteration.
-     * 
+     *
      * @param all If true, all callbacks are returned. If false, only callbacks for surveyed
      *            subscribers are returned.
      * @return Callback list.
@@ -411,6 +410,25 @@ public class ManagedContext<DomainClass> implements Comparable<IManagedContext<D
         } else if (callback != null) {
             callback.response(response);
         }
+    }
+    
+    /**
+     * Returns the name of the event fired after a successful context change.
+     *
+     * @return The name of the event fired after a successful context change.
+     */
+    private String getEventName() {
+        return "CONTEXT.CHANGED." + getContextName();
+    }
+
+    @Override
+    public void addListener(IGenericEvent<DomainClass> listener) {
+        eventManager.subscribe(getEventName(), listener);
+    }
+    
+    @Override
+    public void removeListener(IGenericEvent<DomainClass> listener) {
+        eventManager.unsubscribe(getEventName(), listener);
     }
     
     // ************************************************************************************************
@@ -465,24 +483,28 @@ public class ManagedContext<DomainClass> implements Comparable<IManagedContext<D
     
     /**
      * Register an object as a subscriber if it implements the callback interface.
-     * 
+     *
      * @see org.carewebframework.api.IRegisterEvent#registerObject(Object)
      * @param object Object to register.
      */
     @Override
     public void registerObject(Object object) {
-        addSubscriber(object);
+        if (object instanceof IContextEvent) {
+            addSubscriber((IContextEvent) object);
+        }
     }
     
     /**
      * Remove an object as a subscriber if it implements the callback interface.
-     * 
+     *
      * @see org.carewebframework.api.IRegisterEvent#unregisterObject(Object)
      * @param object Object to unregister.
      */
     @Override
     public void unregisterObject(Object object) {
-        removeSubscriber(object);
+        if (object instanceof IContextEvent) {
+            removeSubscriber((IContextEvent) object);
+        }
     }
     
 }
