@@ -7,15 +7,15 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  * This Source Code Form is also subject to the terms of the Health-Related
  * Additional Disclaimer of Warranty and Limitation of Liability available at
  *
@@ -45,22 +45,22 @@ import org.carewebframework.web.model.ListModel;
  * its list model, the list box contents changes dynamically as the history changes.
  */
 public class HelpViewHistory extends HelpViewBase {
-    
+
     @WiredComponent
     private Listbox lstHistory;
-    
+
     private HelpHistory history;
-    
+
     /**
      * Create the help tab for the specified viewer and viewType.
-     * 
+     *
      * @param viewer The help viewer.
      * @param viewType The view type.
      */
     public HelpViewHistory(HelpViewer viewer, HelpViewType viewType) {
         super(viewer, viewType, "helpHistoryTab.cwf");
     }
-    
+
     @Override
     public void afterInitialized(BaseComponent comp) {
         super.afterInitialized(comp);
@@ -71,21 +71,23 @@ public class HelpViewHistory extends HelpViewBase {
         mv.setRenderer(new HelpTopicRenderer());
         getViewer().setHelpHistory(history);
     }
-    
+
     /**
      * Set the history position to correspond to the new list box selection.
+     * 
+     * @param event The change event.
      */
     @EventHandler(value = "change", target = "@lstHistory")
     private void onChange$lstHistory(ChangeEvent event) {
-        
+
         if (event.getValue() == Boolean.TRUE) {
             history.setPosition(lstHistory.getSelectedIndex());
         }
     }
-    
+
     /**
      * Sets focus to the list box when the tab is selected.
-     * 
+     *
      * @see org.carewebframework.help.viewer.HelpViewBase#onSelect()
      */
     @Override
@@ -93,21 +95,21 @@ public class HelpViewHistory extends HelpViewBase {
         super.onSelect();
         lstHistory.setFocus(true);
     }
-    
+
     /**
      * Updated the list box selection when the history selection changes.
-     * 
+     *
      * @see org.carewebframework.help.viewer.HelpViewBase#onTopicSelected(HelpTopic)
      */
     @Override
     public void onTopicSelected(HelpTopic topic) {
         Listitem item = (Listitem) lstHistory.getChildAt(history.getPosition());
         lstHistory.setSelectedItem(item);
-        
+
         if (item != null) {
             getContainer().getAncestor(Tab.class).setVisible(true);
             item.scrollIntoView(false);
         }
     }
-    
+
 }
