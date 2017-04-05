@@ -7,15 +7,15 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  * This Source Code Form is also subject to the terms of the Health-Related
  * Additional Disclaimer of Warranty and Limitation of Liability available at
  *
@@ -26,10 +26,7 @@
 package org.carewebframework.api;
 
 import org.apache.commons.lang.ObjectUtils;
-
 import org.carewebframework.common.StrUtil;
-
-import org.springframework.core.ErrorCoded;
 import org.springframework.core.NestedRuntimeException;
 
 /**
@@ -44,51 +41,48 @@ import org.springframework.core.NestedRuntimeException;
  * cause.
  * </p>
  */
-public class FrameworkRuntimeException extends NestedRuntimeException implements IThrowableContext, ErrorCoded {
-    
+public class FrameworkRuntimeException extends NestedRuntimeException implements IThrowableContext {
+
     private static final long serialVersionUID = 1L;
-    
-    private String errorCode;
-    
+
+    private final String errorCode;
+
     private final String throwableContext;
-    
+
     public FrameworkRuntimeException(String msg) {
         this(msg, null);
     }
-    
+
     public FrameworkRuntimeException(String msg, Throwable cause) {
         this(msg, cause, null, (Object[]) null);
     }
-    
+
     public FrameworkRuntimeException(String msg, Throwable cause, String throwableContext, Object... args) {
         super(StrUtil.formatMessage(msg, args), cause);
         this.throwableContext = throwableContext;
-        
-        if (msg.startsWith("@")) {
-            errorCode = msg.substring(1);
-        }
+        errorCode = msg.startsWith("@") ? msg.substring(1) : null;
     }
-    
+
     /**
      * Override to provide any special message formatting.
-     * 
+     *
      * @param msg Message to format.
      * @return Formatted message.
      */
     protected String formatMessage(String msg) {
         return msg;
     }
-    
+
     /**
      * Appends nested exception message
-     * 
+     *
      * @see org.springframework.core.NestedExceptionUtils#buildMessage(String, Throwable)
      */
     @Override
     public final String getMessage() {
         return super.getMessage();
     }
-    
+
     /**
      * @see java.lang.Object#equals(java.lang.Object)
      */
@@ -97,15 +91,15 @@ public class FrameworkRuntimeException extends NestedRuntimeException implements
         if (this == other) {
             return true;
         }
-        
+
         if (!(other instanceof FrameworkRuntimeException)) {
             return false;
         }
-        
+
         FrameworkRuntimeException otherBe = (FrameworkRuntimeException) other;
         return getMessage().equals(otherBe.getMessage()) && ObjectUtils.equals(getCause(), otherBe.getCause());
     }
-    
+
     /**
      * @see java.lang.Object#hashCode()
      */
@@ -113,12 +107,11 @@ public class FrameworkRuntimeException extends NestedRuntimeException implements
     public final int hashCode() {
         return getMessage().hashCode();
     }
-    
-    @Override
+
     public String getErrorCode() {
         return errorCode;
     }
-    
+
     @Override
     public String getThrowableContext() {
         return throwableContext;
