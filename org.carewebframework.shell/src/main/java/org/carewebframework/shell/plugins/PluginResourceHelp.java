@@ -101,7 +101,7 @@ public class PluginResourceHelp implements IPluginResource {
         if (action == null) {
             HelpModule module = HelpModule.getModule(id);
             action = module == null ? ""
-                    : "sscript-groovy:" + CareWebUtil.class.getName() + ".showHelpTopic(\"" + id + "\",\""
+                    : "groovy:" + CareWebUtil.class.getName() + ".showHelpTopic(\"" + id + "\",\""
                             + (topic == null ? "" : topic) + "\",\"" + module.getTitle() + "\");";
         }
         

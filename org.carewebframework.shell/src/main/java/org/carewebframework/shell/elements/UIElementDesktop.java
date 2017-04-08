@@ -119,8 +119,8 @@ public class UIElementDesktop extends UIElementBase {
         setInnerComponent(desktopInner);
         menubar = new UIElementMenubar(menubar1);
         toolbar = new UIElementToolbar(toolbar1);
-        ActionUtil.addAction(mnuAbout, "sscript-groovy:org.carewebframework.shell.CareWebUtil.about();");
-        ActionUtil.addAction(mnuTOC, "sscript-groovy:org.carewebframework.shell.CareWebUtil.showHelpTOC();");
+        ActionUtil.addAction(mnuAbout, "groovy:org.carewebframework.shell.CareWebUtil.about();");
+        ActionUtil.addAction(mnuTOC, "groovy:org.carewebframework.shell.CareWebUtil.showHelpTOC();");
         fixedHelpItems = helpMenu.getChildCount();
         sortHelpMenu = false;
         helpMenu.addEventListener("open", (event) -> {

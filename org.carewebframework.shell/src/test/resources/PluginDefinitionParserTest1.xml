@@ -3,7 +3,7 @@
 <plugin id='plugin-test' name='Test1' url='http://www.carewebframework.org'>
 	<resource>
 		<button-resource id="btnTest" caption='Test Button'
-			action='sscript-groovy:System.out.println(\"hello\");' />
+			action='groovy:System.out.println(\"hello\");' />
 		<button-resource id="btnTest2" caption='Test Button2'
 			action='http://www.carewebframework.org' />
 		<help-resource module='testHelpModule' />
