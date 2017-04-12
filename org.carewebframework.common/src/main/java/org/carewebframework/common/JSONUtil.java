@@ -30,6 +30,7 @@ import java.text.DateFormat;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -43,6 +44,7 @@ import com.fasterxml.jackson.databind.BeanProperty;
 import com.fasterxml.jackson.databind.DatabindContext;
 import com.fasterxml.jackson.databind.DeserializationConfig;
 import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationConfig;
 import com.fasterxml.jackson.databind.jsontype.NamedType;
@@ -53,6 +55,7 @@ import com.fasterxml.jackson.databind.jsontype.TypeSerializer;
 import com.fasterxml.jackson.databind.jsontype.impl.AsPropertyTypeDeserializer;
 import com.fasterxml.jackson.databind.jsontype.impl.AsPropertyTypeSerializer;
 import com.fasterxml.jackson.databind.jsontype.impl.StdTypeResolverBuilder;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 
 /**
@@ -61,16 +64,16 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
  * implementations could be used.
  */
 public class JSONUtil {
-
+    
     private static final String DEFAULT_TYPE_PROPERTY = "@class";
-
+    
     private static final Map<String, ObjectMapper> mappers = new ConcurrentHashMap<>();
-
+    
     /**
      * Identifies properties that require type metadata (via property specified in typeProperty).
      */
     private static class CWTypeResolverBuilder extends StdTypeResolverBuilder {
-
+        
         @Override
         public TypeDeserializer buildTypeDeserializer(DeserializationConfig config, JavaType baseType,
                                                       Collection<NamedType> subtypes) {
@@ -78,13 +81,13 @@ public class JSONUtil {
                     : new AsPropertyTypeDeserializer(baseType, _customIdResolver, _typeProperty, _typeIdVisible,
                             baseType.getRawClass());
         }
-
+        
         @Override
         public TypeSerializer buildTypeSerializer(SerializationConfig config, JavaType baseType,
                                                   Collection<NamedType> subtypes) {
             return noTypeInfo(baseType) ? null : new AsPropertyTypeSerializerEx(_customIdResolver, null, _typeProperty);
         }
-
+        
         /**
          * Returns true if no type info should be written for this base type.
          *
@@ -96,50 +99,50 @@ public class JSONUtil {
                     || Date.class.isAssignableFrom(baseType.getRawClass());
         }
     }
-
+    
     /**
      * Resolves type identifiers to classes. Supports aliases and class names.
      */
     private static class CWTypedIdResolver implements TypeIdResolver {
-
+        
         private JavaType baseType;
-
+        
         private final ObjectMapper mapper;
-
+        
         protected CWTypedIdResolver(ObjectMapper mapper) {
             this.mapper = mapper;
         }
-
+        
         @Override
         public void init(JavaType baseType) {
             this.baseType = baseType;
         }
-
+        
         @Override
         public String idFromValue(Object value) {
             return findId(value.getClass());
         }
-
+        
         @Override
         public String idFromValueAndType(Object value, Class<?> suggestedType) {
             return findId(suggestedType);
         }
-
+        
         @Override
         public String idFromBaseType() {
             return findId(baseType.getRawClass());
         }
-
+        
         @Override
         public JavaType typeFromId(String id) {
             return typeFromId(mapper.getTypeFactory(), id);
         }
-
+        
         @Override
         public JavaType typeFromId(DatabindContext context, String id) {
             return typeFromId(context.getTypeFactory(), id);
         }
-
+        
         /**
          * Returns a type token given its alias or class name.
          *
@@ -156,38 +159,38 @@ public class JSONUtil {
                 throw MiscUtil.toUnchecked(e);
             }
         }
-
+        
         @Override
         public Id getMechanism() {
             return Id.CUSTOM;
         }
     }
-
+    
     /**
      * Required to suppress writing of type information except for top-level objects.
      */
     public final static class AsPropertyTypeSerializerEx extends AsPropertyTypeSerializer {
-
+        
         public AsPropertyTypeSerializerEx(TypeIdResolver idRes, BeanProperty property, String propName) {
             super(idRes, property, propName);
         }
-
+        
         @Override
         public void writeTypePrefixForObject(Object value, JsonGenerator jgen) throws IOException, JsonProcessingException {
             boolean needTypeId = jgen.getOutputContext().inRoot() || jgen.getOutputContext().inArray();
             jgen.writeStartObject();
-
+            
             if (needTypeId) {
                 jgen.writeStringField(_typePropertyName, idFromValue(value));
             }
         }
-
+        
     }
-
+    
     private static final Map<String, Class<?>> aliasToClass = new HashMap<>();
-
+    
     private static final Map<Class<?>, String> classToAlias = new HashMap<>();
-
+    
     /**
      * Returns an instance of the mapper for the default type property.
      *
@@ -196,7 +199,7 @@ public class JSONUtil {
     public static ObjectMapper getMapper() {
         return getMapper(null);
     }
-
+    
     /**
      * Returns an instance of the mapper for the specified type property.
      *
@@ -208,10 +211,10 @@ public class JSONUtil {
         ObjectMapper mapper = mappers.get(typeProperty);
         return mapper == null ? initMapper(typeProperty) : mapper;
     }
-
+    
     /**
      * Initializes a mapper in a thread-safe way.
-     * 
+     *
      * @param typeProperty The name of the property specifying the object type.
      * @return The initialized mapper.
      */
@@ -227,11 +230,11 @@ public class JSONUtil {
                 mapper.setDefaultTyping(typer);
                 mappers.put(typeProperty, mapper);
             }
-
+            
             return mapper;
         }
     }
-
+    
     /**
      * Register an alias for the specified class. The alias will be used when serializing objects of
      * this class. A given class or alias may only be registered once.
@@ -243,15 +246,15 @@ public class JSONUtil {
         if (aliasToClass.containsKey(alias) && aliasToClass.get(alias) != clazz) {
             throw new RuntimeException("Alias '" + alias + "' is already registered to another class.");
         }
-
+        
         if (classToAlias.containsKey(clazz) && classToAlias.get(clazz).equals(alias)) {
             throw new RuntimeException("Class '" + clazz.getName() + "' is already registered to another alias.");
         }
-
+        
         aliasToClass.put(alias, clazz);
         classToAlias.put(clazz, alias);
     }
-
+    
     /**
      * Removes a registered alias.
      *
@@ -261,7 +264,7 @@ public class JSONUtil {
         classToAlias.remove(aliasToClass.get(name));
         aliasToClass.remove(name);
     }
-
+    
     /**
      * Returns an alias given its associated class.
      *
@@ -271,7 +274,7 @@ public class JSONUtil {
     public static final String getAlias(Class<?> clazz) {
         return classToAlias.get(clazz);
     }
-
+    
     /**
      * Returns the alias for a class or its class name if an alias has not been registered. This
      * value is used to identify the class type when serializing.
@@ -283,7 +286,7 @@ public class JSONUtil {
         String id = classToAlias.get(clazz);
         return id == null ? clazz.getName() : id;
     }
-
+    
     /**
      * Sets the date format to be used when serializing dates.
      *
@@ -292,7 +295,7 @@ public class JSONUtil {
     public static void setDateFormat(DateFormat dateFormat) {
         setDateFormat(null, dateFormat);
     }
-
+    
     /**
      * Sets the date format to be used when serializing dates.
      *
@@ -302,7 +305,7 @@ public class JSONUtil {
     public static void setDateFormat(String typeProperty, DateFormat dateFormat) {
         getMapper(typeProperty).setDateFormat(dateFormat);
     }
-
+    
     /**
      * Serializes an object to JSON format.
      *
@@ -312,7 +315,7 @@ public class JSONUtil {
     public static String serialize(Object object) {
         return serialize(object, false);
     }
-
+    
     /**
      * Serializes an object to JSON format.
      *
@@ -323,7 +326,7 @@ public class JSONUtil {
     public static String serialize(Object object, boolean prettyPrint) {
         return serialize(null, object, prettyPrint);
     }
-
+    
     /**
      * Serializes an object to JSON format.
      *
@@ -334,7 +337,7 @@ public class JSONUtil {
     public static String serialize(String typeProperty, Object object) {
         return serialize(typeProperty, object, false);
     }
-
+    
     /**
      * Serializes an object to JSON format.
      *
@@ -352,7 +355,7 @@ public class JSONUtil {
             throw new RuntimeException(e);
         }
     }
-
+    
     /**
      * Deserializes an object from JSON format.
      *
@@ -362,7 +365,7 @@ public class JSONUtil {
     public static Object deserialize(String data) {
         return deserialize(null, data);
     }
-
+    
     /**
      * Deserializes an object from JSON format.
      *
@@ -374,18 +377,18 @@ public class JSONUtil {
         if (data == null) {
             return null;
         }
-
+        
         if (data.startsWith("[")) {
             return deserializeList(typeProperty, data, Object.class);
         }
-
+        
         try {
             return getMapper(typeProperty).readValue(data, Object.class);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
-
+    
     /**
      * Deserializes a list of objects.
      *
@@ -397,7 +400,7 @@ public class JSONUtil {
     public static <T> List<T> deserializeList(String data, Class<T> clazz) {
         return deserializeList(null, data, clazz);
     }
-
+    
     /**
      * Deserializes a list of objects.
      *
@@ -414,7 +417,33 @@ public class JSONUtil {
             throw new RuntimeException(e);
         }
     }
+    
+    /**
+     * Merges one JSON tree (srcNode) into another (destNode).
+     *
+     * @param destNode The tree receiving the merged node.
+     * @param srcNode The tree supplying the nodes to merge.
+     * @return The destination node post merging.
+     */
+    public static JsonNode merge(JsonNode destNode, JsonNode srcNode) {
+        Iterator<String> fieldNames = srcNode.fieldNames();
+        
+        while (fieldNames.hasNext()) {
+            String fieldName = fieldNames.next();
+            JsonNode jsonNode = destNode.get(fieldName);
+            // if field exists and is an embedded object
+            if (jsonNode != null && jsonNode.isObject()) {
+                merge(jsonNode, srcNode.get(fieldName));
+            } else if (destNode instanceof ObjectNode) {
+                // Overwrite field
+                JsonNode value = srcNode.get(fieldName);
+                ((ObjectNode) destNode).set(fieldName, value);
+            }
+        }
 
+        return destNode;
+    }
+    
     /**
      * Enforce static class.
      */
