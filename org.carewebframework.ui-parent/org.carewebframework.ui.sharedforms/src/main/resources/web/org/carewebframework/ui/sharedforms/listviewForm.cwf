@@ -15,5 +15,5 @@
 	<menupopup name="menupopup">
 		<menuitem name="mnuRefresh" label="${@msg.cwf.btn.refresh.label}" />
 	</menupopup>
-	<stylesheet src="web/org/carewebframework/ui/sharedforms/sharedForms.css" />
+	<style src="web/org/carewebframework/ui/sharedforms/sharedForms.css" />
 </window>

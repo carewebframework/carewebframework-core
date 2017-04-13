@@ -1,6 +1,6 @@
 <window width="500px" height="500px" title="${self.title}" visible="false"
 	closeAction="destroy" controller="${@cwfChatSessionController}">
-	<stylesheet src="web/org/carewebframework/plugin/chat/chat.css" />
+	<style src="web/org/carewebframework/plugin/chat/chat.css" />
 	<paneview width="100%" height="100%" orientation="horizontal">
 		<pane flex="1" splittable="true">
 			<groupbox height="100%" 

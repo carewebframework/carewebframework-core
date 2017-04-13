@@ -1,7 +1,7 @@
 <?variable-resolver class="org.carewebframework.ui.FrameworkVariableResolver"?>
 
 <div name="errorContent" controller="${@exceptionController}" class="cwf-layout-vertical">
-	<html content="${@msg.cwf.error.dialog.message}" flex="1" />
+	<html content="${@msg.cwf.error.dialog.message}"/>
 	<toolbar alignment="center" flex="1">
 		<button name="btnDetail" class="flavor:btn-info size:btn-xs"
 			style="margin-top: 20px"

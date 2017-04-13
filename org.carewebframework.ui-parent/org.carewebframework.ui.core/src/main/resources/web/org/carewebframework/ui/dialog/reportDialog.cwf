@@ -3,8 +3,8 @@
 	controller="org.carewebframework.ui.dialog.ReportDialog">
 	<paneview class="cwf_reportdialog" orientation="vertical">
 		<pane name="printRoot">
-			<cell name="cmpText" visible="false" />
-			<html name="cmpHtml" visible="false" />
+			<cell name="cmpText" />
+			<html name="cmpHtml" />
 		</pane>
 		<pane>
 			<toolbar alignment="end" width="100%">

@@ -1,6 +1,6 @@
 <window title="${@msg.cwf.chat.invite.title}" width="500px" closeAction="destroy" 
 	controller="${@cwfChatInviteController}">
-	<stylesheet src="web/org/carewebframework/plugin/chat/chat.css" />
+	<style src="web/org/carewebframework/plugin/chat/chat.css" />
 	<label label="${@msg.cwf.chat.participant.header.user}" />
 	<listbox name="lstSessions" flex="1" multiple="true" />
 	<toolbar width="100%" alignment="start">
