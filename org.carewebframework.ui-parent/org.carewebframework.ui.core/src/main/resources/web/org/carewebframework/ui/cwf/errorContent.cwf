@@ -1,7 +1,5 @@
-<?variable-resolver class="org.carewebframework.ui.FrameworkVariableResolver"?>
-
 <div name="errorContent" controller="${@exceptionController}" class="cwf-layout-vertical">
-	<html content="${@msg.cwf.error.dialog.message}"/>
+	<html content="${@msg.cwf.error.dialog.message}" />
 	<toolbar alignment="center" flex="1">
 		<button name="btnDetail" class="flavor:btn-info size:btn-xs"
 			style="margin-top: 20px"
@@ -27,7 +25,7 @@
 			</row>
 			<row style="vertical-align:top">
 				<label label="${@msg.cwf.error.dialog.trace.label}" />
-				<textbox name="txtStackTrace" rows="15" flex="1"
+				<memobox name="txtStackTrace" rows="15" flex="1"
 					readonly="true" />
 			</row>
 		</rows>

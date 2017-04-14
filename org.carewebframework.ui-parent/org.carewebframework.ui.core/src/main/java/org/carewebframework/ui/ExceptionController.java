@@ -43,7 +43,7 @@ import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.BaseUIComponent;
 import org.carewebframework.web.component.Button;
 import org.carewebframework.web.component.Label;
-import org.carewebframework.web.component.Textbox;
+import org.carewebframework.web.component.Memobox;
 import org.carewebframework.web.component.Window;
 import org.carewebframework.web.core.RequestUtil;
 import org.carewebframework.web.event.ClickEvent;
@@ -57,29 +57,29 @@ import org.springframework.web.util.WebUtils;
  * appender with the name defined by constant {@link Constants#EXCEPTION_LOG}.
  */
 public class ExceptionController implements IAutoWired {
-
+    
     private static final Log log = LogFactory.getLog(ExceptionController.class);//TODO Constants.EXCEPTION_LOG);
-
+    
     private Window root;
-
+    
     @WiredComponent
     private Label lblExceptionClass;
-
+    
     @WiredComponent
     private Label lblMessage;
-
+    
     @WiredComponent
     private Label lblStatusCode;
-
+    
     @WiredComponent
-    private Textbox txtStackTrace;
-
+    private Memobox txtStackTrace;
+    
     @WiredComponent
     private BaseUIComponent detail;
-
+    
     @WiredComponent
     private Button btnDetail;
-
+    
     /**
      * Populate the display with information from the current execution.
      */
@@ -88,22 +88,22 @@ public class ExceptionController implements IAutoWired {
         ClientUtil.busy(null, null);
         this.root = comp.getAncestor(Window.class);
         HttpServletRequest req = RequestUtil.getRequest();
-
+        
         Class<?> errClass = (Class<?>) req.getAttribute(WebUtils.ERROR_EXCEPTION_TYPE_ATTRIBUTE);
         String errMsg = (String) req.getAttribute(WebUtils.ERROR_MESSAGE_ATTRIBUTE);
         Throwable err = (Throwable) req.getAttribute(WebUtils.ERROR_EXCEPTION_ATTRIBUTE);
-
+        
         String errReqURI = (String) req.getAttribute(WebUtils.ERROR_REQUEST_URI_ATTRIBUTE);
         String errServletName = (String) req.getAttribute(WebUtils.ERROR_SERVLET_NAME_ATTRIBUTE);
         Integer errStatusCode = (Integer) req.getAttribute(WebUtils.ERROR_STATUS_CODE_ATTRIBUTE);
-
+        
         String throwableContext = null;
-
+        
         if (err != null) {
             if (err instanceof IThrowableContext) {
                 throwableContext = ((IThrowableContext) err).getThrowableContext();
             }
-
+            
             //stack trace info
             if (err instanceof NestedCheckedException) {
                 err = ((NestedCheckedException) err).getMostSpecificCause();
@@ -115,7 +115,7 @@ public class ExceptionController implements IAutoWired {
             errClass = errClass == null ? err.getClass() : errClass;
             errMsg = StringUtils.trimToNull(errMsg) == null ? err.getMessage() : errMsg;
         }
-
+        
         StringBuffer buffer = new StringBuffer();
         //generic exception info
         buffer.append("\nException class: ").append(errClass);
@@ -123,24 +123,24 @@ public class ExceptionController implements IAutoWired {
         buffer.append("\nStatusCode: ").append(errStatusCode);
         buffer.append("\nServletName: ").append(errServletName);
         buffer.append("\nReqURI: ").append(errReqURI);
-
+        
         Map<String, Object> browserInfo = ExecutionContext.getPage().getBrowserInfo();
         buffer.append(browserInfo);
-
+        
         buffer.append("\nThrowableContext: " + throwableContext);
         buffer.append("\nStackTrace: ");
         appendStackTrace(err);
-
+        
         log.error(buffer, err);
         this.lblExceptionClass.setLabel(String.valueOf(errClass));
         this.lblMessage.setLabel(errMsg);
         this.lblStatusCode.setLabel(String.valueOf(errStatusCode));
-
+        
         if (SecurityUtil.isGrantedAny(StrUtil.getLabel("cwf.error.dialog.expanded"))) {
             EventUtil.post(ClickEvent.TYPE, this.btnDetail, null);
         }
     }
-
+    
     /**
      * Appends the stack trace for the specified exception to the display.
      *
@@ -151,17 +151,17 @@ public class ExceptionController implements IAutoWired {
             Class<?> clazz = err.getClass();
             String msg = err.getMessage();
             //Throwable cause = err.getCause();//should be null
-
+            
             this.txtStackTrace.setValue(StringUtils.defaultString(this.txtStackTrace.getValue())
                     + StringUtils.trimToEmpty(clazz.getCanonicalName()) + ": " + StringUtils.trimToEmpty(msg) + "\n");
-
+            
             for (StackTraceElement element : err.getStackTrace()) {
                 this.txtStackTrace
                         .setValue(StringUtils.defaultString(this.txtStackTrace.getValue()) + String.valueOf(element) + "\n");
             }
         }
     }
-
+    
     /**
      * Sets the detail open state.
      *
@@ -171,14 +171,14 @@ public class ExceptionController implements IAutoWired {
         this.detail.setVisible(doOpen);
         this.btnDetail.setLabel(doOpen ? "Hide Detail" : "Show Detail");
     }
-
+    
     /**
      * Event handler for close button
      */
     public void onClick$btnClose() {
         this.root.detach();
     }
-
+    
     /**
      * Event handler for "show detail" button
      */
