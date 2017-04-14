@@ -2,5 +2,5 @@
 	<window closable="true" minimizable="true" width="100%"
 		impl="org.carewebframework.plugin.infopanel.controller.DropContainer">
 		<div />
-	</panel>
+	</window>
 </page>
