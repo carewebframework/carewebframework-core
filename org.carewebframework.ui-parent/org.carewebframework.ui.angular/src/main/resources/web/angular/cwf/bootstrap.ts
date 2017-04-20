@@ -6,6 +6,9 @@ import 'core-js/client/shim';
 import 'zone.js';
 import 'rxjs';
 
+/**
+ * Angular bootstrapper that supports dynamic selectors and multiple component instances.
+ */
 export function AppContext(module: any, selector: string) {
   var App = module.AngularComponent;
 
