@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "target": "es5",
+        "lib": ["es2015", "es2017", "dom"],
+        "outDir": "src/main/resources/web/angular/cwf"
+    },
+    
+    "include": [
+        "src/main/resources/web/angular/cwf/*.ts"
+    ],
+    
+    "exclude": []
+}

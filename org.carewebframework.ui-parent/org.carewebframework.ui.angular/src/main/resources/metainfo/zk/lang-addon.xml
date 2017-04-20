@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<language-addon>
+	<addon-name>angular.addon</addon-name>
+	<language-name>xul/html</language-name>
+
+	<javascript-module name="angular" version="1.0.0"/>
+
+	<javascript src="~./angular/systemjs/dist/system.js"/>
+	<javascript src="~./angular/cwf/systemjs.config.js"/>
+	
+	<component>
+		<component-name>angular</component-name>
+		<component-class>org.carewebframework.ui.angular.AngularComponent
+		</component-class>
+		<widget-class>angular.ext.AngularComponent
+		</widget-class>
+		<mold>
+			<mold-name>default</mold-name>
+			<mold-uri>mold/AngularComponent.js</mold-uri>
+		</mold>
+	</component>
+</language-addon>

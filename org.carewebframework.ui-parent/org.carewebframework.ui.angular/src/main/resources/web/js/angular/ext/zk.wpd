@@ -1,0 +1,3 @@
+<package name="angular.ext" language="xul/html" depends="zul.wgt,zul.inp">
+	<widget name="AngularComponent" />
+</package>
