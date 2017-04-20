@@ -120,6 +120,8 @@ public class CareWebShell extends Div implements AfterCompose {
     
     private boolean autoStart;
     
+    private boolean logoutConfirm = true;
+    
     private final IUserContextEvent userContextListener = new IUserContextEvent() {
         
         /**
@@ -181,7 +183,7 @@ public class CareWebShell extends Div implements AfterCompose {
             appendChild(registeredStyles);
             appendChild(messageWindow = new MessageWindow());
             desktop = new UIElementDesktop(this);
-            appFramework.registerObject(userContextListener);
+            setLogoutConfirm(logoutConfirm);
             String confirmClose = FrameworkWebSupport.getFrameworkProperty("confirmClose", "CAREWEB.CONFIRM.CLOSE");
             
             if (StringUtils.isEmpty(confirmClose) || BooleanUtils.toBoolean(confirmClose)) {
@@ -338,7 +340,31 @@ public class CareWebShell extends Div implements AfterCompose {
     public void setAutoStart(boolean autoStart) {
         this.autoStart = autoStart;
     }
-    
+
+    /**
+     * Returns true if confirmation is required upon user-initiated logout.
+     *
+     * @return True if confirmation is required upon user-initiated logout.
+     */
+    public boolean isLogoutConfirm() {
+        return logoutConfirm;
+    }
+
+    /**
+     * Set to true if confirmation is required upon user-initiated logout.
+     *
+     * @param logoutConfirm True if confirmation is required upon user-initiated logout.
+     */
+    public void setLogoutConfirm(boolean logoutConfirm) {
+        this.logoutConfirm = logoutConfirm;
+        
+        if (logoutConfirm) {
+            appFramework.registerObject(userContextListener);
+        } else {
+            appFramework.unregisterObject(userContextListener);
+        }
+    }
+
     /**
      * Build the UI based on the specified layout.
      *
@@ -611,8 +637,12 @@ public class CareWebShell extends Div implements AfterCompose {
     public void logout() {
         // Ensure that shell is last context subscriber (should be a better way
         // to do this).
-        appFramework.unregisterObject(userContextListener);
-        appFramework.registerObject(userContextListener);
+        
+        if (logoutConfirm) {
+            setLogoutConfirm(false);
+            setLogoutConfirm(true);
+        }
+
         SecurityUtil.getSecurityService().logout(false, null, null);
     }
     
