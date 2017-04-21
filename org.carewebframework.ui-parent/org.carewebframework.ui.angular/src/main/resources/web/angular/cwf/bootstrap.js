@@ -16,6 +16,9 @@ var core_2 = require("@angular/core");
 require("core-js/client/shim");
 require("zone.js");
 require("rxjs");
+/**
+ * Angular bootstrapper that supports dynamic selectors and multiple component instances.
+ */
 function AppContext(module, selector) {
     var App = module.AngularComponent;
     var module_decorations = {
@@ -39,9 +42,9 @@ function AppContext(module, selector) {
         core_1.NgModule(module_decorations),
         __metadata("design:paramtypes", [core_2.ComponentFactoryResolver])
     ], AppModule);
-    this.bootstrap = function bootstrap() {
+    this.bootstrap = function bootstrap(compilerOptions) {
         var platform = platform_browser_dynamic_1.platformBrowserDynamic();
-        platform.bootstrapModule(AppModule);
+        return platform.bootstrapModule(AppModule, compilerOptions);
     };
 }
 exports.AppContext = AppContext;

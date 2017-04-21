@@ -33,9 +33,9 @@ export function AppContext(module: any, selector: string) {
       }
   }
 
-  this.bootstrap = function bootstrap() {  
+  this.bootstrap = function bootstrap(compilerOptions?) {  
     const platform = platformBrowserDynamic();
-    platform.bootstrapModule(AppModule);  
+    return platform.bootstrapModule(AppModule, compilerOptions);  
   }
   
 }
