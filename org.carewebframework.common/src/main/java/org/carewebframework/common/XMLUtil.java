@@ -43,13 +43,13 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
 public class XMLUtil {
-    
+
     public enum TagFormat {
         OPENING, CLOSING, BOTH, EMPTY
     }
-
-    private static DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
     
+    private static final DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+
     /**
      * Parses XML from a string.
      *
@@ -60,7 +60,7 @@ public class XMLUtil {
     public static Document parseXMLFromString(String xml) throws Exception {
         return parseXMLFromStream(IOUtils.toInputStream(xml, StandardCharsets.UTF_8));
     }
-    
+
     /**
      * Parses XML from a list of strings.
      *
@@ -71,7 +71,7 @@ public class XMLUtil {
     public static Document parseXMLFromList(Iterable<String> xml) throws Exception {
         return parseXMLFromString(StrUtil.fromList(xml));
     }
-    
+
     /**
      * Parses XML from a file.
      *
@@ -82,7 +82,7 @@ public class XMLUtil {
     public static Document parseXMLFromLocation(String filePath) throws Exception {
         return parseXMLFromStream(new FileInputStream(filePath));
     }
-    
+
     /**
      * Parses XML from an input stream.
      *
@@ -95,7 +95,7 @@ public class XMLUtil {
         stream.close();
         return document;
     }
-    
+
     /**
      * Converts an XML document to a formatted XML string.
      *
@@ -105,7 +105,7 @@ public class XMLUtil {
     public static String toString(Document doc) {
         return toString(doc, 4);
     }
-    
+
     /**
      * Converts an XML document to a formatted XML string.
      *
@@ -117,7 +117,7 @@ public class XMLUtil {
         if (doc == null) {
             return "";
         }
-        
+
         try {
             DOMSource domSource = new DOMSource(doc);
             StringWriter writer = new StringWriter();
@@ -133,7 +133,7 @@ public class XMLUtil {
             return e.toString();
         }
     }
-    
+
     /**
      * Returns the formatted name for the node.
      *
@@ -143,20 +143,20 @@ public class XMLUtil {
      */
     public static String formatNodeName(Node node, TagFormat format) {
         StringBuilder sb = new StringBuilder((format == TagFormat.CLOSING ? "</" : "<") + node.getNodeName());
-        
+
         if (format != TagFormat.CLOSING) {
             sb.append(formatAttributes(node));
         }
-        
+
         sb.append(format == TagFormat.EMPTY ? " />" : ">");
-        
+
         if (format == TagFormat.BOTH) {
             sb.append(formatNodeName(node, TagFormat.CLOSING));
         }
-        
+
         return sb.toString();
     }
-    
+
     /**
      * Returns formatted attributes of the node.
      *
@@ -166,15 +166,15 @@ public class XMLUtil {
     public static String formatAttributes(Node node) {
         StringBuilder sb = new StringBuilder();
         NamedNodeMap attrs = node.getAttributes();
-        
+
         for (int i = 0; i < attrs.getLength(); i++) {
             Node attr = attrs.item(i);
             sb.append(' ').append(attr.getNodeName()).append("= '").append(attr.getNodeValue()).append("'");
         }
-        
+
         return sb.toString();
     }
-    
+
     /**
      * Enforce static class.
      */
