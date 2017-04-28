@@ -36,18 +36,15 @@ import org.carewebframework.api.IThrowableContext;
 import org.carewebframework.api.security.SecurityUtil;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.web.ancillary.IAutoWired;
+import org.carewebframework.web.annotation.EventHandler;
 import org.carewebframework.web.annotation.WiredComponent;
-import org.carewebframework.web.client.ClientUtil;
 import org.carewebframework.web.client.ExecutionContext;
 import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.component.BaseUIComponent;
-import org.carewebframework.web.component.Button;
+import org.carewebframework.web.component.Detail;
 import org.carewebframework.web.component.Label;
 import org.carewebframework.web.component.Memobox;
 import org.carewebframework.web.component.Window;
 import org.carewebframework.web.core.RequestUtil;
-import org.carewebframework.web.event.ClickEvent;
-import org.carewebframework.web.event.EventUtil;
 import org.springframework.core.NestedCheckedException;
 import org.springframework.core.NestedRuntimeException;
 import org.springframework.web.util.WebUtils;
@@ -75,20 +72,21 @@ public class ExceptionController implements IAutoWired {
     private Memobox txtStackTrace;
     
     @WiredComponent
-    private BaseUIComponent detail;
-    
-    @WiredComponent
-    private Button btnDetail;
+    private Detail detail;
     
     /**
      * Populate the display with information from the current execution.
      */
     @Override
     public void afterInitialized(BaseComponent comp) {
-        ClientUtil.busy(null, null);
-        this.root = comp.getAncestor(Window.class);
+        //ClientUtil.busy(null, null);
+        root = comp.getAncestor(Window.class);
         HttpServletRequest req = RequestUtil.getRequest();
-        
+
+        if (root == null || req == null) {
+            return;
+        }
+
         Class<?> errClass = (Class<?>) req.getAttribute(WebUtils.ERROR_EXCEPTION_TYPE_ATTRIBUTE);
         String errMsg = (String) req.getAttribute(WebUtils.ERROR_MESSAGE_ATTRIBUTE);
         Throwable err = (Throwable) req.getAttribute(WebUtils.ERROR_EXCEPTION_ATTRIBUTE);
@@ -137,7 +135,7 @@ public class ExceptionController implements IAutoWired {
         this.lblStatusCode.setLabel(String.valueOf(errStatusCode));
         
         if (SecurityUtil.isGrantedAny(StrUtil.getLabel("cwf.error.dialog.expanded"))) {
-            EventUtil.post(ClickEvent.TYPE, this.btnDetail, null);
+            setDetail(true);
         }
     }
     
@@ -168,21 +166,23 @@ public class ExceptionController implements IAutoWired {
      * @param doOpen The detail open state.
      */
     private void setDetail(boolean doOpen) {
-        this.detail.setVisible(doOpen);
-        this.btnDetail.setLabel(doOpen ? "Hide Detail" : "Show Detail");
+        detail.setOpen(doOpen);
+        detail.setLabel(
+            StrUtil.getLabel(doOpen ? "cwf.error.dialog.detail.open.label" : "cwf.error.dialog.detail.closed.label"));
     }
     
     /**
      * Event handler for close button
      */
     public void onClick$btnClose() {
-        this.root.detach();
+        root.detach();
     }
     
     /**
-     * Event handler for "show detail" button
+     * Event handler for detail open/close
      */
-    public void onClick$btnDetail() {
-        setDetail(!this.detail.isVisible());
+    @EventHandler(value = { "open", "close" }, target = "@detail")
+    public void onOpenOrClose$detail() {
+        setDetail(detail.isOpen());
     }
 }

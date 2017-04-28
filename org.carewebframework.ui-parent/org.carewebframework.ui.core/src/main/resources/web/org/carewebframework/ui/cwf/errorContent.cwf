@@ -1,33 +1,30 @@
 <div name="errorContent" controller="${@exceptionController}" class="cwf-layout-vertical">
 	<html content="${@msg.cwf.error.dialog.message}" />
-	<toolbar alignment="center" flex="1">
-		<button name="btnDetail" class="flavor:btn-info size:btn-xs"
-			style="margin-top: 20px"
-			label="${@msg.cwf.error.dialog.btn.detail.label}" />
-	</toolbar>
-	<grid name="detail" visible="false">
-		<columns visible="false">
-			<column width="20%" />
-			<column width="80%" />
-		</columns>
-		<rows>
-			<row>
-				<label label="${@msg.cwf.error.dialog.cls.label}" />
-				<label name="lblExceptionClass" />
-			</row>
-			<row>
-				<label label="${@msg.cwf.error.dialog.msg.label}" />
-				<label name="lblMessage" />
-			</row>
-			<row>
-				<label label="${@msg.cwf.error.dialog.status.label}" />
-				<label name="lblStatusCode" />
-			</row>
-			<row style="vertical-align:top">
-				<label label="${@msg.cwf.error.dialog.trace.label}" />
-				<memobox name="txtStackTrace" rows="15" flex="1"
-					readonly="true" />
-			</row>
-		</rows>
-	</grid>
+	<detail name="detail" label="${@msg.cwf.error.dialog.detail.closed.label}">
+		<grid>
+			<columns visible="false">
+				<column width="20%" />
+				<column width="80%" />
+			</columns>
+			<rows>
+				<row>
+					<label label="${@msg.cwf.error.dialog.cls.label}" />
+					<label name="lblExceptionClass" />
+				</row>
+				<row>
+					<label label="${@msg.cwf.error.dialog.msg.label}" />
+					<label name="lblMessage" />
+				</row>
+				<row>
+					<label label="${@msg.cwf.error.dialog.status.label}" />
+					<label name="lblStatusCode" />
+				</row>
+				<row style="vertical-align:top">
+					<label label="${@msg.cwf.error.dialog.trace.label}" />
+					<memobox name="txtStackTrace" rows="15" flex="1"
+						readonly="true" />
+				</row>
+			</rows>
+		</grid>
+	</detail>
 </div>
