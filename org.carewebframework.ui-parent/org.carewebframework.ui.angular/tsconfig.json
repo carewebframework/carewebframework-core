@@ -7,6 +7,8 @@
         "outDir": "src/main/resources/web/angular/cwf"
     },
     
+    "compileOnSave": true,
+    
     "include": [
         "src/main/resources/web/angular/cwf/*.ts"
     ],

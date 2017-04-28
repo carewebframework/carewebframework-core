@@ -4,6 +4,8 @@ zk.$package('angular.ext');
  */
 angular.ext.AngularComponent = zk.$extends(zul.Widget, {
 
+	_ngInvoke : [],
+	
 	_src : null,
 
 	$define: {
@@ -23,14 +25,45 @@ angular.ext.AngularComponent = zk.$extends(zul.Widget, {
 	    
 		if (this._src) {
 			var id = '#'+ this.uuid,
-				src = this._src;
+				src = this._src,
+				self = this,
+				ngFlush = this.ngFlush.bind(this);
 			
 			System.import('cwf-angular-bootstrap').then(function(bootstrap) {
 				System.import(src).then(function(module) {
-					var appContext = new bootstrap.AppContext(module, id);
-					appContext.bootstrap();
+					self._appContext = new bootstrap.AppContext(module, id);
+					self._appContext.bootstrap().then(ngFlush);
 				});
 			});
+		}
+	},
+	
+	unbind_: function () {
+	    this.$supers(angular.ext.AngularComponent, 'unbind_', arguments);
+	    this._destroy();
+	},
+	
+	_destroy: function () {
+		this._appContext ? this._appContext.destroy() : null;
+		this._appContext = null;
+	},
+	
+	isLoaded: function() {
+		return this._appContext && this._appContext.isLoaded();
+	},
+	
+	ngInvoke: function(functionName, args) {
+		if (this.isLoaded()) {
+			return this._appContext.invoke(functionName, args);
+		} else {
+			this._ngInvoke.push({functionName: functionName, args: args});
+		}
+	},
+	
+	ngFlush: function () {
+		while (this._ngInvoke.length) {
+			var invk = this._ngInvoke.shift();
+			this.ngInvoke(invk.functionName, invk.args);
 		}
 	}
 });

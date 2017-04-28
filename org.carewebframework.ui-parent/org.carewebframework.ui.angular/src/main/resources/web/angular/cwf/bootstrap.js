@@ -21,6 +21,9 @@ require("rxjs");
  */
 function AppContext(module, selector) {
     var App = module.AngularComponent;
+    var zone;
+    var componentRef;
+    var moduleRef;
     var module_decorations = {
         imports: [platform_browser_1.BrowserModule],
         declarations: [App],
@@ -28,23 +31,39 @@ function AppContext(module, selector) {
     };
     module.decorations ? Object.assign(module_decorations, module.decorations) : null;
     var AppModule = (function () {
-        function AppModule(resolver) {
+        function AppModule(resolver, ngZone) {
             this.resolver = resolver;
+            this.ngZone = ngZone;
+            zone = ngZone;
         }
         AppModule.prototype.ngDoBootstrap = function (appRef) {
             var factory = this.resolver.resolveComponentFactory(App);
             factory.selector = selector;
-            appRef.bootstrap(factory);
+            componentRef = appRef.bootstrap(factory);
         };
         return AppModule;
     }());
     AppModule = __decorate([
         core_1.NgModule(module_decorations),
-        __metadata("design:paramtypes", [core_2.ComponentFactoryResolver])
+        __metadata("design:paramtypes", [core_2.ComponentFactoryResolver,
+            core_2.NgZone])
     ], AppModule);
-    this.bootstrap = function bootstrap(compilerOptions) {
+    AppContext.prototype.isLoaded = function () {
+        return !!moduleRef;
+    };
+    AppContext.prototype.bootstrap = function (compilerOptions) {
         var platform = platform_browser_dynamic_1.platformBrowserDynamic();
-        return platform.bootstrapModule(AppModule, compilerOptions);
+        return platform.bootstrapModule(AppModule, compilerOptions).then(function (ref) { return moduleRef = ref; });
+    };
+    AppContext.prototype.destroy = function () {
+        moduleRef ? moduleRef.destroy() : null;
+        moduleRef = null;
+    };
+    AppContext.prototype.invoke = function (functionName, args) {
+        return zone.run(function () {
+            var instance = componentRef.instance;
+            instance[functionName].apply(instance, args);
+        });
     };
 }
 exports.AppContext = AppContext;
