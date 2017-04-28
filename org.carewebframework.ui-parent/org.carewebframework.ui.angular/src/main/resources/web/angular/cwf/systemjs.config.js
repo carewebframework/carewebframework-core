@@ -1,17 +1,22 @@
 System.config(
-        {	'map': {
-        		'cwf-angular-bootstrap': 'zkau/web/angular/cwf/bootstrap.js',
-		      	'@angular/core': 'zkau/web/angular/@angular/core/bundles/core.umd.js',
-		      	'@angular/common': 'zkau/web/angular/@angular/common/bundles/common.umd.js',
-		      	'@angular/compiler': 'zkau/web/angular/@angular/compiler/bundles/compiler.umd.js',
-		      	'@angular/platform-browser': 'zkau/web/angular/@angular/platform-browser/bundles/platform-browser.umd.js',
-		      	'@angular/platform-browser-dynamic': 'zkau/web/angular/@angular/platform-browser-dynamic/bundles/platform-browser-dynamic.umd.js',
-		      	'@angular/http': 'zkau/web/angular/@angular/http/bundles/http.umd.js',
-		      	'@angular/router': 'zkau/web/angular/@angular/router/bundles/router.umd.js',
-		      	'@angular/forms': 'zkau/web/angular/@angular/forms/bundles/forms.umd.js',
-        		'rxjs': 'zkau/web/angular/rxjs',
-        		'core-js': 'zkau/web/angular/core-js',
-        		'zone.js': 'zkau/web/angular/zone.js/dist/zone.js'
+        {	
+        	'paths': {
+        		'zk:': zk.ajaxURI('web/', {au: true})
+        	},
+        	
+        	'map': {
+        		'cwf-angular-bootstrap': 'zk:angular/cwf/bootstrap.js',
+		      	'@angular/core': 'zk:angular/@angular/core/bundles/core.umd.js',
+		      	'@angular/common': 'zk:angular/@angular/common/bundles/common.umd.js',
+		      	'@angular/compiler': 'zk:angular/@angular/compiler/bundles/compiler.umd.js',
+		      	'@angular/platform-browser': 'zk:angular/@angular/platform-browser/bundles/platform-browser.umd.js',
+		      	'@angular/platform-browser-dynamic': 'zk:angular/@angular/platform-browser-dynamic/bundles/platform-browser-dynamic.umd.js',
+		      	'@angular/http': 'zk:angular/@angular/http/bundles/http.umd.js',
+		      	'@angular/router': 'zk:angular/@angular/router/bundles/router.umd.js',
+		      	'@angular/forms': 'zk:angular/@angular/forms/bundles/forms.umd.js',
+        		'rxjs': 'zk:angular/rxjs',
+        		'core-js': 'zk:angular/core-js',
+        		'zone.js': 'zk:angular/zone.js/dist/zone.js'
         	},
         	
         	'packages': {
