@@ -1,21 +1,19 @@
-<window name="outer" width="100%" height="100%" mold="bootstrap">
-	<caption name="caption" hflex="1">
-		<div zclass="cwf-step-taskbar" hflex="1">
-			<hlayout name="tbarLeft" class="cwf-step-taskbar-left"
-				hflex="min">
-				<label zclass="cwf-step-title" name="lblTitle" />
-				<toolbarbutton name="btnHome" style="margin-bottom:2px"
+<div name="outer" class="panel flavor:panel-default cwf-stepview">
+	<div class="panel-heading">
+		<div class="cwf-stepview-taskbar">
+			<div name="tbarLeft" class="cwf-stepview-taskbar-left">
+				<label class="cwf-step-title" name="lblTitle" />
+				<link name="btnHome" style="margin-bottom:2px"
 					image="web/org/carewebframework/shell/images/home.png" />
-				<toolbarbutton name="btnLeft"
+				<link name="btnLeft"
 					image="web/org/carewebframework/shell/images/16x16/arrowL.png" />
-				<toolbarbutton name="btnRight"
+				<link name="btnRight"
 					image="web/org/carewebframework/shell/images/16x16/arrowR.png" />
-			</hlayout>
+			</div>
 			<div name="tbarCenter"
-				zclass="cwf-step-taskbar-center container-fluid" hflex="1" />
-			<hlayout name="tbarRight" class="cwf-step-taskbar-right"
-				hflex="min" />
+				class="cwf-stepview-taskbar-center container-fluid" />
+			<div name="tbarRight" class="cwf-stepview-taskbar-right" />
 		</div>
-	</caption>
-	<div name="inner" zclass="panel-body" height="100%" />
-</window>
+	</div>
+	<div name="inner" class="panel-body" />
+</div>

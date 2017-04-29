@@ -7,15 +7,15 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  * This Source Code Form is also subject to the terms of the Health-Related
  * Additional Disclaimer of Warranty and Limitation of Liability available at
  *
@@ -72,7 +72,7 @@ public class UIElementStepPane extends UIElementBase {
     
     /**
      * Called by parent step view to mark this pane as a home page.
-     * 
+     *
      * @param value If true, this is the home page; false if not.
      */
     /*package*/void setHomePane(boolean value) {
@@ -86,7 +86,7 @@ public class UIElementStepPane extends UIElementBase {
     
     /**
      * Add the UI components of the child pane to their respective parent components in the view.
-     * 
+     *
      * @see org.carewebframework.shell.elements.UIElementBase#bind
      */
     @Override
@@ -98,7 +98,7 @@ public class UIElementStepPane extends UIElementBase {
     
     /**
      * Detach the UI components of the child pane the UI.
-     * 
+     *
      * @see org.carewebframework.shell.elements.UIElementBase#unbind
      */
     @Override
@@ -109,7 +109,7 @@ public class UIElementStepPane extends UIElementBase {
     
     /**
      * Brings this UI element to the front of the UI by making it the active pane.
-     * 
+     *
      * @see org.carewebframework.shell.elements.UIElementBase#bringToFront()
      */
     @Override
@@ -120,7 +120,7 @@ public class UIElementStepPane extends UIElementBase {
     
     /**
      * Returns the instance name to use in the designer.
-     * 
+     *
      * @see org.carewebframework.shell.elements.UIElementBase#getInstanceName()
      */
     @Override
@@ -130,7 +130,7 @@ public class UIElementStepPane extends UIElementBase {
     
     /**
      * Apply color changes to button and pane only.
-     * 
+     *
      * @see org.carewebframework.shell.elements.UIElementBase#applyColor()
      */
     @Override
@@ -141,7 +141,7 @@ public class UIElementStepPane extends UIElementBase {
     
     /**
      * Overrides the default behavior to also target the button component.
-     * 
+     *
      * @param contextMenu The design menu if design mode is activated, or null if it is not.
      */
     @Override
@@ -162,7 +162,7 @@ public class UIElementStepPane extends UIElementBase {
     protected void updateVisibility(boolean visible, boolean activated) {
         super.updateVisibility(visible, activated);
         step.setVisible(visible && !isHomePane);
-        step.addClass(getNextSibling(true) != null ? "cwf-step-separator" : null);
+        step.toggleClass("cwf-stepview-separator", null, getNextSibling(true) != null);
         updateButtonStyle();
     }
     
@@ -174,7 +174,7 @@ public class UIElementStepPane extends UIElementBase {
     
     /**
      * Returns the button label.
-     * 
+     *
      * @return The button's label.
      */
     public String getLabel() {
@@ -183,7 +183,7 @@ public class UIElementStepPane extends UIElementBase {
     
     /**
      * Sets the button label.
-     * 
+     *
      * @param value The label value.
      */
     public void setLabel(String value) {
@@ -197,7 +197,7 @@ public class UIElementStepPane extends UIElementBase {
     
     /**
      * Returns the button image url.
-     * 
+     *
      * @return Url for the button image. May be null or empty.
      */
     public String getIcon() {
@@ -206,7 +206,7 @@ public class UIElementStepPane extends UIElementBase {
     
     /**
      * Sets the button image from a url.
-     * 
+     *
      * @param value Url for the button image. May be null or empty.
      */
     public void setIcon(String value) {

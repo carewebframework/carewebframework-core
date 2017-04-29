@@ -7,15 +7,15 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  * This Source Code Form is also subject to the terms of the Health-Related
  * Additional Disclaimer of Warranty and Limitation of Liability available at
  *
@@ -26,14 +26,15 @@
 package org.carewebframework.shell.elements;
 
 import org.carewebframework.shell.designer.PropertyEditorStepView;
-import org.carewebframework.shell.layout.LayoutConstants;
 import org.carewebframework.shell.property.PropertyTypeRegistry;
 import org.carewebframework.theme.ThemeUtil;
+import org.carewebframework.web.annotation.EventHandler;
+import org.carewebframework.web.annotation.WiredComponent;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.BaseUIComponent;
-import org.carewebframework.web.component.Button;
+import org.carewebframework.web.component.Div;
+import org.carewebframework.web.component.Hyperlink;
 import org.carewebframework.web.component.Label;
-import org.carewebframework.web.component.Window;
 
 /**
  * A step-oriented UI Element. This is implemented as a window component with a top toolbar
@@ -47,19 +48,26 @@ public class UIElementStepView extends UIElementBase {
         PropertyTypeRegistry.register("step", PropertyEditorStepView.class);
     }
     
-    private final Window outer;
+    @WiredComponent
+    private final Div outer;
     
+    @WiredComponent
     private BaseUIComponent inner;
     
+    @WiredComponent
     private Label lblTitle;
     
+    @WiredComponent
     private BaseUIComponent tbarCenter;
     
-    private Button btnLeft;
+    @WiredComponent
+    private Hyperlink btnLeft;
     
-    private Button btnRight;
+    @WiredComponent
+    private Hyperlink btnRight;
     
-    private Button btnHome;
+    @WiredComponent
+    private Hyperlink btnHome;
     
     private UIElementStepPane activePane;
     
@@ -77,7 +85,7 @@ public class UIElementStepView extends UIElementBase {
     public UIElementStepView() {
         super();
         maxChildren = Integer.MAX_VALUE;
-        outer = (Window) createFromTemplate();
+        outer = (Div) createFromTemplate();
         setOuterComponent(outer);
         setInnerComponent(inner);
         associateComponent(tbarCenter);
@@ -93,7 +101,7 @@ public class UIElementStepView extends UIElementBase {
     
     /**
      * Activates the active pane. If no pane is currently active, activate the first pane.
-     * 
+     *
      * @see org.carewebframework.shell.elements.UIElementBase#activateChildren(boolean)
      */
     @Override
@@ -102,16 +110,16 @@ public class UIElementStepView extends UIElementBase {
     }
     
     /**
-     * Url for zul template.
+     * Url for cwf template.
      */
     @Override
     protected String getTemplateUrl() {
-        return LayoutConstants.RESOURCE_PREFIX + "UIElementStepView.cwf";
+        return super.getTemplateUrl();
     }
     
     /**
      * Sets the caption.
-     * 
+     *
      * @param caption The caption.
      */
     public void setCaption(String caption) {
@@ -120,7 +128,7 @@ public class UIElementStepView extends UIElementBase {
     
     /**
      * Returns the caption of the panel.
-     * 
+     *
      * @return The panel caption.
      */
     public String getCaption() {
@@ -129,7 +137,7 @@ public class UIElementStepView extends UIElementBase {
     
     /**
      * Returns the currently active pane, or null if no pane is active.
-     * 
+     *
      * @return The currently active pane.
      */
     public UIElementStepPane getActivePane() {
@@ -139,7 +147,7 @@ public class UIElementStepView extends UIElementBase {
     /**
      * Sets the active pane. Since only one pane can be active at a time, the currently active pane
      * is first deactivated.
-     * 
+     *
      * @param pane Step pane to activate.
      */
     public void setActivePane(UIElementStepPane pane) {
@@ -157,13 +165,13 @@ public class UIElementStepView extends UIElementBase {
             activePane.activate(true);
         }
         
-        btnHome.toggleClass("z-toolbarbutton-checked", null, activePane == null || activePane.getIndex() != 0);
+        btnHome.toggleClass(null, "cwf-stepview-home-selected", activePane == null || activePane.getIndex() != 0);
         updateNavigationElements();
     }
     
     /**
      * Returns the index of the active pane, or -1 if no pane is active.
-     * 
+     *
      * @return The index of the active pane.
      */
     public int getActivePaneIndex() {
@@ -177,7 +185,7 @@ public class UIElementStepView extends UIElementBase {
     /**
      * Updates the state of child components. This logic ensures that the separator following the
      * last button in the step sequence is hidden.
-     * 
+     *
      * @see org.carewebframework.shell.elements.UIElementBase#updateState()
      */
     @Override
@@ -213,7 +221,7 @@ public class UIElementStepView extends UIElementBase {
     
     /**
      * Returns the index of the next visible pane before/after the specified one.
-     * 
+     *
      * @param forward If true, search forward. Otherwise, search backward.
      * @param fromIndex Pane index from which to search.
      * @return Index of the next visible pane.
@@ -238,7 +246,7 @@ public class UIElementStepView extends UIElementBase {
     
     /**
      * Returns the next visible pane before/after the specified one.
-     * 
+     *
      * @param forward If true, search forward. Otherwise, search backward.
      * @param fromIndex Pane index from which to search.
      * @return The next visible pane.
@@ -258,7 +266,7 @@ public class UIElementStepView extends UIElementBase {
     
     /**
      * Navigate one pane forward or backward.
-     * 
+     *
      * @param forward Direction of navigation (false moves left, true moves right).
      */
     private void navigate(boolean forward) {
@@ -268,27 +276,30 @@ public class UIElementStepView extends UIElementBase {
     /**
      * Navigate one pane left.
      */
-    public void onClick$btnLeft() {
+    @EventHandler(value = "click", target = "@btnLeft")
+    private void onClick$btnLeft() {
         navigate(false);
     }
     
     /**
      * Navigate one pane right.
      */
-    public void onClick$btnRight() {
+    @EventHandler(value = "click", target = "@btnRight")
+    private void onClick$btnRight() {
         navigate(true);
     }
     
     /**
      * Activate the home pane.
      */
-    public void onClick$btnHome() {
+    @EventHandler(value = "click", target = "@btnHome")
+    private void onClick$btnHome() {
         setActivePane((UIElementStepPane) getFirstChild());
     }
     
     /**
      * Returns true if navigation controls are suppressed.
-     * 
+     *
      * @return True if navigation controls are suppressed.
      */
     public boolean getNoNavigation() {
@@ -297,18 +308,18 @@ public class UIElementStepView extends UIElementBase {
     
     /**
      * Set to true to suppress navigation controls.
-     * 
+     *
      * @param noNavigation True to suppress navigation controls.
      */
     public void setNoNavigation(boolean noNavigation) {
         this.noNavigation = noNavigation;
-        updateSclass();
+        updateClass();
         updateNavigationElements();
     }
     
     /**
      * Returns true if home pane is suppressed.
-     * 
+     *
      * @return Home suppression flag.
      */
     public boolean getNoHome() {
@@ -317,18 +328,18 @@ public class UIElementStepView extends UIElementBase {
     
     /**
      * Set to true to suppress home pane.
-     * 
+     *
      * @param noHome Home suppression flag.
      */
     public void setNoHome(boolean noHome) {
         this.noHome = noHome;
-        updateSclass();
+        updateClass();
         updateState();
     }
     
     /**
      * Returns the panel style to use for the desktop.
-     * 
+     *
      * @return The panel style.
      */
     public ThemeUtil.PanelStyle getStyle() {
@@ -337,7 +348,7 @@ public class UIElementStepView extends UIElementBase {
     
     /**
      * Sets the panel style to use for the desktop.
-     * 
+     *
      * @param style The panel style.
      */
     public void setStyle(ThemeUtil.PanelStyle style) {
@@ -345,8 +356,8 @@ public class UIElementStepView extends UIElementBase {
         outer.addClass(style.getThemeClass());
     }
     
-    private void updateSclass() {
-        //TODO: ZKUtil.updateSclass(outer.getTitle(), "cwf-step-nonav", !noNavigation);
-        //TODO: ZKUtil.updateSclass(outer.getTitle(), "cwf-step-nohome", !noHome);
+    private void updateClass() {
+        outer.toggleClass("cwf-stepview-nonav", null, noNavigation);
+        outer.toggleClass("cwf-stepview-nohome", null, noHome);
     }
 }

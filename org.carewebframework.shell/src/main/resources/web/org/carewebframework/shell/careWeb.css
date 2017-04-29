@@ -163,50 +163,62 @@
 	overflow: visible;
 }
 
-.cwf-step-taskbar > * {
+.cwf-stepview {
+    display: flex;
+    flex-direction: horizontal;
+}
+
+.cwf-stepview-taskbar {
+	width: 100%;
+	display: flex;
+}
+
+.cwf-stepview-taskbar > * {
 	display: inline-block;
 }
 
-.cwf-step-taskbar-left {
-	float: left;
-}
-
-.cwf-step-taskbar-left img {
+.cwf-stepview-taskbar-left img {
 	max-height: 20px;
 }
 
-.cwf-step-taskbar-center {
+.cwf-stepview-taskbar-center {
 	text-align: center;
 	padding-left: 0;
 	padding-right: 0;
+	flex: 1;
 }
 
-.cwf-step-title {
+.cwf-stepview-title {
 	margin-right: 10px;
 }
 
-.cwf-step-title:empty {
+.cwf-stepview-title:empty {
 	display: none;
 }
 
-.cwf-step-button.btn-primary {
+.cwf-stepview-button.btn-primary {
 	outline: solid 1px;
 }
 
-.cwf-step-button:hover {
+.cwf-stepview-button:hover {
 	outline: 2px solid #CDE9FD;
 }
 
-.cwf-step-separator:after {
+.cwf-stepview-separator:after {
 	margin: 0 5px 0 5px;
   	font-family: 'Glyphicons Halflings';
   	font-size: 50%;
 	content: "\e080\e080";
 }
 
-.cwf-step-nonav .cwf-step-separator:after {
+.cwf-stepview-nonav .cwf-stepview-taskbar-left .cwf-link {
 	visibility: hidden;
 	margin: 0;
+}
+
+.cwf-stepview-home-selected {
+    border: 1px solid lightgray!important;
+    border-radius: 5px;
 }
 
 .cwf-propertygrid > .panel-body {
