@@ -10,4 +10,14 @@
 	<name>CWF UI Mockup Plugin</name>
 	<artifactId>org.carewebframework.plugin.mockup</artifactId>
 	
+	<properties>
+		<webjar.name>cwf-mockup</webjar.name>
+		<systemjs>
+			{
+				'map': {
+					'gliffy': 'gliffy/diagramEmbed.js'
+				}
+			}
+		</systemjs>
+	</properties>
 </project>
