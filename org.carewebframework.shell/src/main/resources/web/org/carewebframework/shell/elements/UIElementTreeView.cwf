@@ -1,11 +1,10 @@
 <namespace width="100%" height="100%" style="display:block">
 	<paneview orientation="horizontal" style="display:flex">
-		<pane name="selectorPane" splittable="true"
-			width="200px">
-			<div name="selector" height="100%" width="100%" class="cwf-treeview" />
+		<pane name="selectorPane" splittable="true" width="200px">
+			<div name="selector" class="cwf-treeview-selector" />
 		</pane>
 		<pane flex="1">
-			<div name="innerPane" height="100%" width="100%" />
+			<div name="innerPane" class="cwf-treeview-pane" />
 		</pane>
 	</paneview>
 </namespace>

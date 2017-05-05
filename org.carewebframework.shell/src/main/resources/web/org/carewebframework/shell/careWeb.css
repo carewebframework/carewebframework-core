@@ -86,10 +86,17 @@
     min-width: 80px;
 }
 
-.cwf-treeview {
+.cwf-treeview-selector {
 	overflow: auto;
+	height: 100%;
+	width: 100%;
 }
 
+.cwf-treeview-pane {
+    height: 100%;
+    width: 100%;
+    display: flex;
+}
 .cwf-treeview-node {
 	text-align: left;
 	display: block;

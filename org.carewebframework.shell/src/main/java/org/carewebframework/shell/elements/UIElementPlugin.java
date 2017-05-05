@@ -842,6 +842,14 @@ public class UIElementPlugin extends UIElementBase implements IDisable, IPropert
     }
 
     /**
+     * Set background color on container's first child.
+     */
+    @Override
+    protected void applyColor() {
+        applyColor((BaseUIComponent) container.getFirstChild());
+    }
+    
+    /**
      * Returns the shell instance that hosts this container.
      *
      * @return The shell instance.

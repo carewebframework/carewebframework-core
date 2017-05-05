@@ -62,59 +62,59 @@ import org.carewebframework.web.page.PageUtil;
  * This is the base class for all UI elements supported by the CareWeb framework.
  */
 public abstract class UIElementBase {
-    
+
     protected static final Log log = LogFactory.getLog(UIElementBase.class);
-    
+
     private static final String ATTR_PREFIX = UIElementBase.class.getName() + ".";
-    
+
     private static final String ASSOC_ELEMENT = ATTR_PREFIX + "AssociatedUIElement";
-    
+
     private static final String CONTEXT_MENU = ATTR_PREFIX + "ContextMenu";
-    
+
     private static final RelatedClassMap allowedParentClasses = new RelatedClassMap();
-    
+
     private static final RelatedClassMap allowedChildClasses = new RelatedClassMap();
-    
+
     private final NotificationListeners parentListeners = new NotificationListeners();
-    
+
     private final NotificationListeners childListeners = new NotificationListeners();
-    
+
     private final List<UIElementBase> children = new ArrayList<>();
-    
+
     protected int maxChildren = 1;
-    
+
     protected boolean autoHide = true;
-    
+
     protected boolean autoEnable = true;
-    
+
     private UIElementBase parent;
-    
+
     private boolean locked;
-    
+
     private boolean enabled = true;
-    
+
     private boolean activated;
-    
+
     private boolean visible = true;
-    
+
     private PluginDefinition definition;
-    
+
     private boolean designMode;
-    
+
     private final DesignMask mask;
-    
+
     private BaseUIComponent innerComponent;
-    
+
     private BaseUIComponent outerComponent;
-    
+
     private String rejectReason;
-    
+
     private String hint;
-    
+
     private String color;
-    
+
     private IEventManager eventManager;
-    
+
     /**
      * A UIElementBase subclass should call this in its static initializer block to register any
      * subclasses that may act as a parent.
@@ -126,7 +126,7 @@ public abstract class UIElementBase {
                                                                   Class<? extends UIElementBase> parentClass) {
         allowedParentClasses.addRelated(clazz, parentClass);
     }
-    
+
     /**
      * A UIElementBase subclass should call this in its static initializer block to register any
      * subclasses that may be a child.
@@ -138,7 +138,7 @@ public abstract class UIElementBase {
                                                                  Class<? extends UIElementBase> childClass) {
         allowedChildClasses.addRelated(clazz, childClass);
     }
-    
+
     /**
      * Returns true if childClass can be a child of the parentClass.
      *
@@ -150,7 +150,7 @@ public abstract class UIElementBase {
                                          Class<? extends UIElementBase> childClass) {
         return allowedChildClasses.isRelated(parentClass, childClass);
     }
-    
+
     /**
      * Returns true if parentClass can be a parent of childClass.
      *
@@ -162,7 +162,7 @@ public abstract class UIElementBase {
                                           Class<? extends UIElementBase> parentClass) {
         return allowedParentClasses.isRelated(childClass, parentClass);
     }
-    
+
     /**
      * Returns the UI element that registered the CWF component.
      *
@@ -172,7 +172,7 @@ public abstract class UIElementBase {
     public static UIElementBase getAssociatedUIElement(BaseComponent component) {
         return component == null ? null : (UIElementBase) component.getAttribute(ASSOC_ELEMENT);
     }
-    
+
     /**
      * Returns the design context menu currently bound to the component.
      *
@@ -182,11 +182,11 @@ public abstract class UIElementBase {
     public static Menupopup getDesignContextMenu(BaseComponent component) {
         return component == null ? null : (Menupopup) component.getAttribute(CONTEXT_MENU);
     }
-    
+
     public UIElementBase() {
         mask = new DesignMask(this);
     }
-    
+
     /**
      * Returns the URL of the default template to use in createFromTemplate. Override this method to
      * provide an alternate default URL.
@@ -196,7 +196,7 @@ public abstract class UIElementBase {
     protected String getTemplateUrl() {
         return "web/" + getClass().getName().replace(".", "/") + ".cwf";
     }
-    
+
     /**
      * Create wrapped component(s) from a template (a cwf page). Performs autowiring of variables
      * and events. The template URL is derived from the class name. For example, if the class is
@@ -208,7 +208,7 @@ public abstract class UIElementBase {
     protected BaseUIComponent createFromTemplate() {
         return createFromTemplate(null);
     }
-    
+
     /**
      * Create wrapped component(s) from specified template (a cwf page). Performs autowiring of
      * variables and events.
@@ -221,7 +221,7 @@ public abstract class UIElementBase {
     protected BaseUIComponent createFromTemplate(String template) {
         return createFromTemplate(template, null, this);
     }
-    
+
     /**
      * Create wrapped component(s) from specified template (a cwf page).
      *
@@ -237,19 +237,19 @@ public abstract class UIElementBase {
         } else if (!template.startsWith("web/")) {
             template = CWFUtil.getResourcePath(getClass()) + template;
         }
-        
+
         BaseUIComponent top = null;
-        
+
         try {
             top = (BaseUIComponent) PageUtil.createPage(template, parent).get(0);
             top.wireController(controller);
         } catch (Exception e) {
             UIException.raise("Error creating element from template.", e);
         }
-        
+
         return top;
     }
-    
+
     /**
      * Associates the specified CWF component with this UI element.
      *
@@ -260,7 +260,7 @@ public abstract class UIElementBase {
             component.setAttribute(ASSOC_ELEMENT, this);
         }
     }
-    
+
     /**
      * Returns design mode status.
      *
@@ -269,7 +269,7 @@ public abstract class UIElementBase {
     public boolean isDesignMode() {
         return designMode;
     }
-    
+
     /**
      * Sets design mode status for this component and all its children.
      *
@@ -278,15 +278,15 @@ public abstract class UIElementBase {
     public void setDesignMode(boolean designMode) {
         this.designMode = designMode;
         setDesignContextMenu(designMode ? DesignContextMenu.getInstance().getMenupopup() : null);
-        
+
         for (UIElementBase child : children) {
             child.setDesignMode(designMode);
         }
-        
+
         updateState();
         mask.update();
     }
-    
+
     /**
      * Apply/remove the design context menu to/from CWF components. This default implementation
      * applies the design context menu to the outer CWF component only. It may be overridden to
@@ -297,7 +297,7 @@ public abstract class UIElementBase {
     protected void setDesignContextMenu(Menupopup contextMenu) {
         setDesignContextMenu(getOuterComponent(), contextMenu);
     }
-    
+
     /**
      * Apply/remove the design context menu to/from the specified component. If applying the design
      * context menu, any existing context menu is saved. When removing the context menu, any saved
@@ -308,7 +308,7 @@ public abstract class UIElementBase {
      */
     protected void setDesignContextMenu(BaseUIComponent component, Menupopup contextMenu) {
         component.setAttribute(CONTEXT_MENU, contextMenu);
-        
+
         if (contextMenu == null) {
             SavedState.restore(component);
             applyHint();
@@ -318,7 +318,7 @@ public abstract class UIElementBase {
             component.setHint(getDefinition().getName());
         }
     }
-    
+
     /**
      * Returns the component that will receive the design mode mask. Override if necessary.
      *
@@ -327,18 +327,18 @@ public abstract class UIElementBase {
     public BaseUIComponent getMaskTarget() {
         return getOuterComponent();
     }
-    
+
     /**
      * Updates mask for this element and its children.
      */
     private void updateMasks() {
         mask.update();
-        
+
         for (UIElementBase child : getChildren()) {
             child.updateMasks();
         }
     }
-    
+
     /**
      * Adds the specified child element. The validity of the operation is first tested and an
      * exception thrown if the element is not a valid child for this parent.
@@ -348,7 +348,7 @@ public abstract class UIElementBase {
     public void addChild(UIElementBase child) {
         addChild(child, true);
     }
-    
+
     /**
      * Adds the specified child element. The validity of the operation is first tested and an
      * exception thrown if the element is not a valid child for this parent.
@@ -360,27 +360,27 @@ public abstract class UIElementBase {
         if (!child.canAcceptParent(this)) {
             UIException.raise(child.rejectReason);
         }
-        
+
         if (!canAcceptChild(child)) {
             UIException.raise(rejectReason);
         }
-        
+
         if (doEvent) {
             beforeAddChild(child);
         }
-        
+
         if (child.getParent() != null) {
             child.getParent().removeChild(child, false);
         }
-        
+
         children.add(child);
         child.updateParent(this);
-        
+
         if (doEvent) {
             afterAddChild(child);
         }
     }
-    
+
     /**
      * Called after a child is logically added to the parent.
      *
@@ -389,7 +389,7 @@ public abstract class UIElementBase {
     protected void afterAddChild(UIElementBase child) {
         mask.update();
     }
-    
+
     /**
      * Called before a child is logically added to the parent.
      *
@@ -397,7 +397,7 @@ public abstract class UIElementBase {
      */
     protected void beforeAddChild(UIElementBase child) {
     }
-    
+
     /**
      * Removes the specified element as a child of this parent.
      *
@@ -408,17 +408,17 @@ public abstract class UIElementBase {
         if (!children.contains(child)) {
             return;
         }
-        
+
         boolean isLocked = child.isLocked() || child.getDefinition().isInternal();
-        
+
         if (destroy) {
             child.removeChildren();
-            
+
             if (!isLocked) {
                 child.destroy();
             }
         }
-        
+
         if (!isLocked) {
             beforeRemoveChild(child);
             children.remove(child);
@@ -426,7 +426,7 @@ public abstract class UIElementBase {
             afterRemoveChild(child);
         }
     }
-    
+
     /**
      * Called after a child is logically removed from the parent.
      *
@@ -435,7 +435,7 @@ public abstract class UIElementBase {
     protected void afterRemoveChild(UIElementBase child) {
         mask.update();
     }
-    
+
     /**
      * Called before a child is logically removed from the parent.
      *
@@ -443,7 +443,7 @@ public abstract class UIElementBase {
      */
     protected void beforeRemoveChild(UIElementBase child) {
     }
-    
+
     /**
      * Changes the assigned parent, firing parent changed events if appropriate.
      *
@@ -451,32 +451,32 @@ public abstract class UIElementBase {
      */
     private void updateParent(UIElementBase newParent) {
         UIElementBase oldParent = this.parent;
-        
+
         if (oldParent != newParent) {
             beforeParentChanged(newParent);
-            
+
             if (parent != null && !getDefinition().isInternal()) {
                 unbind();
             }
-            
+
             this.parent = newParent;
-            
+
             if (oldParent != null) {
                 oldParent.updateState();
             }
-            
+
             if (newParent != null) {
                 if (parent != null && !getDefinition().isInternal()) {
                     bind();
                 }
-                
+
                 afterParentChanged(oldParent);
                 newParent.updateState();
                 setDesignMode(newParent.isDesignMode());
             }
         }
     }
-    
+
     /**
      * Called after the parent has been changed.
      *
@@ -484,7 +484,7 @@ public abstract class UIElementBase {
      */
     protected void afterParentChanged(UIElementBase oldParent) {
     }
-    
+
     /**
      * Called before the parent has been changed.
      *
@@ -492,7 +492,7 @@ public abstract class UIElementBase {
      */
     protected void beforeParentChanged(UIElementBase newParent) {
     }
-    
+
     /**
      * Removes this element from its parent and optionally destroys it.
      *
@@ -503,7 +503,7 @@ public abstract class UIElementBase {
             parent.removeChild(this, destroy);
         }
     }
-    
+
     /**
      * Remove and destroy all children associated with this element.
      */
@@ -512,7 +512,7 @@ public abstract class UIElementBase {
             removeChild(children.get(i), true);
         }
     }
-    
+
     /**
      * Override to implement special cleanup when an object is destroyed.
      */
@@ -520,21 +520,21 @@ public abstract class UIElementBase {
         unbind();
         processResources(false);
     }
-    
+
     /**
      * Override to bind wrapped components to the UI.
      */
     protected void bind() {
         getParent().getInnerComponent().addChild(getOuterComponent());
     }
-    
+
     /**
      * Override to unbind wrapped components from the UI.
      */
     protected void unbind() {
         getOuterComponent().destroy();
     }
-    
+
     /**
      * Rebind any children. This may be called if the wrapped UI component is recreated.
      */
@@ -544,7 +544,7 @@ public abstract class UIElementBase {
             child.bind();
         }
     }
-    
+
     /**
      * Returns the innermost wrapped UI component. For UI elements that may host child elements,
      * this would be the wrapped UI component that can host the child components. For UI elements
@@ -556,7 +556,7 @@ public abstract class UIElementBase {
     public BaseUIComponent getInnerComponent() {
         return innerComponent == null ? outerComponent : innerComponent;
     }
-    
+
     /**
      * Sets the innermost wrapped UI component.
      *
@@ -566,7 +566,7 @@ public abstract class UIElementBase {
         innerComponent = value;
         associateComponent(value);
     }
-    
+
     /**
      * Returns the outermost wrapped UI component. This represents the wrapped UI component that
      * will be the direct child of the UI component wrapped by the parent element. For UI elements
@@ -578,7 +578,7 @@ public abstract class UIElementBase {
     public BaseUIComponent getOuterComponent() {
         return outerComponent == null ? innerComponent : outerComponent;
     }
-    
+
     /**
      * Sets the outermost wrapped UI component.
      *
@@ -588,7 +588,7 @@ public abstract class UIElementBase {
         outerComponent = value;
         associateComponent(value);
     }
-    
+
     /**
      * Return the definition used to create this instance.
      *
@@ -598,10 +598,10 @@ public abstract class UIElementBase {
         if (definition == null) {
             setDefinition(getClass());
         }
-        
+
         return definition;
     }
-    
+
     /**
      * Sets the plugin definition for this element.
      *
@@ -612,17 +612,17 @@ public abstract class UIElementBase {
             if (this.definition == definition) {
                 return;
             }
-            
+
             UIException.raise("Cannot modify plugin definition.");
         }
-        
+
         this.definition = definition;
-        
+
         // Assign any default property values.
         if (definition != null) {
             for (PropertyInfo propInfo : definition.getProperties()) {
                 String dflt = propInfo.getDefault();
-                
+
                 if (dflt != null) {
                     try {
                         propInfo.setPropertyValue(this, dflt);
@@ -633,7 +633,7 @@ public abstract class UIElementBase {
             }
         }
     }
-    
+
     /**
      * Sets the plugin definition based on the specified class. Typically this would be the same
      * class as the element itself, but in certain cases (as in the UIElementProxy class) it is not.
@@ -643,14 +643,14 @@ public abstract class UIElementBase {
     public void setDefinition(Class<? extends UIElementBase> clazz) {
         setDefinition(PluginRegistry.getInstance().get(clazz));
     }
-    
+
     /**
      * Displays an about dialog for the UI element.
      */
     public void about() {
         AboutDialog.execute(this);
     }
-    
+
     /**
      * Invokes the property grid with this element as its target.
      */
@@ -661,7 +661,7 @@ public abstract class UIElementBase {
             DialogUtil.showError("Displaying property grid: \r\n" + e.toString());
         }
     }
-    
+
     /**
      * Set width and height of a component to 100%.
      *
@@ -671,7 +671,7 @@ public abstract class UIElementBase {
         component.setWidth("100%");
         component.setHeight("100%");
     }
-    
+
     /**
      * Activates or inactivates a UI element. In general, this method should not be overridden to
      * introduce new behavior. Rather, if a UI element must change its visual state in response to a
@@ -687,12 +687,12 @@ public abstract class UIElementBase {
         updateVisibility();
         getEventManager().fireLocalEvent(
             activate ? LayoutConstants.EVENT_ELEMENT_ACTIVATE : LayoutConstants.EVENT_ELEMENT_INACTIVATE, this);
-        
+
         if (activate) {
             mask.update();
         }
     }
-    
+
     /**
      * Default behavior is to pass activation/inactivation event to children. Override to restrict
      * propagation of the event.
@@ -704,7 +704,7 @@ public abstract class UIElementBase {
             child.activate(activate);
         }
     }
-    
+
     /**
      * Returns the activation status of the element.
      *
@@ -713,7 +713,7 @@ public abstract class UIElementBase {
     public final boolean isActivated() {
         return activated;
     }
-    
+
     /**
      * Returns instance of the event manager.
      *
@@ -723,10 +723,10 @@ public abstract class UIElementBase {
         if (eventManager == null) {
             eventManager = EventManager.getInstance();
         }
-        
+
         return eventManager;
     }
-    
+
     /**
      * Gets the UI element child at the specified index.
      *
@@ -736,7 +736,7 @@ public abstract class UIElementBase {
     public UIElementBase getChild(int index) {
         return children.get(index);
     }
-    
+
     /**
      * Locates and returns a child that is an instance of the specified class. If none is found,
      * returns null.
@@ -750,16 +750,16 @@ public abstract class UIElementBase {
     @SuppressWarnings("unchecked")
     public <T extends UIElementBase> T getChild(Class<T> clazz, UIElementBase last) {
         int i = last == null ? -1 : children.indexOf(last);
-        
+
         for (i++; i < children.size(); i++) {
             if (clazz.isInstance(children.get(i))) {
                 return (T) children.get(i);
             }
         }
-        
+
         return null;
     }
-    
+
     /**
      * Returns an iterable of this component's children.
      *
@@ -768,7 +768,7 @@ public abstract class UIElementBase {
     public Iterable<UIElementBase> getChildren() {
         return children;
     }
-    
+
     /**
      * Returns an iterable of this component's children.
      *
@@ -779,7 +779,7 @@ public abstract class UIElementBase {
     public <T extends UIElementBase> Iterable<T> getChildren(Class<T> clazz) {
         return (Iterable<T>) children;
     }
-    
+
     /**
      * Returns an iterable of this component's serializable children. By default, this calls
      * getChildren() but may be overridden to accommodate specialized serialization needs.
@@ -789,7 +789,7 @@ public abstract class UIElementBase {
     public Iterable<UIElementBase> getSerializableChildren() {
         return getChildren();
     }
-    
+
     /**
      * Returns the number of children.
      *
@@ -798,7 +798,7 @@ public abstract class UIElementBase {
     public int getChildCount() {
         return children.size();
     }
-    
+
     /**
      * Returns the first child, or null if there are no children.
      *
@@ -807,7 +807,7 @@ public abstract class UIElementBase {
     public UIElementBase getFirstChild() {
         return getChildCount() == 0 ? null : getChild(0);
     }
-    
+
     /**
      * Returns the first visible child.
      *
@@ -816,7 +816,7 @@ public abstract class UIElementBase {
     public UIElementBase getFirstVisibleChild() {
         return getVisibleChild(true);
     }
-    
+
     /**
      * Returns the last child, or null if there are no children.
      *
@@ -825,7 +825,7 @@ public abstract class UIElementBase {
     public UIElementBase getLastChild() {
         return getChildCount() == 0 ? null : getChild(getChildCount() - 1);
     }
-    
+
     /**
      * Returns the last visible child.
      *
@@ -834,7 +834,7 @@ public abstract class UIElementBase {
     public UIElementBase getLastVisibleChild() {
         return getVisibleChild(false);
     }
-    
+
     /**
      * Returns first or last visible child.
      *
@@ -845,16 +845,16 @@ public abstract class UIElementBase {
         int start = first ? 0 : getChildCount() - 1;
         int end = first ? getChildCount() - 1 : 0;
         int inc = first ? 1 : -1;
-        
+
         for (int i = start; i <= end; i += inc) {
             if (getChild(i).isVisible()) {
                 return getChild(i);
             }
         }
-        
+
         return null;
     }
-    
+
     /**
      * Returns this element's next sibling.
      *
@@ -863,7 +863,7 @@ public abstract class UIElementBase {
      */
     public UIElementBase getNextSibling(boolean visibleOnly) {
         List<UIElementBase> sibs = parent == null ? null : parent.children;
-        
+
         if (sibs != null) {
             for (int i = sibs.indexOf(this) + 1; i < sibs.size(); i++) {
                 if (!visibleOnly || sibs.get(i).isVisible()) {
@@ -871,10 +871,10 @@ public abstract class UIElementBase {
                 }
             }
         }
-        
+
         return null;
     }
-    
+
     /**
      * Returns the index of the specified child. If the specified component is not a child, -1 is
      * returned.
@@ -885,7 +885,7 @@ public abstract class UIElementBase {
     public int indexOfChild(UIElementBase child) {
         return children.indexOf(child);
     }
-    
+
     /**
      * Returns true if the specified element is a child of this element.
      *
@@ -895,7 +895,7 @@ public abstract class UIElementBase {
     public boolean hasChild(UIElementBase element) {
         return indexOfChild(element) > -1;
     }
-    
+
     /**
      * Recurses the component subtree for a child belonging to the specified class.
      *
@@ -910,18 +910,18 @@ public abstract class UIElementBase {
                 return (T) child;
             }
         }
-        
+
         for (UIElementBase child : getChildren()) {
             T child2 = child.findChildElement(clazz);
-            
+
             if (child2 != null) {
                 return child2;
             }
         }
-        
+
         return null;
     }
-    
+
     /**
      * Returns true if specified element is an ancestor of this element.
      *
@@ -930,17 +930,17 @@ public abstract class UIElementBase {
      */
     public boolean hasAncestor(UIElementBase element) {
         UIElementBase child = this;
-        
+
         while (child != null) {
             if (element.hasChild(child)) {
                 return true;
             }
             child = child.getParent();
         }
-        
+
         return false;
     }
-    
+
     /**
      * Returns this element's index in its parent's list of children. If this element has no parent,
      * returns -1.
@@ -950,7 +950,7 @@ public abstract class UIElementBase {
     public int getIndex() {
         return parent == null ? -1 : parent.indexOfChild(this);
     }
-    
+
     /**
      * Moves a child from one position to another under the same parent.
      *
@@ -968,7 +968,7 @@ public abstract class UIElementBase {
             updateMasks();
         }
     }
-    
+
     /**
      * Element has been moved to a different position under this parent. Adjust wrapped components
      * accordingly.
@@ -979,7 +979,7 @@ public abstract class UIElementBase {
     protected void afterMoveChild(UIElementBase child, UIElementBase before) {
         moveChild(child.getOuterComponent(), before.getOuterComponent());
     }
-    
+
     /**
      * Sets this element's index to the specified value. This effectively changes the position of
      * the element relative to its siblings.
@@ -988,20 +988,20 @@ public abstract class UIElementBase {
      */
     public void setIndex(int index) {
         UIElementBase parent = getParent();
-        
+
         if (parent == null) {
             UIException.raise("Element has no parent.");
         }
-        
+
         int currentIndex = parent.children.indexOf(this);
-        
+
         if (currentIndex < 0 || currentIndex == index) {
             return;
         }
-        
+
         parent.moveChild(currentIndex, index);
     }
-    
+
     /**
      * Brings this element to the front of the user interface.
      */
@@ -1012,7 +1012,7 @@ public abstract class UIElementBase {
             activate(true);
         }
     }
-    
+
     /**
      * Returns the display name of this element. By default, the definition name is returned, but
      * subclasses may override this to return some other name suitable for display in the design UI.
@@ -1022,7 +1022,7 @@ public abstract class UIElementBase {
     public String getDisplayName() {
         return getDefinition().getName();
     }
-    
+
     /**
      * Returns the instance name of this element. By default, this is the same as the display name,
      * but subclasses may override this to provide additional information that would distinguish
@@ -1033,7 +1033,7 @@ public abstract class UIElementBase {
     public String getInstanceName() {
         return getDisplayName();
     }
-    
+
     /**
      * Returns the class of the property editor associated with this UI element. Null means no
      * property editor exists.
@@ -1043,7 +1043,7 @@ public abstract class UIElementBase {
     public Class<? extends Object> getPropEditClass() {
         return null;
     }
-    
+
     /**
      * Returns true if the element is locked. When an element is locked, it may not be manipulated
      * within the designer.
@@ -1053,7 +1053,7 @@ public abstract class UIElementBase {
     public boolean isLocked() {
         return locked;
     }
-    
+
     /**
      * Sets the locked status of the element. When an element is locked, it may not be manipulated
      * within the designer.
@@ -1063,7 +1063,7 @@ public abstract class UIElementBase {
     public void setLocked(boolean locked) {
         this.locked = locked;
     }
-    
+
     /**
      * Returns the parent of this element. May be null.
      *
@@ -1072,7 +1072,7 @@ public abstract class UIElementBase {
     public UIElementBase getParent() {
         return parent;
     }
-    
+
     /**
      * Sets the parent of this element, subject to the parent/child constraints applicable to each.
      *
@@ -1080,20 +1080,20 @@ public abstract class UIElementBase {
      */
     public final void setParent(UIElementBase parent) {
         UIElementBase oldParent = this.parent;
-        
+
         if (oldParent == parent) {
             return;
         }
-        
+
         if (oldParent != null) {
             oldParent.removeChild(this, false);
         }
-        
+
         if (parent != null) {
             parent.addChild(this);
         }
     }
-    
+
     /**
      * Sets the enabled state of the component. This base implementation only sets the internal flag
      * and notifies the parent of the state change. Each UI element is responsible for overriding
@@ -1107,7 +1107,7 @@ public abstract class UIElementBase {
             updateParentState();
         }
     }
-    
+
     /**
      * Returns the enabled state of the UI element.
      *
@@ -1116,7 +1116,7 @@ public abstract class UIElementBase {
     public final boolean isEnabled() {
         return enabled;
     }
-    
+
     /**
      * Sets the visibility state of the component. This base implementation only sets the internal
      * flag and notifies the parent of the state change. Each UI element is responsible for
@@ -1131,14 +1131,14 @@ public abstract class UIElementBase {
             updateParentState();
         }
     }
-    
+
     /**
      * Calls updateVisibility with current settings.
      */
     protected final void updateVisibility() {
         updateVisibility(visible, activated);
     }
-    
+
     /**
      * Override to set the visibility of wrapped components. Invoked when visibility or activation
      * states change.
@@ -1151,7 +1151,7 @@ public abstract class UIElementBase {
             getOuterComponent().setVisible(visible && activated);
         }
     }
-    
+
     /**
      * Moves a child to before another component.
      *
@@ -1161,7 +1161,7 @@ public abstract class UIElementBase {
     protected void moveChild(BaseUIComponent child, BaseUIComponent before) {
         child.getParent().addChild(child, before);
     }
-    
+
     /**
      * Returns the visible state of the UI element.
      *
@@ -1170,7 +1170,7 @@ public abstract class UIElementBase {
     public final boolean isVisible() {
         return visible;
     }
-    
+
     /**
      * Returns the color (as an HTML-formatted RGB string) for this element.
      *
@@ -1179,7 +1179,7 @@ public abstract class UIElementBase {
     public final String getColor() {
         return color;
     }
-    
+
     /**
      * Provides a default implementation for setting the color of a UI element. This is provided to
      * allow components to easily expose a color property in the property editor. It may not be
@@ -1192,19 +1192,19 @@ public abstract class UIElementBase {
         color = value;
         applyColor();
     }
-    
+
     /**
      * Provides a default implementation for setting the color of a UI element. Sets the color of
      * the inner and outer components. Override to modify this default behavior.
      */
     protected void applyColor() {
         applyColor(getOuterComponent());
-        
+
         if (getInnerComponent() != getOuterComponent()) {
             applyColor(getInnerComponent());
         }
     }
-    
+
     /**
      * Applies the current color setting to the target component. If the target implements a custom
      * method for performing this operation, that method will be invoked. Otherwise, the background
@@ -1215,11 +1215,11 @@ public abstract class UIElementBase {
     protected void applyColor(BaseUIComponent comp) {
         if (comp instanceof BaseLabeledComponent) {
             comp.invoke(comp.sub("lbl"), "css", "color", getColor());
-        } else {
+        } else if (comp != null) {
             comp.addStyle("background-color", getColor());
         }
     }
-    
+
     /**
      * Returns the tool tip text.
      *
@@ -1228,7 +1228,7 @@ public abstract class UIElementBase {
     public final String getHint() {
         return hint;
     }
-    
+
     /**
      * Sets the tool tip text.
      *
@@ -1238,7 +1238,7 @@ public abstract class UIElementBase {
         this.hint = value;
         applyHint();
     }
-    
+
     /**
      * Provides a default implementation for setting the hint text of a UI element. Sets the hint
      * text of the inner and outer components. Override to modify this default behavior.
@@ -1247,14 +1247,14 @@ public abstract class UIElementBase {
         if (isDesignMode()) {
             return;
         }
-        
+
         applyHint(getOuterComponent());
-        
+
         if (getInnerComponent() != getOuterComponent()) {
             applyHint(getInnerComponent());
         }
     }
-    
+
     /**
      * Applies the current hint text to the target component.
      *
@@ -1263,7 +1263,7 @@ public abstract class UIElementBase {
     protected void applyHint(BaseUIComponent comp) {
         comp.setHint(getHint());
     }
-    
+
     /**
      * Calls updateState on the parent if one exists.
      */
@@ -1272,7 +1272,7 @@ public abstract class UIElementBase {
             parent.updateState();
         }
     }
-    
+
     /**
      * Update a UI element based on the state of its children. The default implementation acts on
      * container elements only and has the following behavior:
@@ -1287,23 +1287,23 @@ public abstract class UIElementBase {
         if (!isContainer()) {
             return;
         }
-        
+
         boolean anyEnabled = !autoEnable || getChildCount() == 0;
         boolean anyVisible = !autoHide || designMode;
-        
+
         for (UIElementBase child : children) {
             if (anyEnabled && anyVisible) {
                 break;
             }
-            
+
             anyEnabled |= child.isEnabled();
             anyVisible |= child.isVisible();
         }
-        
+
         setEnabled(anyEnabled);
         setVisible(anyVisible);
     }
-    
+
     /**
      * Returns true if this UI element can contain other UI elements.
      *
@@ -1312,7 +1312,7 @@ public abstract class UIElementBase {
     public boolean isContainer() {
         return allowedChildClasses.hasRelated(getClass());
     }
-    
+
     /**
      * Returns true if this element may accept a child. Updates the reject reason with the result.
      *
@@ -1326,10 +1326,10 @@ public abstract class UIElementBase {
         } else {
             rejectReason = null;
         }
-        
+
         return rejectReason == null;
     }
-    
+
     /**
      * Returns true if this element may accept a child of the specified class. Updates the reject
      * reason with the result.
@@ -1341,16 +1341,16 @@ public abstract class UIElementBase {
         if (!canAcceptChild()) {
             return false;
         }
-        
+
         if (!canAcceptChild(getClass(), clazz)) {
             rejectReason = getDisplayName() + " does not accept " + clazz.getSimpleName() + " as a child.";
         } else {
             rejectReason = null;
         }
-        
+
         return rejectReason == null;
     }
-    
+
     /**
      * Returns true if this element may accept the specified child. Updates the reject reason with
      * the result.
@@ -1362,16 +1362,16 @@ public abstract class UIElementBase {
         if (!canAcceptChild()) {
             return false;
         }
-        
+
         if (!canAcceptChild(getClass(), child.getClass())) {
             rejectReason = getDisplayName() + " does not accept " + child.getDisplayName() + " as a child.";
         } else {
             rejectReason = null;
         }
-        
+
         return rejectReason == null;
     }
-    
+
     /**
      * Returns true if this element may accept a parent. Updates the reject reason with the result.
      *
@@ -1382,7 +1382,7 @@ public abstract class UIElementBase {
                 ? getDisplayName() + " does not accept any parent component." : null;
         return rejectReason == null;
     }
-    
+
     /**
      * Returns true if this element may accept a parent of the specified class. Updates the reject
      * reason with the result.
@@ -1396,10 +1396,10 @@ public abstract class UIElementBase {
         } else {
             rejectReason = null;
         }
-        
+
         return rejectReason == null;
     }
-    
+
     /**
      * Returns true if this element may accept the specified element as a parent. Updates the reject
      * reason with the result.
@@ -1411,16 +1411,16 @@ public abstract class UIElementBase {
         if (!canAcceptParent()) {
             return false;
         }
-        
+
         if (!canAcceptParent(getClass(), parent.getClass())) {
             rejectReason = getDisplayName() + " does not accept " + parent.getDisplayName() + " as a parent.";
         } else {
             rejectReason = null;
         }
-        
+
         return rejectReason == null;
     }
-    
+
     /**
      * Sets the reject reason to the specified value.
      *
@@ -1429,7 +1429,7 @@ public abstract class UIElementBase {
     public void setRejectReason(String rejectReason) {
         this.rejectReason = rejectReason;
     }
-    
+
     /**
      * Returns the reject reason. This is updated by the canAcceptParent and canAcceptChild calls.
      *
@@ -1438,7 +1438,7 @@ public abstract class UIElementBase {
     public String getRejectReason() {
         return rejectReason;
     }
-    
+
     /**
      * Returns the UI element at the root of the component tree.
      *
@@ -1446,14 +1446,14 @@ public abstract class UIElementBase {
      */
     public UIElementBase getRoot() {
         UIElementBase root = this;
-        
+
         while (root.getParent() != null) {
             root = root.getParent();
         }
-        
+
         return root;
     }
-    
+
     /**
      * Returns the first ancestor corresponding to the specified class.
      *
@@ -1464,14 +1464,14 @@ public abstract class UIElementBase {
     @SuppressWarnings("unchecked")
     public <T extends UIElementBase> T getAncestor(Class<T> clazz) {
         UIElementBase parent = getParent();
-        
+
         while (parent != null && !clazz.isInstance(parent)) {
             parent = parent.getParent();
         }
-        
+
         return (T) parent;
     }
-    
+
     /**
      * Subclasses may override this to implement any additional operations that are necessary before
      * this element is initialized (i.e., before property values and parent element are set).
@@ -1480,9 +1480,9 @@ public abstract class UIElementBase {
      * @throws Exception Unspecified exception.
      */
     public void beforeInitialize(boolean deserializing) throws Exception {
-        
+
     }
-    
+
     /**
      * Subclasses may override this to implement any additional operations that are necessary after
      * this element is initialized (i.e., after property values and parent element are set).
@@ -1493,7 +1493,7 @@ public abstract class UIElementBase {
     public void afterInitialize(boolean deserializing) throws Exception {
         processResources(true);
     }
-    
+
     /**
      * Process all associated resources.
      *
@@ -1501,12 +1501,12 @@ public abstract class UIElementBase {
      */
     private void processResources(boolean register) {
         CareWebShell shell = CareWebUtil.getShell();
-        
+
         for (IPluginResource resource : getDefinition().getResources()) {
             resource.register(shell, this, register);
         }
     }
-    
+
     /**
      * Returns true if the design mode mask is to be used. This mask is used to cover the underlying
      * outer component when in design mode.
@@ -1516,7 +1516,7 @@ public abstract class UIElementBase {
     protected MaskMode getMaskMode() {
         return mask.getMode();
     }
-    
+
     /**
      * Sets whether to use the design mode mask.
      *
@@ -1525,7 +1525,7 @@ public abstract class UIElementBase {
     protected void setMaskMode(MaskMode mode) {
         mask.setMode(mode);
     }
-    
+
     /**
      * Returns true if any associated UI elements in the component subtree are visible.
      *
@@ -1535,19 +1535,19 @@ public abstract class UIElementBase {
     protected boolean hasVisibleElements(BaseUIComponent component) {
         for (BaseUIComponent child : component.getChildren(BaseUIComponent.class)) {
             UIElementBase ele = getAssociatedUIElement(child);
-            
+
             if (ele != null && ele.isVisible()) {
                 return true;
             }
-            
+
             if (hasVisibleElements(child)) {
                 return true;
             }
         }
-        
+
         return false;
     }
-    
+
     /**
      * Allows a child element to notify its parent of an event of interest.
      *
@@ -1557,13 +1557,13 @@ public abstract class UIElementBase {
      */
     public void notifyParent(String eventName, Object eventData, boolean recurse) {
         UIElementBase ele = parent;
-        
+
         while (ele != null) {
             recurse &= ele.parentListeners.notify(this, eventName, eventData);
             ele = recurse ? ele.parent : null;
         }
     }
-    
+
     /**
      * Register/unregister a child notification listener.
      *
@@ -1574,7 +1574,7 @@ public abstract class UIElementBase {
     protected void listenToChild(String eventName, INotificationListener listener) {
         parentListeners.register(eventName, listener);
     }
-    
+
     /**
      * Allows a parent element to notify its children of an event of interest.
      *
@@ -1585,7 +1585,7 @@ public abstract class UIElementBase {
     public void notifyChildren(String eventName, Object eventData, boolean recurse) {
         notifyChildren(this, eventName, eventData, recurse);
     }
-    
+
     private void notifyChildren(UIElementBase sender, String eventName, Object eventData, boolean recurse) {
         for (UIElementBase child : getChildren()) {
             if (child.childListeners.notify(sender, eventName, eventData) && recurse) {
@@ -1593,7 +1593,7 @@ public abstract class UIElementBase {
             }
         }
     }
-    
+
     /**
      * Register/unregister a parent notification listener.
      *
@@ -1604,5 +1604,5 @@ public abstract class UIElementBase {
     protected void listenToParent(String eventName, INotificationListener listener) {
         childListeners.register(eventName, listener);
     }
-    
+
 }
