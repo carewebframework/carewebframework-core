@@ -29,33 +29,45 @@ import org.carewebframework.api.spring.DomainPropertySource;
 import org.carewebframework.api.spring.LabelPropertySource;
 import org.carewebframework.ui.spring.AppContextFinder;
 import org.carewebframework.ui.spring.FrameworkAppContext;
+import org.carewebframework.web.component.Page;
+import org.carewebframework.web.test.MockConfig;
 import org.carewebframework.web.test.MockEnvironment;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.web.context.support.XmlWebApplicationContext;
 
 public class MockUIEnvironment extends MockEnvironment {
-
+    
     private static class MockAppContextFinder extends AppContextFinder {
-        
+
         static void setRootContext(ApplicationContext ctx) {
             rootContext = ctx;
         }
-    }
 
+        private static void initPage(Page page, ApplicationContext ctx) {
+            page.setAttribute(APP_CONTEXT_ATTRIB, ctx);
+        }
+    }
+    
     @Override
     protected XmlWebApplicationContext createApplicationContext() {
         return new FrameworkAppContext();
     }
-
+    
     @Override
-    protected XmlWebApplicationContext initAppContext(String[] profiles, String[] configLocations) throws Exception {
-        XmlWebApplicationContext ctx = super.initAppContext(profiles, configLocations);
-        ConfigurableEnvironment env = ctx.getEnvironment();
-        env.getPropertySources().addFirst(new LabelPropertySource());
-        env.getPropertySources().addLast(new DomainPropertySource(ctx));
-        MockAppContextFinder.setRootContext(ctx);
+    protected XmlWebApplicationContext initAppContext(MockConfig config, ApplicationContext parent) {
+        XmlWebApplicationContext ctx = super.initAppContext(config, parent);
+
+        if (parent == null) {
+            ConfigurableEnvironment env = ctx.getEnvironment();
+            env.getPropertySources().addFirst(new LabelPropertySource());
+            env.getPropertySources().addLast(new DomainPropertySource(ctx));
+            MockAppContextFinder.setRootContext(ctx);
+        } else {
+            MockAppContextFinder.initPage(getSession().getPage(), ctx);
+        }
+
         return ctx;
     }
-
+    
 }
