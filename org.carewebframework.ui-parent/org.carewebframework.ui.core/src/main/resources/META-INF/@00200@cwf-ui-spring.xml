@@ -13,7 +13,8 @@
 
 	<beans profile="root">
 
-		<!-- Allows access to a desktop-scoped bean in root context. -->
+		<!-- Allows access to a page-scoped bean in root context. -->
+		
 		<bean class="org.springframework.beans.factory.config.CustomScopeConfigurer">
 			<property name="scopes">
 				<map>
@@ -25,14 +26,17 @@
 		</bean>
 
 		<!-- Allows the application to locate the Spring application context. -->
+		
 		<bean id="appContextFinder" class="org.carewebframework.ui.spring.AppContextFinder"
 			cwf:override="always" />
 
 		<!-- Registry for thread listeners. -->
+		
 		<bean class="org.carewebframework.ui.thread.ThreadListenerRegistry"
 			factory-method="getInstance" />
 
 		<!-- Registry for shared icon libraries. -->
+		
 		<bean id="iconLibraryRegistry" class="org.carewebframework.ui.icon.IconLibraryRegistry"
 			factory-method="init">
 			<constructor-arg value="${org.carewebframework.icon.library.default}" />
@@ -40,18 +44,23 @@
 		</bean>
 
 		<!-- List of shortcut bindings for commands. -->
+		
 		<bean id="commandShortcuts" class="org.carewebframework.ui.command.CommandShortcuts">
 			<constructor-arg value="${org.carewebframework.location.shortcuts}" />
 		</bean>
 
 		<!-- Default controller for framework-aware applications. -->
+		
 		<bean id="frameworkController" class="org.carewebframework.ui.FrameworkController"
 			scope="prototype" />
 
 		<!-- Controller for exception dialog. -->
+		
 		<bean id="exceptionController" class="org.carewebframework.ui.ExceptionController"
 			scope="prototype" />
 
+		<!-- Action support -->
+		
 		<bean class="org.carewebframework.ui.action.ActionTypeRegistry" 
 			factory-method="getInstance" />
 		
@@ -61,44 +70,55 @@
 		
 		<bean class="org.carewebframework.ui.action.ActionTypeServerScript" />
 		
+		<!-- Client-side messaging support -->	
+		
+		<bean class="org.carewebframework.ui.messaging.PublishRequestHandler">
+			<constructor-arg ref="messageProducerService" />
+		</bean>
+		
+		<bean class="org.carewebframework.ui.messaging.SubscribeRequestHandler">
+			<constructor-arg ref="messageConsumerService" />
+		</bean>
+		
+		<!-- Component scans -->
+		
 		<cwc:component-scan package="org.carewebframework.ui.dialog" />
 		
 	</beans>
 
 	<beans profile="child">
-
+		<!-- Provides access to the active page -->
+		<bean id="cwf_Page" factory-method="getPage" class="org.carewebframework.web.client.ExecutionContext" />
+		
 		<!-- A registry of all supported commands. -->
 		<bean id="commandRegistry" class="org.carewebframework.ui.command.CommandRegistry">
 			<constructor-arg ref="commandShortcuts" />
 		</bean>
 
-		<!--
-		<bean id="desktopMonitor" class="org.carewebframework.ui.DesktopMonitor"
+		<!-- Monitors a page for inactivity -->
+		<bean id="pageMonitor" class="org.carewebframework.ui.PageMonitor"
 			init-method="init" destroy-method="tearDown">
-			<constructor-arg ref="desktop" />
-			<property name="maximumInactivityInterval"
-				value="${org.carewebframework.ui.desktop.inactivity.interval.maximum}" />
+			<constructor-arg ref="cwf_Page" />
 			<property name="countdownInterval"
-				value="${org.carewebframework.ui.desktop.countdown.interval}" />
+				value="${org.carewebframework.ui.page.countdown.interval}" />
 			<property name="baselineInactivityDuration"
-				value="${org.carewebframework.ui.desktop.inactivity.duration.baseline}" />
+				value="${org.carewebframework.ui.page.inactivity.duration.baseline}" />
 			<property name="lockInactivityDuration"
-				value="${org.carewebframework.ui.desktop.inactivity.duration.lock}" />
+				value="${org.carewebframework.ui.page.inactivity.duration.lock}" />
 			<property name="baselineCountdownDuration"
-				value="${org.carewebframework.ui.desktop.countdown.duration.baseline}" />
+				value="${org.carewebframework.ui.page.countdown.duration.baseline}" />
 			<property name="lockCountdownDuration"
-				value="${org.carewebframework.ui.desktop.countdown.duration.lock}" />
+				value="${org.carewebframework.ui.page.countdown.duration.lock}" />
 			<property name="securityService" ref="securityService" />
 			<property name="eventManager" ref="eventManager" />
 			<property name="autoLockingExclusions">
 				<bean class="org.springframework.util.StringUtils"
 					factory-method="commaDelimitedListToSet">
 					<constructor-arg type="java.lang.String"
-						value="${org.carewebframework.ui.desktop.autolocking.exclusions}" />
+						value="${org.carewebframework.ui.page.autolocking.exclusions}" />
 				</bean>
 			</property>
 		</bean>
-		-->
 		
 	</beans>
 </beans>

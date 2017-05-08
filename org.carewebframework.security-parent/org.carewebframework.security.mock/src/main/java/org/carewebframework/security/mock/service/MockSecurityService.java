@@ -23,34 +23,25 @@
  *
  * #L%
  */
-package org.carewebframework.ui;
+package org.carewebframework.security.mock.service;
 
-import org.carewebframework.ui.util.CWFUtil;
+import org.carewebframework.api.domain.IUser;
+import org.carewebframework.web.client.ClientUtil;
+import org.carewebframework.web.client.ExecutionContext;
 
-/**
- * Constants class
- */
-public class Constants {
-
-    /**
-     * Primarily used to locate the embedded 'web' resources.
-     */
-    public static final String RESOURCE_PREFIX = CWFUtil.getResourcePath(Constants.class);
-
-    /**
-     * Attribute name under which a component's associated composer is stored.
-     */
-    public static final String ATTR_COMPOSER = RESOURCE_PREFIX + ".composer";
-
-    /**
-     * Event for requesting a view update.
-     */
-    public static final String REFRESH_EVENT = "VIEW.REFRESH";
-
-    /**
-     * Enforce static class.
-     */
-    private Constants() {
+public class MockSecurityService extends org.carewebframework.api.security.mock.MockSecurityService {
+    
+    public MockSecurityService() {
+        super();
     }
 
+    public MockSecurityService(IUser mockUser) {
+        super(mockUser);
+    }
+
+    @Override
+    public void logout(boolean force, String target, String message) {
+        ClientUtil.redirect(ExecutionContext.getPage().getBrowserInfo("requestURL"));
+    }
+    
 }

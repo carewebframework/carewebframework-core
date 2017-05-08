@@ -210,18 +210,18 @@ public class PluginDefinition {
     }
     
     /**
-     * Returns the URL of the principal zul page for the plugin.
+     * Returns the URL of the principal cwf page for the plugin.
      * 
-     * @return The URL of the principal zul page.
+     * @return The URL of the principal cwf page.
      */
     public String getUrl() {
         return url;
     }
     
     /**
-     * Sets the URL of the principal zul page for the plugin.
+     * Sets the URL of the principal cwf page for the plugin.
      * 
-     * @param url The URL of the principal zul page.
+     * @param url The URL of the principal cwf page.
      */
     public void setUrl(String url) {
         this.url = url;

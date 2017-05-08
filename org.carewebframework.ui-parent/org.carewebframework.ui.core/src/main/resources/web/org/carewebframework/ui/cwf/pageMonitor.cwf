@@ -1,0 +1,29 @@
+<window class="cwf-pagemonitor" movable="false">
+	<style src="web/org/carewebframework/ui/cwf/pageMonitor.css"/>
+	<div class="cwf-layout-vertical">
+		<div name="timeoutPanel" class="cwf-pagemonitor-panel alert">
+			<label name="lblDuration" class="alert-link"/>
+			<button name="btnKeepOpen" class="flavor:btn-primary"
+				label="${@msg.cwf.pagemonitor.keepalive.label}"/>
+		</div>
+		<div class="cwf-pagemonitor-lock-panel">
+			<div name="lockPanel" class="cwf-layout-vertical">
+				<label label="${@msg.cwf.pagemonitor.lock.title}"/>
+				<div class="cwf-layout-horizontal">
+					<span class="glyphicon glyphicon-lock text-danger"/>
+					<label name="lblLocked"/>
+					<span class="glyphicon glyphicon-lock text-danger"/>
+				</div>
+				<toolbar alignment="center">
+					<textbox name="txtPassword" masked="true" focus="true" forward="enter=btnUnlock.click"/>
+					<button name="btnUnlock" class="flavor:btn-success"
+						label="${@msg.cwf.pagemonitor.unlock.label}"/>
+					<div width="20px"/>
+					<button name="btnLogout" class="flavor:btn-danger"
+						label="${@msg.cwf.pagemonitor.logout.label}"/>
+				</toolbar>
+				<label name="lblInfo" class="cwf-pagemonitor-info"/>
+			</div>
+		</div>
+	</div>
+</window>

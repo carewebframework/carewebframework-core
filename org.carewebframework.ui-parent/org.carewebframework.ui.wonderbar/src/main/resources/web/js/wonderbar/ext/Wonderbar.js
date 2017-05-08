@@ -2,7 +2,7 @@ zk.$package('wonderbar.ext');
 /**
  * Wonderbar
  */
-wonderbar.ext.Wonderbar = zk.$extends(zul.inp.InputWidget, {
+wonderbar.ext.Wonderbar = zk.$extends(cwf.inp.InputWidget, {
     _arrow: null,
 
     $arrow: null,

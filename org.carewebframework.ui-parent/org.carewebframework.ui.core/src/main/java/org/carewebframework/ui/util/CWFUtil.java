@@ -44,7 +44,7 @@ public class CWFUtil {
      *
      * @param event The event to fire.
      */
-    public static void fireEventx(Event event) {
+    public static void fireEvent(Event event) {
         fireEvent(event, deferredDelivery);
     }
 

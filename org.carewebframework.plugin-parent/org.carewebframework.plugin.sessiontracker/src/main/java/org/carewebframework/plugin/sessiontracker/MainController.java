@@ -39,7 +39,7 @@ import org.carewebframework.web.event.Event;
 import org.carewebframework.web.event.EventUtil;
 import org.carewebframework.web.model.IComponentRenderer;
 import org.carewebframework.web.model.ListModel;
-import org.carewebframework.web.websocket.ISessionTracker;
+import org.carewebframework.web.websocket.ISessionLifecycle;
 import org.carewebframework.web.websocket.Session;
 import org.carewebframework.web.websocket.Sessions;
 
@@ -58,7 +58,7 @@ public class MainController extends PluginController {
     
     private final ListModel<Session> model = new ListModel<>();
 
-    private final ISessionTracker sessionTracker = new ISessionTracker() {
+    private final ISessionLifecycle sessionTracker = new ISessionLifecycle() {
         
         @Override
         public void onSessionCreate(Session session) {
@@ -136,10 +136,10 @@ public class MainController extends PluginController {
 
     private void enableAutoRefresh(boolean enable) {
         if (enable) {
-            sessions.registerSessionTracker(sessionTracker);
+            sessions.addLifecycleListener(sessionTracker);
             refresh();
         } else {
-            sessions.unregisterSessionTracker(sessionTracker);
+            sessions.removeLifecycleListener(sessionTracker);
         }
     }
     

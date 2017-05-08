@@ -2,7 +2,7 @@ zk.$package('wonderbar.ext');
 /**
  * WonderbarSeparator
  */
-wonderbar.ext.WonderbarSeparator = zk.$extends(zul.Widget, {
+wonderbar.ext.WonderbarSeparator = zk.$extends(cwf.Widget, {
     separator: true,
 
     getZclass: function () {

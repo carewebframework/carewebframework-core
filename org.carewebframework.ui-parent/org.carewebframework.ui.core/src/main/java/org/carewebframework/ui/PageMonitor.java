@@ -30,7 +30,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.apache.commons.lang.BooleanUtils;
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.logging.Log;
@@ -46,20 +46,24 @@ import org.carewebframework.common.DateUtil.TimeUnit;
 import org.carewebframework.common.MiscUtil;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.ui.util.CWFUtil;
+import org.carewebframework.web.ancillary.ConvertUtil;
+import org.carewebframework.web.annotation.EventHandler;
+import org.carewebframework.web.annotation.WiredComponent;
+import org.carewebframework.web.client.ClientInvocation;
+import org.carewebframework.web.client.ClientRequest;
 import org.carewebframework.web.component.BaseUIComponent;
 import org.carewebframework.web.component.Label;
 import org.carewebframework.web.component.Page;
 import org.carewebframework.web.component.Textbox;
 import org.carewebframework.web.component.Window;
 import org.carewebframework.web.event.Event;
-import org.carewebframework.web.event.IEventListener;
+import org.carewebframework.web.event.EventUtil;
 import org.carewebframework.web.page.PageUtil;
-import org.carewebframework.web.websocket.ISessionTracker;
-import org.carewebframework.web.websocket.Session;
+import org.carewebframework.web.websocket.ISessionListener;
 
 /**
  * Page timeout thread. Used to notify user regarding impending inactivity timeout and take
- * appropriate action. TODO: Needs refactoring.
+ * appropriate action.
  */
 public class PageMonitor extends Thread {
 
@@ -70,7 +74,7 @@ public class PageMonitor extends Thread {
      */
     private enum State {
         INITIAL, COUNTDOWN, TIMEDOUT, DEAD
-    };
+    }
 
     /**
      * Actions to be performed in an event thread.
@@ -108,34 +112,28 @@ public class PageMonitor extends Thread {
     }
 
     /**
-     * Path to the zul code that will be used to display the count down.
+     * Path to the cwf template that will be used to display the count down.
      */
-    private static final String DESKTOP_TIMEOUT_CWF = CWFUtil.getResourcePath(PageMonitor.class)
-            + "cwf/pageTimeoutWarning.cwf";
+    private static final String PAGE_MONITOR_CWF = CWFUtil.getResourcePath(PageMonitor.class) + "cwf/pageMonitor.cwf";
 
     /**
      * Events that will not reset keepalive timer.
      */
-    private static final String[] ignore = new String[] {};
+    private static final String[] ignore = new String[] { "ping" };
 
     private static final String ATTR_LOGGING_OUT = "@logging_out";
 
-    private static final String TIMEOUT_WARNING = "cwf.timeout.%.warning.message";
+    private static final String TIMEOUT_WARNING = "cwf.pagemonitor.%.warning.message";
 
-    private static final String TIMEOUT_EXPIRATION = "cwf.timeout.%.reason.message";
+    private static final String TIMEOUT_EXPIRATION = "cwf.pagemonitor.%.reason.message";
 
-    private static final String SCLASS_COUNTDOWN = "cwf-timeout-%-countdown";
+    private static final String SCLASS_COUNTDOWN = "cwf-pagemonitor-%-countdown";
 
-    private static final String SCLASS_IDLE = "cwf-timeout-%-idle";
+    private static final String SCLASS_IDLE = "cwf-pagemonitor-%-idle";
 
     private final Map<Mode, Long> countdownDuration = new HashMap<>();
 
     private final Map<Mode, Long> inactivityDuration = new HashMap<>();
-
-    /**
-     * Maximum interval of inactivity after which a page is assumed to be dead (in ms).
-     */
-    private long maximumInactivityInterval = 300000;
 
     /**
      * How often to update the displayed count down timer (in ms).
@@ -144,20 +142,27 @@ public class PageMonitor extends Thread {
 
     private boolean canAutoLock = true;
 
+    private boolean shutdown;
+
     private Mode mode = Mode.BASELINE;
 
     private Mode previousMode = mode;
 
     private Window timeoutWindow;
 
+    @WiredComponent
     private BaseUIComponent timeoutPanel;
 
+    @WiredComponent
     private Label lblDuration;
 
+    @WiredComponent
     private Label lblLocked;
 
+    @WiredComponent
     private Label lblInfo;
 
+    @WiredComponent
     private Textbox txtPassword;
 
     private boolean terminate;
@@ -167,10 +172,6 @@ public class PageMonitor extends Thread {
     private long pollingInterval;
 
     private long lastKeepAlive;
-
-    private long lastActivity;
-
-    private boolean pageDead;
 
     private long countdown;
 
@@ -184,91 +185,63 @@ public class PageMonitor extends Thread {
 
     private final Object monitor = new Object();
 
-    private final ISessionTracker tracker = new ISessionTracker() {
-
-        /**
-         * Attaches the time out warning zul to the page root. This markup remains hidden until the
-         * timeout count down commences.
-         */
+    private final ISessionListener sessionListener = new ISessionListener() {
+        
         @Override
-        public void onSessionCreate(Session session) {
-            timeoutWindow = (Window) PageUtil.createPage(DESKTOP_TIMEOUT_CWF, session.getPage(), null);
-            timeoutWindow.wireController(PageMonitor.this);
-            IUser user = securityService.getAuthenticatedUser();
-            lblLocked.setLabel(
-                Mode.BASELINE.getLabel(TIMEOUT_EXPIRATION, user.getFullName() + "@" + user.getSecurityDomain().getName()));
-            //TODO: page.addEventListener(pageActivityMonitor);
-            ThreadUtil.startThread(PageMonitor.this);
+        public void onClientRequest(ClientRequest request) {
+            if (!ArrayUtils.contains(ignore, request.getType())) {
+                resetActivity();
+            }
         }
-
+        
         @Override
-        public void onSessionDestroy(Session session) {
+        public void onDestroy() {
+            PageMonitor.this.terminate = true;
+        }
+        
+        @Override
+        public void onClientInvocation(ClientInvocation invocation) {
             // NOP
         }
+        
     };
 
-    /**
-     * Event listener to handle page actions in event thread.
-     */
-    private final IEventListener actionHandler = new IEventListener() {
+    private void setSclass(String sclass) {
+        String clazz = "mode:" + mode.format(sclass);
 
-        @Override
-        public void onEvent(Event event) {
-            Action action = (Action) event.getData();
-            trace(action.name());
-
-            switch (action) {
-                case UPDATE_COUNTDOWN:
-                    String s = nextMode().getLabel(TIMEOUT_WARNING, DateUtil.formatDuration(countdown, TimeUnit.SECONDS));
-                    lblDuration.setLabel(s);
-                    setSclass(SCLASS_COUNTDOWN);
-                    timeoutPanel.addClass("alert:" + (countdown <= 10000 ? "alert-danger" : "alert-warning"));
-                    //resetActivity(false);
-                    break;
-
-                case UPDATE_MODE:
-                    setSclass(SCLASS_IDLE);
-                    timeoutWindow.setMode(mode == Mode.LOCK ? Window.Mode.POPUP : Window.Mode.INLINE);
-                    txtPassword.setFocus(mode == Mode.LOCK);
-                    //Application.getPageInfo(page).sendToSpawned(mode == Mode.LOCK ? Command.LOCK : Command.UNLOCK);
-                    break;
-
-                case LOGOUT:
-                    terminate = true;
-                    timeoutWindow.setVisible(false);
-                    securityService.logout(true, null, mode.getLabel(TIMEOUT_EXPIRATION));
-                    break;
-            }
+        if (mode == Mode.SHUTDOWN && previousMode == Mode.LOCK) {
+            clazz += " " + previousMode.format(sclass);
         }
 
-        private void setSclass(String sclass) {
-            if (mode == Mode.SHUTDOWN && previousMode == Mode.LOCK) {
-                timeoutWindow.setClasses(mode.format(sclass) + " " + previousMode.format(sclass));
-            } else {
-                timeoutWindow.setClasses(mode.format(sclass));
-            }
-        }
+        timeoutWindow.addClass(clazz);
+    }
 
-    };
+    private final IGenericEvent<Object> applicationControlListener = (eventName, eventData) -> {
+        ApplicationControl applicationControl = ApplicationControl.fromEvent(eventName);
 
-    private final IGenericEvent<Object> pageEventListener = new IGenericEvent<Object>() {
+        if (applicationControl != null) {
+            switch (applicationControl) {
+                case SHUTDOWN_ABORT:
+                    abortShutdown(ConvertUtil.convert(eventData, String.class));
+                    break;
 
-        @Override
-        public void eventCallback(String eventName, Object eventData) {
-            if (eventName.equals(Constants.SHUTDOWN_ABORT_EVENT)) {
-                abortShutdown(eventData == null ? null : eventData.toString());
-            } else if (eventName.equals(Constants.SHUTDOWN_START_EVENT)) {
-                startShutdown(NumberUtils.toLong(eventData == null ? "" : eventData.toString()));
-            } else if (eventName.equals(Constants.SHUTDOWN_EVENT)) {
-                updateShutdown(NumberUtils.toLong(StrUtil.piece(eventData.toString(), StrUtil.U)) * 1000);
-            } else if (eventName.equals(Constants.LOCK_EVENT)) {
-                lockPage(eventData == null || BooleanUtils.toBoolean(eventData.toString()));
+                case SHUTDOWN_START:
+                    startShutdown(ConvertUtil.convert(eventData, Long.class));
+                    break;
+
+                case SHUTDOWN_PROGRESS:
+                    updateShutdown(NumberUtils.toLong(StrUtil.piece((String) eventData, StrUtil.U)) * 1000);
+                    break;
+                
+                case LOCK:
+                    lockPage(eventData == null || ConvertUtil.convert(eventData, Boolean.class));
+                    break;
             }
         }
     };
 
     private void setMode(Mode newMode) {
-        //resetActivity(true);
+        resetActivity();
         mode = newMode == null ? previousMode : newMode;
         pollingInterval = mode == newMode ? pollingInterval : inactivityDuration.get(mode);
         countdown = countdownDuration.get(mode);
@@ -303,7 +276,7 @@ public class PageMonitor extends Thread {
         if (mode == Mode.SHUTDOWN) {
             updateShutdown(0);
             //eventManager.fireLocalEvent(MessageWindow.EVENT_SHOW,
-            //    StringUtils.isEmpty(message) ? StrUtil.getLabel("cwf.timeout.shutdown.abort.message") : message);
+            //    StringUtils.isEmpty(message) ? StrUtil.getLabel("cwf.pagemonitor.shutdown.abort.message") : message);
         }
     }
 
@@ -334,12 +307,10 @@ public class PageMonitor extends Thread {
      */
     private void process() throws Exception {
         long now = System.currentTimeMillis();
-        long silence = now - lastActivity;
         long interval = now - lastKeepAlive;
         State oldState = state;
         long delta = inactivityDuration.get(mode) - interval;
-        state = silence >= maximumInactivityInterval ? State.DEAD
-                : delta > 0 ? State.INITIAL : countdown <= 0 ? State.TIMEDOUT : State.COUNTDOWN;
+        state = delta > 0 ? State.INITIAL : countdown <= 0 ? State.TIMEDOUT : State.COUNTDOWN;
         boolean stateChanged = oldState != state;
 
         switch (state) {
@@ -377,10 +348,6 @@ public class PageMonitor extends Thread {
 
                 break;
 
-            case DEAD:
-                this.terminate = true;
-                this.pageDead = true;
-                break;
         }
     }
 
@@ -419,28 +386,30 @@ public class PageMonitor extends Thread {
      * @param action The action to queue.
      */
     private void queuePageAction(Action action) {
-        Event actionEvent = new Event("onAction", null, action);
+        Event actionEvent = new Event("action", timeoutWindow, action);
+        EventUtil.post(actionEvent);
+    }
 
-        try {
-            actionHandler.onEvent(actionEvent);
-        } catch (Exception e) {
-            log.error("Error executing page action.", e);
-        }
+    private void resetActivity() {
+        lastKeepAlive = System.currentTimeMillis();
     }
 
     /**
      * Resets the keep alive timer when the "keep open" button is clicked.
      */
-    public void onClick$btnKeepOpen() {
-        //resetActivity(true);
+    @EventHandler(value = "click", target = "btnKeepOpen")
+    private void onClick$btnKeepOpen() {
+        setMode(Mode.BASELINE);
         wakeup();
     }
 
-    public void onClick$btnLogout() {
+    @EventHandler(value = "click", target = "btnLogout")
+    private void onClick$btnLogout() {
         securityService.logout(true, null, null);
     }
 
-    public void onClick$btnUnlock() {
+    @EventHandler(value = "click", target = "btnUnlock")
+    private void onClick$btnUnlock() {
         String s = txtPassword.getValue();
         txtPassword.setValue(null);
         lblInfo.setLabel(null);
@@ -450,8 +419,41 @@ public class PageMonitor extends Thread {
             if (securityService.validatePassword(s)) {
                 setMode(Mode.BASELINE);
             } else {
-                lblInfo.setLabel(StrUtil.getLabel("cwf.timeout.lock.badpassword.message"));
+                lblInfo.setLabel(StrUtil.getLabel("cwf.pagemonitor.lock.badpassword.message"));
             }
+        }
+    }
+
+    /**
+     * Event listener to handle page actions in event thread.
+     *
+     * @param event The action event.
+     */
+    @EventHandler("action")
+    private void actionEventHandler(Event event) {
+        Action action = (Action) event.getData();
+        trace(action.name());
+
+        switch (action) {
+            case UPDATE_COUNTDOWN:
+                String s = nextMode().getLabel(TIMEOUT_WARNING, DateUtil.formatDuration(countdown, TimeUnit.SECONDS));
+                lblDuration.setLabel(s);
+                setSclass(SCLASS_COUNTDOWN);
+                timeoutPanel.addClass("alert:" + (countdown <= 10000 ? "alert-danger" : "alert-warning"));
+                break;
+
+            case UPDATE_MODE:
+                setSclass(SCLASS_IDLE);
+                timeoutWindow.setMode(mode == Mode.LOCK ? Window.Mode.POPUP : Window.Mode.INLINE);
+                txtPassword.setFocus(mode == Mode.LOCK);
+                //Application.getPageInfo(page).sendToSpawned(mode == Mode.LOCK ? Command.LOCK : Command.UNLOCK);
+                break;
+
+            case LOGOUT:
+                terminate = true;
+                timeoutWindow.setVisible(false);
+                securityService.logout(true, null, mode.getLabel(TIMEOUT_EXPIRATION));
+                break;
         }
     }
 
@@ -484,10 +486,10 @@ public class PageMonitor extends Thread {
     @Override
     public void run() {
         if (log.isTraceEnabled()) {
-            trace("The PageMonitor has started", getName());
+            trace("The Page Monitor has started", getName());
         }
 
-        setMode(Mode.BASELINE);
+        setMode(null);
 
         synchronized (monitor) {
             while (!terminate && !page.isDead() && !Thread.currentThread().isInterrupted()) {
@@ -531,17 +533,25 @@ public class PageMonitor extends Thread {
      * Called by the IOC container after all properties have been set.
      */
     public void init() {
-        eventManager.subscribe(Constants.DESKTOP_EVENT, pageEventListener);
-        String path = page.getBrowserInfo("requestPath");
-        path = path.startsWith("/") ? path.substring(1) : path;
-        canAutoLock = !autoLockingExclusions.contains(path);
+        eventManager.subscribe(ApplicationControl.EVENT_ROOT, applicationControlListener);
+        String path = page.getBrowserInfo("requestURL");
+        int i = path.lastIndexOf("/");
+        canAutoLock = !autoLockingExclusions.contains(path.substring(i + 1));
+        timeoutWindow = (Window) PageUtil.createPage(PAGE_MONITOR_CWF, page, null).get(0);
+        timeoutWindow.wireController(this);
+        IUser user = securityService.getAuthenticatedUser();
+        lblLocked.setLabel(
+            Mode.BASELINE.getLabel(TIMEOUT_EXPIRATION, user.getFullName() + "@" + user.getSecurityDomain().getName()));
+        page.getSession().addSessionListener(sessionListener);
+        ThreadUtil.startThread(this);
     }
 
     /**
      * Called by IOC container during bean destruction.
      */
     public void tearDown() {
-        eventManager.unsubscribe(Constants.DESKTOP_EVENT, pageEventListener);
+        eventManager.unsubscribe(ApplicationControl.EVENT_ROOT, applicationControlListener);
+        page.getSession().removeSessionListener(sessionListener);
         terminate = true;
         wakeup();
     }
@@ -550,28 +560,6 @@ public class PageMonitor extends Thread {
         if (mode != Mode.SHUTDOWN) {
             setMode(lock ? Mode.LOCK : Mode.BASELINE);
         }
-    }
-
-    /**
-     * Return the maximum interval of inactivity after which a page is assumed to be dead (in ms).
-     * Note: setting this too short will result in a page whose event thread is busy in a prolonged
-     * operation being prematurely discarded.
-     *
-     * @return maximum inactivity interval
-     */
-    public long getMaximumInactivityInterval() {
-        return maximumInactivityInterval;
-    }
-
-    /**
-     * Set the maximum interval of inactivity after which a page is assumed to be dead (in ms).
-     * Note: setting this too short will result in a page whose event thread is busy in a prolonged
-     * operation being prematurely discarded.
-     *
-     * @param maximumInactivityInterval Maximum inactivity interval in ms.
-     */
-    public void setMaximumInactivityInterval(long maximumInactivityInterval) {
-        this.maximumInactivityInterval = maximumInactivityInterval;
     }
 
     /**

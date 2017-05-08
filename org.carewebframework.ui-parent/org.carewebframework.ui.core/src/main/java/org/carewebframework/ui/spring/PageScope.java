@@ -28,7 +28,7 @@ package org.carewebframework.ui.spring;
 import org.carewebframework.api.spring.ScopeContainer;
 import org.carewebframework.web.client.ExecutionContext;
 import org.carewebframework.web.component.Page;
-import org.carewebframework.web.websocket.ISessionTracker;
+import org.carewebframework.web.websocket.ISessionLifecycle;
 import org.carewebframework.web.websocket.Session;
 import org.carewebframework.web.websocket.Sessions;
 
@@ -37,7 +37,7 @@ import org.carewebframework.web.websocket.Sessions;
  */
 public class PageScope extends AbstractScope<Page> {
 
-    private final ISessionTracker sessionTracker = new ISessionTracker() {
+    private final ISessionLifecycle sessionTracker = new ISessionLifecycle() {
 
         @Override
         public void onSessionCreate(Session session) {
@@ -60,7 +60,7 @@ public class PageScope extends AbstractScope<Page> {
 
     public PageScope() {
         super(true);
-        Sessions.getInstance().registerSessionTracker(sessionTracker);
+        Sessions.getInstance().addLifecycleListener(sessionTracker);
     }
 
     @Override

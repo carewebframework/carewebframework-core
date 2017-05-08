@@ -44,33 +44,33 @@ import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.web.context.support.XmlWebApplicationContext;
 
 public class AppContextInitializer implements ApplicationContextInitializer<XmlWebApplicationContext> {
-
+    
     public static final String[] DEFAULT_LOCATIONS = { "classpath*:/META-INF/*-spring.xml" };
-
+    
     private final Page page;
-
+    
     private final boolean testConfig;
-
+    
     public AppContextInitializer() {
         this(null, false);
     }
-
+    
     public AppContextInitializer(Page page) {
         this(page, false);
     }
-
+    
     public AppContextInitializer(Page page, boolean testConfig) {
         this.page = page;
         this.testConfig = testConfig;
     }
-
+    
     @Override
     public void initialize(XmlWebApplicationContext ctx) {
         ctx.setAllowBeanDefinitionOverriding(true);
         ConfigurableEnvironment env = ctx.getEnvironment();
         Set<String> aps = new LinkedHashSet<>();
         Collections.addAll(aps, env.getActiveProfiles());
-
+        
         if (page != null) {
             page.setAttribute(AppContextFinder.APP_CONTEXT_ATTRIB, ctx);
             ServletContext sc = ExecutionContext.getSession().getServletContext();
@@ -91,8 +91,8 @@ public class AppContextInitializer implements ApplicationContextInitializer<XmlW
             ctx.setConfigLocations((String[]) ArrayUtils.addAll(Constants.DEFAULT_LOCATIONS, ctx.getConfigLocations()));
             ClasspathMessageSource.getInstance().setResourceLoader(ctx);
         }
-
+        
         env.setActiveProfiles(aps.toArray(new String[aps.size()]));
     }
-
+    
 }

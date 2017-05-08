@@ -26,7 +26,7 @@
 		</bean>
 		
 		<bean id="securityService" 
-			class="org.carewebframework.api.security.mock.MockSecurityService"
+			class="org.carewebframework.security.mock.service.MockSecurityService"
 			cwf:override="never">
 			<constructor-arg ref="securityMockUser" />
 		</bean>

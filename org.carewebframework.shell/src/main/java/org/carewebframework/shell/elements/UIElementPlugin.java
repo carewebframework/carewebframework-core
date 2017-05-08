@@ -547,7 +547,7 @@ public class UIElementPlugin extends UIElementBase implements IDisable, IPropert
     }
 
     /**
-     * Initializes a plugin, if not already done. This loads the plugin's principal zul page,
+     * Initializes a plugin, if not already done. This loads the plugin's principal cwf page,
      * attaches any event listeners, and sends a load event to subscribers.
      */
     public void load() {

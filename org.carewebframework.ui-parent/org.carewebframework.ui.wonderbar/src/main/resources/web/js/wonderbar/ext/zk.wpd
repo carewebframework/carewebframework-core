@@ -1,4 +1,4 @@
-<package name="wonderbar.ext" language="xul/html" depends="zul.wgt,zul.inp">
+<package name="wonderbar.ext" language="xul/html" depends="cwf.wgt,cwf.inp">
 	<widget name="Wonderbar" />
 	<widget name="WonderbarDefaults" />
 	<widget name="WonderbarItems" />
