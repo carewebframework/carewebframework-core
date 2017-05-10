@@ -1,14 +1,14 @@
-<window class="cwf-pagemonitor" movable="false">
-	<style src="web/org/carewebframework/ui/cwf/pageMonitor.css"/>
+<window class="cwf-sessionmonitor" movable="false">
+	<style src="web/org/carewebframework/ui/cwf/sessionMonitor.css"/>
 	<div class="cwf-layout-vertical">
-		<div name="timeoutPanel" class="cwf-pagemonitor-panel alert">
+		<div name="timeoutPanel" class="cwf-sessionmonitor-panel alert">
 			<label name="lblDuration" class="alert-link"/>
 			<button name="btnKeepOpen" class="flavor:btn-primary"
-				label="${@msg.cwf.pagemonitor.keepalive.label}"/>
+				label="${@msg.cwf.sessionmonitor.keepalive.label}"/>
 		</div>
-		<div class="cwf-pagemonitor-lock-panel">
+		<div class="cwf-sessionmonitor-lock-panel">
 			<div name="lockPanel" class="cwf-layout-vertical">
-				<label label="${@msg.cwf.pagemonitor.lock.title}"/>
+				<label label="${@msg.cwf.sessionmonitor.lock.title}"/>
 				<div class="cwf-layout-horizontal">
 					<span class="glyphicon glyphicon-lock text-danger"/>
 					<label name="lblLocked"/>
@@ -17,12 +17,12 @@
 				<toolbar alignment="center">
 					<textbox name="txtPassword" masked="true" focus="true" forward="enter=btnUnlock.click"/>
 					<button name="btnUnlock" class="flavor:btn-success"
-						label="${@msg.cwf.pagemonitor.unlock.label}"/>
+						label="${@msg.cwf.sessionmonitor.unlock.label}"/>
 					<div width="20px"/>
 					<button name="btnLogout" class="flavor:btn-danger"
-						label="${@msg.cwf.pagemonitor.logout.label}"/>
+						label="${@msg.cwf.sessionmonitor.logout.label}"/>
 				</toolbar>
-				<label name="lblInfo" class="cwf-pagemonitor-info"/>
+				<label name="lblInfo" class="cwf-sessionmonitor-info"/>
 			</div>
 		</div>
 	</div>

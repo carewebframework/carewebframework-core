@@ -1,0 +1,126 @@
+.cwf-sessionmonitor {
+	position: fixed;
+	display: none;
+	background: none;
+	z-index: 9999 !important;
+	top: 0;
+	botton: 0;
+	right: 0;
+	left: 0;
+}
+
+.cwf-sessionmonitor>.panel-heading {
+	display: none;
+}
+
+.cwf-sessionmonitor label {
+	font-size: 1em;
+	white-space: pre-wrap;
+	vertical-align: middle;
+}
+
+.cwf-sessionmonitor-info {
+    display:block;
+    color: red;
+    font-weight: bold;
+    padding-top: 5px
+}
+
+.cwf-sessionmonitor-panel {
+	border: 1px gray solid;
+	border-top: none;
+    border-radius: 0 0 5px 5px;
+}
+
+.cwf-sessionmonitor div {
+    overflow: hidden;
+}
+
+.cwf-sessionmonitor-panel>label {
+    font-weight: bold; 
+    margin-right: 40px;
+}
+
+.cwf-sessionmonitor-lock-panel {
+	text-align: center;
+    width: 100%;
+    height: 100%;
+    display: none;
+}
+
+.cwf-sessionmonitor-lock-panel .cwf_toolbar {
+	border: none;
+}
+
+.cwf-sessionmonitor-lock-panel>div {
+	top: 25%;
+	position: relative;
+	background: ivory;
+	border-radius: 10px;
+	padding: 10px;
+}
+
+.cwf-sessionmonitor-lock-panel>div>div {
+	padding: 10px;
+}
+
+.cwf-sessionmonitor-lock-panel>div>label:first-child {
+	width: 100%;
+	font-size: 150%;
+	padding: 10px;
+}
+
+.cwf-sessionmonitor-lock-panel .glyphicon {
+    font-size: 300%;
+    margin: 20px 0 0 0;
+}
+
+.cwf-sessionmonitor-lock-panel label {
+    flex: 1;
+}
+
+.cwf-sessionmonitor-lock-panel>div {
+	width: 50%;
+	min-width: 200px;
+	display: inline-block
+}
+
+.cwf-sessionmonitor-baseline-countdown,
+.cwf-sessionmonitor-lock-countdown,
+.cwf-sessionmonitor-lock-idle,
+.cwf-sessionmonitor-shutdown-countdown {
+	display: inline;
+}
+
+.cwf-sessionmonitor-lock-idle,
+.cwf-sessionmonitor-lock-countdown {
+	opacity: 1 !important;
+	pointer-events: auto !important;
+	height: 100%;
+	background: lightgray;
+}
+
+.cwf-sessionmonitor-lock-idle .cwf-sessionmonitor-panel {
+	visibility: hidden;
+}
+
+.cwf-sessionmonitor-lock-idle .cwf-sessionmonitor-lock-panel,
+.cwf-sessionmonitor-lock-countdown .cwf-sessionmonitor-lock-panel {
+	display: block;
+}
+
+.cwf-sessionmonitor-shutdown-countdown {
+	opacity: .75;
+    pointer-events: none;
+}
+
+.cwf-sessionmonitor-shutdown-countdown .cwf-sessionmonitor-panel input,
+.cwf-sessionmonitor-shutdown-countdown .cwf-sessionmonitor-panel button {
+	display: none;
+}
+
+.cwf-sessionmonitor-lock-spawned {
+	color: blue;
+	font-size: 2em;
+}
+

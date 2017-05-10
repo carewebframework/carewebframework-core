@@ -30,11 +30,6 @@
 		<bean id="appContextFinder" class="org.carewebframework.ui.spring.AppContextFinder"
 			cwf:override="always" />
 
-		<!-- Registry for thread listeners. -->
-		
-		<bean class="org.carewebframework.ui.thread.ThreadListenerRegistry"
-			factory-method="getInstance" />
-
 		<!-- Registry for shared icon libraries. -->
 		
 		<bean id="iconLibraryRegistry" class="org.carewebframework.ui.icon.IconLibraryRegistry"
@@ -87,35 +82,40 @@
 	</beans>
 
 	<beans profile="child">
-		<!-- Provides access to the active page -->
+		<!-- Provides access to the active page and session -->
+		
 		<bean id="cwf_Page" factory-method="getPage" class="org.carewebframework.web.client.ExecutionContext" />
 		
+		<bean id="cwf_Session" factory-method="getSession" class="org.carewebframework.web.client.ExecutionContext" />
+		
 		<!-- A registry of all supported commands. -->
+		
 		<bean id="commandRegistry" class="org.carewebframework.ui.command.CommandRegistry">
 			<constructor-arg ref="commandShortcuts" />
 		</bean>
 
 		<!-- Monitors a page for inactivity -->
-		<bean id="pageMonitor" class="org.carewebframework.ui.session.SessionMonitor"
+		
+		<bean class="org.carewebframework.ui.session.SessionMonitor"
 			init-method="init" destroy-method="tearDown">
 			<constructor-arg ref="cwf_Page" />
 			<property name="countdownInterval"
-				value="${org.carewebframework.ui.page.countdown.interval}" />
+				value="${org.carewebframework.ui.session.countdown.interval}" />
 			<property name="baselineInactivityDuration"
-				value="${org.carewebframework.ui.page.inactivity.duration.baseline}" />
+				value="${org.carewebframework.ui.session.inactivity.duration.baseline}" />
 			<property name="lockInactivityDuration"
-				value="${org.carewebframework.ui.page.inactivity.duration.lock}" />
+				value="${org.carewebframework.ui.session.inactivity.duration.lock}" />
 			<property name="baselineCountdownDuration"
-				value="${org.carewebframework.ui.page.countdown.duration.baseline}" />
+				value="${org.carewebframework.ui.session.countdown.duration.baseline}" />
 			<property name="lockCountdownDuration"
-				value="${org.carewebframework.ui.page.countdown.duration.lock}" />
+				value="${org.carewebframework.ui.session.countdown.duration.lock}" />
 			<property name="securityService" ref="securityService" />
 			<property name="eventManager" ref="eventManager" />
 			<property name="autoLockingExclusions">
 				<bean class="org.springframework.util.StringUtils"
 					factory-method="commaDelimitedListToSet">
 					<constructor-arg type="java.lang.String"
-						value="${org.carewebframework.ui.page.autolocking.exclusions}" />
+						value="${org.carewebframework.ui.session.autolocking.exclusions}" />
 				</bean>
 			</property>
 		</bean>
