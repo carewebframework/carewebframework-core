@@ -94,6 +94,30 @@
 			<constructor-arg ref="commandShortcuts" />
 		</bean>
 
+		<!-- Thymeleaf template configuration -->
+		
+		<bean id="thymeleafTemplateResolver"
+			class="org.thymeleaf.spring4.templateresolver.SpringResourceTemplateResolver">
+			<property name="prefix" value="" />
+			<property name="suffix" value="" />
+			<property name="templateMode" value="HTML" />
+		</bean>
+		
+		<bean id="thymeleafMessageResolver"
+			class="org.carewebframework.ui.thymeleaf.ThymeleafMessageResolver" />
+		
+		<bean id="thymeleafTemplateEngine"
+			class="org.thymeleaf.spring4.SpringTemplateEngine">
+			<property name="templateResolver" ref="thymeleafTemplateResolver" />
+			<property name="messageResolver" ref="thymeleafMessageResolver" />
+		</bean>
+		
+		<bean class="org.thymeleaf.spring4.view.ThymeleafViewResolver">
+			<property name="templateEngine" ref="thymeleafTemplateEngine" />
+			<property name="order" value="1" />
+			<property name="viewNames" value="*.htm,*.html" />
+		</bean>
+		
 		<!-- Monitors a page for inactivity -->
 		
 		<bean class="org.carewebframework.ui.session.SessionMonitor"
