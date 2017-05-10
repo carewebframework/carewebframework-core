@@ -41,21 +41,21 @@ import org.springframework.web.socket.WebSocketSession;
  * Handler for servicing subscription requests from the browser client.
  */
 public class SubscribeRequestHandler implements IRequestHandler {
-    
+
     private enum RequestType {
         SUBSCRIBE, UNSUBSCRIBE
     };
-
-    private static final String ATTR_SUBSCRIBERS = "messaging-subscribers";
     
-    private final ConsumerService consumerService;
+    private static final String ATTR_SUBSCRIBERS = "messaging-subscribers";
 
+    private final ConsumerService consumerService;
+    
     public SubscribeRequestHandler(ConsumerService consumerService) {
         this.consumerService = consumerService;
     }
-
+    
     @Override
-    public void handleRequest(ClientRequest request) throws Exception {
+    public void handleRequest(ClientRequest request) {
         WebSocketSession socket = request.getPage().getSession().getSocket();
         String id = request.getParam("id", String.class);
         String channel = request.getParam("channel", String.class);
@@ -63,7 +63,7 @@ public class SubscribeRequestHandler implements IRequestHandler {
         Map<String, IMessageCallback> subscribers = getSubscribers();
         String subid = id + "@" + channel;
         IMessageCallback callback = subscribers.get(subid);
-
+        
         switch (type) {
             case SUBSCRIBE:
                 if (callback == null) {
@@ -72,35 +72,35 @@ public class SubscribeRequestHandler implements IRequestHandler {
                                 message);
                         WebSocketHandler.send(socket, invocation);
                     });
-
+                    
                     consumerService.subscribe(channel, callback);
                 }
-
+                
                 break;
-            
+
             case UNSUBSCRIBE:
                 if (callback != null) {
                     subscribers.remove(subid);
                     consumerService.unsubscribe(channel, callback);
                 }
-
+                
                 break;
         }
     }
-    
+
     @Override
     public String getRequestType() {
         return "subscribe";
     }
-    
+
     private Map<String, IMessageCallback> getSubscribers() {
         @SuppressWarnings("unchecked")
         Map<String, IMessageCallback> subscribers = (Map<String, IMessageCallback>) ExecutionContext.get(ATTR_SUBSCRIBERS);
-
+        
         if (subscribers == null) {
             ExecutionContext.put(ATTR_SUBSCRIBERS, subscribers = new HashMap<>());
         }
-
+        
         return subscribers;
     }
 }

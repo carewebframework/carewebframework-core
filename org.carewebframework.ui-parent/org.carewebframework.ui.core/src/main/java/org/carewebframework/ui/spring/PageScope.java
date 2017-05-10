@@ -30,53 +30,59 @@ import org.carewebframework.web.client.ExecutionContext;
 import org.carewebframework.web.component.Page;
 import org.carewebframework.web.websocket.ISessionLifecycle;
 import org.carewebframework.web.websocket.Session;
+import org.carewebframework.web.websocket.SessionInitException;
 import org.carewebframework.web.websocket.Sessions;
 
 /**
  * Implements a custom Spring scope based on the CWF page.
  */
 public class PageScope extends AbstractScope<Page> {
-
+    
     private final ISessionLifecycle sessionTracker = new ISessionLifecycle() {
-
+        
         @Override
         public void onSessionCreate(Session session) {
             getContainer(session.getPage(), false);
-            AppContextFinder.createAppContext(session.getPage());
-        }
 
+            try {
+                AppContextFinder.createAppContext(session.getPage());
+            } catch (Exception e) {
+                throw new SessionInitException(e);
+            }
+        }
+        
         @Override
         public void onSessionDestroy(Session session) {
             ScopeContainer container = getContainer(session.getPage(), false);
-
+            
             if (container != null) {
                 container.destroy();
                 session.getPage().removeAttribute(getKey());
                 AppContextFinder.destroyAppContext(session.getPage());
             }
         }
-
+        
     };
-
+    
     public PageScope() {
         super(true);
         Sessions.getInstance().addLifecycleListener(sessionTracker);
     }
-
+    
     @Override
     protected ScopeContainer getScopeContainer(Page scope) {
         return (ScopeContainer) scope.getAttribute(getKey());
     }
-
+    
     @Override
     protected void bindContainer(Page scope, ScopeContainer container) {
         scope.setAttribute(getKey(), container);
         container.setConversationId(scope.getId());
     }
-
+    
     @Override
     protected Page getActiveScope() {
         return ExecutionContext.getPage();
     }
-
+    
 }

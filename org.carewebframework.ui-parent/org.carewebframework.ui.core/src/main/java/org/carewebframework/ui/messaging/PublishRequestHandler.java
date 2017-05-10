@@ -34,25 +34,25 @@ import org.carewebframework.web.websocket.IRequestHandler;
  * Handler for servicing publication requests from the browser client.
  */
 public class PublishRequestHandler implements IRequestHandler {
-
+    
     private final ProducerService producerService;
-
+    
     public PublishRequestHandler(ProducerService producerService) {
         this.producerService = producerService;
     }
-
+    
     @Override
-    public void handleRequest(ClientRequest request) throws Exception {
+    public void handleRequest(ClientRequest request) {
         String channel = request.getParam("channel", String.class);
         String type = request.getParam("type", String.class);
         Object payload = request.getParam("payload", Object.class);
         Message message = new Message(type, payload);
         producerService.publish(channel, message);
     }
-
+    
     @Override
     public String getRequestType() {
         return "publish";
     }
-
+    
 }
