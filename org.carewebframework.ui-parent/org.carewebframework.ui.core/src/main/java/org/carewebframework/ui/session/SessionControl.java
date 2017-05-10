@@ -1,13 +1,13 @@
-package org.carewebframework.ui;
+package org.carewebframework.ui.session;
 
 /**
- * Events that control the application state.
+ * Events used to control session state via administrator functions.
  */
-public enum ApplicationControl {
+public enum SessionControl {
     
     SHUTDOWN_START, SHUTDOWN_ABORT, SHUTDOWN_PROGRESS, LOCK;
     
-    public static final String EVENT_ROOT = "APP_CONTROL";
+    public static final String EVENT_ROOT = "SESSION_CONTROL";
 
     private static final String EVENT_PREFIX = EVENT_ROOT + ".";
 
@@ -17,12 +17,12 @@ public enum ApplicationControl {
      * @param eventName The event name.
      * @return The corresponding member, or null if none.
      */
-    public static ApplicationControl fromEvent(String eventName) {
+    public static SessionControl fromEvent(String eventName) {
         if (eventName.startsWith(EVENT_PREFIX)) {
             String name = eventName.substring(EVENT_PREFIX.length()).replace(".", "_");
 
             try {
-                return ApplicationControl.valueOf(name);
+                return SessionControl.valueOf(name);
             } catch (Exception e) {
                 return null;
             }
@@ -33,7 +33,7 @@ public enum ApplicationControl {
 
     private final String eventName;
     
-    ApplicationControl() {
+    SessionControl() {
         eventName = EVENT_PREFIX + name().replace("_", ".");
     }
     

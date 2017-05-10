@@ -96,7 +96,7 @@
 		</bean>
 
 		<!-- Monitors a page for inactivity -->
-		<bean id="pageMonitor" class="org.carewebframework.ui.PageMonitor"
+		<bean id="pageMonitor" class="org.carewebframework.ui.session.SessionMonitor"
 			init-method="init" destroy-method="tearDown">
 			<constructor-arg ref="cwf_Page" />
 			<property name="countdownInterval"

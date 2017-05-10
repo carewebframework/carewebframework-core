@@ -56,11 +56,11 @@ import org.carewebframework.shell.elements.UIElementPlugin;
 import org.carewebframework.shell.layout.UILayout;
 import org.carewebframework.shell.plugins.PluginDefinition;
 import org.carewebframework.shell.plugins.PluginResourceHelp;
-import org.carewebframework.ui.ApplicationControl;
 import org.carewebframework.ui.command.CommandEvent;
 import org.carewebframework.ui.command.CommandRegistry;
 import org.carewebframework.ui.command.CommandUtil;
 import org.carewebframework.ui.dialog.DialogUtil;
+import org.carewebframework.ui.session.SessionControl;
 import org.carewebframework.web.annotation.Component;
 import org.carewebframework.web.annotation.Component.ChildTag;
 import org.carewebframework.web.annotation.Component.PropertyGetter;
@@ -649,7 +649,7 @@ public class CareWebShell extends Div {
      * Lock the desktop.
      */
     public void lock() {
-        eventManager.fireLocalEvent(ApplicationControl.LOCK.getEventName(), true);
+        eventManager.fireLocalEvent(SessionControl.LOCK.getEventName(), true);
     }
     
     /**
