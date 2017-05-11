@@ -9,8 +9,8 @@
 	left: 0;
 }
 
-.cwf-sessionmonitor>.panel-heading {
-	display: none;
+.cwf-sessionmonitor div {
+    overflow: hidden;
 }
 
 .cwf-sessionmonitor label {
@@ -26,17 +26,13 @@
     padding-top: 5px
 }
 
-.cwf-sessionmonitor-panel {
+.cwf-sessionmonitor-countdown-panel {
 	border: 1px gray solid;
 	border-top: none;
     border-radius: 0 0 5px 5px;
 }
 
-.cwf-sessionmonitor div {
-    overflow: hidden;
-}
-
-.cwf-sessionmonitor-panel>label {
+.cwf-sessionmonitor-countdown-panel>label {
     font-weight: bold; 
     margin-right: 40px;
 }
@@ -100,7 +96,7 @@
 	background: lightgray;
 }
 
-.cwf-sessionmonitor-lock-idle .cwf-sessionmonitor-panel {
+.cwf-sessionmonitor-lock-idle .cwf-sessionmonitor-countdown-panel {
 	visibility: hidden;
 }
 
@@ -114,13 +110,9 @@
     pointer-events: none;
 }
 
-.cwf-sessionmonitor-shutdown-countdown .cwf-sessionmonitor-panel input,
-.cwf-sessionmonitor-shutdown-countdown .cwf-sessionmonitor-panel button {
+.cwf-sessionmonitor-shutdown-countdown .cwf-sessionmonitor-countdown-panel input,
+.cwf-sessionmonitor-shutdown-countdown .cwf-sessionmonitor-countdown-panel button {
 	display: none;
 }
 
-.cwf-sessionmonitor-lock-spawned {
-	color: blue;
-	font-size: 2em;
-}
 

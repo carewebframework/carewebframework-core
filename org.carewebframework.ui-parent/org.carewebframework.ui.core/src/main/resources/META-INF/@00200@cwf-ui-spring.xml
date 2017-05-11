@@ -120,11 +120,8 @@
 		
 		<!-- Monitors a page for inactivity -->
 		
-		<bean class="org.carewebframework.ui.session.SessionMonitor"
-			init-method="init" destroy-method="tearDown">
-			<constructor-arg ref="cwf_Page" />
-			<property name="countdownInterval"
-				value="${org.carewebframework.ui.session.countdown.interval}" />
+		<bean id="sessionMonitorController" scope="prototype"
+			class="org.carewebframework.ui.session.SessionMonitor">
 			<property name="baselineInactivityDuration"
 				value="${org.carewebframework.ui.session.inactivity.duration.baseline}" />
 			<property name="lockInactivityDuration"
@@ -134,14 +131,6 @@
 			<property name="lockCountdownDuration"
 				value="${org.carewebframework.ui.session.countdown.duration.lock}" />
 			<property name="securityService" ref="securityService" />
-			<property name="eventManager" ref="eventManager" />
-			<property name="autoLockingExclusions">
-				<bean class="org.springframework.util.StringUtils"
-					factory-method="commaDelimitedListToSet">
-					<constructor-arg type="java.lang.String"
-						value="${org.carewebframework.ui.session.autolocking.exclusions}" />
-				</bean>
-			</property>
 		</bean>
 		
 	</beans>
