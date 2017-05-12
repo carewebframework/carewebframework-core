@@ -83,8 +83,7 @@
 
 .cwf-sessionmonitor-baseline-countdown,
 .cwf-sessionmonitor-lock-countdown,
-.cwf-sessionmonitor-lock-idle,
-.cwf-sessionmonitor-shutdown-countdown {
+.cwf-sessionmonitor-lock-idle {
 	display: inline;
 }
 
@@ -105,13 +104,13 @@
 	display: block;
 }
 
-.cwf-sessionmonitor-shutdown-countdown {
+.cwf-sessionmonitor-shutdown {
 	opacity: .75;
     pointer-events: none;
 }
 
-.cwf-sessionmonitor-shutdown-countdown .cwf-sessionmonitor-countdown-panel input,
-.cwf-sessionmonitor-shutdown-countdown .cwf-sessionmonitor-countdown-panel button {
+.cwf-sessionmonitor-shutdown .cwf-sessionmonitor-countdown-panel input,
+.cwf-sessionmonitor-shutdown .cwf-sessionmonitor-countdown-panel button {
 	display: none;
 }
 

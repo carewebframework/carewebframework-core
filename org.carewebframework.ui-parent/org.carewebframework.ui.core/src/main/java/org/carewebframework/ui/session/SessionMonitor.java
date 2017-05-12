@@ -57,10 +57,11 @@ import org.carewebframework.web.component.Timer;
 import org.carewebframework.web.event.EventUtil;
 import org.carewebframework.web.event.TimerEvent;
 import org.carewebframework.web.websocket.ISessionListener;
+import org.carewebframework.web.websocket.Session;
 
 /**
- * Session inactivity timeout thread. Used to notify user regarding impending inactivity timeout and
- * take appropriate action.
+ * Session inactivity timeout controller. Used to notify user regarding impending inactivity timeout
+ * and take appropriate action.
  */
 public class SessionMonitor extends FrameworkController {
 
@@ -77,7 +78,7 @@ public class SessionMonitor extends FrameworkController {
      * Available timeout modes.
      */
     private enum Mode {
-        BASELINE, LOCK, LOGOUT, SHUTDOWN;
+        BASELINE, LOCK, LOGOUT;
 
         /**
          * Returns a label from a label reference.
@@ -121,9 +122,9 @@ public class SessionMonitor extends FrameworkController {
 
     private boolean noAutoLock;
 
+    private boolean shutdown;
+    
     private Mode mode;
-
-    private Mode previousMode;
 
     private BaseUIComponent timeoutWindow;
 
@@ -147,6 +148,8 @@ public class SessionMonitor extends FrameworkController {
 
     private Page page;
     
+    private Session session;
+    
     private long timerInterval;
 
     private long lastKeepAlive;
@@ -161,7 +164,7 @@ public class SessionMonitor extends FrameworkController {
         
         @Override
         public void onClientRequest(ClientRequest request) {
-            String eventType = EventUtil.getEventType(request);
+            String eventType = shutdown ? null : EventUtil.getEventType(request);
 
             if (eventType != null && !ArrayUtils.contains(ignoredEvents, eventType)) {
                 resetActivity();
@@ -208,7 +211,6 @@ public class SessionMonitor extends FrameworkController {
         inactivityDuration.put(Mode.BASELINE, 900000L);
         inactivityDuration.put(Mode.LOCK, 900000L);
         inactivityDuration.put(Mode.LOGOUT, 0L);
-        inactivityDuration.put(Mode.SHUTDOWN, 0L);
         countdownDuration.put(Mode.BASELINE, 60000L);
         countdownDuration.put(Mode.LOCK, 60000L);
         countdownDuration.put(Mode.LOGOUT, 60000L);
@@ -218,6 +220,7 @@ public class SessionMonitor extends FrameworkController {
     public void afterInitialized(BaseComponent root) {
         super.afterInitialized(root);
         page = root.getPage();
+        session = page.getSession();
         noAutoLock = page.getAttribute(ATTR_NO_AUTO_LOCK, false);
         timeoutWindow = (BaseUIComponent) root;
         getEventManager().subscribe(SessionControl.EVENT_ROOT, applicationControlListener);
@@ -225,15 +228,15 @@ public class SessionMonitor extends FrameworkController {
         lblLocked.setLabel(user == null ? null
                 : Mode.BASELINE.getLabel(TIMEOUT_EXPIRATION, user.getFullName() + "@" + user.getSecurityDomain().getName()));
         setMode(Mode.BASELINE);
-        page.getSession().addSessionListener(sessionListener);
+        session.addSessionListener(sessionListener);
     }
 
     private void updateClass() {
         String sclass = state == State.COUNTDOWN ? SCLASS_COUNTDOWN : SCLASS_IDLE;
         String clazz = "mode:" + mode.format(sclass);
 
-        if (mode == Mode.SHUTDOWN && previousMode == Mode.LOCK) {
-            clazz += " " + previousMode.format(sclass);
+        if (shutdown) {
+            clazz += " cwf-sessionmonitor-shutdown";
         }
 
         timeoutWindow.addClass(clazz);
@@ -244,16 +247,8 @@ public class SessionMonitor extends FrameworkController {
         resetActivity();
 
         if (newMode != mode) {
-            timer.stop();
-            previousMode = mode == Mode.SHUTDOWN ? previousMode : mode;
             mode = newMode;
-            timerInterval = mode == previousMode ? timerInterval : inactivityDuration.get(mode);
-            countdown = countdownDuration.get(mode);
-            
-            if (!updateState()) {
-                updateClass();
-            }
-            
+            updateState(true);
             txtPassword.setFocus(mode == Mode.LOCK);
         }
     }
@@ -264,13 +259,14 @@ public class SessionMonitor extends FrameworkController {
      * @param message Optional message to send to user.
      */
     public void abortShutdown(String message) {
-        if (mode == Mode.SHUTDOWN) {
+        if (shutdown) {
             updateShutdown(0);
             message = StringUtils.isEmpty(message) ? StrUtil.getLabel("cwf.sessionmonitor.shutdown.abort.message") : message;
             MessageWindow mw = page.getChild(MessageWindow.class);
 
             if (mw != null) {
                 MessagePane mp = new MessagePane();
+                mp.setTitle(StrUtil.getLabel("cwf.sessionmonitor.shutdown.abort.title"));
                 mp.addClass("flavor:alert-success");
                 mp.addChild(new Label(message));
                 mw.addChild(mp);
@@ -301,8 +297,9 @@ public class SessionMonitor extends FrameworkController {
      *            If zero or negative, aborts any shutdown in progress.
      */
     private void updateShutdown(long delay) {
-        countdownDuration.put(Mode.SHUTDOWN, delay);
-        setMode(delay > 0 ? Mode.SHUTDOWN : previousMode);
+        countdown = delay;
+        shutdown = delay > 0;
+        updateState(true);
     }
 
     private void updateCountdown() {
@@ -316,13 +313,13 @@ public class SessionMonitor extends FrameworkController {
     /**
      * Updates the current state, if necessary.
      *
-     * @return True if the state changed.
+     * @param force If true, treat as a state change regardless of previous state.
      */
-    private boolean updateState() {
+    private void updateState(boolean force) {
         long now = System.currentTimeMillis();
         long interval = now - lastKeepAlive;
-        State oldState = state;
-        long delta = inactivityDuration.get(mode) - interval;
+        State oldState = force ? null : state;
+        long delta = shutdown ? -1 : inactivityDuration.get(mode) - interval;
         state = delta > 0 ? State.INITIAL : countdown <= 0 ? State.TIMEDOUT : State.COUNTDOWN;
         boolean stateChanged = oldState != state;
         
@@ -359,7 +356,7 @@ public class SessionMonitor extends FrameworkController {
 
                 if (mode == Mode.LOGOUT) {
                     requestLogout();
-                    return stateChanged;
+                    return;
                 }
 
                 break;
@@ -372,8 +369,6 @@ public class SessionMonitor extends FrameworkController {
         if (stateChanged) {
             updateClass();
         }
-        
-        return stateChanged;
     }
 
     /**
@@ -408,7 +403,7 @@ public class SessionMonitor extends FrameworkController {
 
     @EventHandler(value = "timer", target = "@timer")
     private void onTimer(TimerEvent event) {
-        updateState();
+        updateState(false);
     }
     
     /**
@@ -417,12 +412,11 @@ public class SessionMonitor extends FrameworkController {
     @EventHandler(value = "click", target = "btnKeepOpen")
     private void onClick$btnKeepOpen() {
         setMode(Mode.BASELINE);
-        updateState();
     }
 
     @EventHandler(value = "click", target = "btnLogout")
     private void onClick$btnLogout() {
-        securityService.logout(true, null, null);
+        securityService.logout(true, null, StrUtil.getLabel("cwf.sessionmonitor.logout.reason.message"));
     }
 
     @EventHandler(value = "click", target = "btnUnlock")
@@ -446,15 +440,13 @@ public class SessionMonitor extends FrameworkController {
      */
     @Override
     protected void cleanup() {
+        session.removeSessionListener(sessionListener);
         getEventManager().unsubscribe(SessionControl.EVENT_ROOT, applicationControlListener);
-        page.getSession().removeSessionListener(sessionListener);
         super.cleanup();
     }
 
     public void lockPage(boolean lock) {
-        if (mode != Mode.SHUTDOWN) {
-            setMode(lock ? Mode.LOCK : Mode.BASELINE);
-        }
+        setMode(lock ? Mode.LOCK : Mode.BASELINE);
     }
 
     public ISecurityService getSecurityService() {
