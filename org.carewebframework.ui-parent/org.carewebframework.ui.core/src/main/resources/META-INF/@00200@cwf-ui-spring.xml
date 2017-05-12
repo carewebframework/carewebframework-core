@@ -46,12 +46,12 @@
 
 		<!-- Default controller for framework-aware applications. -->
 		
-		<bean id="frameworkController" class="org.carewebframework.ui.FrameworkController"
+		<bean id="frameworkController" class="org.carewebframework.ui.controller.FrameworkController"
 			scope="prototype" />
 
 		<!-- Controller for exception dialog. -->
 		
-		<bean id="exceptionController" class="org.carewebframework.ui.ExceptionController"
+		<bean id="exceptionController" class="org.carewebframework.ui.controller.ExceptionController"
 			scope="prototype" />
 
 		<!-- Action support -->

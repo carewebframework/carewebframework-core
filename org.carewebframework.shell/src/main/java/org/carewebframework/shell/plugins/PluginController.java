@@ -29,7 +29,7 @@ import org.carewebframework.api.thread.IAbortable;
 import org.carewebframework.shell.elements.UIElementBase;
 import org.carewebframework.shell.elements.UIElementPlugin;
 import org.carewebframework.shell.elements.UIElementPlugin.PluginContainer;
-import org.carewebframework.ui.FrameworkController;
+import org.carewebframework.ui.controller.FrameworkController;
 import org.carewebframework.web.ancillary.IAutoWired;
 import org.carewebframework.web.component.BaseComponent;
 

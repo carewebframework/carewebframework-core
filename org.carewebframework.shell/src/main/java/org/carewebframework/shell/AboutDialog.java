@@ -36,7 +36,7 @@ import org.apache.commons.lang.StringUtils;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.shell.elements.UIElementBase;
 import org.carewebframework.shell.plugins.PluginDefinition;
-import org.carewebframework.ui.FrameworkController;
+import org.carewebframework.ui.controller.FrameworkController;
 import org.carewebframework.ui.dialog.DialogUtil;
 import org.carewebframework.ui.manifest.ManifestViewer;
 import org.carewebframework.ui.util.CWFUtil;

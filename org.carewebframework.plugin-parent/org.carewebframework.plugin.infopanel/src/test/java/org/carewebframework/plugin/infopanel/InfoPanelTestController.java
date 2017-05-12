@@ -30,7 +30,7 @@ import org.carewebframework.api.event.IEventManager;
 import org.carewebframework.plugin.infopanel.model.IInfoPanel;
 import org.carewebframework.plugin.infopanel.model.IInfoPanel.Action;
 import org.carewebframework.plugin.infopanel.service.InfoPanelService;
-import org.carewebframework.ui.FrameworkController;
+import org.carewebframework.ui.controller.FrameworkController;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.Button;
 import org.carewebframework.web.component.Checkbox;

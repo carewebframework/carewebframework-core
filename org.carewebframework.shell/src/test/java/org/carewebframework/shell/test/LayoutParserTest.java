@@ -41,7 +41,7 @@ import org.carewebframework.shell.elements.UIElementTreeView;
 import org.carewebframework.shell.layout.UILayout;
 import org.carewebframework.shell.plugins.PluginDefinition;
 import org.carewebframework.shell.property.PropertyInfo;
-import org.carewebframework.ui.FrameworkController;
+import org.carewebframework.ui.controller.FrameworkController;
 import org.carewebframework.web.event.ClickEvent;
 import org.carewebframework.web.event.EventUtil;
 import org.carewebframework.web.test.MockTest;

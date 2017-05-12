@@ -31,7 +31,7 @@ import static org.junit.Assert.assertNotNull;
 import org.carewebframework.api.event.EventManager;
 import org.carewebframework.shell.CareWebShell;
 import org.carewebframework.shell.elements.UIElementPlugin;
-import org.carewebframework.ui.FrameworkController;
+import org.carewebframework.ui.controller.FrameworkController;
 import org.carewebframework.ui.test.MockUITest;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.Label;

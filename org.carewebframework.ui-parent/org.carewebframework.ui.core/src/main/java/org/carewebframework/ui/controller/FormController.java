@@ -7,15 +7,15 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  * This Source Code Form is also subject to the terms of the Health-Related
  * Additional Disclaimer of Warranty and Limitation of Liability available at
  *
@@ -23,7 +23,7 @@
  *
  * #L%
  */
-package org.carewebframework.ui;
+package org.carewebframework.ui.controller;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -34,6 +34,7 @@ import org.carewebframework.common.StrUtil;
 import org.carewebframework.ui.dialog.DialogUtil;
 import org.carewebframework.ui.dialog.PopupDialog;
 import org.carewebframework.ui.util.CWFUtil;
+import org.carewebframework.web.annotation.EventHandler;
 import org.carewebframework.web.annotation.WiredComponent;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.component.BaseUIComponent;
@@ -57,7 +58,7 @@ import org.carewebframework.web.event.IEventListener;
  * <li>Optionally implement <b>initControls</b> to provide custom initialization of input elements.
  * </li>
  * </ul>
- * 
+ *
  * @param <T> Class of the domain object.
  */
 public abstract class FormController<T> extends FrameworkController {
@@ -78,16 +79,12 @@ public abstract class FormController<T> extends FrameworkController {
         changed(event.getTarget());
     };
     
-    // Start of auto-wired members
-    
     @WiredComponent
     private Button btnOK;
     
-    // End of auto-wired members.
-    
     /**
      * Creates and displays the form.
-     * 
+     *
      * @param form Url of the form.
      * @param domainObject The domain object to be modified.
      * @return True if changes were committed. False if canceled.
@@ -110,13 +107,14 @@ public abstract class FormController<T> extends FrameworkController {
         domainObject = (T) comp.getAttribute("domainObject");
         btnOK.setDisabled(true);
         initControls();
-        EventUtil.post(new Event("onDeferredInit", root, null));
+        EventUtil.post(new Event("deferredInit", root, null));
     }
     
     /**
      * Deferred initialization (allows any model-based controls to fully render).
      */
-    public void onDeferredInit() {
+    @EventHandler("deferredInit")
+    protected void onDeferredInit() {
         populateControls(domainObject);
         CWFUtil.focusFirst(root, true);
         forwardChangeEvents(root);
@@ -132,13 +130,14 @@ public abstract class FormController<T> extends FrameworkController {
     /**
      * Captures form closure from close icon.
      */
-    public void onClose() {
+    @EventHandler("close")
+    protected void onClose() {
         close(true);
     }
     
     /**
      * Registers a component as changed.
-     * 
+     *
      * @param target The component whose input state changed.
      */
     protected void changed(BaseComponent target) {
@@ -149,7 +148,7 @@ public abstract class FormController<T> extends FrameworkController {
     
     /**
      * Displays the validation error for a required element.
-     * 
+     *
      * @param target The target input element.
      * @return Always false.
      */
@@ -161,7 +160,7 @@ public abstract class FormController<T> extends FrameworkController {
     /**
      * Clears any current validation error and displays a new validation error for the specified
      * input element.
-     * 
+     *
      * @param target The target input element.
      * @param message The validation error message.
      */
@@ -179,7 +178,7 @@ public abstract class FormController<T> extends FrameworkController {
     
     /**
      * Returns the text or "@"-prefixed label reference for the title of the cancel warning dialog.
-     * 
+     *
      * @return Text or label reference.
      */
     public String getCancelTitleLabel() {
@@ -188,7 +187,7 @@ public abstract class FormController<T> extends FrameworkController {
     
     /**
      * Sets the text or label reference for the title of the cancel warning dialog.
-     * 
+     *
      * @param value Text or "@"-prefixed label reference.
      */
     public void setCancelTitleLabel(String value) {
@@ -198,7 +197,7 @@ public abstract class FormController<T> extends FrameworkController {
     /**
      * Returns the text or "@"-prefixed label reference for the message of the cancel warning
      * dialog.
-     * 
+     *
      * @return Text or label reference.
      */
     public String getCancelMessageLabel() {
@@ -207,7 +206,7 @@ public abstract class FormController<T> extends FrameworkController {
     
     /**
      * Sets the text or label reference for the message of the cancel warning dialog.
-     * 
+     *
      * @param value Text or "@"-prefixed label reference.
      */
     public void setCancelMessageLabel(String value) {
@@ -216,7 +215,7 @@ public abstract class FormController<T> extends FrameworkController {
     
     /**
      * Returns the text or "@"-prefixed label reference of the required input message.
-     * 
+     *
      * @return Text or label reference.
      */
     public String getRequiredMessageLabel() {
@@ -225,7 +224,7 @@ public abstract class FormController<T> extends FrameworkController {
     
     /**
      * Sets the text or label reference for the title of the required input message.
-     * 
+     *
      * @param value Text or "@"-prefixed label reference.
      */
     public void setRequiredMessageLabel(String value) {
@@ -235,20 +234,22 @@ public abstract class FormController<T> extends FrameworkController {
     /**
      * Commit changes and close the form when OK button is clicked.
      */
-    public void onClick$btnOK() {
+    @EventHandler(value = "click", target = "@btnOK")
+    protected void onClick$btnOK() {
         close(false);
     }
     
     /**
      * Close the form when Cancel button is clicked, ignoring any changes.
      */
-    public void onClick$btnCancel() {
+    @EventHandler(value = "click", target = "btnCancel")
+    protected void onClick$btnCancel() {
         close(true);
     }
     
     /**
      * Commits all changes.
-     * 
+     *
      * @return True if the operation was successful.
      */
     private boolean doCommit() {
@@ -298,7 +299,7 @@ public abstract class FormController<T> extends FrameworkController {
     
     /**
      * Returns true if all required inputs are present.
-     * 
+     *
      * @return True if all required inputs are present.
      */
     protected boolean hasRequired() {
@@ -307,21 +308,21 @@ public abstract class FormController<T> extends FrameworkController {
     
     /**
      * Populates input elements from the domain object.
-     * 
+     *
      * @param domainObject The domain object.
      */
     protected abstract void populateControls(T domainObject);
     
     /**
      * Populates the domain object from the input elements.
-     * 
+     *
      * @param domainObject The domain object.
      */
     protected abstract void populateDomainObject(T domainObject);
     
     /**
      * Commits changes to the the domain object.
-     * 
+     *
      * @param domainObject The domain object.
      */
     protected abstract void commit(T domainObject);

@@ -14,27 +14,18 @@
 }
 
 .cwf-sessionmonitor label {
-	font-size: 1em;
 	white-space: pre-wrap;
-	vertical-align: middle;
 }
 
 .cwf-sessionmonitor-info {
-    display:block;
+    display: block;
     color: red;
-    font-weight: bold;
-    padding-top: 5px
 }
 
 .cwf-sessionmonitor-countdown-panel {
 	border: 1px gray solid;
 	border-top: none;
     border-radius: 0 0 5px 5px;
-}
-
-.cwf-sessionmonitor-countdown-panel>label {
-    font-weight: bold; 
-    margin-right: 40px;
 }
 
 .cwf-sessionmonitor-lock-panel {
@@ -61,7 +52,6 @@
 }
 
 .cwf-sessionmonitor-lock-panel>div>label:first-child {
-	width: 100%;
 	font-size: 150%;
 	padding: 10px;
 }

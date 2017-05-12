@@ -1,4 +1,4 @@
-<popupbox impl="org.carewebframework.ui.dialog.DateTimebox">
+<popupbox impl="org.carewebframework.ui.dialog.DateTimebox" controller="self">
 	<popup name="popup">
 		<grid class="cwf_datetimebox" width="350px">
 			<rows>
@@ -27,6 +27,7 @@
 		
 		<style>
 			.cwf_datetimebox {
+				border: 1px solid lightgray;
 				border-radius: 6px;
 			}
 			

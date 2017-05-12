@@ -34,7 +34,7 @@ import org.carewebframework.api.messaging.IPublisherInfo;
 import org.carewebframework.common.DateUtil;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.plugin.chat.SessionService.ISessionUpdate;
-import org.carewebframework.ui.FrameworkController;
+import org.carewebframework.ui.controller.FrameworkController;
 import org.carewebframework.ui.dialog.PopupDialog;
 import org.carewebframework.ui.util.CWFUtil;
 import org.carewebframework.web.ancillary.IResponseCallback;
