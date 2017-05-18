@@ -1,0 +1,32 @@
+<vlayout sclass="cwf-desktopmonitor" visible="false"
+	apply="${desktopMonitorController}">
+	<style src="~./org/carewebframework/ui/zk/desktopMonitor.css" />
+	<timer id="timer" />
+	<div id="timeoutPanel"
+		sclass="cwf-desktopmonitor-countdown-panel alert">
+		<label id="lblDuration" zclass="alert-link" />
+		<button id="btnKeepOpen" zclass="btn"
+			sclass="btn-primary pull-right"
+			label="${labels.cwf.desktopmonitor.keepalive.label}" />
+	</div>
+	<div sclass="cwf-desktopmonitor-lock-panel" hflex="1">
+		<vlayout id="lockPanel">
+			<label value="${labels.cwf.desktopmonitor.lock.title}" />
+			<hlayout width="100%">
+				<span hflex="1" sclass="glyphicon glyphicon-lock text-danger" />
+				<label id="lblLocked" />
+				<span hflex="1" sclass="glyphicon glyphicon-lock text-danger" />
+			</hlayout>
+			<toolbar align="center">
+				<textbox id="txtPassword" type="password" focus="true"
+					forward="onOK=btnUnlock.onClick" />
+				<button id="btnUnlock" zclass="btn" sclass="btn-success"
+					label="${labels.cwf.desktopmonitor.unlock.label}" />
+				<separator width="20px" orient="vertical"/>
+				<button id="btnLogout" zclass="btn" sclass="btn-danger"
+					label="${labels.cwf.desktopmonitor.logout.label}" />
+			</toolbar>
+			<label id="lblInfo" sclass="cwf-desktopmonitor-info" />
+		</vlayout>
+	</div>
+</vlayout>

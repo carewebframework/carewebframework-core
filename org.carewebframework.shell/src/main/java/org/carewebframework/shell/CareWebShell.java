@@ -58,6 +58,7 @@ import org.carewebframework.ui.FrameworkWebSupport;
 import org.carewebframework.ui.command.CommandEvent;
 import org.carewebframework.ui.command.CommandRegistry;
 import org.carewebframework.ui.command.CommandUtil;
+import org.carewebframework.ui.desktop.DesktopControl;
 import org.carewebframework.ui.zk.MessageWindow;
 import org.carewebframework.ui.zk.MessageWindow.MessageInfo;
 import org.carewebframework.ui.zk.PromptDialog;
@@ -79,58 +80,58 @@ import org.zkoss.zul.impl.XulElement;
  * Implements a generic UI shell that can be dynamically extended with plug-ins.
  */
 public class CareWebShell extends Div implements AfterCompose {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     protected static final Log log = LogFactory.getLog(CareWebShell.class);
-    
+
     public final String LBL_CONFIRM_CLOSE = StrUtil.getLabel("cwf.shell.confirmclose.message");
-    
+
     public final String LBL_NO_LAYOUT = StrUtil.getLabel("cwf.shell.nolayout.message");
-    
+
     public final String LBL_LOGOUT_CONFIRMATION = StrUtil.getLabel("cwf.shell.logout.confirmation.message");
-    
+
     public final String LBL_LOGOUT_CONFIRMATION_CAPTION = StrUtil.getLabel("cwf.shell.logout.confirmation.caption");
-    
+
     public final String LBL_LOGOUT_CANCEL = StrUtil.getLabel("cwf.shell.logout.cancel.message");
-    
+
     private final AppFramework appFramework = FrameworkUtil.getAppFramework();
-    
+
     private final IEventManager eventManager = EventManager.getInstance();
-    
+
     private final CommandRegistry commandRegistry = SpringUtil.getBean("commandRegistry", CommandRegistry.class);
-    
+
     private final List<PluginContainer> plugins = new ArrayList<>();
-    
+
     private final List<HelpModule> helpModules = new ArrayList<>();
-    
+
     private final List<String> propertyGroups = new ArrayList<>();
-    
+
     private UILayout layout = new UILayout();
-    
+
     private UIElementDesktop desktop;
-    
+
     private final Component registeredStyles = new Span();
-    
+
     private CareWebStartup startupRoutines;
-    
+
     private MessageWindow messageWindow;
-    
+
     private String defaultLayoutName;
-    
+
     private boolean autoStart;
-    
+
     private boolean logoutConfirm = true;
-    
+
     private final IUserContextEvent userContextListener = new IUserContextEvent() {
-        
+
         /**
          * @see IUserContextEvent#canceled()
          */
         @Override
         public void canceled() {
         }
-        
+
         /**
          * @see IUserContextEvent#committed()
          */
@@ -138,7 +139,7 @@ public class CareWebShell extends Div implements AfterCompose {
         public void committed() {
             reset();
         }
-        
+
         /**
          * Prompt user for logout confirmation (unless suppressed).
          *
@@ -149,12 +150,12 @@ public class CareWebShell extends Div implements AfterCompose {
             if (silent || PromptDialog.confirm(LBL_LOGOUT_CONFIRMATION, LBL_LOGOUT_CONFIRMATION_CAPTION, "LOGOUT.CONFIRM")) {
                 return null;
             }
-            
+
             return LBL_LOGOUT_CANCEL;
         }
-        
+
     };
-    
+
     /**
      * Returns the application name for this instance of the CareWeb shell.
      *
@@ -163,7 +164,7 @@ public class CareWebShell extends Div implements AfterCompose {
     public static String getApplicationName() {
         return FrameworkUtil.getAppName();
     }
-    
+
     /**
      * Create the shell instance.
      */
@@ -172,7 +173,7 @@ public class CareWebShell extends Div implements AfterCompose {
         CareWebUtil.setShell(this);
         Executions.getCurrent().getDesktop().enableServerPush(true);
     }
-    
+
     /**
      * Perform additional initializations.
      */
@@ -185,24 +186,24 @@ public class CareWebShell extends Div implements AfterCompose {
             desktop = new UIElementDesktop(this);
             setLogoutConfirm(logoutConfirm);
             String confirmClose = FrameworkWebSupport.getFrameworkProperty("confirmClose", "CAREWEB.CONFIRM.CLOSE");
-            
+
             if (StringUtils.isEmpty(confirmClose) || BooleanUtils.toBoolean(confirmClose)) {
                 Clients.confirmClose(LBL_CONFIRM_CLOSE);
             }
-            
+
             String layout = defaultLayoutName != null ? defaultLayoutName
                     : FrameworkWebSupport.getFrameworkProperty("layout", "CAREWEB.LAYOUT.DEFAULT");
-            
+
             if (!StringUtils.isEmpty(layout)) {
                 loadLayout(layout);
             }
-            
+
         } catch (Exception e) {
             log.error("Error initializing the shell.", e);
             throw MiscUtil.toUnchecked(e);
         }
     }
-    
+
     /**
      * Handle help requests.
      *
@@ -214,7 +215,7 @@ public class CareWebShell extends Div implements AfterCompose {
             HelpUtil.showCSH(ref == null ? event.getTarget() : ref);
         }
     }
-    
+
     /**
      * Return information about the browser client.
      *
@@ -223,7 +224,7 @@ public class CareWebShell extends Div implements AfterCompose {
     public ClientInfoEvent getClientInformation() {
         return Application.getDesktopInfo(getDesktop()).getClientInformation();
     }
-    
+
     /**
      * Capture unhandled shortcut key press events.
      *
@@ -233,12 +234,12 @@ public class CareWebShell extends Div implements AfterCompose {
         KeyEvent keyEvent = (KeyEvent) ZKUtil.getEventOrigin(event);
         String shortcut = CommandUtil.getShortcut(keyEvent);
         Collection<? extends XulElement> plugins = getActivatedPlugins(null);
-        
+
         if (!plugins.isEmpty()) {
             commandRegistry.fireCommands(shortcut, keyEvent, plugins);
         }
     }
-    
+
     /**
      * Returns a reference to the current UI desktop.
      *
@@ -247,7 +248,7 @@ public class CareWebShell extends Div implements AfterCompose {
     public UIElementDesktop getUIDesktop() {
         return desktop;
     }
-    
+
     /**
      * Returns a reference to the current UI layout.
      *
@@ -256,14 +257,14 @@ public class CareWebShell extends Div implements AfterCompose {
     public UILayout getUILayout() {
         return layout;
     }
-    
+
     /**
      * Executed once all plugins are loaded.
      */
     public void start() {
         desktop.activate(true);
         String initialPlugin = PropertyUtil.getValue("CAREWEB.INITIAL.SECTION", getApplicationName());
-        
+
         if (!StringUtils.isEmpty(initialPlugin)) {
             for (PluginContainer plugin : plugins) {
                 if (initialPlugin.equals(plugin.getPluginDefinition().getId())) {
@@ -272,14 +273,14 @@ public class CareWebShell extends Div implements AfterCompose {
                 }
             }
         }
-        
+
         if (startupRoutines == null) {
             startupRoutines = SpringUtil.getBean("careWebStartup", CareWebStartup.class);
         }
-        
+
         startupRoutines.execute();
     }
-    
+
     /**
      * Loads a layout from the specified resource.
      *
@@ -289,14 +290,14 @@ public class CareWebShell extends Div implements AfterCompose {
     public void loadLayout(String resource) throws Exception {
         layout = UILayout.load(resource);
         FrameworkUtil.setAppName(layout.getName());
-        
+
         if (layout.isEmpty()) {
             PromptDialog.showError(LBL_NO_LAYOUT);
         } else {
             buildUI(layout);
         }
     }
-    
+
     /**
      * Returns the name of the layout to be loaded.
      *
@@ -305,7 +306,7 @@ public class CareWebShell extends Div implements AfterCompose {
     public String getLayout() {
         return defaultLayoutName;
     }
-    
+
     /**
      * Sets the layout to be loaded. If null, the layout specified by the configuration will be
      * loaded.
@@ -315,12 +316,12 @@ public class CareWebShell extends Div implements AfterCompose {
      */
     public void setLayout(String defaultLayoutName) throws Exception {
         this.defaultLayoutName = defaultLayoutName;
-        
+
         if (desktop != null && !StringUtils.isEmpty(defaultLayoutName)) {
             loadLayout(defaultLayoutName);
         }
     }
-    
+
     /**
      * Returns the auto-start setting.
      *
@@ -330,7 +331,7 @@ public class CareWebShell extends Div implements AfterCompose {
     public boolean isAutoStart() {
         return autoStart;
     }
-    
+
     /**
      * Sets the auto-start setting.
      *
@@ -340,7 +341,7 @@ public class CareWebShell extends Div implements AfterCompose {
     public void setAutoStart(boolean autoStart) {
         this.autoStart = autoStart;
     }
-
+    
     /**
      * Returns true if confirmation is required upon user-initiated logout.
      *
@@ -349,7 +350,7 @@ public class CareWebShell extends Div implements AfterCompose {
     public boolean isLogoutConfirm() {
         return logoutConfirm;
     }
-
+    
     /**
      * Set to true if confirmation is required upon user-initiated logout.
      *
@@ -357,14 +358,14 @@ public class CareWebShell extends Div implements AfterCompose {
      */
     public void setLogoutConfirm(boolean logoutConfirm) {
         this.logoutConfirm = logoutConfirm;
-        
+
         if (logoutConfirm) {
             appFramework.registerObject(userContextListener);
         } else {
             appFramework.unregisterObject(userContextListener);
         }
     }
-
+    
     /**
      * Build the UI based on the specified layout.
      *
@@ -380,19 +381,19 @@ public class CareWebShell extends Div implements AfterCompose {
         desktop.setIcon(layout.readString("icon", ""));
         desktop.setAppId(FrameworkUtil.getAppName());
         desktop.activate(true);
-        
+
         if (autoStart) {
             start();
         }
     }
-    
+
     /**
      * Resets the desktop to its baseline state and clears registered help modules and property
      * groups.
      */
     public void reset() {
         FrameworkUtil.setAppName(null);
-        
+
         try {
             desktop.activate(false);
             desktop.clear();
@@ -405,7 +406,7 @@ public class CareWebShell extends Div implements AfterCompose {
             plugins.clear();
         } catch (Exception e) {}
     }
-    
+
     /**
      * Registers a plugin and its resources. Called internally when a plugin is instantiated.
      *
@@ -414,7 +415,7 @@ public class CareWebShell extends Div implements AfterCompose {
     public void registerPlugin(PluginContainer plugin) {
         plugins.add(plugin);
     }
-    
+
     /**
      * Unregisters a plugin and its resources. Called internally when a plugin is destroyed.
      *
@@ -423,7 +424,7 @@ public class CareWebShell extends Div implements AfterCompose {
     public void unregisterPlugin(PluginContainer plugin) {
         plugins.remove(plugin);
     }
-    
+
     /**
      * Adds a component to the common tool bar.
      *
@@ -432,7 +433,7 @@ public class CareWebShell extends Div implements AfterCompose {
     public void addToolbarComponent(Component component) {
         desktop.getToolbar().addToolbarComponent(component, null);
     }
-    
+
     /**
      * Registers a help resource.
      *
@@ -440,25 +441,25 @@ public class CareWebShell extends Div implements AfterCompose {
      */
     public void registerHelpResource(PluginResourceHelp resource) {
         HelpModule def = HelpModule.getModule(resource.getModule());
-        
+
         if (def != null) {
             if (helpModules.contains(def)) {
                 return;
             }
-            
+
             IHelpSet hs = HelpSetCache.getInstance().get(def);
-            
+
             if (hs == null) {
                 return;
             }
-            
+
             HelpUtil.getViewer().mergeHelpSet(hs);
             helpModules.add(def);
         }
-        
+
         desktop.addHelpMenu(resource);
     }
-    
+
     /**
      * Registers an external style sheet. If the style sheet has not already been registered,
      * creates a style component and adds it to the current page.
@@ -470,7 +471,7 @@ public class CareWebShell extends Div implements AfterCompose {
             registeredStyles.appendChild(new Style(url));
         }
     }
-    
+
     /**
      * Returns the style sheet associated with the specified URL.
      *
@@ -483,10 +484,10 @@ public class CareWebShell extends Div implements AfterCompose {
                 return style;
             }
         }
-        
+
         return null;
     }
-    
+
     /**
      * Registers a property group.
      *
@@ -498,7 +499,7 @@ public class CareWebShell extends Div implements AfterCompose {
             eventManager.fireLocalEvent(Constants.EVENT_RESOURCE_PROPGROUP_ADD, propertyGroup);
         }
     }
-    
+
     /**
      * Adds a menu.
      *
@@ -509,7 +510,7 @@ public class CareWebShell extends Div implements AfterCompose {
     public Menu addMenu(String path, String action) {
         return desktop.addMenu(path, action, false);
     }
-    
+
     /**
      * Returns a list of all plugins currently loaded into the UI.
      *
@@ -518,7 +519,7 @@ public class CareWebShell extends Div implements AfterCompose {
     public Iterable<PluginContainer> getLoadedPlugins() {
         return plugins;
     }
-    
+
     /**
      * Locates a loaded plugin with the specified id.
      *
@@ -531,10 +532,10 @@ public class CareWebShell extends Div implements AfterCompose {
                 return plugin;
             }
         }
-        
+
         return null;
     }
-    
+
     /**
      * Locates a loaded plugin with the specified id.
      *
@@ -544,14 +545,14 @@ public class CareWebShell extends Div implements AfterCompose {
      */
     public PluginContainer getLoadedPlugin(String id, boolean forceInit) {
         PluginContainer plugin = getLoadedPlugin(id);
-        
+
         if (plugin != null && forceInit) {
             plugin.load();
         }
-        
+
         return plugin;
     }
-    
+
     /**
      * Locates an activated plugin with the specified id.
      *
@@ -565,10 +566,10 @@ public class CareWebShell extends Div implements AfterCompose {
                 return plugin;
             }
         }
-        
+
         return null;
     }
-    
+
     /**
      * Returns a list of all active plugins.
      *
@@ -577,7 +578,7 @@ public class CareWebShell extends Div implements AfterCompose {
     public Iterable<PluginContainer> getActivatedPlugins() {
         return getActivatedPlugins(null);
     }
-    
+
     /**
      * Populates a list of all activated plugins.
      *
@@ -590,16 +591,16 @@ public class CareWebShell extends Div implements AfterCompose {
         } else {
             list.clear();
         }
-        
+
         for (PluginContainer plugin : plugins) {
             if (UIElementZKBase.getAssociatedUIElement(plugin).isActivated()) {
                 list.add(plugin);
             }
         }
-        
+
         return list;
     }
-    
+
     /**
      * Returns a list of all plugin definitions that are currently in use (i.e., have associated
      * plugins loaded) in the environment.
@@ -609,18 +610,18 @@ public class CareWebShell extends Div implements AfterCompose {
      */
     public Iterable<PluginDefinition> getLoadedPluginDefinitions() {
         List<PluginDefinition> result = new ArrayList<>();
-        
+
         for (PluginContainer plugin : plugins) {
             PluginDefinition def = plugin.getPluginDefinition();
-            
+
             if (!result.contains(def)) {
                 result.add(def);
             }
         }
-        
+
         return result;
     }
-    
+
     /**
      * Returns a list of property groups bound to loaded plugins. Guarantees each group name will
      * appear at most once in the list.
@@ -630,29 +631,29 @@ public class CareWebShell extends Div implements AfterCompose {
     public List<String> getPropertyGroups() {
         return propertyGroups;
     }
-    
+
     /**
      * Logout user after confirmation prompt.
      */
     public void logout() {
         // Ensure that shell is last context subscriber (should be a better way
         // to do this).
-        
+
         if (logoutConfirm) {
             setLogoutConfirm(false);
             setLogoutConfirm(true);
         }
-
+        
         SecurityUtil.getSecurityService().logout(false, null, null);
     }
-    
+
     /**
      * Lock the desktop.
      */
     public void lock() {
-        eventManager.fireLocalEvent(org.carewebframework.ui.Constants.LOCK_EVENT, true);
+        eventManager.fireLocalEvent(DesktopControl.LOCK.getEventName(), true);
     }
-    
+
     /**
      * Shows a slide-down message.
      *
@@ -662,7 +663,7 @@ public class CareWebShell extends Div implements AfterCompose {
     public void showMessage(String message) {
         messageWindow.show(message);
     }
-    
+
     /**
      * Shows a slide-down message.
      *
@@ -673,7 +674,7 @@ public class CareWebShell extends Div implements AfterCompose {
     public void showMessage(String message, String caption) {
         messageWindow.show(message, caption);
     }
-    
+
     /**
      * Shows a slide-down message.
      *
@@ -685,7 +686,7 @@ public class CareWebShell extends Div implements AfterCompose {
     public void showMessage(String message, String caption, String color) {
         messageWindow.show(message, caption, color);
     }
-    
+
     /**
      * Shows a slide-down message.
      *
@@ -698,7 +699,7 @@ public class CareWebShell extends Div implements AfterCompose {
     public void showMessage(String message, String caption, String color, int duration) {
         messageWindow.show(message, caption, color, duration);
     }
-    
+
     /**
      * Shows a slide-down message.
      *
@@ -712,7 +713,7 @@ public class CareWebShell extends Div implements AfterCompose {
     public void showMessage(String message, String caption, String color, Integer duration, String tag) {
         messageWindow.show(message, caption, color, duration, tag);
     }
-    
+
     /**
      * Shows a slide-down message.
      *
@@ -728,7 +729,7 @@ public class CareWebShell extends Div implements AfterCompose {
     public void showMessage(String message, String caption, String color, Integer duration, String tag, String action) {
         messageWindow.show(message, caption, color, duration, tag, action);
     }
-    
+
     /**
      * Shows a slide-down message.
      *
@@ -738,7 +739,7 @@ public class CareWebShell extends Div implements AfterCompose {
     public void showMessage(MessageInfo messageInfo) {
         messageWindow.show(messageInfo);
     }
-    
+
     /**
      * Clears all slide-down messages;
      *
@@ -747,7 +748,7 @@ public class CareWebShell extends Div implements AfterCompose {
     public void clearMessages() {
         messageWindow.clear();
     }
-    
+
     /**
      * Clears all slide-down messages with specified tag;
      *
@@ -757,5 +758,5 @@ public class CareWebShell extends Div implements AfterCompose {
     public void clearMessages(String tag) {
         messageWindow.clear(tag);
     }
-    
+
 }

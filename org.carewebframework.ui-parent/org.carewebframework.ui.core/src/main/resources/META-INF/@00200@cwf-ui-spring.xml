@@ -74,13 +74,8 @@
 			<constructor-arg ref="commandShortcuts" />
 		</bean>
 
-		<bean id="desktopMonitor" class="org.carewebframework.ui.DesktopMonitor"
-			init-method="init" destroy-method="tearDown">
-			<constructor-arg ref="desktop" />
-			<property name="maximumInactivityInterval"
-				value="${org.carewebframework.ui.desktop.inactivity.interval.maximum}" />
-			<property name="countdownInterval"
-				value="${org.carewebframework.ui.desktop.countdown.interval}" />
+		<bean id="desktopMonitorController" class="org.carewebframework.ui.desktop.DesktopMonitor"
+			scope="prototype">
 			<property name="baselineInactivityDuration"
 				value="${org.carewebframework.ui.desktop.inactivity.duration.baseline}" />
 			<property name="lockInactivityDuration"
@@ -90,14 +85,6 @@
 			<property name="lockCountdownDuration"
 				value="${org.carewebframework.ui.desktop.countdown.duration.lock}" />
 			<property name="securityService" ref="securityService" />
-			<property name="eventManager" ref="eventManager" />
-			<property name="autoLockingExclusions">
-				<bean class="org.springframework.util.StringUtils"
-					factory-method="commaDelimitedListToSet">
-					<constructor-arg type="java.lang.String"
-						value="${org.carewebframework.ui.desktop.autolocking.exclusions}" />
-				</bean>
-			</property>
 		</bean>
 
 		<bean id="popupManager" class="org.carewebframework.ui.zk.PopupManager"

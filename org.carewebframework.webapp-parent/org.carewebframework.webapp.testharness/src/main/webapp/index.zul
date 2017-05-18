@@ -1,4 +1,5 @@
 <zk>
+	<include src="~./org/carewebframework/ui/zk/desktopMonitor.zul" />
 	<cwfShellEx id="testHarness" height="100%" width="100%" layout="/layout.xml"
 		apply="org.carewebframework.testharness.TestHarnessController"  />
 </zk>
