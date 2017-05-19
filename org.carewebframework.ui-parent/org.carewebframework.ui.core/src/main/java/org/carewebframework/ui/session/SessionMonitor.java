@@ -71,7 +71,7 @@ public class SessionMonitor extends FrameworkController {
      * Reflects the different execution states for the session monitor.
      */
     private enum State {
-        INITIAL, COUNTDOWN, TIMEDOUT, DEAD
+        INITIAL, COUNTDOWN, TIMEDOUT
     }
     
     /**
@@ -233,13 +233,13 @@ public class SessionMonitor extends FrameworkController {
     
     private void updateClass() {
         String sclass = state == State.COUNTDOWN ? SCLASS_COUNTDOWN : SCLASS_IDLE;
-        String clazz = "mode:" + mode.format(sclass);
+        sclass = "mode:" + mode.format(sclass);
         
         if (shutdown) {
-            clazz += " cwf-sessionmonitor-shutdown";
+            sclass += " cwf-sessionmonitor-shutdown";
         }
         
-        timeoutWindow.addClass(clazz);
+        timeoutWindow.addClass(sclass);
         timeoutWindow.setVisible(mode != Mode.BASELINE || state != State.INITIAL);
     }
     
@@ -286,8 +286,12 @@ public class SessionMonitor extends FrameworkController {
     }
     
     private void logout() {
+        logout(mode.getLabel(TIMEOUT_EXPIRATION));
+    }
+
+    private void logout(String message) {
         timeoutWindow.setVisible(false);
-        securityService.logout(true, null, mode.getLabel(TIMEOUT_EXPIRATION));
+        securityService.logout(true, null, message);
     }
     
     /**
@@ -416,7 +420,7 @@ public class SessionMonitor extends FrameworkController {
     
     @EventHandler(value = "click", target = "btnLogout")
     private void onClick$btnLogout() {
-        securityService.logout(true, null, StrUtil.getLabel("cwf.sessionmonitor.logout.reason.message"));
+        logout(StrUtil.getLabel("cwf.sessionmonitor.logout.reason.message"));
     }
     
     @EventHandler(value = "click", target = "btnUnlock")
