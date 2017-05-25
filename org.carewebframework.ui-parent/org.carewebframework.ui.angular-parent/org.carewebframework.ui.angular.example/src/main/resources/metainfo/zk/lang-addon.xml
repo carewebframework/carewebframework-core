@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<language-addon>
+	<addon-name>angular-example</addon-name>
+	<language-name>xul/html</language-name>
+	<depends>angular.addon</depends>
+	
+	<javascript-module name="angular-example" version="1.0.0"/>
+
+	<javascript src="~./org/carewebframework/ui/angular/example/systemjs.config.js"/>
+	
+</language-addon>

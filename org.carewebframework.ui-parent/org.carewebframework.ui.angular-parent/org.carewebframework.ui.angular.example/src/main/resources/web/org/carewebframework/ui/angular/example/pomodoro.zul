@@ -1,0 +1,7 @@
+<zk>
+	<!-- Example showing loading of two instances each of two separate angular components -->
+	<angular src="cwf-angular-hello" />
+	<angular src="cwf-angular-pomodoro" />
+	<angular src="cwf-angular-hello" />
+	<angular src="cwf-angular-pomodoro" />
+</zk>

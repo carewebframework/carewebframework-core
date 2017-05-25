@@ -18,6 +18,6 @@
 		<module>org.carewebframework.ui.popupsupport</module>
 		<module>org.carewebframework.ui.sharedforms</module>
 		<module>org.carewebframework.ui.wonderbar</module>
-		<module>org.carewebframework.ui.angular</module>
+		<module>org.carewebframework.ui.angular-parent</module>
 	</modules>
 </project>
