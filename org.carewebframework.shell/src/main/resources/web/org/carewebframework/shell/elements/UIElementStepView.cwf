@@ -1,4 +1,4 @@
-<div name="outer" class="panel flavor:panel-default cwf-stepview">
+<div name="outer" namespace="true" class="panel flavor:panel-default cwf-stepview">
 	<div class="panel-heading">
 		<div class="cwf-stepview-taskbar">
 			<div name="tbarLeft" class="cwf-stepview-taskbar-left">
