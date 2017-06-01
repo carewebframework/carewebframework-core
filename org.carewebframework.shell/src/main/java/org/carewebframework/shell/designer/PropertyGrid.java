@@ -104,7 +104,7 @@ public class PropertyGrid implements IAutoWired {
     @SuppressWarnings("rawtypes")
     private final IListModel<PropertyEditorBase> model = new ListModel<>();
     
-    private UIElementBase target;
+    private Object target;
     
     private boolean pendingChanges;
     
@@ -209,12 +209,30 @@ public class PropertyGrid implements IAutoWired {
     }
     
     /**
-     * Sets the target UI element for the property grid. Iterates throw the target's property
+     * Sets the target UI element for the property grid. Iterates through the target's property
      * definitions and presents a row for each editable property.
      *
      * @param target UI element whose properties are to be edited.
      */
     public void setTarget(UIElementBase target) {
+        if (target == null) {
+            setTarget(null, null, null);
+        } else {
+            PluginDefinition def = target.getDefinition();
+            List<PropertyInfo> props = def.getProperties();
+            setTarget(target, props, target.getDisplayName());
+        }
+    }
+    
+    /**
+     * Sets the target object for the property grid. Iterates through the target's property
+     * definitions and presents a row for each editable property.
+     *
+     * @param target Object whose properties are to be edited.
+     * @param props Property list.
+     * @param title Title for editor.
+     */
+    public void setTarget(Object target, List<PropertyInfo> props, String title) {
         this.target = target;
         model.clear();
         
@@ -226,11 +244,9 @@ public class PropertyGrid implements IAutoWired {
         }
         
         ((BaseUIComponent) window.getFirstChild()).setVisible(true);
-        window.setTitle(StrUtil.formatMessage("@cwf.shell.designer.property.grid.title", target.getDisplayName()));
-        PluginDefinition def = target.getDefinition();
-        List<PropertyInfo> props = def.getProperties();
+        window.setTitle(StrUtil.formatMessage("@cwf.shell.designer.property.grid.title", title));
         
-        if (props != null && props.size() > 0) {
+        if (props != null && !props.isEmpty()) {
             for (PropertyInfo prop : props) {
                 addPropertyEditor(prop, true);
             }
@@ -305,8 +321,8 @@ public class PropertyGrid implements IAutoWired {
         
         disableButtons(result);
         
-        if (commit) {
-            EventUtil.post(new LayoutChangedEvent(null, target));
+        if (commit && target instanceof UIElementBase) {
+            EventUtil.post(new LayoutChangedEvent(null, (UIElementBase) target));
         }
         
         return result;
@@ -373,11 +389,11 @@ public class PropertyGrid implements IAutoWired {
     }
     
     /**
-     * Returns the target UI element.
+     * Returns the target object.
      *
-     * @return The target UI element.
+     * @return The target object.
      */
-    public UIElementBase getTarget() {
+    public Object getTarget() {
         return target;
     }
     
