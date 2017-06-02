@@ -30,7 +30,7 @@ import java.util.Collections;
 import org.carewebframework.shell.ancillary.UIException;
 import org.carewebframework.shell.layout.LayoutIdentifier;
 import org.carewebframework.shell.layout.LayoutUtil;
-import org.carewebframework.shell.layout.UILayout;
+import org.carewebframework.shell.layout.Layout;
 import org.carewebframework.shell.plugins.PluginDefinition;
 import org.carewebframework.web.component.Div;
 import org.springframework.util.StringUtils;
@@ -51,7 +51,7 @@ public class ElementLayout extends ElementBase {
     
     private boolean linked = true;
     
-    private UILayout layout;
+    private Layout layout;
     
     private final Div div = new Div();
     
@@ -98,9 +98,9 @@ public class ElementLayout extends ElementBase {
         return (linked ? "Linked" : "Embedded") + " Layout - " + layoutName;
     }
     
-    public UILayout getLayout() throws Exception {
+    public Layout getLayout() throws Exception {
         if (layout == null) {
-            layout = new UILayout();
+            layout = new Layout();
             String xml = LayoutUtil.getLayoutContent(new LayoutIdentifier(layoutName, shared));
             
             if (StringUtils.isEmpty(xml)) {

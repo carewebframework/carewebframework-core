@@ -27,7 +27,7 @@ package org.carewebframework.shell.designer;
 
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.shell.elements.ElementBase;
-import org.carewebframework.shell.layout.UILayout;
+import org.carewebframework.shell.layout.Layout;
 import org.carewebframework.web.ancillary.IAutoWired;
 import org.carewebframework.web.ancillary.IDisable;
 import org.carewebframework.web.annotation.EventHandler;
@@ -128,7 +128,7 @@ public class DesignContextMenu implements IAutoWired {
         boolean noAdd = isLocked || !ele.canAcceptChild();
         boolean noEdit = isLocked || !ele.getDefinition().hasEditableProperties();
         Object cbData = Clipboard.getInstance().getData();
-        Class<? extends ElementBase> clazz = cbData instanceof UILayout ? ((UILayout) cbData).getRootClass() : null;
+        Class<? extends ElementBase> clazz = cbData instanceof Layout ? ((Layout) cbData).getRootClass() : null;
         boolean noPaste = noAdd || clazz == null || !ele.canAcceptChild(clazz)
                 || !ElementBase.canAcceptParent(clazz, ele.getClass());
         disable(add, noAdd);
@@ -260,7 +260,7 @@ public class DesignContextMenu implements IAutoWired {
      */
     @EventHandler(value = "click", target = "@mnuCopy")
     private void onClick$mnuCopy() {
-        clipboard.copy(UILayout.serialize(owner));
+        clipboard.copy(Layout.serialize(owner));
     }
     
     /**
@@ -280,8 +280,8 @@ public class DesignContextMenu implements IAutoWired {
     private void onClick$mnuPaste() {
         Object data = clipboard.getData();
         
-        if (data instanceof UILayout) {
-            ((UILayout) data).deserialize(owner);
+        if (data instanceof Layout) {
+            ((Layout) data).deserialize(owner);
         }
     }
     

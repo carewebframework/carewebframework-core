@@ -49,9 +49,9 @@ import org.w3c.dom.Node;
 /**
  * Represents the layout of the visual interface.
  */
-public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
+public class Layout implements IPropertyProvider, IClipboardAware<Layout> {
     
-    private static final Log log = LogFactory.getLog(UILayout.class);
+    private static final Log log = LogFactory.getLog(Layout.class);
     
     private static final String NULL_VALUE = "\\null\\";
     
@@ -70,7 +70,7 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
      * @param resource The resource to be loaded.
      * @return The loaded layout.
      */
-    public static UILayout load(String resource) {
+    public static Layout load(String resource) {
         int i = resource.indexOf(":");
         
         if (i > 0) {
@@ -83,7 +83,7 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
             }
         }
         
-        UILayout layout = new UILayout();
+        Layout layout = new Layout();
         layout.loadFromUrl(resource);
         return layout;
     }
@@ -94,17 +94,17 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
      * @param parent Top level element to be serialized.
      * @return A UI layout representing the serialized hierarchy.
      */
-    public static UILayout serialize(ElementBase parent) {
-        UILayout layout = new UILayout();
+    public static Layout serialize(ElementBase parent) {
+        Layout layout = new Layout();
         layout.internalSerialize(parent);
         return layout;
     }
     
-    public UILayout() {
+    public Layout() {
         clear();
     }
     
-    public UILayout(String layoutName) {
+    public Layout(String layoutName) {
         this();
         setName(layoutName);
     }
@@ -304,7 +304,7 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
      * @param text The XML text to parse.
      * @return This layout (for chaining).
      */
-    public UILayout loadFromText(String text) {
+    public Layout loadFromText(String text) {
         try {
             reset();
             document = XMLUtil.parseXMLFromString(text);
@@ -322,7 +322,7 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
      * @param layoutId Layout identifier.
      * @return This layout (for chaining).
      */
-    public UILayout loadFromProperty(LayoutIdentifier layoutId) {
+    public Layout loadFromProperty(LayoutIdentifier layoutId) {
         String xml = LayoutUtil.getLayoutContent(layoutId);
         loadFromText(xml);
         this.layoutName = layoutId.name;
@@ -335,7 +335,7 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
      * @param appId An application id.
      * @return True if the operation succeeded.
      */
-    public UILayout loadByAppId(String appId) {
+    public Layout loadByAppId(String appId) {
         String xml = LayoutUtil.getLayoutContentByAppId(appId);
         return loadFromText(xml);
     }
@@ -573,7 +573,7 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
      * @throws Exception Unspecified exception.
      */
     @Override
-    public UILayout fromClipboard(String data) throws Exception {
-        return new UILayout().loadFromText(data);
+    public Layout fromClipboard(String data) throws Exception {
+        return new Layout().loadFromText(data);
     }
 }

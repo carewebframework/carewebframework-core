@@ -32,7 +32,7 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.shell.elements.ElementBase;
-import org.carewebframework.shell.layout.UILayout;
+import org.carewebframework.shell.layout.Layout;
 import org.carewebframework.shell.plugins.PluginDefinition;
 import org.carewebframework.ui.dialog.DialogUtil;
 import org.carewebframework.web.ancillary.IAutoWired;
@@ -452,7 +452,7 @@ public class LayoutDesigner implements IAutoWired {
      */
     @EventHandler(value = "click", target = "@btnCopy")
     private void onClick$btnCopy() {
-        clipboard.copy(UILayout.serialize(selectedElement()));
+        clipboard.copy(Layout.serialize(selectedElement()));
     }
     
     /**
@@ -462,8 +462,8 @@ public class LayoutDesigner implements IAutoWired {
     private void onClick$btnPaste() {
         Object data = clipboard.getData();
         
-        if (data instanceof UILayout) {
-            ((UILayout) data).deserialize(selectedElement());
+        if (data instanceof Layout) {
+            ((Layout) data).deserialize(selectedElement());
             requestRefresh();
         }
     }

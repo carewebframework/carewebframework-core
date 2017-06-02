@@ -33,7 +33,7 @@ import org.carewebframework.common.StrUtil;
 import org.carewebframework.shell.CareWebShell;
 import org.carewebframework.shell.elements.ElementDesktop;
 import org.carewebframework.shell.layout.LayoutIdentifier;
-import org.carewebframework.shell.layout.UILayout;
+import org.carewebframework.shell.layout.Layout;
 import org.carewebframework.ui.dialog.DialogUtil;
 import org.carewebframework.ui.xml.XMLViewer;
 import org.carewebframework.web.ancillary.IAutoWired;
@@ -163,7 +163,7 @@ public class DesignMenu implements IAutoWired {
      */
     @EventHandler(value = "click", target = "mnuSaveLayout")
     private void onClick$mnuSaveLayout() {
-        LayoutManager.saveLayout(UILayout.serialize(owner),
+        LayoutManager.saveLayout(Layout.serialize(owner),
             new LayoutIdentifier(shell.getUILayout().getName(), LayoutManager.defaultIsShared()), false, null);
     }
     
@@ -178,7 +178,7 @@ public class DesignMenu implements IAutoWired {
             LayoutIdentifier layoutId = event.getTarget().getAttribute("layoutId", LayoutIdentifier.class);
             
             if (layoutId != null) {
-                UILayout newLayout = new UILayout();
+                Layout newLayout = new Layout();
                 newLayout.loadFromProperty(layoutId);
                 shell.buildUI(newLayout);
             }

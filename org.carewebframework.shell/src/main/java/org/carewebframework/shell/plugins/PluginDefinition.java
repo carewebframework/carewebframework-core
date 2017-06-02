@@ -38,7 +38,7 @@ import org.carewebframework.common.MiscUtil;
 import org.carewebframework.shell.ancillary.UIException;
 import org.carewebframework.shell.elements.ElementBase;
 import org.carewebframework.shell.elements.ElementPlugin;
-import org.carewebframework.shell.layout.UILayout;
+import org.carewebframework.shell.layout.Layout;
 import org.carewebframework.shell.property.PropertyInfo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.StringUtils;
@@ -609,7 +609,7 @@ public class PluginDefinition {
     public ElementBase createElement(ElementBase parent, IPropertyProvider propertySource) {
         try {
             ElementBase element = null;
-            boolean deserializing = propertySource instanceof UILayout;
+            boolean deserializing = propertySource instanceof Layout;
             
             if (isForbidden()) {
                 log.info("Access to plugin " + getName() + " is restricted.");

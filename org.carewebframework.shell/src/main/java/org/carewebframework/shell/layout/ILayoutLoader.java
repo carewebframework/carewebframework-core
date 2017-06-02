@@ -43,5 +43,5 @@ public interface ILayoutLoader {
      * @param layoutName The layout name.
      * @return The loaded layout.
      */
-    UILayout loadLayout(String layoutName);
+    Layout loadLayout(String layoutName);
 }

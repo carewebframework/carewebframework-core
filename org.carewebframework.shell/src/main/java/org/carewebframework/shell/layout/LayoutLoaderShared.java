@@ -35,7 +35,7 @@ public class LayoutLoaderShared extends LayoutLoaderBase {
     }
     
     @Override
-    public UILayout loadLayout(String name) {
-        return new UILayout().loadFromProperty(new LayoutIdentifier(name, true));
+    public Layout loadLayout(String name) {
+        return new Layout().loadFromProperty(new LayoutIdentifier(name, true));
     }
 }

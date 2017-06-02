@@ -39,7 +39,7 @@ import org.carewebframework.shell.elements.ElementTabPane;
 import org.carewebframework.shell.elements.ElementTabView;
 import org.carewebframework.shell.elements.ElementTreePane;
 import org.carewebframework.shell.elements.ElementTreeView;
-import org.carewebframework.shell.layout.UILayout;
+import org.carewebframework.shell.layout.Layout;
 import org.carewebframework.shell.plugins.PluginDefinition;
 import org.carewebframework.shell.plugins.PluginException;
 import org.carewebframework.shell.plugins.PluginRegistry;
@@ -307,7 +307,7 @@ public class CareWebShellEx extends CareWebShell {
      * @throws Exception Unspecified exception.
      */
     public void registerLayout(String path, String resource) throws Exception {
-        UILayout layout = UILayout.load(resource);
+        Layout layout = Layout.load(resource);
         ElementBase parent = parentFromPath(path);
         
         if (parent != null) {

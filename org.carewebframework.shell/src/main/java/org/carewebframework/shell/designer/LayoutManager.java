@@ -46,7 +46,7 @@ import org.carewebframework.api.FrameworkUtil;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.shell.layout.LayoutIdentifier;
 import org.carewebframework.shell.layout.LayoutUtil;
-import org.carewebframework.shell.layout.UILayout;
+import org.carewebframework.shell.layout.Layout;
 import org.carewebframework.ui.dialog.DialogUtil;
 import org.carewebframework.ui.dialog.PopupDialog;
 import org.carewebframework.web.ancillary.IAutoWired;
@@ -182,7 +182,7 @@ public class LayoutManager implements IAutoWired {
      * @param hideScope If true, hide shared/private scope selection.
      * @param callback Callback if layout successfully saved.
      */
-    public static void saveLayout(UILayout layout, LayoutIdentifier layoutId, boolean hideScope,
+    public static void saveLayout(Layout layout, LayoutIdentifier layoutId, boolean hideScope,
                                   IResponseCallback<LayoutIdentifier> callback) {
         LayoutPrompt.show(layoutId, hideScope, true, CAP_LAYOUT_SAVE, MSG_LAYOUT_SAVE, (event) -> {
             LayoutIdentifier id = event.getTarget().getAttribute("layoutId", LayoutIdentifier.class);
@@ -286,7 +286,7 @@ public class LayoutManager implements IAutoWired {
      * @param strm An input stream.
      */
     public void importLayout(boolean shared, InputStream strm) {
-        UILayout layout = new UILayout();
+        Layout layout = new Layout();
         layout.loadFromStream(strm);
         LayoutIdentifier layoutId = new LayoutIdentifier(layout.getName(), shared);
         saveLayout(layout, layoutId, false, (response) -> {

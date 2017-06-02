@@ -35,7 +35,7 @@ public class LayoutLoaderApp extends LayoutLoaderBase {
     }
 
     @Override
-    public UILayout loadLayout(String appId) {
-        return new UILayout().loadByAppId(appId);
+    public Layout loadLayout(String appId) {
+        return new Layout().loadByAppId(appId);
     }
 }

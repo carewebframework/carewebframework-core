@@ -38,7 +38,7 @@ import org.carewebframework.shell.elements.ElementMenubar;
 import org.carewebframework.shell.elements.ElementPlugin;
 import org.carewebframework.shell.elements.ElementPlugin.PluginContainer;
 import org.carewebframework.shell.elements.ElementTreeView;
-import org.carewebframework.shell.layout.UILayout;
+import org.carewebframework.shell.layout.Layout;
 import org.carewebframework.shell.plugins.PluginDefinition;
 import org.carewebframework.shell.property.PropertyInfo;
 import org.carewebframework.ui.controller.FrameworkController;
@@ -49,7 +49,7 @@ import org.junit.Test;
 
 public class LayoutParserTest {
 
-    private final UILayout layout = new UILayout();
+    private final Layout layout = new Layout();
 
     @Test
     public void ParserTest() throws Exception {

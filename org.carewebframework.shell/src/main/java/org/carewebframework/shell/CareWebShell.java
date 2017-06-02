@@ -53,7 +53,7 @@ import org.carewebframework.help.IHelpViewer;
 import org.carewebframework.help.viewer.HelpUtil;
 import org.carewebframework.shell.elements.ElementDesktop;
 import org.carewebframework.shell.elements.ElementPlugin;
-import org.carewebframework.shell.layout.UILayout;
+import org.carewebframework.shell.layout.Layout;
 import org.carewebframework.shell.plugins.PluginDefinition;
 import org.carewebframework.shell.plugins.PluginResourceHelp;
 import org.carewebframework.ui.command.CommandEvent;
@@ -106,7 +106,7 @@ public class CareWebShell extends Div implements INamespace {
 
     private final List<String> propertyGroups = new ArrayList<>();
 
-    private UILayout layout = new UILayout();
+    private Layout layout = new Layout();
 
     private ElementDesktop desktop;
 
@@ -247,7 +247,7 @@ public class CareWebShell extends Div implements INamespace {
      *
      * @return The current UI layout.
      */
-    public UILayout getUILayout() {
+    public Layout getUILayout() {
         return layout;
     }
 
@@ -281,7 +281,7 @@ public class CareWebShell extends Div implements INamespace {
      * @throws Exception Unspecified exception.
      */
     public void loadLayout(String resource) throws Exception {
-        layout = UILayout.load(resource);
+        layout = Layout.load(resource);
         FrameworkUtil.setAppName(layout.getName());
 
         if (layout.isEmpty()) {
@@ -366,7 +366,7 @@ public class CareWebShell extends Div implements INamespace {
      *
      * @param layout Layout for building UI.
      */
-    public void buildUI(UILayout layout) {
+    public void buildUI(Layout layout) {
         this.layout = layout;
         reset();
         layout.deserialize(desktop);
