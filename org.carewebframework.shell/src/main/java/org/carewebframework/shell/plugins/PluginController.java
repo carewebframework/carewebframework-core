@@ -26,9 +26,9 @@
 package org.carewebframework.shell.plugins;
 
 import org.carewebframework.api.thread.IAbortable;
-import org.carewebframework.shell.elements.UIElementBase;
-import org.carewebframework.shell.elements.UIElementPlugin;
-import org.carewebframework.shell.elements.UIElementPlugin.PluginContainer;
+import org.carewebframework.shell.elements.ElementBase;
+import org.carewebframework.shell.elements.ElementPlugin;
+import org.carewebframework.shell.elements.ElementPlugin.PluginContainer;
 import org.carewebframework.ui.controller.FrameworkController;
 import org.carewebframework.web.ancillary.IAutoWired;
 import org.carewebframework.web.component.BaseComponent;
@@ -41,7 +41,7 @@ public class PluginController extends FrameworkController implements IPluginCont
     
     private boolean isActive;
     
-    private UIElementPlugin plugin;
+    private ElementPlugin plugin;
     
     /**
      * Wire controller from toolbar components first, then from plugin.
@@ -50,7 +50,7 @@ public class PluginController extends FrameworkController implements IPluginCont
     public void afterInitialized(BaseComponent comp) {
         super.afterInitialized(comp);
         PluginContainer container = comp.getAncestor(PluginContainer.class, true);
-        plugin = (UIElementPlugin) UIElementBase.getAssociatedUIElement(container);
+        plugin = (ElementPlugin) ElementBase.getAssociatedElement(container);
     }
     
     /**
@@ -63,7 +63,7 @@ public class PluginController extends FrameworkController implements IPluginCont
     }
     
     @Override
-    public void onLoad(UIElementPlugin plugin) {
+    public void onLoad(ElementPlugin plugin) {
         this.plugin = plugin;
     }
     
@@ -98,7 +98,7 @@ public class PluginController extends FrameworkController implements IPluginCont
         comp.wireController(controller);
     }
     
-    public UIElementPlugin getPlugin() {
+    public ElementPlugin getPlugin() {
         return plugin;
     }
     

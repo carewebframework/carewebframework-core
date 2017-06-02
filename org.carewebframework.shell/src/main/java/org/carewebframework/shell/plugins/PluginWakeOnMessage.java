@@ -31,7 +31,7 @@ import org.carewebframework.api.event.EventManager;
 import org.carewebframework.api.event.IEventManager;
 import org.carewebframework.api.event.IGenericEvent;
 import org.carewebframework.common.StrUtil;
-import org.carewebframework.shell.elements.UIElementPlugin;
+import org.carewebframework.shell.elements.ElementPlugin;
 
 /**
  * This can serve as a bean resource for a plugin to insure that a plugin is loaded when a specific
@@ -42,7 +42,7 @@ public class PluginWakeOnMessage implements IPluginEventListener, IGenericEvent<
     
     final private List<String> eventNames;
     
-    private UIElementPlugin plugin;
+    private ElementPlugin plugin;
     
     private final IEventManager eventManager = EventManager.getInstance();
     

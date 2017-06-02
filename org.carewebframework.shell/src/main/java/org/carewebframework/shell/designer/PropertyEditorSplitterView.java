@@ -25,15 +25,15 @@
  */
 package org.carewebframework.shell.designer;
 
-import org.carewebframework.shell.elements.UIElementSplitterPane;
+import org.carewebframework.shell.elements.ElementSplitterPane;
 
 /**
  * Property editor for managing splitter panes.
  */
-public class PropertyEditorSplitterView extends PropertyEditorCustomTree<UIElementSplitterPane> {
+public class PropertyEditorSplitterView extends PropertyEditorCustomTree<ElementSplitterPane> {
     
     public PropertyEditorSplitterView() {
-        super(UIElementSplitterPane.class, null, false);
+        super(ElementSplitterPane.class, null, false);
     }
     
 }

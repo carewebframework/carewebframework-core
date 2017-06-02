@@ -32,7 +32,7 @@ import org.carewebframework.api.domain.IUser;
 import org.carewebframework.api.event.IGenericEvent;
 import org.carewebframework.api.security.SecurityUtil;
 import org.carewebframework.shell.CareWebUtil;
-import org.carewebframework.shell.elements.UIElementPlugin;
+import org.carewebframework.shell.elements.ElementPlugin;
 import org.carewebframework.shell.plugins.PluginController;
 import org.carewebframework.web.annotation.EventHandler;
 import org.carewebframework.web.annotation.WiredComponent;
@@ -59,7 +59,7 @@ public class MainController extends PluginController {
     };
 
     @Override
-    public void onLoad(UIElementPlugin plugin) {
+    public void onLoad(ElementPlugin plugin) {
         super.onLoad(plugin);
         setUser(UserContext.getActiveUser());
         UserContext.getUserContext().addListener(userChangeListener);

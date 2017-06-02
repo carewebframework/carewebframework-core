@@ -31,10 +31,10 @@ import org.carewebframework.web.component.Image;
 /**
  * Simple button stock object.
  */
-public class UIElementImage extends UIElementBase {
+public class ElementImage extends ElementBase {
     
     static {
-        registerAllowedParentClass(UIElementImage.class, UIElementBase.class);
+        registerAllowedParentClass(ElementImage.class, ElementBase.class);
     }
     
     private final Div root = new Div();
@@ -43,7 +43,7 @@ public class UIElementImage extends UIElementBase {
     
     private boolean stretch;
     
-    public UIElementImage() {
+    public ElementImage() {
         setOuterComponent(root);
         root.addClass("cwf-plugin-container");
         fullSize(root);

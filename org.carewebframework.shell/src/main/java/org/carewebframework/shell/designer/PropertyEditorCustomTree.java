@@ -31,8 +31,8 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.carewebframework.shell.elements.UIElementBase;
-import org.carewebframework.shell.elements.UIElementProxy;
+import org.carewebframework.shell.elements.ElementBase;
+import org.carewebframework.shell.elements.ElementProxy;
 import org.carewebframework.shell.plugins.PluginDefinition;
 import org.carewebframework.shell.property.PropertyInfo;
 import org.carewebframework.ui.util.TreeUtil;
@@ -58,13 +58,13 @@ import org.springframework.util.Assert;
  *
  * @param <T> Type of child element.
  */
-public class PropertyEditorCustomTree<T extends UIElementBase> extends PropertyEditorCustom {
+public class PropertyEditorCustomTree<T extends ElementBase> extends PropertyEditorCustom {
 
     /**
-     * Subclass UIElementProxy to allow us to synchronize changes to label property with the
+     * Subclass ElementProxy to allow us to synchronize changes to label property with the
      * corresponding tree node.
      */
-    private class Proxy extends UIElementProxy {
+    private class Proxy extends ElementProxy {
 
         private Treenode node;
 
@@ -76,9 +76,9 @@ public class PropertyEditorCustomTree<T extends UIElementBase> extends PropertyE
             super(def);
         }
 
-        public UIElementBase realize() throws Exception {
+        public ElementBase realize() throws Exception {
             Treenode parentItem = node.getParent() instanceof Treenode ? (Treenode) node.getParent() : null;
-            UIElementBase parentElement = parentItem == null ? getTarget() : getProxy(parentItem).realize();
+            ElementBase parentElement = parentItem == null ? getTarget() : getProxy(parentItem).realize();
             realize(parentElement);
             return getTarget();
         }
@@ -298,8 +298,8 @@ public class PropertyEditorCustomTree<T extends UIElementBase> extends PropertyE
         return result;
     }
 
-    private UIElementBase getTargetElement() {
-        return (UIElementBase) getTarget();
+    private ElementBase getTargetElement() {
+        return (ElementBase) getTarget();
     }
 
     /**
@@ -320,8 +320,8 @@ public class PropertyEditorCustomTree<T extends UIElementBase> extends PropertyE
      * @param target The target UI element whose children will be added to the tree.
      * @param parent The parent component to receive the new tree items.
      */
-    private void initTree(UIElementBase target, BaseComponent parent) {
-        for (UIElementBase child : target.getChildren()) {
+    private void initTree(ElementBase target, BaseComponent parent) {
+        for (ElementBase child : target.getChildren()) {
             if (childClass == null || childClass.isInstance(child)) {
                 Treenode node = addTreenode(newProxy(child), parent, null);
 
@@ -405,14 +405,14 @@ public class PropertyEditorCustomTree<T extends UIElementBase> extends PropertyE
      * @param tc Root of subtree.
      * @param parent The parent UI element.
      */
-    protected void resequenceTargets(BaseComponent tc, UIElementBase parent) {
+    protected void resequenceTargets(BaseComponent tc, ElementBase parent) {
         if (tc != null) {
             int index = -1;
 
             for (BaseComponent child : tc.getChildren()) {
                 index++;
                 Treenode node = (Treenode) child;
-                UIElementBase target = getProxy(node).getTarget();
+                ElementBase target = getProxy(node).getTarget();
                 target.setParent(parent);
                 target.setIndex(index);
                 resequenceTargets(node, target);
@@ -426,7 +426,7 @@ public class PropertyEditorCustomTree<T extends UIElementBase> extends PropertyE
      * @param child Element to be proxied. May not be null.
      * @return The proxy wrapping the specified child.
      */
-    private Proxy newProxy(UIElementBase child) {
+    private Proxy newProxy(ElementBase child) {
         Assert.notNull(child, "Child element may not be null");
         @SuppressWarnings("unchecked")
         Proxy proxy = new Proxy((T) child);

@@ -31,13 +31,13 @@ import org.carewebframework.web.component.Hyperlink;
 /**
  * Simple hyperlink stock object.
  */
-public class UIElementLink extends UIElementButton {
+public class ElementLink extends ElementButton {
     
     static {
-        registerAllowedParentClass(UIElementLink.class, UIElementBase.class);
+        registerAllowedParentClass(ElementLink.class, ElementBase.class);
     }
     
-    public UIElementLink() {
+    public ElementLink() {
         super(new Hyperlink(), ThemeUtil.ButtonSize.SMALL, ThemeUtil.ButtonStyle.LINK);
     }
     

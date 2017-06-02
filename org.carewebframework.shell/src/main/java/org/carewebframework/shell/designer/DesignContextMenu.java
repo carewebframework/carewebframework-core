@@ -26,7 +26,7 @@
 package org.carewebframework.shell.designer;
 
 import org.carewebframework.common.StrUtil;
-import org.carewebframework.shell.elements.UIElementBase;
+import org.carewebframework.shell.elements.ElementBase;
 import org.carewebframework.shell.layout.UILayout;
 import org.carewebframework.web.ancillary.IAutoWired;
 import org.carewebframework.web.ancillary.IDisable;
@@ -51,7 +51,7 @@ public class DesignContextMenu implements IAutoWired {
     
     private BaseComponent listener;
     
-    private UIElementBase owner;
+    private ElementBase owner;
     
     private Menupopup menuPopup;
     
@@ -120,7 +120,7 @@ public class DesignContextMenu implements IAutoWired {
      * @param properties Properties input element.
      * @param about About input element.
      */
-    public void updateStates(UIElementBase ele, IDisable add, IDisable delete, IDisable copy, IDisable cut, IDisable paste,
+    public void updateStates(ElementBase ele, IDisable add, IDisable delete, IDisable copy, IDisable cut, IDisable paste,
                              IDisable properties, IDisable about) {
         boolean isNull = ele == null;
         boolean isLocked = isNull || ele.isLocked();
@@ -128,9 +128,9 @@ public class DesignContextMenu implements IAutoWired {
         boolean noAdd = isLocked || !ele.canAcceptChild();
         boolean noEdit = isLocked || !ele.getDefinition().hasEditableProperties();
         Object cbData = Clipboard.getInstance().getData();
-        Class<? extends UIElementBase> clazz = cbData instanceof UILayout ? ((UILayout) cbData).getRootClass() : null;
+        Class<? extends ElementBase> clazz = cbData instanceof UILayout ? ((UILayout) cbData).getRootClass() : null;
         boolean noPaste = noAdd || clazz == null || !ele.canAcceptChild(clazz)
-                || !UIElementBase.canAcceptParent(clazz, ele.getClass());
+                || !ElementBase.canAcceptParent(clazz, ele.getClass());
         disable(add, noAdd);
         disable(delete, noDelete);
         disable(copy, isNull);
@@ -184,7 +184,7 @@ public class DesignContextMenu implements IAutoWired {
      * 
      * @param owner Menu's owner.
      */
-    public void setOwner(UIElementBase owner) {
+    public void setOwner(ElementBase owner) {
         if (this.owner != owner) {
             this.owner = owner;
             mnuHeader.setLabel(
@@ -214,7 +214,7 @@ public class DesignContextMenu implements IAutoWired {
     private void onOpen(Event event) {
         if (listener == null) {
             BaseComponent ref = event.getRelatedTarget();
-            setOwner(UIElementBase.getAssociatedUIElement(ref));
+            setOwner(ElementBase.getAssociatedElement(ref));
         }
         
         if (owner == null) {

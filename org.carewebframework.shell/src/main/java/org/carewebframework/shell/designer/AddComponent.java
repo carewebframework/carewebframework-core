@@ -33,9 +33,9 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.carewebframework.api.property.PropertyUtil;
 import org.carewebframework.common.StrUtil;
-import org.carewebframework.shell.elements.UIElementBase;
-import org.carewebframework.shell.elements.UIElementLayout;
-import org.carewebframework.shell.elements.UIElementPlugin;
+import org.carewebframework.shell.elements.ElementBase;
+import org.carewebframework.shell.elements.ElementLayout;
+import org.carewebframework.shell.elements.ElementPlugin;
 import org.carewebframework.shell.layout.LayoutUtil;
 import org.carewebframework.shell.plugins.PluginDefinition;
 import org.carewebframework.shell.plugins.PluginRegistry;
@@ -63,9 +63,9 @@ public class AddComponent implements IAutoWired {
     
     private static final String ON_FAVORITE = "favorite";
     
-    private UIElementBase parentElement;
+    private ElementBase parentElement;
     
-    private UIElementBase childElement;
+    private ElementBase childElement;
     
     private Window window;
     
@@ -126,10 +126,10 @@ public class AddComponent implements IAutoWired {
      * @param parentElement Element to serve as parent to the newly created child element.
      * @param callback Callback to return the newly created child element.
      */
-    public static void newChild(UIElementBase parentElement, IResponseCallback<UIElementBase> callback) {
+    public static void newChild(ElementBase parentElement, IResponseCallback<ElementBase> callback) {
         show(parentElement, true, (event) -> {
             if (callback != null) {
-                callback.onComplete(event.getTarget().getAttribute("childElement", UIElementBase.class));
+                callback.onComplete(event.getTarget().getAttribute("childElement", ElementBase.class));
             }
         });
     }
@@ -141,7 +141,7 @@ public class AddComponent implements IAutoWired {
      * @param parentElement Element to serve as parent to the newly created child element.
      * @param callback Callback to return the plugin definition.
      */
-    public static void getDefinition(UIElementBase parentElement, IResponseCallback<PluginDefinition> callback) {
+    public static void getDefinition(ElementBase parentElement, IResponseCallback<PluginDefinition> callback) {
         show(parentElement, false, (event) -> {
             if (callback != null) {
                 callback.onComplete(event.getTarget().getAttribute("pluginDefinition", PluginDefinition.class));
@@ -157,7 +157,7 @@ public class AddComponent implements IAutoWired {
      * @param createChild If true, the selected element will be created.
      * @param callback The close event handler.
      */
-    private static void show(UIElementBase parentElement, boolean createChild, IEventListener callback) {
+    private static void show(ElementBase parentElement, boolean createChild, IEventListener callback) {
         Map<String, Object> args = new HashMap<>();
         args.put("parentElement", parentElement);
         args.put("createChild", createChild);
@@ -174,7 +174,7 @@ public class AddComponent implements IAutoWired {
     @Override
     public void afterInitialized(BaseComponent comp) {
         window = (Window) comp;
-        this.parentElement = comp.getAttribute("parentElement", UIElementBase.class);
+        this.parentElement = comp.getAttribute("parentElement", ElementBase.class);
         this.createChild = comp.getAttribute("createChild", false);
         Treenode defaultItem = null;
         boolean useDefault = true;
@@ -185,9 +185,9 @@ public class AddComponent implements IAutoWired {
                 continue;
             }
             
-            Class<? extends UIElementBase> clazz = def.getClazz();
+            Class<? extends ElementBase> clazz = def.getClazz();
             
-            if (!parentElement.canAcceptChild(clazz) || !UIElementBase.canAcceptParent(clazz, parentElement.getClass())) {
+            if (!parentElement.canAcceptChild(clazz) || !ElementBase.canAcceptParent(clazz, parentElement.getClass())) {
                 continue;
             }
             
@@ -206,7 +206,7 @@ public class AddComponent implements IAutoWired {
             }
         }
         
-        if (parentElement.canAcceptChild(UIElementLayout.class)) {
+        if (parentElement.canAcceptChild(ElementLayout.class)) {
             addLayouts(true);
             addLayouts(false);
         }
@@ -241,7 +241,7 @@ public class AddComponent implements IAutoWired {
     
     private void addLayouts(boolean shared) {
         for (String layout : LayoutUtil.getLayouts(shared)) {
-            UIElementLayout ele = new UIElementLayout(layout, shared);
+            ElementLayout ele = new ElementLayout(layout, shared);
             addTreenode(ele.getDefinition(), null);
         }
     }
@@ -250,7 +250,7 @@ public class AddComponent implements IAutoWired {
         String category = other != null ? favoritesCategory : def.getCategory();
         
         if (StringUtils.isEmpty(category)) {
-            if (UIElementPlugin.class.isAssignableFrom(def.getClazz())) {
+            if (ElementPlugin.class.isAssignableFrom(def.getClazz())) {
                 category = StrUtil.getLabel("cwf.shell.plugin.category.default");
             } else {
                 return null;

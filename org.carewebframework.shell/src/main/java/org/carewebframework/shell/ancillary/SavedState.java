@@ -25,7 +25,7 @@
  */
 package org.carewebframework.shell.ancillary;
 
-import org.carewebframework.shell.elements.UIElementBase;
+import org.carewebframework.shell.elements.ElementBase;
 import org.carewebframework.web.component.BaseUIComponent;
 import org.carewebframework.web.component.Popup;
 
@@ -35,7 +35,7 @@ import org.carewebframework.web.component.Popup;
  */
 public class SavedState {
     
-    private static final String SAVED_STATE = UIElementBase.class.getName();
+    private static final String SAVED_STATE = ElementBase.class.getName();
     
     final BaseUIComponent component;
     

@@ -26,31 +26,38 @@
 package org.carewebframework.shell.elements;
 
 import org.carewebframework.theme.ThemeUtil;
-import org.carewebframework.web.component.Label;
+import org.carewebframework.web.component.BaseLabeledComponent.LabelPositionHorz;
+import org.carewebframework.web.component.Hyperlink;
 
 /**
  * Simple button stock object.
  */
-public class UIElementLabel extends UIElementBase {
+public class ElementButton extends ElementActionBase {
     
     static {
-        registerAllowedParentClass(UIElementLabel.class, UIElementBase.class);
+        registerAllowedParentClass(ElementButton.class, ElementBase.class);
     }
     
-    private final Label label = new Label();
+    private final Hyperlink component;
     
-    private ThemeUtil.LabelSize size = ThemeUtil.LabelSize.DEFAULT;
+    private ThemeUtil.ButtonSize size;
     
-    private ThemeUtil.LabelStyle style = ThemeUtil.LabelStyle.DEFAULT;
+    private ThemeUtil.ButtonStyle style;
     
-    public UIElementLabel() {
-        setOuterComponent(label);
+    public ElementButton() {
+        this(new Hyperlink(), ThemeUtil.ButtonSize.SMALL, ThemeUtil.ButtonStyle.DEFAULT);
+    }
+    
+    public ElementButton(Hyperlink component, ThemeUtil.ButtonSize size, ThemeUtil.ButtonStyle style) {
+        this.component = component;
+        this.size = size;
+        this.style = style;
+        setOuterComponent(component);
         updateStyle();
-        setMaskMode(null);
     }
     
     private void updateStyle() {
-        ThemeUtil.applyThemeClass(label, style, size);
+        ThemeUtil.applyThemeClass(component, style, size);
     }
     
     @Override
@@ -64,7 +71,7 @@ public class UIElementLabel extends UIElementBase {
      * @return The label text.
      */
     public String getLabel() {
-        return label.getLabel();
+        return component.getLabel();
     }
     
     /**
@@ -73,30 +80,56 @@ public class UIElementLabel extends UIElementBase {
      * @param value The label text.
      */
     public void setLabel(String value) {
-        label.setLabel(value);
+        component.setLabel(value);
     }
     
-    public ThemeUtil.LabelSize getSize() {
+    /**
+     * Sets the URL of the icon to display on the button.
+     * 
+     * @param url Icon URL.
+     */
+    public void setIcon(String url) {
+        component.setImage(url);
+    }
+    
+    /**
+     * Returns the URL of the icon to display on the button.
+     * 
+     * @return Icon URL.
+     */
+    public String getIcon() {
+        return component.getImage();
+    }
+    
+    public LabelPositionHorz getPosition() {
+        return component.getPosition();
+    }
+    
+    public void setPosition(LabelPositionHorz position) {
+        component.setPosition(position);
+    }
+    
+    public ThemeUtil.ButtonSize getSize() {
         return size;
     }
     
-    public void setSize(ThemeUtil.LabelSize size) {
+    public void setSize(ThemeUtil.ButtonSize size) {
         this.size = size;
         updateStyle();
     }
     
-    public ThemeUtil.LabelStyle getStyle() {
+    public ThemeUtil.ButtonStyle getStyle() {
         return style;
     }
     
-    public void setStyle(ThemeUtil.LabelStyle style) {
+    public void setStyle(ThemeUtil.ButtonStyle style) {
         this.style = style;
         updateStyle();
     }
     
     @Override
     protected void applyColor() {
-        label.addStyle("color", getColor());
+        component.addStyle("color", getColor());
     }
     
 }

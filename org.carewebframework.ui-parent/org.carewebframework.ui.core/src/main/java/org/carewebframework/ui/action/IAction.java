@@ -27,7 +27,7 @@ package org.carewebframework.ui.action;
 
 /**
  * Interface implemented by actions that may be associated with certain UI elements (e.g.,
- * UIElementButton).
+ * ElementButton).
  */
 public interface IAction {
     

@@ -31,7 +31,7 @@ import java.util.Map;
 import org.carewebframework.api.security.SecurityUtil;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.shell.CareWebShell;
-import org.carewebframework.shell.elements.UIElementDesktop;
+import org.carewebframework.shell.elements.ElementDesktop;
 import org.carewebframework.shell.layout.LayoutIdentifier;
 import org.carewebframework.shell.layout.UILayout;
 import org.carewebframework.ui.dialog.DialogUtil;
@@ -53,7 +53,7 @@ public class DesignMenu implements IAutoWired {
     
     private CareWebShell shell;
     
-    private UIElementDesktop owner;
+    private ElementDesktop owner;
     
     @WiredComponent
     private Menu menu;
@@ -70,7 +70,7 @@ public class DesignMenu implements IAutoWired {
      * @param owner Desktop UI element owner.
      * @param parent The parent for the design menu.
      */
-    public static void create(UIElementDesktop owner, BaseUIComponent parent) {
+    public static void create(ElementDesktop owner, BaseUIComponent parent) {
         Map<String, Object> args = Collections.singletonMap("owner", owner);
         PageUtil.createPage(DesignConstants.RESOURCE_PREFIX + "designMenu.cwf", parent, args).get(0);
     }
@@ -80,7 +80,7 @@ public class DesignMenu implements IAutoWired {
      */
     @Override
     public void afterInitialized(BaseComponent comp) {
-        this.owner = comp.getAttribute("owner", UIElementDesktop.class);
+        this.owner = comp.getAttribute("owner", ElementDesktop.class);
         shell = owner.getShell();
         
         if (!WebUtil.isDebugEnabled() && !SecurityUtil.hasDebugRole()) {

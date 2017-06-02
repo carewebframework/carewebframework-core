@@ -25,7 +25,7 @@
  */
 package org.carewebframework.plugin.settings;
 
-import org.carewebframework.shell.elements.UIElementBase;
+import org.carewebframework.shell.elements.ElementBase;
 import org.carewebframework.shell.property.IPropertyAccessor;
 import org.carewebframework.shell.property.PropertyInfo;
 
@@ -33,7 +33,7 @@ import org.carewebframework.shell.property.PropertyInfo;
  * This is a simple wrapper class that allows the property editor to access settings through the
  * settings provider.
  */
-public class Settings extends UIElementBase implements IPropertyAccessor {
+public class Settings extends ElementBase implements IPropertyAccessor {
     
     private final ISettingsProvider provider;
     

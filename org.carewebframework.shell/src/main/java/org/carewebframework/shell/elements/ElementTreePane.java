@@ -34,15 +34,15 @@ import org.carewebframework.web.component.Span;
 import org.carewebframework.web.event.IEventListener;
 
 /**
- * A child of a UIElementTreeView, this UI element specifies the tree path where its associated tree
+ * A child of a ElementTreeView, this UI element specifies the tree path where its associated tree
  * node is to reside in the parent's tree.
  */
-public class UIElementTreePane extends UIElementBase {
+public class ElementTreePane extends ElementBase {
 
     static {
-        registerAllowedParentClass(UIElementTreePane.class, UIElementTreeView.class);
-        registerAllowedParentClass(UIElementTreePane.class, UIElementTreePane.class);
-        registerAllowedChildClass(UIElementTreePane.class, UIElementBase.class);
+        registerAllowedParentClass(ElementTreePane.class, ElementTreeView.class);
+        registerAllowedParentClass(ElementTreePane.class, ElementTreePane.class);
+        registerAllowedChildClass(ElementTreePane.class, ElementBase.class);
     }
 
     private final Div pane = new Div();
@@ -51,11 +51,11 @@ public class UIElementTreePane extends UIElementBase {
 
     private final Hyperlink anchor;
 
-    private UIElementBase mainChild;
+    private ElementBase mainChild;
 
-    private UIElementBase activeChild;
+    private ElementBase activeChild;
 
-    private UIElementTreeView treeView;
+    private ElementTreeView treeView;
 
     private boolean selected;
 
@@ -67,7 +67,7 @@ public class UIElementTreePane extends UIElementBase {
      * Handler for node click events. Click will select the node and associated pane.
      */
     private final IEventListener clickListener = (event) -> {
-        treeView.setActivePane(UIElementTreePane.this);
+        treeView.setActivePane(ElementTreePane.this);
     };
 
     /**
@@ -79,7 +79,7 @@ public class UIElementTreePane extends UIElementBase {
         }
     };
 
-    public UIElementTreePane() {
+    public ElementTreePane() {
         super();
         maxChildren = Integer.MAX_VALUE;
         //fullSize(pane);
@@ -135,9 +135,9 @@ public class UIElementTreePane extends UIElementBase {
      * Determines canOpen state based on whether any visible child nodes are present.
      */
     private void checkChildren() {
-        UIElementBase child = getFirstVisibleChild();
+        ElementBase child = getFirstVisibleChild();
 
-        while (child != null && !(child instanceof UIElementTreePane)) {
+        while (child != null && !(child instanceof ElementTreePane)) {
             child = child.getNextSibling(true);
         }
 
@@ -196,10 +196,10 @@ public class UIElementTreePane extends UIElementBase {
      * Initializes the child after it is added.
      */
     @Override
-    protected void afterAddChild(UIElementBase child) {
+    protected void afterAddChild(ElementBase child) {
         super.afterAddChild(child);
 
-        if (child instanceof UIElementTreePane) {
+        if (child instanceof ElementTreePane) {
             checkChildren();
         } else {
             mainChild = child;
@@ -211,7 +211,7 @@ public class UIElementTreePane extends UIElementBase {
     }
 
     @Override
-    protected void afterRemoveChild(UIElementBase child) {
+    protected void afterRemoveChild(ElementBase child) {
         super.afterRemoveChild(child);
 
         if (mainChild == child) {
@@ -222,24 +222,24 @@ public class UIElementTreePane extends UIElementBase {
             activeChild = null;
         }
 
-        if (child instanceof UIElementTreePane) {
+        if (child instanceof ElementTreePane) {
             checkChildren();
         }
     }
 
     @Override
-    public boolean canAcceptChild(Class<? extends UIElementBase> clazz) {
+    public boolean canAcceptChild(Class<? extends ElementBase> clazz) {
         return super.canAcceptChild(clazz) && checkChildClass(clazz);
     }
 
     @Override
-    public boolean canAcceptChild(UIElementBase child) {
+    public boolean canAcceptChild(ElementBase child) {
         return super.canAcceptChild(child) && checkChildClass(child.getClass());
     }
 
     @Override
     public void bind() {
-        setTreeView(getAncestor(UIElementTreeView.class));
+        setTreeView(getAncestor(ElementTreeView.class));
         treeView.getInnerComponent().addChild(pane);
         getNodeParent().addChild(node);
     }
@@ -250,8 +250,8 @@ public class UIElementTreePane extends UIElementBase {
      * @return The parent for this node.
      */
     private BaseComponent getNodeParent() {
-        UIElementBase parent = getParent();
-        return parent == treeView ? treeView.getSelector() : ((UIElementTreePane) parent).node;
+        ElementBase parent = getParent();
+        return parent == treeView ? treeView.getSelector() : ((ElementTreePane) parent).node;
     }
 
     /**
@@ -260,13 +260,13 @@ public class UIElementTreePane extends UIElementBase {
      *
      * @param treeView Tree view.
      */
-    private void setTreeView(UIElementTreeView treeView) {
+    private void setTreeView(ElementTreeView treeView) {
         if (this.treeView != treeView) {
             this.treeView = treeView;
 
-            for (UIElementBase child : getChildren()) {
-                if (child instanceof UIElementTreePane) {
-                    ((UIElementTreePane) child).setTreeView(treeView);
+            for (ElementBase child : getChildren()) {
+                if (child instanceof ElementTreePane) {
+                    ((ElementTreePane) child).setTreeView(treeView);
                 }
             }
 
@@ -297,9 +297,9 @@ public class UIElementTreePane extends UIElementBase {
      * Only the node needs to be resequenced, since pane sequencing is arbitrary.
      */
     @Override
-    protected void afterMoveChild(UIElementBase child, UIElementBase before) {
-        UIElementTreePane childpane = (UIElementTreePane) child;
-        UIElementTreePane beforepane = (UIElementTreePane) before;
+    protected void afterMoveChild(ElementBase child, ElementBase before) {
+        ElementTreePane childpane = (ElementTreePane) child;
+        ElementTreePane beforepane = (ElementTreePane) before;
         moveChild(childpane.node, beforepane.node);
     }
 
@@ -326,11 +326,11 @@ public class UIElementTreePane extends UIElementBase {
             activeChild = null;
         } else {
             activeChild = mainChild;
-            UIElementBase child = this;
-            UIElementBase parent = getParent();
+            ElementBase child = this;
+            ElementBase parent = getParent();
 
-            while (parent instanceof UIElementTreePane) {
-                ((UIElementTreePane) parent).activeChild = child;
+            while (parent instanceof ElementTreePane) {
+                ((ElementTreePane) parent).activeChild = child;
                 child = parent;
                 parent = parent.getParent();
             }
@@ -347,8 +347,8 @@ public class UIElementTreePane extends UIElementBase {
      * @param clazz Class of child to be considered.
      * @return True if child may be added.
      */
-    private boolean checkChildClass(Class<? extends UIElementBase> clazz) {
-        if (clazz != UIElementTreePane.class && mainChild != null) {
+    private boolean checkChildClass(Class<? extends ElementBase> clazz) {
+        if (clazz != ElementTreePane.class && mainChild != null) {
             setRejectReason("Tree pane can accept only one child of this type.");
             return false;
         }

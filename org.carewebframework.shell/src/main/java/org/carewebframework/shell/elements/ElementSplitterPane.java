@@ -28,13 +28,13 @@ package org.carewebframework.shell.elements;
 import org.carewebframework.web.component.Pane;
 
 /**
- * A child of the UIElementSplitterView.
+ * A child of the ElementSplitterView.
  */
-public class UIElementSplitterPane extends UIElementBase {
+public class ElementSplitterPane extends ElementBase {
     
     static {
-        registerAllowedParentClass(UIElementSplitterPane.class, UIElementSplitterView.class);
-        registerAllowedChildClass(UIElementSplitterPane.class, UIElementBase.class);
+        registerAllowedParentClass(ElementSplitterPane.class, ElementSplitterView.class);
+        registerAllowedChildClass(ElementSplitterPane.class, ElementBase.class);
     }
     
     private final Pane pane = new Pane();
@@ -43,7 +43,7 @@ public class UIElementSplitterPane extends UIElementBase {
     
     private boolean relative = true;
     
-    public UIElementSplitterPane() {
+    public ElementSplitterPane() {
         super();
         pane.setSplittable(true);
         setOuterComponent(pane);
@@ -89,7 +89,7 @@ public class UIElementSplitterPane extends UIElementBase {
     
     private void updateSize() {
         if (getParent() != null) {
-            updateSize(((UIElementSplitterView) getParent()).isHorizontal());
+            updateSize(((ElementSplitterView) getParent()).isHorizontal());
         }
     }
 }

@@ -25,7 +25,7 @@
  */
 package org.carewebframework.shell.plugins;
 
-import org.carewebframework.shell.elements.UIElementPlugin;
+import org.carewebframework.shell.elements.ElementPlugin;
 import org.carewebframework.web.event.Event;
 
 /**
@@ -44,7 +44,7 @@ public class PluginEvent extends Event {
     
     private final PluginAction action;
     
-    private final UIElementPlugin plugin;
+    private final ElementPlugin plugin;
     
     /**
      * Creates an event to encapsulate an action on the specified plugin.
@@ -52,7 +52,7 @@ public class PluginEvent extends Event {
      * @param plugin Plugin receiving the action.
      * @param action The action performed.
      */
-    public PluginEvent(UIElementPlugin plugin, PluginAction action) {
+    public PluginEvent(ElementPlugin plugin, PluginAction action) {
         this(plugin, action, null);
     }
     
@@ -63,7 +63,7 @@ public class PluginEvent extends Event {
      * @param action The action performed.
      * @param data Arbitrary data to attach.
      */
-    public PluginEvent(UIElementPlugin plugin, PluginAction action, Object data) {
+    public PluginEvent(ElementPlugin plugin, PluginAction action, Object data) {
         super(TYPE, plugin.getOuterComponent(), data);
         this.plugin = plugin;
         this.action = action;
@@ -83,7 +83,7 @@ public class PluginEvent extends Event {
      * 
      * @return The plugin.
      */
-    public UIElementPlugin getPlugin() {
+    public ElementPlugin getPlugin() {
         return plugin;
     }
 }

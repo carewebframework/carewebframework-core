@@ -36,21 +36,21 @@ import org.carewebframework.web.component.Toolbar.Alignment;
 /**
  * Implements a shared toolbar.
  */
-public class UIElementToolbar extends UIElementBase {
+public class ElementToolbar extends ElementBase {
     
     static {
-        registerAllowedChildClass(UIElementToolbar.class, UIElementBase.class);
-        registerAllowedParentClass(UIElementToolbar.class, UIElementBase.class);
+        registerAllowedChildClass(ElementToolbar.class, ElementBase.class);
+        registerAllowedParentClass(ElementToolbar.class, ElementBase.class);
         PropertyTypeRegistry.register("children", PropertyEditorOrderedChildren.class);
     }
     
     private final Toolbar toolbar;
     
-    public UIElementToolbar() {
+    public ElementToolbar() {
         this(new Toolbar());
     }
     
-    public UIElementToolbar(Toolbar toolbar) {
+    public ElementToolbar(Toolbar toolbar) {
         super();
         this.toolbar = toolbar;
         toolbar.setAlignment(Toolbar.Alignment.END);
@@ -87,7 +87,7 @@ public class UIElementToolbar extends UIElementBase {
     }
     
     @Override
-    protected void beforeAddChild(UIElementBase child) {
+    protected void beforeAddChild(ElementBase child) {
         super.beforeAddChild(child);
         Object cmp = child.getOuterComponent();
         

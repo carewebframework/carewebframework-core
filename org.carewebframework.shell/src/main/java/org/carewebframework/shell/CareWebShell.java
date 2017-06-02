@@ -51,8 +51,8 @@ import org.carewebframework.help.HelpSetCache;
 import org.carewebframework.help.IHelpSet;
 import org.carewebframework.help.IHelpViewer;
 import org.carewebframework.help.viewer.HelpUtil;
-import org.carewebframework.shell.elements.UIElementDesktop;
-import org.carewebframework.shell.elements.UIElementPlugin;
+import org.carewebframework.shell.elements.ElementDesktop;
+import org.carewebframework.shell.elements.ElementPlugin;
 import org.carewebframework.shell.layout.UILayout;
 import org.carewebframework.shell.plugins.PluginDefinition;
 import org.carewebframework.shell.plugins.PluginResourceHelp;
@@ -98,7 +98,7 @@ public class CareWebShell extends Div implements INamespace {
 
     private final CommandRegistry commandRegistry = SpringUtil.getBean("commandRegistry", CommandRegistry.class);
 
-    private final List<UIElementPlugin> plugins = new ArrayList<>();
+    private final List<ElementPlugin> plugins = new ArrayList<>();
 
     private final Set<HelpModule> helpModules = new HashSet<>();
 
@@ -108,7 +108,7 @@ public class CareWebShell extends Div implements INamespace {
 
     private UILayout layout = new UILayout();
 
-    private UIElementDesktop desktop;
+    private ElementDesktop desktop;
 
     private final BaseComponent registeredStyles = new Span();
 
@@ -187,7 +187,7 @@ public class CareWebShell extends Div implements INamespace {
             CommandUtil.associateCommand("help", this);
             getPage().addChild(messageWindow = new MessageWindow());
             addChild(registeredStyles);
-            desktop = new UIElementDesktop(this);
+            desktop = new ElementDesktop(this);
             setLogoutConfirm(logoutConfirm);
             String confirmClose = getAppProperty("confirmClose", "CAREWEB.CONFIRM.CLOSE");
 
@@ -228,7 +228,7 @@ public class CareWebShell extends Div implements INamespace {
     public void onKeycapture(KeycaptureEvent event) {
         String shortcut = event.getKeycapture();
 
-        for (UIElementPlugin plugin : getActivatedPlugins(null)) {
+        for (ElementPlugin plugin : getActivatedPlugins(null)) {
             commandRegistry.fireCommands(shortcut, event, plugin.getOuterComponent());
         }
     }
@@ -238,7 +238,7 @@ public class CareWebShell extends Div implements INamespace {
      *
      * @return The current UI desktop.
      */
-    public UIElementDesktop getUIDesktop() {
+    public ElementDesktop getUIDesktop() {
         return desktop;
     }
 
@@ -259,7 +259,7 @@ public class CareWebShell extends Div implements INamespace {
         String initialPlugin = PropertyUtil.getValue("CAREWEB.INITIAL.SECTION", getApplicationName());
 
         if (!StringUtils.isEmpty(initialPlugin)) {
-            for (UIElementPlugin plugin : plugins) {
+            for (ElementPlugin plugin : plugins) {
                 if (initialPlugin.equals(plugin.getDefinition().getId())) {
                     plugin.bringToFront();
                     break;
@@ -407,7 +407,7 @@ public class CareWebShell extends Div implements INamespace {
      *
      * @param plugin Plugin to register.
      */
-    public void registerPlugin(UIElementPlugin plugin) {
+    public void registerPlugin(ElementPlugin plugin) {
         plugins.add(plugin);
     }
 
@@ -416,7 +416,7 @@ public class CareWebShell extends Div implements INamespace {
      *
      * @param plugin Plugin to unregister.
      */
-    public void unregisterPlugin(UIElementPlugin plugin) {
+    public void unregisterPlugin(ElementPlugin plugin) {
         plugins.remove(plugin);
     }
 
@@ -511,7 +511,7 @@ public class CareWebShell extends Div implements INamespace {
      *
      * @return Currently loaded plugins.
      */
-    public Iterable<UIElementPlugin> getLoadedPlugins() {
+    public Iterable<ElementPlugin> getLoadedPlugins() {
         return plugins;
     }
 
@@ -521,8 +521,8 @@ public class CareWebShell extends Div implements INamespace {
      * @param id Id of plugin to locate.
      * @return A reference to the loaded plugin, or null if not found.
      */
-    public UIElementPlugin getLoadedPlugin(String id) {
-        for (UIElementPlugin plugin : plugins) {
+    public ElementPlugin getLoadedPlugin(String id) {
+        for (ElementPlugin plugin : plugins) {
             if (id.equals(plugin.getDefinition().getId())) {
                 return plugin;
             }
@@ -538,8 +538,8 @@ public class CareWebShell extends Div implements INamespace {
      * @param forceInit If true the plugin will be initialized if not already so.
      * @return A reference to the loaded and fully initialized plugin, or null if not found.
      */
-    public UIElementPlugin getLoadedPlugin(String id, boolean forceInit) {
-        UIElementPlugin plugin = getLoadedPlugin(id);
+    public ElementPlugin getLoadedPlugin(String id, boolean forceInit) {
+        ElementPlugin plugin = getLoadedPlugin(id);
 
         if (plugin != null && forceInit) {
             plugin.load();
@@ -554,8 +554,8 @@ public class CareWebShell extends Div implements INamespace {
      * @param id Id of plugin to locate.
      * @return The requested plugin, or null if not found.
      */
-    public UIElementPlugin getActivatedPlugin(String id) {
-        for (UIElementPlugin plugin : plugins) {
+    public ElementPlugin getActivatedPlugin(String id) {
+        for (ElementPlugin plugin : plugins) {
             if (id.equals(plugin.getDefinition().getId()) && plugin.isActivated()) {
                 return plugin;
             }
@@ -569,7 +569,7 @@ public class CareWebShell extends Div implements INamespace {
      *
      * @return List of all active plugins.
      */
-    public Iterable<UIElementPlugin> getActivatedPlugins() {
+    public Iterable<ElementPlugin> getActivatedPlugins() {
         return getActivatedPlugins(null);
     }
 
@@ -579,14 +579,14 @@ public class CareWebShell extends Div implements INamespace {
      * @param list The list to be populated. If null, a new list is created.
      * @return A list of active plugins.
      */
-    public Collection<UIElementPlugin> getActivatedPlugins(Collection<UIElementPlugin> list) {
+    public Collection<ElementPlugin> getActivatedPlugins(Collection<ElementPlugin> list) {
         if (list == null) {
             list = new ArrayList<>();
         } else {
             list.clear();
         }
 
-        for (UIElementPlugin plugin : plugins) {
+        for (ElementPlugin plugin : plugins) {
             if (plugin.isActivated()) {
                 list.add(plugin);
             }
@@ -605,7 +605,7 @@ public class CareWebShell extends Div implements INamespace {
     public Iterable<PluginDefinition> getLoadedPluginDefinitions() {
         List<PluginDefinition> result = new ArrayList<>();
 
-        for (UIElementPlugin plugin : plugins) {
+        for (ElementPlugin plugin : plugins) {
             PluginDefinition def = plugin.getDefinition();
 
             if (!result.contains(def)) {

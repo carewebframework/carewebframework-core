@@ -28,7 +28,7 @@ package org.carewebframework.ui.sharedforms;
 import java.util.Arrays;
 
 import org.carewebframework.common.StrUtil;
-import org.carewebframework.shell.elements.UIElementPlugin;
+import org.carewebframework.shell.elements.ElementPlugin;
 import org.carewebframework.shell.plugins.PluginController;
 import org.carewebframework.web.annotation.WiredComponent;
 import org.carewebframework.web.component.Window;
@@ -57,7 +57,7 @@ public class CaptionedFormController extends PluginController {
     private String color2;
     
     @Override
-    public void onLoad(UIElementPlugin plugin) {
+    public void onLoad(ElementPlugin plugin) {
         //panel = (Window) root;
         super.onLoad(plugin);
         plugin.registerProperties(this, "caption", "captionStyle", "icon", "color1", "color2");

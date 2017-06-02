@@ -32,12 +32,12 @@ import static org.junit.Assert.assertTrue;
 
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.shell.CareWebShell;
-import org.carewebframework.shell.elements.UIElementBase;
-import org.carewebframework.shell.elements.UIElementDesktop;
-import org.carewebframework.shell.elements.UIElementMenubar;
-import org.carewebframework.shell.elements.UIElementPlugin;
-import org.carewebframework.shell.elements.UIElementPlugin.PluginContainer;
-import org.carewebframework.shell.elements.UIElementTreeView;
+import org.carewebframework.shell.elements.ElementBase;
+import org.carewebframework.shell.elements.ElementDesktop;
+import org.carewebframework.shell.elements.ElementMenubar;
+import org.carewebframework.shell.elements.ElementPlugin;
+import org.carewebframework.shell.elements.ElementPlugin.PluginContainer;
+import org.carewebframework.shell.elements.ElementTreeView;
 import org.carewebframework.shell.layout.UILayout;
 import org.carewebframework.shell.plugins.PluginDefinition;
 import org.carewebframework.shell.property.PropertyInfo;
@@ -74,15 +74,15 @@ public class LayoutParserTest {
         PluginDefinition def = PluginDefinition.getDefinition("treeview");
         assertNotNull(def);
         assertEquals(def.getDescription(), StrUtil.getLabel("cwf.shell.plugin.treeview.description"));
-        UIElementBase ele = def.createElement(null, null);
-        assertTrue(ele instanceof UIElementTreeView);
+        ElementBase ele = def.createElement(null, null);
+        assertTrue(ele instanceof ElementTreeView);
         CareWebShell shell = new CareWebShell();
         shell.setParent(MockTest.mockEnvironment.getSession().getPage());
-        UIElementDesktop root = shell.getUIDesktop();
-        UIElementBase element = layout.deserialize(root);
-        assertTrue(element instanceof UIElementMenubar);
+        ElementDesktop root = shell.getUIDesktop();
+        ElementBase element = layout.deserialize(root);
+        assertTrue(element instanceof ElementMenubar);
         assertTrue(element.hasAncestor(root));
-        UIElementPlugin plugin1 = shell.getLoadedPlugin("testplugin1");
+        ElementPlugin plugin1 = shell.getLoadedPlugin("testplugin1");
         assertNotNull(plugin1);
         PluginContainer container1 = (PluginContainer) plugin1.getOuterComponent();
         TestPluginController controller = (TestPluginController) FrameworkController
@@ -109,7 +109,7 @@ public class LayoutParserTest {
         testPlugin(controller, 1, 2, 1, 1);
     }
 
-    private void testProperty(UIElementPlugin plugin, String propertyName, Object expectedValue) throws Exception {
+    private void testProperty(ElementPlugin plugin, String propertyName, Object expectedValue) throws Exception {
         PluginDefinition def = plugin.getDefinition();
         PropertyInfo propInfo = null;
 

@@ -38,8 +38,8 @@ import org.carewebframework.common.MiscUtil;
 import org.carewebframework.common.XMLUtil;
 import org.carewebframework.shell.ancillary.UIException;
 import org.carewebframework.shell.designer.IClipboardAware;
-import org.carewebframework.shell.elements.UIElementBase;
-import org.carewebframework.shell.elements.UIElementDesktop;
+import org.carewebframework.shell.elements.ElementBase;
+import org.carewebframework.shell.elements.ElementDesktop;
 import org.carewebframework.shell.plugins.PluginDefinition;
 import org.carewebframework.shell.property.PropertyInfo;
 import org.carewebframework.web.client.ExecutionContext;
@@ -94,7 +94,7 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
      * @param parent Top level element to be serialized.
      * @return A UI layout representing the serialized hierarchy.
      */
-    public static UILayout serialize(UIElementBase parent) {
+    public static UILayout serialize(ElementBase parent) {
         UILayout layout = new UILayout();
         layout.internalSerialize(parent);
         return layout;
@@ -115,10 +115,10 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
      * @param parent Parent UI element at this level of the hierarchy. May be null.
      * @return The UI element created during this pass.
      */
-    public UIElementBase deserialize(UIElementBase parent) {
+    public ElementBase deserialize(ElementBase parent) {
         moveTop();
         moveDown();
-        UIElementBase element = internalDeserialize(parent, !(parent instanceof UIElementDesktop));
+        ElementBase element = internalDeserialize(parent, !(parent instanceof ElementDesktop));
         
         if (element != null) {
             element.getRoot().activate(true);
@@ -136,7 +136,7 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
      * @param ignoreInternal Ignore internal elements.
      * @return The UI element created during this pass.
      */
-    private UIElementBase internalDeserialize(UIElementBase parent, boolean ignoreInternal) {
+    private ElementBase internalDeserialize(ElementBase parent, boolean ignoreInternal) {
         String id = getObjectName();
         PluginDefinition def = PluginDefinition.getDefinition(id);
         
@@ -144,7 +144,7 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
             log.error("Unrecognized tag '" + id + "' encountered in layout.");
         }
         
-        UIElementBase element = def == null ? null
+        ElementBase element = def == null ? null
                 : ignoreInternal && def.isInternal() ? null : def.createElement(parent, this);
         
         if (element != null && moveDown()) {
@@ -164,7 +164,7 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
      *
      * @param parent UI element to be serialized.
      */
-    private void internalSerialize(UIElementBase parent) {
+    private void internalSerialize(ElementBase parent) {
         PluginDefinition def = parent.getDefinition();
         boolean isRoot = parent.getParent() == null;
         
@@ -181,7 +181,7 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
             }
         }
         
-        for (UIElementBase child : parent.getSerializableChildren()) {
+        for (ElementBase child : parent.getSerializableChildren()) {
             internalSerialize(child);
         }
         
@@ -398,7 +398,7 @@ public class UILayout implements IPropertyProvider, IClipboardAware<UILayout> {
      *
      * @return Class of the element at the root of the layout, or null if none.
      */
-    public Class<? extends UIElementBase> getRootClass() {
+    public Class<? extends ElementBase> getRootClass() {
         Node node = document.getDocumentElement();
         node = node.hasChildNodes() ? node.getFirstChild() : null;
         String id = node == null ? null : node.getNodeName();

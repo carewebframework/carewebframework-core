@@ -25,15 +25,15 @@
  */
 package org.carewebframework.shell.designer;
 
-import org.carewebframework.shell.elements.UIElementTabPane;
+import org.carewebframework.shell.elements.ElementTabPane;
 
 /**
  * Property editor for managing tabs.
  */
-public class PropertyEditorTabView extends PropertyEditorCustomTree<UIElementTabPane> {
+public class PropertyEditorTabView extends PropertyEditorCustomTree<ElementTabPane> {
     
     public PropertyEditorTabView() {
-        super(UIElementTabPane.class, "label", false);
+        super(ElementTabPane.class, "label", false);
     }
     
 }

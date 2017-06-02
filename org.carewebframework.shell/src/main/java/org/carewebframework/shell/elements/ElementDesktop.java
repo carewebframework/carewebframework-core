@@ -52,10 +52,10 @@ import org.carewebframework.web.component.Toolbar;
 /**
  * This is the topmost component of the layout.
  */
-public class UIElementDesktop extends UIElementBase {
+public class ElementDesktop extends ElementBase {
 
     static {
-        registerAllowedChildClass(UIElementDesktop.class, UIElementBase.class);
+        registerAllowedChildClass(ElementDesktop.class, ElementBase.class);
     }
 
     private final BaseUIComponent desktopOuter;
@@ -104,21 +104,21 @@ public class UIElementDesktop extends UIElementBase {
 
     private ThemeUtil.PanelStyle style = ThemeUtil.PanelStyle.DEFAULT;
 
-    private final UIElementMenubar menubar;
+    private final ElementMenubar menubar;
 
-    private final UIElementToolbar toolbar;
+    private final ElementToolbar toolbar;
 
     private final CareWebShell shell;
 
-    public UIElementDesktop(CareWebShell shell) throws Exception {
+    public ElementDesktop(CareWebShell shell) throws Exception {
         super();
         this.shell = shell;
         maxChildren = Integer.MAX_VALUE;
         desktopOuter = createFromTemplate();
         setOuterComponent(desktopOuter);
         setInnerComponent(desktopInner);
-        menubar = new UIElementMenubar(menubar1);
-        toolbar = new UIElementToolbar(toolbar1);
+        menubar = new ElementMenubar(menubar1);
+        toolbar = new ElementToolbar(toolbar1);
         ActionUtil.addAction(mnuAbout, "groovy:org.carewebframework.shell.CareWebUtil.about();");
         ActionUtil.addAction(mnuTOC, "groovy:org.carewebframework.shell.CareWebUtil.showHelpTOC();");
         fixedHelpItems = helpMenu.getChildCount();
@@ -252,7 +252,7 @@ public class UIElementDesktop extends UIElementBase {
      *
      * @return Desktop tool bar.
      */
-    public UIElementToolbar getToolbar() {
+    public ElementToolbar getToolbar() {
         return toolbar;
     }
 
@@ -261,7 +261,7 @@ public class UIElementDesktop extends UIElementBase {
      *
      * @return Desktop menu bar.
      */
-    public UIElementMenubar getMenubar() {
+    public ElementMenubar getMenubar() {
         return menubar;
     }
 
@@ -269,7 +269,7 @@ public class UIElementDesktop extends UIElementBase {
      * Overrides addChild to suppress onAddChild events for internally created children.
      */
     @Override
-    public void addChild(UIElementBase child) {
+    public void addChild(ElementBase child) {
         addChild(child, child != toolbar && child != menubar);
     }
 

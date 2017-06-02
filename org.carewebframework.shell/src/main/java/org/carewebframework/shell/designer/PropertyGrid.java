@@ -33,7 +33,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.shell.ancillary.UIException;
-import org.carewebframework.shell.elements.UIElementBase;
+import org.carewebframework.shell.elements.ElementBase;
 import org.carewebframework.shell.plugins.PluginDefinition;
 import org.carewebframework.shell.property.PropertyInfo;
 import org.carewebframework.shell.property.PropertyType;
@@ -148,7 +148,7 @@ public class PropertyGrid implements IAutoWired {
      * @param parent Parent component for property grid (may be null).
      * @return Newly created PropertyGrid instance.
      */
-    public static PropertyGrid create(UIElementBase target, BaseComponent parent) {
+    public static PropertyGrid create(ElementBase target, BaseComponent parent) {
         return create(target, parent, false);
     }
     
@@ -160,7 +160,7 @@ public class PropertyGrid implements IAutoWired {
      * @param embedded If true, the property grid is embedded within another component.
      * @return Newly created PropertyGrid instance.
      */
-    public static PropertyGrid create(UIElementBase target, BaseComponent parent, boolean embedded) {
+    public static PropertyGrid create(ElementBase target, BaseComponent parent, boolean embedded) {
         Map<String, Object> args = new HashMap<>();
         args.put("target", target);
         args.put("embedded", embedded);
@@ -189,7 +189,7 @@ public class PropertyGrid implements IAutoWired {
         mv.setModel(model);
         comp.setAttribute("controller", this);
         this.embedded = comp.getAttribute("embedded", false);
-        setTarget(comp.getAttribute("target", UIElementBase.class));
+        setTarget(comp.getAttribute("target", ElementBase.class));
         
         if (window.getParent() != null) {
             window.setClosable(false);
@@ -214,7 +214,7 @@ public class PropertyGrid implements IAutoWired {
      *
      * @param target UI element whose properties are to be edited.
      */
-    public void setTarget(UIElementBase target) {
+    public void setTarget(ElementBase target) {
         if (target == null) {
             setTarget(null, null, null);
         } else {
@@ -321,8 +321,8 @@ public class PropertyGrid implements IAutoWired {
         
         disableButtons(result);
         
-        if (commit && target instanceof UIElementBase) {
-            EventUtil.post(new LayoutChangedEvent(null, (UIElementBase) target));
+        if (commit && target instanceof ElementBase) {
+            EventUtil.post(new LayoutChangedEvent(null, (ElementBase) target));
         }
         
         return result;

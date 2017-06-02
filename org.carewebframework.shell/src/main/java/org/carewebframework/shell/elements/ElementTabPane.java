@@ -31,11 +31,11 @@ import org.carewebframework.web.component.Tabview;
 /**
  * Wraps the Tab component.
  */
-public class UIElementTabPane extends UIElementBase {
+public class ElementTabPane extends ElementBase {
     
     static {
-        registerAllowedParentClass(UIElementTabPane.class, UIElementTabView.class);
-        registerAllowedChildClass(UIElementTabPane.class, UIElementBase.class);
+        registerAllowedParentClass(ElementTabPane.class, ElementTabView.class);
+        registerAllowedChildClass(ElementTabPane.class, ElementBase.class);
     }
     
     private final Tab tab = new Tab();
@@ -44,7 +44,7 @@ public class UIElementTabPane extends UIElementBase {
      * Set up the tab and tab panel UI components. Note that we use a custom widget override to
      * allow setting the color of the caption text.
      */
-    public UIElementTabPane() {
+    public ElementTabPane() {
         super();
         setOuterComponent(tab);
     }
@@ -55,7 +55,7 @@ public class UIElementTabPane extends UIElementBase {
     @Override
     public void bringToFront() {
         super.bringToFront();
-        ((UIElementTabView) getParent()).setActivePane(this);
+        ((ElementTabView) getParent()).setActivePane(this);
     }
     
     /**

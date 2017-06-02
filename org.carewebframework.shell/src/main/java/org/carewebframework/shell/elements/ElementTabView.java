@@ -32,29 +32,29 @@ import org.carewebframework.web.component.Tabview.TabPosition;
 import org.carewebframework.web.event.ChangeEvent;
 
 /**
- * Wraps the Tabview component. This UI element can only accept UIElementTabPane elements as
+ * Wraps the Tabview component. This UI element can only accept ElementTabPane elements as
  * children and only one of those can be active at a time.
  */
-public class UIElementTabView extends UIElementBase {
+public class ElementTabView extends ElementBase {
 
     static {
-        registerAllowedParentClass(UIElementTabView.class, UIElementBase.class);
-        registerAllowedChildClass(UIElementTabView.class, UIElementTabPane.class);
+        registerAllowedParentClass(ElementTabView.class, ElementBase.class);
+        registerAllowedChildClass(ElementTabView.class, ElementTabPane.class);
         PropertyTypeRegistry.register("tabs", PropertyEditorTabView.class);
     }
 
     private final Tabview tabview = new Tabview();
 
-    private UIElementTabPane activePane;
+    private ElementTabPane activePane;
 
-    public UIElementTabView() {
+    public ElementTabView() {
         super();
         maxChildren = Integer.MAX_VALUE;
         fullSize(tabview);
         setOuterComponent(tabview);
         tabview.addClass("cwf-tabview");
         tabview.addEventListener(ChangeEvent.TYPE, (event) -> {
-            setActivePane((UIElementTabPane) getAssociatedUIElement(tabview.getSelectedTab()));
+            setActivePane((ElementTabPane) getAssociatedElement(tabview.getSelectedTab()));
         });
     }
 
@@ -80,7 +80,7 @@ public class UIElementTabView extends UIElementBase {
      * Need to detach both the tab and the tab panel of the child component.
      */
     @Override
-    protected void beforeRemoveChild(UIElementBase child) {
+    protected void beforeRemoveChild(ElementBase child) {
         if (child == activePane) {
             setActivePane(null);
         }
@@ -91,7 +91,7 @@ public class UIElementTabView extends UIElementBase {
      *
      * @param pane The pane to become active.
      */
-    protected void setActivePane(UIElementTabPane pane) {
+    protected void setActivePane(ElementTabPane pane) {
         if (pane == activePane) {
             return;
         }
@@ -112,7 +112,7 @@ public class UIElementTabView extends UIElementBase {
         super.updateVisibility(visible, activated);
 
         if (activated && visible && activePane == null && getChildCount() > 0) {
-            setActivePane((UIElementTabPane) getChild(0));
+            setActivePane((ElementTabPane) getChild(0));
         }
     }
     
@@ -122,7 +122,7 @@ public class UIElementTabView extends UIElementBase {
     @Override
     public void activateChildren(boolean activate) {
         if (activePane == null) {
-            activePane = (UIElementTabPane) getAssociatedUIElement(tabview.getSelectedTab());
+            activePane = (ElementTabPane) getAssociatedElement(tabview.getSelectedTab());
         }
 
         if (activePane != null) {

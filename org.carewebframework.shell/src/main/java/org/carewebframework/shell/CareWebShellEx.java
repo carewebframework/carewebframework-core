@@ -32,13 +32,13 @@ import org.carewebframework.api.property.IPropertyProvider;
 import org.carewebframework.api.property.PropertyUtil;
 import org.carewebframework.common.MiscUtil;
 import org.carewebframework.shell.ancillary.UIException;
-import org.carewebframework.shell.elements.UIElementBase;
-import org.carewebframework.shell.elements.UIElementMenuItem;
-import org.carewebframework.shell.elements.UIElementPlugin;
-import org.carewebframework.shell.elements.UIElementTabPane;
-import org.carewebframework.shell.elements.UIElementTabView;
-import org.carewebframework.shell.elements.UIElementTreePane;
-import org.carewebframework.shell.elements.UIElementTreeView;
+import org.carewebframework.shell.elements.ElementBase;
+import org.carewebframework.shell.elements.ElementMenuItem;
+import org.carewebframework.shell.elements.ElementPlugin;
+import org.carewebframework.shell.elements.ElementTabPane;
+import org.carewebframework.shell.elements.ElementTabView;
+import org.carewebframework.shell.elements.ElementTreePane;
+import org.carewebframework.shell.elements.ElementTreeView;
 import org.carewebframework.shell.layout.UILayout;
 import org.carewebframework.shell.plugins.PluginDefinition;
 import org.carewebframework.shell.plugins.PluginException;
@@ -67,9 +67,9 @@ public class CareWebShellEx extends CareWebShell {
      */
     public class PathResolver {
         
-        private final Class<? extends UIElementBase> rootClass;
+        private final Class<? extends ElementBase> rootClass;
         
-        private final Class<? extends UIElementBase> childClass;
+        private final Class<? extends ElementBase> childClass;
         
         /**
          * Creates a path resolver.
@@ -77,10 +77,10 @@ public class CareWebShellEx extends CareWebShell {
          * @param rootClass This is the class that will hold instances of the child class.
          * @param childClass This is the class that will hold the plugin.
          */
-        public PathResolver(Class<? extends UIElementBase> rootClass, Class<? extends UIElementBase> childClass) {
-            if (!UIElementBase.canAcceptChild(rootClass, childClass) || !UIElementBase.canAcceptParent(childClass, rootClass)
-                    || !UIElementBase.canAcceptParent(childClass, childClass)
-                    || !UIElementBase.canAcceptChild(childClass, UIElementPlugin.class)) {
+        public PathResolver(Class<? extends ElementBase> rootClass, Class<? extends ElementBase> childClass) {
+            if (!ElementBase.canAcceptChild(rootClass, childClass) || !ElementBase.canAcceptParent(childClass, rootClass)
+                    || !ElementBase.canAcceptParent(childClass, childClass)
+                    || !ElementBase.canAcceptChild(childClass, ElementPlugin.class)) {
                 throw new UIException("Root and child classes are not compatible.");
             }
             this.rootClass = rootClass;
@@ -94,7 +94,7 @@ public class CareWebShellEx extends CareWebShell {
          * @param path Path to resolve.
          * @return The plugin parent
          */
-        protected UIElementBase resolvePath(UIElementTabPane tabPane, String path) {
+        protected ElementBase resolvePath(ElementTabPane tabPane, String path) {
             return getElement(path, getRoot(tabPane), childClass);
         }
         
@@ -105,8 +105,8 @@ public class CareWebShellEx extends CareWebShell {
          * @param tabPane The tab pane.
          * @return The root.
          */
-        protected UIElementBase getRoot(UIElementTabPane tabPane) {
-            UIElementBase root = tabPane.findChildElement(rootClass);
+        protected ElementBase getRoot(ElementTabPane tabPane) {
+            ElementBase root = tabPane.findChildElement(rootClass);
             
             if (root == null) {
                 try {
@@ -122,7 +122,7 @@ public class CareWebShellEx extends CareWebShell {
         
     }
     
-    private UIElementTabView tabView;
+    private ElementTabView tabView;
     
     private String defaultPluginId;
     
@@ -143,7 +143,7 @@ public class CareWebShellEx extends CareWebShell {
      * @return Container created for the plugin.
      * @throws Exception Unspecified exception.
      */
-    public UIElementBase registerFromId(String path, String id) throws Exception {
+    public ElementBase registerFromId(String path, String id) throws Exception {
         return registerFromId(path, id, null);
     }
     
@@ -157,7 +157,7 @@ public class CareWebShellEx extends CareWebShell {
      * @return Container created for the plugin.
      * @throws Exception Unspecified exception.
      */
-    public UIElementBase registerFromId(String path, String id, IPropertyProvider propertySource) throws Exception {
+    public ElementBase registerFromId(String path, String id, IPropertyProvider propertySource) throws Exception {
         return register(path, pluginById(id), propertySource);
     }
     
@@ -185,7 +185,7 @@ public class CareWebShellEx extends CareWebShell {
      * @return Container created for the plugin.
      * @throws Exception Unspecified exception.
      */
-    public UIElementBase register(String path, String url) throws Exception {
+    public ElementBase register(String path, String url) throws Exception {
         return register(path, url, null);
     }
     
@@ -198,7 +198,7 @@ public class CareWebShellEx extends CareWebShell {
      * @return Container created for the plugin.
      * @throws Exception Unspecified exception.
      */
-    public UIElementBase register(String path, String url, IPropertyProvider propertySource) throws Exception {
+    public ElementBase register(String path, String url, IPropertyProvider propertySource) throws Exception {
         PluginDefinition def = new PluginDefinition();
         def.setUrl(url);
         return register(path, def, propertySource);
@@ -211,21 +211,21 @@ public class CareWebShellEx extends CareWebShell {
      * @param action Associated action for the menu.
      * @return Created menu.
      */
-    public UIElementMenuItem registerMenu(String path, String action) {
-        UIElementMenuItem menu = getElement(path, getUIDesktop().getMenubar(), UIElementMenuItem.class);
+    public ElementMenuItem registerMenu(String path, String action) {
+        ElementMenuItem menu = getElement(path, getUIDesktop().getMenubar(), ElementMenuItem.class);
         menu.setAction(action);
         return menu;
     }
     
-    private <T extends UIElementBase> T getElement(String path, UIElementBase root, Class<T> childClass) {
-        UIElementBase parent = root;
+    private <T extends ElementBase> T getElement(String path, ElementBase root, Class<T> childClass) {
+        ElementBase parent = root;
         T ele = null;
         
         try {
             for (String pc : path.split("\\\\")) {
                 ele = null;
                 
-                for (UIElementBase child : parent.getChildren()) {
+                for (ElementBase child : parent.getChildren()) {
                     if (!childClass.isInstance(child)) {
                         continue;
                     }
@@ -263,7 +263,7 @@ public class CareWebShellEx extends CareWebShell {
      * @return The newly created plugin.
      * @throws Exception Unspecified exception.
      */
-    public UIElementBase register(String path, PluginDefinition def) throws Exception {
+    public ElementBase register(String path, PluginDefinition def) throws Exception {
         return register(path, def, null);
     }
     
@@ -277,7 +277,7 @@ public class CareWebShellEx extends CareWebShell {
      * @return The newly created plugin.
      * @throws Exception Unspecified exception.
      */
-    public UIElementBase register(String path, PluginDefinition def, IPropertyProvider propertySource) throws Exception {
+    public ElementBase register(String path, PluginDefinition def, IPropertyProvider propertySource) throws Exception {
         if (def.isForbidden()) {
             log.info("Access to plugin " + def.getName() + " is restricted.");
             return null;
@@ -288,8 +288,8 @@ public class CareWebShellEx extends CareWebShell {
             return null;
         }
         
-        UIElementBase parent = parentFromPath(path);
-        UIElementBase plugin = parent == null ? null : def.createElement(parent, propertySource);
+        ElementBase parent = parentFromPath(path);
+        ElementBase plugin = parent == null ? null : def.createElement(parent, propertySource);
         String defPluginId = getDefaultPluginId();
         
         if (!defPluginId.isEmpty()
@@ -308,7 +308,7 @@ public class CareWebShellEx extends CareWebShell {
      */
     public void registerLayout(String path, String resource) throws Exception {
         UILayout layout = UILayout.load(resource);
-        UIElementBase parent = parentFromPath(path);
+        ElementBase parent = parentFromPath(path);
         
         if (parent != null) {
             layout.deserialize(parent);
@@ -322,14 +322,14 @@ public class CareWebShellEx extends CareWebShell {
      * @return The parent UI element.
      * @throws Exception Unspecified exception.
      */
-    private UIElementBase parentFromPath(String path) throws Exception {
+    private ElementBase parentFromPath(String path) throws Exception {
         if (TOOLBAR_PATH.equalsIgnoreCase(path)) {
             return getUIDesktop().getToolbar();
         }
         
         String[] pieces = path.split(delim, 2);
-        UIElementTabPane tabPane = pieces.length == 0 ? null : findTabPane(pieces[0]);
-        UIElementBase parent = pieces.length < 2 ? null : getPathResolver().resolvePath(tabPane, pieces[1]);
+        ElementTabPane tabPane = pieces.length == 0 ? null : findTabPane(pieces[0]);
+        ElementBase parent = pieces.length < 2 ? null : getPathResolver().resolvePath(tabPane, pieces[1]);
         return parent == null ? tabPane : parent;
     }
     
@@ -340,17 +340,17 @@ public class CareWebShellEx extends CareWebShell {
      * @return Tab corresponding to label text.
      * @throws Exception Unspecified exception.
      */
-    private UIElementTabPane findTabPane(String name) throws Exception {
-        UIElementTabView tabView = getTabView();
-        UIElementTabPane tabPane = null;
+    private ElementTabPane findTabPane(String name) throws Exception {
+        ElementTabView tabView = getTabView();
+        ElementTabPane tabPane = null;
         
-        while ((tabPane = tabView.getChild(UIElementTabPane.class, tabPane)) != null) {
+        while ((tabPane = tabView.getChild(ElementTabPane.class, tabPane)) != null) {
             if (name.equalsIgnoreCase(tabPane.getLabel())) {
                 return tabPane;
             }
         }
         
-        tabPane = new UIElementTabPane();
+        tabPane = new ElementTabPane();
         tabPane.setParent(tabView);
         tabPane.setLabel(name);
         return tabPane;
@@ -363,9 +363,9 @@ public class CareWebShellEx extends CareWebShell {
      *
      * @return The target tab view, or null if not found.
      */
-    private UIElementTabView getTabView() {
+    private ElementTabView getTabView() {
         if (tabView == null) {
-            tabView = getUIDesktop().findChildElement(UIElementTabView.class);
+            tabView = getUIDesktop().findChildElement(ElementTabView.class);
         }
         
         return tabView;
@@ -400,7 +400,7 @@ public class CareWebShellEx extends CareWebShell {
      */
     public PathResolver getPathResolver() {
         if (pathResolver == null) {
-            pathResolver = new PathResolver(UIElementTreeView.class, UIElementTreePane.class);
+            pathResolver = new PathResolver(ElementTreeView.class, ElementTreePane.class);
         }
         
         return pathResolver;

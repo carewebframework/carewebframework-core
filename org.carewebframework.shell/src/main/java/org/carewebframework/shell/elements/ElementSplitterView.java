@@ -34,11 +34,11 @@ import org.carewebframework.web.component.Paneview.Orientation;
  * A splitter view has either a vertical or horizontal orientation and can contain any number of
  * splitter panes which are placed side-by-side with splitter bars in between for manual sizing.
  */
-public class UIElementSplitterView extends UIElementBase {
+public class ElementSplitterView extends ElementBase {
 
     static {
-        registerAllowedParentClass(UIElementSplitterView.class, UIElementBase.class);
-        registerAllowedChildClass(UIElementSplitterView.class, UIElementSplitterPane.class);
+        registerAllowedParentClass(ElementSplitterView.class, ElementBase.class);
+        registerAllowedChildClass(ElementSplitterView.class, ElementSplitterPane.class);
         PropertyTypeRegistry.register("panes", PropertyEditorSplitterView.class);
     }
 
@@ -46,7 +46,7 @@ public class UIElementSplitterView extends UIElementBase {
 
     private Orientation orientation;
 
-    public UIElementSplitterView() {
+    public ElementSplitterView() {
         super();
         setOuterComponent(root);
         root.setFlex("1");
@@ -59,15 +59,15 @@ public class UIElementSplitterView extends UIElementBase {
         root.setOrientation(this.orientation);
         boolean isHorizontal = isHorizontal();
 
-        for (UIElementSplitterPane child : this.getChildren(UIElementSplitterPane.class)) {
+        for (ElementSplitterPane child : this.getChildren(ElementSplitterPane.class)) {
             child.updateSize(isHorizontal);
         }
     }
 
     @Override
-    protected void afterAddChild(UIElementBase child) {
+    protected void afterAddChild(ElementBase child) {
         super.afterAddChild(child);
-        ((UIElementSplitterPane) child).updateSize(isHorizontal());
+        ((ElementSplitterPane) child).updateSize(isHorizontal());
     }
 
     public String getOrientation() {

@@ -38,11 +38,11 @@ import org.springframework.util.StringUtils;
 /**
  * Wrapper for a UI layout component.
  */
-public class UIElementLayout extends UIElementBase {
+public class ElementLayout extends ElementBase {
     
     static {
-        registerAllowedParentClass(UIElementLayout.class, UIElementBase.class);
-        registerAllowedChildClass(UIElementLayout.class, UIElementBase.class);
+        registerAllowedParentClass(ElementLayout.class, ElementBase.class);
+        registerAllowedChildClass(ElementLayout.class, ElementBase.class);
     }
     
     private String layoutName;
@@ -61,12 +61,12 @@ public class UIElementLayout extends UIElementBase {
     
     private boolean initializing;
     
-    public UIElementLayout() {
+    public ElementLayout() {
         fullSize(div);
         setOuterComponent(div);
     }
     
-    public UIElementLayout(String layoutName, boolean shared) {
+    public ElementLayout(String layoutName, boolean shared) {
         this();
         this.layoutName = layoutName;
         this.shared = shared;
@@ -155,8 +155,8 @@ public class UIElementLayout extends UIElementBase {
      * A linked layout has no serializable children.
      */
     @Override
-    public Iterable<UIElementBase> getSerializableChildren() {
-        return linked ? Collections.<UIElementBase> emptyList() : super.getSerializableChildren();
+    public Iterable<ElementBase> getSerializableChildren() {
+        return linked ? Collections.<ElementBase> emptyList() : super.getSerializableChildren();
     }
     
     /**
@@ -192,9 +192,9 @@ public class UIElementLayout extends UIElementBase {
      * Checks for a circular reference to the same linked layout, throwing an exception if found.
      */
     private void checkForCircularReference() {
-        UIElementLayout layout = this;
+        ElementLayout layout = this;
         
-        while ((layout = layout.getAncestor(UIElementLayout.class)) != null) {
+        while ((layout = layout.getAncestor(ElementLayout.class)) != null) {
             if (layout.linked && layout.shared == shared && layout.layoutName.equals(layoutName)) {
                 UIException.raise("Circular reference to layout " + layoutName);
             }
@@ -216,8 +216,8 @@ public class UIElementLayout extends UIElementBase {
      * @param children List of descendants.
      * @param lock The lock state.
      */
-    private void lockDescendants(Iterable<UIElementBase> children, boolean lock) {
-        for (UIElementBase child : children) {
+    private void lockDescendants(Iterable<ElementBase> children, boolean lock) {
+        for (ElementBase child : children) {
             child.setLocked(lock);
             lockDescendants(child.getChildren(), lock);
         }

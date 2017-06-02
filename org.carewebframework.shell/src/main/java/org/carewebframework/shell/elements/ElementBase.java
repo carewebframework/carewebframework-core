@@ -59,15 +59,15 @@ import org.carewebframework.web.component.Menupopup;
 import org.carewebframework.web.page.PageUtil;
 
 /**
- * This is the base class for all UI elements supported by the CareWeb framework.
+ * This is the base class for all layout elements supported by the CareWeb framework.
  */
-public abstract class UIElementBase {
+public abstract class ElementBase {
 
-    protected static final Log log = LogFactory.getLog(UIElementBase.class);
+    protected static final Log log = LogFactory.getLog(ElementBase.class);
 
-    private static final String ATTR_PREFIX = UIElementBase.class.getName() + ".";
+    private static final String ATTR_PREFIX = ElementBase.class.getName() + ".";
 
-    private static final String ASSOC_ELEMENT = ATTR_PREFIX + "AssociatedUIElement";
+    private static final String ASSOC_ELEMENT = ATTR_PREFIX + "AssociatedElement";
 
     private static final String CONTEXT_MENU = ATTR_PREFIX + "ContextMenu";
 
@@ -79,7 +79,7 @@ public abstract class UIElementBase {
 
     private final NotificationListeners childListeners = new NotificationListeners();
 
-    private final List<UIElementBase> children = new ArrayList<>();
+    private final List<ElementBase> children = new ArrayList<>();
 
     protected int maxChildren = 1;
 
@@ -87,7 +87,7 @@ public abstract class UIElementBase {
 
     protected boolean autoEnable = true;
 
-    private UIElementBase parent;
+    private ElementBase parent;
 
     private boolean locked;
 
@@ -116,26 +116,26 @@ public abstract class UIElementBase {
     private IEventManager eventManager;
 
     /**
-     * A UIElementBase subclass should call this in its static initializer block to register any
+     * A ElementBase subclass should call this in its static initializer block to register any
      * subclasses that may act as a parent.
      *
      * @param clazz Class whose valid parent classes are to be registered.
      * @param parentClass Class that may act as a parent to clazz.
      */
-    protected static synchronized void registerAllowedParentClass(Class<? extends UIElementBase> clazz,
-                                                                  Class<? extends UIElementBase> parentClass) {
+    protected static synchronized void registerAllowedParentClass(Class<? extends ElementBase> clazz,
+                                                                  Class<? extends ElementBase> parentClass) {
         allowedParentClasses.addRelated(clazz, parentClass);
     }
 
     /**
-     * A UIElementBase subclass should call this in its static initializer block to register any
+     * A ElementBase subclass should call this in its static initializer block to register any
      * subclasses that may be a child.
      *
      * @param clazz Class whose valid child classes are to be registered.
      * @param childClass Class that may be a child of clazz.
      */
-    protected static synchronized void registerAllowedChildClass(Class<? extends UIElementBase> clazz,
-                                                                 Class<? extends UIElementBase> childClass) {
+    protected static synchronized void registerAllowedChildClass(Class<? extends ElementBase> clazz,
+                                                                 Class<? extends ElementBase> childClass) {
         allowedChildClasses.addRelated(clazz, childClass);
     }
 
@@ -146,8 +146,7 @@ public abstract class UIElementBase {
      * @param childClass Child class
      * @return True if childClass can be a child of the parentClass.
      */
-    public static boolean canAcceptChild(Class<? extends UIElementBase> parentClass,
-                                         Class<? extends UIElementBase> childClass) {
+    public static boolean canAcceptChild(Class<? extends ElementBase> parentClass, Class<? extends ElementBase> childClass) {
         return allowedChildClasses.isRelated(parentClass, childClass);
     }
 
@@ -158,8 +157,8 @@ public abstract class UIElementBase {
      * @param parentClass The parent class.
      * @return True if parentClass can be a parent of childClass.
      */
-    public static boolean canAcceptParent(Class<? extends UIElementBase> childClass,
-                                          Class<? extends UIElementBase> parentClass) {
+    public static boolean canAcceptParent(Class<? extends ElementBase> childClass,
+                                          Class<? extends ElementBase> parentClass) {
         return allowedParentClasses.isRelated(childClass, parentClass);
     }
 
@@ -169,8 +168,8 @@ public abstract class UIElementBase {
      * @param component The CWF component of interest.
      * @return The associated UI element.
      */
-    public static UIElementBase getAssociatedUIElement(BaseComponent component) {
-        return component == null ? null : (UIElementBase) component.getAttribute(ASSOC_ELEMENT);
+    public static ElementBase getAssociatedElement(BaseComponent component) {
+        return component == null ? null : (ElementBase) component.getAttribute(ASSOC_ELEMENT);
     }
 
     /**
@@ -183,7 +182,7 @@ public abstract class UIElementBase {
         return component == null ? null : (Menupopup) component.getAttribute(CONTEXT_MENU);
     }
 
-    public UIElementBase() {
+    public ElementBase() {
         mask = new DesignMask(this);
     }
 
@@ -194,7 +193,8 @@ public abstract class UIElementBase {
      * @return The template URL.
      */
     protected String getTemplateUrl() {
-        return "web/" + getClass().getName().replace(".", "/") + ".cwf";
+        return "web/" + getClass().getPackage().getName().replace(".", "/") + "/"
+                + StringUtils.uncapitalize(getClass().getSimpleName()) + ".cwf";
     }
 
     /**
@@ -279,7 +279,7 @@ public abstract class UIElementBase {
         this.designMode = designMode;
         setDesignContextMenu(designMode ? DesignContextMenu.getInstance().getMenupopup() : null);
 
-        for (UIElementBase child : children) {
+        for (ElementBase child : children) {
             child.setDesignMode(designMode);
         }
 
@@ -334,7 +334,7 @@ public abstract class UIElementBase {
     private void updateMasks() {
         mask.update();
 
-        for (UIElementBase child : getChildren()) {
+        for (ElementBase child : getChildren()) {
             child.updateMasks();
         }
     }
@@ -345,7 +345,7 @@ public abstract class UIElementBase {
      *
      * @param child Element to add as a child.
      */
-    public void addChild(UIElementBase child) {
+    public void addChild(ElementBase child) {
         addChild(child, true);
     }
 
@@ -356,7 +356,7 @@ public abstract class UIElementBase {
      * @param child Element to add as a child.
      * @param doEvent Fires the add child events if true.
      */
-    protected void addChild(UIElementBase child, boolean doEvent) {
+    protected void addChild(ElementBase child, boolean doEvent) {
         if (!child.canAcceptParent(this)) {
             UIException.raise(child.rejectReason);
         }
@@ -386,7 +386,7 @@ public abstract class UIElementBase {
      *
      * @param child The child element added.
      */
-    protected void afterAddChild(UIElementBase child) {
+    protected void afterAddChild(ElementBase child) {
         mask.update();
     }
 
@@ -395,7 +395,7 @@ public abstract class UIElementBase {
      *
      * @param child The new child element.
      */
-    protected void beforeAddChild(UIElementBase child) {
+    protected void beforeAddChild(ElementBase child) {
     }
 
     /**
@@ -404,7 +404,7 @@ public abstract class UIElementBase {
      * @param child Child element to remove.
      * @param destroy If true the child is explicitly destroyed.
      */
-    public void removeChild(UIElementBase child, boolean destroy) {
+    public void removeChild(ElementBase child, boolean destroy) {
         if (!children.contains(child)) {
             return;
         }
@@ -432,7 +432,7 @@ public abstract class UIElementBase {
      *
      * @param child The child UI element.
      */
-    protected void afterRemoveChild(UIElementBase child) {
+    protected void afterRemoveChild(ElementBase child) {
         mask.update();
     }
 
@@ -441,7 +441,7 @@ public abstract class UIElementBase {
      *
      * @param child The child UI element.
      */
-    protected void beforeRemoveChild(UIElementBase child) {
+    protected void beforeRemoveChild(ElementBase child) {
     }
 
     /**
@@ -449,8 +449,8 @@ public abstract class UIElementBase {
      *
      * @param newParent The new parent.
      */
-    private void updateParent(UIElementBase newParent) {
-        UIElementBase oldParent = this.parent;
+    private void updateParent(ElementBase newParent) {
+        ElementBase oldParent = this.parent;
 
         if (oldParent != newParent) {
             beforeParentChanged(newParent);
@@ -482,7 +482,7 @@ public abstract class UIElementBase {
      *
      * @param oldParent The value of the parent property prior to the change.
      */
-    protected void afterParentChanged(UIElementBase oldParent) {
+    protected void afterParentChanged(ElementBase oldParent) {
     }
 
     /**
@@ -490,7 +490,7 @@ public abstract class UIElementBase {
      *
      * @param newParent The value of the parent property prior to the change.
      */
-    protected void beforeParentChanged(UIElementBase newParent) {
+    protected void beforeParentChanged(ElementBase newParent) {
     }
 
     /**
@@ -539,7 +539,7 @@ public abstract class UIElementBase {
      * Rebind any children. This may be called if the wrapped UI component is recreated.
      */
     protected void rebindChildren() {
-        for (UIElementBase child : getChildren()) {
+        for (ElementBase child : getChildren()) {
             child.unbind();
             child.bind();
         }
@@ -636,11 +636,11 @@ public abstract class UIElementBase {
 
     /**
      * Sets the plugin definition based on the specified class. Typically this would be the same
-     * class as the element itself, but in certain cases (as in the UIElementProxy class) it is not.
+     * class as the element itself, but in certain cases (as in the ElementProxy class) it is not.
      *
      * @param clazz The UI element class.
      */
-    public void setDefinition(Class<? extends UIElementBase> clazz) {
+    public void setDefinition(Class<? extends ElementBase> clazz) {
         setDefinition(PluginRegistry.getInstance().get(clazz));
     }
 
@@ -700,7 +700,7 @@ public abstract class UIElementBase {
      * @param activate The activate status.
      */
     protected void activateChildren(boolean activate) {
-        for (UIElementBase child : children) {
+        for (ElementBase child : children) {
             child.activate(activate);
         }
     }
@@ -733,7 +733,7 @@ public abstract class UIElementBase {
      * @param index Index of the child to retrieve.
      * @return The child at the specified index.
      */
-    public UIElementBase getChild(int index) {
+    public ElementBase getChild(int index) {
         return children.get(index);
     }
 
@@ -748,7 +748,7 @@ public abstract class UIElementBase {
      * @return The requested child or null if none found.
      */
     @SuppressWarnings("unchecked")
-    public <T extends UIElementBase> T getChild(Class<T> clazz, UIElementBase last) {
+    public <T extends ElementBase> T getChild(Class<T> clazz, ElementBase last) {
         int i = last == null ? -1 : children.indexOf(last);
 
         for (i++; i < children.size(); i++) {
@@ -765,7 +765,7 @@ public abstract class UIElementBase {
      *
      * @return Iterable of this component's children.
      */
-    public Iterable<UIElementBase> getChildren() {
+    public Iterable<ElementBase> getChildren() {
         return children;
     }
 
@@ -776,7 +776,7 @@ public abstract class UIElementBase {
      * @return Iterable of this component's children.
      */
     @SuppressWarnings("unchecked")
-    public <T extends UIElementBase> Iterable<T> getChildren(Class<T> clazz) {
+    public <T extends ElementBase> Iterable<T> getChildren(Class<T> clazz) {
         return (Iterable<T>) children;
     }
 
@@ -786,7 +786,7 @@ public abstract class UIElementBase {
      *
      * @return Iterable of this component's serializable children.
      */
-    public Iterable<UIElementBase> getSerializableChildren() {
+    public Iterable<ElementBase> getSerializableChildren() {
         return getChildren();
     }
 
@@ -804,7 +804,7 @@ public abstract class UIElementBase {
      *
      * @return First child, or null if none.
      */
-    public UIElementBase getFirstChild() {
+    public ElementBase getFirstChild() {
         return getChildCount() == 0 ? null : getChild(0);
     }
 
@@ -813,7 +813,7 @@ public abstract class UIElementBase {
      *
      * @return First visible child, or null if none;
      */
-    public UIElementBase getFirstVisibleChild() {
+    public ElementBase getFirstVisibleChild() {
         return getVisibleChild(true);
     }
 
@@ -822,7 +822,7 @@ public abstract class UIElementBase {
      *
      * @return Last child, or null if none.
      */
-    public UIElementBase getLastChild() {
+    public ElementBase getLastChild() {
         return getChildCount() == 0 ? null : getChild(getChildCount() - 1);
     }
 
@@ -831,7 +831,7 @@ public abstract class UIElementBase {
      *
      * @return Last visible child, or null if none;
      */
-    public UIElementBase getLastVisibleChild() {
+    public ElementBase getLastVisibleChild() {
         return getVisibleChild(false);
     }
 
@@ -841,7 +841,7 @@ public abstract class UIElementBase {
      * @param first If true, find first visible child; if false, last visible child.
      * @return Visible child, or null if none found.
      */
-    private UIElementBase getVisibleChild(boolean first) {
+    private ElementBase getVisibleChild(boolean first) {
         int start = first ? 0 : getChildCount() - 1;
         int end = first ? getChildCount() - 1 : 0;
         int inc = first ? 1 : -1;
@@ -861,8 +861,8 @@ public abstract class UIElementBase {
      * @param visibleOnly If true, skip any non-visible siblings.
      * @return The next sibling, or null if none.
      */
-    public UIElementBase getNextSibling(boolean visibleOnly) {
-        List<UIElementBase> sibs = parent == null ? null : parent.children;
+    public ElementBase getNextSibling(boolean visibleOnly) {
+        List<ElementBase> sibs = parent == null ? null : parent.children;
 
         if (sibs != null) {
             for (int i = sibs.indexOf(this) + 1; i < sibs.size(); i++) {
@@ -882,7 +882,7 @@ public abstract class UIElementBase {
      * @param child The child component whose index is sought.
      * @return The child's index or -1 if not found.
      */
-    public int indexOfChild(UIElementBase child) {
+    public int indexOfChild(ElementBase child) {
         return children.indexOf(child);
     }
 
@@ -892,7 +892,7 @@ public abstract class UIElementBase {
      * @param element The UI element to test.
      * @return True if the element is a child.
      */
-    public boolean hasChild(UIElementBase element) {
+    public boolean hasChild(ElementBase element) {
         return indexOfChild(element) > -1;
     }
 
@@ -904,14 +904,14 @@ public abstract class UIElementBase {
      * @return A child of the specified class, or null if not found.
      */
     @SuppressWarnings("unchecked")
-    public <T extends UIElementBase> T findChildElement(Class<T> clazz) {
-        for (UIElementBase child : getChildren()) {
+    public <T extends ElementBase> T findChildElement(Class<T> clazz) {
+        for (ElementBase child : getChildren()) {
             if (clazz.isInstance(child)) {
                 return (T) child;
             }
         }
 
-        for (UIElementBase child : getChildren()) {
+        for (ElementBase child : getChildren()) {
             T child2 = child.findChildElement(clazz);
 
             if (child2 != null) {
@@ -928,8 +928,8 @@ public abstract class UIElementBase {
      * @param element A UI element.
      * @return True if the specified element is an ancestor of this element.
      */
-    public boolean hasAncestor(UIElementBase element) {
-        UIElementBase child = this;
+    public boolean hasAncestor(ElementBase element) {
+        ElementBase child = this;
 
         while (child != null) {
             if (element.hasChild(child)) {
@@ -959,8 +959,8 @@ public abstract class UIElementBase {
      */
     public void moveChild(int from, int to) {
         if (from != to) {
-            UIElementBase child = children.get(from);
-            UIElementBase ref = children.get(to);
+            ElementBase child = children.get(from);
+            ElementBase ref = children.get(to);
             children.remove(from);
             to = children.indexOf(ref);
             children.add(to, child);
@@ -976,7 +976,7 @@ public abstract class UIElementBase {
      * @param child Child element that was moved.
      * @param before Child element was moved before this one.
      */
-    protected void afterMoveChild(UIElementBase child, UIElementBase before) {
+    protected void afterMoveChild(ElementBase child, ElementBase before) {
         moveChild(child.getOuterComponent(), before.getOuterComponent());
     }
 
@@ -987,7 +987,7 @@ public abstract class UIElementBase {
      * @param index The index.
      */
     public void setIndex(int index) {
-        UIElementBase parent = getParent();
+        ElementBase parent = getParent();
 
         if (parent == null) {
             UIException.raise("Element has no parent.");
@@ -1069,7 +1069,7 @@ public abstract class UIElementBase {
      *
      * @return This element's parent.
      */
-    public UIElementBase getParent() {
+    public ElementBase getParent() {
         return parent;
     }
 
@@ -1078,8 +1078,8 @@ public abstract class UIElementBase {
      *
      * @param parent The new parent.
      */
-    public final void setParent(UIElementBase parent) {
-        UIElementBase oldParent = this.parent;
+    public final void setParent(ElementBase parent) {
+        ElementBase oldParent = this.parent;
 
         if (oldParent == parent) {
             return;
@@ -1291,7 +1291,7 @@ public abstract class UIElementBase {
         boolean anyEnabled = !autoEnable || getChildCount() == 0;
         boolean anyVisible = !autoHide || designMode;
 
-        for (UIElementBase child : children) {
+        for (ElementBase child : children) {
             if (anyEnabled && anyVisible) {
                 break;
             }
@@ -1337,7 +1337,7 @@ public abstract class UIElementBase {
      * @param clazz Child class to test.
      * @return True if this element may accept a child of the specified class.
      */
-    public boolean canAcceptChild(Class<? extends UIElementBase> clazz) {
+    public boolean canAcceptChild(Class<? extends ElementBase> clazz) {
         if (!canAcceptChild()) {
             return false;
         }
@@ -1358,7 +1358,7 @@ public abstract class UIElementBase {
      * @param child Child instance to test.
      * @return True if this element may accept the specified child.
      */
-    public boolean canAcceptChild(UIElementBase child) {
+    public boolean canAcceptChild(ElementBase child) {
         if (!canAcceptChild()) {
             return false;
         }
@@ -1390,7 +1390,7 @@ public abstract class UIElementBase {
      * @param clazz Parent class to test.
      * @return True if this element may accept a parent of the specified class.
      */
-    public boolean canAcceptParent(Class<? extends UIElementBase> clazz) {
+    public boolean canAcceptParent(Class<? extends ElementBase> clazz) {
         if (!canAcceptParent(getClass(), clazz)) {
             rejectReason = getDisplayName() + " does not accept " + clazz.getSimpleName() + " as a parent.";
         } else {
@@ -1407,7 +1407,7 @@ public abstract class UIElementBase {
      * @param parent Parent instance to test.
      * @return True if this element may accept the specified element as a parent.
      */
-    public boolean canAcceptParent(UIElementBase parent) {
+    public boolean canAcceptParent(ElementBase parent) {
         if (!canAcceptParent()) {
             return false;
         }
@@ -1444,8 +1444,8 @@ public abstract class UIElementBase {
      *
      * @return Root UI element.
      */
-    public UIElementBase getRoot() {
-        UIElementBase root = this;
+    public ElementBase getRoot() {
+        ElementBase root = this;
 
         while (root.getParent() != null) {
             root = root.getParent();
@@ -1462,8 +1462,8 @@ public abstract class UIElementBase {
      * @return An ancestor of the specified class or null if not found.
      */
     @SuppressWarnings("unchecked")
-    public <T extends UIElementBase> T getAncestor(Class<T> clazz) {
-        UIElementBase parent = getParent();
+    public <T extends ElementBase> T getAncestor(Class<T> clazz) {
+        ElementBase parent = getParent();
 
         while (parent != null && !clazz.isInstance(parent)) {
             parent = parent.getParent();
@@ -1534,7 +1534,7 @@ public abstract class UIElementBase {
      */
     protected boolean hasVisibleElements(BaseUIComponent component) {
         for (BaseUIComponent child : component.getChildren(BaseUIComponent.class)) {
-            UIElementBase ele = getAssociatedUIElement(child);
+            ElementBase ele = getAssociatedElement(child);
 
             if (ele != null && ele.isVisible()) {
                 return true;
@@ -1556,7 +1556,7 @@ public abstract class UIElementBase {
      * @param recurse If true, recurse up the parent chain.
      */
     public void notifyParent(String eventName, Object eventData, boolean recurse) {
-        UIElementBase ele = parent;
+        ElementBase ele = parent;
 
         while (ele != null) {
             recurse &= ele.parentListeners.notify(this, eventName, eventData);
@@ -1586,8 +1586,8 @@ public abstract class UIElementBase {
         notifyChildren(this, eventName, eventData, recurse);
     }
 
-    private void notifyChildren(UIElementBase sender, String eventName, Object eventData, boolean recurse) {
-        for (UIElementBase child : getChildren()) {
+    private void notifyChildren(ElementBase sender, String eventName, Object eventData, boolean recurse) {
+        for (ElementBase child : getChildren()) {
             if (child.childListeners.notify(sender, eventName, eventData) && recurse) {
                 child.notifyChildren(sender, eventName, eventData, recurse);
             }

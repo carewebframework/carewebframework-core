@@ -25,7 +25,7 @@
  */
 package org.carewebframework.shell.designer;
 
-import org.carewebframework.shell.elements.UIElementBase;
+import org.carewebframework.shell.elements.ElementBase;
 import org.carewebframework.web.component.BaseComponent;
 import org.carewebframework.web.event.Event;
 
@@ -36,7 +36,7 @@ public class LayoutChangedEvent extends Event {
     
     public static final String ON_LAYOUT_CHANGED = "layoutChanged";
     
-    public LayoutChangedEvent(BaseComponent target, UIElementBase element) {
+    public LayoutChangedEvent(BaseComponent target, ElementBase element) {
         super(ON_LAYOUT_CHANGED, target, element);
     }
     
@@ -45,7 +45,7 @@ public class LayoutChangedEvent extends Event {
      * 
      * @return The UI element that changed.
      */
-    public UIElementBase getUIElement() {
-        return (UIElementBase) getData();
+    public ElementBase getElement() {
+        return (ElementBase) getData();
     }
 }

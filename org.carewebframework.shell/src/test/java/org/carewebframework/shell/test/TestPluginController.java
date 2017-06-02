@@ -25,7 +25,7 @@
  */
 package org.carewebframework.shell.test;
 
-import org.carewebframework.shell.elements.UIElementPlugin;
+import org.carewebframework.shell.elements.ElementPlugin;
 import org.carewebframework.shell.plugins.IPluginController;
 import org.carewebframework.shell.plugins.PluginController;
 import org.carewebframework.web.annotation.EventHandler;
@@ -72,7 +72,7 @@ public class TestPluginController extends PluginController implements IPluginCon
     }
     
     @Override
-    public void onLoad(UIElementPlugin plugin) {
+    public void onLoad(ElementPlugin plugin) {
         super.onLoad(plugin);
         plugin.registerProperties(this, "prop1", "prop2", "prop3");
         loadCount++;

@@ -31,7 +31,7 @@ import java.util.List;
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.carewebframework.common.StrUtil;
-import org.carewebframework.shell.elements.UIElementPlugin;
+import org.carewebframework.shell.elements.ElementPlugin;
 import org.carewebframework.ui.command.CommandUtil;
 import org.carewebframework.ui.util.CWFUtil;
 import org.carewebframework.web.annotation.EventHandler;
@@ -126,7 +126,7 @@ public abstract class ListFormController<DAO> extends CaptionedFormController {
     protected abstract void requestData();
     
     @Override
-    public void onLoad(UIElementPlugin plugin) {
+    public void onLoad(ElementPlugin plugin) {
         super.onLoad(plugin);
         root = detailPane;
         rows.setModel(model);

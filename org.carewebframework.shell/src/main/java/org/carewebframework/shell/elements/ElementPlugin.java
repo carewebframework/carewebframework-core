@@ -64,10 +64,10 @@ import org.springframework.util.StringUtils;
 /**
  * This class is used for all container-hosted plugins.
  */
-public class UIElementPlugin extends UIElementBase implements IDisable, IPropertyAccessor {
+public class ElementPlugin extends ElementBase implements IDisable, IPropertyAccessor {
 
     static {
-        registerAllowedParentClass(UIElementPlugin.class, UIElementBase.class);
+        registerAllowedParentClass(ElementPlugin.class, ElementBase.class);
     }
 
     private class ToolbarContainer extends Namespace {
@@ -112,7 +112,7 @@ public class UIElementPlugin extends UIElementBase implements IDisable, IPropert
      * Sets the container as the wrapped component and registers itself to receive action
      * notifications from the container.
      */
-    public UIElementPlugin() {
+    public ElementPlugin() {
         super();
         shell = CareWebUtil.getShell();
         setOuterComponent(container);
@@ -123,7 +123,7 @@ public class UIElementPlugin extends UIElementBase implements IDisable, IPropert
     }
 
     /**
-     * @see org.carewebframework.shell.elements.UIElementBase#about()
+     * @see org.carewebframework.shell.elements.ElementBase#about()
      */
     @Override
     public void about() {
@@ -133,7 +133,7 @@ public class UIElementPlugin extends UIElementBase implements IDisable, IPropert
     /**
      * Passes the activation request to the container.
      *
-     * @see org.carewebframework.shell.elements.UIElementBase#activateChildren(boolean)
+     * @see org.carewebframework.shell.elements.ElementBase#activateChildren(boolean)
      */
     @Override
     public void activateChildren(boolean active) {
@@ -167,7 +167,7 @@ public class UIElementPlugin extends UIElementBase implements IDisable, IPropert
      * Additional processing of the plugin after it is initialized.
      *
      * @throws Exception Unspecified exception.
-     * @see org.carewebframework.shell.elements.UIElementBase#afterInitialize
+     * @see org.carewebframework.shell.elements.ElementBase#afterInitialize
      */
     @Override
     public void afterInitialize(boolean deserializing) throws Exception {

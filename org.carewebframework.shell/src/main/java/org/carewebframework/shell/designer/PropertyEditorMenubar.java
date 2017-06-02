@@ -25,14 +25,14 @@
  */
 package org.carewebframework.shell.designer;
 
-import org.carewebframework.shell.elements.UIElementMenuItem;
+import org.carewebframework.shell.elements.ElementMenuItem;
 
 /**
  * Property editor for managing menus.
  */
-public class PropertyEditorMenubar extends PropertyEditorCustomTree<UIElementMenuItem> {
+public class PropertyEditorMenubar extends PropertyEditorCustomTree<ElementMenuItem> {
     
     public PropertyEditorMenubar() {
-        super(UIElementMenuItem.class, "label", true);
+        super(ElementMenuItem.class, "label", true);
     }
 }

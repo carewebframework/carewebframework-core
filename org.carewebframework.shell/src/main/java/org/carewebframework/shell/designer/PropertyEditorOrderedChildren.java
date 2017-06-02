@@ -25,12 +25,12 @@
  */
 package org.carewebframework.shell.designer;
 
-import org.carewebframework.shell.elements.UIElementBase;
+import org.carewebframework.shell.elements.ElementBase;
 
 /**
  * Property editor for managing a component with ordered children.
  */
-public class PropertyEditorOrderedChildren extends PropertyEditorCustomTree<UIElementBase> {
+public class PropertyEditorOrderedChildren extends PropertyEditorCustomTree<ElementBase> {
     
     public PropertyEditorOrderedChildren() {
         super(null, "label", false);

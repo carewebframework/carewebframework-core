@@ -33,10 +33,10 @@ import org.carewebframework.web.component.Import;
 /**
  * UI element that encapsulates an iframe or an include (as determined by URL).
  */
-public class UIElementFrame extends UIElementBase {
+public class ElementFrame extends ElementBase {
 
     static {
-        registerAllowedParentClass(UIElementFrame.class, UIElementBase.class);
+        registerAllowedParentClass(ElementFrame.class, ElementBase.class);
     }
 
     private final Div root = new Div();
@@ -45,7 +45,7 @@ public class UIElementFrame extends UIElementBase {
 
     private String url;
 
-    public UIElementFrame() {
+    public ElementFrame() {
         super();
         root.addClass("cwf-plugin-container");
         fullSize(root);

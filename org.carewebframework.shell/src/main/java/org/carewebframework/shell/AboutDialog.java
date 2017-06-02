@@ -34,7 +34,7 @@ import java.util.jar.Manifest;
 
 import org.apache.commons.lang.StringUtils;
 import org.carewebframework.common.StrUtil;
-import org.carewebframework.shell.elements.UIElementBase;
+import org.carewebframework.shell.elements.ElementBase;
 import org.carewebframework.shell.plugins.PluginDefinition;
 import org.carewebframework.ui.controller.FrameworkController;
 import org.carewebframework.ui.dialog.DialogUtil;
@@ -161,7 +161,7 @@ public class AboutDialog extends FrameworkController {
      * 
      * @param component UI element whose attributes are to be displayed.
      */
-    public static void execute(UIElementBase component) {
+    public static void execute(ElementBase component) {
         if (component.getDefinition() != null) {
             execute(component.getDefinition());
         } else {

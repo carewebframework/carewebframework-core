@@ -36,21 +36,21 @@ import org.carewebframework.shell.property.PropertyInfo;
  * designer to create placeholders for actual UI elements without creating the element itself and
  * for deferring property changes to existing UI elements.
  */
-public class UIElementProxy extends UIElementBase implements IPropertyAccessor {
+public class ElementProxy extends ElementBase implements IPropertyAccessor {
     
     private final HashMap<String, Object> properties = new HashMap<>();
     
-    private UIElementBase target;
+    private ElementBase target;
     
     private boolean deleted;
     
-    public UIElementProxy(PluginDefinition def) {
+    public ElementProxy(PluginDefinition def) {
         super();
         setDefinition(def);
         revert();
     }
     
-    public UIElementProxy(UIElementBase target) {
+    public ElementProxy(ElementBase target) {
         super();
         this.target = target;
         
@@ -89,7 +89,7 @@ public class UIElementProxy extends UIElementBase implements IPropertyAccessor {
         return properties.put(propName, value);
     }
     
-    public UIElementBase getTarget() {
+    public ElementBase getTarget() {
         return target;
     }
     
@@ -111,7 +111,7 @@ public class UIElementProxy extends UIElementBase implements IPropertyAccessor {
      * @param parent The parent UI element.
      * @throws Exception Unspecified exception.
      */
-    public void realize(UIElementBase parent) throws Exception {
+    public void realize(ElementBase parent) throws Exception {
         if (!deleted && target == null) {
             target = getDefinition().createElement(parent, null);
         } else if (deleted && target != null) {

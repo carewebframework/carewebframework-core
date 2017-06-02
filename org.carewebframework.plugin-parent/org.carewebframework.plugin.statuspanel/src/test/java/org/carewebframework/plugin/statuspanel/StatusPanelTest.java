@@ -30,7 +30,7 @@ import static org.junit.Assert.assertNotNull;
 
 import org.carewebframework.api.event.EventManager;
 import org.carewebframework.shell.CareWebShell;
-import org.carewebframework.shell.elements.UIElementPlugin;
+import org.carewebframework.shell.elements.ElementPlugin;
 import org.carewebframework.ui.controller.FrameworkController;
 import org.carewebframework.ui.test.MockUITest;
 import org.carewebframework.web.component.BaseComponent;
@@ -45,7 +45,7 @@ public class StatusPanelTest extends MockUITest {
         shell.setParent(mockEnvironment.getSession().getPage());
         shell.setLayout("/StatusPanelTest.xml");
         mockEnvironment.flushEvents();
-        UIElementPlugin plugin = shell.getActivatedPlugin("cwfStatusPanel");
+        ElementPlugin plugin = shell.getActivatedPlugin("cwfStatusPanel");
         BaseComponent root = plugin.getOuterComponent().getFirstChild();
         StatusPanel controller = (StatusPanel) FrameworkController.getController(root);
         assertNotNull("Controller must not be null.", controller);

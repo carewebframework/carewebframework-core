@@ -26,8 +26,8 @@
 package org.carewebframework.shell.plugins;
 
 import org.carewebframework.shell.CareWebShell;
-import org.carewebframework.shell.elements.UIElementBase;
-import org.carewebframework.shell.elements.UIElementPlugin;
+import org.carewebframework.shell.elements.ElementBase;
+import org.carewebframework.shell.elements.ElementPlugin;
 import org.carewebframework.web.component.BaseMenuComponent;
 
 /**
@@ -112,9 +112,9 @@ public class PluginResourceMenu implements IPluginResource {
      * @param register If true, register the resource. If false, unregister it.
      */
     @Override
-    public void register(CareWebShell shell, UIElementBase owner, boolean register) {
+    public void register(CareWebShell shell, ElementBase owner, boolean register) {
         if (register) {
-            UIElementPlugin plugin = (UIElementPlugin) owner;
+            ElementPlugin plugin = (ElementPlugin) owner;
             BaseMenuComponent menu = plugin.getShell().addMenu(getPath(), getAction());
             plugin.registerComponent(menu);
             plugin.registerId(getId(), menu);

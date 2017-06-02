@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.carewebframework.api.FrameworkUtil;
-import org.carewebframework.shell.elements.UIElementPlugin;
+import org.carewebframework.shell.elements.ElementPlugin;
 
 /**
  * Base class for defining logic that determines when a plugin should be enabled. Plugin authors may
@@ -37,7 +37,7 @@ import org.carewebframework.shell.elements.UIElementPlugin;
  */
 public abstract class PluginStatus implements IPluginEventListener {
     
-    private final List<UIElementPlugin> plugins = new ArrayList<>();
+    private final List<ElementPlugin> plugins = new ArrayList<>();
     
     private boolean disabled;
     
@@ -104,7 +104,7 @@ public abstract class PluginStatus implements IPluginEventListener {
      */
     @Override
     public void onPluginEvent(PluginEvent event) {
-        UIElementPlugin plugin = event.getPlugin();
+        ElementPlugin plugin = event.getPlugin();
         
         switch (event.getAction()) {
             case SUBSCRIBE:
@@ -127,7 +127,7 @@ public abstract class PluginStatus implements IPluginEventListener {
         if (!plugins.isEmpty()) {
             boolean disabled = isDisabled();
             
-            for (UIElementPlugin container : plugins) {
+            for (ElementPlugin container : plugins) {
                 container.setDisabled(disabled);
             }
         }

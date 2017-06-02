@@ -35,11 +35,11 @@ import org.carewebframework.web.component.Span;
  * A step-oriented UI Element. This is a composite element consisting of a button and its separator
  * with an associated pane. Clicking on a button activates its corresponding pane.
  */
-public class UIElementStepPane extends UIElementBase {
+public class ElementStepPane extends ElementBase {
     
     static {
-        registerAllowedParentClass(UIElementStepPane.class, UIElementStepView.class);
-        registerAllowedChildClass(UIElementStepPane.class, UIElementBase.class);
+        registerAllowedParentClass(ElementStepPane.class, ElementStepView.class);
+        registerAllowedChildClass(ElementStepPane.class, ElementBase.class);
     }
     
     private final Div pane = new Div();
@@ -53,7 +53,7 @@ public class UIElementStepPane extends UIElementBase {
     /**
      * Create the UI components that comprise this UI element.
      */
-    public UIElementStepPane() {
+    public ElementStepPane() {
         super();
         button.setLabel("New Step");
         fullSize(pane);
@@ -65,7 +65,7 @@ public class UIElementStepPane extends UIElementBase {
         button.addClass("cwf-step-button");
         button.addClass("btn btn-sm");
         button.addEventListener("click", (event) -> {
-            ((UIElementStepView) getParent()).setActivePane(UIElementStepPane.this);
+            ((ElementStepView) getParent()).setActivePane(ElementStepPane.this);
             pane.setFocus(true);
         });
     }
@@ -87,19 +87,19 @@ public class UIElementStepPane extends UIElementBase {
     /**
      * Add the UI components of the child pane to their respective parent components in the view.
      *
-     * @see org.carewebframework.shell.elements.UIElementBase#bind
+     * @see org.carewebframework.shell.elements.ElementBase#bind
      */
     @Override
     protected void bind() {
         super.bind();
-        BaseComponent root = ((UIElementStepView) getParent()).getToolbarRoot();
+        BaseComponent root = ((ElementStepView) getParent()).getToolbarRoot();
         root.addChild(step);
     }
     
     /**
      * Detach the UI components of the child pane the UI.
      *
-     * @see org.carewebframework.shell.elements.UIElementBase#unbind
+     * @see org.carewebframework.shell.elements.ElementBase#unbind
      */
     @Override
     protected void unbind() {
@@ -110,18 +110,18 @@ public class UIElementStepPane extends UIElementBase {
     /**
      * Brings this UI element to the front of the UI by making it the active pane.
      *
-     * @see org.carewebframework.shell.elements.UIElementBase#bringToFront()
+     * @see org.carewebframework.shell.elements.ElementBase#bringToFront()
      */
     @Override
     public void bringToFront() {
         super.bringToFront();
-        ((UIElementStepView) getParent()).setActivePane(this);
+        ((ElementStepView) getParent()).setActivePane(this);
     }
     
     /**
      * Returns the instance name to use in the designer.
      *
-     * @see org.carewebframework.shell.elements.UIElementBase#getInstanceName()
+     * @see org.carewebframework.shell.elements.ElementBase#getInstanceName()
      */
     @Override
     public String getInstanceName() {
@@ -131,7 +131,7 @@ public class UIElementStepPane extends UIElementBase {
     /**
      * Apply color changes to button and pane only.
      *
-     * @see org.carewebframework.shell.elements.UIElementBase#applyColor()
+     * @see org.carewebframework.shell.elements.ElementBase#applyColor()
      */
     @Override
     protected void applyColor() {

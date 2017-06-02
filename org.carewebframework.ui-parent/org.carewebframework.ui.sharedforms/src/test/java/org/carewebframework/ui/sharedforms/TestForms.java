@@ -27,7 +27,7 @@ package org.carewebframework.ui.sharedforms;
 
 import static org.junit.Assert.assertEquals;
 
-import org.carewebframework.shell.elements.UIElementPlugin;
+import org.carewebframework.shell.elements.ElementPlugin;
 import org.carewebframework.ui.test.MockUITest;
 import org.carewebframework.web.ancillary.ILabeled;
 import org.carewebframework.web.component.BaseComponent;
@@ -44,7 +44,7 @@ public class TestForms extends MockUITest {
         BaseComponent root = PageUtil.createPage("web/org/carewebframework/ui/sharedforms/listviewForm.cwf", null).get(0);
         TestController controller = new TestController();
         root.wireController(controller);
-        UIElementPlugin dummy = new UIElementPlugin();
+        ElementPlugin dummy = new ElementPlugin();
         controller.onLoad(dummy);
         controller.requestData();
         assertEquals(10, controller.model.size());

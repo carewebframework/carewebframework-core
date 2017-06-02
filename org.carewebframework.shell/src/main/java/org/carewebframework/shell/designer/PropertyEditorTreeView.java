@@ -25,15 +25,15 @@
  */
 package org.carewebframework.shell.designer;
 
-import org.carewebframework.shell.elements.UIElementTreePane;
+import org.carewebframework.shell.elements.ElementTreePane;
 
 /**
  * Property editor for managing tree nodes.
  */
-public class PropertyEditorTreeView extends PropertyEditorCustomTree<UIElementTreePane> {
+public class PropertyEditorTreeView extends PropertyEditorCustomTree<ElementTreePane> {
     
     public PropertyEditorTreeView() {
-        super(UIElementTreePane.class, "label", true);
+        super(ElementTreePane.class, "label", true);
     }
     
 }

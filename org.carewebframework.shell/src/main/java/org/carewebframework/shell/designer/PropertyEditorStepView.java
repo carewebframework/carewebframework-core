@@ -25,15 +25,15 @@
  */
 package org.carewebframework.shell.designer;
 
-import org.carewebframework.shell.elements.UIElementStepPane;
+import org.carewebframework.shell.elements.ElementStepPane;
 
 /**
  * Property editor for step view.
  */
-public class PropertyEditorStepView extends PropertyEditorCustomTree<UIElementStepPane> {
+public class PropertyEditorStepView extends PropertyEditorCustomTree<ElementStepPane> {
     
     public PropertyEditorStepView() {
-        super(UIElementStepPane.class, "label", false);
+        super(ElementStepPane.class, "label", false);
     }
     
 }

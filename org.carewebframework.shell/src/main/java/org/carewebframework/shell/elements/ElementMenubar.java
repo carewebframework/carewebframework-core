@@ -32,21 +32,21 @@ import org.carewebframework.web.component.Span;
 /**
  * Base implementation of a menu bar.
  */
-public class UIElementMenubar extends UIElementBase {
+public class ElementMenubar extends ElementBase {
     
     static {
-        registerAllowedChildClass(UIElementMenubar.class, UIElementMenuItem.class);
-        registerAllowedParentClass(UIElementMenubar.class, UIElementBase.class);
+        registerAllowedChildClass(ElementMenubar.class, ElementMenuItem.class);
+        registerAllowedParentClass(ElementMenubar.class, ElementBase.class);
         PropertyTypeRegistry.register("menuitems", PropertyEditorMenubar.class);
     }
     
     private final Span menubar;
     
-    public UIElementMenubar() {
+    public ElementMenubar() {
         this(new Span());
     }
     
-    public UIElementMenubar(Span menubar) {
+    public ElementMenubar(Span menubar) {
         setOuterComponent(this.menubar = menubar);
         menubar.addClass("cwf-menubar");
         maxChildren = Integer.MAX_VALUE;

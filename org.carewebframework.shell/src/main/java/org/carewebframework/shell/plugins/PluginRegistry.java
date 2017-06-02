@@ -27,17 +27,17 @@ package org.carewebframework.shell.plugins;
 
 import org.carewebframework.api.spring.BeanRegistry;
 import org.carewebframework.common.AbstractRegistry;
-import org.carewebframework.shell.elements.UIElementBase;
+import org.carewebframework.shell.elements.ElementBase;
 
 /**
  * Registry of all known plugins.
  */
 public class PluginRegistry extends BeanRegistry<String, PluginDefinition> {
     
-    private final AbstractRegistry<Class<? extends UIElementBase>, PluginDefinition> classRegistry = new AbstractRegistry<Class<? extends UIElementBase>, PluginDefinition>() {
+    private final AbstractRegistry<Class<? extends ElementBase>, PluginDefinition> classRegistry = new AbstractRegistry<Class<? extends ElementBase>, PluginDefinition>() {
         
         @Override
-        protected Class<? extends UIElementBase> getKey(PluginDefinition item) {
+        protected Class<? extends ElementBase> getKey(PluginDefinition item) {
             return item.getClazz();
         }
     };
@@ -61,7 +61,7 @@ public class PluginRegistry extends BeanRegistry<String, PluginDefinition> {
         classRegistry.register(item);
     }
     
-    public PluginDefinition unregister(Class<? extends UIElementBase> clazz) {
+    public PluginDefinition unregister(Class<? extends ElementBase> clazz) {
         return unregister(get(clazz));
     }
     
@@ -76,7 +76,7 @@ public class PluginRegistry extends BeanRegistry<String, PluginDefinition> {
      * @param clazz The class of the UI element.
      * @return The associated plugin definition, or null if not found.
      */
-    public PluginDefinition get(Class<? extends UIElementBase> clazz) {
+    public PluginDefinition get(Class<? extends ElementBase> clazz) {
         return classRegistry.get(clazz);
     }
     

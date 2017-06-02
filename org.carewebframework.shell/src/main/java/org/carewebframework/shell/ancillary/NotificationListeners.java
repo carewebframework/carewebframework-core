@@ -28,7 +28,7 @@ package org.carewebframework.shell.ancillary;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.carewebframework.shell.elements.UIElementBase;
+import org.carewebframework.shell.elements.ElementBase;
 
 /**
  * Allows a UI element to listen to notifications from its parent or children.
@@ -51,7 +51,7 @@ public class NotificationListeners {
         }
     }
     
-    public boolean notify(UIElementBase sender, String eventName, Object eventData) {
+    public boolean notify(ElementBase sender, String eventName, Object eventData) {
         INotificationListener listener = listeners == null ? null : listeners.get(eventName);
         return listener == null || listener.onNotification(sender, eventName, eventData);
     }

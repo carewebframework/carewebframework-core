@@ -37,11 +37,11 @@ import org.carewebframework.web.component.Pane;
  * area on the right where tree panes are positioned. Clicking on a node in the tree activates the
  * associated tree pane.
  */
-public class UIElementTreeView extends UIElementBase {
+public class ElementTreeView extends ElementBase {
 
     static {
-        registerAllowedParentClass(UIElementTreeView.class, UIElementBase.class);
-        registerAllowedChildClass(UIElementTreeView.class, UIElementTreePane.class);
+        registerAllowedParentClass(ElementTreeView.class, ElementBase.class);
+        registerAllowedChildClass(ElementTreeView.class, ElementTreePane.class);
         PropertyTypeRegistry.register("nodes", PropertyEditorTreeView.class);
     }
 
@@ -54,11 +54,11 @@ public class UIElementTreeView extends UIElementBase {
     @WiredComponent
     private Pane selectorPane;
 
-    private UIElementTreePane activePane;
+    private ElementTreePane activePane;
 
     private ThemeUtil.ButtonStyle selectionStyle = ThemeUtil.ButtonStyle.PRIMARY;
 
-    public UIElementTreeView() throws Exception {
+    public ElementTreeView() throws Exception {
         super();
         maxChildren = Integer.MAX_VALUE;
         setOuterComponent(createFromTemplate());
@@ -69,9 +69,9 @@ public class UIElementTreeView extends UIElementBase {
      * Only the node needs to be resequenced, since pane sequencing is arbitrary.
      */
     @Override
-    protected void afterMoveChild(UIElementBase child, UIElementBase before) {
-        UIElementTreePane childpane = (UIElementTreePane) child;
-        UIElementTreePane beforepane = (UIElementTreePane) before;
+    protected void afterMoveChild(ElementBase child, ElementBase before) {
+        ElementTreePane childpane = (ElementTreePane) child;
+        ElementTreePane beforepane = (ElementTreePane) before;
         moveChild(childpane.getNode(), beforepane.getNode());
     }
 
@@ -137,9 +137,9 @@ public class UIElementTreeView extends UIElementBase {
      * Remove the associated tree node when a tree pane is removed.
      */
     @Override
-    protected void afterRemoveChild(UIElementBase child) {
+    protected void afterRemoveChild(ElementBase child) {
         if (child == activePane) {
-            setActivePane((UIElementTreePane) getFirstChild());
+            setActivePane((ElementTreePane) getFirstChild());
         }
         super.afterRemoveChild(child);
     }
@@ -159,8 +159,8 @@ public class UIElementTreeView extends UIElementBase {
     @Override
     public void activateChildren(boolean activate) {
         if (activePane == null || !activePane.isVisible()) {
-            UIElementBase active = getFirstVisibleChild();
-            setActivePane((UIElementTreePane) active);
+            ElementBase active = getFirstVisibleChild();
+            setActivePane((ElementTreePane) active);
         }
 
         if (activePane != null) {
@@ -173,7 +173,7 @@ public class UIElementTreeView extends UIElementBase {
      *
      * @param pane Pane to make active.
      */
-    protected void setActivePane(UIElementTreePane pane) {
+    protected void setActivePane(ElementTreePane pane) {
         if (pane == activePane) {
             return;
         }

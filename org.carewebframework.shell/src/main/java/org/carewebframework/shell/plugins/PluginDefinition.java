@@ -36,8 +36,8 @@ import org.carewebframework.api.property.IPropertyProvider;
 import org.carewebframework.api.security.SecurityUtil;
 import org.carewebframework.common.MiscUtil;
 import org.carewebframework.shell.ancillary.UIException;
-import org.carewebframework.shell.elements.UIElementBase;
-import org.carewebframework.shell.elements.UIElementPlugin;
+import org.carewebframework.shell.elements.ElementBase;
+import org.carewebframework.shell.elements.ElementPlugin;
 import org.carewebframework.shell.layout.UILayout;
 import org.carewebframework.shell.property.PropertyInfo;
 import org.springframework.beans.BeanUtils;
@@ -96,7 +96,7 @@ public class PluginDefinition {
     
     private boolean disabled;
     
-    private Class<? extends UIElementBase> clazz;
+    private Class<? extends ElementBase> clazz;
     
     private final List<IPluginResource> resources = new ArrayList<>();
     
@@ -122,7 +122,7 @@ public class PluginDefinition {
      * @param clazz The class whose plugin definition is sought.
      * @return The associated plugin definition, or null if not found.
      */
-    public static PluginDefinition getDefinition(Class<? extends UIElementBase> clazz) {
+    public static PluginDefinition getDefinition(Class<? extends ElementBase> clazz) {
         return PluginRegistry.getInstance().get(clazz);
     }
     
@@ -140,7 +140,7 @@ public class PluginDefinition {
      * @param clazz Associated UI element class.
      * @throws ClassNotFoundException If class not found.
      */
-    public PluginDefinition(String name, Class<? extends UIElementBase> clazz) throws ClassNotFoundException {
+    public PluginDefinition(String name, Class<? extends ElementBase> clazz) throws ClassNotFoundException {
         super();
         this.name = name;
         setClazz(clazz);
@@ -352,9 +352,9 @@ public class PluginDefinition {
      * 
      * @return Associated UI element class.
      */
-    public Class<? extends UIElementBase> getClazz() {
+    public Class<? extends ElementBase> getClazz() {
         if (clazz == null) {
-            setClazz(UIElementPlugin.class);
+            setClazz(ElementPlugin.class);
         }
         
         return clazz;
@@ -365,7 +365,7 @@ public class PluginDefinition {
      * 
      * @param clazz The associated class.
      */
-    public void setClazz(Class<? extends UIElementBase> clazz) {
+    public void setClazz(Class<? extends ElementBase> clazz) {
         this.clazz = clazz;
         
         try {
@@ -606,9 +606,9 @@ public class PluginDefinition {
      * @return Newly created element (may be null if access is restricted or plugin has been
      *         disabled).
      */
-    public UIElementBase createElement(UIElementBase parent, IPropertyProvider propertySource) {
+    public ElementBase createElement(ElementBase parent, IPropertyProvider propertySource) {
         try {
-            UIElementBase element = null;
+            ElementBase element = null;
             boolean deserializing = propertySource instanceof UILayout;
             
             if (isForbidden()) {
@@ -616,7 +616,7 @@ public class PluginDefinition {
             } else if (isDisabled()) {
                 log.info("Plugin " + getName() + " has been disabled.");
             } else {
-                Class<? extends UIElementBase> clazz = getClazz();
+                Class<? extends ElementBase> clazz = getClazz();
                 
                 if (isInternal()) {
                     element = parent.getChild(clazz, null);

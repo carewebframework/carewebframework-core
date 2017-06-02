@@ -27,7 +27,7 @@ package org.carewebframework.ui.sharedforms;
 
 import java.util.List;
 
-import org.carewebframework.shell.elements.UIElementPlugin;
+import org.carewebframework.shell.elements.ElementPlugin;
 import org.carewebframework.ui.sharedforms.TestController.TestItem;
 
 public class TestController extends ListFormController<TestItem> {
@@ -45,7 +45,7 @@ public class TestController extends ListFormController<TestItem> {
     }
     
     @Override
-    public void onLoad(UIElementPlugin plugin) {
+    public void onLoad(ElementPlugin plugin) {
         super.onLoad(plugin);
         setup("Test Title", -2, "Header1", "Header2", "Header3");
     }

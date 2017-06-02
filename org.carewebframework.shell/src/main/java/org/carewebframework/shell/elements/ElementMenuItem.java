@@ -35,17 +35,17 @@ import org.carewebframework.web.component.Menuitem;
  * allow it to behave as a menu and a menu item. This simplifies the creation and manipulation of
  * hierarchical menu trees.
  */
-public class UIElementMenuItem extends UIElementActionBase {
+public class ElementMenuItem extends ElementActionBase {
     
     static {
-        registerAllowedParentClass(UIElementMenuItem.class, UIElementMenubar.class);
-        registerAllowedParentClass(UIElementMenuItem.class, UIElementMenuItem.class);
-        registerAllowedChildClass(UIElementMenuItem.class, UIElementMenuItem.class);
+        registerAllowedParentClass(ElementMenuItem.class, ElementMenubar.class);
+        registerAllowedParentClass(ElementMenuItem.class, ElementMenuItem.class);
+        registerAllowedChildClass(ElementMenuItem.class, ElementMenuItem.class);
     }
     
     private BaseLabeledImageComponent<?> menu = new Menuitem();
     
-    public UIElementMenuItem() {
+    public ElementMenuItem() {
         super();
         maxChildren = Integer.MAX_VALUE;
         autoHide = false;
@@ -79,7 +79,7 @@ public class UIElementMenuItem extends UIElementActionBase {
     
     @Override
     protected void bind() {
-        Class<?> clazz = getParent() instanceof UIElementMenuItem ? Menuitem.class : Menu.class;
+        Class<?> clazz = getParent() instanceof ElementMenuItem ? Menuitem.class : Menu.class;
         
         if (!clazz.isInstance(menu)) {
             BaseLabeledImageComponent<?> oldMenu = menu;

@@ -31,7 +31,7 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.carewebframework.common.StrUtil;
-import org.carewebframework.shell.elements.UIElementBase;
+import org.carewebframework.shell.elements.ElementBase;
 import org.carewebframework.shell.layout.UILayout;
 import org.carewebframework.shell.plugins.PluginDefinition;
 import org.carewebframework.ui.dialog.DialogUtil;
@@ -71,7 +71,7 @@ public class LayoutDesigner implements IAutoWired {
         RELOCATE // Move to a different parent
     }
     
-    private UIElementBase rootElement;
+    private ElementBase rootElement;
     
     private Window window;
     
@@ -130,7 +130,7 @@ public class LayoutDesigner implements IAutoWired {
      * Listens for changes to the UI, filtering out all but those associated with a UI element.
      */
     private final IEventListener layoutListener = (event) -> {
-        if (UIElementBase.getAssociatedUIElement(event.getRelatedTarget()) != null) {
+        if (ElementBase.getAssociatedElement(event.getRelatedTarget()) != null) {
             requestRefresh();
         }
     };
@@ -140,7 +140,7 @@ public class LayoutDesigner implements IAutoWired {
      *
      * @param rootElement The root UI element.
      */
-    public static void execute(UIElementBase rootElement) {
+    public static void execute(ElementBase rootElement) {
         Window dlg = getInstance(true);
         dlg.getAttribute("controller", LayoutDesigner.class).init(rootElement);
         dlg.popup(null);
@@ -193,7 +193,7 @@ public class LayoutDesigner implements IAutoWired {
      *
      * @param rootElement The root UI element.
      */
-    private void init(UIElementBase rootElement) {
+    private void init(ElementBase rootElement) {
         if (this.rootElement != rootElement) {
             this.rootElement = rootElement;
             refresh();
@@ -224,7 +224,7 @@ public class LayoutDesigner implements IAutoWired {
      */
     private void refresh() {
         refreshPending = false;
-        UIElementBase selectedElement = selectedElement();
+        ElementBase selectedElement = selectedElement();
         tree.destroyChildren();
         dragId = 0;
         buildTree(rootElement, null, selectedElement);
@@ -239,7 +239,7 @@ public class LayoutDesigner implements IAutoWired {
      * @param parentNode Tree node that will be the parent node of the subtree.
      * @param selectedElement The currently selected element.
      */
-    private void buildTree(UIElementBase root, Treenode parentNode, UIElementBase selectedElement) {
+    private void buildTree(ElementBase root, Treenode parentNode, ElementBase selectedElement) {
         Treenode node = createNode(root);
         node.setParent(parentNode == null ? tree : parentNode);
         
@@ -247,7 +247,7 @@ public class LayoutDesigner implements IAutoWired {
             tree.setSelectedNode(node);
         }
         
-        for (UIElementBase child : root.getChildren()) {
+        for (ElementBase child : root.getChildren()) {
             buildTree(child, node, selectedElement);
         }
     }
@@ -258,7 +258,7 @@ public class LayoutDesigner implements IAutoWired {
      * @param ele UI element
      * @return Newly created tree node.
      */
-    private Treenode createNode(UIElementBase ele) {
+    private Treenode createNode(ElementBase ele) {
         String label = ele.getDisplayName();
         String instanceName = ele.getInstanceName();
         PluginDefinition def = ele.getDefinition();
@@ -296,7 +296,7 @@ public class LayoutDesigner implements IAutoWired {
      *
      * @return Currently selected element (may be null).
      */
-    private UIElementBase selectedElement() {
+    private ElementBase selectedElement() {
         return getElement(tree.getSelectedNode());
     }
     
@@ -306,8 +306,8 @@ public class LayoutDesigner implements IAutoWired {
      * @param node A tree node.
      * @return The UI element associated with the tree node.
      */
-    private UIElementBase getElement(Treenode node) {
-        return (UIElementBase) (node == null ? rootElement : node.getData());
+    private ElementBase getElement(Treenode node) {
+        return (ElementBase) (node == null ? rootElement : node.getData());
     }
     
     /**
@@ -315,7 +315,7 @@ public class LayoutDesigner implements IAutoWired {
      */
     private void updateControls() {
         Treenode selectedNode = tree.getSelectedNode();
-        UIElementBase selectedElement = getElement(selectedNode);
+        ElementBase selectedElement = getElement(selectedNode);
         contextMenu.updateStates(selectedElement, btnAdd, btnDelete, btnCopy, btnCut, btnPaste, btnProperties, btnAbout);
         BaseComponent parent = selectedNode == null ? null : selectedNode.getParent();
         //parent = parent == null ? null : parent.getParent();
@@ -353,8 +353,8 @@ public class LayoutDesigner implements IAutoWired {
             return MovementType.INVALID;
         }
         
-        UIElementBase eleChild = getElement(child);
-        UIElementBase eleTarget = getElement(target);
+        ElementBase eleChild = getElement(child);
+        ElementBase eleTarget = getElement(target);
         
         if (eleChild == eleTarget) {
             return MovementType.INVALID;
@@ -425,7 +425,7 @@ public class LayoutDesigner implements IAutoWired {
      */
     @EventHandler(value = "change", target = "@tree")
     private void onChange$tree() {
-        UIElementBase ele = selectedElement();
+        ElementBase ele = selectedElement();
         Object obj = ele == null ? null : ele.getOuterComponent();
         
         if (bringToFront && ele != null) {
@@ -518,8 +518,8 @@ public class LayoutDesigner implements IAutoWired {
      */
     @EventHandler(value = "click", target = "@btnDelete")
     private void onClick$btnDelete() {
-        UIElementBase child = selectedElement();
-        UIElementBase parent = child.getParent();
+        ElementBase child = selectedElement();
+        ElementBase parent = child.getParent();
         parent.removeChild(child, true);
         tree.getSelectedNode().destroy();
         updateDroppable();
@@ -579,8 +579,8 @@ public class LayoutDesigner implements IAutoWired {
     }
     
     private void doDrop(Treenode dragged, Treenode target, boolean allowExchange) {
-        UIElementBase eleTarget = getElement(target);
-        UIElementBase eleDragged = getElement(dragged);
+        ElementBase eleTarget = getElement(target);
+        ElementBase eleDragged = getElement(dragged);
         
         switch (movementType(dragged, target, allowExchange)) {
             case INVALID:

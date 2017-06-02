@@ -32,13 +32,13 @@ import org.carewebframework.ui.action.ActionUtil;
 /**
  * Base class for UI elements that support an associated action.
  */
-public class UIElementActionBase extends UIElementBase {
+public class ElementActionBase extends ElementBase {
 
     private String action;
 
     private ActionListener listener;
 
-    public UIElementActionBase() {
+    public ElementActionBase() {
         setMaskMode(null);
     }
 
