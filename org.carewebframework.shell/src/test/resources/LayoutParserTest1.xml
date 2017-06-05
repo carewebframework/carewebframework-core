@@ -6,8 +6,8 @@
 			<tabview orientation="top">
 				<tabpane label="Tabpane Label">
 					<treeview caption="Treeview Caption" open="true">
-						<treepane path="Pane 1" />
-						<treepane path="Pane 2" />
+						<treepane label="Pane 1" />
+						<treepane label="Pane 2" />
 					</treeview>
 				</tabpane>
 			</tabview>

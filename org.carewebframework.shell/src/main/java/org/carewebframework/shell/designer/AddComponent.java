@@ -7,15 +7,15 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  * This Source Code Form is also subject to the terms of the Health-Related
  * Additional Disclaimer of Warranty and Limitation of Liability available at
  *
@@ -122,7 +122,7 @@ public class AddComponent implements IAutoWired {
     /**
      * Display the add component dialog, presenting a list of candidate plugins that may serve as
      * children to the specified parent element.
-     * 
+     *
      * @param parentElement Element to serve as parent to the newly created child element.
      * @param callback Callback to return the newly created child element.
      */
@@ -137,7 +137,7 @@ public class AddComponent implements IAutoWired {
     /**
      * Display the add component dialog, presenting a list of candidate plugins that may serve as
      * children to the specified parent element.
-     * 
+     *
      * @param parentElement Element to serve as parent to the newly created child element.
      * @param callback Callback to return the plugin definition.
      */
@@ -152,7 +152,7 @@ public class AddComponent implements IAutoWired {
     /**
      * Display the add component dialog, presenting a list of candidate plugins that may serve as
      * children to the specified parent element.
-     * 
+     *
      * @param parentElement Element to serve as parent to the newly created child element.
      * @param createChild If true, the selected element will be created.
      * @param callback The close event handler.
@@ -168,7 +168,7 @@ public class AddComponent implements IAutoWired {
     /**
      * Initialize the tree view based with list of plugins that may serve as children to the parent
      * element.
-     * 
+     *
      * @param comp The root component.
      */
     @Override
@@ -291,7 +291,7 @@ public class AddComponent implements IAutoWired {
     
     /**
      * Updates the tree node according to the favorite status.
-     * 
+     *
      * @param node Tree node to update.
      * @param isFavorite If true, the node is a favorite.
      */
@@ -304,7 +304,7 @@ public class AddComponent implements IAutoWired {
     
     /**
      * Returns currently selected plugin definition, or null if none selected.
-     * 
+     *
      * @return Definition of the currently selected plugin.
      */
     private PluginDefinition selectedPluginDefinition() {
@@ -313,7 +313,7 @@ public class AddComponent implements IAutoWired {
     
     private void returnResult(PluginDefinition definition) {
         if (definition != null) {
-            childElement = createChild ? definition.createElement(parentElement, null) : null;
+            childElement = createChild ? definition.createElement(parentElement, null, false) : null;
             
             if (childElement != null) {
                 childElement.bringToFront();

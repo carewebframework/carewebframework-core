@@ -30,7 +30,6 @@ import java.io.InputStream;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.carewebframework.api.property.IPropertyProvider;
@@ -49,20 +48,43 @@ import org.w3c.dom.Node;
 /**
  * Represents the layout of the visual interface.
  */
-public class Layout implements IPropertyProvider, IClipboardAware<Layout> {
-    
+public class Layout implements IClipboardAware<Layout> {
+
     private static final Log log = LogFactory.getLog(Layout.class);
-    
+
     private static final String NULL_VALUE = "\\null\\";
+
+    private final IPropertyProvider propertyProvider = new IPropertyProvider() {
+
+        /**
+         * @see org.carewebframework.api.property.IPropertyProvider#getProperty(String)
+         */
+        @Override
+        public String getProperty(String key) {
+            return readString(key, null);
+        }
+
+        /**
+         * Returns true if the specified attribute exists in the current node.
+         *
+         * @param name Attribute name.
+         * @return True if the attribute exists.
+         */
+        @Override
+        public boolean hasProperty(String name) {
+            return currentNode == null ? false : currentNode.getAttributes().getNamedItem(name) != null;
+        }
+        
+    };
     
     private Document document;
-    
+
     private Node currentNode;
-    
+
     private String layoutName;
-    
+
     private String version;
-    
+
     /**
      * Loads a layout from the specified resource, using a registered layout loader or, failing
      * that, using the default loadFromUrl method.
@@ -72,22 +94,22 @@ public class Layout implements IPropertyProvider, IClipboardAware<Layout> {
      */
     public static Layout load(String resource) {
         int i = resource.indexOf(":");
-        
+
         if (i > 0) {
             String loaderId = resource.substring(0, i);
             ILayoutLoader layoutLoader = LayoutLoaderRegistry.getInstance().get(loaderId);
-            
+
             if (layoutLoader != null) {
                 String name = resource.substring(i + 1);
                 return layoutLoader.loadLayout(name);
             }
         }
-        
+
         Layout layout = new Layout();
         layout.loadFromUrl(resource);
         return layout;
     }
-    
+
     /**
      * Serializes the UI element hierarchy under and including the specified element.
      *
@@ -99,16 +121,16 @@ public class Layout implements IPropertyProvider, IClipboardAware<Layout> {
         layout.internalSerialize(parent);
         return layout;
     }
-    
+
     public Layout() {
         clear();
     }
-    
+
     public Layout(String layoutName) {
         this();
         setName(layoutName);
     }
-    
+
     /**
      * Deserializes the layout, under the specified parent, starting from the layout origin.
      *
@@ -116,17 +138,23 @@ public class Layout implements IPropertyProvider, IClipboardAware<Layout> {
      * @return The UI element created during this pass.
      */
     public ElementBase deserialize(ElementBase parent) {
+        boolean isDesktop = parent instanceof ElementDesktop;
         moveTop();
+
+        if (isDesktop) {
+            parent.getDefinition().initElement(parent, propertyProvider);
+        }
+
         moveDown();
-        ElementBase element = internalDeserialize(parent, !(parent instanceof ElementDesktop));
-        
+        ElementBase element = internalDeserialize(parent, !isDesktop);
+
         if (element != null) {
             element.getRoot().activate(true);
         }
-        
+
         return element;
     }
-    
+
     /**
      * Deserializes the layout, under the specified parent. This method manipulates the current
      * position within the layout and is called recursively in a depth-first traversal of the XML
@@ -139,25 +167,25 @@ public class Layout implements IPropertyProvider, IClipboardAware<Layout> {
     private ElementBase internalDeserialize(ElementBase parent, boolean ignoreInternal) {
         String id = getObjectName();
         PluginDefinition def = PluginDefinition.getDefinition(id);
-        
+
         if (def == null) {
             log.error("Unrecognized tag '" + id + "' encountered in layout.");
         }
-        
+
         ElementBase element = def == null ? null
-                : ignoreInternal && def.isInternal() ? null : def.createElement(parent, this);
-        
+                : ignoreInternal && def.isInternal() ? null : def.createElement(parent, propertyProvider, true);
+
         if (element != null && moveDown()) {
             internalDeserialize(element, false);
             moveUp();
         }
-        
+
         while (moveNext()) {
             internalDeserialize(parent, ignoreInternal);
         }
         return element;
     }
-    
+
     /**
      * Serializes the specified UI element (parent). This is called recursively for the specified
      * element and all its subordinates.
@@ -167,38 +195,38 @@ public class Layout implements IPropertyProvider, IClipboardAware<Layout> {
     private void internalSerialize(ElementBase parent) {
         PluginDefinition def = parent.getDefinition();
         boolean isRoot = parent.getParent() == null;
-        
+
         if (!isRoot) {
             newChild(def.getId());
         }
-        
+
         for (PropertyInfo propInfo : def.getProperties()) {
             Object value = propInfo.isSerializable() ? propInfo.getPropertyValue(parent) : null;
             String val = value == null ? null : propInfo.getPropertyType().getSerializer().serialize(value);
-            
+
             if (!ObjectUtils.equals(value, propInfo.getDefault())) {
                 writeString(propInfo.getId(), val);
             }
         }
-        
+
         for (ElementBase child : parent.getSerializableChildren()) {
             internalSerialize(child);
         }
-        
+
         if (!isRoot) {
             moveUp();
         }
     }
-    
+
     /**
      * Returns the object name (i.e., the element tag) of the currently selected node.
      *
      * @return The object name.
      */
-    public String getObjectName() {
+    private String getObjectName() {
         return currentNode.getNodeName();
     }
-    
+
     /**
      * Returns the name of the currently loaded layout, or null if none loaded.
      *
@@ -207,7 +235,7 @@ public class Layout implements IPropertyProvider, IClipboardAware<Layout> {
     public String getName() {
         return layoutName;
     }
-    
+
     /**
      * Sets the name of the current layout.
      *
@@ -217,7 +245,7 @@ public class Layout implements IPropertyProvider, IClipboardAware<Layout> {
         layoutName = value;
         setAttributeValue("name", value, document.getDocumentElement());
     }
-    
+
     /**
      * Returns the version of the layout.
      *
@@ -226,7 +254,7 @@ public class Layout implements IPropertyProvider, IClipboardAware<Layout> {
     public String getVersion() {
         return version;
     }
-    
+
     /**
      * Sets the version of the current layout.
      *
@@ -236,7 +264,7 @@ public class Layout implements IPropertyProvider, IClipboardAware<Layout> {
         version = value;
         setAttributeValue("version", value, document.getDocumentElement());
     }
-    
+
     /**
      * Performs some simple validation of the newly loaded layout.
      *
@@ -244,16 +272,16 @@ public class Layout implements IPropertyProvider, IClipboardAware<Layout> {
      */
     private void validateDocument() throws Exception {
         currentNode = document.getDocumentElement();
-        
+
         if (!LayoutConstants.LAYOUT_ROOT.equals(currentNode.getNodeName())) {
             throw new Exception("Expected signature not found.");
         }
-        
+
         layoutName = readString("name", "");
         version = readString("version", "");
         moveDown();
     }
-    
+
     /**
      * Reset the layout to not loaded state.
      */
@@ -263,7 +291,7 @@ public class Layout implements IPropertyProvider, IClipboardAware<Layout> {
         layoutName = null;
         version = null;
     }
-    
+
     /**
      * Load the layout from a file.
      *
@@ -271,14 +299,14 @@ public class Layout implements IPropertyProvider, IClipboardAware<Layout> {
      */
     public void loadFromUrl(String url) {
         InputStream strm = ExecutionContext.getSession().getServletContext().getResourceAsStream(url);
-        
+
         if (strm == null) {
             throw new UIException("Unable to locate layout resource: " + url);
         }
-        
+
         loadFromStream(strm);
     }
-    
+
     /**
      * Load the layout from an input stream.
      *
@@ -297,7 +325,7 @@ public class Layout implements IPropertyProvider, IClipboardAware<Layout> {
             IOUtils.closeQuietly(strm);
         }
     }
-    
+
     /**
      * Load the layout from a string.
      *
@@ -315,7 +343,7 @@ public class Layout implements IPropertyProvider, IClipboardAware<Layout> {
             throw MiscUtil.toUnchecked(e);
         }
     }
-    
+
     /**
      * Load the layout from a stored property.
      *
@@ -328,7 +356,7 @@ public class Layout implements IPropertyProvider, IClipboardAware<Layout> {
         this.layoutName = layoutId.name;
         return this;
     }
-    
+
     /**
      * Load the layout associated with the specified application id.
      *
@@ -339,7 +367,7 @@ public class Layout implements IPropertyProvider, IClipboardAware<Layout> {
         String xml = LayoutUtil.getLayoutContentByAppId(appId);
         return loadFromText(xml);
     }
-    
+
     /**
      * Saves the layout as a property value using the specified identifier.
      *
@@ -349,17 +377,17 @@ public class Layout implements IPropertyProvider, IClipboardAware<Layout> {
     public boolean saveToProperty(LayoutIdentifier layoutId) {
         setName(layoutId.name);
         setVersion(LayoutConstants.LAYOUT_VERSION);
-        
+
         try {
             LayoutUtil.saveLayout(layoutId, toString());
         } catch (Exception e) {
             log.error("Error saving application layout.", e);
             return false;
         }
-        
+
         return true;
     }
-    
+
     /**
      * Sets the current node to the specified value. If the value is not an element node, sets the
      * current node to the first sibling node that is an element.
@@ -375,10 +403,10 @@ public class Layout implements IPropertyProvider, IClipboardAware<Layout> {
             }
             node = node.getNextSibling();
         }
-        
+
         return false;
     }
-    
+
     /**
      * Clears the current document.
      */
@@ -389,10 +417,10 @@ public class Layout implements IPropertyProvider, IClipboardAware<Layout> {
         } catch (Exception e) {
             reset();
         }
-        
+
         currentNode = document.getDocumentElement();
     }
-    
+
     /**
      * Returns the class of the element at the root of the layout.
      *
@@ -405,66 +433,44 @@ public class Layout implements IPropertyProvider, IClipboardAware<Layout> {
         PluginDefinition def = id == null ? null : PluginDefinition.getDefinition(id);
         return def == null ? null : def.getClazz();
     }
-    
+
     /**
      * Move current node down one level.
      *
      * @return True if successful.
      */
-    public boolean moveDown() {
+    private boolean moveDown() {
         return currentNode != null && currentNode.hasChildNodes() && setCurrentNode(currentNode.getFirstChild());
     }
-    
+
     /**
      * Moves to next sibling node.
      *
      * @return True if successful.
      */
-    public boolean moveNext() {
+    private boolean moveNext() {
         return setCurrentNode(currentNode.getNextSibling());
     }
-    
+
     /**
      * Move to the top element in the document.
      *
      * @return Returns true only if a layout is currently loaded.
      */
-    public boolean moveTop() {
+    private boolean moveTop() {
         currentNode = document.getDocumentElement();
         return !StringUtils.isEmpty(layoutName);
     }
-    
+
     /**
      * Move up one level.
      *
      * @return True if successful
      */
-    public boolean moveUp() {
+    private boolean moveUp() {
         return setCurrentNode(currentNode.getParentNode());
     }
-    
-    /**
-     * Returns value of named attribute as a boolean.
-     *
-     * @param name Attribute name.
-     * @param deflt Default value if not found.
-     * @return Value of the attribute.
-     */
-    public boolean readBoolean(String name, boolean deflt) {
-        return Boolean.parseBoolean(readString(name, Boolean.toString(deflt)));
-    }
-    
-    /**
-     * Return value of named attribute as an integer;
-     *
-     * @param name Attribute name.
-     * @param deflt Default value if not found.
-     * @return Value of the attribute.
-     */
-    public int readInteger(String name, int deflt) {
-        return NumberUtils.toInt(readString(name, null), deflt);
-    }
-    
+
     /**
      * Return value of named attribute as a string.
      *
@@ -472,38 +478,31 @@ public class Layout implements IPropertyProvider, IClipboardAware<Layout> {
      * @param deflt Default value if not found.
      * @return Value of the attribute.
      */
-    public String readString(String name, String deflt) {
-        String value = hasProperty(name) ? currentNode.getAttributes().getNamedItem(name).getNodeValue() : deflt;
+    private String readString(String name, String deflt) {
+        String value = propertyProvider.hasProperty(name) ? currentNode.getAttributes().getNamedItem(name).getNodeValue()
+                : deflt;
         return NULL_VALUE.equals(value) ? null : value;
     }
-    
+
     /**
      * Create a new element node as the child of the current node and make it the current node.
      *
      * @param name Tag name for the new element.
      */
-    public void newChild(String name) {
+    private void newChild(String name) {
         currentNode = currentNode.appendChild(document.createElement(name));
     }
-    
-    public void writeBoolean(String name, boolean value) {
-        writeString(name, Boolean.toString(value));
-    }
-    
-    public void writeInteger(String name, int value) {
-        writeString(name, Integer.toString(value));
-    }
-    
+
     /**
      * Sets an attribute value.
      *
      * @param name Attribute name.
      * @param value Attribute value.
      */
-    public void writeString(String name, String value) {
+    private void writeString(String name, String value) {
         setAttributeValue(name, value == null ? NULL_VALUE : value, currentNode);
     }
-    
+
     /**
      * Returns true if the layout has no content.
      *
@@ -513,7 +512,7 @@ public class Layout implements IPropertyProvider, IClipboardAware<Layout> {
         Node root = document == null ? null : document.getElementsByTagName(LayoutConstants.LAYOUT_ROOT).item(0);
         return root == null || !root.hasChildNodes();
     }
-    
+
     /**
      * Sets the specified attribute value for the specified element.
      *
@@ -523,15 +522,15 @@ public class Layout implements IPropertyProvider, IClipboardAware<Layout> {
      */
     private void setAttributeValue(String name, String value, Node element) {
         Node node = element.getAttributes().getNamedItem(name);
-        
+
         if (node == null) {
             node = document.createAttribute(name);
             element.getAttributes().setNamedItem(node);
         }
-        
+
         node.setNodeValue(value);
     }
-    
+
     /**
      * Returns the layout as an xml-formatted string.
      */
@@ -539,26 +538,7 @@ public class Layout implements IPropertyProvider, IClipboardAware<Layout> {
     public String toString() {
         return document == null ? null : XMLUtil.toString(document);
     }
-    
-    /**
-     * @see org.carewebframework.api.property.IPropertyProvider#getProperty(String)
-     */
-    @Override
-    public String getProperty(String key) {
-        return readString(key, null);
-    }
-    
-    /**
-     * Returns true if the specified attribute exists in the current node.
-     *
-     * @param name Attribute name.
-     * @return True if the attribute exists.
-     */
-    @Override
-    public boolean hasProperty(String name) {
-        return currentNode == null ? false : currentNode.getAttributes().getNamedItem(name) != null;
-    }
-    
+
     /**
      * Converts to clipboard format.
      */
@@ -566,7 +546,7 @@ public class Layout implements IPropertyProvider, IClipboardAware<Layout> {
     public String toClipboard() {
         return toString();
     }
-    
+
     /**
      * Converts from clipboard format.
      *

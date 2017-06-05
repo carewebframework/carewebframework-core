@@ -238,7 +238,7 @@ public class CareWebShell extends Div implements INamespace {
      *
      * @return The current UI desktop.
      */
-    public ElementDesktop getUIDesktop() {
+    public ElementDesktop getDesktop() {
         return desktop;
     }
 
@@ -370,9 +370,6 @@ public class CareWebShell extends Div implements INamespace {
         this.layout = layout;
         reset();
         layout.deserialize(desktop);
-        layout.moveTop();
-        desktop.setTitle(layout.readString("title", ""));
-        desktop.setIcon(layout.readString("icon", ""));
         desktop.setAppId(FrameworkUtil.getAppName());
         desktop.activate(true);
 

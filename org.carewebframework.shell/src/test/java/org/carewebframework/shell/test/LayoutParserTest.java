@@ -30,6 +30,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import org.apache.commons.beanutils.PropertyUtils;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.shell.CareWebShell;
 import org.carewebframework.shell.elements.ElementBase;
@@ -37,6 +38,12 @@ import org.carewebframework.shell.elements.ElementDesktop;
 import org.carewebframework.shell.elements.ElementMenubar;
 import org.carewebframework.shell.elements.ElementPlugin;
 import org.carewebframework.shell.elements.ElementPlugin.PluginContainer;
+import org.carewebframework.shell.elements.ElementSplitterPane;
+import org.carewebframework.shell.elements.ElementSplitterView;
+import org.carewebframework.shell.elements.ElementTabPane;
+import org.carewebframework.shell.elements.ElementTabView;
+import org.carewebframework.shell.elements.ElementToolbar;
+import org.carewebframework.shell.elements.ElementTreePane;
 import org.carewebframework.shell.elements.ElementTreeView;
 import org.carewebframework.shell.layout.Layout;
 import org.carewebframework.shell.plugins.PluginDefinition;
@@ -48,40 +55,41 @@ import org.carewebframework.web.test.MockTest;
 import org.junit.Test;
 
 public class LayoutParserTest {
-
+    
     private final Layout layout = new Layout();
+    
+    private ElementBase element;
 
     @Test
     public void ParserTest() throws Exception {
         String xml = MockTest.getTextFromResource("LayoutParserTest1.xml");
         layout.loadFromText(xml);
         assertFalse(layout.isEmpty());
-        testNode(1, "_menubar");
-        testNode(0, "_toolbar");
-        testNode(0, "splitterview");
-        testNode(1, "splitterpane");
-        testProperty("size", "90");
-        testProperty("relative", "true");
-        testNode(1, "tabview");
-        testProperty("orientation", "top");
-        testNode(1, "tabpane");
-        testNode(1, "treeview");
-        testProperty("open", "true");
-        testNode(1, "treepane");
-        testProperty("path", "Pane 1");
-        testNode(0, "treepane");
-        testProperty("path", "Pane 2");
         PluginDefinition def = PluginDefinition.getDefinition("treeview");
         assertNotNull(def);
         assertEquals(def.getDescription(), StrUtil.getLabel("cwf.shell.plugin.treeview.description"));
-        ElementBase ele = def.createElement(null, null);
+        ElementBase ele = def.createElement(null, null, false);
         assertTrue(ele instanceof ElementTreeView);
         CareWebShell shell = new CareWebShell();
         shell.setParent(MockTest.mockEnvironment.getSession().getPage());
-        ElementDesktop root = shell.getUIDesktop();
-        ElementBase element = layout.deserialize(root);
-        assertTrue(element instanceof ElementMenubar);
-        assertTrue(element.hasAncestor(root));
+        ElementDesktop root = shell.getDesktop();
+        layout.deserialize(root);
+        element = root;
+        testNode(1, ElementMenubar.class);
+        testNode(0, ElementToolbar.class);
+        testNode(0, ElementSplitterView.class);
+        testNode(1, ElementSplitterPane.class);
+        testProperty("size", 90);
+        testProperty("relative", true);
+        testNode(1, ElementTabView.class);
+        testProperty("orientation", "top");
+        testNode(1, ElementTabPane.class);
+        testNode(1, ElementTreeView.class);
+        testProperty("open", true);
+        testNode(1, ElementTreePane.class);
+        testProperty("label", "Pane 1");
+        testNode(0, ElementTreePane.class);
+        testProperty("label", "Pane 2");
         ElementPlugin plugin1 = shell.getLoadedPlugin("testplugin1");
         assertNotNull(plugin1);
         PluginContainer container1 = (PluginContainer) plugin1.getOuterComponent();
@@ -108,22 +116,22 @@ public class LayoutParserTest {
         root.removeChildren();
         testPlugin(controller, 1, 2, 1, 1);
     }
-
+    
     private void testProperty(ElementPlugin plugin, String propertyName, Object expectedValue) throws Exception {
         PluginDefinition def = plugin.getDefinition();
         PropertyInfo propInfo = null;
-
+        
         for (PropertyInfo pi : def.getProperties()) {
             if (pi.getId().equals(propertyName)) {
                 propInfo = pi;
                 break;
             }
         }
-
+        
         assertNotNull("Property not found: " + propertyName, propInfo);
         assertEquals(expectedValue, plugin.getPropertyValue(propInfo));
     }
-
+    
     private void testPlugin(TestPluginController controller, int loadCount, int activateCount, int inactivateCount,
                             int unloadCount) {
         MockTest.mockEnvironment.flushEvents();
@@ -132,26 +140,27 @@ public class LayoutParserTest {
         assertEquals(inactivateCount, controller.getInactivateCount());
         assertEquals(unloadCount, controller.getUnloadCount());
     }
-
-    private void testNode(int dir, String name) {
+    
+    private void testNode(int dir, Class<? extends ElementBase> clazz) {
         switch (dir) {
             case 1:
-                layout.moveDown();
+                element = element.getFirstChild();
                 break;
-
+            
             case -1:
-                layout.moveUp();
+                element = element.getParent();
                 break;
-
+            
             case 0:
-                layout.moveNext();
+                element = element.getNextSibling(false);
                 break;
         }
-
-        assertEquals(layout.getObjectName(), name);
+        
+        assertTrue(clazz.isInstance(element));
     }
-
-    private void testProperty(String key, String value) {
-        assertEquals(layout.getProperty(key), value);
+    
+    private void testProperty(String key, Object value) throws Exception {
+        Object prop = PropertyUtils.getProperty(element, key);
+        assertEquals(prop, value);
     }
 }
