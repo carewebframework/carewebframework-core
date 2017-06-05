@@ -33,6 +33,7 @@ import org.apache.commons.lang.StringUtils;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.shell.elements.ElementBase;
 import org.carewebframework.shell.layout.Layout;
+import org.carewebframework.shell.layout.LayoutParser;
 import org.carewebframework.shell.plugins.PluginDefinition;
 import org.carewebframework.ui.dialog.DialogUtil;
 import org.carewebframework.web.ancillary.IAutoWired;
@@ -57,75 +58,75 @@ import org.carewebframework.web.event.IEventListener;
  * Controller for dialog for managing the current layout.
  */
 public class LayoutDesigner implements IAutoWired {
-    
+
     private static final String DIALOG = DesignConstants.RESOURCE_PREFIX + "layoutDesigner.cwf";
-    
+
     private static final String ATTR_BRING_TO_FRONT = DIALOG + ".BTF";
-    
+
     private final String noDescriptionHint = StrUtil.getLabel("cwf.shell.designer.add.component.description.missing.hint");
-    
+
     private enum MovementType {
         INVALID, // Invalid movement type
         EXCHANGE, // Exchange position of two siblings
         FIRST, // Move ahead of all siblings
         RELOCATE // Move to a different parent
     }
-    
+
     private ElementBase rootElement;
-    
+
     private Window window;
-    
+
     @WiredComponent
     private Treeview tree;
-    
+
     @WiredComponent
     private Button btnCut;
-    
+
     @WiredComponent
     private Button btnCopy;
-    
+
     @WiredComponent
     private Button btnPaste;
-    
+
     @WiredComponent
     private Button btnAdd;
-    
+
     @WiredComponent
     private Button btnDelete;
-    
+
     @WiredComponent
     private Button btnUp;
-    
+
     @WiredComponent
     private Button btnDown;
-    
+
     @WiredComponent
     private Button btnLeft;
-    
+
     @WiredComponent
     private Button btnRight;
-    
+
     @WiredComponent
     private Button btnToFront;
-    
+
     @WiredComponent
     private Button btnProperties;
-    
+
     @WiredComponent
     private Button btnAbout;
-    
+
     private final Clipboard clipboard = Clipboard.getInstance();
-    
+
     private final DesignContextMenu contextMenu = DesignContextMenu.create();
-    
+
     private int dragId;
-    
+
     private LayoutChangedEvent layoutChangedEvent;
-    
+
     private boolean refreshPending;
-    
+
     private boolean bringToFront;
-    
+
     /**
      * Listens for changes to the UI, filtering out all but those associated with a UI element.
      */
@@ -134,7 +135,7 @@ public class LayoutDesigner implements IAutoWired {
             requestRefresh();
         }
     };
-    
+
     /**
      * Display the Layout Manager dialog
      *
@@ -145,18 +146,18 @@ public class LayoutDesigner implements IAutoWired {
         dlg.getAttribute("controller", LayoutDesigner.class).init(rootElement);
         dlg.popup(null);
     }
-    
+
     /**
      * Close the dialog if it is open.
      */
     public static void closeDialog() {
         Window dlg = getInstance(false);
-        
+
         if (dlg != null) {
             dlg.close();
         }
     }
-    
+
     /**
      * Returns an instance of the layout manager. If the layout manager is open, returns that
      * instance. If not and autoCreate is true, creates a new one.
@@ -167,15 +168,15 @@ public class LayoutDesigner implements IAutoWired {
     private static Window getInstance(boolean autoCreate) {
         Page page = ExecutionContext.getPage();
         Window dlg = page.getAttribute(DIALOG, Window.class);
-        
+
         if (autoCreate && dlg == null) {
             dlg = DialogUtil.popup(DIALOG, true, true, false);
             page.setAttribute(DIALOG, dlg);
         }
-        
+
         return dlg;
     }
-    
+
     @Override
     public void afterInitialized(BaseComponent comp) {
         window = (Window) comp;
@@ -187,7 +188,7 @@ public class LayoutDesigner implements IAutoWired {
         clipboard.addListener(comp);
         comp.getPage().addEventListener("register unregister", layoutListener);
     }
-    
+
     /**
      * Initialize the tree view based on the current layout.
      *
@@ -199,7 +200,7 @@ public class LayoutDesigner implements IAutoWired {
             refresh();
         }
     }
-    
+
     /**
      * Highlights a component.
      *
@@ -208,7 +209,7 @@ public class LayoutDesigner implements IAutoWired {
     private void highlight(BaseComponent comp) {
         comp.invoke("widget$.effect", "pulsate", Collections.singletonMap("times", 1));
     }
-    
+
     /**
      * Submits an asynchronous refresh request if one is not already pending.
      */
@@ -218,7 +219,7 @@ public class LayoutDesigner implements IAutoWired {
             EventUtil.post(layoutChangedEvent);
         }
     }
-    
+
     /**
      * Refreshes the component tree.
      */
@@ -231,7 +232,7 @@ public class LayoutDesigner implements IAutoWired {
         updateDroppable();
         updateControls();
     }
-    
+
     /**
      * Refresh a subtree of the component tree. Called recursively.
      *
@@ -242,16 +243,16 @@ public class LayoutDesigner implements IAutoWired {
     private void buildTree(ElementBase root, Treenode parentNode, ElementBase selectedElement) {
         Treenode node = createNode(root);
         node.setParent(parentNode == null ? tree : parentNode);
-        
+
         if (root == selectedElement) {
             tree.setSelectedNode(node);
         }
-        
+
         for (ElementBase child : root.getChildren()) {
             buildTree(child, node, selectedElement);
         }
     }
-    
+
     /**
      * Creates a tree node associated with the specified UI element.
      *
@@ -262,25 +263,25 @@ public class LayoutDesigner implements IAutoWired {
         String label = ele.getDisplayName();
         String instanceName = ele.getInstanceName();
         PluginDefinition def = ele.getDefinition();
-        
+
         if (!label.equalsIgnoreCase(instanceName)) {
             label += " - " + instanceName;
         }
-        
+
         Treenode node = new Treenode();
         node.setLabel(label);
         node.setData(ele);
         node.setHint(StringUtils.defaultString(def.getDescription(), noDescriptionHint));
         node.addEventForward(DropEvent.class, window, null);
         node.addEventForward(DblclickEvent.class, btnProperties, ClickEvent.TYPE);
-        
+
         if (!ele.isLocked() && !def.isInternal()) {
             node.setDragid("d" + dragId++);
         }
-        
+
         return node;
     }
-    
+
     /**
      * Returns the tree node containing the component.
      *
@@ -290,7 +291,7 @@ public class LayoutDesigner implements IAutoWired {
     private Treenode getTreenode(BaseComponent comp) {
         return (Treenode) (comp instanceof Treenode ? comp : comp.getAncestor(Treenode.class));
     }
-    
+
     /**
      * Returns currently selected UI element, or null if none selected.
      *
@@ -299,7 +300,7 @@ public class LayoutDesigner implements IAutoWired {
     private ElementBase selectedElement() {
         return getElement(tree.getSelectedNode());
     }
-    
+
     /**
      * Returns the UI element associated with the given tree node.
      *
@@ -309,7 +310,7 @@ public class LayoutDesigner implements IAutoWired {
     private ElementBase getElement(Treenode node) {
         return (ElementBase) (node == null ? rootElement : node.getData());
     }
-    
+
     /**
      * Update control states for current selection.
      */
@@ -327,18 +328,18 @@ public class LayoutDesigner implements IAutoWired {
         target = selectedNode == null ? null : (Treenode) selectedNode.getNextSibling();
         btnDown.setDisabled(movementType(selectedNode, target, true) == MovementType.INVALID);
         btnToFront.addStyle("opacity", bringToFront ? null : "0.5");
-        
+
         if (selectedElement != null) {
             window.setContext(contextMenu.getMenupopup());
             contextMenu.setOwner(selectedElement);
         }
-        
+
         if (selectedNode != null) {
             selectedNode.setSelected(false);
             selectedNode.setSelected(true);
         }
     }
-    
+
     /**
      * Returns the type of movement being requested.
      *
@@ -352,66 +353,66 @@ public class LayoutDesigner implements IAutoWired {
         if (!canMove(child) || target == null) {
             return MovementType.INVALID;
         }
-        
+
         ElementBase eleChild = getElement(child);
         ElementBase eleTarget = getElement(target);
-        
+
         if (eleChild == eleTarget) {
             return MovementType.INVALID;
         }
-        
+
         if (eleChild.getParent() == eleTarget.getParent() && allowExchange) {
             return canMove(target) ? MovementType.EXCHANGE : MovementType.INVALID;
         }
-        
+
         if (eleChild.getParent() == eleTarget) {
             return MovementType.FIRST;
         }
-        
+
         if (eleTarget.canAcceptChild(eleChild) && eleChild.canAcceptParent(eleTarget)) {
             return MovementType.RELOCATE;
         }
-        
+
         return MovementType.INVALID;
     }
-    
+
     private boolean canMove(Treenode node) {
         return node != null && node.getDragid() != null;
     }
-    
+
     private void enumerateNodes(BaseUIComponent parent, List<Treenode> nodes) {
         for (Treenode child : parent.getChildren(Treenode.class)) {
             nodes.add(child);
             enumerateNodes(child, nodes);
         }
     }
-
+    
     /**
      * Updates the drop ids for all tree nodes.
      */
     private void updateDroppable() {
         List<Treenode> nodes = new ArrayList<>();
         enumerateNodes(tree, nodes);
-
+        
         for (Treenode target : nodes) {
             if (canMove(target)) {
                 StringBuilder sb = new StringBuilder();
-                
+
                 for (Treenode node : nodes) {
                     if (node != target && movementType(node, target, true) != MovementType.INVALID) {
                         String id = node.getDragid();
-
+                        
                         if (id != null) {
                             sb.append(sb.length() > 0 ? " " : "").append(id);
                         }
                     }
                 }
-                
+
                 target.setDropid(sb.toString());
             }
         }
     }
-    
+
     /**
      * Refreshes tree when layout has changed.
      */
@@ -419,7 +420,7 @@ public class LayoutDesigner implements IAutoWired {
     private void onLayoutChanged() {
         refresh();
     }
-    
+
     /**
      * Updates tool bar controls when selected changes.
      */
@@ -427,17 +428,17 @@ public class LayoutDesigner implements IAutoWired {
     private void onChange$tree() {
         ElementBase ele = selectedElement();
         Object obj = ele == null ? null : ele.getOuterComponent();
-        
+
         if (bringToFront && ele != null) {
             ele.bringToFront();
         }
-        
+
         if (obj instanceof BaseComponent) {
             highlight((BaseComponent) obj);
         }
         updateControls();
     }
-    
+
     /**
      * Performs a cut operation on the selected node.
      */
@@ -446,28 +447,28 @@ public class LayoutDesigner implements IAutoWired {
         onClick$btnCopy();
         onClick$btnDelete();
     }
-    
+
     /**
      * Performs a copy operation on the selected node.
      */
     @EventHandler(value = "click", target = "@btnCopy")
     private void onClick$btnCopy() {
-        clipboard.copy(Layout.serialize(selectedElement()));
+        clipboard.copy(LayoutParser.parseElement(selectedElement()));
     }
-    
+
     /**
      * Performs a paste operation, inserted the pasted elements under the current selection.
      */
     @EventHandler(value = "click", target = "@btnPaste")
     private void onClick$btnPaste() {
         Object data = clipboard.getData();
-        
+
         if (data instanceof Layout) {
-            ((Layout) data).deserialize(selectedElement());
+            ((Layout) data).materialize(selectedElement());
             requestRefresh();
         }
     }
-    
+
     /**
      * Shows clipboard contents.
      */
@@ -475,7 +476,7 @@ public class LayoutDesigner implements IAutoWired {
     private void onClick$btnView() {
         clipboard.view();
     }
-    
+
     /**
      * Refreshes the tree view.
      */
@@ -483,13 +484,13 @@ public class LayoutDesigner implements IAutoWired {
     private void onClick$btnRefresh() {
         refresh();
     }
-    
+
     @EventHandler(value = "click", target = "@btnToFront")
     private void onClick$btnToFront() {
         bringToFront = !bringToFront;
         updateControls();
     }
-    
+
     /**
      * Displays the property grid for the currently selected node.
      */
@@ -499,7 +500,7 @@ public class LayoutDesigner implements IAutoWired {
             PropertyGrid.create(selectedElement(), null);
         }
     }
-    
+
     /**
      * Invokes the add component dialog. Any newly added component will be placed under the current
      * selection.
@@ -512,7 +513,7 @@ public class LayoutDesigner implements IAutoWired {
             }
         });
     }
-    
+
     /**
      * Removes the currently selected element and any children.
      */
@@ -525,31 +526,31 @@ public class LayoutDesigner implements IAutoWired {
         updateDroppable();
         updateControls();
     }
-    
+
     @EventHandler(value = "click", target = "@btnUp")
     private void onClick$btnUp() {
         Treenode node = tree.getSelectedNode();
         doDrop(node, (Treenode) node.getPreviousSibling(), true);
     }
-    
+
     @EventHandler(value = "click", target = "@btnDown")
     private void onClick$btnDown() {
         Treenode node = tree.getSelectedNode();
         doDrop((Treenode) node.getNextSibling(), node, true);
     }
-    
+
     @EventHandler(value = "click", target = "@btnRight")
     private void onClick$btnRight() {
         Treenode node = tree.getSelectedNode();
         doDrop(node, (Treenode) node.getPreviousSibling(), false);
     }
-    
+
     @EventHandler(value = "click", target = "@btnLeft")
     private void onClick$btnLeft() {
         Treenode node = tree.getSelectedNode();
         doDrop(node, (Treenode) node.getParent().getParent(), false);
     }
-    
+
     /**
      * Display the About dialog for the selected element.
      */
@@ -557,7 +558,7 @@ public class LayoutDesigner implements IAutoWired {
     private void onClick$btnAbout() {
         selectedElement().about();
     }
-    
+
     /**
      * Invoked when the clipboard contents changes.
      */
@@ -565,7 +566,7 @@ public class LayoutDesigner implements IAutoWired {
     private void onClipboardChange() {
         updateControls();
     }
-    
+
     /**
      * Handles drop events.
      *
@@ -577,25 +578,25 @@ public class LayoutDesigner implements IAutoWired {
         Treenode dragged = getTreenode(event.getDraggable());
         doDrop(dragged, target, true);
     }
-    
+
     private void doDrop(Treenode dragged, Treenode target, boolean allowExchange) {
         ElementBase eleTarget = getElement(target);
         ElementBase eleDragged = getElement(dragged);
-        
+
         switch (movementType(dragged, target, allowExchange)) {
             case INVALID:
                 return;
-            
+
             case EXCHANGE:
                 eleDragged.setIndex(eleTarget.getIndex());
                 target.getParent().addChild(dragged, target);
                 break;
-            
+
             case FIRST:
                 eleDragged.setIndex(0);
                 target.addChild(dragged, 0);
                 break;
-            
+
             case RELOCATE:
                 eleDragged.setParent(eleTarget);
                 getTreenode(target).addChild(dragged);
@@ -604,7 +605,7 @@ public class LayoutDesigner implements IAutoWired {
         updateDroppable();
         updateControls();
     }
-    
+
     /**
      * Remove all listeners upon close.
      */

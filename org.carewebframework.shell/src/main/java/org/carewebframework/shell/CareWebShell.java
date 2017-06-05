@@ -54,6 +54,7 @@ import org.carewebframework.help.viewer.HelpUtil;
 import org.carewebframework.shell.elements.ElementDesktop;
 import org.carewebframework.shell.elements.ElementPlugin;
 import org.carewebframework.shell.layout.Layout;
+import org.carewebframework.shell.layout.LayoutParser;
 import org.carewebframework.shell.plugins.PluginDefinition;
 import org.carewebframework.shell.plugins.PluginResourceHelp;
 import org.carewebframework.ui.command.CommandEvent;
@@ -81,56 +82,56 @@ import org.carewebframework.web.event.KeycaptureEvent;
  */
 @Component(value = "cwfShell", widgetClass = "Div", parentTag = "*", childTag = @ChildTag("*"))
 public class CareWebShell extends Div implements INamespace {
-
-    protected static final Log log = LogFactory.getLog(CareWebShell.class);
-
-    public final String LBL_NO_LAYOUT = StrUtil.getLabel("cwf.shell.nolayout.message");
-
-    public final String LBL_LOGOUT_CONFIRMATION = StrUtil.getLabel("cwf.shell.logout.confirmation.message");
-
-    public final String LBL_LOGOUT_CONFIRMATION_CAPTION = StrUtil.getLabel("cwf.shell.logout.confirmation.caption");
-
-    public final String LBL_LOGOUT_CANCEL = StrUtil.getLabel("cwf.shell.logout.cancel.message");
-
-    private final AppFramework appFramework = FrameworkUtil.getAppFramework();
-
-    private final IEventManager eventManager = EventManager.getInstance();
-
-    private final CommandRegistry commandRegistry = SpringUtil.getBean("commandRegistry", CommandRegistry.class);
-
-    private final List<ElementPlugin> plugins = new ArrayList<>();
-
-    private final Set<HelpModule> helpModules = new HashSet<>();
-
-    private final Set<IHelpSet> helpSets = new HashSet<>();
-
-    private final List<String> propertyGroups = new ArrayList<>();
-
-    private Layout layout = new Layout();
-
-    private ElementDesktop desktop;
-
-    private final BaseComponent registeredStyles = new Span();
-
-    private CareWebStartup startupRoutines;
-
-    private MessageWindow messageWindow;
-
-    private String defaultLayoutName;
-
-    private boolean autoStart;
     
+    protected static final Log log = LogFactory.getLog(CareWebShell.class);
+    
+    public final String LBL_NO_LAYOUT = StrUtil.getLabel("cwf.shell.nolayout.message");
+    
+    public final String LBL_LOGOUT_CONFIRMATION = StrUtil.getLabel("cwf.shell.logout.confirmation.message");
+    
+    public final String LBL_LOGOUT_CONFIRMATION_CAPTION = StrUtil.getLabel("cwf.shell.logout.confirmation.caption");
+    
+    public final String LBL_LOGOUT_CANCEL = StrUtil.getLabel("cwf.shell.logout.cancel.message");
+    
+    private final AppFramework appFramework = FrameworkUtil.getAppFramework();
+    
+    private final IEventManager eventManager = EventManager.getInstance();
+    
+    private final CommandRegistry commandRegistry = SpringUtil.getBean("commandRegistry", CommandRegistry.class);
+    
+    private final List<ElementPlugin> plugins = new ArrayList<>();
+    
+    private final Set<HelpModule> helpModules = new HashSet<>();
+    
+    private final Set<IHelpSet> helpSets = new HashSet<>();
+    
+    private final List<String> propertyGroups = new ArrayList<>();
+    
+    private Layout layout = new Layout();
+    
+    private ElementDesktop desktop;
+    
+    private final BaseComponent registeredStyles = new Span();
+    
+    private CareWebStartup startupRoutines;
+    
+    private MessageWindow messageWindow;
+    
+    private String defaultLayoutName;
+    
+    private boolean autoStart;
+
     private boolean logoutConfirm = true;
-
+    
     private final IUserContextEvent userContextListener = new IUserContextEvent() {
-
+        
         /**
          * @see IUserContextEvent#canceled()
          */
         @Override
         public void canceled() {
         }
-
+        
         /**
          * @see IUserContextEvent#committed()
          */
@@ -138,7 +139,7 @@ public class CareWebShell extends Div implements INamespace {
         public void committed() {
             reset();
         }
-
+        
         /**
          * Prompt user for logout confirmation (unless suppressed).
          *
@@ -150,20 +151,20 @@ public class CareWebShell extends Div implements INamespace {
                 response.accept();
             } else {
                 response.defer();
-
+                
                 DialogUtil.confirm(LBL_LOGOUT_CONFIRMATION, LBL_LOGOUT_CONFIRMATION_CAPTION, "LOGOUT.CONFIRM", (confirm) -> {
                     if (confirm) {
                         response.accept();
                     } else {
                         response.reject(LBL_LOGOUT_CANCEL);
                     }
-
+                    
                 });
             }
         }
-
+        
     };
-
+    
     /**
      * Returns the application name for this instance of the CareWeb shell.
      *
@@ -172,7 +173,7 @@ public class CareWebShell extends Div implements INamespace {
     public static String getApplicationName() {
         return FrameworkUtil.getAppName();
     }
-
+    
     /**
      * Create the shell instance.
      */
@@ -180,7 +181,7 @@ public class CareWebShell extends Div implements INamespace {
         super();
         CareWebUtil.setShell(this);
     }
-
+    
     @Override
     protected void onAttach(Page page) {
         try {
@@ -190,24 +191,24 @@ public class CareWebShell extends Div implements INamespace {
             desktop = new ElementDesktop(this);
             setLogoutConfirm(logoutConfirm);
             String confirmClose = getAppProperty("confirmClose", "CAREWEB.CONFIRM.CLOSE");
-
+            
             if (StringUtils.isEmpty(confirmClose) || BooleanUtils.toBoolean(confirmClose)) {
                 ClientUtil.canClose(false);
             }
-
+            
             String layout = defaultLayoutName != null ? defaultLayoutName
                     : getAppProperty("layout", "CAREWEB.LAYOUT.DEFAULT");
-
+            
             if (!StringUtils.isEmpty(layout)) {
                 loadLayout(layout);
             }
-
+            
         } catch (Exception e) {
             log.error("Error initializing the shell.", e);
             throw MiscUtil.toUnchecked(e);
         }
     }
-
+    
     /**
      * Handle help requests.
      *
@@ -219,7 +220,7 @@ public class CareWebShell extends Div implements INamespace {
             HelpUtil.showCSH(ref == null ? event.getTarget() : ref);
         }
     }
-
+    
     /**
      * Capture unhandled shortcut key press events.
      *
@@ -227,12 +228,12 @@ public class CareWebShell extends Div implements INamespace {
      */
     public void onKeycapture(KeycaptureEvent event) {
         String shortcut = event.getKeycapture();
-
+        
         for (ElementPlugin plugin : getActivatedPlugins(null)) {
             commandRegistry.fireCommands(shortcut, event, plugin.getOuterComponent());
         }
     }
-
+    
     /**
      * Returns a reference to the current UI desktop.
      *
@@ -241,7 +242,7 @@ public class CareWebShell extends Div implements INamespace {
     public ElementDesktop getDesktop() {
         return desktop;
     }
-
+    
     /**
      * Returns a reference to the current UI layout.
      *
@@ -250,14 +251,14 @@ public class CareWebShell extends Div implements INamespace {
     public Layout getUILayout() {
         return layout;
     }
-
+    
     /**
      * Executed once all plugins are loaded.
      */
     public void start() {
         desktop.activate(true);
         String initialPlugin = PropertyUtil.getValue("CAREWEB.INITIAL.SECTION", getApplicationName());
-
+        
         if (!StringUtils.isEmpty(initialPlugin)) {
             for (ElementPlugin plugin : plugins) {
                 if (initialPlugin.equals(plugin.getDefinition().getId())) {
@@ -266,14 +267,14 @@ public class CareWebShell extends Div implements INamespace {
                 }
             }
         }
-
+        
         if (startupRoutines == null) {
             startupRoutines = SpringUtil.getBean("careWebStartup", CareWebStartup.class);
         }
-
+        
         startupRoutines.execute();
     }
-
+    
     /**
      * Loads a layout from the specified resource.
      *
@@ -281,16 +282,16 @@ public class CareWebShell extends Div implements INamespace {
      * @throws Exception Unspecified exception.
      */
     public void loadLayout(String resource) throws Exception {
-        layout = Layout.load(resource);
+        layout = LayoutParser.parseResource(resource);
         FrameworkUtil.setAppName(layout.getName());
-
+        
         if (layout.isEmpty()) {
             DialogUtil.showError(LBL_NO_LAYOUT);
         } else {
             buildUI(layout);
         }
     }
-
+    
     /**
      * Returns the name of the layout to be loaded.
      *
@@ -300,7 +301,7 @@ public class CareWebShell extends Div implements INamespace {
     public String getLayout() {
         return defaultLayoutName;
     }
-
+    
     /**
      * Sets the layout to be loaded. If null, the layout specified by the configuration will be
      * loaded.
@@ -311,12 +312,12 @@ public class CareWebShell extends Div implements INamespace {
     @PropertySetter("layout")
     public void setLayout(String defaultLayoutName) throws Exception {
         this.defaultLayoutName = defaultLayoutName;
-
+        
         if (desktop != null && !StringUtils.isEmpty(defaultLayoutName)) {
             loadLayout(defaultLayoutName);
         }
     }
-
+    
     /**
      * Returns the auto-start setting.
      *
@@ -326,7 +327,7 @@ public class CareWebShell extends Div implements INamespace {
     public boolean isAutoStart() {
         return autoStart;
     }
-
+    
     /**
      * Sets the auto-start setting.
      *
@@ -336,7 +337,7 @@ public class CareWebShell extends Div implements INamespace {
     public void setAutoStart(boolean autoStart) {
         this.autoStart = autoStart;
     }
-
+    
     /**
      * Returns true if confirmation is required upon user-initiated logout.
      *
@@ -345,7 +346,7 @@ public class CareWebShell extends Div implements INamespace {
     public boolean isLogoutConfirm() {
         return logoutConfirm;
     }
-
+    
     /**
      * Set to true if confirmation is required upon user-initiated logout.
      *
@@ -353,14 +354,14 @@ public class CareWebShell extends Div implements INamespace {
      */
     public void setLogoutConfirm(boolean logoutConfirm) {
         this.logoutConfirm = logoutConfirm;
-        
+
         if (logoutConfirm) {
             appFramework.registerObject(userContextListener);
         } else {
             appFramework.unregisterObject(userContextListener);
         }
     }
-
+    
     /**
      * Build the UI based on the specified layout.
      *
@@ -369,22 +370,22 @@ public class CareWebShell extends Div implements INamespace {
     public void buildUI(Layout layout) {
         this.layout = layout;
         reset();
-        layout.deserialize(desktop);
+        layout.materialize(desktop);
         desktop.setAppId(FrameworkUtil.getAppName());
         desktop.activate(true);
-
+        
         if (autoStart) {
             start();
         }
     }
-
+    
     /**
      * Resets the desktop to its baseline state and clears registered help modules and property
      * groups.
      */
     public void reset() {
         FrameworkUtil.setAppName(null);
-
+        
         try {
             desktop.activate(false);
             desktop.clear();
@@ -398,7 +399,7 @@ public class CareWebShell extends Div implements INamespace {
             plugins.clear();
         } catch (Exception e) {}
     }
-
+    
     /**
      * Registers a plugin and its resources. Called internally when a plugin is instantiated.
      *
@@ -407,7 +408,7 @@ public class CareWebShell extends Div implements INamespace {
     public void registerPlugin(ElementPlugin plugin) {
         plugins.add(plugin);
     }
-
+    
     /**
      * Unregisters a plugin and its resources. Called internally when a plugin is destroyed.
      *
@@ -416,7 +417,7 @@ public class CareWebShell extends Div implements INamespace {
     public void unregisterPlugin(ElementPlugin plugin) {
         plugins.remove(plugin);
     }
-
+    
     /**
      * Adds a component to the common tool bar.
      *
@@ -425,7 +426,7 @@ public class CareWebShell extends Div implements INamespace {
     public void addToolbarComponent(BaseComponent component) {
         desktop.getToolbar().addToolbarComponent(component, null);
     }
-
+    
     /**
      * Registers a help resource.
      *
@@ -433,23 +434,23 @@ public class CareWebShell extends Div implements INamespace {
      */
     public void registerHelpResource(PluginResourceHelp resource) {
         HelpModule def = HelpModule.getModule(resource.getModule());
-
+        
         if (def != null && helpModules.add(def)) {
             IHelpSet hs = HelpSetCache.getInstance().get(def);
-
+            
             if (hs != null) {
                 helpSets.add(hs);
                 IHelpViewer viewer = HelpUtil.getViewer(false);
-
+                
                 if (viewer != null) {
                     viewer.mergeHelpSet(hs);
                 }
             }
         }
-
+        
         desktop.addHelpMenu(resource);
     }
-
+    
     /**
      * Registers an external style sheet. If the style sheet has not already been registered,
      * creates a style component and adds it to the current page.
@@ -463,7 +464,7 @@ public class CareWebShell extends Div implements INamespace {
             registeredStyles.addChild(ss);
         }
     }
-
+    
     /**
      * Returns the style sheet associated with the specified URL.
      *
@@ -476,10 +477,10 @@ public class CareWebShell extends Div implements INamespace {
                 return ss;
             }
         }
-
+        
         return null;
     }
-
+    
     /**
      * Registers a property group.
      *
@@ -491,7 +492,7 @@ public class CareWebShell extends Div implements INamespace {
             eventManager.fireLocalEvent(Constants.EVENT_RESOURCE_PROPGROUP_ADD, propertyGroup);
         }
     }
-
+    
     /**
      * Adds a menu.
      *
@@ -502,7 +503,7 @@ public class CareWebShell extends Div implements INamespace {
     public BaseMenuComponent addMenu(String path, String action) {
         return desktop.addMenu(path, action, false);
     }
-
+    
     /**
      * Returns a list of all plugins currently loaded into the UI.
      *
@@ -511,7 +512,7 @@ public class CareWebShell extends Div implements INamespace {
     public Iterable<ElementPlugin> getLoadedPlugins() {
         return plugins;
     }
-
+    
     /**
      * Locates a loaded plugin with the specified id.
      *
@@ -524,10 +525,10 @@ public class CareWebShell extends Div implements INamespace {
                 return plugin;
             }
         }
-
+        
         return null;
     }
-
+    
     /**
      * Locates a loaded plugin with the specified id.
      *
@@ -537,14 +538,14 @@ public class CareWebShell extends Div implements INamespace {
      */
     public ElementPlugin getLoadedPlugin(String id, boolean forceInit) {
         ElementPlugin plugin = getLoadedPlugin(id);
-
+        
         if (plugin != null && forceInit) {
             plugin.load();
         }
-
+        
         return plugin;
     }
-
+    
     /**
      * Locates an activated plugin with the specified id.
      *
@@ -557,10 +558,10 @@ public class CareWebShell extends Div implements INamespace {
                 return plugin;
             }
         }
-
+        
         return null;
     }
-
+    
     /**
      * Returns a list of all active plugins.
      *
@@ -569,7 +570,7 @@ public class CareWebShell extends Div implements INamespace {
     public Iterable<ElementPlugin> getActivatedPlugins() {
         return getActivatedPlugins(null);
     }
-
+    
     /**
      * Populates a list of all activated plugins.
      *
@@ -582,16 +583,16 @@ public class CareWebShell extends Div implements INamespace {
         } else {
             list.clear();
         }
-
+        
         for (ElementPlugin plugin : plugins) {
             if (plugin.isActivated()) {
                 list.add(plugin);
             }
         }
-
+        
         return list;
     }
-
+    
     /**
      * Returns a list of all plugin definitions that are currently in use (i.e., have associated
      * plugins loaded) in the environment.
@@ -601,18 +602,18 @@ public class CareWebShell extends Div implements INamespace {
      */
     public Iterable<PluginDefinition> getLoadedPluginDefinitions() {
         List<PluginDefinition> result = new ArrayList<>();
-
+        
         for (ElementPlugin plugin : plugins) {
             PluginDefinition def = plugin.getDefinition();
-
+            
             if (!result.contains(def)) {
                 result.add(def);
             }
         }
-
+        
         return result;
     }
-
+    
     /**
      * Returns a list of property groups bound to loaded plugins. Guarantees each group name will
      * appear at most once in the list.
@@ -622,34 +623,34 @@ public class CareWebShell extends Div implements INamespace {
     public List<String> getPropertyGroups() {
         return propertyGroups;
     }
-
+    
     public String getAppProperty(String queryParam, String propName) {
         String result = getPage().getQueryParam(queryParam);
         return result == null ? PropertyUtil.getValue(propName) : result;
     }
-
+    
     /**
      * Logout user after confirmation prompt.
      */
     public void logout() {
         // Ensure that shell is last context subscriber (should be a better way
         // to do this).
-        
+
         if (logoutConfirm) {
             setLogoutConfirm(false);
             setLogoutConfirm(true);
         }
-        
+
         SecurityUtil.getSecurityService().logout(false, null, null);
     }
-
+    
     /**
      * Lock the desktop.
      */
     public void lock() {
         eventManager.fireLocalEvent(SessionControl.LOCK.getEventName(), true);
     }
-
+    
     /**
      * Returns the message window instance for managing slide-down messages.
      *
@@ -658,7 +659,7 @@ public class CareWebShell extends Div implements INamespace {
     public MessageWindow getMessageWindow() {
         return messageWindow;
     }
-
+    
     /**
      * Returns reference to the help viewer. If not already created, one will be created and
      * initialized with the registered help sets.
@@ -667,14 +668,14 @@ public class CareWebShell extends Div implements INamespace {
      */
     protected IHelpViewer getHelpViewer() {
         IHelpViewer viewer = HelpUtil.getViewer(false);
-
+        
         if (viewer != null) {
             return viewer;
         }
-
+        
         viewer = HelpUtil.getViewer(true);
         viewer.load(helpSets);
         return viewer;
     }
-
+    
 }

@@ -38,13 +38,13 @@ import org.carewebframework.web.component.Label;
 import org.junit.Test;
 
 public class StatusPanelTest extends MockUITest {
-
+    
     @Test
     public void test() throws Exception {
         CareWebShell shell = new CareWebShell();
-        shell.setParent(mockEnvironment.getSession().getPage());
+        shell.setParent(getMockEnvironment().getSession().getPage());
         shell.setLayout("/StatusPanelTest.xml");
-        mockEnvironment.flushEvents();
+        getMockEnvironment().flushEvents();
         ElementPlugin plugin = shell.getActivatedPlugin("cwfStatusPanel");
         BaseComponent root = plugin.getOuterComponent().getFirstChild();
         StatusPanel controller = (StatusPanel) FrameworkController.getController(root);
@@ -56,11 +56,11 @@ public class StatusPanelTest extends MockUITest {
         test(root, "STATUS.TEST2", 1, 3);
         test(root, "STATUS.TEST2", 2, 3);
     }
-
+    
     private void test(BaseComponent root, String eventName, int eventData, int expectedSize) {
         String labelText = eventName + "." + eventData;
         EventManager.getInstance().fireLocalEvent(eventName, labelText);
-        mockEnvironment.flushEvents();
+        getMockEnvironment().flushEvents();
         assertEquals(expectedSize, root.getChildren().size());
         Label label = (Label) root.getChildren().get(expectedSize - 1).getFirstChild();
         assertEquals(labelText, label.getLabel());

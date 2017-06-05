@@ -26,16 +26,25 @@
 package org.carewebframework.shell.layout;
 
 /**
- * Loads layout by application id.
+ * Represents a trigger occurrence within a layout.
  */
-public class LayoutLoaderApp extends LayoutLoaderBase {
+public class LayoutTrigger {
+    
+    private final String condition;
 
-    public LayoutLoaderApp() {
-        super("app");
+    private final String action;
+
+    protected LayoutTrigger(String condition, String action) {
+        this.condition = condition;
+        this.action = action;
     }
     
-    @Override
-    public Layout loadLayout(String appId) {
-        return LayoutParser.parseAppId(appId);
+    public String getCondition() {
+        return condition;
     }
+    
+    public String getAction() {
+        return action;
+    }
+    
 }

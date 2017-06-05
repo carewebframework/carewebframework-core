@@ -7,15 +7,15 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  * This Source Code Form is also subject to the terms of the Health-Related
  * Additional Disclaimer of Warranty and Limitation of Liability available at
  *
@@ -28,6 +28,7 @@ package org.carewebframework.shell.designer;
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.shell.elements.ElementBase;
 import org.carewebframework.shell.layout.Layout;
+import org.carewebframework.shell.layout.LayoutParser;
 import org.carewebframework.web.ancillary.IAutoWired;
 import org.carewebframework.web.ancillary.IDisable;
 import org.carewebframework.web.annotation.EventHandler;
@@ -82,7 +83,7 @@ public class DesignContextMenu implements IAutoWired {
     /**
      * Returns an instance of the design context menu. This is a singleton with the page scope and
      * is cached once created.
-     * 
+     *
      * @return The design context menu for the active page.
      */
     public static DesignContextMenu getInstance() {
@@ -99,7 +100,7 @@ public class DesignContextMenu implements IAutoWired {
     
     /**
      * Creates an instance of the design context menu.
-     * 
+     *
      * @return New design context menu.
      */
     public static DesignContextMenu create() {
@@ -110,7 +111,7 @@ public class DesignContextMenu implements IAutoWired {
     /**
      * Updates states on input elements (typically buttons or menu items) according to state of the
      * specified UI element. Any parameter may be null.
-     * 
+     *
      * @param ele A UI element.
      * @param add Add input element.
      * @param delete Delete input element.
@@ -142,7 +143,7 @@ public class DesignContextMenu implements IAutoWired {
     
     /**
      * Sets the disabled state of the specified component.
-     * 
+     *
      * @param comp The component.
      * @param disabled The disabled state.
      */
@@ -181,7 +182,7 @@ public class DesignContextMenu implements IAutoWired {
     /**
      * Sets the context menu's owner. This modifies the member menu item states to reflect the
      * current owner.
-     * 
+     *
      * @param owner Menu's owner.
      */
     public void setOwner(ElementBase owner) {
@@ -195,7 +196,7 @@ public class DesignContextMenu implements IAutoWired {
     
     /**
      * Sets the component that is to receive layout change events.
-     * 
+     *
      * @param listener Event listener.
      */
     public void setListener(BaseComponent listener) {
@@ -208,7 +209,7 @@ public class DesignContextMenu implements IAutoWired {
     
     /**
      * Sets the context menu's owner based on the UI element that invoked the menu.
-     * 
+     *
      * @param event The open event.
      */
     private void onOpen(Event event) {
@@ -260,7 +261,7 @@ public class DesignContextMenu implements IAutoWired {
      */
     @EventHandler(value = "click", target = "@mnuCopy")
     private void onClick$mnuCopy() {
-        clipboard.copy(Layout.serialize(owner));
+        clipboard.copy(LayoutParser.parseElement(owner));
     }
     
     /**
@@ -281,7 +282,7 @@ public class DesignContextMenu implements IAutoWired {
         Object data = clipboard.getData();
         
         if (data instanceof Layout) {
-            ((Layout) data).deserialize(owner);
+            ((Layout) data).materialize(owner);
         }
     }
     

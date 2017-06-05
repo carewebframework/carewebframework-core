@@ -44,9 +44,10 @@ import java.util.Map;
 
 import org.carewebframework.api.FrameworkUtil;
 import org.carewebframework.common.StrUtil;
-import org.carewebframework.shell.layout.LayoutIdentifier;
-import org.carewebframework.shell.layout.LayoutUtil;
 import org.carewebframework.shell.layout.Layout;
+import org.carewebframework.shell.layout.LayoutIdentifier;
+import org.carewebframework.shell.layout.LayoutParser;
+import org.carewebframework.shell.layout.LayoutUtil;
 import org.carewebframework.ui.dialog.DialogUtil;
 import org.carewebframework.ui.dialog.PopupDialog;
 import org.carewebframework.web.ancillary.IAutoWired;
@@ -77,71 +78,71 @@ import org.carewebframework.web.model.ListModel;
  * Supports selection and management of existing layouts.
  */
 public class LayoutManager implements IAutoWired {
-
+    
     private static final String ATTR_DEFAULT_SCOPE = LayoutUtil.class.getName() + ".defaultscope";
-
+    
     @WiredComponent
     private Button btnOK;
-
+    
     @WiredComponent
     private Button btnDelete;
-
+    
     @WiredComponent
     private Button btnRename;
-
+    
     @WiredComponent
     private Button btnClone;
-
+    
     @WiredComponent
     private Button btnExport;
-
+    
     @WiredComponent
     private Button btnImport;
-
+    
     @WiredComponent
     private Listbox lstLayouts;
-
+    
     @WiredComponent
     private Label lblPrompt;
-
+    
     @WiredComponent
     private Radiogroup radioGroup;
-
+    
     @WiredComponent
     private Radiobutton rbShared;
-
+    
     @WiredComponent
     private BaseUIComponent tbManage;
-
+    
     @WiredComponent
     private BaseUIComponent pnlSelect;
-
+    
     @WiredComponent
     private BaseUIComponent pnlScope;
-
+    
     @WiredComponent
     private Upload upload;
-
+    
     private boolean shared;
-
+    
     private IModelAndView<Listitem, String> modelAndView;
-
+    
     private final IComponentRenderer<Listitem, String> renderer = new IComponentRenderer<Listitem, String>() {
-
+        
         @Override
         public Listitem render(String data) {
             Listitem item = new Listitem(data);
             item.setData(new LayoutIdentifier(data, shared));
-
+            
             if (pnlSelect.isVisible()) {
                 item.addEventForward(DblclickEvent.TYPE, btnOK, ClickEvent.TYPE);
             }
-
+            
             return item;
         }
-
+        
     };
-
+    
     /**
      * Returns true if the default layout scope is shared.
      *
@@ -150,7 +151,7 @@ public class LayoutManager implements IAutoWired {
     public static boolean defaultIsShared() {
         return FrameworkUtil.getAttribute(ATTR_DEFAULT_SCOPE) != null;
     }
-
+    
     /**
      * Sets the default layout scope.
      *
@@ -159,7 +160,7 @@ public class LayoutManager implements IAutoWired {
     public static void defaultIsShared(boolean isShared) {
         FrameworkUtil.setAttribute(ATTR_DEFAULT_SCOPE, isShared ? true : null);
     }
-
+    
     /**
      * Invokes the layout manager dialog.
      *
@@ -173,7 +174,7 @@ public class LayoutManager implements IAutoWired {
         args.put("deflt", deflt);
         PopupDialog.show(RESOURCE_PREFIX + "layoutManager.cwf", args, true, true, true, closeListener);
     }
-
+    
     /**
      * Prompts to save layout.
      *
@@ -186,25 +187,25 @@ public class LayoutManager implements IAutoWired {
                                   IResponseCallback<LayoutIdentifier> callback) {
         LayoutPrompt.show(layoutId, hideScope, true, CAP_LAYOUT_SAVE, MSG_LAYOUT_SAVE, (event) -> {
             LayoutIdentifier id = event.getTarget().getAttribute("layoutId", LayoutIdentifier.class);
-
+            
             if (id != null) {
                 layout.saveToProperty(id);
-
+                
                 if (callback != null) {
                     callback.onComplete(id);
                 }
             }
-
+            
         });
     }
-
+    
     public static void exportLayout(LayoutIdentifier layout) {
         String content = LayoutUtil.getLayoutContent(layout);
         ClientUtil.saveToFile(content, "text/xml", layout.name + ".xml");
     }
-
+    
     private Window window;
-
+    
     @Override
     public void afterInitialized(BaseComponent root) {
         window = (Window) root;
@@ -221,7 +222,7 @@ public class LayoutManager implements IAutoWired {
         upload.bind(btnImport);
         refresh(root.getAttribute("dflt", ""));
     }
-
+    
     /**
      * Refresh the list.
      *
@@ -232,7 +233,7 @@ public class LayoutManager implements IAutoWired {
         lstLayouts.setSelectedItem(deflt == null ? null : (Listitem) lstLayouts.findChildByLabel(deflt));
         updateControls();
     }
-
+    
     /**
      * Update control states.
      */
@@ -244,7 +245,7 @@ public class LayoutManager implements IAutoWired {
         btnClone.setDisabled(disable);
         btnExport.setDisabled(disable);
     }
-
+    
     /**
      * Returns the identifier of the currently selected layout, or null if none selected.
      *
@@ -254,7 +255,7 @@ public class LayoutManager implements IAutoWired {
         Listitem item = lstLayouts.getSelectedItem();
         return item == null ? null : (LayoutIdentifier) item.getData();
     }
-
+    
     /**
      * Clone or rename a layout.
      *
@@ -266,19 +267,19 @@ public class LayoutManager implements IAutoWired {
         LayoutIdentifier layoutId1 = getSelectedLayout();
         LayoutPrompt.show(layoutId1, !clone, false, title, prompt, (event) -> {
             LayoutIdentifier layoutId2 = event.getTarget().getAttribute("layoutId", LayoutIdentifier.class);
-
+            
             if (layoutId2 != null) {
                 if (clone) {
                     LayoutUtil.cloneLayout(layoutId1, layoutId2);
                 } else {
                     LayoutUtil.renameLayout(layoutId1, layoutId2.name);
                 }
-
+                
                 refresh(null);
             }
         });
     }
-
+    
     /**
      * Import a layout.
      *
@@ -286,39 +287,38 @@ public class LayoutManager implements IAutoWired {
      * @param strm An input stream.
      */
     public void importLayout(boolean shared, InputStream strm) {
-        Layout layout = new Layout();
-        layout.loadFromStream(strm);
+        Layout layout = LayoutParser.parseStream(strm);
         LayoutIdentifier layoutId = new LayoutIdentifier(layout.getName(), shared);
         saveLayout(layout, layoutId, false, (response) -> {
             refresh(response.name);
         });
     }
-
+    
     @EventHandler(value = "upload", target = "@btnImport")
     private void onUpload$btnImport(UploadEvent event) {
         if (event.getState() == UploadState.DONE) {
             importLayout(shared, event.getBlob());
         }
     }
-
+    
     /**
      * Sets the selected layout and closes the dialog.
      */
     @EventHandler(value = "click", target = "@btnOK")
     private void onClick$btnOK() {
         LayoutIdentifier id = getSelectedLayout();
-
+        
         if (id != null) {
             window.setAttribute("layoutId", id);
             window.close();
         }
     }
-
+    
     @EventHandler(value = "click", target = "btnCancel")
     private void onClick$btnCancel() {
         window.close();
     }
-
+    
     /**
      * Deletes the selected layout.
      */
@@ -331,7 +331,7 @@ public class LayoutManager implements IAutoWired {
             }
         });
     }
-
+    
     /**
      * Renames the selected layout.
      */
@@ -339,7 +339,7 @@ public class LayoutManager implements IAutoWired {
     private void onClick$btnRename() {
         cloneOrRename(false);
     }
-
+    
     /**
      * Clones the selected layout.
      */
@@ -347,7 +347,7 @@ public class LayoutManager implements IAutoWired {
     private void onClick$btnClone() {
         cloneOrRename(true);
     }
-
+    
     /**
      * Export a layout
      */
@@ -355,7 +355,7 @@ public class LayoutManager implements IAutoWired {
     private void onClick$btnExport() {
         exportLayout(getSelectedLayout());
     }
-
+    
     /**
      * Update control states when selection changes.
      */
@@ -363,7 +363,7 @@ public class LayoutManager implements IAutoWired {
     private void onChange$lstLayouts() {
         updateControls();
     }
-
+    
     /**
      * Refresh when shared/private toggled.
      */
@@ -373,5 +373,5 @@ public class LayoutManager implements IAutoWired {
         defaultIsShared(shared);
         refresh(null);
     }
-
+    
 }

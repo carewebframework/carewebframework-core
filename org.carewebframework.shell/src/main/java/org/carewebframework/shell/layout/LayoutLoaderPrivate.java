@@ -29,13 +29,13 @@ package org.carewebframework.shell.layout;
  * Loads layout from user's private store.
  */
 public class LayoutLoaderPrivate extends LayoutLoaderBase {
-    
+
     public LayoutLoaderPrivate() {
         super("private");
     }
-
+    
     @Override
     public Layout loadLayout(String name) {
-        return new Layout().loadFromProperty(new LayoutIdentifier(name, false));
+        return LayoutParser.parseProperty(new LayoutIdentifier(name, false));
     }
 }

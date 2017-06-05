@@ -25,208 +25,92 @@
  */
 package org.carewebframework.shell.layout;
 
-import java.io.InputStream;
+import java.util.Map.Entry;
 
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.ObjectUtils;
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.carewebframework.api.property.IPropertyProvider;
 import org.carewebframework.common.MiscUtil;
 import org.carewebframework.common.XMLUtil;
-import org.carewebframework.shell.ancillary.UIException;
 import org.carewebframework.shell.designer.IClipboardAware;
 import org.carewebframework.shell.elements.ElementBase;
 import org.carewebframework.shell.elements.ElementDesktop;
 import org.carewebframework.shell.plugins.PluginDefinition;
-import org.carewebframework.shell.property.PropertyInfo;
-import org.carewebframework.web.client.ExecutionContext;
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
+import org.w3c.dom.Element;
 
 /**
  * Represents the layout of the visual interface.
  */
 public class Layout implements IClipboardAware<Layout> {
-
+    
     private static final Log log = LogFactory.getLog(Layout.class);
-
+    
     private static final String NULL_VALUE = "\\null\\";
 
-    private final IPropertyProvider propertyProvider = new IPropertyProvider() {
-
-        /**
-         * @see org.carewebframework.api.property.IPropertyProvider#getProperty(String)
-         */
-        @Override
-        public String getProperty(String key) {
-            return readString(key, null);
-        }
-
-        /**
-         * Returns true if the specified attribute exists in the current node.
-         *
-         * @param name Attribute name.
-         * @return True if the attribute exists.
-         */
-        @Override
-        public boolean hasProperty(String name) {
-            return currentNode == null ? false : currentNode.getAttributes().getNamedItem(name) != null;
-        }
-        
-    };
+    private LayoutElement root;
     
-    private Document document;
-
-    private Node currentNode;
-
     private String layoutName;
-
+    
     private String version;
-
-    /**
-     * Loads a layout from the specified resource, using a registered layout loader or, failing
-     * that, using the default loadFromUrl method.
-     *
-     * @param resource The resource to be loaded.
-     * @return The loaded layout.
-     */
-    public static Layout load(String resource) {
-        int i = resource.indexOf(":");
-
-        if (i > 0) {
-            String loaderId = resource.substring(0, i);
-            ILayoutLoader layoutLoader = LayoutLoaderRegistry.getInstance().get(loaderId);
-
-            if (layoutLoader != null) {
-                String name = resource.substring(i + 1);
-                return layoutLoader.loadLayout(name);
-            }
-        }
-
-        Layout layout = new Layout();
-        layout.loadFromUrl(resource);
-        return layout;
-    }
-
-    /**
-     * Serializes the UI element hierarchy under and including the specified element.
-     *
-     * @param parent Top level element to be serialized.
-     * @return A UI layout representing the serialized hierarchy.
-     */
-    public static Layout serialize(ElementBase parent) {
-        Layout layout = new Layout();
-        layout.internalSerialize(parent);
-        return layout;
-    }
-
+    
     public Layout() {
         clear();
     }
-
+    
+    public Layout(Layout layout) {
+        this(layout.root);
+    }
+    
     public Layout(String layoutName) {
         this();
         setName(layoutName);
     }
-
+    
+    public Layout(LayoutElement root) {
+        init(root);
+    }
+    
     /**
-     * Deserializes the layout, under the specified parent, starting from the layout origin.
+     * Materializes the layout, under the specified parent, starting from the layout origin.
      *
      * @param parent Parent UI element at this level of the hierarchy. May be null.
      * @return The UI element created during this pass.
      */
-    public ElementBase deserialize(ElementBase parent) {
+    public ElementBase materialize(ElementBase parent) {
         boolean isDesktop = parent instanceof ElementDesktop;
-        moveTop();
-
+        
         if (isDesktop) {
-            parent.getDefinition().initElement(parent, propertyProvider);
+            parent.getDefinition().initElement(parent, root);
         }
-
-        moveDown();
-        ElementBase element = internalDeserialize(parent, !isDesktop);
+        
+        materializeChildren(parent, root, !isDesktop);
+        ElementBase element = parent.getLastVisibleChild();
 
         if (element != null) {
             element.getRoot().activate(true);
         }
-
+        
         return element;
     }
-
+    
     /**
-     * Deserializes the layout, under the specified parent. This method manipulates the current
-     * position within the layout and is called recursively in a depth-first traversal of the XML
-     * hierarchy.
+     * Materializes the layout, under the specified parent.
      *
      * @param parent Parent UI element at this level of the hierarchy. May be null.
+     * @param node The current layout element.
      * @param ignoreInternal Ignore internal elements.
-     * @return The UI element created during this pass.
      */
-    private ElementBase internalDeserialize(ElementBase parent, boolean ignoreInternal) {
-        String id = getObjectName();
-        PluginDefinition def = PluginDefinition.getDefinition(id);
-
-        if (def == null) {
-            log.error("Unrecognized tag '" + id + "' encountered in layout.");
-        }
-
-        ElementBase element = def == null ? null
-                : ignoreInternal && def.isInternal() ? null : def.createElement(parent, propertyProvider, true);
-
-        if (element != null && moveDown()) {
-            internalDeserialize(element, false);
-            moveUp();
-        }
-
-        while (moveNext()) {
-            internalDeserialize(parent, ignoreInternal);
-        }
-        return element;
-    }
-
-    /**
-     * Serializes the specified UI element (parent). This is called recursively for the specified
-     * element and all its subordinates.
-     *
-     * @param parent UI element to be serialized.
-     */
-    private void internalSerialize(ElementBase parent) {
-        PluginDefinition def = parent.getDefinition();
-        boolean isRoot = parent.getParent() == null;
-
-        if (!isRoot) {
-            newChild(def.getId());
-        }
-
-        for (PropertyInfo propInfo : def.getProperties()) {
-            Object value = propInfo.isSerializable() ? propInfo.getPropertyValue(parent) : null;
-            String val = value == null ? null : propInfo.getPropertyType().getSerializer().serialize(value);
-
-            if (!ObjectUtils.equals(value, propInfo.getDefault())) {
-                writeString(propInfo.getId(), val);
+    private void materializeChildren(ElementBase parent, LayoutElement node, boolean ignoreInternal) {
+        for (LayoutElement child : node.getElements()) {
+            PluginDefinition def = child.getDefinition();
+            ElementBase element = ignoreInternal && def.isInternal() ? null : def.createElement(parent, child, true);
+            
+            if (element != null) {
+                materializeChildren(element, child, false);
             }
         }
-
-        for (ElementBase child : parent.getSerializableChildren()) {
-            internalSerialize(child);
-        }
-
-        if (!isRoot) {
-            moveUp();
-        }
     }
-
-    /**
-     * Returns the object name (i.e., the element tag) of the currently selected node.
-     *
-     * @return The object name.
-     */
-    private String getObjectName() {
-        return currentNode.getNodeName();
-    }
-
+    
     /**
      * Returns the name of the currently loaded layout, or null if none loaded.
      *
@@ -235,7 +119,7 @@ public class Layout implements IClipboardAware<Layout> {
     public String getName() {
         return layoutName;
     }
-
+    
     /**
      * Sets the name of the current layout.
      *
@@ -243,9 +127,9 @@ public class Layout implements IClipboardAware<Layout> {
      */
     public void setName(String value) {
         layoutName = value;
-        setAttributeValue("name", value, document.getDocumentElement());
+        root.getAttributes().put("name", value);
     }
-
+    
     /**
      * Returns the version of the layout.
      *
@@ -254,7 +138,7 @@ public class Layout implements IClipboardAware<Layout> {
     public String getVersion() {
         return version;
     }
-
+    
     /**
      * Sets the version of the current layout.
      *
@@ -262,112 +146,29 @@ public class Layout implements IClipboardAware<Layout> {
      */
     public void setVersion(String value) {
         version = value;
-        setAttributeValue("version", value, document.getDocumentElement());
+        root.getAttributes().put("version", value);
     }
-
+    
     /**
      * Performs some simple validation of the newly loaded layout.
      *
-     * @throws Exception Unspecified exception.
+     * @param root The root layout element.
      */
-    private void validateDocument() throws Exception {
-        currentNode = document.getDocumentElement();
-
-        if (!LayoutConstants.LAYOUT_ROOT.equals(currentNode.getNodeName())) {
-            throw new Exception("Expected signature not found.");
-        }
-
+    private void init(LayoutElement root) {
+        this.root = root;
         layoutName = readString("name", "");
         version = readString("version", "");
-        moveDown();
     }
-
+    
     /**
      * Reset the layout to not loaded state.
      */
-    private void reset() {
-        document = null;
-        currentNode = null;
+    private void clear() {
+        root = null;
         layoutName = null;
         version = null;
     }
-
-    /**
-     * Load the layout from a file.
-     *
-     * @param url Resource path.
-     */
-    public void loadFromUrl(String url) {
-        InputStream strm = ExecutionContext.getSession().getServletContext().getResourceAsStream(url);
-
-        if (strm == null) {
-            throw new UIException("Unable to locate layout resource: " + url);
-        }
-
-        loadFromStream(strm);
-    }
-
-    /**
-     * Load the layout from an input stream.
-     *
-     * @param strm The input stream.
-     * @throws Exception when problem retrieving resource via url.
-     */
-    public void loadFromStream(InputStream strm) {
-        try {
-            reset();
-            document = XMLUtil.parseXMLFromStream(strm);
-            validateDocument();
-        } catch (Exception e) {
-            reset();
-            throw MiscUtil.toUnchecked(e);
-        } finally {
-            IOUtils.closeQuietly(strm);
-        }
-    }
-
-    /**
-     * Load the layout from a string.
-     *
-     * @param text The XML text to parse.
-     * @return This layout (for chaining).
-     */
-    public Layout loadFromText(String text) {
-        try {
-            reset();
-            document = XMLUtil.parseXMLFromString(text);
-            validateDocument();
-            return this;
-        } catch (Exception e) {
-            reset();
-            throw MiscUtil.toUnchecked(e);
-        }
-    }
-
-    /**
-     * Load the layout from a stored property.
-     *
-     * @param layoutId Layout identifier.
-     * @return This layout (for chaining).
-     */
-    public Layout loadFromProperty(LayoutIdentifier layoutId) {
-        String xml = LayoutUtil.getLayoutContent(layoutId);
-        loadFromText(xml);
-        this.layoutName = layoutId.name;
-        return this;
-    }
-
-    /**
-     * Load the layout associated with the specified application id.
-     *
-     * @param appId An application id.
-     * @return True if the operation succeeded.
-     */
-    public Layout loadByAppId(String appId) {
-        String xml = LayoutUtil.getLayoutContentByAppId(appId);
-        return loadFromText(xml);
-    }
-
+    
     /**
      * Saves the layout as a property value using the specified identifier.
      *
@@ -377,100 +178,26 @@ public class Layout implements IClipboardAware<Layout> {
     public boolean saveToProperty(LayoutIdentifier layoutId) {
         setName(layoutId.name);
         setVersion(LayoutConstants.LAYOUT_VERSION);
-
+        
         try {
             LayoutUtil.saveLayout(layoutId, toString());
         } catch (Exception e) {
             log.error("Error saving application layout.", e);
             return false;
         }
-
+        
         return true;
     }
-
-    /**
-     * Sets the current node to the specified value. If the value is not an element node, sets the
-     * current node to the first sibling node that is an element.
-     *
-     * @param node Node to become current node.
-     * @return True if the current node was successfully set.
-     */
-    private boolean setCurrentNode(Node node) {
-        while (node != null) {
-            if (node.getNodeType() == Node.ELEMENT_NODE) {
-                currentNode = node;
-                return true;
-            }
-            node = node.getNextSibling();
-        }
-
-        return false;
-    }
-
-    /**
-     * Clears the current document.
-     */
-    public void clear() {
-        try {
-            reset();
-            document = XMLUtil.parseXMLFromString("<" + LayoutConstants.LAYOUT_ROOT + "/>\r\n");
-        } catch (Exception e) {
-            reset();
-        }
-
-        currentNode = document.getDocumentElement();
-    }
-
+    
     /**
      * Returns the class of the element at the root of the layout.
      *
      * @return Class of the element at the root of the layout, or null if none.
      */
     public Class<? extends ElementBase> getRootClass() {
-        Node node = document.getDocumentElement();
-        node = node.hasChildNodes() ? node.getFirstChild() : null;
-        String id = node == null ? null : node.getNodeName();
-        PluginDefinition def = id == null ? null : PluginDefinition.getDefinition(id);
-        return def == null ? null : def.getClazz();
+        return root == null ? null : root.getDefinition().getClazz();
     }
-
-    /**
-     * Move current node down one level.
-     *
-     * @return True if successful.
-     */
-    private boolean moveDown() {
-        return currentNode != null && currentNode.hasChildNodes() && setCurrentNode(currentNode.getFirstChild());
-    }
-
-    /**
-     * Moves to next sibling node.
-     *
-     * @return True if successful.
-     */
-    private boolean moveNext() {
-        return setCurrentNode(currentNode.getNextSibling());
-    }
-
-    /**
-     * Move to the top element in the document.
-     *
-     * @return Returns true only if a layout is currently loaded.
-     */
-    private boolean moveTop() {
-        currentNode = document.getDocumentElement();
-        return !StringUtils.isEmpty(layoutName);
-    }
-
-    /**
-     * Move up one level.
-     *
-     * @return True if successful
-     */
-    private boolean moveUp() {
-        return setCurrentNode(currentNode.getParentNode());
-    }
-
+    
     /**
      * Return value of named attribute as a string.
      *
@@ -479,66 +206,65 @@ public class Layout implements IClipboardAware<Layout> {
      * @return Value of the attribute.
      */
     private String readString(String name, String deflt) {
-        String value = propertyProvider.hasProperty(name) ? currentNode.getAttributes().getNamedItem(name).getNodeValue()
-                : deflt;
+        String value = root == null ? deflt : root.hasProperty(name) ? root.getProperty(name) : deflt;
         return NULL_VALUE.equals(value) ? null : value;
     }
-
-    /**
-     * Create a new element node as the child of the current node and make it the current node.
-     *
-     * @param name Tag name for the new element.
-     */
-    private void newChild(String name) {
-        currentNode = currentNode.appendChild(document.createElement(name));
-    }
-
-    /**
-     * Sets an attribute value.
-     *
-     * @param name Attribute name.
-     * @param value Attribute value.
-     */
-    private void writeString(String name, String value) {
-        setAttributeValue(name, value == null ? NULL_VALUE : value, currentNode);
-    }
-
+    
     /**
      * Returns true if the layout has no content.
      *
      * @return True if the layout has no content.
      */
     public boolean isEmpty() {
-        Node root = document == null ? null : document.getElementsByTagName(LayoutConstants.LAYOUT_ROOT).item(0);
-        return root == null || !root.hasChildNodes();
+        return root == null || root.getElements().isEmpty();
     }
-
-    /**
-     * Sets the specified attribute value for the specified element.
-     *
-     * @param name Attribute name.
-     * @param value Attribute value.
-     * @param element Element to receive the attribute.
-     */
-    private void setAttributeValue(String name, String value, Node element) {
-        Node node = element.getAttributes().getNamedItem(name);
-
-        if (node == null) {
-            node = document.createAttribute(name);
-            element.getAttributes().setNamedItem(node);
-        }
-
-        node.setNodeValue(value);
-    }
-
+    
     /**
      * Returns the layout as an xml-formatted string.
      */
     @Override
     public String toString() {
-        return document == null ? null : XMLUtil.toString(document);
+        if (root == null) {
+            return "";
+        }
+
+        try {
+            Document doc = XMLUtil.parseXMLFromString("<layout/>");
+            Element node = doc.getDocumentElement();
+            buildDocument(node, root);
+            node.setAttribute("version", "4.0");
+            node.setAttribute("name", layoutName);
+            return XMLUtil.toString(doc);
+        } catch (Exception e) {
+            throw MiscUtil.toUnchecked(e);
+        }
     }
 
+    private void buildDocument(Element node, LayoutElement ele) {
+        PluginDefinition def = ele.getDefinition();
+
+        for (Entry<String, String> entry : ele.getAttributes().entrySet()) {
+            node.setAttribute(entry.getKey(), entry.getValue());
+        }
+        
+        if (def.getClazz() != ElementDesktop.class) {
+            node.setAttribute("_type", def.getId());
+        }
+        
+        for (LayoutTrigger trigger : ele.getTriggers()) {
+            Element child = node.getOwnerDocument().createElement("trigger");
+            child.setAttribute("condition", trigger.getCondition());
+            child.setAttribute("action", trigger.getAction());
+            node.appendChild(child);
+        }
+        
+        for (LayoutElement element : ele.getElements()) {
+            Element child = node.getOwnerDocument().createElement("element");
+            node.appendChild(child);
+            buildDocument(child, element);
+        }
+    }
+    
     /**
      * Converts to clipboard format.
      */
@@ -546,14 +272,13 @@ public class Layout implements IClipboardAware<Layout> {
     public String toClipboard() {
         return toString();
     }
-
+    
     /**
      * Converts from clipboard format.
-     *
-     * @throws Exception Unspecified exception.
      */
     @Override
-    public Layout fromClipboard(String data) throws Exception {
-        return new Layout().loadFromText(data);
+    public Layout fromClipboard(String data) {
+        init(LayoutParser.parseText(data).root);
+        return this;
     }
 }

@@ -46,6 +46,7 @@ import org.carewebframework.shell.elements.ElementToolbar;
 import org.carewebframework.shell.elements.ElementTreePane;
 import org.carewebframework.shell.elements.ElementTreeView;
 import org.carewebframework.shell.layout.Layout;
+import org.carewebframework.shell.layout.LayoutParser;
 import org.carewebframework.shell.plugins.PluginDefinition;
 import org.carewebframework.shell.property.PropertyInfo;
 import org.carewebframework.ui.controller.FrameworkController;
@@ -56,24 +57,40 @@ import org.junit.Test;
 
 public class LayoutParserTest {
     
-    private final Layout layout = new Layout();
-    
+    private CareWebShell shell;
+
     private ElementBase element;
 
     @Test
-    public void ParserTest() throws Exception {
-        String xml = MockTest.getTextFromResource("LayoutParserTest1.xml");
-        layout.loadFromText(xml);
+    public void parserTest() throws Exception {
+        shell = new CareWebShell();
+        shell.setParent(MockTest.getMockEnvironment().getSession().getPage());
+        parserTestFile("layout-v3.xml");
+        parserTestFile("layout-v4.xml");
+    }
+    
+    private void parserTestFile(String file) throws Exception {
+        Layout layout = parserTestXML(MockTest.getTextFromResource(file));
+        parserTestXML(layout.toString());
+    }
+    
+    private Layout parserTestXML(String xml) throws Exception {
+        Layout layout = LayoutParser.parseText(xml);
+        parserTestLayout(layout);
+        return layout;
+    }
+    
+    private void parserTestLayout(Layout layout) throws Exception {
         assertFalse(layout.isEmpty());
+        assertEquals(layout.getName(), "test");
         PluginDefinition def = PluginDefinition.getDefinition("treeview");
         assertNotNull(def);
         assertEquals(def.getDescription(), StrUtil.getLabel("cwf.shell.plugin.treeview.description"));
         ElementBase ele = def.createElement(null, null, false);
         assertTrue(ele instanceof ElementTreeView);
-        CareWebShell shell = new CareWebShell();
-        shell.setParent(MockTest.mockEnvironment.getSession().getPage());
         ElementDesktop root = shell.getDesktop();
-        layout.deserialize(root);
+        root.removeChildren();
+        layout.materialize(root);
         element = root;
         testNode(1, ElementMenubar.class);
         testNode(0, ElementToolbar.class);
@@ -101,7 +118,7 @@ public class LayoutParserTest {
         root.activate(false);
         testPlugin(controller, 1, 1, 1, 0);
         root.activate(true);
-        MockTest.mockEnvironment.flushEvents();
+        MockTest.getMockEnvironment().flushEvents();
         testPlugin(controller, 1, 2, 1, 0);
         testProperty(plugin1, "prop1", "value1");
         testProperty(plugin1, "prop2", 123);
@@ -134,7 +151,7 @@ public class LayoutParserTest {
     
     private void testPlugin(TestPluginController controller, int loadCount, int activateCount, int inactivateCount,
                             int unloadCount) {
-        MockTest.mockEnvironment.flushEvents();
+        MockTest.getMockEnvironment().flushEvents();
         assertEquals(loadCount, controller.getLoadCount());
         assertEquals(activateCount, controller.getActivateCount());
         assertEquals(inactivateCount, controller.getInactivateCount());

@@ -1,4 +1,4 @@
-<layout title="Layout Title">
+<layout name="test" title="Layout Title" version="3.0">
 	<_menubar />
 	<_toolbar />
 	<splitterview orientation="vertical">

@@ -29,13 +29,13 @@ package org.carewebframework.shell.layout;
  * Loads layout from the shared store.
  */
 public class LayoutLoaderShared extends LayoutLoaderBase {
-
+    
     public LayoutLoaderShared() {
         super("shared");
     }
-    
+
     @Override
     public Layout loadLayout(String name) {
-        return new Layout().loadFromProperty(new LayoutIdentifier(name, true));
+        return LayoutParser.parseProperty(new LayoutIdentifier(name, true));
     }
 }

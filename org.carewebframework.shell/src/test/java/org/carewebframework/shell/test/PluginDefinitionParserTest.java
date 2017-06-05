@@ -39,8 +39,8 @@ import org.junit.Test;
 public class PluginDefinitionParserTest {
 
     @Test
-    public void ParserTest() throws Exception {
-        String xml = MockTest.getTextFromResource("PluginDefinitionParserTest1.xml");
+    public void parserTest() throws Exception {
+        String xml = MockTest.getTextFromResource("pluginDefinition.xml");
         PluginDefinition def = PluginXmlParser.fromXml(xml);
         assertEquals("Test1", def.getName());
         assertEquals("plugin-test", def.getId());
