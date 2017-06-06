@@ -64,6 +64,7 @@ public class ElementLayout extends ElementBase {
 
     public ElementLayout() {
         fullSize(div);
+        div.addStyle("display", "flex");
         setOuterComponent(div);
     }
 

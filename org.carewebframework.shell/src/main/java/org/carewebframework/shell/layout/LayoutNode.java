@@ -25,27 +25,46 @@
  */
 package org.carewebframework.shell.layout;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.carewebframework.api.property.IPropertyProvider;
+
 /**
- * Represents a trigger occurrence within a layout.
+ * Represents a node within a layout.
  */
-public class LayoutTrigger extends LayoutNode {
+public abstract class LayoutNode implements IPropertyProvider {
     
-    private final String condition;
+    private final Map<String, String> attributes = new HashMap<>();
+    
+    private final String tagName;
 
-    private final String action;
+    protected LayoutNode(String tagName) {
+        this.tagName = tagName;
+    }
 
-    protected LayoutTrigger(String condition, String action) {
-        super("trigger");
-        this.condition = condition;
-        this.action = action;
+    protected String getTagName() {
+        return tagName;
+    }
+
+    protected Map<String, String> getAttributes() {
+        return attributes;
     }
     
-    public String getCondition() {
-        return condition;
+    /**
+     * @see org.carewebframework.api.property.IPropertyProvider#getProperty(java.lang.String)
+     */
+    @Override
+    public String getProperty(String key) {
+        return attributes.get(key);
     }
     
-    public String getAction() {
-        return action;
+    /**
+     * @see org.carewebframework.api.property.IPropertyProvider#hasProperty(java.lang.String)
+     */
+    @Override
+    public boolean hasProperty(String key) {
+        return attributes.containsKey(key);
     }
-    
+
 }

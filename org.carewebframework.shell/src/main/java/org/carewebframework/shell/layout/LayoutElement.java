@@ -26,69 +26,69 @@
 package org.carewebframework.shell.layout;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import org.carewebframework.api.property.IPropertyProvider;
 import org.carewebframework.shell.plugins.PluginDefinition;
+import org.carewebframework.shell.plugins.PluginRegistry;
 
 /**
  * Represents a UI element occurrence within a layout.
  */
-public class LayoutElement implements IPropertyProvider {
-    
-    private final LayoutElement parent;
+public class LayoutElement extends LayoutNode {
 
-    private final Map<String, String> attributes = new HashMap<>();
+    /**
+     * Represents the root node for a layout.
+     */
+    public static class LayoutRoot extends LayoutElement {
+        
+        public LayoutRoot() {
+            super();
+        }
+    }
+
+    private final LayoutElement parent;
     
     private final PluginDefinition pluginDefinition;
-    
+
     private final List<LayoutElement> elements = new ArrayList<>();
-    
+
     private final List<LayoutTrigger> triggers = new ArrayList<>();
+
+    private LayoutElement() {
+        super("layout");
+        this.parent = null;
+        this.pluginDefinition = PluginRegistry.getInstance().get("_desktop");
+    }
     
     protected LayoutElement(PluginDefinition pluginDefinition, LayoutElement parent) {
+        super("element");
         this.parent = parent;
         this.pluginDefinition = pluginDefinition;
-        
+
         if (parent != null) {
             parent.getElements().add(this);
         }
     }
-    
-    protected Map<String, String> getAttributes() {
-        return attributes;
-    }
-    
+
     protected List<LayoutElement> getElements() {
         return elements;
     }
-    
+
     protected List<LayoutTrigger> getTriggers() {
         return triggers;
     }
-    
+
     protected PluginDefinition getDefinition() {
         return pluginDefinition;
     }
-
+    
     protected LayoutElement getParent() {
         return parent;
     }
-    
+
     protected LayoutElement getNextSibling() {
         int i = parent == null ? 0 : parent.elements.indexOf(this) + 1;
         return i == 0 || i >= parent.elements.size() ? null : parent.elements.get(i);
     }
-    
-    @Override
-    public String getProperty(String key) {
-        return attributes.get(key);
-    }
-    
-    @Override
-    public boolean hasProperty(String key) {
-        return attributes.containsKey(key);
-    }
+
 }
