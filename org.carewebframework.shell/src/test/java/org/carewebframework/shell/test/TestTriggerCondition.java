@@ -23,15 +23,14 @@
  *
  * #L%
  */
-package org.carewebframework.shell.triggers;
+package org.carewebframework.shell.test;
 
-/**
- * Base interface for trigger conditions and actions.
- */
-public interface ITriggerComponent {
+import org.carewebframework.shell.triggers.TriggerCondition;
+
+public class TestTriggerCondition extends TriggerCondition {
     
-    String getId();
-
-    String getDescription();
+    @Override
+    protected void init() {
+    }
 
 }

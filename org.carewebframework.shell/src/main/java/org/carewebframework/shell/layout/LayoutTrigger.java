@@ -34,7 +34,7 @@ public class LayoutTrigger extends LayoutNode {
 
     private final String action;
 
-    protected LayoutTrigger(String condition, String action) {
+    public LayoutTrigger(String condition, String action) {
         super("trigger");
         this.condition = condition;
         this.action = action;
@@ -47,5 +47,5 @@ public class LayoutTrigger extends LayoutNode {
     public String getAction() {
         return action;
     }
-    
+
 }

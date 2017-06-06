@@ -25,47 +25,65 @@
  */
 package org.carewebframework.shell.triggers;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.carewebframework.shell.elements.ElementBase;
 
 /**
  * A trigger is a condition/action pair with zero or more plugin targets. When a condition is
  * triggered, the associated action is invoked on each target.
  */
-public class Trigger implements ITriggerCallback {
+public class Trigger extends ElementBase {
 
-    private final Set<ElementBase> targets = new HashSet<>();
+    static {
+        registerAllowedChildClass(Trigger.class, TriggerCondition.class);
+        registerAllowedChildClass(Trigger.class, TriggerAction.class);
+    }
 
-    private final ITriggerAction action;
+    private TriggerAction action;
     
-    private final ITriggerCondition condition;
+    private TriggerCondition condition;
 
     private boolean executing;
 
-    public Trigger(ITriggerCondition condition, ITriggerAction action) {
-        this.action = action;
-        this.condition = condition;
-        condition.registerCallback(this);
-    }
-
-    public boolean addTarget(ElementBase target) {
-        return targets.add(target);
-    }
-
-    public boolean removeTarget(ElementBase target) {
-        return targets.remove(target);
+    private final ITriggerCallback callback = () -> {
+        onTrigger();
+    };
+    
+    public Trigger() {
     }
 
     @Override
-    public void onTrigger() {
-        if (!executing) {
+    protected void afterAddChild(ElementBase child) {
+        super.afterAddChild(child);
+        
+        if (child instanceof TriggerAction) {
+            action = (TriggerAction) child;
+        } else if (child instanceof TriggerCondition) {
+            condition = (TriggerCondition) child;
+            condition.registerCallback(callback);
+        }
+    }
+
+    @Override
+    protected void afterRemoveChild(ElementBase child) {
+        super.afterRemoveChild(child);
+        
+        if (action == child) {
+            action = null;
+        } else if (condition == child) {
+            condition.unregisterCallback(callback);
+            condition = null;
+        }
+    }
+
+    private void onTrigger() {
+        if (!executing && action != null) {
             try {
                 executing = true;
                 
-                for (ElementBase target : targets) {
-                    action.invokeAction(target);
+                for (ElementBase target : getChildren()) {
+                    if (target != action && target != condition) {
+                        action.invokeAction(target);
+                    }
                 }
             } finally {
                 executing = false;
@@ -73,8 +91,11 @@ public class Trigger implements ITriggerCallback {
         }
     }
     
-    public String getDescription() {
-        return "When: " + condition.getDescription() + "\n\nThen: " + action.getDescription();
+    @Override
+    public String toString() {
+        String cdx = condition == null ? "<not defined>" : condition.getDisplayName();
+        String adx = action == null ? "<not defined" : action.getDisplayName();
+        return "When: " + cdx + "\n\nThen: " + adx;
     }
     
 }

@@ -28,20 +28,31 @@ package org.carewebframework.shell.triggers;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.carewebframework.shell.elements.ElementBase;
+
 /**
- * Base class for rules governing plugin behavior.
+ * Conditional logic for a trigger.
  */
-public abstract class TriggerCondition extends TriggerComponent implements ITriggerCondition {
+public abstract class TriggerCondition extends ElementBase implements ITriggerCondition {
     
+    static {
+        registerAllowedParentClass(TriggerCondition.class, Trigger.class);
+    }
+
     private final Set<ITriggerCallback> callbacks = new HashSet<>();
 
-    protected TriggerCondition(String id, String description) {
-        super(id, description);
+    public TriggerCondition() {
+        init();
     }
     
     @Override
     public void registerCallback(ITriggerCallback callback) {
         callbacks.add(callback);
+    }
+    
+    @Override
+    public void unregisterCallback(ITriggerCallback callback) {
+        callbacks.remove(callback);
     }
     
     protected void invokeCallbacks() {
@@ -50,4 +61,5 @@ public abstract class TriggerCondition extends TriggerComponent implements ITrig
         }
     }
     
+    protected abstract void init();
 }

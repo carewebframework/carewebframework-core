@@ -7,15 +7,15 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  * This Source Code Form is also subject to the terms of the Health-Related
  * Additional Disclaimer of Warranty and Limitation of Liability available at
  *
@@ -46,7 +46,7 @@ public class SpringUtil {
     /**
      * Sets the finder logic for locating the framework context. This is set during framework
      * initialization and should not be changed.
-     * 
+     *
      * @param appContextFinder The application context finder.
      */
     public static void setAppContextFinder(IAppContextFinder appContextFinder) {
@@ -56,7 +56,7 @@ public class SpringUtil {
     /**
      * Returns the application context (container) associated with the current framework instance.
      * Will return null if an application context cannot be inferred or has not yet been created.
-     * 
+     *
      * @return Application context
      */
     public static ApplicationContext getAppContext() {
@@ -66,7 +66,7 @@ public class SpringUtil {
     /**
      * Returns the root application context (container) associated with the application. Will return
      * null if an application context cannot be inferred or has not yet been created.
-     * 
+     *
      * @return Root application context
      */
     public static ApplicationContext getRootAppContext() {
@@ -75,7 +75,7 @@ public class SpringUtil {
     
     /**
      * Returns true if an application context has been loaded.
-     * 
+     *
      * @return boolean True if an application context has been loaded
      */
     public static boolean isLoaded() {
@@ -84,7 +84,7 @@ public class SpringUtil {
     
     /**
      * Returns the bean with an id matching the specified id, or null if none found.
-     * 
+     *
      * @param id Bean id
      * @return Returns the bean instance whose id matches the specified id, or null if none found or
      *         if the application context cannot be determined.
@@ -96,7 +96,7 @@ public class SpringUtil {
     
     /**
      * Returns the bean with an id matching the specified id, or null if none found.
-     * 
+     *
      * @param <T> Class of return type.
      * @param id Bean id
      * @param clazz Expected return type.
@@ -110,8 +110,24 @@ public class SpringUtil {
     }
     
     /**
+     * Return the bean of the specified class.
+     *
+     * @param clazz The bean class.
+     * @return The requested bean instance, or null if not found.
+     */
+    public static <T> T getBean(Class<T> clazz) {
+        ApplicationContext appContext = getAppContext();
+        
+        try {
+            return appContext == null ? null : appContext.getBean(clazz);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+    
+    /**
      * Returns a property value from the application context.
-     * 
+     *
      * @param name Property name.
      * @return Property value, or null if not found.
      */
@@ -131,7 +147,7 @@ public class SpringUtil {
     
     /**
      * Returns the resource at the specified location. Supports classpath references.
-     * 
+     *
      * @param location The resource location.
      * @return The corresponding resource, or null if one does not exist.
      */
@@ -142,7 +158,7 @@ public class SpringUtil {
     
     /**
      * Returns an array of resources matching the location pattern.
-     * 
+     *
      * @param locationPattern The location pattern. Supports classpath references.
      * @return Array of matching resources.
      */

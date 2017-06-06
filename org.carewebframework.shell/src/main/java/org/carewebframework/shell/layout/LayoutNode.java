@@ -31,26 +31,36 @@ import java.util.Map;
 import org.carewebframework.api.property.IPropertyProvider;
 
 /**
- * Represents a node within a layout.
+ * Base class for all nodes within a layout.
  */
 public abstract class LayoutNode implements IPropertyProvider {
-    
-    private final Map<String, String> attributes = new HashMap<>();
-    
-    private final String tagName;
 
+    private final Map<String, String> attributes = new HashMap<>();
+
+    private final String tagName;
+    
     protected LayoutNode(String tagName) {
         this.tagName = tagName;
     }
-
+    
+    /**
+     * Returns the tag name used when serializing this node.
+     *
+     * @return The tag name.
+     */
     protected String getTagName() {
         return tagName;
     }
-
+    
+    /**
+     * Returns the attribute map for the node.
+     *
+     * @return The attribute map.
+     */
     protected Map<String, String> getAttributes() {
         return attributes;
     }
-    
+
     /**
      * @see org.carewebframework.api.property.IPropertyProvider#getProperty(java.lang.String)
      */
@@ -58,7 +68,7 @@ public abstract class LayoutNode implements IPropertyProvider {
     public String getProperty(String key) {
         return attributes.get(key);
     }
-    
+
     /**
      * @see org.carewebframework.api.property.IPropertyProvider#hasProperty(java.lang.String)
      */
@@ -66,5 +76,5 @@ public abstract class LayoutNode implements IPropertyProvider {
     public boolean hasProperty(String key) {
         return attributes.containsKey(key);
     }
-
+    
 }

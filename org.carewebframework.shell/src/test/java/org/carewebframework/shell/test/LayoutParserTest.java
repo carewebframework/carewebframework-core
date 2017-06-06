@@ -56,11 +56,11 @@ import org.carewebframework.web.test.MockTest;
 import org.junit.Test;
 
 public class LayoutParserTest {
-    
+
     private CareWebShell shell;
-
+    
     private ElementBase element;
-
+    
     @Test
     public void parserTest() throws Exception {
         shell = new CareWebShell();
@@ -68,18 +68,18 @@ public class LayoutParserTest {
         parserTestFile("layout-v3.xml");
         parserTestFile("layout-v4.xml");
     }
-    
+
     private void parserTestFile(String file) throws Exception {
         Layout layout = parserTestXML(MockTest.getTextFromResource(file));
         parserTestXML(layout.toString());
     }
-    
+
     private Layout parserTestXML(String xml) throws Exception {
         Layout layout = LayoutParser.parseText(xml);
         parserTestLayout(layout);
         return layout;
     }
-    
+
     private void parserTestLayout(Layout layout) throws Exception {
         assertFalse(layout.isEmpty());
         assertEquals(layout.getName(), "test");
@@ -133,22 +133,22 @@ public class LayoutParserTest {
         root.removeChildren();
         testPlugin(controller, 1, 2, 1, 1);
     }
-    
+
     private void testProperty(ElementPlugin plugin, String propertyName, Object expectedValue) throws Exception {
         PluginDefinition def = plugin.getDefinition();
         PropertyInfo propInfo = null;
-        
+
         for (PropertyInfo pi : def.getProperties()) {
             if (pi.getId().equals(propertyName)) {
                 propInfo = pi;
                 break;
             }
         }
-        
+
         assertNotNull("Property not found: " + propertyName, propInfo);
         assertEquals(expectedValue, plugin.getPropertyValue(propInfo));
     }
-    
+
     private void testPlugin(TestPluginController controller, int loadCount, int activateCount, int inactivateCount,
                             int unloadCount) {
         MockTest.getMockEnvironment().flushEvents();
@@ -157,25 +157,25 @@ public class LayoutParserTest {
         assertEquals(inactivateCount, controller.getInactivateCount());
         assertEquals(unloadCount, controller.getUnloadCount());
     }
-    
+
     private void testNode(int dir, Class<? extends ElementBase> clazz) {
         switch (dir) {
             case 1:
                 element = element.getFirstChild();
                 break;
-            
+
             case -1:
                 element = element.getParent();
                 break;
-            
+
             case 0:
                 element = element.getNextSibling(false);
                 break;
         }
-        
+
         assertTrue(clazz.isInstance(element));
     }
-    
+
     private void testProperty(String key, Object value) throws Exception {
         Object prop = PropertyUtils.getProperty(element, key);
         assertEquals(prop, value);

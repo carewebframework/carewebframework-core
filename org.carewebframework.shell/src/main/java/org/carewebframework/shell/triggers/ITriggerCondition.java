@@ -28,7 +28,9 @@ package org.carewebframework.shell.triggers;
 /**
  * Logic that determines when a trigger should be fired.
  */
-public interface ITriggerCondition extends ITriggerComponent {
+public interface ITriggerCondition {
     
     void registerCallback(ITriggerCallback callback);
+    
+    void unregisterCallback(ITriggerCallback callback);
 }

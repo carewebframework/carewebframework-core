@@ -30,8 +30,8 @@ import org.carewebframework.shell.elements.ElementBase;
 /**
  * Action to be invoked when a plugin trigger is fired.
  */
-public interface ITriggerAction extends ITriggerComponent {
-
-    void invokeAction(ElementBase target);
+public interface ITriggerAction {
     
+    void invokeAction(ElementBase target);
+
 }

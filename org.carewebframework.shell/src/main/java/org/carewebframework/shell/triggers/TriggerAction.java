@@ -30,10 +30,10 @@ import org.carewebframework.shell.elements.ElementBase;
 /**
  * Base class trigger-based actions.
  */
-public abstract class TriggerAction extends TriggerComponent implements ITriggerAction {
+public abstract class TriggerAction extends ElementBase implements ITriggerAction {
     
-    protected TriggerAction(String id, String description) {
-        super(id, description);
+    static {
+        registerAllowedParentClass(TriggerAction.class, Trigger.class);
     }
 
     @Override

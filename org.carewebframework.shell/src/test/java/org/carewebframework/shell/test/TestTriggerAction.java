@@ -23,29 +23,16 @@
  *
  * #L%
  */
-package org.carewebframework.shell.triggers;
+package org.carewebframework.shell.test;
 
-/**
- * Base class for trigger conditions and actions.
- */
-public abstract class TriggerComponent implements ITriggerComponent {
-    
-    private final String id;
+import org.carewebframework.shell.elements.ElementBase;
+import org.carewebframework.shell.triggers.TriggerAction;
 
-    private final String description;
-
-    protected TriggerComponent(String id, String description) {
-        this.id = id;
-        this.description = description;
-    }
+public class TestTriggerAction extends TriggerAction {
     
     @Override
-    public String getId() {
-        return id;
+    public void invokeAction(ElementBase target) {
+        target.setHint("success");
     }
-    
-    @Override
-    public String getDescription() {
-        return description;
-    }
+
 }
