@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>org.carewebframework</groupId>
 		<artifactId>org.carewebframework.mvn.plugin-parent</artifactId>
-		<version>5.0.0-SNAPSHOT</version>
+		<version>5.0.0-RC2</version>
 	</parent>
 	
 	<artifactId>org.carewebframework.mvn.plugin.core</artifactId>
