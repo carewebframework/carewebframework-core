@@ -103,17 +103,6 @@
 		<url-pattern>/zkau/*</url-pattern>
 	</servlet-mapping>
 
-	<error-page>
-		<!-- Exception-type of Throwable is handled by zk (zk.xml). Specifying 
-			Throwable exception-type handling in both web.xml and zk.xml causes IllegalStateException 
-			(response already committed). -->
-		<error-code>500</error-code>
-		<location>/zkau/web/org/carewebframework/ui/zk/errorLoading.zul</location>
-	</error-page>
-	<error-page>
-		<error-code>404</error-code>
-		<location>/zkau/web/org/carewebframework/ui/zk/errorLoading.zul</location>
-	</error-page>
 	<!--
 		MaxInactiveInterval (in minutes).
 	-->
