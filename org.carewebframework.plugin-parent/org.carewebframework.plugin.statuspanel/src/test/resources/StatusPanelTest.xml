@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<layout>
-	<cwfStatusPanel />
+<layout version="4.0">
+	<element _type="cwfStatusPanel" />
 </layout>
