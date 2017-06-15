@@ -5,20 +5,20 @@ import org.carewebframework.web.client.ClientUtil;
 /**
  * URL action type causes navigation to URL in a separate viewport.
  */
-public class ActionTypeUrl extends ActionTypeBase {
-    
+public class ActionTypeUrl extends ActionTypeBase<String> {
+
     public ActionTypeUrl() {
         super("url", "^https?:.*");
     }
-    
+
     @Override
-    public Object parse(String script) {
+    public String parse(String script) {
         return script;
     }
-    
+
     @Override
-    public void execute(Object script) {
-        ClientUtil.redirect((String) script, "_blank");
+    public void execute(String script) {
+        ClientUtil.redirect(script, "_blank");
     }
-    
+
 }

@@ -33,10 +33,10 @@ import org.carewebframework.web.component.Import;
 /**
  * UI element that encapsulates an iframe or an include (as determined by URL).
  */
-public class ElementFrame extends ElementBase {
+public class ElementFrame extends ElementUI {
 
     static {
-        registerAllowedParentClass(ElementFrame.class, ElementBase.class);
+        registerAllowedParentClass(ElementFrame.class, ElementUI.class);
     }
 
     private final Div root = new Div();

@@ -35,21 +35,21 @@ import org.carewebframework.web.component.Span;
  * A step-oriented UI Element. This is a composite element consisting of a button and its separator
  * with an associated pane. Clicking on a button activates its corresponding pane.
  */
-public class ElementStepPane extends ElementBase {
-    
+public class ElementStepPane extends ElementUI {
+
     static {
         registerAllowedParentClass(ElementStepPane.class, ElementStepView.class);
-        registerAllowedChildClass(ElementStepPane.class, ElementBase.class);
+        registerAllowedChildClass(ElementStepPane.class, ElementUI.class, 1);
     }
-    
+
     private final Div pane = new Div();
-    
+
     private final Hyperlink button = new Hyperlink();
-    
+
     private final Span step = new Span();
-    
+
     private boolean isHomePane;
-    
+
     /**
      * Create the UI components that comprise this UI element.
      */
@@ -69,7 +69,7 @@ public class ElementStepPane extends ElementBase {
             pane.setFocus(true);
         });
     }
-    
+
     /**
      * Called by parent step view to mark this pane as a home page.
      *
@@ -79,11 +79,11 @@ public class ElementStepPane extends ElementBase {
         this.isHomePane = value;
         updateVisibility();
     }
-    
+
     /*package*/ Span getStep() {
         return step;
     }
-    
+
     /**
      * Add the UI components of the child pane to their respective parent components in the view.
      *
@@ -95,7 +95,7 @@ public class ElementStepPane extends ElementBase {
         BaseComponent root = ((ElementStepView) getParent()).getToolbarRoot();
         root.addChild(step);
     }
-    
+
     /**
      * Detach the UI components of the child pane the UI.
      *
@@ -106,7 +106,7 @@ public class ElementStepPane extends ElementBase {
         super.unbind();
         step.detach();
     }
-    
+
     /**
      * Brings this UI element to the front of the UI by making it the active pane.
      *
@@ -117,7 +117,7 @@ public class ElementStepPane extends ElementBase {
         super.bringToFront();
         ((ElementStepView) getParent()).setActivePane(this);
     }
-    
+
     /**
      * Returns the instance name to use in the designer.
      *
@@ -127,7 +127,7 @@ public class ElementStepPane extends ElementBase {
     public String getInstanceName() {
         return getLabel();
     }
-    
+
     /**
      * Apply color changes to button and pane only.
      *
@@ -138,7 +138,7 @@ public class ElementStepPane extends ElementBase {
         button.addStyle("color", getColor());
         pane.addStyle("background", getColor());
     }
-    
+
     /**
      * Overrides the default behavior to also target the button component.
      *
@@ -149,7 +149,7 @@ public class ElementStepPane extends ElementBase {
         super.setDesignContextMenu(contextMenu);
         setDesignContextMenu(button, contextMenu);
     }
-    
+
     /**
      * Updates the button's styling based on the current state.
      */
@@ -157,7 +157,7 @@ public class ElementStepPane extends ElementBase {
         button.addStyle("disabled", isEnabled() ? "true" : null);
         button.addClass(isActivated() ? "flavor:btn-primary" : "flavor:btn-default");
     }
-    
+
     @Override
     protected void updateVisibility(boolean visible, boolean activated) {
         super.updateVisibility(visible, activated);
@@ -165,13 +165,13 @@ public class ElementStepPane extends ElementBase {
         step.toggleClass("cwf-stepview-separator", null, getNextSibling(true) != null);
         updateButtonStyle();
     }
-    
+
     @Override
     public void setEnabled(boolean enabled) {
         super.setEnabled(enabled);
         updateButtonStyle();
     }
-    
+
     /**
      * Returns the button label.
      *
@@ -180,7 +180,7 @@ public class ElementStepPane extends ElementBase {
     public String getLabel() {
         return button.getLabel();
     }
-    
+
     /**
      * Sets the button label.
      *
@@ -189,12 +189,12 @@ public class ElementStepPane extends ElementBase {
     public void setLabel(String value) {
         button.setLabel(value);
     }
-    
+
     @Override
     protected void applyHint() {
         button.setHint(getHint());
     }
-    
+
     /**
      * Returns the button image url.
      *
@@ -203,7 +203,7 @@ public class ElementStepPane extends ElementBase {
     public String getIcon() {
         return button.getImage();
     }
-    
+
     /**
      * Sets the button image from a url.
      *

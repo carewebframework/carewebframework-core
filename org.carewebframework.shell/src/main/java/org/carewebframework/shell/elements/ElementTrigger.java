@@ -23,42 +23,64 @@
  *
  * #L%
  */
-package org.carewebframework.shell.triggers;
+package org.carewebframework.shell.elements;
 
-import org.carewebframework.shell.elements.ElementBase;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
+import org.carewebframework.shell.plugins.PluginException;
+import org.carewebframework.shell.triggers.ITriggerCallback;
 
 /**
  * A trigger is a condition/action pair with zero or more plugin targets. When a condition is
  * triggered, the associated action is invoked on each target.
  */
-public class Trigger extends ElementBase {
+public class ElementTrigger extends ElementBase {
 
     static {
-        registerAllowedChildClass(Trigger.class, TriggerCondition.class);
-        registerAllowedChildClass(Trigger.class, TriggerAction.class);
+        registerAllowedChildClass(ElementTrigger.class, ElementTriggerCondition.class, 1);
+        registerAllowedChildClass(ElementTrigger.class, ElementTriggerAction.class, 1);
     }
 
-    private TriggerAction action;
+    private ElementTriggerAction action;
     
-    private TriggerCondition condition;
+    private ElementTriggerCondition condition;
 
     private boolean executing;
+
+    private final Set<ElementUI> targets = new HashSet<>();
 
     private final ITriggerCallback callback = () -> {
         onTrigger();
     };
     
-    public Trigger() {
+    public ElementTrigger() {
+    }
+
+    @Override
+    protected void beforeAddChild(ElementBase child) {
+        super.beforeAddChild(child);
+        
+        if (child instanceof ElementTriggerAction) {
+            if (action != null && action != child) {
+                throw new PluginException("This trigger already has an action.");
+            }
+        } else if (child instanceof ElementTriggerCondition) {
+            if (condition != null && condition != child) {
+                throw new PluginException("This trigger already has a condition.");
+            }
+        }
     }
 
     @Override
     protected void afterAddChild(ElementBase child) {
         super.afterAddChild(child);
         
-        if (child instanceof TriggerAction) {
-            action = (TriggerAction) child;
-        } else if (child instanceof TriggerCondition) {
-            condition = (TriggerCondition) child;
+        if (child instanceof ElementTriggerAction) {
+            action = (ElementTriggerAction) child;
+        } else if (child instanceof ElementTriggerCondition) {
+            condition = (ElementTriggerCondition) child;
             condition.registerCallback(callback);
         }
     }
@@ -76,19 +98,37 @@ public class Trigger extends ElementBase {
     }
 
     private void onTrigger() {
-        if (!executing && action != null) {
+        if (!executing && action != null && !targets.isEmpty() && isEnabled() && !isDesignMode()) {
             try {
                 executing = true;
                 
-                for (ElementBase target : getChildren()) {
-                    if (target != action && target != condition) {
-                        action.invokeAction(target);
-                    }
+                for (ElementUI target : targets) {
+                    action.invokeAction(target);
                 }
             } finally {
                 executing = false;
             }
         }
+    }
+    
+    public ElementTriggerCondition getCondition() {
+        return condition;
+    }
+
+    public ElementTriggerAction getAction() {
+        return action;
+    }
+
+    public void addTarget(ElementUI target) {
+        targets.add(target);
+    }
+    
+    public void removeTarget(ElementUI target) {
+        targets.remove(target);
+    }
+    
+    public Set<ElementUI> getTargets() {
+        return Collections.unmodifiableSet(targets);
     }
     
     @Override

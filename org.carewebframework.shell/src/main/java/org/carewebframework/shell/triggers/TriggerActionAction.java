@@ -23,36 +23,47 @@
  *
  * #L%
  */
-package org.carewebframework.shell.designer;
+package org.carewebframework.shell.triggers;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import org.carewebframework.api.security.SecurityUtil;
-import org.carewebframework.shell.property.PropertyInfo;
+import org.carewebframework.shell.elements.ElementTriggerAction;
+import org.carewebframework.shell.elements.ElementUI;
 import org.carewebframework.ui.action.ActionRegistry;
-import org.carewebframework.ui.action.ActionRegistry.ActionScope;
-import org.carewebframework.ui.action.ActionUtil;
 import org.carewebframework.ui.action.IAction;
 
 /**
- * Editor for actions.
+ * Trigger action that invokes a registered action.
  */
-public class PropertyEditorAction extends PropertyEditorList {
+public class TriggerActionAction extends ElementTriggerAction {
     
-    /**
-     * Initialize the list from the action registry.
-     */
-    @Override
-    protected void init(Object target, PropertyInfo propInfo, PropertyGrid propGrid) {
-        propInfo.getConfig().setProperty("readonly", Boolean.toString(!SecurityUtil.hasDebugRole()));
-        super.init(target, propInfo, propGrid);
-        List<IAction> actions = new ArrayList<>(ActionRegistry.getRegisteredActions(ActionScope.BOTH));
-        Collections.sort(actions, ActionUtil.comparator);
-        
-        for (IAction action : actions) {
-            appendItem(action.toString(), action.getId());
-        }
+    private IAction action;
+
+    public TriggerActionAction() {
+
     }
+
+    public TriggerActionAction(IAction action) {
+        this.action = action;
+    }
+
+    public TriggerActionAction(String actionId) {
+        this(ActionRegistry.getRegisteredAction(actionId));
+    }
+
+    @Override
+    protected boolean doInvokeAction(ElementUI target) {
+        if (getAction() != null) {
+            getAction().execute();
+        }
+
+        return false;
+    }
+    
+    public IAction getAction() {
+        return action;
+    }
+    
+    public void setAction(IAction action) {
+        this.action = action;
+    }
+
 }

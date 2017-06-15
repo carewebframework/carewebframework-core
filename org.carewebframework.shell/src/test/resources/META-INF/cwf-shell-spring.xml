@@ -26,6 +26,9 @@
 			</cwp:resource>
 		</cwp:plugin>
 
+		<cwp:plugin id="testAction" name="Test trigger action"
+			class="org.carewebframework.shell.test.TestTriggerAction" />
+		
 	</beans>
 	
 	<beans profile="child-test">

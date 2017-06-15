@@ -37,30 +37,28 @@ import org.carewebframework.web.component.Page;
  * Global (shared across application instances) and local (restricted to current desktop) registry
  * for actions. Local entries take precedence over global.
  */
-public class ActionRegistry extends AbstractRegistry<String, ActionEntry> {
-
+public class ActionRegistry extends AbstractRegistry<String, IAction> {
+    
     private static final String ATTR_LOCAL_REGISTRY = ActionRegistry.class.getName() + ".local";
-
+    
     private static final ActionRegistry instance = new ActionRegistry();
-
+    
     public enum ActionScope {
         BOTH, GLOBAL, LOCAL
     }
-
+    
     /**
      * Adds an action to the global or local registry.
      *
      * @param asGlobal If true, register as global action; if false, local action.
-     * @param id Unique id.
      * @param action Action to add.
      * @return The added action.
      */
-    public static ActionEntry register(boolean asGlobal, String id, IAction action) {
-        ActionEntry actionEntry = new ActionEntry(id, action);
-        getRegistry(asGlobal).register(actionEntry);
-        return actionEntry;
+    public static IAction register(boolean asGlobal, IAction action) {
+        getRegistry(asGlobal).register(action);
+        return action;
     }
-
+    
     /**
      * Adds an action to the global or local registry.
      *
@@ -70,10 +68,10 @@ public class ActionRegistry extends AbstractRegistry<String, ActionEntry> {
      * @param script Action's script.
      * @return The added action.
      */
-    public static ActionEntry register(boolean asGlobal, String id, String label, String script) {
-        return register(asGlobal, id, new ActionEntry(id, label, script));
+    public static IAction register(boolean asGlobal, String id, String label, String script) {
+        return register(asGlobal, new Action(id, label, script));
     }
-
+    
     /**
      * Removes an action from the global or local registry.
      *
@@ -83,38 +81,38 @@ public class ActionRegistry extends AbstractRegistry<String, ActionEntry> {
     public static void unregister(boolean asGlobal, String id) {
         getRegistry(asGlobal).unregisterByKey(id);
     }
-
+    
     /**
      * Attempt to locate in local registry first, then global.
      *
      * @param id The action id.
      * @return The action entry (possibly null).
      */
-    public static ActionEntry getRegisteredAction(String id) {
-        ActionEntry action = getRegistry(false).get(id);
+    public static IAction getRegisteredAction(String id) {
+        IAction action = getRegistry(false).get(id);
         return action == null ? getRegistry(true).get(id) : action;
     }
-
+    
     /**
      * Returns a collection of actions registered to the specified scope.
      *
      * @param scope Action scope from which to retrieve.
      * @return Actions associated with specified scope.
      */
-    public static Collection<ActionEntry> getRegisteredActions(ActionScope scope) {
-        Map<String, ActionEntry> actions = new HashMap<>();
-
+    public static Collection<IAction> getRegisteredActions(ActionScope scope) {
+        Map<String, IAction> actions = new HashMap<>();
+        
         if (scope == ActionScope.BOTH || scope == ActionScope.GLOBAL) {
             actions.putAll(getRegistry(true).map);
         }
-
+        
         if (scope == ActionScope.BOTH || scope == ActionScope.LOCAL) {
             actions.putAll(getRegistry(false).map);
         }
-
+        
         return actions.values();
     }
-
+    
     /**
      * Returns a reference to the registry for global or local actions.
      *
@@ -125,30 +123,30 @@ public class ActionRegistry extends AbstractRegistry<String, ActionEntry> {
         if (global) {
             return instance;
         }
-
+        
         Page page = ExecutionContext.getPage();
         ActionRegistry registry = (ActionRegistry) page.getAttribute(ATTR_LOCAL_REGISTRY);
-
+        
         if (registry == null) {
             page.setAttribute(ATTR_LOCAL_REGISTRY, registry = new ActionRegistry());
         }
-
+        
         return registry;
     }
-
+    
     /**
      * Create global or local action registry.
      */
     private ActionRegistry() {
         super();
     }
-
+    
     /**
      * Action entry id is the key.
      */
     @Override
-    protected String getKey(ActionEntry item) {
+    protected String getKey(IAction item) {
         return item.getId();
     }
-
+    
 }

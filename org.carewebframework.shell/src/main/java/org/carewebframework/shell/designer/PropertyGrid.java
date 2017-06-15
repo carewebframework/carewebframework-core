@@ -32,7 +32,7 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.carewebframework.common.StrUtil;
-import org.carewebframework.shell.ancillary.UIException;
+import org.carewebframework.shell.ancillary.CWFException;
 import org.carewebframework.shell.elements.ElementBase;
 import org.carewebframework.shell.plugins.PluginDefinition;
 import org.carewebframework.shell.property.PropertyInfo;
@@ -278,7 +278,7 @@ public class PropertyGrid implements IAutoWired {
             PropertyType type = propInfo.getPropertyType();
             
             if (type == null) {
-                throw new UIException("Unknown property type: " + propInfo.getType());
+                throw new CWFException("Unknown property type: " + propInfo.getType());
             }
             
             Class<? extends PropertyEditorBase<?>> editorClass = type.getEditorClass();

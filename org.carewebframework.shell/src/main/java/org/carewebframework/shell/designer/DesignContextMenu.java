@@ -27,6 +27,7 @@ package org.carewebframework.shell.designer;
 
 import org.carewebframework.common.StrUtil;
 import org.carewebframework.shell.elements.ElementBase;
+import org.carewebframework.shell.elements.ElementUI;
 import org.carewebframework.shell.layout.Layout;
 import org.carewebframework.shell.layout.LayoutParser;
 import org.carewebframework.web.ancillary.IAutoWired;
@@ -47,39 +48,39 @@ import org.carewebframework.web.page.PageUtil;
  * Context menu for designer.
  */
 public class DesignContextMenu implements IAutoWired {
-    
+
     private final Clipboard clipboard = Clipboard.getInstance();
-    
+
     private BaseComponent listener;
-    
-    private ElementBase owner;
-    
+
+    private ElementUI owner;
+
     private Menupopup menuPopup;
-    
+
     @WiredComponent
     private Menuheader mnuHeader;
-    
+
     @WiredComponent
     private Menuitem mnuAdd;
-    
+
     @WiredComponent
     private Menuitem mnuDelete;
-    
+
     @WiredComponent
     private Menuitem mnuCopy;
-    
+
     @WiredComponent
     private Menuitem mnuPaste;
-    
+
     @WiredComponent
     private Menuitem mnuCut;
-    
+
     @WiredComponent
     private Menuitem mnuProperties;
-    
+
     @WiredComponent
     private Menuitem mnuAbout;
-    
+
     /**
      * Returns an instance of the design context menu. This is a singleton with the page scope and
      * is cached once created.
@@ -89,15 +90,15 @@ public class DesignContextMenu implements IAutoWired {
     public static DesignContextMenu getInstance() {
         Page page = ExecutionContext.getPage();
         DesignContextMenu contextMenu = page.getAttribute(DesignConstants.ATTR_DESIGN_MENU, DesignContextMenu.class);
-        
+
         if (contextMenu == null) {
             contextMenu = create();
             page.setAttribute(DesignConstants.ATTR_DESIGN_MENU, contextMenu);
         }
-        
+
         return contextMenu;
     }
-    
+
     /**
      * Creates an instance of the design context menu.
      *
@@ -107,7 +108,7 @@ public class DesignContextMenu implements IAutoWired {
         return PageUtil.createPage(DesignConstants.RESOURCE_PREFIX + "designContextMenu.cwf", ExecutionContext.getPage())
                 .get(0).getAttribute("controller", DesignContextMenu.class);
     }
-    
+
     /**
      * Updates states on input elements (typically buttons or menu items) according to state of the
      * specified UI element. Any parameter may be null.
@@ -140,7 +141,7 @@ public class DesignContextMenu implements IAutoWired {
         disable(properties, noEdit);
         disable(about, isNull);
     }
-    
+
     /**
      * Sets the disabled state of the specified component.
      *
@@ -150,13 +151,13 @@ public class DesignContextMenu implements IAutoWired {
     private void disable(IDisable comp, boolean disabled) {
         if (comp != null) {
             comp.setDisabled(disabled);
-            
+
             if (comp instanceof BaseUIComponent) {
                 ((BaseUIComponent) comp).addStyle("opacity", disabled ? ".2" : "1");
             }
         }
     }
-    
+
     @Override
     public void afterInitialized(BaseComponent root) {
         menuPopup = (Menupopup) root;
@@ -167,7 +168,7 @@ public class DesignContextMenu implements IAutoWired {
             onOpen(event);
         });
     }
-    
+
     /**
      * Update control states based on menu owner.
      */
@@ -178,14 +179,14 @@ public class DesignContextMenu implements IAutoWired {
             updateStates(owner, mnuAdd, mnuDelete, mnuCopy, mnuCut, mnuPaste, mnuProperties, mnuAbout);
         }
     }
-    
+
     /**
      * Sets the context menu's owner. This modifies the member menu item states to reflect the
      * current owner.
      *
      * @param owner Menu's owner.
      */
-    public void setOwner(ElementBase owner) {
+    public void setOwner(ElementUI owner) {
         if (this.owner != owner) {
             this.owner = owner;
             mnuHeader.setLabel(
@@ -193,7 +194,7 @@ public class DesignContextMenu implements IAutoWired {
             updateControls();
         }
     }
-    
+
     /**
      * Sets the component that is to receive layout change events.
      *
@@ -202,11 +203,11 @@ public class DesignContextMenu implements IAutoWired {
     public void setListener(BaseComponent listener) {
         this.listener = listener;
     }
-    
+
     public Menupopup getMenupopup() {
         return menuPopup;
     }
-    
+
     /**
      * Sets the context menu's owner based on the UI element that invoked the menu.
      *
@@ -215,15 +216,15 @@ public class DesignContextMenu implements IAutoWired {
     private void onOpen(Event event) {
         if (listener == null) {
             BaseComponent ref = event.getRelatedTarget();
-            setOwner(ElementBase.getAssociatedElement(ref));
+            setOwner(ElementUI.getAssociatedElement(ref));
         }
-        
+
         if (owner == null) {
             event.stopPropagation();
             menuPopup.close();
         }
     }
-    
+
     /**
      * Invoke owner's property editor.
      */
@@ -231,7 +232,7 @@ public class DesignContextMenu implements IAutoWired {
     private void onClick$mnuProperties() {
         owner.editProperties();
     }
-    
+
     /**
      * Invoke owner's about dialog.
      */
@@ -239,7 +240,7 @@ public class DesignContextMenu implements IAutoWired {
     private void onClick$mnuAbout() {
         owner.about();
     }
-    
+
     /**
      * Remove owner from the layout.
      */
@@ -247,7 +248,7 @@ public class DesignContextMenu implements IAutoWired {
     private void onClick$mnuDelete() {
         owner.remove(true);
     }
-    
+
     /**
      * Present Add Component dialog containing valid choices for this owner.
      */
@@ -255,7 +256,7 @@ public class DesignContextMenu implements IAutoWired {
     private void onClick$mnuAdd() {
         AddComponent.newChild(owner, null);
     }
-    
+
     /**
      * Copies the XML layout with the owner as the root node to the clipboard.
      */
@@ -263,7 +264,7 @@ public class DesignContextMenu implements IAutoWired {
     private void onClick$mnuCopy() {
         clipboard.copy(LayoutParser.parseElement(owner));
     }
-    
+
     /**
      * Copies the XML layout with the owner as the root node to the clipboard, then deletes the
      * owner.
@@ -273,19 +274,19 @@ public class DesignContextMenu implements IAutoWired {
         onClick$mnuCopy();
         onClick$mnuDelete();
     }
-    
+
     /**
      * Paste the XML layout in the clipboard into the layout with the owner as the parent node.
      */
     @EventHandler(value = "click", target = "@mnuPaste")
     private void onClick$mnuPaste() {
         Object data = clipboard.getData();
-        
+
         if (data instanceof Layout) {
             ((Layout) data).materialize(owner);
         }
     }
-    
+
     /**
      * Display the clipboard viewer.
      */
@@ -293,7 +294,7 @@ public class DesignContextMenu implements IAutoWired {
     private void onClick$mnuView() {
         clipboard.view();
     }
-    
+
     /**
      * Called when clipboard contents changes.
      */

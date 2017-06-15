@@ -28,35 +28,26 @@ package org.carewebframework.shell.elements;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.carewebframework.api.event.EventManager;
 import org.carewebframework.api.event.IEventManager;
+import org.carewebframework.common.MiscUtil;
 import org.carewebframework.shell.AboutDialog;
 import org.carewebframework.shell.CareWebShell;
 import org.carewebframework.shell.CareWebUtil;
 import org.carewebframework.shell.ancillary.INotificationListener;
 import org.carewebframework.shell.ancillary.NotificationListeners;
 import org.carewebframework.shell.ancillary.RelatedClassMap;
-import org.carewebframework.shell.ancillary.SavedState;
-import org.carewebframework.shell.ancillary.UIException;
-import org.carewebframework.shell.designer.DesignContextMenu;
-import org.carewebframework.shell.designer.DesignMask;
-import org.carewebframework.shell.designer.DesignMask.MaskMode;
+import org.carewebframework.shell.ancillary.RelatedClassMap.Cardinality;
+import org.carewebframework.shell.ancillary.CWFException;
 import org.carewebframework.shell.designer.PropertyGrid;
-import org.carewebframework.shell.layout.LayoutConstants;
 import org.carewebframework.shell.plugins.IPluginResource;
 import org.carewebframework.shell.plugins.PluginDefinition;
 import org.carewebframework.shell.plugins.PluginRegistry;
 import org.carewebframework.shell.property.PropertyInfo;
 import org.carewebframework.ui.dialog.DialogUtil;
-import org.carewebframework.ui.util.CWFUtil;
-import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.component.BaseLabeledComponent;
 import org.carewebframework.web.component.BaseUIComponent;
-import org.carewebframework.web.component.Menupopup;
-import org.carewebframework.web.page.PageUtil;
 
 /**
  * This is the base class for all layout elements supported by the CareWeb framework.
@@ -64,12 +55,6 @@ import org.carewebframework.web.page.PageUtil;
 public abstract class ElementBase {
     
     protected static final Log log = LogFactory.getLog(ElementBase.class);
-    
-    private static final String ATTR_PREFIX = ElementBase.class.getName() + ".";
-    
-    private static final String ASSOC_ELEMENT = ATTR_PREFIX + "AssociatedElement";
-    
-    private static final String CONTEXT_MENU = ATTR_PREFIX + "ContextMenu";
     
     private static final RelatedClassMap allowedParentClasses = new RelatedClassMap();
     
@@ -81,37 +66,19 @@ public abstract class ElementBase {
     
     private final List<ElementBase> children = new ArrayList<>();
     
-    protected int maxChildren = 1;
-    
-    protected boolean autoHide = true;
-    
-    protected boolean autoEnable = true;
+    private final int maxChildren;
     
     private ElementBase parent;
+    
+    private boolean designMode;
     
     private boolean locked;
     
     private boolean enabled = true;
     
-    private boolean activated;
-    
-    private boolean visible = true;
-    
     private PluginDefinition definition;
     
-    private boolean designMode;
-    
-    private final DesignMask mask;
-    
-    private BaseUIComponent innerComponent;
-    
-    private BaseUIComponent outerComponent;
-    
     private String rejectReason;
-    
-    private String hint;
-    
-    private String color;
     
     private IEventManager eventManager;
     
@@ -124,7 +91,7 @@ public abstract class ElementBase {
      */
     protected static synchronized void registerAllowedParentClass(Class<? extends ElementBase> clazz,
                                                                   Class<? extends ElementBase> parentClass) {
-        allowedParentClasses.addRelated(clazz, parentClass);
+        allowedParentClasses.addCardinality(clazz, parentClass, 1);
     }
     
     /**
@@ -133,10 +100,12 @@ public abstract class ElementBase {
      *
      * @param clazz Class whose valid child classes are to be registered.
      * @param childClass Class that may be a child of clazz.
+     * @param maxOccurrences Maximum occurrences for the child class.
      */
     protected static synchronized void registerAllowedChildClass(Class<? extends ElementBase> clazz,
-                                                                 Class<? extends ElementBase> childClass) {
-        allowedChildClasses.addRelated(clazz, childClass);
+                                                                 Class<? extends ElementBase> childClass,
+                                                                 int maxOccurrences) {
+        allowedChildClasses.addCardinality(clazz, childClass, maxOccurrences);
     }
     
     /**
@@ -162,181 +131,8 @@ public abstract class ElementBase {
         return allowedParentClasses.isRelated(childClass, parentClass);
     }
     
-    /**
-     * Returns the UI element that registered the CWF component.
-     *
-     * @param component The CWF component of interest.
-     * @return The associated UI element.
-     */
-    public static ElementBase getAssociatedElement(BaseComponent component) {
-        return component == null ? null : (ElementBase) component.getAttribute(ASSOC_ELEMENT);
-    }
-    
-    /**
-     * Returns the design context menu currently bound to the component.
-     *
-     * @param component The CWF component of interest.
-     * @return The associated design context menu, or null if none.
-     */
-    public static Menupopup getDesignContextMenu(BaseComponent component) {
-        return component == null ? null : (Menupopup) component.getAttribute(CONTEXT_MENU);
-    }
-    
     public ElementBase() {
-        mask = new DesignMask(this);
-    }
-    
-    /**
-     * Returns the URL of the default template to use in createFromTemplate. Override this method to
-     * provide an alternate default URL.
-     *
-     * @return The template URL.
-     */
-    protected String getTemplateUrl() {
-        return "web/" + getClass().getPackage().getName().replace(".", "/") + "/"
-                + StringUtils.uncapitalize(getClass().getSimpleName()) + ".cwf";
-    }
-    
-    /**
-     * Create wrapped component(s) from a template (a cwf page). Performs autowiring of variables
-     * and events. The template URL is derived from the class name. For example, if the class is
-     * "org.carewebframework.xxx.Clazz", the template URL is assumed to be
-     * "web/org/carewebframework/xxx/Clazz.cwf".
-     *
-     * @return Top level component.
-     */
-    protected BaseUIComponent createFromTemplate() {
-        return createFromTemplate(null);
-    }
-    
-    /**
-     * Create wrapped component(s) from specified template (a cwf page). Performs autowiring of
-     * variables and events.
-     *
-     * @param template URL of cwf page that will serve as a template. If a path is not specified, it
-     *            is derived from the package. If the URL is not specified, the template name is
-     *            obtained from getTemplateUrl.
-     * @return Top level component.
-     */
-    protected BaseUIComponent createFromTemplate(String template) {
-        return createFromTemplate(template, null, this);
-    }
-    
-    /**
-     * Create wrapped component(s) from specified template (a cwf page).
-     *
-     * @param template URL of cwf page that will serve as a template. If the URL is not specified,
-     *            the template name is obtained from getTemplateUrl.
-     * @param parent The component that will become the parent.
-     * @param controller If specified, events and variables are autowired to the controller.
-     * @return Top level component.
-     */
-    protected BaseUIComponent createFromTemplate(String template, BaseComponent parent, Object controller) {
-        if (StringUtils.isEmpty(template)) {
-            template = getTemplateUrl();
-        } else if (!template.startsWith("web/")) {
-            template = CWFUtil.getResourcePath(getClass()) + template;
-        }
-        
-        BaseUIComponent top = null;
-        
-        try {
-            top = (BaseUIComponent) PageUtil.createPage(template, parent).get(0);
-            top.wireController(controller);
-        } catch (Exception e) {
-            UIException.raise("Error creating element from template.", e);
-        }
-        
-        return top;
-    }
-    
-    /**
-     * Associates the specified CWF component with this UI element.
-     *
-     * @param component CWF component to associate.
-     */
-    public void associateComponent(BaseComponent component) {
-        if (component != null) {
-            component.setAttribute(ASSOC_ELEMENT, this);
-        }
-    }
-    
-    /**
-     * Returns design mode status.
-     *
-     * @return True if design mode is active.
-     */
-    public boolean isDesignMode() {
-        return designMode;
-    }
-    
-    /**
-     * Sets design mode status for this component and all its children.
-     *
-     * @param designMode The design mode flag.
-     */
-    public void setDesignMode(boolean designMode) {
-        this.designMode = designMode;
-        setDesignContextMenu(designMode ? DesignContextMenu.getInstance().getMenupopup() : null);
-        
-        for (ElementBase child : children) {
-            child.setDesignMode(designMode);
-        }
-        
-        updateState();
-        mask.update();
-    }
-    
-    /**
-     * Apply/remove the design context menu to/from CWF components. This default implementation
-     * applies the design context menu to the outer CWF component only. It may be overridden to
-     * modify this default behavior.
-     *
-     * @param contextMenu The design menu if design mode is activated, or null if it is not.
-     */
-    protected void setDesignContextMenu(Menupopup contextMenu) {
-        setDesignContextMenu(getOuterComponent(), contextMenu);
-    }
-    
-    /**
-     * Apply/remove the design context menu to/from the specified component. If applying the design
-     * context menu, any existing context menu is saved. When removing the context menu, any saved
-     * context menu is restored.
-     *
-     * @param component Component to which to apply/remove the design context menu.
-     * @param contextMenu The design menu if design mode is activated, or null if it is not.
-     */
-    protected void setDesignContextMenu(BaseUIComponent component, Menupopup contextMenu) {
-        component.setAttribute(CONTEXT_MENU, contextMenu);
-        
-        if (contextMenu == null) {
-            SavedState.restore(component);
-            applyHint();
-        } else {
-            new SavedState(component);
-            component.setContext(contextMenu);
-            component.setHint(getDefinition().getName());
-        }
-    }
-    
-    /**
-     * Returns the component that will receive the design mode mask. Override if necessary.
-     *
-     * @return The component that will receive the design mode mask.
-     */
-    public BaseUIComponent getMaskTarget() {
-        return getOuterComponent();
-    }
-    
-    /**
-     * Updates mask for this element and its children.
-     */
-    private void updateMasks() {
-        mask.update();
-        
-        for (ElementBase child : getChildren()) {
-            child.updateMasks();
-        }
+        maxChildren = allowedChildClasses.getTotalCardinality(getClass());
     }
     
     /**
@@ -358,11 +154,11 @@ public abstract class ElementBase {
      */
     protected void addChild(ElementBase child, boolean doEvent) {
         if (!child.canAcceptParent(this)) {
-            UIException.raise(child.rejectReason);
+            CWFException.raise(child.rejectReason);
         }
         
         if (!canAcceptChild(child)) {
-            UIException.raise(rejectReason);
+            CWFException.raise(rejectReason);
         }
         
         if (doEvent) {
@@ -387,7 +183,6 @@ public abstract class ElementBase {
      * @param child The child element added.
      */
     protected void afterAddChild(ElementBase child) {
-        mask.update();
     }
     
     /**
@@ -433,7 +228,6 @@ public abstract class ElementBase {
      * @param child The child UI element.
      */
     protected void afterRemoveChild(ElementBase child) {
-        mask.update();
     }
     
     /**
@@ -454,11 +248,6 @@ public abstract class ElementBase {
         
         if (oldParent != newParent) {
             beforeParentChanged(newParent);
-            
-            if (parent != null && !getDefinition().isInternal()) {
-                unbind();
-            }
-            
             this.parent = newParent;
             
             if (oldParent != null) {
@@ -466,13 +255,8 @@ public abstract class ElementBase {
             }
             
             if (newParent != null) {
-                if (parent != null && !getDefinition().isInternal()) {
-                    bind();
-                }
-                
                 afterParentChanged(oldParent);
                 newParent.updateState();
-                setDesignMode(newParent.isDesignMode());
             }
         }
     }
@@ -517,76 +301,7 @@ public abstract class ElementBase {
      * Override to implement special cleanup when an object is destroyed.
      */
     public void destroy() {
-        unbind();
         processResources(false);
-    }
-    
-    /**
-     * Override to bind wrapped components to the UI.
-     */
-    protected void bind() {
-        getParent().getInnerComponent().addChild(getOuterComponent());
-    }
-    
-    /**
-     * Override to unbind wrapped components from the UI.
-     */
-    protected void unbind() {
-        getOuterComponent().destroy();
-    }
-    
-    /**
-     * Rebind any children. This may be called if the wrapped UI component is recreated.
-     */
-    protected void rebindChildren() {
-        for (ElementBase child : getChildren()) {
-            child.unbind();
-            child.bind();
-        }
-    }
-    
-    /**
-     * Returns the innermost wrapped UI component. For UI elements that may host child elements,
-     * this would be the wrapped UI component that can host the child components. For UI elements
-     * that wrap a single UI component, getInnerComponent and getOuterComponent should return the
-     * same value.
-     *
-     * @return The inner component.
-     */
-    public BaseUIComponent getInnerComponent() {
-        return innerComponent == null ? outerComponent : innerComponent;
-    }
-    
-    /**
-     * Sets the innermost wrapped UI component.
-     *
-     * @param value The innermost wrapped UI component.
-     */
-    protected void setInnerComponent(BaseUIComponent value) {
-        innerComponent = value;
-        associateComponent(value);
-    }
-    
-    /**
-     * Returns the outermost wrapped UI component. This represents the wrapped UI component that
-     * will be the direct child of the UI component wrapped by the parent element. For UI elements
-     * that wrap a single UI component, getInnerComponent and getOuterComponent should return the
-     * same value.
-     *
-     * @return The outer component.
-     */
-    public BaseUIComponent getOuterComponent() {
-        return outerComponent == null ? innerComponent : outerComponent;
-    }
-    
-    /**
-     * Sets the outermost wrapped UI component.
-     *
-     * @param value The outermost wrapped UI component.
-     */
-    protected void setOuterComponent(BaseUIComponent value) {
-        outerComponent = value;
-        associateComponent(value);
     }
     
     /**
@@ -613,7 +328,7 @@ public abstract class ElementBase {
                 return;
             }
             
-            UIException.raise("Cannot modify plugin definition.");
+            CWFException.raise("Cannot modify plugin definition.");
         }
         
         this.definition = definition;
@@ -645,6 +360,30 @@ public abstract class ElementBase {
     }
     
     /**
+     * Returns design mode status.
+     *
+     * @return True if design mode is active.
+     */
+    public boolean isDesignMode() {
+        return designMode;
+    }
+    
+    /**
+     * Sets design mode status for this component and all its children.
+     *
+     * @param designMode The design mode flag.
+     */
+    public void setDesignMode(boolean designMode) {
+        this.designMode = designMode;
+        
+        for (ElementBase child : children) {
+            child.setDesignMode(designMode);
+        }
+        
+        updateState();
+    }
+    
+    /**
      * Displays an about dialog for the UI element.
      */
     public void about() {
@@ -660,58 +399,6 @@ public abstract class ElementBase {
         } catch (Exception e) {
             DialogUtil.showError("Displaying property grid: \r\n" + e.toString());
         }
-    }
-    
-    /**
-     * Set width and height of a component to 100%.
-     *
-     * @param component BaseComponent
-     */
-    protected void fullSize(BaseUIComponent component) {
-        component.setWidth("100%");
-        component.setHeight("100%");
-    }
-    
-    /**
-     * Activates or inactivates a UI element. In general, this method should not be overridden to
-     * introduce new behavior. Rather, if a UI element must change its visual state in response to a
-     * change in activation state, it should override the updateVisibility method. If a UI element
-     * requires special activation logic for its children (e.g., if it allows only one child to be
-     * active at a time), it should override the activateChildren method.
-     *
-     * @param activate The activate status.
-     */
-    public void activate(boolean activate) {
-        activateChildren(activate);
-        activated = activate;
-        updateVisibility();
-        getEventManager().fireLocalEvent(
-            activate ? LayoutConstants.EVENT_ELEMENT_ACTIVATE : LayoutConstants.EVENT_ELEMENT_INACTIVATE, this);
-        
-        if (activate) {
-            mask.update();
-        }
-    }
-    
-    /**
-     * Default behavior is to pass activation/inactivation event to children. Override to restrict
-     * propagation of the event.
-     *
-     * @param activate The activate status.
-     */
-    protected void activateChildren(boolean activate) {
-        for (ElementBase child : children) {
-            child.activate(activate);
-        }
-    }
-    
-    /**
-     * Returns the activation status of the element.
-     *
-     * @return The activation status.
-     */
-    public final boolean isActivated() {
-        return activated;
     }
     
     /**
@@ -770,14 +457,13 @@ public abstract class ElementBase {
     }
     
     /**
-     * Returns an iterable of this component's children.
+     * Returns an iterable of this component's children restricted to the specified type.
      *
-     * @param clazz Expected class of children.
+     * @param clazz Restrict to children of this type.
      * @return Iterable of this component's children.
      */
-    @SuppressWarnings("unchecked")
     public <T extends ElementBase> Iterable<T> getChildren(Class<T> clazz) {
-        return (Iterable<T>) children;
+        return MiscUtil.iterableForType(children, clazz);
     }
     
     /**
@@ -800,6 +486,28 @@ public abstract class ElementBase {
     }
     
     /**
+     * Returns the number of children.
+     *
+     * @param clazz Restrict to children of this type.
+     * @return Number of children.
+     */
+    public int getChildCount(Class<? extends ElementBase> clazz) {
+        if (clazz == ElementBase.class) {
+            return getChildCount();
+        }
+        
+        int count = 0;
+        
+        for (ElementBase child : children) {
+            if (clazz.isInstance(child)) {
+                count++;
+            }
+        }
+        
+        return count;
+    }
+    
+    /**
      * Returns the first child, or null if there are no children.
      *
      * @return First child, or null if none.
@@ -809,70 +517,12 @@ public abstract class ElementBase {
     }
     
     /**
-     * Returns the first visible child.
-     *
-     * @return First visible child, or null if none;
-     */
-    public ElementBase getFirstVisibleChild() {
-        return getVisibleChild(true);
-    }
-    
-    /**
      * Returns the last child, or null if there are no children.
      *
      * @return Last child, or null if none.
      */
     public ElementBase getLastChild() {
         return getChildCount() == 0 ? null : getChild(getChildCount() - 1);
-    }
-    
-    /**
-     * Returns the last visible child.
-     *
-     * @return Last visible child, or null if none;
-     */
-    public ElementBase getLastVisibleChild() {
-        return getVisibleChild(false);
-    }
-    
-    /**
-     * Returns first or last visible child.
-     *
-     * @param first If true, find first visible child; if false, last visible child.
-     * @return Visible child, or null if none found.
-     */
-    private ElementBase getVisibleChild(boolean first) {
-        int count = getChildCount();
-        int start = first ? 0 : count - 1;
-        int inc = first ? 1 : -1;
-        
-        for (int i = start; i >= 0 && i < count; i += inc) {
-            if (getChild(i).isVisible()) {
-                return getChild(i);
-            }
-        }
-        
-        return null;
-    }
-    
-    /**
-     * Returns this element's next sibling.
-     *
-     * @param visibleOnly If true, skip any non-visible siblings.
-     * @return The next sibling, or null if none.
-     */
-    public ElementBase getNextSibling(boolean visibleOnly) {
-        List<ElementBase> sibs = parent == null ? null : parent.children;
-        
-        if (sibs != null) {
-            for (int i = sibs.indexOf(this) + 1; i < sibs.size(); i++) {
-                if (!visibleOnly || sibs.get(i).isVisible()) {
-                    return sibs.get(i);
-                }
-            }
-        }
-        
-        return null;
     }
     
     /**
@@ -965,19 +615,16 @@ public abstract class ElementBase {
             to = children.indexOf(ref);
             children.add(to, child);
             afterMoveChild(child, ref);
-            updateMasks();
         }
     }
     
     /**
-     * Element has been moved to a different position under this parent. Adjust wrapped components
-     * accordingly.
+     * Called after an element has been moved to a different position under this parent.
      *
      * @param child Child element that was moved.
      * @param before Child element was moved before this one.
      */
     protected void afterMoveChild(ElementBase child, ElementBase before) {
-        moveChild(child.getOuterComponent(), before.getOuterComponent());
     }
     
     /**
@@ -990,7 +637,7 @@ public abstract class ElementBase {
         ElementBase parent = getParent();
         
         if (parent == null) {
-            UIException.raise("Element has no parent.");
+            CWFException.raise("Element has no parent.");
         }
         
         int currentIndex = parent.children.indexOf(this);
@@ -1000,17 +647,6 @@ public abstract class ElementBase {
         }
         
         parent.moveChild(currentIndex, index);
-    }
-    
-    /**
-     * Brings this element to the front of the user interface.
-     */
-    public void bringToFront() {
-        if (parent != null) {
-            parent.bringToFront();
-        } else {
-            activate(true);
-        }
     }
     
     /**
@@ -1116,42 +752,7 @@ public abstract class ElementBase {
     public final boolean isEnabled() {
         return enabled;
     }
-    
-    /**
-     * Sets the visibility state of the component. This base implementation only sets the internal
-     * flag and notifies the parent of the state change. Each UI element is responsible for
-     * overriding this method and reflecting the visibility state in their wrapped UI components.
-     *
-     * @param visible The visibility state.
-     */
-    public final void setVisible(boolean visible) {
-        if (this.visible != visible) {
-            this.visible = visible;
-            updateVisibility();
-            updateParentState();
-        }
-    }
-    
-    /**
-     * Calls updateVisibility with current settings.
-     */
-    protected final void updateVisibility() {
-        updateVisibility(visible, activated);
-    }
-    
-    /**
-     * Override to set the visibility of wrapped components. Invoked when visibility or activation
-     * states change.
-     *
-     * @param visible The current visibility state.
-     * @param activated The current activation state.
-     */
-    protected void updateVisibility(boolean visible, boolean activated) {
-        if (!getDefinition().isInternal()) {
-            getOuterComponent().setVisible(visible && activated);
-        }
-    }
-    
+
     /**
      * Moves a child to before another component.
      *
@@ -1160,108 +761,6 @@ public abstract class ElementBase {
      */
     protected void moveChild(BaseUIComponent child, BaseUIComponent before) {
         child.getParent().addChild(child, before);
-    }
-    
-    /**
-     * Returns the visible state of the UI element.
-     *
-     * @return True if the UI element is visible.
-     */
-    public final boolean isVisible() {
-        return visible;
-    }
-    
-    /**
-     * Returns the color (as an HTML-formatted RGB string) for this element.
-     *
-     * @return An HTML-formatted color specification (e.g., #0F134E). May be null.
-     */
-    public final String getColor() {
-        return color;
-    }
-    
-    /**
-     * Provides a default implementation for setting the color of a UI element. This is provided to
-     * allow components to easily expose a color property in the property editor. It may not be
-     * appropriate for all subclasses. To change which UI elements are affected, override the
-     * applyColor() method.
-     *
-     * @param value A correctly formatted HTML color specification.
-     */
-    public final void setColor(String value) {
-        color = value;
-        applyColor();
-    }
-    
-    /**
-     * Provides a default implementation for setting the color of a UI element. Sets the color of
-     * the inner and outer components. Override to modify this default behavior.
-     */
-    protected void applyColor() {
-        applyColor(getOuterComponent());
-        
-        if (getInnerComponent() != getOuterComponent()) {
-            applyColor(getInnerComponent());
-        }
-    }
-    
-    /**
-     * Applies the current color setting to the target component. If the target implements a custom
-     * method for performing this operation, that method will be invoked. Otherwise, the background
-     * color of the target is set. Override this method to provide alternate implementations.
-     *
-     * @param comp Component to receive the color setting.
-     */
-    protected void applyColor(BaseUIComponent comp) {
-        if (comp instanceof BaseLabeledComponent) {
-            comp.invoke(comp.sub("lbl"), "css", "color", getColor());
-        } else if (comp != null) {
-            comp.addStyle("background-color", getColor());
-        }
-    }
-    
-    /**
-     * Returns the tool tip text.
-     *
-     * @return The tool tip text.
-     */
-    public final String getHint() {
-        return hint;
-    }
-    
-    /**
-     * Sets the tool tip text.
-     *
-     * @param value The tool tip text.
-     */
-    public final void setHint(String value) {
-        this.hint = value;
-        applyHint();
-    }
-    
-    /**
-     * Provides a default implementation for setting the hint text of a UI element. Sets the hint
-     * text of the inner and outer components. Override to modify this default behavior.
-     */
-    protected void applyHint() {
-        if (isDesignMode()) {
-            return;
-        }
-        
-        applyHint(getOuterComponent());
-        
-        if (getInnerComponent() != getOuterComponent()) {
-            applyHint(getInnerComponent());
-        }
-    }
-    
-    /**
-     * Applies the current hint text to the target component.
-     *
-     * @param comp Component to receive the hint text.
-     */
-    protected void applyHint(BaseUIComponent comp) {
-        comp.setHint(getHint());
     }
     
     /**
@@ -1274,34 +773,9 @@ public abstract class ElementBase {
     }
     
     /**
-     * Update a UI element based on the state of its children. The default implementation acts on
-     * container elements only and has the following behavior:
-     * <ul>
-     * <li>If all children are disabled, the parent is also disabled (set autoEnable to false to
-     * turn off).</li>
-     * <li>If all children are hidden or there are no children and design mode is not active, the
-     * parent is also hidden (set autoHide to false to turn off).
-     * </ul>
+     * Update an element based on the state of its children.
      */
     protected void updateState() {
-        if (!isContainer()) {
-            return;
-        }
-        
-        boolean anyEnabled = !autoEnable || getChildCount() == 0;
-        boolean anyVisible = !autoHide || designMode;
-        
-        for (ElementBase child : children) {
-            if (anyEnabled && anyVisible) {
-                break;
-            }
-            
-            anyEnabled |= child.isEnabled();
-            anyVisible |= child.isVisible();
-        }
-        
-        setEnabled(anyEnabled);
-        setVisible(anyVisible);
     }
     
     /**
@@ -1310,7 +784,7 @@ public abstract class ElementBase {
      * @return True if this UI element can contain other UI elements.
      */
     public boolean isContainer() {
-        return allowedChildClasses.hasRelated(getClass());
+        return maxChildren > 0;
     }
     
     /**
@@ -1319,10 +793,10 @@ public abstract class ElementBase {
      * @return True if this element may accept a child. Updates the reject reason with the result.
      */
     public boolean canAcceptChild() {
-        if (!isContainer()) {
-            rejectReason = getDisplayName() + " does not accept any child components.";
+        if (maxChildren == 0) {
+            rejectReason = getDisplayName() + " does not accept any children.";
         } else if (getChildCount() >= maxChildren) {
-            rejectReason = getDisplayName() + " may accept at most " + maxChildren + " child component(s).";
+            rejectReason = "Maximum child count exceeded for " + getDisplayName() + ".";
         } else {
             rejectReason = null;
         }
@@ -1334,20 +808,24 @@ public abstract class ElementBase {
      * Returns true if this element may accept a child of the specified class. Updates the reject
      * reason with the result.
      *
-     * @param clazz Child class to test.
+     * @param childClass Child class to test.
      * @return True if this element may accept a child of the specified class.
      */
-    public boolean canAcceptChild(Class<? extends ElementBase> clazz) {
+    public boolean canAcceptChild(Class<? extends ElementBase> childClass) {
         if (!canAcceptChild()) {
             return false;
         }
+
+        Cardinality cardinality = allowedChildClasses.getCardinality(getClass(), childClass);
+        int max = cardinality.getMaxOccurrences();
         
-        if (!canAcceptChild(getClass(), clazz)) {
-            rejectReason = getDisplayName() + " does not accept " + clazz.getSimpleName() + " as a child.";
-        } else {
-            rejectReason = null;
+        if (max == 0) {
+            rejectReason = getDisplayName() + " does not accept " + childClass.getSimpleName() + " as a child.";
+        } else if (max != Integer.MAX_VALUE && getChildCount(cardinality.getTargetClass()) >= max) {
+            rejectReason = getDisplayName() + " cannot accept more than " + max + " of "
+                    + cardinality.getTargetClass().getSimpleName() + ".";
         }
-        
+
         return rejectReason == null;
     }
     
@@ -1359,17 +837,7 @@ public abstract class ElementBase {
      * @return True if this element may accept the specified child.
      */
     public boolean canAcceptChild(ElementBase child) {
-        if (!canAcceptChild()) {
-            return false;
-        }
-        
-        if (!canAcceptChild(getClass(), child.getClass())) {
-            rejectReason = getDisplayName() + " does not accept " + child.getDisplayName() + " as a child.";
-        } else {
-            rejectReason = null;
-        }
-        
-        return rejectReason == null;
+        return canAcceptChild(child.getClass());
     }
     
     /**
@@ -1480,7 +948,6 @@ public abstract class ElementBase {
      * @throws Exception Unspecified exception.
      */
     public void beforeInitialize(boolean deserializing) throws Exception {
-        
     }
     
     /**
@@ -1505,47 +972,6 @@ public abstract class ElementBase {
         for (IPluginResource resource : getDefinition().getResources()) {
             resource.register(shell, this, register);
         }
-    }
-    
-    /**
-     * Returns true if the design mode mask is to be used. This mask is used to cover the underlying
-     * outer component when in design mode.
-     *
-     * @return True if the design mode mask is enabled.
-     */
-    protected MaskMode getMaskMode() {
-        return mask.getMode();
-    }
-    
-    /**
-     * Sets whether to use the design mode mask.
-     *
-     * @param mode True to enable the design mode mask.
-     */
-    protected void setMaskMode(MaskMode mode) {
-        mask.setMode(mode);
-    }
-    
-    /**
-     * Returns true if any associated UI elements in the component subtree are visible.
-     *
-     * @param component Component subtree to examine.
-     * @return True if any associated UI element in the subtree is visible.
-     */
-    protected boolean hasVisibleElements(BaseUIComponent component) {
-        for (BaseUIComponent child : component.getChildren(BaseUIComponent.class)) {
-            ElementBase ele = getAssociatedElement(child);
-            
-            if (ele != null && ele.isVisible()) {
-                return true;
-            }
-            
-            if (hasVisibleElements(child)) {
-                return true;
-            }
-        }
-        
-        return false;
     }
     
     /**

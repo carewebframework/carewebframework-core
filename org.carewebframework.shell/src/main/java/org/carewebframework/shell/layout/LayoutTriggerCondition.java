@@ -23,43 +23,17 @@
  *
  * #L%
  */
-package org.carewebframework.shell.triggers;
+package org.carewebframework.shell.layout;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import org.carewebframework.shell.elements.ElementBase;
+import org.carewebframework.shell.plugins.PluginDefinition;
 
 /**
- * Conditional logic for a trigger.
+ * Represents a trigger condition within a layout.
  */
-public abstract class TriggerCondition extends ElementBase implements ITriggerCondition {
+public class LayoutTriggerCondition extends LayoutNode {
     
-    static {
-        registerAllowedParentClass(TriggerCondition.class, Trigger.class);
-    }
-
-    private final Set<ITriggerCallback> callbacks = new HashSet<>();
-
-    public TriggerCondition() {
-        init();
+    public LayoutTriggerCondition(LayoutTrigger parent, PluginDefinition pluginDefinition) {
+        super("condition", parent, pluginDefinition);
     }
     
-    @Override
-    public void registerCallback(ITriggerCallback callback) {
-        callbacks.add(callback);
-    }
-    
-    @Override
-    public void unregisterCallback(ITriggerCallback callback) {
-        callbacks.remove(callback);
-    }
-    
-    protected void invokeCallbacks() {
-        for (ITriggerCallback callback : callbacks) {
-            callback.onTrigger();
-        }
-    }
-    
-    protected abstract void init();
 }

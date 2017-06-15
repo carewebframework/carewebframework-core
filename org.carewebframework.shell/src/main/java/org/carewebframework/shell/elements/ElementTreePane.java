@@ -37,12 +37,12 @@ import org.carewebframework.web.event.IEventListener;
  * A child of a ElementTreeView, this UI element specifies the tree path where its associated tree
  * node is to reside in the parent's tree.
  */
-public class ElementTreePane extends ElementBase {
+public class ElementTreePane extends ElementUI {
 
     static {
         registerAllowedParentClass(ElementTreePane.class, ElementTreeView.class);
         registerAllowedParentClass(ElementTreePane.class, ElementTreePane.class);
-        registerAllowedChildClass(ElementTreePane.class, ElementBase.class);
+        registerAllowedChildClass(ElementTreePane.class, ElementUI.class, Integer.MAX_VALUE);
     }
 
     private final Div pane = new Div();
@@ -51,9 +51,9 @@ public class ElementTreePane extends ElementBase {
 
     private final Hyperlink anchor;
 
-    private ElementBase mainChild;
+    private ElementUI mainChild;
 
-    private ElementBase activeChild;
+    private ElementUI activeChild;
 
     private ElementTreeView treeView;
 
@@ -81,8 +81,6 @@ public class ElementTreePane extends ElementBase {
 
     public ElementTreePane() {
         super();
-        maxChildren = Integer.MAX_VALUE;
-        //fullSize(pane);
         pane.setFlex("1");
         pane.setVisible(false);
         setOuterComponent(pane);
@@ -135,7 +133,7 @@ public class ElementTreePane extends ElementBase {
      * Determines canOpen state based on whether any visible child nodes are present.
      */
     private void checkChildren() {
-        ElementBase child = getFirstVisibleChild();
+        ElementUI child = getFirstVisibleChild();
 
         while (child != null && !(child instanceof ElementTreePane)) {
             child = child.getNextSibling(true);
@@ -202,7 +200,7 @@ public class ElementTreePane extends ElementBase {
         if (child instanceof ElementTreePane) {
             checkChildren();
         } else {
-            mainChild = child;
+            mainChild = (ElementUI) child;
 
             if (isActivated()) {
                 activeChild = mainChild;
@@ -326,8 +324,8 @@ public class ElementTreePane extends ElementBase {
             activeChild = null;
         } else {
             activeChild = mainChild;
-            ElementBase child = this;
-            ElementBase parent = getParent();
+            ElementUI child = this;
+            ElementUI parent = getParent();
 
             while (parent instanceof ElementTreePane) {
                 ((ElementTreePane) parent).activeChild = child;

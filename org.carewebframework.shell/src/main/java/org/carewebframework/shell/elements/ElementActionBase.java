@@ -32,32 +32,32 @@ import org.carewebframework.ui.action.ActionUtil;
 /**
  * Base class for UI elements that support an associated action.
  */
-public class ElementActionBase extends ElementBase {
-
+public class ElementActionBase extends ElementUI {
+    
     private String action;
-
+    
     private ActionListener listener;
-
+    
     public ElementActionBase() {
         setMaskMode(null);
     }
-
+    
     public void setAction(String action) {
         if (!StringUtils.equals(action, this.action)) {
             this.action = action;
             applyAction();
         }
     }
-
+    
     public String getAction() {
         return action;
     }
-
+    
     protected void applyAction() {
         listener = ActionUtil.addAction(getOuterComponent(), action);
         updateListener();
     }
-
+    
     /**
      * Disable action in design mode.
      */
@@ -66,7 +66,7 @@ public class ElementActionBase extends ElementBase {
         super.setDesignMode(designMode);
         updateListener();
     }
-
+    
     /**
      * Disables the event listener when in design mode.
      */

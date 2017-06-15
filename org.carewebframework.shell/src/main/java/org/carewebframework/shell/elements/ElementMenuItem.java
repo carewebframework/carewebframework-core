@@ -36,30 +36,29 @@ import org.carewebframework.web.component.Menuitem;
  * hierarchical menu trees.
  */
 public class ElementMenuItem extends ElementActionBase {
-    
+
     static {
         registerAllowedParentClass(ElementMenuItem.class, ElementMenubar.class);
         registerAllowedParentClass(ElementMenuItem.class, ElementMenuItem.class);
-        registerAllowedChildClass(ElementMenuItem.class, ElementMenuItem.class);
+        registerAllowedChildClass(ElementMenuItem.class, ElementMenuItem.class, Integer.MAX_VALUE);
     }
-    
+
     private BaseLabeledImageComponent<?> menu = new Menuitem();
-    
+
     public ElementMenuItem() {
         super();
-        maxChildren = Integer.MAX_VALUE;
         autoHide = false;
         setOuterComponent(menu);
     }
-    
+
     public String getLabel() {
         return menu.getLabel();
     }
-    
+
     public void setLabel(String label) {
         menu.setLabel(label);
     }
-    
+
     /**
      * The caption label is the instance name.
      */
@@ -67,29 +66,29 @@ public class ElementMenuItem extends ElementActionBase {
     public String getInstanceName() {
         return getLabel();
     }
-    
+
     @Override
     public void bringToFront() {
         super.bringToFront();
-        
+
         if (isDesignMode() && menu instanceof Menu) {
             ((Menu) menu).open();
         }
     }
-    
+
     @Override
     protected void bind() {
         Class<?> clazz = getParent() instanceof ElementMenuItem ? Menuitem.class : Menu.class;
-        
+
         if (!clazz.isInstance(menu)) {
             BaseLabeledImageComponent<?> oldMenu = menu;
-            
+
             try {
                 menu = (BaseLabeledImageComponent<?>) clazz.newInstance();
             } catch (Exception e) {
                 throw MiscUtil.toUnchecked(e);
             }
-            
+
             setOuterComponent(menu);
             rebindChildren();
             oldMenu.destroy();
@@ -99,10 +98,10 @@ public class ElementMenuItem extends ElementActionBase {
             applyColor();
             applyAction();
         }
-        
+
         super.bind();
     }
-    
+
     @Override
     protected void unbind() {
         menu.detach();

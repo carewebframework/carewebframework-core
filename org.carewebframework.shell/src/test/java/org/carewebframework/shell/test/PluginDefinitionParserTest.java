@@ -33,11 +33,12 @@ import org.carewebframework.shell.plugins.PluginResourceButton;
 import org.carewebframework.shell.plugins.PluginResourceHelp;
 import org.carewebframework.shell.plugins.PluginResourcePropertyGroup;
 import org.carewebframework.shell.plugins.PluginXmlParser;
+import org.carewebframework.ui.test.MockUITest;
 import org.carewebframework.web.test.MockTest;
 import org.junit.Test;
 
-public class PluginDefinitionParserTest {
-
+public class PluginDefinitionParserTest extends MockUITest {
+    
     @Test
     public void parserTest() throws Exception {
         String xml = MockTest.getTextFromResource("pluginDefinition.xml");
@@ -50,5 +51,5 @@ public class PluginDefinitionParserTest {
         assertTrue(def.getResources().get(2) instanceof PluginResourceHelp);
         assertTrue(def.getResources().get(3) instanceof PluginResourcePropertyGroup);
     }
-
+    
 }

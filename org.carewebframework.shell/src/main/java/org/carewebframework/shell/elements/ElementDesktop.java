@@ -52,10 +52,10 @@ import org.carewebframework.web.component.Toolbar;
 /**
  * This is the topmost component of the layout.
  */
-public class ElementDesktop extends ElementBase {
+public class ElementDesktop extends ElementUI {
 
     static {
-        registerAllowedChildClass(ElementDesktop.class, ElementBase.class);
+        registerAllowedChildClass(ElementDesktop.class, ElementUI.class, Integer.MAX_VALUE);
     }
 
     private final BaseUIComponent desktopOuter;
@@ -113,7 +113,6 @@ public class ElementDesktop extends ElementBase {
     public ElementDesktop(CareWebShell shell) throws Exception {
         super();
         this.shell = shell;
-        maxChildren = Integer.MAX_VALUE;
         desktopOuter = createFromTemplate();
         setOuterComponent(desktopOuter);
         setInnerComponent(desktopInner);

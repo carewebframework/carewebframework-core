@@ -1,19 +1,26 @@
-<layout name="TestHarness" title="Test Harness" version="1.0">
-	<_menubar />
-	<_toolbar />
-	<splitterview orientation="vertical">
-		<splitterpane size="47" relative="false">
-			<cwfUserHeader />
-		</splitterpane>
-		<splitterpane size="90" relative="true">
-			<tabview orientation="top">
-				<tabpane label="Test Harness">
-					<treeview caption="Plugins:" open="true" />
-				</tabpane>
-			</tabview>
-		</splitterpane>
-		<splitterpane size="17" relative="false">
-			<cwfStatusPanel />
-		</splitterpane>
-	</splitterview>
+<layout name="TestHarness" title="Test Harness" version="4.0">
+	<element _type="_menubar" />
+	<element _type="_toolbar" />
+	<element _type="splitterview" orientation="vertical">
+		<element _type="splitterpane" size="47" relative="false">
+			<element _type="cwfUserHeader" />
+		</element>
+		<element _type="splitterpane" size="90" relative="true">
+			<element _type="tabview" orientation="top">
+				<element _type="tabpane" label="Test Harness">
+					<element _type="treeview" caption="Plugins:" open="true" />
+				</element>
+				<element _type="tabpane" label="Logout">
+					<element _type="cwfUserHeader" />
+					<trigger>
+						<condition _type="condition-activate" />
+						<action _type="action-logout" />
+					</trigger>
+				</element>
+			</element>
+		</element>
+		<element _type="splitterpane" size="17" relative="false">
+			<element _type="cwfStatusPanel" />
+		</element>
+	</element>
 </layout>

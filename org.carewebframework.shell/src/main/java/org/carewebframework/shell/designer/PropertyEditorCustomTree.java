@@ -64,23 +64,24 @@ public class PropertyEditorCustomTree<T extends ElementBase> extends PropertyEdi
      * Subclass ElementProxy to allow us to synchronize changes to label property with the
      * corresponding tree node.
      */
-    private class Proxy extends ElementProxy {
+    public class Proxy extends ElementProxy {
 
         private Treenode node;
 
         public Proxy(T child) {
             super(child);
+            Assert.notNull(child, "Child element may not be null");
         }
 
         public Proxy(PluginDefinition def) {
             super(def);
+            Assert.notNull(def, "Plugin definition may not be null");
         }
 
-        public ElementBase realize() throws Exception {
+        public ElementBase realize() {
             Treenode parentItem = node.getParent() instanceof Treenode ? (Treenode) node.getParent() : null;
-            ElementBase parentElement = parentItem == null ? getTarget() : getProxy(parentItem).realize();
-            realize(parentElement);
-            return getTarget();
+            ElementBase parentElement = parentItem == null ? (ElementBase) getTarget() : getProxy(parentItem).realize();
+            return realize(parentElement);
         }
 
         public void setItem(Treenode node) {
@@ -386,10 +387,8 @@ public class PropertyEditorCustomTree<T extends ElementBase> extends PropertyEdi
      * Commits changes to all proxies to their proxied elements. For insertion and deletion
      * operations, the proxied elements are created or deleted at this time. The commit operation
      * writes all property settings from the proxy to the proxied element.
-     *
-     * @throws Exception Unspecified exception.
      */
-    private void commitProxies() throws Exception {
+    private void commitProxies() {
         for (Proxy proxy : proxies) {
             proxy.realize();
             proxy.commit();
@@ -412,10 +411,10 @@ public class PropertyEditorCustomTree<T extends ElementBase> extends PropertyEdi
             for (BaseComponent child : tc.getChildren()) {
                 index++;
                 Treenode node = (Treenode) child;
-                ElementBase target = getProxy(node).getTarget();
-                target.setParent(parent);
-                target.setIndex(index);
-                resequenceTargets(node, target);
+                ElementBase real = getProxy(node).getReal();
+                real.setParent(parent);
+                real.setIndex(index);
+                resequenceTargets(node, real);
             }
         }
     }
@@ -426,12 +425,9 @@ public class PropertyEditorCustomTree<T extends ElementBase> extends PropertyEdi
      * @param child Element to be proxied. May not be null.
      * @return The proxy wrapping the specified child.
      */
-    private Proxy newProxy(ElementBase child) {
-        Assert.notNull(child, "Child element may not be null");
-        @SuppressWarnings("unchecked")
-        Proxy proxy = new Proxy((T) child);
-        proxies.add(proxy);
-        return proxy;
+    @SuppressWarnings("unchecked")
+    protected Proxy newProxy(ElementBase child) {
+        return addProxy(new Proxy((T) child));
     }
 
     /**
@@ -440,9 +436,17 @@ public class PropertyEditorCustomTree<T extends ElementBase> extends PropertyEdi
      * @param def Plugin definition for child to be created.
      * @return The proxy wrapping the specified plugin definition.
      */
-    private Proxy newProxy(PluginDefinition def) {
-        Assert.notNull(def, "Plugin definition may not be null");
-        Proxy proxy = new Proxy(def);
+    protected Proxy newProxy(PluginDefinition def) {
+        return addProxy(new Proxy(def));
+    }
+
+    /**
+     * Add a proxy to the proxy list.
+     *
+     * @param proxy Proxy to add
+     * @return The newly added proxy.
+     */
+    protected Proxy addProxy(Proxy proxy) {
         proxies.add(proxy);
         return proxy;
     }
@@ -645,7 +649,7 @@ public class PropertyEditorCustomTree<T extends ElementBase> extends PropertyEdi
         if (node != null) {
             Proxy proxy = getProxy(node);
 
-            if (proxy.getTarget() == null) {
+            if (proxy.getReal() == null) {
                 proxies.remove(proxy);
             } else {
                 proxy.setDeleted(true);

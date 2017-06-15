@@ -27,7 +27,7 @@ package org.carewebframework.shell.elements;
 
 import java.util.Collections;
 
-import org.carewebframework.shell.ancillary.UIException;
+import org.carewebframework.shell.ancillary.CWFException;
 import org.carewebframework.shell.layout.Layout;
 import org.carewebframework.shell.layout.LayoutIdentifier;
 import org.carewebframework.shell.layout.LayoutParser;
@@ -39,35 +39,35 @@ import org.springframework.util.StringUtils;
 /**
  * Wrapper for a UI layout component.
  */
-public class ElementLayout extends ElementBase {
-
+public class ElementLayout extends ElementUI {
+    
     static {
-        registerAllowedParentClass(ElementLayout.class, ElementBase.class);
-        registerAllowedChildClass(ElementLayout.class, ElementBase.class);
+        registerAllowedParentClass(ElementLayout.class, ElementUI.class);
+        registerAllowedChildClass(ElementLayout.class, ElementUI.class, 1);
     }
-
+    
     private String layoutName;
-
+    
     private boolean shared;
-
+    
     private boolean linked = true;
-
+    
     private Layout layout;
-
+    
     private final Div div = new Div();
-
+    
     private PluginDefinition def;
-
+    
     private boolean loaded;
-
+    
     private boolean initializing;
-
+    
     public ElementLayout() {
         fullSize(div);
         div.addStyle("display", "flex");
         setOuterComponent(div);
     }
-
+    
     public ElementLayout(String layoutName, boolean shared) {
         this();
         this.layoutName = layoutName;
@@ -76,14 +76,14 @@ public class ElementLayout extends ElementBase {
         super.setDefinition(def);
         initDefinition();
     }
-
+    
     private void initDefinition() {
         if (def != null) {
             def.setName(layoutName);
             def.setCategory("Layouts\\" + (shared ? "Shared" : "Private"));
         }
     }
-
+    
     @Override
     public void setDefinition(PluginDefinition definition) {
         if (definition != null && def == null) {
@@ -94,65 +94,65 @@ public class ElementLayout extends ElementBase {
             super.setDefinition(def);
         }
     }
-
+    
     @Override
     public String getDisplayName() {
         return (linked ? "Linked" : "Embedded") + " Layout - " + layoutName;
     }
-
+    
     public Layout getLayout() throws Exception {
         if (layout == null) {
             String xml = LayoutUtil.getLayoutContent(new LayoutIdentifier(layoutName, shared));
-
+            
             if (StringUtils.isEmpty(xml)) {
                 layout = new Layout();
-                UIException.raise("Unknown layout: " + layoutName);
+                CWFException.raise("Unknown layout: " + layoutName);
             }
-
+            
             layout = LayoutParser.parseText(xml);
         }
-
+        
         return layout;
     }
-
+    
     public String getLayoutName() {
         return layoutName;
     }
-
+    
     public void setLayoutName(String layoutName) {
         this.layoutName = layoutName;
         initDefinition();
     }
-
+    
     public boolean getShared() {
         return shared;
     }
-
+    
     public void setShared(boolean shared) {
         this.shared = shared;
         initDefinition();
     }
-
+    
     @Override
     public void beforeInitialize(boolean deserializing) throws Exception {
         initializing = true;
         super.beforeInitialize(deserializing);
     }
-
+    
     /**
      * If this is a linked layout, must deserialize from it.
      */
     @Override
     public void afterInitialize(boolean deserializing) throws Exception {
         super.afterInitialize(deserializing);
-
+        
         if (linked) {
             internalDeserialize(false);
         }
-
+        
         initializing = false;
     }
-
+    
     /**
      * A linked layout has no serializable children.
      */
@@ -160,7 +160,7 @@ public class ElementLayout extends ElementBase {
     public Iterable<ElementBase> getSerializableChildren() {
         return linked ? Collections.<ElementBase> emptyList() : super.getSerializableChildren();
     }
-
+    
     /**
      * Deserialize from the associated layout.
      *
@@ -170,39 +170,39 @@ public class ElementLayout extends ElementBase {
         if (!forced && loaded) {
             return;
         }
-
+        
         lockDescendants(false);
         removeChildren();
         loaded = true;
-
+        
         try {
             if (linked) {
                 checkForCircularReference();
             }
-
+            
             getLayout().materialize(this);
-
+            
             if (linked) {
                 lockDescendants(true);
             }
         } catch (Exception e) {
-            UIException.raise("Error loading layout.", e);
+            CWFException.raise("Error loading layout.", e);
         }
     }
-
+    
     /**
      * Checks for a circular reference to the same linked layout, throwing an exception if found.
      */
     private void checkForCircularReference() {
         ElementLayout layout = this;
-
+        
         while ((layout = layout.getAncestor(ElementLayout.class)) != null) {
             if (layout.linked && layout.shared == shared && layout.layoutName.equals(layoutName)) {
-                UIException.raise("Circular reference to layout " + layoutName);
+                CWFException.raise("Circular reference to layout " + layoutName);
             }
         }
     }
-
+    
     /**
      * Sets the lock state for all descendants of this layout.
      *
@@ -211,7 +211,7 @@ public class ElementLayout extends ElementBase {
     private void lockDescendants(boolean lock) {
         lockDescendants(getChildren(), lock);
     }
-
+    
     /**
      * Sets the lock state for all descendants of this layout.
      *
@@ -224,7 +224,7 @@ public class ElementLayout extends ElementBase {
             lockDescendants(child.getChildren(), lock);
         }
     }
-
+    
     /**
      * Returns the linked state. If true, the associated layout is linked by reference. Any changes
      * to the layout will be reflected when the containing layout is loaded. If false, the
@@ -237,7 +237,7 @@ public class ElementLayout extends ElementBase {
     public boolean getLinked() {
         return linked;
     }
-
+    
     /**
      * Sets the linked state. A change in this state requires reloading of the associated layout.
      *
@@ -246,7 +246,7 @@ public class ElementLayout extends ElementBase {
     public void setLinked(boolean linked) {
         if (linked != this.linked) {
             this.linked = linked;
-
+            
             if (!initializing) {
                 internalDeserialize(true);
                 getRoot().activate(true);

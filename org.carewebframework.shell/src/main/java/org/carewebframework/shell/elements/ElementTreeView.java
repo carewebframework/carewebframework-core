@@ -37,34 +37,33 @@ import org.carewebframework.web.component.Pane;
  * area on the right where tree panes are positioned. Clicking on a node in the tree activates the
  * associated tree pane.
  */
-public class ElementTreeView extends ElementBase {
-
+public class ElementTreeView extends ElementUI {
+    
     static {
-        registerAllowedParentClass(ElementTreeView.class, ElementBase.class);
-        registerAllowedChildClass(ElementTreeView.class, ElementTreePane.class);
+        registerAllowedParentClass(ElementTreeView.class, ElementUI.class);
+        registerAllowedChildClass(ElementTreeView.class, ElementTreePane.class, Integer.MAX_VALUE);
         PropertyTypeRegistry.register("nodes", PropertyEditorTreeView.class);
     }
-
+    
     @WiredComponent
     private Div innerPane;
-
+    
     @WiredComponent
     private Div selector;
-
+    
     @WiredComponent
     private Pane selectorPane;
-
+    
     private ElementTreePane activePane;
-
+    
     private ThemeUtil.ButtonStyle selectionStyle = ThemeUtil.ButtonStyle.PRIMARY;
-
-    public ElementTreeView() throws Exception {
+    
+    public ElementTreeView() {
         super();
-        maxChildren = Integer.MAX_VALUE;
         setOuterComponent(createFromTemplate());
         setInnerComponent(innerPane);
     }
-
+    
     /**
      * Only the node needs to be resequenced, since pane sequencing is arbitrary.
      */
@@ -74,7 +73,7 @@ public class ElementTreeView extends ElementBase {
         ElementTreePane beforepane = (ElementTreePane) before;
         moveChild(childpane.getNode(), beforepane.getNode());
     }
-
+    
     /**
      * Sets the caption of the selector pane.
      *
@@ -83,7 +82,7 @@ public class ElementTreeView extends ElementBase {
     public void setCaption(String value) {
         selectorPane.setTitle(value);
     }
-
+    
     /**
      * Returns the caption of the selector pane.
      *
@@ -92,7 +91,7 @@ public class ElementTreeView extends ElementBase {
     public String getCaption() {
         return selectorPane.getTitle();
     }
-
+    
     /**
      * Opens or closes the selector pane.
      *
@@ -101,7 +100,7 @@ public class ElementTreeView extends ElementBase {
     public void setOpen(boolean value) {
         //TODO: selectorPane.setOpen(value);
     }
-
+    
     /**
      * Returns true if the selector pane is open.
      *
@@ -110,7 +109,7 @@ public class ElementTreeView extends ElementBase {
     public boolean isOpen() {
         return true; //TODO: selectorPane.isOpen();
     }
-
+    
     /**
      * Returns the button style to use for selected nodes.
      *
@@ -119,7 +118,7 @@ public class ElementTreeView extends ElementBase {
     public ThemeUtil.ButtonStyle getSelectionStyle() {
         return selectionStyle;
     }
-
+    
     /**
      * Sets the button style to use for selected nodes.
      *
@@ -129,10 +128,10 @@ public class ElementTreeView extends ElementBase {
         if (activePane != null) {
             activePane.updateSelectionStyle(this.selectionStyle, selectionStyle);
         }
-
+        
         this.selectionStyle = selectionStyle;
     }
-
+    
     /**
      * Remove the associated tree node when a tree pane is removed.
      */
@@ -143,7 +142,7 @@ public class ElementTreeView extends ElementBase {
         }
         super.afterRemoveChild(child);
     }
-
+    
     /**
      * Returns the selector pane's container.
      *
@@ -152,7 +151,7 @@ public class ElementTreeView extends ElementBase {
     /*package*/Div getSelector() {
         return selector;
     }
-
+    
     /**
      * Only the active pane should receive the activation request.
      */
@@ -162,12 +161,12 @@ public class ElementTreeView extends ElementBase {
             ElementBase active = getFirstVisibleChild();
             setActivePane((ElementTreePane) active);
         }
-
+        
         if (activePane != null) {
             activePane.activate(activate);
         }
     }
-
+    
     /**
      * Activates the specified pane. Any previously active pane will be deactivated.
      *
@@ -177,13 +176,13 @@ public class ElementTreeView extends ElementBase {
         if (pane == activePane) {
             return;
         }
-
+        
         if (activePane != null) {
             activePane.makeActivePane(false);
         }
-
+        
         activePane = pane;
-
+        
         if (activePane != null) {
             activePane.makeActivePane(true);
         }

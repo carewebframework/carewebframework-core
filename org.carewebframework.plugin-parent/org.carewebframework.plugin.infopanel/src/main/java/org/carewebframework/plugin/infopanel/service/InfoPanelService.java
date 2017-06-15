@@ -34,6 +34,7 @@ import org.carewebframework.plugin.infopanel.model.IInfoPanel.Action;
 import org.carewebframework.shell.elements.ElementBase;
 import org.carewebframework.shell.elements.ElementPlugin;
 import org.carewebframework.shell.elements.ElementPlugin.PluginContainer;
+import org.carewebframework.shell.elements.ElementUI;
 import org.carewebframework.ui.controller.FrameworkController;
 import org.carewebframework.web.component.BaseComponent;
 
@@ -41,9 +42,9 @@ import org.carewebframework.web.component.BaseComponent;
  * Static methods for interacting with an info panel.
  */
 public class InfoPanelService {
-
+    
     private static final String EVENT_LISTENER_ATTR = "@infopanel.listener";
-
+    
     /**
      * Finds the "nearest" info panel.
      *
@@ -52,9 +53,9 @@ public class InfoPanelService {
      * @return The nearest active info panel, or null if none found.
      */
     public static IInfoPanel findInfoPanel(PluginContainer container, boolean activeOnly) {
-        return findInfoPanel(ElementBase.getAssociatedElement(container), activeOnly);
+        return findInfoPanel(ElementUI.getAssociatedElement(container), activeOnly);
     }
-
+    
     /**
      * Finds the "nearest" active info panel.
      *
@@ -64,7 +65,7 @@ public class InfoPanelService {
     public static IInfoPanel findInfoPanel(PluginContainer container) {
         return findInfoPanel(container, true);
     }
-
+    
     /**
      * Finds the "nearest" info panel.
      *
@@ -76,16 +77,16 @@ public class InfoPanelService {
         ElementBase parent = element;
         ElementBase previousParent;
         IInfoPanel infoPanel = searchChildren(element, null, activeOnly);
-
+        
         while ((infoPanel == null) && (parent != null)) {
             previousParent = parent;
             parent = parent.getParent();
             infoPanel = searchChildren(parent, previousParent, activeOnly);
         }
-
+        
         return infoPanel;
     }
-
+    
     /**
      * Finds the "nearest" active info panel.
      *
@@ -95,7 +96,7 @@ public class InfoPanelService {
     public static IInfoPanel findInfoPanel(ElementBase element) {
         return findInfoPanel(element, true);
     }
-
+    
     /**
      * Search children of the specified parent for an occurrence of an active info panel. This is a
      * recursive, breadth-first search of the component tree.
@@ -107,14 +108,14 @@ public class InfoPanelService {
      */
     private static IInfoPanel searchChildren(ElementBase parent, ElementBase exclude, boolean activeOnly) {
         IInfoPanel infoPanel = null;
-
+        
         if (parent != null) {
             for (ElementBase child : parent.getChildren()) {
                 if ((child != exclude) && ((infoPanel = getInfoPanel(child, activeOnly)) != null)) {
                     break;
                 }
             }
-
+            
             if (infoPanel == null) {
                 for (ElementBase child : parent.getChildren()) {
                     if ((child != exclude) && ((infoPanel = searchChildren(child, null, activeOnly)) != null)) {
@@ -123,10 +124,10 @@ public class InfoPanelService {
                 }
             }
         }
-
+        
         return infoPanel;
     }
-
+    
     /**
      * Returns the info panel associated with the UI element, if there is one.
      *
@@ -137,17 +138,17 @@ public class InfoPanelService {
     private static IInfoPanel getInfoPanel(ElementBase element, boolean activeOnly) {
         if (element instanceof ElementPlugin) {
             ElementPlugin plugin = (ElementPlugin) element;
-
+            
             if ((!activeOnly || plugin.isActivated()) && (plugin.getDefinition().getId().equals("infoPanelPlugin"))) {
                 plugin.load();
                 BaseComponent top = plugin.getOuterComponent().findByName("infoPanelRoot");
                 return (IInfoPanel) FrameworkController.getController(top);
             }
         }
-
+        
         return null;
     }
-
+    
     /**
      * Associate a generic event with an action on this component's container.
      *
@@ -158,7 +159,7 @@ public class InfoPanelService {
     public static void associateEvent(BaseComponent component, String eventName, Action action) {
         getActionListeners(component, true).add(new ActionListener(eventName, action));
     }
-
+    
     /**
      * Returns a list of events associated with a component. Should only be used internally.
      *
@@ -168,7 +169,7 @@ public class InfoPanelService {
     public static List<ActionListener> getActionListeners(BaseComponent component) {
         return getActionListeners(component, false);
     }
-
+    
     /**
      * Returns a list of events associated with a component.
      *
@@ -179,19 +180,19 @@ public class InfoPanelService {
     private static List<ActionListener> getActionListeners(BaseComponent component, boolean forceCreate) {
         @SuppressWarnings("unchecked")
         List<ActionListener> ActionListeners = (List<ActionListener>) component.getAttribute(EVENT_LISTENER_ATTR);
-
+        
         if (ActionListeners == null && forceCreate) {
             ActionListeners = new ArrayList<>();
             component.setAttribute(EVENT_LISTENER_ATTR, ActionListeners);
         }
-
+        
         return ActionListeners;
     }
-
+    
     /**
      * Enforce static class.
      */
     private InfoPanelService() {
     }
-
+    
 }

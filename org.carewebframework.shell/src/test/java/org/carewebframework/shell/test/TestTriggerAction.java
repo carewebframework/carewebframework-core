@@ -25,14 +25,15 @@
  */
 package org.carewebframework.shell.test;
 
-import org.carewebframework.shell.elements.ElementBase;
-import org.carewebframework.shell.triggers.TriggerAction;
+import org.carewebframework.shell.elements.ElementTriggerAction;
+import org.carewebframework.shell.elements.ElementUI;
 
-public class TestTriggerAction extends TriggerAction {
-    
+public class TestTriggerAction extends ElementTriggerAction {
+
     @Override
-    public void invokeAction(ElementBase target) {
-        target.setHint("success");
+    public boolean doInvokeAction(ElementUI target) {
+        target.setHint("triggered");
+        return true;
     }
-
+    
 }

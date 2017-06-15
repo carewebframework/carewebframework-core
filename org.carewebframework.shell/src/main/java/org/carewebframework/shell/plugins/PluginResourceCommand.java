@@ -27,16 +27,17 @@ package org.carewebframework.shell.plugins;
 
 import org.carewebframework.shell.CareWebShell;
 import org.carewebframework.shell.elements.ElementBase;
+import org.carewebframework.shell.elements.ElementUI;
 import org.carewebframework.ui.command.CommandUtil;
 
 /**
  * Resource for declaring commands supported by a plugin.
  */
 public class PluginResourceCommand implements IPluginResource {
-
+    
     // The id of the command.
     private String id;
-
+    
     /**
      * Returns the id of the command.
      *
@@ -45,7 +46,7 @@ public class PluginResourceCommand implements IPluginResource {
     public String getId() {
         return id;
     }
-
+    
     /**
      * Sets the id of the command.
      *
@@ -54,7 +55,7 @@ public class PluginResourceCommand implements IPluginResource {
     public void setId(String id) {
         this.id = id;
     }
-
+    
     /**
      * Registers/unregisters a command resource.
      *
@@ -65,8 +66,8 @@ public class PluginResourceCommand implements IPluginResource {
     @Override
     public void register(CareWebShell shell, ElementBase owner, boolean register) {
         if (register) {
-            CommandUtil.associateCommand(getId(), owner.getOuterComponent());
+            CommandUtil.associateCommand(getId(), ((ElementUI) owner).getOuterComponent());
         }
     }
-
+    
 }

@@ -40,65 +40,64 @@ import org.carewebframework.web.component.Label;
  * A step-oriented UI Element. This is implemented as a window component with a top toolbar
  * containing sequential steps as a sequence of buttons.
  */
-public class ElementStepView extends ElementBase {
-
+public class ElementStepView extends ElementUI {
+    
     static {
-        registerAllowedParentClass(ElementStepView.class, ElementBase.class);
-        registerAllowedChildClass(ElementStepView.class, ElementStepPane.class);
+        registerAllowedParentClass(ElementStepView.class, ElementUI.class);
+        registerAllowedChildClass(ElementStepView.class, ElementStepPane.class, Integer.MAX_VALUE);
         PropertyTypeRegistry.register("step", PropertyEditorStepView.class);
     }
-
+    
     @WiredComponent
     private final Div outer;
-
+    
     @WiredComponent
     private BaseUIComponent inner;
-
+    
     @WiredComponent
     private Label lblTitle;
-
+    
     @WiredComponent
     private BaseUIComponent tbarCenter;
-
+    
     @WiredComponent
     private Hyperlink btnLeft;
-
+    
     @WiredComponent
     private Hyperlink btnRight;
-
+    
     @WiredComponent
     private Hyperlink btnHome;
-
+    
     private ElementStepPane activePane;
-
+    
     private boolean noNavigation;
-
+    
     private boolean noHome;
-
+    
     private final String defaultHomeIcon;
-
+    
     private ThemeUtil.PanelStyle style = ThemeUtil.PanelStyle.PRIMARY;
-
+    
     /**
      * Creates the UI components that comprise this UI element.
      */
     public ElementStepView() {
         super();
-        maxChildren = Integer.MAX_VALUE;
         outer = (Div) createFromTemplate();
         setOuterComponent(outer);
         setInnerComponent(inner);
         associateComponent(tbarCenter);
         defaultHomeIcon = btnHome.getImage();
     }
-
+    
     @Override
     protected void beforeRemoveChild(ElementBase child) {
         if (child == activePane) {
             setActivePane(null);
         }
     }
-
+    
     /**
      * Activates the active pane. If no pane is currently active, activate the first pane.
      *
@@ -108,7 +107,7 @@ public class ElementStepView extends ElementBase {
     public void activateChildren(boolean activate) {
         setActivePane(activePane == null ? (ElementStepPane) getFirstVisibleChild() : activePane);
     }
-
+    
     /**
      * Sets the caption.
      *
@@ -117,7 +116,7 @@ public class ElementStepView extends ElementBase {
     public void setCaption(String caption) {
         lblTitle.setLabel(caption);
     }
-
+    
     /**
      * Returns the caption of the panel.
      *
@@ -126,7 +125,7 @@ public class ElementStepView extends ElementBase {
     public String getCaption() {
         return lblTitle.getLabel();
     }
-
+    
     /**
      * Returns the currently active pane, or null if no pane is active.
      *
@@ -135,7 +134,7 @@ public class ElementStepView extends ElementBase {
     public ElementStepPane getActivePane() {
         return activePane;
     }
-
+    
     /**
      * Sets the active pane. Since only one pane can be active at a time, the currently active pane
      * is first deactivated.
@@ -146,21 +145,21 @@ public class ElementStepView extends ElementBase {
         if (pane == activePane) {
             return;
         }
-
+        
         if (activePane != null) {
             activePane.activate(false);
         }
-
+        
         activePane = hasChild(pane) ? pane : null;
-
+        
         if (activePane != null) {
             activePane.activate(true);
         }
-
+        
         btnHome.toggleClass(null, "cwf-stepview-home-selected", activePane == null || activePane.getIndex() != 0);
         updateNavigationElements();
     }
-
+    
     /**
      * Returns the index of the active pane, or -1 if no pane is active.
      *
@@ -169,11 +168,11 @@ public class ElementStepView extends ElementBase {
     public int getActivePaneIndex() {
         return activePane == null ? -1 : indexOfChild(activePane);
     }
-
+    
     /*package*/BaseComponent getToolbarRoot() {
         return tbarCenter;
     }
-
+    
     /**
      * Updates the state of child components. This logic ensures that the separator following the
      * last button in the step sequence is hidden.
@@ -183,21 +182,21 @@ public class ElementStepView extends ElementBase {
     @Override
     protected void updateState() {
         String homeIcon = null;
-
+        
         for (int i = 0; i < getChildCount(); i++) {
             ElementStepPane pane = (ElementStepPane) getChild(i);
             pane.setHomePane(!noHome && i == 0);
-
+            
             if (i == 0) {
                 homeIcon = pane.getIcon();
             }
         }
-
+        
         btnHome.setImage(homeIcon == null ? defaultHomeIcon : homeIcon);
         updateNavigationElements();
         super.updateState();
     }
-
+    
     /**
      * Update any navigation elements based on the currently active pane.
      */
@@ -210,7 +209,7 @@ public class ElementStepView extends ElementBase {
         btnLeft.setDisabled(nextVisiblePaneIndex(false, i) < (noHome ? 0 : 1));
         btnRight.setDisabled(nextVisiblePaneIndex(true, i) == -1);
     }
-
+    
     /**
      * Returns the index of the next visible pane before/after the specified one.
      *
@@ -222,20 +221,20 @@ public class ElementStepView extends ElementBase {
         int max = getChildCount();
         int idx = fromIndex >= 0 ? fromIndex : forward ? -1 : max;
         idx += forward ? 1 : -1;
-
+        
         while (idx > -1 && idx < max) {
             ElementStepPane pane = (ElementStepPane) getChild(idx);
-
+            
             if (pane.isVisible()) {
                 return idx;
             }
-
+            
             idx += forward ? 1 : -1;
         }
-
+        
         return -1;
     }
-
+    
     /**
      * Returns the next visible pane before/after the specified one.
      *
@@ -247,7 +246,7 @@ public class ElementStepView extends ElementBase {
         int idx = nextVisiblePaneIndex(forward, fromIndex);
         return idx == -1 ? null : (ElementStepPane) getChild(idx);
     }
-
+    
     @Override
     protected void afterMoveChild(ElementBase child, ElementBase before) {
         super.afterMoveChild(child, before);
@@ -255,7 +254,7 @@ public class ElementStepView extends ElementBase {
         ElementStepPane beforepane = (ElementStepPane) before;
         moveChild(childpane.getStep(), beforepane.getStep());
     }
-
+    
     /**
      * Navigate one pane forward or backward.
      *
@@ -264,7 +263,7 @@ public class ElementStepView extends ElementBase {
     private void navigate(boolean forward) {
         setActivePane(nextVisiblePane(forward, getActivePaneIndex()));
     }
-
+    
     /**
      * Navigate one pane left.
      */
@@ -272,7 +271,7 @@ public class ElementStepView extends ElementBase {
     private void onClick$btnLeft() {
         navigate(false);
     }
-
+    
     /**
      * Navigate one pane right.
      */
@@ -280,7 +279,7 @@ public class ElementStepView extends ElementBase {
     private void onClick$btnRight() {
         navigate(true);
     }
-
+    
     /**
      * Activate the home pane.
      */
@@ -288,7 +287,7 @@ public class ElementStepView extends ElementBase {
     private void onClick$btnHome() {
         setActivePane((ElementStepPane) getFirstChild());
     }
-
+    
     /**
      * Returns true if navigation controls are suppressed.
      *
@@ -297,7 +296,7 @@ public class ElementStepView extends ElementBase {
     public boolean getNoNavigation() {
         return noNavigation;
     }
-
+    
     /**
      * Set to true to suppress navigation controls.
      *
@@ -308,7 +307,7 @@ public class ElementStepView extends ElementBase {
         updateClass();
         updateNavigationElements();
     }
-
+    
     /**
      * Returns true if home pane is suppressed.
      *
@@ -317,7 +316,7 @@ public class ElementStepView extends ElementBase {
     public boolean getNoHome() {
         return noHome;
     }
-
+    
     /**
      * Set to true to suppress home pane.
      *
@@ -328,7 +327,7 @@ public class ElementStepView extends ElementBase {
         updateClass();
         updateState();
     }
-
+    
     /**
      * Returns the panel style to use for the desktop.
      *
@@ -337,7 +336,7 @@ public class ElementStepView extends ElementBase {
     public ThemeUtil.PanelStyle getStyle() {
         return style;
     }
-
+    
     /**
      * Sets the panel style to use for the desktop.
      *
@@ -347,7 +346,7 @@ public class ElementStepView extends ElementBase {
         this.style = style;
         outer.addClass(style.getThemeClass());
     }
-
+    
     private void updateClass() {
         outer.toggleClass("cwf-stepview-nonav", null, noNavigation);
         outer.toggleClass("cwf-stepview-nohome", null, noHome);

@@ -1,12 +1,12 @@
 package org.carewebframework.ui.action;
 
-public interface IActionType {
-    
+public interface IActionType<T> {
+
     boolean matches(String script);
-    
-    Object parse(String script);
-    
-    void execute(Object script);
-    
+
+    T parse(String script);
+
+    void execute(T script);
+
     String getName();
 }

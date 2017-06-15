@@ -25,18 +25,18 @@
  */
 package org.carewebframework.shell.triggers;
 
-import org.carewebframework.shell.elements.ElementBase;
+import org.carewebframework.shell.elements.ElementTriggerAction;
+import org.carewebframework.shell.elements.ElementUI;
 
 /**
- * Base class trigger-based actions.
+ * Trigger action that makes a UI element visible.
  */
-public abstract class TriggerAction extends ElementBase implements ITriggerAction {
+public class TriggerActionHide extends ElementTriggerAction {
     
-    static {
-        registerAllowedParentClass(TriggerAction.class, Trigger.class);
-    }
-
     @Override
-    public abstract void invokeAction(ElementBase target);
+    protected boolean doInvokeAction(ElementUI target) {
+        target.setVisible(false);
+        return true;
+    }
 
 }

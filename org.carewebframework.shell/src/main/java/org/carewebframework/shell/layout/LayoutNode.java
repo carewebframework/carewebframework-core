@@ -25,22 +25,42 @@
  */
 package org.carewebframework.shell.layout;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import org.carewebframework.api.property.IPropertyProvider;
+import org.carewebframework.common.MiscUtil;
+import org.carewebframework.shell.plugins.PluginDefinition;
+import org.w3c.dom.Element;
 
 /**
- * Base class for all nodes within a layout.
+ * Base class for all node types within a layout.
  */
 public abstract class LayoutNode implements IPropertyProvider {
 
+    protected static final String NULL_VALUE = "\\null\\";
+    
     private final Map<String, String> attributes = new HashMap<>();
 
     private final String tagName;
     
-    protected LayoutNode(String tagName) {
+    private final LayoutNode parent;
+    
+    private final List<LayoutNode> children = new ArrayList<>();
+
+    private final PluginDefinition pluginDefinition;
+
+    protected LayoutNode(String tagName, LayoutNode parent, PluginDefinition pluginDefinition) {
         this.tagName = tagName;
+        this.parent = parent;
+        this.pluginDefinition = pluginDefinition;
+        
+        if (parent != null) {
+            parent.getChildren().add(this);
+        }
     }
     
     /**
@@ -52,6 +72,28 @@ public abstract class LayoutNode implements IPropertyProvider {
         return tagName;
     }
     
+    protected PluginDefinition getDefinition() {
+        return pluginDefinition;
+    }
+    
+    protected List<LayoutNode> getChildren() {
+        return children;
+    }
+
+    protected <T extends LayoutNode> T getChild(Class<T> clazz) {
+        Iterator<T> iter = MiscUtil.iteratorForType(children, clazz);
+        return iter.hasNext() ? iter.next() : null;
+    }
+
+    protected LayoutNode getParent() {
+        return parent;
+    }
+
+    protected LayoutNode getNextSibling() {
+        int i = parent == null ? 0 : parent.children.indexOf(this) + 1;
+        return i == 0 || i >= parent.children.size() ? null : parent.children.get(i);
+    }
+
     /**
      * Returns the attribute map for the node.
      *
@@ -66,7 +108,8 @@ public abstract class LayoutNode implements IPropertyProvider {
      */
     @Override
     public String getProperty(String key) {
-        return attributes.get(key);
+        String value = attributes.get(key);
+        return NULL_VALUE.equals(value) ? null : value;
     }
 
     /**
@@ -77,4 +120,17 @@ public abstract class LayoutNode implements IPropertyProvider {
         return attributes.containsKey(key);
     }
     
+    /**
+     * Creates a DOM node from this layout node.
+     *
+     * @param parent Parent DOM node.
+     * @return The newly created DOM node.
+     */
+    public Element createDOMNode(Element parent) {
+        Element domNode = parent.getOwnerDocument().createElement(tagName);
+        LayoutUtil.copyAttributes(attributes, domNode);
+        parent.appendChild(domNode);
+        return domNode;
+    }
+
 }

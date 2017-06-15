@@ -36,6 +36,7 @@ import org.carewebframework.common.StrUtil;
 import org.carewebframework.shell.elements.ElementBase;
 import org.carewebframework.shell.elements.ElementLayout;
 import org.carewebframework.shell.elements.ElementPlugin;
+import org.carewebframework.shell.elements.ElementUI;
 import org.carewebframework.shell.layout.LayoutUtil;
 import org.carewebframework.shell.plugins.PluginDefinition;
 import org.carewebframework.shell.plugins.PluginRegistry;
@@ -60,34 +61,34 @@ import org.carewebframework.web.page.PageUtil;
  * Dialog for adding new component to UI.
  */
 public class AddComponent implements IAutoWired {
-    
+
     private static final String ON_FAVORITE = "favorite";
-    
+
     private ElementBase parentElement;
-    
+
     private ElementBase childElement;
-    
+
     private Window window;
-    
+
     private boolean createChild;
-    
+
     private List<String> favorites;
-    
+
     private boolean favoritesChanged;
-    
+
     private final String favoritesCategory = StrUtil.getLabel("cwf.shell.plugin.category.favorite");
-    
+
     private final String noDescriptionHint = StrUtil.getLabel("cwf.shell.designer.add.component.description.missing.hint");
-    
+
     @WiredComponent
     private Treenode tnFavorites;
-    
+
     @WiredComponent
     private Treeview tree;
-    
+
     @WiredComponent
     private Button btnOK;
-    
+
     /**
      * Handles click on item not under favorites category.
      */
@@ -97,7 +98,7 @@ public class AddComponent implements IAutoWired {
         boolean isFavorite = !node.getAttribute("favorite", false);
         Treenode other = (Treenode) node.getAttribute("other");
         favoritesChanged = true;
-        
+
         if (isFavorite) {
             favorites.add(path);
             other = addTreenode((PluginDefinition) node.getData(), node);
@@ -106,10 +107,10 @@ public class AddComponent implements IAutoWired {
             favorites.remove(path);
             other.detach();
         }
-        
+
         setFavoriteStatus(node, isFavorite);
     };
-    
+
     /**
      * Handles click on item under favorites category.
      */
@@ -118,7 +119,7 @@ public class AddComponent implements IAutoWired {
         Treenode other = (Treenode) node.getAttribute("other");
         EventUtil.send(ON_FAVORITE, other, null);
     };
-    
+
     /**
      * Display the add component dialog, presenting a list of candidate plugins that may serve as
      * children to the specified parent element.
@@ -133,7 +134,7 @@ public class AddComponent implements IAutoWired {
             }
         });
     }
-    
+
     /**
      * Display the add component dialog, presenting a list of candidate plugins that may serve as
      * children to the specified parent element.
@@ -148,7 +149,7 @@ public class AddComponent implements IAutoWired {
             }
         });
     }
-    
+
     /**
      * Display the add component dialog, presenting a list of candidate plugins that may serve as
      * children to the specified parent element.
@@ -164,7 +165,7 @@ public class AddComponent implements IAutoWired {
         Window dlg = (Window) PageUtil.createPage(DesignConstants.RESOURCE_PREFIX + "addComponent.cwf", null, args).get(0);
         dlg.modal(callback);
     }
-    
+
     /**
      * Initialize the tree view based with list of plugins that may serve as children to the parent
      * element.
@@ -179,24 +180,24 @@ public class AddComponent implements IAutoWired {
         Treenode defaultItem = null;
         boolean useDefault = true;
         loadFavorites();
-        
+
         for (PluginDefinition def : PluginRegistry.getInstance()) {
             if (def.isInternal()) {
                 continue;
             }
-            
+
             Class<? extends ElementBase> clazz = def.getClazz();
-            
+
             if (!parentElement.canAcceptChild(clazz) || !ElementBase.canAcceptParent(clazz, parentElement.getClass())) {
                 continue;
             }
-            
+
             Treenode item = addTreenode(def, null);
-            
+
             if (item == null) {
                 continue;
             }
-            
+
             if (!item.isDisabled()) {
                 if (defaultItem == null) {
                     defaultItem = item;
@@ -205,31 +206,31 @@ public class AddComponent implements IAutoWired {
                 }
             }
         }
-        
+
         if (parentElement.canAcceptChild(ElementLayout.class)) {
             addLayouts(true);
             addLayouts(false);
         }
-        
+
         TreeUtil.sort(tree);
         tnFavorites.setIndex(0);
-        
+
         if (useDefault && defaultItem != null) {
             defaultItem.setSelected(true);
             onChange$tree();
         }
-        
+
         window.setTitle(
             StrUtil.formatMessage("@cwf.shell.designer.add.component.title", parentElement.getDefinition().getName()));
         window.setOnCanClose(() -> {
             if (favoritesChanged) {
                 PropertyUtil.saveValues(DesignConstants.DESIGN_FAVORITES_PROPERTY, null, false, favorites);
             }
-            
+
             return true;
         });
     }
-    
+
     private void loadFavorites() {
         try {
             favorites = PropertyUtil.getValues(DesignConstants.DESIGN_FAVORITES_PROPERTY);
@@ -238,17 +239,17 @@ public class AddComponent implements IAutoWired {
             favorites = null;
         }
     }
-    
+
     private void addLayouts(boolean shared) {
         for (String layout : LayoutUtil.getLayouts(shared)) {
             ElementLayout ele = new ElementLayout(layout, shared);
             addTreenode(ele.getDefinition(), null);
         }
     }
-    
+
     private Treenode addTreenode(PluginDefinition def, Treenode other) {
         String category = other != null ? favoritesCategory : def.getCategory();
-        
+
         if (StringUtils.isEmpty(category)) {
             if (ElementPlugin.class.isAssignableFrom(def.getClazz())) {
                 category = StrUtil.getLabel("cwf.shell.plugin.category.default");
@@ -256,7 +257,7 @@ public class AddComponent implements IAutoWired {
                 return null;
             }
         }
-        
+
         String path = category + (category.endsWith("\\") ? "" : "\\") + def.getName();
         boolean isFavorite = other != null || (favorites != null && favorites.contains(path));
         boolean disabled = def.isDisabled() || def.isForbidden();
@@ -268,27 +269,27 @@ public class AddComponent implements IAutoWired {
                 EventUtil.send(ON_FAVORITE, event.getTarget(), null);
             }
         });
-        
+
         if (disabled) {
             node.setDisabled(true);
         } else {
             node.addEventForward(DblclickEvent.TYPE, btnOK, ClickEvent.TYPE);
         }
-        
+
         if (favorites != null) {
             node.addEventListener(ON_FAVORITE, other == null ? favoriteListener1 : favoriteListener2);
-            
+
             if (isFavorite && other == null) {
                 other = addTreenode(def, node);
             }
-            
+
             node.setAttribute("other", other);
             node.setAttribute("path", path);
             setFavoriteStatus(node, isFavorite);
         }
         return node;
     }
-    
+
     /**
      * Updates the tree node according to the favorite status.
      *
@@ -301,7 +302,7 @@ public class AddComponent implements IAutoWired {
         node.setAttribute("favorite", isFavorite);
         tnFavorites.setVisible(isFavorite || tnFavorites.getFirstChild() != null);
     }
-    
+
     /**
      * Returns currently selected plugin definition, or null if none selected.
      *
@@ -310,21 +311,21 @@ public class AddComponent implements IAutoWired {
     private PluginDefinition selectedPluginDefinition() {
         return (PluginDefinition) (tree.getSelectedNode() == null ? null : tree.getSelectedNode().getData());
     }
-    
+
     private void returnResult(PluginDefinition definition) {
         if (definition != null) {
             childElement = createChild ? definition.createElement(parentElement, null, false) : null;
-            
-            if (childElement != null) {
-                childElement.bringToFront();
+
+            if (childElement instanceof ElementUI) {
+                ((ElementUI) childElement).bringToFront();
             }
-            
+
             window.setAttribute("pluginDefinition", definition);
             window.setAttribute("childElement", childElement);
             window.close();
         }
     }
-    
+
     /**
      * Close dialog without further action.
      */
@@ -332,7 +333,7 @@ public class AddComponent implements IAutoWired {
     private void onClick$btnCancel() {
         window.close();
     }
-    
+
     /**
      * Create new element based on selected plugin definition, add it to the parent element and
      * close the dialog.
@@ -341,7 +342,7 @@ public class AddComponent implements IAutoWired {
     private void onClick$btnOK() {
         returnResult(selectedPluginDefinition());
     }
-    
+
     /**
      * Update buttons based on current selection.
      */
@@ -349,5 +350,5 @@ public class AddComponent implements IAutoWired {
     private void onChange$tree() {
         btnOK.setDisabled(selectedPluginDefinition() == null);
     }
-    
+
 }

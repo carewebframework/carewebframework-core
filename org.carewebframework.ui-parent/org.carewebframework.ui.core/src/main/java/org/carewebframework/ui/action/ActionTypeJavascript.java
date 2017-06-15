@@ -2,20 +2,20 @@ package org.carewebframework.ui.action;
 
 import org.carewebframework.web.client.ClientUtil;
 
-public class ActionTypeJavascript extends ActionTypeBase {
-    
+public class ActionTypeJavascript extends ActionTypeBase<String> {
+
     public ActionTypeJavascript() {
         super("javascript", "^j(ava)?script:.*");
     }
-    
+
     @Override
     public String parse(String script) {
         return stripPrefix(script);
     }
-    
+
     @Override
-    public void execute(Object script) {
-        ClientUtil.eval((String) script);
+    public void execute(String script) {
+        ClientUtil.eval(script);
     }
-    
+
 }

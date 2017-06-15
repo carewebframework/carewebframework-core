@@ -45,42 +45,46 @@ import org.carewebframework.shell.elements.ElementTabView;
 import org.carewebframework.shell.elements.ElementToolbar;
 import org.carewebframework.shell.elements.ElementTreePane;
 import org.carewebframework.shell.elements.ElementTreeView;
+import org.carewebframework.shell.elements.ElementTrigger;
+import org.carewebframework.shell.elements.ElementUI;
 import org.carewebframework.shell.layout.Layout;
 import org.carewebframework.shell.layout.LayoutParser;
 import org.carewebframework.shell.plugins.PluginDefinition;
 import org.carewebframework.shell.property.PropertyInfo;
+import org.carewebframework.shell.triggers.TriggerConditionActivate;
 import org.carewebframework.ui.controller.FrameworkController;
+import org.carewebframework.ui.test.MockUITest;
 import org.carewebframework.web.event.ClickEvent;
 import org.carewebframework.web.event.EventUtil;
 import org.carewebframework.web.test.MockTest;
 import org.junit.Test;
 
-public class LayoutParserTest {
+public class LayoutParserTest extends MockUITest {
 
     private CareWebShell shell;
     
-    private ElementBase element;
+    private ElementUI element;
     
     @Test
     public void parserTest() throws Exception {
         shell = new CareWebShell();
-        shell.setParent(MockTest.getMockEnvironment().getSession().getPage());
-        parserTestFile("layout-v3.xml");
-        parserTestFile("layout-v4.xml");
+        shell.setParent(getMockEnvironment().getSession().getPage());
+        parserTestFile("layout-v3.xml", false);
+        parserTestFile("layout-v4.xml", true);
     }
 
-    private void parserTestFile(String file) throws Exception {
-        Layout layout = parserTestXML(MockTest.getTextFromResource(file));
-        parserTestXML(layout.toString());
+    private void parserTestFile(String file, boolean hasTrigger) throws Exception {
+        Layout layout = parserTestXML(getTextFromResource(file), hasTrigger);
+        parserTestXML(layout.toString(), hasTrigger);
     }
 
-    private Layout parserTestXML(String xml) throws Exception {
+    private Layout parserTestXML(String xml, boolean hasTrigger) throws Exception {
         Layout layout = LayoutParser.parseText(xml);
-        parserTestLayout(layout);
+        parserTestLayout(layout, hasTrigger);
         return layout;
     }
 
-    private void parserTestLayout(Layout layout) throws Exception {
+    private void parserTestLayout(Layout layout, boolean hasTrigger) throws Exception {
         assertFalse(layout.isEmpty());
         assertEquals(layout.getName(), "test");
         PluginDefinition def = PluginDefinition.getDefinition("treeview");
@@ -109,6 +113,15 @@ public class LayoutParserTest {
         testProperty("label", "Pane 2");
         ElementPlugin plugin1 = shell.getLoadedPlugin("testplugin1");
         assertNotNull(plugin1);
+        assertEquals(hasTrigger ? 1 : 0, plugin1.getTriggers().size());
+        assertEquals(hasTrigger ? "triggered" : null, plugin1.getHint());
+
+        if (hasTrigger) {
+            ElementTrigger trigger = plugin1.getTriggers().iterator().next();
+            assertTrue(trigger.getAction() instanceof TestTriggerAction);
+            assertTrue(trigger.getCondition() instanceof TriggerConditionActivate);
+        }
+
         PluginContainer container1 = (PluginContainer) plugin1.getOuterComponent();
         TestPluginController controller = (TestPluginController) FrameworkController
                 .getController(container1.getFirstChild());
@@ -151,17 +164,17 @@ public class LayoutParserTest {
 
     private void testPlugin(TestPluginController controller, int loadCount, int activateCount, int inactivateCount,
                             int unloadCount) {
-        MockTest.getMockEnvironment().flushEvents();
+        getMockEnvironment().flushEvents();
         assertEquals(loadCount, controller.getLoadCount());
         assertEquals(activateCount, controller.getActivateCount());
         assertEquals(inactivateCount, controller.getInactivateCount());
         assertEquals(unloadCount, controller.getUnloadCount());
     }
 
-    private void testNode(int dir, Class<? extends ElementBase> clazz) {
+    private void testNode(int dir, Class<? extends ElementUI> clazz) {
         switch (dir) {
             case 1:
-                element = element.getFirstChild();
+                element = (ElementUI) element.getFirstChild();
                 break;
 
             case -1:

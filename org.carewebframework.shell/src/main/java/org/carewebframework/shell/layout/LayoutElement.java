@@ -32,13 +32,10 @@ import org.carewebframework.shell.plugins.PluginDefinition;
 import org.carewebframework.shell.plugins.PluginRegistry;
 
 /**
- * Represents a UI element occurrence within a layout.
+ * Represents a UI element node within a layout.
  */
 public class LayoutElement extends LayoutNode {
-    
-    /**
-     * Represents the root node for a layout.
-     */
+
     public static class LayoutRoot extends LayoutElement {
 
         public LayoutRoot() {
@@ -46,49 +43,18 @@ public class LayoutElement extends LayoutNode {
         }
     }
     
-    private final LayoutElement parent;
-
-    private final PluginDefinition pluginDefinition;
-    
-    private final List<LayoutElement> elements = new ArrayList<>();
-    
     private final List<LayoutTrigger> triggers = new ArrayList<>();
-    
+
     private LayoutElement() {
-        super("layout");
-        this.parent = null;
-        this.pluginDefinition = PluginRegistry.getInstance().get("_desktop");
+        super("layout", null, PluginRegistry.getInstance().get("_desktop"));
+    }
+    
+    public LayoutElement(PluginDefinition pluginDefinition, LayoutElement parent) {
+        super("element", parent, pluginDefinition);
     }
 
-    public LayoutElement(PluginDefinition pluginDefinition, LayoutElement parent) {
-        super("element");
-        this.parent = parent;
-        this.pluginDefinition = pluginDefinition;
-        
-        if (parent != null) {
-            parent.getElements().add(this);
-        }
-    }
-    
-    protected List<LayoutElement> getElements() {
-        return elements;
-    }
-    
     protected List<LayoutTrigger> getTriggers() {
         return triggers;
     }
-    
-    protected PluginDefinition getDefinition() {
-        return pluginDefinition;
-    }
 
-    protected LayoutElement getParent() {
-        return parent;
-    }
-    
-    protected LayoutElement getNextSibling() {
-        int i = parent == null ? 0 : parent.elements.indexOf(this) + 1;
-        return i == 0 || i >= parent.elements.size() ? null : parent.elements.get(i);
-    }
-    
 }

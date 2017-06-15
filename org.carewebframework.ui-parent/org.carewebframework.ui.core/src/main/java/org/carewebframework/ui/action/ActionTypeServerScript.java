@@ -8,17 +8,17 @@ import org.springframework.util.Assert;
 /**
  * Action type is a server-side script.
  */
-public class ActionTypeServerScript extends ActionTypeBase {
-
+public class ActionTypeServerScript extends ActionTypeBase<IParsedScript> {
+    
     public ActionTypeServerScript() {
         super("sscript", null);
     }
-
+    
     @Override
     public boolean matches(String script) {
         return ScriptRegistry.getInstance().get(getType(script)) != null;
     }
-
+    
     @Override
     public IParsedScript parse(String script) {
         String lang = getType(script);
@@ -27,10 +27,10 @@ public class ActionTypeServerScript extends ActionTypeBase {
         script = stripPrefix(script);
         return language.parse(script);
     }
-
+    
     @Override
-    public void execute(Object script) {
-        ((IParsedScript) script).run();
+    public void execute(IParsedScript script) {
+        script.run();
     }
-
+    
 }

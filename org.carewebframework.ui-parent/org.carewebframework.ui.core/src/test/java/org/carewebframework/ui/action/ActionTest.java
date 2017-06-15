@@ -34,10 +34,10 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 public class ActionTest {
-    
+
     @Rule
     public final ExpectedException exception = ExpectedException.none();
-    
+
     @Test
     public void testActionFormats() {
         loadActionTypes();
@@ -50,19 +50,19 @@ public class ActionTest {
         exception.expect(IllegalArgumentException.class);
         ActionTypeRegistry.getType("unknown type");
     }
-
+    
     private void loadGroovyScript() {
         ScriptRegistry.getInstance().register(new GroovyScript());
     }
-    
+
     private void loadActionTypes() {
         loadActionType(new ActionTypeJavascript());
         loadActionType(new ActionTypeServerScript());
         loadActionType(new ActionTypeUrl());
     }
-
-    private void loadActionType(IActionType actionType) {
+    
+    private void loadActionType(IActionType<?> actionType) {
         ActionTypeRegistry.getInstance().register(actionType);
     }
-    
+
 }

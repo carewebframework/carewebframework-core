@@ -35,7 +35,7 @@ import org.carewebframework.api.ManifestIterator;
 import org.carewebframework.api.property.IPropertyProvider;
 import org.carewebframework.api.security.SecurityUtil;
 import org.carewebframework.common.MiscUtil;
-import org.carewebframework.shell.ancillary.UIException;
+import org.carewebframework.shell.ancillary.CWFException;
 import org.carewebframework.shell.elements.ElementBase;
 import org.carewebframework.shell.elements.ElementPlugin;
 import org.carewebframework.shell.property.PropertyInfo;
@@ -48,63 +48,63 @@ import org.springframework.util.StringUtils;
  * module, etc.
  */
 public class PluginDefinition {
-
+    
     private static final Log log = LogFactory.getLog(PluginDefinition.class);
-
+    
     /**
      * Represents a security authority.
      */
     public static class Authority {
-
+        
         private String name;
-
+        
         public void setName(String name) {
             this.name = name;
         }
-
+        
         public String getName() {
             return name;
         }
     }
-
+    
     private String name;
-
+    
     private String source;
-
+    
     private String url;
-
+    
     private String id;
-
+    
     private String description;
-
+    
     private String category;
-
+    
     private String creator;
-
+    
     private String copyright;
-
+    
     private String version;
-
+    
     private String released;
-
+    
     private String icon;
-
+    
     private boolean requiresAll;
-
+    
     private boolean lazyLoad = true;
-
+    
     private boolean disabled;
-
+    
     private Class<? extends ElementBase> clazz;
-
+    
     private final List<IPluginResource> resources = new ArrayList<>();
-
+    
     private final List<Authority> authorities = new ArrayList<>();
-
+    
     private final List<PropertyInfo> properties = new ArrayList<>();
-
+    
     private Manifest manifest;
-
+    
     /**
      * Returns the plugin definition associated with the specified xml tag (same as plugin id).
      *
@@ -114,7 +114,7 @@ public class PluginDefinition {
     public static PluginDefinition getDefinition(String tag) {
         return PluginRegistry.getInstance().get(tag);
     }
-
+    
     /**
      * Returns the plugin definition associated with the specified class.
      *
@@ -124,27 +124,29 @@ public class PluginDefinition {
     public static PluginDefinition getDefinition(Class<? extends ElementBase> clazz) {
         return PluginRegistry.getInstance().get(clazz);
     }
-
+    
     /**
      * The basic constructor.
      */
     public PluginDefinition() {
-
+        
     }
-
+    
     /**
-     * Constructs a plugin definition for the specified plugin name and class.
+     * Constructs a plugin definition for the specified plugin id, name and class.
      *
+     * @param id Unique id for plugin
      * @param name Display name of the plugin.
      * @param clazz Associated UI element class.
      * @throws ClassNotFoundException If class not found.
      */
-    public PluginDefinition(String name, Class<? extends ElementBase> clazz) throws ClassNotFoundException {
+    public PluginDefinition(String id, String name, Class<? extends ElementBase> clazz) {
         super();
+        this.id = id;
         this.name = name;
         setClazz(clazz);
     }
-
+    
     /**
      * Copy constructor.
      *
@@ -153,7 +155,7 @@ public class PluginDefinition {
     public PluginDefinition(PluginDefinition def) {
         BeanUtils.copyProperties(def, this);
     }
-
+    
     /**
      * Returns the unique id of the plugin definition.
      *
@@ -162,7 +164,7 @@ public class PluginDefinition {
     public String getId() {
         return id;
     }
-
+    
     /**
      * Sets the unique id of the plugin definition
      *
@@ -171,7 +173,7 @@ public class PluginDefinition {
     public void setId(String id) {
         this.id = id;
     }
-
+    
     /**
      * Returns the source of the plugin.
      *
@@ -180,7 +182,7 @@ public class PluginDefinition {
     public String getSource() {
         return getValueWithDefault(source, "Implementation-Vendor");
     }
-
+    
     /**
      * Sets the source of the plugin.
      *
@@ -189,7 +191,7 @@ public class PluginDefinition {
     public void setSource(String source) {
         this.source = source;
     }
-
+    
     /**
      * Returns the display name of the plugin definition.
      *
@@ -198,7 +200,7 @@ public class PluginDefinition {
     public String getName() {
         return name;
     }
-
+    
     /**
      * Sets the display name of the plugin definition.
      *
@@ -207,7 +209,7 @@ public class PluginDefinition {
     public void setName(String name) {
         this.name = name;
     }
-
+    
     /**
      * Returns the URL of the principal cwf page for the plugin.
      *
@@ -216,7 +218,7 @@ public class PluginDefinition {
     public String getUrl() {
         return url;
     }
-
+    
     /**
      * Sets the URL of the principal cwf page for the plugin.
      *
@@ -224,8 +226,12 @@ public class PluginDefinition {
      */
     public void setUrl(String url) {
         this.url = url;
-    }
 
+        if (clazz == null && url != null) {
+            setClazz(ElementPlugin.class);
+        }
+    }
+    
     /**
      * Sets the requiresAll flag. When true, this flag indicates that all associated authorities
      * must be present in order to access the plugin. When false, any single associated authority is
@@ -237,7 +243,7 @@ public class PluginDefinition {
     public void setRequiresAll(boolean requiresAll) {
         this.requiresAll = requiresAll;
     }
-
+    
     /**
      * Returns the requiresAll flag. When true, this flag indicates that all associated authorities
      * must be present in order to access the plugin. When false, any single associated authority is
@@ -249,7 +255,7 @@ public class PluginDefinition {
     public boolean isRequiresAll() {
         return requiresAll;
     }
-
+    
     /**
      * Returns the lazyLoad flag. When true, a plugin created from this definition is not fully
      * initialized until it is first activity. When false, the plugin is initialized immediately
@@ -260,7 +266,7 @@ public class PluginDefinition {
     public boolean isLazyLoad() {
         return lazyLoad;
     }
-
+    
     /**
      * Sets the lazyLoad flag. When true, a plugin created from this definition is not fully
      * initialized until it is first activity. When false, the plugin is initialized immediately
@@ -271,7 +277,7 @@ public class PluginDefinition {
     public void setLazyLoad(boolean lazyLoad) {
         this.lazyLoad = lazyLoad;
     }
-
+    
     /**
      * Returns the list of associated plugin resources. Never null.
      *
@@ -280,7 +286,7 @@ public class PluginDefinition {
     public List<IPluginResource> getResources() {
         return resources;
     }
-
+    
     /**
      * Returns the list of plugin resources belonging to the specified resource class. Never null.
      *
@@ -291,16 +297,16 @@ public class PluginDefinition {
     @SuppressWarnings("unchecked")
     public <E extends IPluginResource> List<E> getResources(Class<E> clazz) {
         List<E> list = new ArrayList<>();
-
+        
         for (IPluginResource resource : resources) {
             if (clazz.isInstance(resource)) {
                 list.add((E) resource);
             }
         }
-
+        
         return list;
     }
-
+    
     /**
      * Adds resources from the list to the list of resources associated with this plugin.
      *
@@ -309,7 +315,7 @@ public class PluginDefinition {
     public void setResources(List<IPluginResource> resources) {
         this.resources.addAll(resources);
     }
-
+    
     /**
      * Returns the list of authorities required for access to this plugin. Never null.
      *
@@ -318,7 +324,7 @@ public class PluginDefinition {
     public List<Authority> getAuthorities() {
         return authorities;
     }
-
+    
     /**
      * Adds authorities from the list to the list of authorities associated with this plugin.
      *
@@ -327,7 +333,7 @@ public class PluginDefinition {
     public void setAuthorities(List<Authority> authorities) {
         this.authorities.addAll(authorities);
     }
-
+    
     /**
      * Returns the list of properties associated with this plugin. Never null.
      *
@@ -336,7 +342,7 @@ public class PluginDefinition {
     public List<PropertyInfo> getProperties() {
         return properties;
     }
-
+    
     /**
      * Adds properties from the list to the list of properties associated with this plugin.
      *
@@ -345,20 +351,16 @@ public class PluginDefinition {
     public void setProperties(List<PropertyInfo> properties) {
         this.properties.addAll(properties);
     }
-
+    
     /**
      * Returns the UI element class associated with this definition.
      *
      * @return Associated UI element class.
      */
     public Class<? extends ElementBase> getClazz() {
-        if (clazz == null) {
-            setClazz(ElementPlugin.class);
-        }
-
         return clazz;
     }
-
+    
     /**
      * Sets the UI element class associated with this definition.
      *
@@ -366,7 +368,7 @@ public class PluginDefinition {
      */
     public void setClazz(Class<? extends ElementBase> clazz) {
         this.clazz = clazz;
-
+        
         try {
             // Force execution of static initializers
             Class.forName(clazz.getName());
@@ -374,7 +376,7 @@ public class PluginDefinition {
             MiscUtil.toUnchecked(e);
         }
     }
-
+    
     /**
      * Returns the description of this plugin.
      *
@@ -383,7 +385,7 @@ public class PluginDefinition {
     public String getDescription() {
         return description;
     }
-
+    
     /**
      * Sets the description of this plugin.
      *
@@ -392,7 +394,7 @@ public class PluginDefinition {
     public void setDescription(String description) {
         this.description = description;
     }
-
+    
     /**
      * Sets the category under which this plugin is to be classified. This can be specified as a
      * tree node path using "\" to separate the path components.
@@ -402,7 +404,7 @@ public class PluginDefinition {
     public void setCategory(String category) {
         this.category = category;
     }
-
+    
     /**
      * Returns the category under which this plugin is to be classified. This can be specified as a
      * tree node path using "\" to separate the path components.
@@ -412,7 +414,7 @@ public class PluginDefinition {
     public String getCategory() {
         return category;
     }
-
+    
     /**
      * Returns the name of the creator of this plugin.
      *
@@ -421,7 +423,7 @@ public class PluginDefinition {
     public String getCreator() {
         return creator;
     }
-
+    
     /**
      * Sets the name of the creator of this plugin.
      *
@@ -430,7 +432,7 @@ public class PluginDefinition {
     public void setCreator(String creator) {
         this.creator = creator;
     }
-
+    
     /**
      * Returns any copyright information for this plugin.
      *
@@ -439,7 +441,7 @@ public class PluginDefinition {
     public String getCopyright() {
         return copyright;
     }
-
+    
     /**
      * Sets any copyright information for this plugin.
      *
@@ -448,7 +450,7 @@ public class PluginDefinition {
     public void setCopyright(String copyright) {
         this.copyright = copyright;
     }
-
+    
     /**
      * Returns version information about the plugin.
      *
@@ -457,7 +459,7 @@ public class PluginDefinition {
     public String getVersion() {
         return getValueWithDefault(version, "Implementation-Version");
     }
-
+    
     /**
      * Sets version information about the plugin.
      *
@@ -466,7 +468,7 @@ public class PluginDefinition {
     public void setVersion(String version) {
         this.version = version;
     }
-
+    
     /**
      * Sets release information (typically a date) about the plugin.
      *
@@ -475,7 +477,7 @@ public class PluginDefinition {
     public void setReleased(String released) {
         this.released = released;
     }
-
+    
     /**
      * Returns release information (typically a date) about the plugin.
      *
@@ -484,7 +486,7 @@ public class PluginDefinition {
     public String getReleased() {
         return released;
     }
-
+    
     /**
      * Sets the url of the icon associated with the plugin.
      *
@@ -493,7 +495,7 @@ public class PluginDefinition {
     public void setIcon(String icon) {
         this.icon = icon;
     }
-
+    
     /**
      * Returns the url of the icon associated with the plugin.
      *
@@ -502,7 +504,7 @@ public class PluginDefinition {
     public String getIcon() {
         return icon;
     }
-
+    
     /**
      * Returns true if this definition represents an internal UI element (i.e., one that has been
      * pre-created by some other means).
@@ -512,7 +514,7 @@ public class PluginDefinition {
     public boolean isInternal() {
         return id != null && id.startsWith("_");
     }
-
+    
     /**
      * Returns true if the plugin has been disabled.
      *
@@ -521,7 +523,7 @@ public class PluginDefinition {
     public boolean isDisabled() {
         return disabled;
     }
-
+    
     /**
      * Sets the disabled state of the plugin.
      *
@@ -530,7 +532,7 @@ public class PluginDefinition {
     public void setDisabled(boolean disabled) {
         this.disabled = disabled;
     }
-
+    
     /**
      * Returns true if access to the plugin is restricted.
      *
@@ -540,20 +542,20 @@ public class PluginDefinition {
         if (authorities.size() == 0) {
             return false; // If no restrictions, return false
         }
-
+        
         boolean result = true;
-
+        
         for (Authority priv : authorities) {
             result = !SecurityUtil.isGranted(priv.name);
-
+            
             if (requiresAll == result) {
                 break;
             }
         }
-
+        
         return result;
     }
-
+    
     /**
      * Returns true if this definition contains any editable properties.
      *
@@ -565,10 +567,10 @@ public class PluginDefinition {
                 return true;
             }
         }
-
+        
         return false;
     }
-
+    
     /**
      * Sets the path of the resource containing the plugin definition. This is used to locate the
      * manifest entry from which version and source information can be extracted.
@@ -580,7 +582,7 @@ public class PluginDefinition {
             manifest = ManifestIterator.getInstance().findByPath(path);
         }
     }
-
+    
     /**
      * Returns a value's default if the initial value is null or empty.
      *
@@ -592,10 +594,10 @@ public class PluginDefinition {
         if (StringUtils.isEmpty(value) && manifest != null) {
             value = manifest.getMainAttributes().getValue(manifestKey);
         }
-
+        
         return value;
     }
-
+    
     /**
      * Creates an instance of the element based on its definition. If a property source is
      * specified, the source is used to initialize properties on the newly created element.
@@ -609,42 +611,42 @@ public class PluginDefinition {
     public ElementBase createElement(ElementBase parent, IPropertyProvider propertyProvider, boolean deserializing) {
         try {
             ElementBase element = null;
-
+            
             if (isForbidden()) {
                 log.info("Access to plugin " + getName() + " is restricted.");
             } else if (isDisabled()) {
                 log.info("Plugin " + getName() + " has been disabled.");
             } else {
                 Class<? extends ElementBase> clazz = getClazz();
-
+                
                 if (isInternal()) {
                     element = parent.getChild(clazz, null);
                 } else {
                     element = clazz.newInstance();
                 }
-
+                
                 if (element == null) {
-                    UIException.raise("Failed to create UI element " + id + ".");
+                    CWFException.raise("Failed to create UI element " + id + ".");
                 }
-
+                
                 element.setDefinition(this);
                 element.beforeInitialize(deserializing);
                 initElement(element, propertyProvider);
-
+                
                 if (parent != null) {
                     element.setParent(parent);
                 }
-
+                
                 element.afterInitialize(deserializing);
             }
-
+            
             return element;
-
+            
         } catch (Exception e) {
             throw MiscUtil.toUnchecked(e);
         }
     }
-    
+
     /**
      * Initialize the element's properties using the specified property provider.
      *
@@ -655,7 +657,7 @@ public class PluginDefinition {
         if (propertyProvider != null) {
             for (PropertyInfo propInfo : getProperties()) {
                 String key = propInfo.getId();
-
+                
                 if (propertyProvider.hasProperty(key)) {
                     String value = propertyProvider.getProperty(key);
                     propInfo.setPropertyValue(element, value);

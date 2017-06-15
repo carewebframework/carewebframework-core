@@ -7,15 +7,15 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  * This Source Code Form is also subject to the terms of the Health-Related
  * Additional Disclaimer of Warranty and Limitation of Liability available at
  *
@@ -23,23 +23,20 @@
  *
  * #L%
  */
-package org.carewebframework.shell.ancillary;
+package org.carewebframework.shell.triggers;
 
-import org.carewebframework.ui.util.CWFUtil;
+import org.carewebframework.shell.elements.ElementTriggerAction;
+import org.carewebframework.shell.elements.ElementUI;
 
-public class UIException extends RuntimeException {
-    
-    private static final long serialVersionUID = 1L;
-    
-    public static void raise(String text, Throwable t) throws UIException {
-        raise(text + "\n" + CWFUtil.formatExceptionForDisplay(t));
+/**
+ * Trigger action that makes a UI element visible.
+ */
+public class TriggerActionShow extends ElementTriggerAction {
+
+    @Override
+    protected boolean doInvokeAction(ElementUI target) {
+        target.setVisible(true);
+        return true;
     }
     
-    public static void raise(String text) throws UIException {
-        throw new UIException(text);
-    }
-    
-    public UIException(String text) {
-        super(text);
-    }
 }

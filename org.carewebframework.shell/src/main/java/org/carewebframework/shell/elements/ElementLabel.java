@@ -7,15 +7,15 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  * This Source Code Form is also subject to the terms of the Health-Related
  * Additional Disclaimer of Warranty and Limitation of Liability available at
  *
@@ -31,10 +31,10 @@ import org.carewebframework.web.component.Label;
 /**
  * Simple button stock object.
  */
-public class ElementLabel extends ElementBase {
+public class ElementLabel extends ElementUI {
     
     static {
-        registerAllowedParentClass(ElementLabel.class, ElementBase.class);
+        registerAllowedParentClass(ElementLabel.class, ElementUI.class);
     }
     
     private final Label label = new Label();
@@ -60,7 +60,7 @@ public class ElementLabel extends ElementBase {
     
     /**
      * Returns the button's label text.
-     * 
+     *
      * @return The label text.
      */
     public String getLabel() {
@@ -69,7 +69,7 @@ public class ElementLabel extends ElementBase {
     
     /**
      * Sets the button's label text.
-     * 
+     *
      * @param value The label text.
      */
     public void setLabel(String value) {

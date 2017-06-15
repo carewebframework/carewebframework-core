@@ -64,10 +64,10 @@ import org.springframework.util.StringUtils;
 /**
  * This class is used for all container-hosted plugins.
  */
-public class ElementPlugin extends ElementBase implements IDisable, IPropertyAccessor {
+public class ElementPlugin extends ElementUI implements IDisable, IPropertyAccessor {
 
     static {
-        registerAllowedParentClass(ElementPlugin.class, ElementBase.class);
+        registerAllowedParentClass(ElementPlugin.class, ElementUI.class);
     }
 
     private class ToolbarContainer extends Namespace {

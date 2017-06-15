@@ -59,7 +59,8 @@
 		<cwt:theme id="theme-default" 
 			url="org/carewebframework/ui/ext/bootstrap/css/bootstrap-theme.min.css" version="4.0.0" />
 			
-		<!-- Stock UI component definitions follow. -->
+		<!-- Stock UI plugin definitions follow. -->
+		
 		<cwp:plugin id="_desktop"
 			class="org.carewebframework.shell.elements.ElementDesktop" name="${@msg.cwf.shell.plugin._desktop.name}"
 			description="${@msg.cwf.shell.plugin._desktop.description}">
@@ -120,6 +121,8 @@
 					name="${@msg.cwf.shell.plugin.tabpane.hint.name}" description="${@msg.cwf.shell.plugin.tabpane.hint.description}" />
 				<cwp:property id="color" type="color"
 					name="${@msg.cwf.shell.plugin.tabpane.color.name}" description="${@msg.cwf.shell.plugin.tabpane.color.description}" />
+				<cwp:property id="" type="triggers"
+					name="Triggers" description="Triggers" />
 			</cwp:serialization>
 		</cwp:plugin>
 
@@ -443,6 +446,36 @@
 			</cwp:serialization>
 		</cwp:plugin>
 
+		<!-- Trigger elements -->
+		
+		<cwp:plugin id="trigger"
+			class="org.carewebframework.shell.elements.ElementTrigger" name="Trigger" description="Trigger">
+		</cwp:plugin>
+		
+		<cwp:plugin id="action"
+			class="org.carewebframework.shell.elements.ElementTriggerAction" name="Trigger Action" description="Trigger action">
+		</cwp:plugin>
+		
+		<cwp:plugin id="condition"
+			class="org.carewebframework.shell.elements.ElementTriggerCondition" name="Trigger Condition" description="Trigger condition">
+		</cwp:plugin>
+		
+		<!-- Trigger Action plugins -->
+		
+		<cwp:plugin id="action-hide" name="Hide a component"
+			class="org.carewebframework.shell.triggers.TriggerActionHide" />
+		
+		<cwp:plugin id="action-show" name="Show a component"
+			class="org.carewebframework.shell.triggers.TriggerActionShow" />
+		
+		<cwp:plugin id="action-logout" name="Logout"
+			class="org.carewebframework.shell.triggers.TriggerActionLogout" />
+		
+		<!-- Trigger Condition plugins -->
+		
+		<cwp:plugin id="condition-activate" name="A component is activated"
+			class="org.carewebframework.shell.triggers.TriggerConditionActivate" />
+		
 	</beans>
 
 	<beans profile="child">

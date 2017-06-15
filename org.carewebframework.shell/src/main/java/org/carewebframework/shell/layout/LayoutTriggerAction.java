@@ -25,31 +25,15 @@
  */
 package org.carewebframework.shell.layout;
 
-import org.carewebframework.shell.Constants;
-import org.carewebframework.ui.util.CWFUtil;
+import org.carewebframework.shell.plugins.PluginDefinition;
 
 /**
- * Package-wide constants.
+ * Represents a trigger action within a layout.
  */
-public class LayoutConstants {
+public class LayoutTriggerAction extends LayoutNode {
     
-    public static final String RESOURCE_PREFIX = CWFUtil.getResourcePath(LayoutConstants.class);
-    
-    public static final String PATH_DELIMITER = "\\\\";
-    
-    protected static final String PROPERTY_LAYOUT_SHARED = "CAREWEB.LAYOUT.SHARED";
-    
-    protected static final String PROPERTY_LAYOUT_PRIVATE = "CAREWEB.LAYOUT.PRIVATE";
-    
-    protected static final String PROPERTY_LAYOUT_ASSOCIATION = "CAREWEB.LAYOUT.ASSOCIATION";
-    
-    public static final String EVENT_ELEMENT_ACTIVATE = Constants.EVENT_PREFIX + ".ELEMENT.ACTIVATE";
-    
-    public static final String EVENT_ELEMENT_INACTIVATE = Constants.EVENT_PREFIX + ".ELEMENT.INACTIVATE";
-    
-    /**
-     * Enforce static class.
-     */
-    private LayoutConstants() {
+    public LayoutTriggerAction(LayoutTrigger parent, PluginDefinition pluginDefinition) {
+        super("action", parent, pluginDefinition);
     }
+    
 }

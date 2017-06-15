@@ -25,13 +25,19 @@
  */
 package org.carewebframework.shell.triggers;
 
-import org.carewebframework.shell.elements.ElementBase;
+import org.carewebframework.shell.elements.ElementUI;
 
 /**
  * Action to be invoked when a plugin trigger is fired.
  */
 public interface ITriggerAction {
     
-    void invokeAction(ElementBase target);
+    /**
+     * Invoke action on specified target.
+     *
+     * @param target The target.
+     * @return If false, do not invoke action on any additional targets.
+     */
+    boolean invokeAction(ElementUI target);
 
 }

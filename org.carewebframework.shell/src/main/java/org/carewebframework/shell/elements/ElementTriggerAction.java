@@ -23,15 +23,32 @@
  *
  * #L%
  */
-package org.carewebframework.shell.layout;
+package org.carewebframework.shell.elements;
+
+import org.carewebframework.shell.triggers.ITriggerAction;
 
 /**
- * Represents a trigger occurrence within a layout.
+ * Base class trigger-based actions.
  */
-public class LayoutTrigger extends LayoutNode {
+public abstract class ElementTriggerAction extends ElementBase implements ITriggerAction {
+
+    static {
+        registerAllowedParentClass(ElementTriggerAction.class, ElementTrigger.class);
+    }
     
-    public LayoutTrigger() {
-        super("trigger", null, null);
+    protected abstract boolean doInvokeAction(ElementUI target);
+    
+    protected ElementTrigger getTrigger() {
+        return (ElementTrigger) getParent();
+    }
+    
+    @Override
+    public final boolean invokeAction(ElementUI target) {
+        if (isEnabled() && !isDesignMode()) {
+            return doInvokeAction(target);
+        }
+
+        return true;
     }
     
 }

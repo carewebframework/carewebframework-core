@@ -23,15 +23,14 @@
  *
  * #L%
  */
-package org.carewebframework.shell.layout;
+package org.carewebframework.shell.triggers;
 
 /**
- * Represents a trigger occurrence within a layout.
+ * Trigger action that invokes the shell logout action.
  */
-public class LayoutTrigger extends LayoutNode {
-    
-    public LayoutTrigger() {
-        super("trigger", null, null);
+public class TriggerActionLogout extends TriggerActionAction {
+
+    public TriggerActionLogout() {
+        super("cwf.shell.logout");
     }
-    
 }

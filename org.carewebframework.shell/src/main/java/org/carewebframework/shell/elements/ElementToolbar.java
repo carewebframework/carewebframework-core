@@ -7,15 +7,15 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  * This Source Code Form is also subject to the terms of the Health-Related
  * Additional Disclaimer of Warranty and Limitation of Liability available at
  *
@@ -36,11 +36,11 @@ import org.carewebframework.web.component.Toolbar.Alignment;
 /**
  * Implements a shared toolbar.
  */
-public class ElementToolbar extends ElementBase {
+public class ElementToolbar extends ElementUI {
     
     static {
-        registerAllowedChildClass(ElementToolbar.class, ElementBase.class);
-        registerAllowedParentClass(ElementToolbar.class, ElementBase.class);
+        registerAllowedChildClass(ElementToolbar.class, ElementUI.class, Integer.MAX_VALUE);
+        registerAllowedParentClass(ElementToolbar.class, ElementUI.class);
         PropertyTypeRegistry.register("children", PropertyEditorOrderedChildren.class);
     }
     
@@ -56,7 +56,6 @@ public class ElementToolbar extends ElementBase {
         toolbar.setAlignment(Toolbar.Alignment.END);
         toolbar.addClass("cwf-desktop-toolbar btn-toolbar");
         setOuterComponent(toolbar);
-        maxChildren = Integer.MAX_VALUE;
     }
     
     public Toolbar getToolbar() {
@@ -65,7 +64,7 @@ public class ElementToolbar extends ElementBase {
     
     /**
      * Adds a component to the toolbar.
-     * 
+     *
      * @param component Component to add. If the component is a toolbar itself, its children will be
      *            added to the toolbar.
      * @param action The action to associate with the component.
@@ -89,7 +88,7 @@ public class ElementToolbar extends ElementBase {
     @Override
     protected void beforeAddChild(ElementBase child) {
         super.beforeAddChild(child);
-        Object cmp = child.getOuterComponent();
+        Object cmp = ((ElementUI) child).getOuterComponent();
         
         if (cmp instanceof BaseUIComponent) {
             BaseUIComponent comp = (BaseUIComponent) cmp;

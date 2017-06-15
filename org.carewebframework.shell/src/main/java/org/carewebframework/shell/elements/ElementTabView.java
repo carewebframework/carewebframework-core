@@ -32,24 +32,23 @@ import org.carewebframework.web.component.Tabview.TabPosition;
 import org.carewebframework.web.event.ChangeEvent;
 
 /**
- * Wraps the Tabview component. This UI element can only accept ElementTabPane elements as
- * children and only one of those can be active at a time.
+ * Wraps the Tabview component. This UI element can only accept ElementTabPane elements as children
+ * and only one of those can be active at a time.
  */
-public class ElementTabView extends ElementBase {
-
+public class ElementTabView extends ElementUI {
+    
     static {
-        registerAllowedParentClass(ElementTabView.class, ElementBase.class);
-        registerAllowedChildClass(ElementTabView.class, ElementTabPane.class);
+        registerAllowedParentClass(ElementTabView.class, ElementUI.class);
+        registerAllowedChildClass(ElementTabView.class, ElementTabPane.class, Integer.MAX_VALUE);
         PropertyTypeRegistry.register("tabs", PropertyEditorTabView.class);
     }
-
+    
     private final Tabview tabview = new Tabview();
-
+    
     private ElementTabPane activePane;
-
+    
     public ElementTabView() {
         super();
-        maxChildren = Integer.MAX_VALUE;
         fullSize(tabview);
         setOuterComponent(tabview);
         tabview.addClass("cwf-tabview");
@@ -57,7 +56,7 @@ public class ElementTabView extends ElementBase {
             setActivePane((ElementTabPane) getAssociatedElement(tabview.getSelectedTab()));
         });
     }
-
+    
     /**
      * Sets the orientation which can be horizontal or vertical.
      *
@@ -66,7 +65,7 @@ public class ElementTabView extends ElementBase {
     public void setOrientation(String orientation) {
         tabview.setTabPosition(TabPosition.valueOf(orientation.toUpperCase()));
     }
-
+    
     /**
      * Returns the orientation (horizontal, vertical, top, or bottom).
      *
@@ -75,7 +74,7 @@ public class ElementTabView extends ElementBase {
     public String getOrientation() {
         return tabview.getTabPosition().name().toLowerCase();
     }
-
+    
     /**
      * Need to detach both the tab and the tab panel of the child component.
      */
@@ -85,7 +84,7 @@ public class ElementTabView extends ElementBase {
             setActivePane(null);
         }
     }
-
+    
     /**
      * Sets the active (visible) pane.
      *
@@ -95,27 +94,27 @@ public class ElementTabView extends ElementBase {
         if (pane == activePane) {
             return;
         }
-
+        
         if (activePane != null) {
             activePane.activate(false);
         }
-
+        
         activePane = pane;
-
+        
         if (activePane != null) {
             activePane.activate(true);
         }
     }
-
+    
     @Override
     protected void updateVisibility(boolean visible, boolean activated) {
         super.updateVisibility(visible, activated);
-
+        
         if (activated && visible && activePane == null && getChildCount() > 0) {
             setActivePane((ElementTabPane) getChild(0));
         }
     }
-    
+
     /**
      * Overrides activateChildren to ensure that only the active pane is affected.
      */
@@ -124,10 +123,10 @@ public class ElementTabView extends ElementBase {
         if (activePane == null) {
             activePane = (ElementTabPane) getAssociatedElement(tabview.getSelectedTab());
         }
-
+        
         if (activePane != null) {
             activePane.activate(activate);
         }
     }
-
+    
 }

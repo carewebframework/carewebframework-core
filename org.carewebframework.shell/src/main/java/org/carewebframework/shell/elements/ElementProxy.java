@@ -37,30 +37,30 @@ import org.carewebframework.shell.property.PropertyInfo;
  * for deferring property changes to existing UI elements.
  */
 public class ElementProxy extends ElementBase implements IPropertyAccessor {
-
+    
     private final HashMap<String, Object> properties = new HashMap<>();
-
-    private ElementBase target;
-
+    
+    private ElementBase real;
+    
     private boolean deleted;
-
+    
     public ElementProxy(PluginDefinition def) {
         super();
         setDefinition(def);
         revert();
     }
-
-    public ElementProxy(ElementBase target) {
+    
+    public ElementProxy(ElementBase real) {
         super();
-        this.target = target;
-
-        if (target != null) {
-            setDefinition(target.getDefinition());
+        this.real = real;
+        
+        if (real != null) {
+            setDefinition(real.getDefinition());
         }
-
+        
         revert();
     }
-
+    
     /**
      * Override to get property value from proxy's property cache.
      *
@@ -70,11 +70,11 @@ public class ElementProxy extends ElementBase implements IPropertyAccessor {
     public Object getPropertyValue(PropertyInfo propInfo) throws Exception {
         return getPropertyValue(propInfo.getId());
     }
-
+    
     public Object getPropertyValue(String propName) {
         return properties.get(propName);
     }
-
+    
     /**
      * Overridden to set property value in proxy's property cache.
      *
@@ -84,70 +84,72 @@ public class ElementProxy extends ElementBase implements IPropertyAccessor {
     public void setPropertyValue(PropertyInfo propInfo, Object value) {
         setPropertyValue(propInfo.getId(), value);
     }
-
+    
     public Object setPropertyValue(String propName, Object value) {
         return properties.put(propName, value);
     }
-
-    public ElementBase getTarget() {
-        return target;
+    
+    public ElementBase getReal() {
+        return real;
     }
-
+    
     protected void revert() {
         properties.clear();
         syncProperties(true);
     }
-
+    
     public void commit() {
         syncProperties(false);
     }
-
+    
     /**
-     * Realizes the creation or destruction of the proxied target. In other words, if this is a
-     * deletion operation and a target exists, the target is removed from its parent. If this is not
-     * a deletion and the target does not exist, a new target is instantiated as a child to the
-     * specified parent.
+     * Realizes the creation or destruction of the proxied object. In other words, if this is a
+     * deletion operation and the proxied object exists, the proxied object is removed from its
+     * parent. If this is not a deletion and the proxied object does not exist, a new object is
+     * instantiated as a child to the specified parent.
      *
      * @param parent The parent UI element.
-     * @throws Exception Unspecified exception.
+     * @return Returns the updated proxied object.
      */
-    public void realize(ElementBase parent) throws Exception {
-        if (!deleted && target == null) {
-            target = getDefinition().createElement(parent, null, false);
-        } else if (deleted && target != null) {
-            target.remove(true);
-            target = null;
+    public ElementBase realize(ElementBase parent) {
+        if (!deleted && real == null) {
+            real = getDefinition().createElement(parent, null, false);
+        } else if (deleted && real != null) {
+            real.remove(true);
+            real = null;
         }
-    }
 
+        return real;
+    }
+    
     /**
-     * Synchronizes property values between the proxy and its target.
+     * Synchronizes property values between the proxy and its object.
      *
-     * @param fromTarget If true, property values are copied from the target to the proxy. If false,
+     * @param fromReal If true, property values are copied from the target to the proxy. If false,
      *            property values are copied from the proxy to the target.
      */
-    private void syncProperties(boolean fromTarget) {
+    private void syncProperties(boolean fromReal) {
         PluginDefinition def = getDefinition();
-
+        
         for (PropertyInfo propInfo : def.getProperties()) {
-            if (fromTarget) {
-                syncProperty(propInfo, target, this);
+            if (fromReal) {
+                syncProperty(propInfo, real, this);
             } else {
-                syncProperty(propInfo, this, target);
+                syncProperty(propInfo, this, real);
             }
         }
     }
-
+    
     private void syncProperty(PropertyInfo propInfo, Object from, Object to) {
         if (to != null) {
             propInfo.setPropertyValue(to, propInfo.getPropertyValue(from));
         }
     }
-
+    
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
     }
-
+    
     public boolean isDeleted() {
         return deleted;
     }

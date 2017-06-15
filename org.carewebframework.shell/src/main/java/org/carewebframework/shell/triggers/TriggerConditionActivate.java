@@ -23,14 +23,24 @@
  *
  * #L%
  */
-package org.carewebframework.shell.test;
+package org.carewebframework.shell.triggers;
 
-import org.carewebframework.shell.triggers.TriggerCondition;
+import org.carewebframework.shell.elements.ElementTrigger;
+import org.carewebframework.shell.elements.ElementUI;
 
-public class TestTriggerCondition extends TriggerCondition {
+/**
+ * Condition that triggers when a UI component is activated.
+ */
+public class TriggerConditionActivate extends TriggerConditionGenericEvent {
     
+    public TriggerConditionActivate() {
+        super(ElementUI.EVENT_ELEMENT_ACTIVATE);
+    }
+
     @Override
-    protected void init() {
+    protected boolean excludeEvent(Object eventObject) {
+        ElementTrigger trigger = getTrigger();
+        return trigger == null || !trigger.getTargets().contains(eventObject);
     }
 
 }
