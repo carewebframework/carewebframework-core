@@ -12,10 +12,6 @@
 				</element>
 				<element _type="tabpane" label="Logout">
 					<element _type="cwfUserHeader" />
-					<trigger>
-						<condition _type="condition-activate" />
-						<action _type="action-logout" />
-					</trigger>
 				</element>
 			</element>
 		</element>
