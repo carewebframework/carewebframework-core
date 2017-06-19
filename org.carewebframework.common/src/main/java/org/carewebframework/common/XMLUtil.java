@@ -7,15 +7,15 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  * This Source Code Form is also subject to the terms of the Health-Related
  * Additional Disclaimer of Warranty and Limitation of Liability available at
  *
@@ -45,11 +45,11 @@ public class XMLUtil {
     
     public enum TagFormat {
         OPENING, CLOSING, BOTH, EMPTY
-    };
+    }
     
     /**
      * Parses XML from a string.
-     * 
+     *
      * @param xml String containing valid XML.
      * @return XML document.
      * @throws Exception Unspecified exception.
@@ -60,7 +60,7 @@ public class XMLUtil {
     
     /**
      * Parses XML from a list of strings.
-     * 
+     *
      * @param xml String iterable containing valid XML.
      * @return XML document.
      * @throws Exception Unspecified exception.
@@ -71,7 +71,7 @@ public class XMLUtil {
     
     /**
      * Parses XML from a file.
-     * 
+     *
      * @param filePath Full path to a file containing valid XML.
      * @return XML document.
      * @throws Exception Unspecified exception.
@@ -82,7 +82,7 @@ public class XMLUtil {
     
     /**
      * Parses XML from an input stream.
-     * 
+     *
      * @param stream Input stream containing valid XML.
      * @return XML document.
      * @throws Exception Unspecified exception.
@@ -95,7 +95,7 @@ public class XMLUtil {
     
     /**
      * Converts an XML document to a formatted XML string.
-     * 
+     *
      * @param doc The document to format.
      * @return Formatted XML document.
      */
@@ -105,7 +105,7 @@ public class XMLUtil {
     
     /**
      * Converts an XML document to a formatted XML string.
-     * 
+     *
      * @param doc The document to format.
      * @param indent Number of characters to indent.
      * @return Formatted XML document.
@@ -120,20 +120,27 @@ public class XMLUtil {
             StringWriter writer = new StringWriter();
             StreamResult result = new StreamResult(writer);
             TransformerFactory tf = TransformerFactory.newInstance();
-            tf.setAttribute("indent-number", indent);
+            
+            try {
+                tf.setAttribute("indent-number", indent);
+            } catch (IllegalArgumentException e) {
+                // Ignore if not supported.
+            }
+            
             Transformer transformer = tf.newTransformer();
             transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", Integer.toString(indent));
             transformer.transform(domSource, result);
             return writer.toString();
         } catch (Exception e) {
-            return e.toString();
+            throw MiscUtil.toUnchecked(e);
         }
     }
-    
+
     /**
      * Returns the formatted name for the node.
-     * 
+     *
      * @param node Node to format.
      * @param format Desired format (opening tag, closing tag, empty tag, or both).
      * @return Formatted name.
@@ -156,7 +163,7 @@ public class XMLUtil {
     
     /**
      * Returns formatted attributes of the node.
-     * 
+     *
      * @param node The node.
      * @return Formatted attributes.
      */
