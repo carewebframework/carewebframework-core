@@ -38,8 +38,7 @@ function AppContext(module, selector) {
         }
         AppModule.prototype.ngDoBootstrap = function (appRef) {
             var factory = this.resolver.resolveComponentFactory(App);
-            factory.selector = selector;
-            componentRef = appRef.bootstrap(factory);
+            componentRef = appRef.bootstrap(factory, selector);
         };
         return AppModule;
     }());

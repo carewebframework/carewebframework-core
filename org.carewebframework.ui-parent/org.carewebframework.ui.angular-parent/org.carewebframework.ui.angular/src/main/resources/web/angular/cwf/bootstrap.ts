@@ -35,8 +35,7 @@ export function AppContext(module: any, selector: string) {
 
       ngDoBootstrap(appRef : ApplicationRef) {
           const factory = this.resolver.resolveComponentFactory(App);
-          factory.selector = selector;
-          componentRef = appRef.bootstrap(factory);
+          componentRef = appRef.bootstrap(factory, selector);
       }
   }
 
