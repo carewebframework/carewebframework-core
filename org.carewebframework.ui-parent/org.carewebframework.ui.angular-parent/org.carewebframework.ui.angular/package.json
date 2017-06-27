@@ -1,9 +1,9 @@
 {
   "name": "cwf-angular",
   "version": "1.0.0",
-  "description": "Angular 2 support",
+  "description": "Angular 4 support",
   "main": "",
-  "keywords": [],
+  "keywords": ["CareWebFramework", "Angular"],
   "author": "CareWeb Framework",
   "repository": {
     "type": "git",
