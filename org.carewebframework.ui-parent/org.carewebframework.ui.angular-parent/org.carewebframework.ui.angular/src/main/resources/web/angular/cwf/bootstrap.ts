@@ -11,12 +11,8 @@ import 'rxjs';
  */
 export function AppContext(module: any, selector: string) {
   var App = module.AngularComponent;
-
-  var zone : NgZone;
   
-  var componentRef : ComponentRef<any>;
-  
-  var moduleRef : NgModuleRef<AppModule>;
+  var appContext = this;
   
   var module_decorations = {
     imports: [ BrowserModule ],
@@ -31,32 +27,34 @@ export function AppContext(module: any, selector: string) {
       constructor(
           private resolver : ComponentFactoryResolver,
           private ngZone: NgZone
-      ) {zone = ngZone}
+      ) {
+        appContext.zone = ngZone
+      }
 
       ngDoBootstrap(appRef : ApplicationRef) {
           const factory = this.resolver.resolveComponentFactory(App);
-          componentRef = appRef.bootstrap(factory, selector);
+          appContext.componentRef = appRef.bootstrap(factory, selector);
       }
   }
 
   AppContext.prototype.isLoaded = function() : boolean {
-    return !!moduleRef;
+    return !!this.moduleRef;
   }
   
   AppContext.prototype.bootstrap = function(compilerOptions?) : Promise<NgModuleRef<AppModule>> {  
     const platform = platformBrowserDynamic();
     return platform.bootstrapModule(AppModule, compilerOptions).then(
-      ref => moduleRef = ref);
+      ref => this.moduleRef = ref);
   }
   
   AppContext.prototype.destroy = function() : void {
-    moduleRef ? moduleRef.destroy() : null;
-    moduleRef = null; 
+    this.moduleRef ? this.moduleRef.destroy() : null;
+    this.moduleRef = null; 
   }
   
   AppContext.prototype.invoke = function(functionName: string, args: any[]) : any {
-    return zone.run(() => {
-      let instance = componentRef.instance;
+    return this.zone.run(() => {
+      let instance = this.componentRef.instance;
       instance[functionName].apply(instance, args)
     })
   }

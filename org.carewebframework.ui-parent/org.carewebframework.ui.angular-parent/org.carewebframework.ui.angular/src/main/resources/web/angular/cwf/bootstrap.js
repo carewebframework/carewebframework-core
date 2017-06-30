@@ -21,9 +21,7 @@ require("rxjs");
  */
 function AppContext(module, selector) {
     var App = module.AngularComponent;
-    var zone;
-    var componentRef;
-    var moduleRef;
+    var appContext = this;
     var module_decorations = {
         imports: [platform_browser_1.BrowserModule],
         declarations: [App],
@@ -34,11 +32,11 @@ function AppContext(module, selector) {
         function AppModule(resolver, ngZone) {
             this.resolver = resolver;
             this.ngZone = ngZone;
-            zone = ngZone;
+            appContext.zone = ngZone;
         }
         AppModule.prototype.ngDoBootstrap = function (appRef) {
             var factory = this.resolver.resolveComponentFactory(App);
-            componentRef = appRef.bootstrap(factory, selector);
+            appContext.componentRef = appRef.bootstrap(factory, selector);
         };
         return AppModule;
     }());
@@ -48,21 +46,24 @@ function AppContext(module, selector) {
             core_2.NgZone])
     ], AppModule);
     AppContext.prototype.isLoaded = function () {
-        return !!moduleRef;
+        return !!this.moduleRef;
     };
     AppContext.prototype.bootstrap = function (compilerOptions) {
+        var _this = this;
         var platform = platform_browser_dynamic_1.platformBrowserDynamic();
-        return platform.bootstrapModule(AppModule, compilerOptions).then(function (ref) { return moduleRef = ref; });
+        return platform.bootstrapModule(AppModule, compilerOptions).then(function (ref) { return _this.moduleRef = ref; });
     };
     AppContext.prototype.destroy = function () {
-        moduleRef ? moduleRef.destroy() : null;
-        moduleRef = null;
+        this.moduleRef ? this.moduleRef.destroy() : null;
+        this.moduleRef = null;
     };
     AppContext.prototype.invoke = function (functionName, args) {
-        return zone.run(function () {
-            var instance = componentRef.instance;
+        var _this = this;
+        return this.zone.run(function () {
+            var instance = _this.componentRef.instance;
             instance[functionName].apply(instance, args);
         });
     };
 }
 exports.AppContext = AppContext;
+//# sourceMappingURL=bootstrap.js.map
