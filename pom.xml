@@ -13,7 +13,6 @@
 	<description>CareWeb Framework Parent POM</description>
 	
 	<modules>
-		<module>org.carewebframework.common</module>
 		<module>org.carewebframework.mvn-parent</module>
 		<module>org.carewebframework.api-parent</module>
 		<module>org.carewebframework.ui-parent</module>
