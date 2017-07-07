@@ -32,6 +32,7 @@
 		<dependency>
 			<groupId>org.carewebframework</groupId>
 			<artifactId>org.carewebframework.api.core</artifactId>
+			<version>${project.parent.version}</version>
 		</dependency>
 		<!-- Supporting Libraries -->
 		<dependency>
@@ -46,6 +47,7 @@
 		<dependency>
 			<groupId>org.carewebframework</groupId>
 			<artifactId>org.carewebframework.api.test</artifactId>
+			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>log4j</groupId>

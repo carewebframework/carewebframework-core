@@ -19,16 +19,18 @@
 		<dependency>
 			<groupId>org.carewebframework</groupId>
 			<artifactId>org.carewebframework.security.basic</artifactId>
-			<version>${org.carewebframework.core.version}</version>
+			<version>${project.parent.version}</version>
 		</dependency>
 		<!-- Unit testing -->
 		<dependency>
 			<groupId>org.carewebframework</groupId>
 			<artifactId>org.carewebframework.api.test</artifactId>
+			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.carewebframework</groupId>
 			<artifactId>org.carewebframework.ui.test</artifactId>
+			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.carewebframework</groupId>

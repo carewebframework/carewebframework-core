@@ -14,6 +14,7 @@
 		<dependency>
 			<groupId>org.carewebframework</groupId>
 			<artifactId>org.carewebframework.api.core</artifactId>
+			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.carewebframework</groupId>
@@ -24,11 +25,13 @@
 			<groupId>org.carewebframework</groupId>
 			<artifactId>org.carewebframework.api.security.mock</artifactId>
 			<scope>test</scope>
+			<version>${project.parent.version}</version>
 		</dependency>
 		<!-- Unit testing -->
 		<dependency>
 			<groupId>org.carewebframework</groupId>
 			<artifactId>org.carewebframework.api.test</artifactId>
+			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.carewebframework</groupId>
