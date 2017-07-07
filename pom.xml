@@ -12,6 +12,13 @@
 	<name>CareWeb Framework Parent POM</name>
 	<description>CareWeb Framework Parent POM</description>
 	
+	<scm>
+		<connection>scm:git:git://github.com/carewebframework/carewebframework-core</connection>
+		<developerConnection>scm:git:git://github.com/carewebframework/carewebframework-core</developerConnection>
+		<url>https://github.com/carewebframework/carewebframework-core</url>
+		<tag>HEAD</tag>
+	</scm>
+	
 	<modules>
 		<module>org.carewebframework.mvn-parent</module>
 		<module>org.carewebframework.api-parent</module>
