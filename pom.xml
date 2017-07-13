@@ -21,7 +21,7 @@
 	</scm>
 	
 	<properties>
-		<org.carewebframework.web.version>1.0.0-SNAPSHOT</org.carewebframework.web.version>
+		<org.carewebframework.web.version>1.0.1-SNAPSHOT</org.carewebframework.web.version>
 	</properties>
 	
 	<modules>
