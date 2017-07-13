@@ -43,13 +43,18 @@
 		<dependencies>
 			<dependency>
 				<groupId>org.carewebframework</groupId>
-				<artifactId>org.carewebframework.web.core</artifactId>
-				<version>${org.carewebframework.web.version}</version>
+				<artifactId>org.carewebframework.api.test</artifactId>
+				<scope>test</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.carewebframework</groupId>
-				<artifactId>org.carewebframework.web.script.groovy</artifactId>
-				<version>${org.carewebframework.web.version}</version>
+				<artifactId>org.carewebframework.ui.test</artifactId>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.carewebframework</groupId>
+				<artifactId>org.carewebframework.web.test</artifactId>
+				<scope>test</scope>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

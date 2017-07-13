@@ -1,6 +1,6 @@
 'use strict';
 
-define('cwf-login', ['jquery', 'lodash', 'css!cwf-login-css.css', 'css!bootstrap-css.css'], function($) {
+define('cwf-login', ['jquery', 'lodash', 'cwf-login-css', 'bootstrap-css'], function($) {
 	return {
 	
 		init: function(timeout, logoutUrl, required, disabled) {

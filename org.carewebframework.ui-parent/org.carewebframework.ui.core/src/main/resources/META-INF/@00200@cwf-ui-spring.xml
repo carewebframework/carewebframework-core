@@ -75,25 +75,6 @@
 			<constructor-arg ref="messageConsumerService" />
 		</bean>
 		
-		<!-- Component scans -->
-		
-		<cwc:component-scan package="org.carewebframework.ui.dialog" />
-		
-	</beans>
-
-	<beans profile="child">
-		<!-- Provides access to the active page and session -->
-		
-		<bean id="cwf_Page" factory-method="getPage" class="org.carewebframework.web.client.ExecutionContext" />
-		
-		<bean id="cwf_Session" factory-method="getSession" class="org.carewebframework.web.client.ExecutionContext" />
-		
-		<!-- A registry of all supported commands. -->
-		
-		<bean id="commandRegistry" class="org.carewebframework.ui.command.CommandRegistry">
-			<constructor-arg ref="commandShortcuts" />
-		</bean>
-
 		<!-- Thymeleaf template configuration -->
 		
 		<bean id="thymeleafTemplateResolver"
@@ -114,10 +95,29 @@
 		
 		<bean class="org.thymeleaf.spring4.view.ThymeleafViewResolver">
 			<property name="templateEngine" ref="thymeleafTemplateEngine" />
-			<property name="order" value="1" />
+			<property name="order" value="-99" />
 			<property name="viewNames" value="*.htm,*.html" />
 		</bean>
 		
+		<!-- Component scans -->
+		
+		<cwc:component-scan package="org.carewebframework.ui.dialog" />
+		
+	</beans>
+
+	<beans profile="child">
+		<!-- Provides access to the active page and session -->
+		
+		<bean id="cwf_Page" factory-method="getPage" class="org.carewebframework.web.client.ExecutionContext" />
+		
+		<bean id="cwf_Session" factory-method="getSession" class="org.carewebframework.web.client.ExecutionContext" />
+		
+		<!-- A registry of all supported commands. -->
+		
+		<bean id="commandRegistry" class="org.carewebframework.ui.command.CommandRegistry">
+			<constructor-arg ref="commandShortcuts" />
+		</bean>
+
 		<!-- Monitors a page for inactivity -->
 		
 		<bean id="sessionMonitorController" scope="prototype"

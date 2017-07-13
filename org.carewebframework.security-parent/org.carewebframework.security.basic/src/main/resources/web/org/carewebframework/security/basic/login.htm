@@ -11,24 +11,22 @@
 </head>
 
 <body style="display:none">
-	<script type="text/javascript" src='webjars/requirejs/require.js'></script>
+	<script type="text/javascript" src='webjars/systemjs/dist/system.js'></script>
 	
 	<script th:inline="javascript">
-		require([], function() {
-	        require.config(
-	        	[(${webjarInit})]
-	        );
+    	System.config(
+    		[(${webjarInit})]
+        );
 	        
-			require(['cwf-login'], function(sec) {
-				var msg = [[#{security.login.form.timeout.message}]],
-				logout = 'security/logout_success?target=./login&message=' + encodeURIComponent(msg);
-				sec.init(
-					[(${timeout})], 
-					logout, 
-					[[#{security.login.required.fields}]],
-					[[${disabled}]]);	
-			});
-		});	
+		System.import('cwf-login').then(function(sec) {
+			var msg = [[#{security.login.form.timeout.message}]],
+			logout = 'security/logout_success?target=./login&message=' + encodeURIComponent(msg);
+			sec.init(
+				[(${timeout})], 
+				logout, 
+				[[#{security.login.required.fields}]],
+				[[${disabled}]]);	
+		});
 	</script>
 	
 	<div id="cwf-login-root">

@@ -45,11 +45,11 @@ import org.springframework.web.bind.annotation.GetMapping;
  */
 @Controller
 public class LoginController {
-    
+
     @Autowired
     private ISecurityService securityService;
-    
-    @GetMapping("security/login")
+
+    @GetMapping(path = "security/login", produces = "text/html")
     public String login(ModelMap model, HttpServletRequest request) {
         Collection<ISecurityDomain> domains = SecurityDomainRegistry.getInstance().getAll();
         model.addAttribute("baseUrl", RequestUtil.getBaseURL(request));
@@ -59,11 +59,11 @@ public class LoginController {
         model.addAttribute("domains", domains);
         model.addAttribute("disabled", securityService.loginDisabled());
         model.addAttribute("action", "security/login");
-
+        
         String error = request.getParameter("error");
         model.addAttribute("error",
             error == null ? null : error.isEmpty() ? StrUtil.getLabel("security.login.error") : error);
         return "classpath:/web/org/carewebframework/security/basic/login.htm";
     }
-    
+
 }

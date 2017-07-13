@@ -26,10 +26,12 @@
 		<dependency>
 			<groupId>org.carewebframework</groupId>
 			<artifactId>org.carewebframework.web.core</artifactId>
+			<version>${org.carewebframework.web.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.carewebframework</groupId>
 			<artifactId>org.carewebframework.web.script.groovy</artifactId>
+			<version>${org.carewebframework.web.version}</version>
 		</dependency>
 		<!-- Servlet API -->
 		<dependency>
