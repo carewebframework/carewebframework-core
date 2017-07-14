@@ -49,6 +49,7 @@ import org.carewebframework.web.component.Rowcell;
 import org.carewebframework.web.component.Rows;
 import org.carewebframework.web.event.ChangeEvent;
 import org.carewebframework.web.event.ClickEvent;
+import org.carewebframework.web.event.DblclickEvent;
 import org.carewebframework.web.model.IComponentRenderer;
 import org.carewebframework.web.model.ListModel;
 
@@ -347,6 +348,16 @@ public abstract class ListFormController<DAO> extends CaptionedFormController {
         }
         
         row.setVisible(!columns.isEmpty());
+        row.addEventListener(ChangeEvent.class, (event) -> {
+            if (getShowDetailPane() && row.isSelected()) {
+                rowSelected(row);
+            }
+        });
+        row.addEventListener(DblclickEvent.class, (event) -> {
+            if (!getShowDetailPane() && row.isSelected()) {
+                rowSelected(row);
+            }
+        });
         
         for (Object colData : columns) {
             Object data = transformData(colData);
@@ -430,19 +441,12 @@ public abstract class ListFormController<DAO> extends CaptionedFormController {
         refresh();
     }
     
-    @EventHandler(value = "change", target = "@rows")
-    private void onChange$rows(ChangeEvent event) {
-        if (getShowDetailPane()) {
-            rowSelected(getSelectedRow());
-        }
-    }
-    
     /**
-     * Called when an item is selected. Override for specialized handling.
+     * Called when a row is selected. Override for specialized handling.
      *
-     * @param li Selected list item.
+     * @param row The selected row.
      */
-    protected void rowSelected(Row li) {
+    protected void rowSelected(Row row) {
         
     }
     
