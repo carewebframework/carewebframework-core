@@ -80,7 +80,7 @@ import org.carewebframework.web.event.KeycaptureEvent;
 /**
  * Implements a generic UI shell that can be dynamically extended with plug-ins.
  */
-@Component(value = "cwfShell", widgetClass = "Div", parentTag = "*", childTag = @ChildTag("*"))
+@Component(tag = "cwfShell", widgetClass = "Div", parentTag = "*", childTag = @ChildTag("*"))
 public class CareWebShell extends Div implements INamespace {
     
     protected static final Log log = LogFactory.getLog(CareWebShell.class);

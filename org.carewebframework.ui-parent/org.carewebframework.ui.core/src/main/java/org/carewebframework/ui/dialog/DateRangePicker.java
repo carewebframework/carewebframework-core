@@ -46,7 +46,7 @@ import org.carewebframework.web.event.EventUtil;
 /**
  * Generic component for choosing date ranges.
  */
-@Component(value = "datepicker", widgetClass = "Combobox", parentTag = "*", childTag = @ChildTag("datepickeritem"))
+@Component(tag = "datepicker", widgetClass = "Combobox", parentTag = "*", childTag = @ChildTag("datepickeritem"))
 public class DateRangePicker extends Combobox {
     
     public static final String ON_SELECT_RANGE = "selectRange";
@@ -54,7 +54,7 @@ public class DateRangePicker extends Combobox {
     private static final String[] DEFAULT_CHOICES = { "All Dates", "Today|T|T", "Last Week|T|T-7", "Last Month|T|T-30|1",
             "Last Year|T|T-365", "Last Two Years|T|T-730" };
     
-    @Component(value = "datepickeritem", widgetClass = "Comboitem", parentTag = "datepicker")
+    @Component(tag = "datepickeritem", widgetClass = "Comboitem", parentTag = "datepicker")
     public static class Dateitem extends Comboitem {
         
     }

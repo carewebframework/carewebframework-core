@@ -53,7 +53,7 @@ import org.carewebframework.web.annotation.Component.ChildTag;
  * views containing tree views. It can only be used with a layout that contains a tab view
  * component. Its public methods are fully compatible with version 1.0.
  */
-@Component(value = "cwfShellEx", widgetClass = "Div", parentTag = "*", childTag = @ChildTag("*"))
+@Component(tag = "cwfShellEx", widgetClass = "Div", parentTag = "*", childTag = @ChildTag("*"))
 public class CareWebShellEx extends CareWebShell {
 
     public static final String TOOLBAR_PATH = "@toolbar";
