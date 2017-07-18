@@ -7,15 +7,15 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  * This Source Code Form is also subject to the terms of the Health-Related
  * Additional Disclaimer of Warranty and Limitation of Liability available at
  *
@@ -90,7 +90,7 @@ public class PopupSupport implements IGenericEvent<Object>, IEventListener {
         for (Window window : windows) {
             try {
                 window.removeEventListener("close", this);
-                window.detach();
+                window.destroy();
             } catch (Throwable e) {
                 
             }
@@ -102,7 +102,7 @@ public class PopupSupport implements IGenericEvent<Object>, IEventListener {
     
     /**
      * Popup event handler - display popup dialog upon receipt.
-     * 
+     *
      * @param eventName Name of popupEvent
      * @param eventData May either be an encoded string (for backward compatibility) or a PopupData
      *            instance.
@@ -141,14 +141,14 @@ public class PopupSupport implements IGenericEvent<Object>, IEventListener {
      * Reset window placement to initial position if no more popups are open.
      */
     private synchronized void resetPosition() {
-        if (windows.size() == 0) {
+        if (windows.isEmpty()) {
             position = INITIAL_POSITION;
         }
     }
     
     /**
      * Return the screen position for window placement
-     * 
+     *
      * @return The screen position.
      */
     private synchronized String getPosition() {
@@ -158,7 +158,7 @@ public class PopupSupport implements IGenericEvent<Object>, IEventListener {
     
     /**
      * Return a popup window instance.
-     * 
+     *
      * @return A popup window instance.
      * @throws Exception Unspecified exception.
      */
@@ -180,7 +180,7 @@ public class PopupSupport implements IGenericEvent<Object>, IEventListener {
     
     /**
      * Set the event manager instance.
-     * 
+     *
      * @param eventManager The event manager.
      */
     public void setEventManager(EventManager eventManager) {
@@ -189,7 +189,7 @@ public class PopupSupport implements IGenericEvent<Object>, IEventListener {
     
     /**
      * Get the event manager instance.
-     * 
+     *
      * @return The event manager.
      */
     public EventManager getEventManager() {
