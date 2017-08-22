@@ -30,6 +30,7 @@ import java.util.Map;
 
 import org.carewebframework.ui.dialog.PopupDialog;
 import org.carewebframework.web.component.BaseComponent;
+import org.carewebframework.web.component.BaseUIComponent;
 import org.carewebframework.web.component.Window;
 import org.w3c.dom.Document;
 
@@ -37,7 +38,7 @@ import org.w3c.dom.Document;
  * Static utility class for XML viewing functions.
  */
 public class XMLViewer {
-
+    
     /**
      * Show the dialog, loading the specified document.
      *
@@ -45,11 +46,29 @@ public class XMLViewer {
      * @return The dialog.
      */
     public static Window showXML(Document document) {
+        return showXML(document, null);
+    }
+    
+    /**
+     * Show the dialog, loading the specified document.
+     *
+     * @param document The XML document.
+     * @param parent If specified, show viewer in embedded mode. Otherwise, show as modal dialog.
+     * @return The dialog.
+     */
+    public static Window showXML(Document document, BaseUIComponent parent) {
         Map<String, Object> args = new HashMap<>();
         args.put("document", document);
-        return PopupDialog.show(XMLConstants.VIEW_DIALOG, args, true, true, true, null);
-    }
+        boolean modal = parent == null;
+        Window dialog = PopupDialog.show(XMLConstants.VIEW_DIALOG, args, modal, modal, modal, null);
 
+        if (parent != null) {
+            dialog.setParent(parent);
+        }
+
+        return dialog;
+    }
+    
     /**
      * Display the CWF markup for the component tree rooted at root.
      *
@@ -58,9 +77,9 @@ public class XMLViewer {
      */
     public static Window showCWF(BaseComponent root) {
         return showCWF(root, XMLConstants.EXCLUDED_PROPERTIES);
-
+        
     }
-
+    
     /**
      * Display the CWF markup for the component tree rooted at root.
      *
@@ -69,10 +88,11 @@ public class XMLViewer {
      * @return The dialog.
      */
     public static Window showCWF(BaseComponent root, String... excludedProperties) {
-        return showXML(CWF2XML.toDocument(root, excludedProperties));
-
+        Window window = showXML(CWF2XML.toDocument(root, excludedProperties));
+        window.setTitle("CWF Markup");
+        return window;
     }
-
+    
     /**
      * Enforce static class.
      */
