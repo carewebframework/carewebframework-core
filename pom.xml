@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.carewebframework</groupId>
 		<artifactId>org.carewebframework-root</artifactId>
-		<version>6.0.0</version>
+		<version>6.0.2-SNAPSHOT</version>
 	</parent>
 	
 	<artifactId>org.carewebframework-parent</artifactId>
@@ -21,7 +21,7 @@
 	</scm>
 	
 	<properties>
-		<org.carewebframework.web.version>1.0.1-SNAPSHOT</org.carewebframework.web.version>
+		<org.carewebframework.web.version>1.0.4</org.carewebframework.web.version>
 	</properties>
 	
 	<modules>

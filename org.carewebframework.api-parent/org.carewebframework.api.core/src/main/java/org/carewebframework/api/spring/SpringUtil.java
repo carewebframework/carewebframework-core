@@ -112,6 +112,7 @@ public class SpringUtil {
     /**
      * Return the bean of the specified class.
      *
+     * @param <T> The requested class.
      * @param clazz The bean class.
      * @return The requested bean instance, or null if not found.
      */

@@ -81,7 +81,7 @@ public class RelatedClassMap {
         /**
          * Return cardinality for the target class or one of its superclasses.
          *
-         * @param targetClass
+         * @param targetClass Class whose cardinality is sought.
          * @return The associated cardinality, or null if none specified.
          */
         public Cardinality getCardinality(Class<? extends ElementBase> targetClass) {
@@ -155,8 +155,8 @@ public class RelatedClassMap {
     }
     
     /**
-     * Returns true if the specified class has any related classes (i.e., has a total cardinality >
-     * 0).
+     * Returns true if the specified class has any related classes (i.e., has a total cardinality
+     * &gt; 0).
      *
      * @param sourceClass The source class.
      * @return True if the specified class has any related classes.

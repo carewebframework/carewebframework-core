@@ -62,66 +62,66 @@ import org.carewebframework.web.ipc.InvocationRequestQueueRegistry;
  * Help content viewer. Supports multiple help formats.
  */
 public class HelpViewer implements IAutoWired, IHelpViewer, ITopicListener {
-
+    
     public enum HelpViewerMode {
         EMBEDDED, POPUP;
-
+        
         @Override
         public String toString() {
             return name().toLowerCase();
         }
     }
-
+    
     @WiredComponent
     private Tabview tvNavigator;
-
+    
     @WiredComponent
     private Iframe iframe;
-
+    
     @WiredComponent
     private Button btnPrevious;
-
+    
     @WiredComponent
     private Button btnNext;
-
+    
     @WiredComponent
     private Button btnPrint;
-
+    
     @WiredComponent
     private Button btnOpen;
-
+    
     @WiredComponent
     private Label lblLoading;
-
+    
     private Window root;
-
+    
     private final List<IHelpSet> helpSets = new ArrayList<>();
-
+    
     private final List<HelpViewBase> views = new ArrayList<>();
-
+    
     private InvocationRequestQueue requestQueue;
-
+    
     private HelpHistory history;
-
+    
     private HelpViewerMode mode;
-
+    
     private String lastURL;
-
+    
     private double lastHeight = 600;
-
+    
     private double lastWidth = 1000;
-
+    
     public HelpViewer() {
         super();
     }
-
+    
     @Override
     public void afterInitialized(BaseComponent comp) {
         root = (Window) comp;
         root.setAttribute("controller", this);
         init();
     }
-
+    
     /**
      * @see org.carewebframework.help.IHelpViewer#show()
      */
@@ -129,7 +129,7 @@ public class HelpViewer implements IAutoWired, IHelpViewer, ITopicListener {
     public void show() {
         lblLoading.setVisible(false);
         tvNavigator.setVisible(true);
-
+        
         if (mode == HelpViewerMode.EMBEDDED) {
             root.setHeight(lastHeight + "px");
             root.setWidth(lastWidth + "px");
@@ -139,7 +139,7 @@ public class HelpViewer implements IAutoWired, IHelpViewer, ITopicListener {
             ClientUtil.invoke("window.focus");
         }
     }
-
+    
     /**
      * @see org.carewebframework.help.IHelpViewer#show(java.lang.String)
      */
@@ -147,7 +147,7 @@ public class HelpViewer implements IAutoWired, IHelpViewer, ITopicListener {
     public void show(String homeId) {
         show(homeId, null);
     }
-
+    
     /**
      * @see org.carewebframework.help.IHelpViewer#show(IHelpSet)
      */
@@ -155,7 +155,7 @@ public class HelpViewer implements IAutoWired, IHelpViewer, ITopicListener {
     public void show(IHelpSet helpSet) {
         show(helpSet, null);
     }
-
+    
     /**
      * @see org.carewebframework.help.IHelpViewer#show(java.lang.String, java.lang.String)
      */
@@ -163,7 +163,7 @@ public class HelpViewer implements IAutoWired, IHelpViewer, ITopicListener {
     public void show(String homeId, String topicId) {
         show(findHelpSet(homeId), topicId);
     }
-
+    
     /**
      * @see org.carewebframework.help.IHelpViewer#show(IHelpSet, java.lang.String)
      */
@@ -171,7 +171,7 @@ public class HelpViewer implements IAutoWired, IHelpViewer, ITopicListener {
     public void show(IHelpSet helpSet, String topicId) {
         show(helpSet, topicId, null);
     }
-
+    
     /**
      * @see org.carewebframework.help.IHelpViewer#show(IHelpSet, java.lang.String, java.lang.String)
      */
@@ -187,20 +187,20 @@ public class HelpViewer implements IAutoWired, IHelpViewer, ITopicListener {
             show(HelpViewType.HISTORY);
         }
     }
-
+    
     /**
-     * @see org.carewebframework.help.IHelpViewer#show(org.carewebframework.help.viewer.HelpViewType)
+     * @see org.carewebframework.help.IHelpViewer#show(org.carewebframework.help.HelpViewType)
      */
     @Override
     public void show(HelpViewType viewType) {
         HelpViewBase view = findView(viewType, false, true);
-
+        
         if (view != null) {
             selectView(view);
             show();
         }
     }
-
+    
     /**
      * Close the window. If this is a local window, simply hide it. If it is a remote window, close
      * the browser window entirely.
@@ -210,12 +210,12 @@ public class HelpViewer implements IAutoWired, IHelpViewer, ITopicListener {
     @Override
     public void close() {
         root.close();
-
+        
         if (mode != HelpViewerMode.EMBEDDED) {
             ClientUtil.invoke("window.close");
         }
     }
-
+    
     /**
      * Resets the viewer to its baseline state. All registered help sets are removed, the history is
      * cleared, and all views are hidden.
@@ -225,31 +225,31 @@ public class HelpViewer implements IAutoWired, IHelpViewer, ITopicListener {
         lblLoading.setVisible(true);
         helpSets.clear();
         history.clear();
-
+        
         for (Tab tab : tvNavigator.getChildren(Tab.class)) {
             tab.setVisible(false);
         }
     }
-
+    
     /**
      * @see org.carewebframework.help.IHelpViewer#load(java.lang.Iterable)
      */
     @Override
     public void load(Iterable<IHelpSet> helpSets) {
         reset();
-
+        
         if (helpSets != null) {
             for (IHelpSet helpSet : helpSets) {
                 mergeHelpSet(helpSet);
             }
         }
-
+        
         lblLoading.setVisible(false);
         tvNavigator.setVisible(true);
         selectView(views.get(0));
         onTopicSelected(null);
     }
-
+    
     /**
      * Select the tab associated with the view. Fires the onSelect event on the tab.
      *
@@ -259,7 +259,7 @@ public class HelpViewer implements IAutoWired, IHelpViewer, ITopicListener {
         view.getContainer().getAncestor(Tab.class).setSelected(true);
         view.onSelect();
     }
-
+    
     /**
      * @see org.carewebframework.help.IHelpViewer#mergeHelpSet(IHelpSet)
      */
@@ -268,25 +268,25 @@ public class HelpViewer implements IAutoWired, IHelpViewer, ITopicListener {
         if (helpSet == null || MiscUtil.containsInstance(helpSets, helpSet)) {
             return;
         }
-
+        
         if (HelpUtil.getSearchService() != null) {
             HelpViewSearch searchTab = (HelpViewSearch) findView(HelpViewType.SEARCH, true, false);
             searchTab.mergeHelpSet(helpSet);
         }
-
+        
         // Each supported view type will result in a dedicated tab
-
+        
         for (IHelpView view : helpSet.getAllViews()) {
             HelpViewBase helpView = findView(view.getViewType(), true, true);
-
+            
             if (helpView != null) {
                 helpView.addView(view);
             }
         }
-
+        
         helpSets.add(helpSet);
     }
-
+    
     /**
      * Returns the help set that matches the specified home id, or null if no match found.
      *
@@ -299,10 +299,10 @@ public class HelpViewer implements IAutoWired, IHelpViewer, ITopicListener {
                 return helpSet;
             }
         }
-
+        
         return null;
     }
-
+    
     /**
      * Returns the help view associated with the specified view type. If the view does not exist and
      * doCreate is true and the view type is supported, a new view is created. Otherwise, null is
@@ -315,23 +315,23 @@ public class HelpViewer implements IAutoWired, IHelpViewer, ITopicListener {
      */
     private HelpViewBase findView(HelpViewType viewType, boolean doCreate, boolean visible) {
         HelpViewBase result = null;
-
+        
         for (HelpViewBase view : views) {
             if (view.getViewType().equals(viewType)) {
                 result = view;
                 break;
             }
         }
-
+        
         result = result != null ? result : doCreate ? createView(viewType) : null;
-
+        
         if (result != null) {
             result.getContainer().getAncestor(Tab.class).setVisible(visible);
         }
-
+        
         return result;
     }
-
+    
     /**
      * Creates a help tab for the specified view type. If the view type is not supported, null is
      * returned.
@@ -342,22 +342,22 @@ public class HelpViewer implements IAutoWired, IHelpViewer, ITopicListener {
     private HelpViewBase createView(HelpViewType viewType) {
         HelpViewBase newView = HelpViewBase.createView(this, viewType);
         int pos = -1;
-
+        
         for (int i = 0; i < views.size(); i++) {
             HelpViewBase view = views.get(i);
-
+            
             if (viewType.compareTo(view.getViewType()) <= 0) {
                 pos = i;
                 break;
             }
         }
-
+        
         if (pos < 0) {
             views.add(newView);
         } else {
             views.add(pos, newView);
         }
-
+        
         Tab tab = new Tab();
         tab.addStyle("overflow", "auto");
         String label = StrUtil.getLabel("cwf.help.tab." + viewType.name().toLowerCase() + ".label");
@@ -367,7 +367,7 @@ public class HelpViewer implements IAutoWired, IHelpViewer, ITopicListener {
         tvNavigator.addChild(tab, pos);
         return newView;
     }
-
+    
     /**
      * Sets the currently viewed topic.
      *
@@ -376,7 +376,7 @@ public class HelpViewer implements IAutoWired, IHelpViewer, ITopicListener {
     public void setTopic(HelpTopic topic) {
         history.add(topic);
     }
-
+    
     /**
      * Allows help history tab to inject model.
      *
@@ -385,7 +385,7 @@ public class HelpViewer implements IAutoWired, IHelpViewer, ITopicListener {
     protected void setHelpHistory(HelpHistory history) {
         this.history = history;
     }
-
+    
     /**
      * Moves to the next topic in the view history.
      */
@@ -393,7 +393,7 @@ public class HelpViewer implements IAutoWired, IHelpViewer, ITopicListener {
     private void onClick$btnNext() {
         history.next();
     }
-
+    
     /**
      * Moves to the previous topic in the view history.
      */
@@ -401,7 +401,7 @@ public class HelpViewer implements IAutoWired, IHelpViewer, ITopicListener {
     private void onClick$btnPrevious() {
         history.previous();
     }
-
+    
     /**
      * Opens the iFrame contents in a separate window.
      */
@@ -409,7 +409,7 @@ public class HelpViewer implements IAutoWired, IHelpViewer, ITopicListener {
     private void onClick$btnOpen() {
         HelpUtil.openWindow(iframe.getSrc(), "_blank");
     }
-
+    
     /**
      * Fired when the iFrame's URL changes.
      *
@@ -418,19 +418,19 @@ public class HelpViewer implements IAutoWired, IHelpViewer, ITopicListener {
     @EventHandler(value = "load", target = "@iframe")
     private void onLoad$iframe(Event event) {
         String url = (String) event.getData();
-
+        
         if (url == null || url.equals(lastURL)) {
             return;
         }
-
+        
         lastURL = url;
         HelpTopic topic = findTopic(url);
-
+        
         if (topic != null) {
             setTopic(topic);
         }
     }
-
+    
     /**
      * Returns a topic matching the specified URL.
      *
@@ -440,20 +440,20 @@ public class HelpViewer implements IAutoWired, IHelpViewer, ITopicListener {
     private HelpTopic findTopic(String url) {
         int i = url.indexOf("/web/");
         url = i == -1 ? url : url.substring(i);
-
+        
         for (IHelpSet hs : helpSets) {
             try {
                 HelpTopic topic = hs.getTopic(url);
-
+                
                 if (topic != null) {
                     return topic;
                 }
             } catch (Exception e) {}
         }
-
+        
         return null;
     }
-
+    
     /**
      * Returns a reference to the tab box.
      *
@@ -462,7 +462,7 @@ public class HelpViewer implements IAutoWired, IHelpViewer, ITopicListener {
     protected Tabview getTabview() {
         return tvNavigator;
     }
-
+    
     /**
      * Initializes the UI after initial loading.
      */
@@ -482,12 +482,12 @@ public class HelpViewer implements IAutoWired, IHelpViewer, ITopicListener {
         findView(HelpViewType.HISTORY, true, false);
         history.addTopicListener(this);
         reset();
-
+        
         if (proxied) {
             root.setCloseAction(CloseAction.DESTROY);
             page.setTitle("Help");
             InvocationRequestQueue proxyQueue = InvocationRequestQueueRegistry.getInstance().get("help" + proxyId);
-
+            
             if (proxyQueue == null || !proxyQueue.isAlive()) {
                 proxyQueue = null;
                 close();
@@ -498,9 +498,9 @@ public class HelpViewer implements IAutoWired, IHelpViewer, ITopicListener {
         } else {
             root.setCloseAction(CloseAction.HIDE);
         }
-
+        
     }
-
+    
     /**
      * Save height and width to use next time window is shown.
      *
@@ -511,43 +511,43 @@ public class HelpViewer implements IAutoWired, IHelpViewer, ITopicListener {
         lastHeight = event.getHeight();
         lastWidth = event.getWidth();
     }
-
+    
     /**
      * Remove the viewer reference when it is detached.
      */
     @EventHandler("destroy")
     private void onDestroy() {
         HelpUtil.removeViewer(root.getPage(), this, false);
-
+        
         if (requestQueue != null) {
             requestQueue.close();
             requestQueue = null;
         }
     }
-
+    
     /**
      * Invoked by the view history whenever the selected topic changes.
      */
     @Override
     public void onTopicSelected(HelpTopic topic) {
         URL url = null;
-
+        
         try {
             String src = topic == null ? null : HelpUtil.getUrl(topic.getURL().toString());
             iframe.setSrc(src);
         } catch (Exception e) {
             iframe.setSrc("about:" + e);
         }
-
+        
         lastURL = iframe.getSrc();
         btnPrevious.setDisabled(!history.hasPrevious());
         btnNext.setDisabled(!history.hasNext());
         btnPrint.setDisabled(url == null);
         btnOpen.setDisabled(url == null);
-
+        
         for (HelpViewBase view : views) {
             view.onTopicSelected(topic);
         }
     }
-
+    
 }

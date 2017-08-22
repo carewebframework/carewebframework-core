@@ -36,11 +36,11 @@ import org.carewebframework.common.MiscUtil;
 import org.carewebframework.shell.AboutDialog;
 import org.carewebframework.shell.CareWebShell;
 import org.carewebframework.shell.CareWebUtil;
+import org.carewebframework.shell.ancillary.CWFException;
 import org.carewebframework.shell.ancillary.INotificationListener;
 import org.carewebframework.shell.ancillary.NotificationListeners;
 import org.carewebframework.shell.ancillary.RelatedClassMap;
 import org.carewebframework.shell.ancillary.RelatedClassMap.Cardinality;
-import org.carewebframework.shell.ancillary.CWFException;
 import org.carewebframework.shell.designer.PropertyGrid;
 import org.carewebframework.shell.plugins.IPluginResource;
 import org.carewebframework.shell.plugins.PluginDefinition;
@@ -459,6 +459,7 @@ public abstract class ElementBase {
     /**
      * Returns an iterable of this component's children restricted to the specified type.
      *
+     * @param <T> Type of children returned by iterable.
      * @param clazz Restrict to children of this type.
      * @return Iterable of this component's children.
      */

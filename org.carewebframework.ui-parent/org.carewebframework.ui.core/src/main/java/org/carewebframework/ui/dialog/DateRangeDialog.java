@@ -7,15 +7,15 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  * This Source Code Form is also subject to the terms of the Health-Related
  * Additional Disclaimer of Warranty and Limitation of Liability available at
  *
@@ -44,10 +44,10 @@ import org.carewebframework.web.page.PageUtil;
  * Presents a date range dialog.
  */
 public class DateRangeDialog implements IAutoWired {
-    
+
     /**
      * Displays the date range dialog.
-     * 
+     *
      * @param callback Callback for returning a date range reflecting the inputs from the dialog.
      *            This will be null if the input is cancelled or if an unexpected error occurs.
      */
@@ -55,10 +55,10 @@ public class DateRangeDialog implements IAutoWired {
         Date today = DateUtil.today();
         show(today, today, callback);
     }
-    
+
     /**
      * Displays the date range dialog.
-     * 
+     *
      * @param startDefault Default start date.
      * @param endDefault Default end date.
      * @param callback Callback for returning a date range reflecting the inputs from the dialog.
@@ -67,10 +67,10 @@ public class DateRangeDialog implements IAutoWired {
     public static void show(Date startDefault, Date endDefault, IResponseCallback<DateRange> callback) {
         show(new DateRange(startDefault, endDefault), callback);
     }
-    
+
     /**
      * Displays the date range dialog.
-     * 
+     *
      * @param dateRange The initial date range.
      * @param callback Callback for returning a date range reflecting the inputs from the dialog.
      *            This will be null if the input is cancelled or if an unexpected error occurs.
@@ -84,15 +84,15 @@ public class DateRangeDialog implements IAutoWired {
             callback.onComplete((DateRange) dlg.getAttribute("result"));
         });
     }
-    
+
     @WiredComponent
     private Datebox startDate;
-    
+
     @WiredComponent
     private Datebox endDate;
-    
+
     private Window root;
-    
+
     /**
      * Set default values for input boxes.
      */
@@ -103,7 +103,7 @@ public class DateRangeDialog implements IAutoWired {
         startDate.setValue(dateRange.getStartDate());
         endDate.setValue(dateRange.getEndDate());
     }
-    
+
     /**
      * Entering return in the start date box sets focus to the end date box.
      */
@@ -111,17 +111,15 @@ public class DateRangeDialog implements IAutoWired {
     private void onOK$startDate() {
         endDate.setFocus(true);
     }
-    
+
     /**
      * Entering return in the end date box is same as clicking the OK button.
-     * 
-     * @param event The onOK event.
      */
     @EventHandler(value = "enter", target = "@endDate")
     private void onOK$endDate() {
         onClick$btnOK();
     }
-    
+
     /**
      * Clicking the cancel button aborts the input.
      */
@@ -129,7 +127,7 @@ public class DateRangeDialog implements IAutoWired {
     private void onClick$btnCancel() {
         root.close();
     }
-    
+
     /**
      * Clicking the OK button creates a DateRangeItem object with the responses from the dialog and
      * closes the dialog.
@@ -141,12 +139,12 @@ public class DateRangeDialog implements IAutoWired {
             startDate = endDate;
             endDate = temp;
         }
-        
+
         DateRange dateRange = new DateRange(null, startDate.getValue(), endDate.getValue());
         root.setAttribute("result", dateRange);
         root.close();
     }
-    
+
     /**
      * Sets the end date value equal to the start date value.
      */
@@ -154,7 +152,7 @@ public class DateRangeDialog implements IAutoWired {
     private void onClick$btnSameAsStart() {
         endDate.setValue(startDate.getValue());
     }
-    
+
     /**
      * Sets the start date value equal to the end date value.
      */

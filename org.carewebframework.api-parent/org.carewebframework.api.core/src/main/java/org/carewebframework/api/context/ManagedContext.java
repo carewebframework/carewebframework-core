@@ -53,33 +53,33 @@ import org.carewebframework.common.StopWatchFactory.IStopWatch;
  * @param <DomainClass> Class of underlying domain object.
  */
 public class ManagedContext<DomainClass> implements Comparable<IManagedContext<DomainClass>>, IRegisterEvent, IManagedContext<DomainClass> {
-    
+
     private static final Log log = LogFactory.getLog(ManagedContext.class);
-    
+
     private static final int CONTEXT_CURRENT = 0;
-    
+
     private static final int CONTEXT_PENDING = 1;
-    
+
     private final Object[] domainObject = new Object[2];
-    
+
     private Class<? extends IContextEvent> eventInterface;
-    
+
     private String contextName;
-    
+
     private boolean isPending;
-    
+
     private final List<IContextEvent> subscribers = new ArrayList<>();
-    
+
     private final List<IContextEvent> surveyed = new ArrayList<>();
-    
+
     protected IContextManager contextManager;
-    
+
     protected IEventManager eventManager;
-    
+
     protected AppFramework appFramework;
-    
+
     protected ContextItems contextItems = new ContextItems();
-    
+
     /**
      * Every managed context must specify a unique context name and the context change event
      * interface it supports.
@@ -90,7 +90,7 @@ public class ManagedContext<DomainClass> implements Comparable<IManagedContext<D
     protected ManagedContext(String contextName, Class<? extends IContextEvent> eventInterface) {
         this(contextName, eventInterface, null);
     }
-    
+
     /**
      * Every managed context must specify a unique context name and the context change event
      * interface it supports.
@@ -105,7 +105,7 @@ public class ManagedContext<DomainClass> implements Comparable<IManagedContext<D
         setPending(initialContext);
         commit(true);
     }
-    
+
     /**
      * Extracts and returns the CCOW context from the specified domain object. Each subclass should
      * override this and supply their own implementation.
@@ -116,7 +116,7 @@ public class ManagedContext<DomainClass> implements Comparable<IManagedContext<D
     protected ContextItems toCCOWContext(DomainClass domainObject) {
         return contextItems;
     }
-    
+
     /**
      * Creates a local context based on the specified CCOW context. Each subclass should override
      * this and supply their own implementation.
@@ -128,7 +128,7 @@ public class ManagedContext<DomainClass> implements Comparable<IManagedContext<D
     protected DomainClass fromCCOWContext(ContextItems contextItems) {
         return null;
     }
-    
+
     /**
      * Sets the pending state to the specified domain object.
      *
@@ -138,7 +138,7 @@ public class ManagedContext<DomainClass> implements Comparable<IManagedContext<D
         this.domainObject[CONTEXT_PENDING] = domainObject;
         isPending = true;
     }
-    
+
     /**
      * Compares whether two domain objects are the same. This is used to determine whether a context
      * change request really represents a different context. It may be overridden if the default
@@ -151,7 +151,7 @@ public class ManagedContext<DomainClass> implements Comparable<IManagedContext<D
     protected boolean isSameContext(DomainClass domainObject1, DomainClass domainObject2) {
         return ObjectUtils.equals(domainObject1, domainObject2);
     }
-    
+
     /**
      * Sets the context manager instance.
      *
@@ -160,7 +160,7 @@ public class ManagedContext<DomainClass> implements Comparable<IManagedContext<D
     public void setContextManager(IContextManager contextManager) {
         this.contextManager = contextManager;
     }
-    
+
     /**
      * Sets the event manager instance.
      *
@@ -169,7 +169,7 @@ public class ManagedContext<DomainClass> implements Comparable<IManagedContext<D
     public void setEventManager(IEventManager eventManager) {
         this.eventManager = eventManager;
     }
-    
+
     /**
      * Sets the application framework instance.
      *
@@ -178,11 +178,11 @@ public class ManagedContext<DomainClass> implements Comparable<IManagedContext<D
     public void setAppFramework(AppFramework appFramework) {
         this.appFramework = appFramework;
     }
-    
+
     // ************************************************************************************************
     // * IManagedContext implementation
     // ***********************************************************************************************/
-    
+
     /**
      * @see org.carewebframework.api.context.IManagedContext#commit(boolean)
      */
@@ -191,11 +191,11 @@ public class ManagedContext<DomainClass> implements Comparable<IManagedContext<D
         if (accept) {
             domainObject[CONTEXT_CURRENT] = domainObject[CONTEXT_PENDING];
         }
-        
+
         domainObject[CONTEXT_PENDING] = null;
         isPending = false;
     }
-    
+
     /**
      * @see org.carewebframework.api.context.IManagedContext#getContextItems(boolean)
      */
@@ -205,7 +205,7 @@ public class ManagedContext<DomainClass> implements Comparable<IManagedContext<D
         DomainClass domainObject = getContextObject(pending);
         return domainObject == null ? contextItems : toCCOWContext(domainObject);
     }
-    
+
     /**
      * @see org.carewebframework.api.context.IManagedContext#getContextName()
      */
@@ -213,7 +213,7 @@ public class ManagedContext<DomainClass> implements Comparable<IManagedContext<D
     public String getContextName() {
         return contextName;
     }
-    
+
     /**
      * @see org.carewebframework.api.context.IManagedContext#isPending()
      */
@@ -221,7 +221,7 @@ public class ManagedContext<DomainClass> implements Comparable<IManagedContext<D
     public boolean isPending() {
         return isPending;
     }
-    
+
     /**
      * @see org.carewebframework.api.context.IManagedContext#getPriority()
      */
@@ -229,7 +229,7 @@ public class ManagedContext<DomainClass> implements Comparable<IManagedContext<D
     public int getPriority() {
         return 0;
     }
-    
+
     /**
      * @see org.carewebframework.api.context.IManagedContext#init()
      */
@@ -237,7 +237,7 @@ public class ManagedContext<DomainClass> implements Comparable<IManagedContext<D
     public void init() {
         reset();
     }
-    
+
     /**
      * @see org.carewebframework.api.context.IManagedContext#reset()
      */
@@ -245,55 +245,55 @@ public class ManagedContext<DomainClass> implements Comparable<IManagedContext<D
     public void reset() {
         setPending(null);
     }
-    
+
     /**
      * @see org.carewebframework.api.context.IManagedContext#setContextItems(org.carewebframework.api.context.ContextItems)
      */
     @Override
     public boolean setContextItems(ContextItems contextItems) {
         DomainClass domainObject = fromCCOWContext(contextItems);
-        
+
         if (domainObject == null) {
             return false;
         }
-        
+
         setPending(domainObject);
         return true;
     }
-    
+
     /**
-     * @see org.carewebframework.api.context.IManagedContext#addSubscriber(java.lang.Object)
+     * @see org.carewebframework.api.context.IManagedContext#addSubscriber(IContextEvent)
      */
     @Override
     public boolean addSubscriber(IContextEvent subscriber) {
         if (!eventInterface.isInstance(subscriber)) {
             return false;
         }
-        
+
         if (subscribers.contains(subscriber)) {
             return false;
         }
-        
+
         subscribers.add(subscriber);
         return true;
     }
-    
+
     /**
      * @see org.carewebframework.api.context.IManagedContext#addSubscribers(java.lang.Iterable)
      */
     @Override
     public boolean addSubscribers(Iterable<IContextEvent> subscribers) {
         boolean result = false;
-        
+
         for (IContextEvent subscriber : subscribers) {
             result |= addSubscriber(subscriber);
         }
-        
+
         return result;
     }
-    
+
     /**
-     * @see org.carewebframework.api.context.IManagedContext#removeSubscriber(java.lang.Object)
+     * @see org.carewebframework.api.context.IManagedContext#removeSubscriber(IContextEvent)
      */
     @Override
     public void removeSubscriber(IContextEvent subscriber) {
@@ -302,7 +302,7 @@ public class ManagedContext<DomainClass> implements Comparable<IManagedContext<D
             surveyed.remove(subscriber);
         }
     }
-    
+
     /**
      * @see org.carewebframework.api.context.IManagedContext#removeSubscribers(java.lang.Iterable)
      */
@@ -312,60 +312,60 @@ public class ManagedContext<DomainClass> implements Comparable<IManagedContext<D
             removeSubscriber(subscriber);
         }
     }
-    
+
     /**
      * @see org.carewebframework.api.context.IManagedContext#notifySubscribers(boolean, boolean)
      */
     @Override
     public void notifySubscribers(boolean accept, boolean all) {
         Map<String, Object> map = null;
-        
+
         if (log.isDebugEnabled() && StopWatchFactory.hasFactory()) {
             map = new HashMap<>();
             map.put("action", accept ? "committed" : "canceled");
             map.put("context", getContextName());
         }
-        
+
         for (IContextEvent event : getIterable(all)) {
             IStopWatch sw = null;
-            
+
             try {
                 if (map != null) {
                     map.remove("exception");
                     map.put("subscriber", event.getClass().getName());
                     sw = StopWatchFactory.create("org.carewebframework.context.notifySubscribers", map);
-                    
+
                     if (sw != null) {
                         sw.start();
                     }
                 }
-                
+
                 if (accept) {
                     event.committed();
                 } else {
                     event.canceled();
                 }
-                
+
             } catch (Throwable e) {
                 log.error("Error during notifySubscribers.", e);
-                
+
                 if (map != null) {
                     map.put("exception", e.toString());
                 }
             }
-            
+
             if (sw != null) {
                 sw.stop();
             }
         }
-        
+
         surveyed.clear();
-        
+
         if (accept) {
             eventManager.fireLocalEvent(getEventName(), getContextObject(false));
         }
     }
-    
+
     /**
      * Returns a callback list that is safe for iteration.
      *
@@ -376,9 +376,10 @@ public class ManagedContext<DomainClass> implements Comparable<IManagedContext<D
     private Iterable<IContextEvent> getIterable(boolean all) {
         return new ArrayList<>(all ? subscribers : surveyed);
     }
-    
+
     /**
-     * @see org.carewebframework.api.context.IManagedContext#surveySubscribers(boolean)
+     * @see org.carewebframework.api.context.IManagedContext#surveySubscribers(boolean,
+     *      ISurveyCallback)
      */
     @Override
     public void surveySubscribers(boolean silent, ISurveyCallback callback) {
@@ -386,24 +387,24 @@ public class ManagedContext<DomainClass> implements Comparable<IManagedContext<D
         Iterator<IContextEvent> iter = getIterable(true).iterator();
         surveySubscribers(iter, response, callback);
     }
-    
+
     private void surveySubscribers(Iterator<IContextEvent> iter, SurveyResponse response, ISurveyCallback callback) {
         if ((response.isSilent() || !response.rejected()) && iter.hasNext()) {
             IContextEvent subscriber = iter.next();
-            
+
             response.reset(__ -> {
                 surveySubscribers(iter, response, callback);
             });
-            
+
             try {
                 subscriber.pending(response);
             } catch (Throwable e) {
                 log.error("Error during surveysubscribers.", e);
                 response.reject(e.toString());
             }
-            
+
             ResponseState state = response.getState();
-            
+
             if (state != ResponseState.DEFERRED) {
                 surveySubscribers(iter, response, callback);
             }
@@ -411,7 +412,7 @@ public class ManagedContext<DomainClass> implements Comparable<IManagedContext<D
             callback.response(response);
         }
     }
-    
+
     /**
      * Returns the name of the event fired after a successful context change.
      *
@@ -420,21 +421,21 @@ public class ManagedContext<DomainClass> implements Comparable<IManagedContext<D
     private String getEventName() {
         return "CONTEXT.CHANGED." + getContextName();
     }
-
+    
     @Override
     public void addListener(IGenericEvent<DomainClass> listener) {
         eventManager.subscribe(getEventName(), listener);
     }
-    
+
     @Override
     public void removeListener(IGenericEvent<DomainClass> listener) {
         eventManager.unsubscribe(getEventName(), listener);
     }
-    
+
     // ************************************************************************************************
     // * ISharedContext implementation
     // ***********************************************************************************************/
-    
+
     /**
      * @see org.carewebframework.api.context.ISharedContext#requestContextChange(Object)
      */
@@ -443,17 +444,17 @@ public class ManagedContext<DomainClass> implements Comparable<IManagedContext<D
         if (isSameContext(newContextObject, getContextObject(false))) {
             return;
         }
-        
+
         if (isPending) {
             throw new ContextException("A context change is already pending.");
         }
-        
+
         contextManager.localChangeBegin(this);
         domainObject[CONTEXT_PENDING] = newContextObject;
         isPending = true;
         contextManager.localChangeEnd(this, null);
     }
-    
+
     /**
      * @see org.carewebframework.api.context.ISharedContext#getContextObject(boolean)
      */
@@ -462,11 +463,11 @@ public class ManagedContext<DomainClass> implements Comparable<IManagedContext<D
     public DomainClass getContextObject(boolean pending) {
         return (DomainClass) domainObject[pending ? CONTEXT_PENDING : CONTEXT_CURRENT];
     }
-    
+
     // ************************************************************************************************
     // * Comparable implementation
     // ***********************************************************************************************/
-    
+
     /**
      * Compares by priority, with higher priorities collating first.
      */
@@ -476,11 +477,11 @@ public class ManagedContext<DomainClass> implements Comparable<IManagedContext<D
         int pri2 = getPriority();
         return this == o ? 0 : pri1 < pri2 ? -1 : 1;
     }
-    
+
     // ************************************************************************************************
     // * IRegisterEvent implementation
     // ***********************************************************************************************/
-    
+
     /**
      * Register an object as a subscriber if it implements the callback interface.
      *
@@ -493,7 +494,7 @@ public class ManagedContext<DomainClass> implements Comparable<IManagedContext<D
             addSubscriber((IContextEvent) object);
         }
     }
-    
+
     /**
      * Remove an object as a subscriber if it implements the callback interface.
      *
@@ -506,5 +507,5 @@ public class ManagedContext<DomainClass> implements Comparable<IManagedContext<D
             removeSubscriber((IContextEvent) object);
         }
     }
-    
+
 }
