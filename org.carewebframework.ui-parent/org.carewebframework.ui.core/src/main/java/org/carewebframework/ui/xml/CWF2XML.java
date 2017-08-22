@@ -7,15 +7,15 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  * This Source Code Form is also subject to the terms of the Health-Related
  * Additional Disclaimer of Warranty and Limitation of Liability available at
  *
@@ -49,14 +49,14 @@ import org.w3c.dom.Node;
  * Converts a CWF component tree to XML format.
  */
 public class CWF2XML {
-    
+
     private final Set<String> exclude = new HashSet<>();
-    
+
     private final Document doc;
-    
+
     /**
      * Returns an XML document that mirrors the CWF component tree starting at the specified root.
-     * 
+     *
      * @param root BaseComponent whose subtree is to be traversed.
      * @param excludedProperties An optional list of properties that should be excluded from the
      *            output. These may either be the property name (e.g., "uuid") or a property name
@@ -74,11 +74,11 @@ public class CWF2XML {
             return null;
         }
     }
-    
+
     /**
      * Returns an XML-formatted string that mirrors the CWF component tree starting at the specified
      * root.
-     * 
+     *
      * @param root BaseComponent whose subtree is to be traversed.
      * @param excludedProperties An optional list of properties that should be excluded from the
      *            output. These may either be the property name (e.g., "uuid") or a property name
@@ -90,10 +90,10 @@ public class CWF2XML {
     public static String toXML(BaseComponent root, String... excludedProperties) {
         return XMLUtil.toString(toDocument(root, excludedProperties));
     }
-    
+
     /**
      * Private constructor to limit access to static methods.
-     * 
+     *
      * @param excludedProperties An optional list of properties that should be excluded from the
      *            output. These may either be the property name (e.g., "uuid") or a property name
      *            qualified by a component name (e.g., "window.uuid"). Optionally, an entry may be
@@ -103,20 +103,20 @@ public class CWF2XML {
      */
     private CWF2XML(String[] excludedProperties) throws ParserConfigurationException {
         doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
-        
+
         if (excludedProperties != null) {
             exclude.addAll(Arrays.asList(excludedProperties));
         }
-        
+
         exclude.add("innerAttrs");
         exclude.add("outerAttrs");
     }
-    
+
     /**
      * Adds the root component to the XML document at the current level along with all bean
      * properties that return String or primitive types. Then, recurses over all of the root
      * component's children.
-     * 
+     *
      * @param root The root component.
      * @param parent The parent XML node.
      */
@@ -125,52 +125,52 @@ public class CWF2XML {
         Class<?> clazz = root.getClass();
         ComponentDefinition def = root.getDefinition();
         String cmpname = def.getTag();
-        
+
         if (def.getComponentClass() != clazz) {
-            properties.put("use", clazz.getName());
+            properties.put("impl", clazz.getName());
         }
-        
+
         Node child = doc.createElement(cmpname);
         parent.appendChild(child);
-        
+
         for (PropertyDescriptor propDx : PropertyUtils.getPropertyDescriptors(root)) {
             Method getter = propDx.getReadMethod();
             Method setter = propDx.getWriteMethod();
             String name = propDx.getName();
-            
+
             if (getter != null && setter != null && !isExcluded(name, cmpname, null)
                     && !setter.isAnnotationPresent(Deprecated.class)
                     && (getter.getReturnType() == String.class || getter.getReturnType().isPrimitive())) {
                 try {
                     Object raw = getter.invoke(root);
                     String value = raw == null ? null : raw.toString();
-                    
+
                     if (StringUtils.isEmpty(value) || ("id".equals(name) && value.startsWith("z_"))
                             || isExcluded(name, cmpname, value)) {
                         continue;
                     }
-                    
+
                     properties.put(name, value.toString());
                 } catch (Exception e) {}
             }
         }
-        
+
         for (Entry<String, String> entry : properties.entrySet()) {
             Attr attr = doc.createAttribute(entry.getKey());
             child.getAttributes().setNamedItem(attr);
             attr.setValue(entry.getValue());
         }
-        
+
         properties = null;
-        
+
         for (BaseComponent cmp : root.getChildren()) {
             toXML(cmp, child);
         }
     }
-    
+
     /**
      * Returns true if the property is to be excluded.
-     * 
+     *
      * @param name The property name.
      * @param cmpname The component name (may be null).
      * @param value The property value (may be null).
@@ -179,10 +179,10 @@ public class CWF2XML {
     private boolean isExcluded(String name, String cmpname, String value) {
         return exclude.contains(excludeKey(name, null, value)) || exclude.contains(excludeKey(name, cmpname, value));
     }
-    
+
     /**
      * Returns the exclusion lookup key for the property.
-     * 
+     *
      * @param name The property name.
      * @param cmpname The component name (may be null).
      * @param value The property value (may be null).
