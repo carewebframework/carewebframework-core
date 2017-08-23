@@ -1,0 +1,19 @@
+.cwf-xml-tag > a {
+	color: black;
+}
+
+.cwf-xml-attrname {
+	color: red;
+}
+
+.cwf-xml-attrvalue {
+	color: green;
+}
+
+.cwf-xml-content > a {
+	color: blue;
+}
+
+.cwf-xml-comment > a {
+	color: lightgray;
+}

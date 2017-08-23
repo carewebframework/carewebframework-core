@@ -6,4 +6,5 @@
 		<textbox name="txtSearch" width="350px" focus="true" forward="enter=btnSearch.click"/>
 		<button name="btnSearch" label="Search" />
 	</toolbar>
+	<style src="web/org/carewebframework/ui/xml/xmlViewer.css" />
 </window>

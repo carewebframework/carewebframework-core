@@ -60,6 +60,11 @@ class XMLViewerRenderer implements IComponentRenderer<Treenode, Node> {
             return tnode;
         }
         
+        if (node.getNodeType() == Node.COMMENT_NODE) {
+            setLabel(tnode, "<!--" + node.getNodeValue() + "-->", XMLConstants.STYLE_COMMENT);
+            return tnode;
+        }
+
         if (node.getParentNode() == null) { // Closing tag
             setLabel(tnode, XMLUtil.formatNodeName(node, TagFormat.CLOSING), XMLConstants.STYLE_TAG);
             return tnode;
@@ -69,9 +74,11 @@ class XMLViewerRenderer implements IComponentRenderer<Treenode, Node> {
         String label = "<" + node.getNodeName();
         NamedNodeMap attrs = node.getAttributes();
         
-        for (int i = 0; i < attrs.getLength(); i++) {
-            Node attr = attrs.item(i);
-            label += " " + attr.getNodeName() + "='" + attr.getNodeValue() + "'";
+        if (attrs != null) {
+            for (int i = 0; i < attrs.getLength(); i++) {
+                Node attr = attrs.item(i);
+                label += " " + attr.getNodeName() + "='" + attr.getNodeValue() + "'";
+            }
         }
         
         setLabel(tnode, label + (leaf ? " />" : ">"), XMLConstants.STYLE_TAG);
