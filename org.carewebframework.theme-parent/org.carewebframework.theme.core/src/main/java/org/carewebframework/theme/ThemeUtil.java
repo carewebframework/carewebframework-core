@@ -25,7 +25,7 @@
  */
 package org.carewebframework.theme;
 
-import org.carewebframework.web.component.BaseUIComponent;
+import org.fujion.component.BaseUIComponent;
 
 /**
  * Utility methods for manipulating theme styles.

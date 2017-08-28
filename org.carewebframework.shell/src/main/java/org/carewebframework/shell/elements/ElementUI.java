@@ -41,11 +41,11 @@ import org.carewebframework.shell.designer.DesignMask.MaskMode;
 import org.carewebframework.shell.designer.PropertyEditorTriggers;
 import org.carewebframework.shell.property.PropertyTypeRegistry;
 import org.carewebframework.ui.util.CWFUtil;
-import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.component.BaseLabeledComponent;
-import org.carewebframework.web.component.BaseUIComponent;
-import org.carewebframework.web.component.Menupopup;
-import org.carewebframework.web.page.PageUtil;
+import org.fujion.component.BaseComponent;
+import org.fujion.component.BaseLabeledComponent;
+import org.fujion.component.BaseUIComponent;
+import org.fujion.component.Menupopup;
+import org.fujion.page.PageUtil;
 
 /**
  * This is the base class for all layout elements supported by the CareWeb framework.
@@ -120,14 +120,14 @@ public abstract class ElementUI extends ElementBase {
      */
     protected String getTemplateUrl() {
         return "web/" + getClass().getPackage().getName().replace(".", "/") + "/"
-                + StringUtils.uncapitalize(getClass().getSimpleName()) + ".cwf";
+                + StringUtils.uncapitalize(getClass().getSimpleName()) + ".fsp";
     }
     
     /**
      * Create wrapped component(s) from a template (a cwf page). Performs autowiring of variables
      * and events. The template URL is derived from the class name. For example, if the class is
      * "org.carewebframework.xxx.Clazz", the template URL is assumed to be
-     * "web/org/carewebframework/xxx/clazz.cwf".
+     * "web/org/carewebframework/xxx/clazz.fsp".
      *
      * @return Top level component.
      */

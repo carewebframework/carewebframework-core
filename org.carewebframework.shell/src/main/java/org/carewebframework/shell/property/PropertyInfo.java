@@ -29,7 +29,7 @@ import java.lang.reflect.Method;
 import java.util.Properties;
 
 import org.apache.commons.lang.StringUtils;
-import org.carewebframework.common.MiscUtil;
+import org.fujion.common.MiscUtil;
 
 /**
  * Holds information about a specific plug-in property.

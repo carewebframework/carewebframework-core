@@ -25,7 +25,7 @@
  */
 package org.carewebframework.shell.property;
 
-import org.carewebframework.common.AbstractRegistry;
+import org.fujion.common.AbstractRegistry;
 import org.carewebframework.shell.designer.PropertyEditorAction;
 import org.carewebframework.shell.designer.PropertyEditorBase;
 import org.carewebframework.shell.designer.PropertyEditorBoolean;

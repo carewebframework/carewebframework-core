@@ -31,18 +31,18 @@ import org.carewebframework.plugin.infopanel.model.IInfoPanel;
 import org.carewebframework.plugin.infopanel.model.IInfoPanel.Action;
 import org.carewebframework.plugin.infopanel.service.InfoPanelService;
 import org.carewebframework.ui.controller.FrameworkController;
-import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.component.Button;
-import org.carewebframework.web.component.Checkbox;
-import org.carewebframework.web.component.Div;
-import org.carewebframework.web.component.Import;
-import org.carewebframework.web.component.Label;
-import org.carewebframework.web.component.Listbox;
-import org.carewebframework.web.component.Listitem;
-import org.carewebframework.web.component.Menuitem;
-import org.carewebframework.web.dragdrop.DropUtil;
-import org.carewebframework.web.event.ClickEvent;
-import org.carewebframework.web.event.DblclickEvent;
+import org.fujion.component.BaseComponent;
+import org.fujion.component.Button;
+import org.fujion.component.Checkbox;
+import org.fujion.component.Div;
+import org.fujion.component.Import;
+import org.fujion.component.Label;
+import org.fujion.component.Listbox;
+import org.fujion.component.Listitem;
+import org.fujion.component.Menuitem;
+import org.fujion.dragdrop.DropUtil;
+import org.fujion.event.ClickEvent;
+import org.fujion.event.DblclickEvent;
 
 /**
  * Controller for the test component. This component provides a list box of draggable list items for

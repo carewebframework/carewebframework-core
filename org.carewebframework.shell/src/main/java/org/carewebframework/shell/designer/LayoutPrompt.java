@@ -33,28 +33,28 @@ import static org.carewebframework.shell.designer.DesignConstants.MSG_LAYOUT_OVE
 import java.util.HashMap;
 import java.util.Map;
 
-import org.carewebframework.common.StrUtil;
+import org.fujion.common.StrUtil;
 import org.carewebframework.shell.layout.LayoutIdentifier;
 import org.carewebframework.shell.layout.LayoutUtil;
 import org.carewebframework.ui.dialog.DialogUtil;
-import org.carewebframework.web.ancillary.IAutoWired;
-import org.carewebframework.web.annotation.EventHandler;
-import org.carewebframework.web.annotation.WiredComponent;
-import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.component.Label;
-import org.carewebframework.web.component.Radiobutton;
-import org.carewebframework.web.component.Radiogroup;
-import org.carewebframework.web.component.Textbox;
-import org.carewebframework.web.component.Window;
-import org.carewebframework.web.event.IEventListener;
-import org.carewebframework.web.page.PageUtil;
+import org.fujion.ancillary.IAutoWired;
+import org.fujion.annotation.EventHandler;
+import org.fujion.annotation.WiredComponent;
+import org.fujion.component.BaseComponent;
+import org.fujion.component.Label;
+import org.fujion.component.Radiobutton;
+import org.fujion.component.Radiogroup;
+import org.fujion.component.Textbox;
+import org.fujion.component.Window;
+import org.fujion.event.IEventListener;
+import org.fujion.page.PageUtil;
 
 /**
  * Supports selection and management of existing layouts.
  */
 public class LayoutPrompt implements IAutoWired {
     
-    private static final String DIALOG = DesignConstants.RESOURCE_PREFIX + "layoutPrompt.cwf";
+    private static final String DIALOG = DesignConstants.RESOURCE_PREFIX + "layoutPrompt.fsp";
     
     @WiredComponent
     private Radiogroup radioGroup;

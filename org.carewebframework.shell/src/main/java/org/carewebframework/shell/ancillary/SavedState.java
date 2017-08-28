@@ -26,8 +26,8 @@
 package org.carewebframework.shell.ancillary;
 
 import org.carewebframework.shell.elements.ElementBase;
-import org.carewebframework.web.component.BaseUIComponent;
-import org.carewebframework.web.component.Popup;
+import org.fujion.component.BaseUIComponent;
+import org.fujion.component.Popup;
 
 /**
  * Saves various states of a component prior to configuring it for design mode. The restore method

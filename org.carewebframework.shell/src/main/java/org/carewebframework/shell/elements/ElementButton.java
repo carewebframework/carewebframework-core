@@ -26,8 +26,8 @@
 package org.carewebframework.shell.elements;
 
 import org.carewebframework.theme.ThemeUtil;
-import org.carewebframework.web.component.BaseLabeledComponent.LabelPositionHorz;
-import org.carewebframework.web.component.Hyperlink;
+import org.fujion.component.BaseLabeledComponent.LabelPositionHorz;
+import org.fujion.component.Hyperlink;
 
 /**
  * Simple button stock object.

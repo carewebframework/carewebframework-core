@@ -12,7 +12,7 @@
 
 		<cwp:plugin id="cwfEventTesting" name="Event Testing" 
 			category="${@msg.cwf.shell.plugin.category.system}"
-			url="web/org/carewebframework/plugin/eventtesting/main.cwf">
+			url="web/org/carewebframework/plugin/eventtesting/main.fsp">
 			<cwp:security requiresAll="false">
 				<cwp:authority name="PRIV_MONITOR_SYSTEM" />
 			</cwp:security>

@@ -29,13 +29,13 @@ import java.util.Collection;
 import java.util.Date;
 
 import org.apache.commons.lang.StringUtils;
-import org.carewebframework.common.DateUtil;
-import org.carewebframework.common.StrUtil;
-import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.component.BaseUIComponent;
-import org.carewebframework.web.component.Image;
-import org.carewebframework.web.component.Label;
-import org.carewebframework.web.model.IComponentRenderer;
+import org.fujion.common.DateUtil;
+import org.fujion.common.StrUtil;
+import org.fujion.component.BaseComponent;
+import org.fujion.component.BaseUIComponent;
+import org.fujion.component.Image;
+import org.fujion.component.Label;
+import org.fujion.model.IComponentRenderer;
 
 /**
  * Base for renderers.

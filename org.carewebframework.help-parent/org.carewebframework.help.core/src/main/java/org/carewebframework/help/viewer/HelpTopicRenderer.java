@@ -1,8 +1,8 @@
 package org.carewebframework.help.viewer;
 
 import org.carewebframework.help.HelpTopic;
-import org.carewebframework.web.component.Listitem;
-import org.carewebframework.web.model.IComponentRenderer;
+import org.fujion.component.Listitem;
+import org.fujion.model.IComponentRenderer;
 
 public class HelpTopicRenderer implements IComponentRenderer<Listitem, HelpTopic> {
     

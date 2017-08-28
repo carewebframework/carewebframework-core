@@ -27,10 +27,10 @@ package org.carewebframework.shell.designer;
 
 import java.awt.Color;
 
-import org.carewebframework.common.ColorUtil;
+import org.fujion.common.ColorUtil;
 import org.carewebframework.shell.property.PropertyInfo;
-import org.carewebframework.web.component.ColorPicker;
-import org.carewebframework.web.component.ColorPicker.ColorPickeritem;;
+import org.fujion.component.ColorPicker;
+import org.fujion.component.ColorPicker.ColorPickeritem;;
 
 /**
  * Property editor for color properties. If the associated property has defined choices, the color

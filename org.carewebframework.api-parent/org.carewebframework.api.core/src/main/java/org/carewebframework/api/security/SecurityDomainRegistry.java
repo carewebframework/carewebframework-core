@@ -25,7 +25,7 @@
  */
 package org.carewebframework.api.security;
 
-import org.carewebframework.common.AbstractRegistry;
+import org.fujion.common.AbstractRegistry;
 
 import org.springframework.util.StringUtils;
 

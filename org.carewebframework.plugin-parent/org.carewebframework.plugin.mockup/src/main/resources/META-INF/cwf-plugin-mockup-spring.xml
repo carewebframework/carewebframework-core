@@ -11,7 +11,7 @@
 	<beans profile="root">
 		
 		<cwp:plugin id="cwfMockupViewer" name="Mockup Viewer" 
-			url="web/org/carewebframework/plugin/mockup/main.cwf"
+			url="web/org/carewebframework/plugin/mockup/main.fsp"
 			description="Plugin to allow embedding third-party wireframes for quick UI prototyping.">
 			<cwp:serialization>
 				<cwp:property id="mockupType" name="${@msg.cwf.mockup.type.name}" type="enum"

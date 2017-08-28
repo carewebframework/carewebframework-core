@@ -35,14 +35,14 @@ import org.carewebframework.help.IHelpViewer;
 import org.carewebframework.help.viewer.HelpViewer.HelpViewerMode;
 import org.carewebframework.ui.command.CommandUtil;
 import org.carewebframework.ui.util.CWFUtil;
-import org.carewebframework.web.client.ClientUtil;
-import org.carewebframework.web.client.ExecutionContext;
-import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.component.BaseUIComponent;
-import org.carewebframework.web.component.Image;
-import org.carewebframework.web.component.Page;
-import org.carewebframework.web.ipc.InvocationRequest;
-import org.carewebframework.web.page.PageUtil;
+import org.fujion.client.ClientUtil;
+import org.fujion.client.ExecutionContext;
+import org.fujion.component.BaseComponent;
+import org.fujion.component.BaseUIComponent;
+import org.fujion.component.Image;
+import org.fujion.component.Page;
+import org.fujion.ipc.InvocationRequest;
+import org.fujion.page.PageUtil;
 
 /**
  * Utility class containing helper methods in support of online help infrastructure.
@@ -55,7 +55,7 @@ public class HelpUtil {
 
     protected static final String IMAGES_ROOT = RESOURCE_PREFIX + "images/";
 
-    protected static final String VIEWER_URL = RESOURCE_PREFIX + "helpViewer.cwf";
+    protected static final String VIEWER_URL = RESOURCE_PREFIX + "helpViewer.fsp";
 
     protected static final String VIEWER_ATTRIB = VIEWER_URL;
 

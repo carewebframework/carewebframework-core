@@ -26,12 +26,12 @@
 package org.carewebframework.shell.elements;
 
 import org.carewebframework.theme.ThemeUtil;
-import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.component.Div;
-import org.carewebframework.web.component.Hyperlink;
-import org.carewebframework.web.component.Menupopup;
-import org.carewebframework.web.component.Span;
-import org.carewebframework.web.event.IEventListener;
+import org.fujion.component.BaseComponent;
+import org.fujion.component.Div;
+import org.fujion.component.Hyperlink;
+import org.fujion.component.Menupopup;
+import org.fujion.component.Span;
+import org.fujion.event.IEventListener;
 
 /**
  * A child of a ElementTreeView, this UI element specifies the tree path where its associated tree

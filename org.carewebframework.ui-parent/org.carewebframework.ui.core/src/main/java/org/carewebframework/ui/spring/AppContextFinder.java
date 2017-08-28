@@ -27,8 +27,8 @@ package org.carewebframework.ui.spring;
 
 import org.carewebframework.api.spring.IAppContextFinder;
 import org.carewebframework.api.spring.SpringUtil;
-import org.carewebframework.web.client.ExecutionContext;
-import org.carewebframework.web.component.Page;
+import org.fujion.client.ExecutionContext;
+import org.fujion.component.Page;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.ContextLoader;
 import org.springframework.web.context.support.XmlWebApplicationContext;

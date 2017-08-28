@@ -2,14 +2,14 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	xmlns:cwf="http://www.carewebframework.org/schema/spring"
-	xmlns:cwc="http://www.carewebframework.org/schema/component"
+	xmlns:ffc="http://www.fujion.org/schema/component"
 	xsi:schemaLocation="
 		http://www.springframework.org/schema/beans
 		http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.carewebframework.org/schema/spring
 		http://www.carewebframework.org/schema/spring/spring-extensions.xsd
-		http://www.carewebframework.org/schema/component
-		http://www.carewebframework.org/schema/component/component-extensions.xsd">
+		http://www.fujion.org/schema/component
+		http://www.fujion.org/schema/extensions/component-extensions.xsd">
 
 	<beans profile="root">
 
@@ -101,16 +101,16 @@
 		
 		<!-- Component scans -->
 		
-		<cwc:component-scan package="org.carewebframework.ui.dialog" />
+		<ffc:component-scan package="org.carewebframework.ui.dialog" />
 		
 	</beans>
 
 	<beans profile="child">
 		<!-- Provides access to the active page and session -->
 		
-		<bean id="cwf_Page" factory-method="getPage" class="org.carewebframework.web.client.ExecutionContext" />
+		<bean id="cwf_Page" factory-method="getPage" class="org.fujion.client.ExecutionContext" />
 		
-		<bean id="cwf_Session" factory-method="getSession" class="org.carewebframework.web.client.ExecutionContext" />
+		<bean id="cwf_Session" factory-method="getSession" class="org.fujion.client.ExecutionContext" />
 		
 		<!-- A registry of all supported commands. -->
 		

@@ -29,14 +29,14 @@ import java.util.Date;
 import java.util.List;
 
 import org.carewebframework.api.property.PropertyUtil;
-import org.carewebframework.common.DateRange;
-import org.carewebframework.web.annotation.EventHandler;
-import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.component.Listbox;
-import org.carewebframework.web.component.Listitem;
-import org.carewebframework.web.event.ChangeEvent;
-import org.carewebframework.web.event.Event;
-import org.carewebframework.web.event.EventUtil;
+import org.fujion.common.DateRange;
+import org.fujion.annotation.EventHandler;
+import org.fujion.component.BaseComponent;
+import org.fujion.component.Listbox;
+import org.fujion.component.Listitem;
+import org.fujion.event.ChangeEvent;
+import org.fujion.event.Event;
+import org.fujion.event.EventUtil;
 
 /**
  * Generic component for choosing date ranges.
@@ -176,7 +176,7 @@ public class DateRangeChooser extends Listbox {
     /**
      * Need to update visual appearance of selection when it is changed.
      * 
-     * @see org.carewebframework.web.component.Listbox#setSelectedItem(Listitem)
+     * @see org.fujion.component.Listbox#setSelectedItem(Listitem)
      */
     @Override
     public void setSelectedItem(Listitem item) {

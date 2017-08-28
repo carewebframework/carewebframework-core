@@ -30,28 +30,28 @@ import java.util.List;
 
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.math.NumberUtils;
-import org.carewebframework.common.StrUtil;
+import org.fujion.common.StrUtil;
 import org.carewebframework.shell.elements.ElementPlugin;
 import org.carewebframework.ui.command.CommandUtil;
 import org.carewebframework.ui.util.CWFUtil;
-import org.carewebframework.web.annotation.EventHandler;
-import org.carewebframework.web.annotation.WiredComponent;
-import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.component.Column;
-import org.carewebframework.web.component.Columns;
-import org.carewebframework.web.component.Grid;
-import org.carewebframework.web.component.Label;
-import org.carewebframework.web.component.Pane;
-import org.carewebframework.web.component.Paneview;
-import org.carewebframework.web.component.Paneview.Orientation;
-import org.carewebframework.web.component.Row;
-import org.carewebframework.web.component.Rowcell;
-import org.carewebframework.web.component.Rows;
-import org.carewebframework.web.event.ChangeEvent;
-import org.carewebframework.web.event.ClickEvent;
-import org.carewebframework.web.event.DblclickEvent;
-import org.carewebframework.web.model.IComponentRenderer;
-import org.carewebframework.web.model.ListModel;
+import org.fujion.annotation.EventHandler;
+import org.fujion.annotation.WiredComponent;
+import org.fujion.component.BaseComponent;
+import org.fujion.component.Column;
+import org.fujion.component.Columns;
+import org.fujion.component.Grid;
+import org.fujion.component.Label;
+import org.fujion.component.Pane;
+import org.fujion.component.Paneview;
+import org.fujion.component.Paneview.Orientation;
+import org.fujion.component.Row;
+import org.fujion.component.Rowcell;
+import org.fujion.component.Rows;
+import org.fujion.event.ChangeEvent;
+import org.fujion.event.ClickEvent;
+import org.fujion.event.DblclickEvent;
+import org.fujion.model.IComponentRenderer;
+import org.fujion.model.ListModel;
 
 /**
  * Controller for list view based forms.
@@ -151,7 +151,7 @@ public abstract class ListFormController<DAO> extends CaptionedFormController {
         String defWidth = (100 / headers.length) + "%";
         
         for (String header : headers) {
-            String[] pcs = StrUtil.split(header, StrUtil.U, 3);
+            String[] pcs = StrUtil.split(header, "^", 3);
             Column lhdr = new Column(pcs[0]);
             columns.addChild(lhdr);
             lhdr.setAttribute(SORT_TYPE_ATTR, NumberUtils.toInt(pcs[1]));
@@ -420,8 +420,8 @@ public abstract class ListFormController<DAO> extends CaptionedFormController {
     protected void status(String message) {
         if (message != null) {
             grid.setVisible(false);
-            status.setLabel(StrUtil.piece(message, StrUtil.U));
-            status.setHint(StrUtil.piece(message, StrUtil.U, 2, 999));
+            status.setLabel(StrUtil.piece(message, "^"));
+            status.setHint(StrUtil.piece(message, "^", 2, 999));
             status.setVisible(true);
         } else {
             status.setVisible(false);

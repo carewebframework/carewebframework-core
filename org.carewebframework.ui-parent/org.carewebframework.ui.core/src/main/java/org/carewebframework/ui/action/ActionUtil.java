@@ -28,8 +28,8 @@ package org.carewebframework.ui.action;
 import java.util.Comparator;
 
 import org.apache.commons.lang.StringUtils;
-import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.event.ClickEvent;
+import org.fujion.component.BaseComponent;
+import org.fujion.event.ClickEvent;
 
 /**
  * Static utility class.

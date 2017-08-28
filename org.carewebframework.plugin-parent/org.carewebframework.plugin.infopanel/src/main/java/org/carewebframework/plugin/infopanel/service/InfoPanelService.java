@@ -36,7 +36,7 @@ import org.carewebframework.shell.elements.ElementPlugin;
 import org.carewebframework.shell.elements.ElementPlugin.PluginContainer;
 import org.carewebframework.shell.elements.ElementUI;
 import org.carewebframework.ui.controller.FrameworkController;
-import org.carewebframework.web.component.BaseComponent;
+import org.fujion.component.BaseComponent;
 
 /**
  * Static methods for interacting with an info panel.

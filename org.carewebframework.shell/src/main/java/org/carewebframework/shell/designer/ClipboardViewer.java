@@ -28,16 +28,16 @@ package org.carewebframework.shell.designer;
 import java.util.Collections;
 import java.util.Map;
 
-import org.carewebframework.common.StrUtil;
+import org.fujion.common.StrUtil;
 import org.carewebframework.ui.util.CWFUtil;
-import org.carewebframework.web.ancillary.IAutoWired;
-import org.carewebframework.web.annotation.EventHandler;
-import org.carewebframework.web.annotation.WiredComponent;
-import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.component.Button;
-import org.carewebframework.web.component.Memobox;
-import org.carewebframework.web.component.Window;
-import org.carewebframework.web.page.PageUtil;
+import org.fujion.ancillary.IAutoWired;
+import org.fujion.annotation.EventHandler;
+import org.fujion.annotation.WiredComponent;
+import org.fujion.component.BaseComponent;
+import org.fujion.component.Button;
+import org.fujion.component.Memobox;
+import org.fujion.component.Window;
+import org.fujion.page.PageUtil;
 
 /**
  * Allows viewing and editing of clipboard contents.
@@ -70,7 +70,7 @@ public class ClipboardViewer implements IAutoWired {
      */
     public static void show(Clipboard clipboard) {
         Map<String, Object> args = Collections.singletonMap("clipboard", clipboard);
-        Window dlg = (Window) PageUtil.createPage(DesignConstants.RESOURCE_PREFIX + "clipboardViewer.cwf", null, args)
+        Window dlg = (Window) PageUtil.createPage(DesignConstants.RESOURCE_PREFIX + "clipboardViewer.fsp", null, args)
                 .get(0);
         dlg.modal(null);
     }

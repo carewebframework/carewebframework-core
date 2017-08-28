@@ -32,10 +32,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.carewebframework.ui.util.CWFUtil;
-import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.component.Cell;
-import org.carewebframework.web.component.Html;
-import org.carewebframework.web.component.Hyperlink;
+import org.fujion.component.BaseComponent;
+import org.fujion.component.Cell;
+import org.fujion.component.Html;
+import org.fujion.component.Hyperlink;
 import org.junit.Test;
 
 public class UtilTest {

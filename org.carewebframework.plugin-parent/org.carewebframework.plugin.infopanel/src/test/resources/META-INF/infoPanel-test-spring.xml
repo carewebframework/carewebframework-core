@@ -11,7 +11,7 @@
 	<beans profile="root">
 
 		<cwp:plugin id="infoPanelTestPlugin" name="Information Panel Test"
-			url="web/org/carewebframework/plugin/infopanel/infoPanelTest.cwf">
+			url="web/org/carewebframework/plugin/infopanel/infoPanelTest.fsp">
 		</cwp:plugin>
 
 	</beans>

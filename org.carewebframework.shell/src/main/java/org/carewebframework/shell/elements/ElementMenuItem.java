@@ -25,10 +25,10 @@
  */
 package org.carewebframework.shell.elements;
 
-import org.carewebframework.common.MiscUtil;
-import org.carewebframework.web.component.BaseLabeledImageComponent;
-import org.carewebframework.web.component.Menu;
-import org.carewebframework.web.component.Menuitem;
+import org.fujion.common.MiscUtil;
+import org.fujion.component.BaseLabeledImageComponent;
+import org.fujion.component.Menu;
+import org.fujion.component.Menuitem;
 
 /**
  * Base class for representing a single menu item. The Menu class has been subclassed (MenuEx) to

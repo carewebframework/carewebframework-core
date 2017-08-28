@@ -25,8 +25,8 @@
  */
 package org.carewebframework.plugin.messagetesting;
 
-import org.carewebframework.web.component.Listitem;
-import org.carewebframework.web.model.IComponentRenderer;
+import org.fujion.component.Listitem;
+import org.fujion.model.IComponentRenderer;
 
 public class SubscriptionRenderer implements IComponentRenderer<Listitem, String> {
     

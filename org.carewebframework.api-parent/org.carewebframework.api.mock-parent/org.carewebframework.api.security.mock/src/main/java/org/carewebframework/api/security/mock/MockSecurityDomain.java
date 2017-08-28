@@ -31,7 +31,7 @@ import java.util.Map;
 import org.carewebframework.api.domain.IUser;
 import org.carewebframework.api.security.ISecurityDomain;
 import org.carewebframework.api.spring.SpringUtil;
-import org.carewebframework.common.StrUtil;
+import org.fujion.common.StrUtil;
 
 /**
  * Mock user for testing.

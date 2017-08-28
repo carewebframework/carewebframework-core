@@ -1,12 +1,12 @@
 package org.carewebframework.ui.manifest;
 
-import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.component.Row;
-import org.carewebframework.web.component.Grid;
-import org.carewebframework.web.event.ClickEvent;
-import org.carewebframework.web.event.Event;
-import org.carewebframework.web.event.EventUtil;
-import org.carewebframework.web.event.IEventListener;
+import org.fujion.component.BaseComponent;
+import org.fujion.component.Row;
+import org.fujion.component.Grid;
+import org.fujion.event.ClickEvent;
+import org.fujion.event.Event;
+import org.fujion.event.EventUtil;
+import org.fujion.event.IEventListener;
 
 public class ManifestItemRenderer extends BaseRenderer<ManifestItem> {
     

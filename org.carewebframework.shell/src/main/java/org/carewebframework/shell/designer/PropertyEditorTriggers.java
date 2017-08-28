@@ -29,7 +29,7 @@ import org.carewebframework.shell.elements.ElementBase;
 import org.carewebframework.shell.elements.ElementTrigger;
 import org.carewebframework.shell.elements.ElementUI;
 import org.carewebframework.shell.plugins.PluginDefinition;
-import org.carewebframework.web.component.BaseComponent;
+import org.fujion.component.BaseComponent;
 
 /**
  * Property editor for managing triggers.

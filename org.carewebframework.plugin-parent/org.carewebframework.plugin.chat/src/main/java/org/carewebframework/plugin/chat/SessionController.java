@@ -31,30 +31,30 @@ import java.util.Map;
 import java.util.Set;
 
 import org.carewebframework.api.messaging.IPublisherInfo;
-import org.carewebframework.common.DateUtil;
-import org.carewebframework.common.StrUtil;
+import org.fujion.common.DateUtil;
+import org.fujion.common.StrUtil;
 import org.carewebframework.plugin.chat.SessionService.ISessionUpdate;
 import org.carewebframework.ui.controller.FrameworkController;
 import org.carewebframework.ui.dialog.PopupDialog;
 import org.carewebframework.ui.util.CWFUtil;
-import org.carewebframework.web.ancillary.IResponseCallback;
-import org.carewebframework.web.annotation.EventHandler;
-import org.carewebframework.web.annotation.WiredComponent;
-import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.component.Button;
-import org.carewebframework.web.component.Label;
-import org.carewebframework.web.component.Listbox;
-import org.carewebframework.web.component.Memobox;
-import org.carewebframework.web.component.Window;
-import org.carewebframework.web.event.ChangeEvent;
-import org.carewebframework.web.model.ListModel;
+import org.fujion.ancillary.IResponseCallback;
+import org.fujion.annotation.EventHandler;
+import org.fujion.annotation.WiredComponent;
+import org.fujion.component.BaseComponent;
+import org.fujion.component.Button;
+import org.fujion.component.Label;
+import org.fujion.component.Listbox;
+import org.fujion.component.Memobox;
+import org.fujion.component.Window;
+import org.fujion.event.ChangeEvent;
+import org.fujion.model.ListModel;
 
 /**
  * Controller for an individual chat session.
  */
 public class SessionController extends FrameworkController implements ISessionUpdate {
 
-    private static final String DIALOG = CWFUtil.getResourcePath(SessionController.class) + "session.cwf";
+    private static final String DIALOG = CWFUtil.getResourcePath(SessionController.class) + "session.fsp";
 
     private String sessionId;
 

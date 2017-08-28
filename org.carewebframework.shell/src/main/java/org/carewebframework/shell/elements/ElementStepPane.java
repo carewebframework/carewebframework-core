@@ -25,11 +25,11 @@
  */
 package org.carewebframework.shell.elements;
 
-import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.component.Div;
-import org.carewebframework.web.component.Hyperlink;
-import org.carewebframework.web.component.Menupopup;
-import org.carewebframework.web.component.Span;
+import org.fujion.component.BaseComponent;
+import org.fujion.component.Div;
+import org.fujion.component.Hyperlink;
+import org.fujion.component.Menupopup;
+import org.fujion.component.Span;
 
 /**
  * A step-oriented UI Element. This is a composite element consisting of a button and its separator

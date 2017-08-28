@@ -36,7 +36,7 @@ import java.util.Properties;
 import org.apache.commons.lang.StringEscapeUtils;
 
 import org.carewebframework.api.property.IPropertyService;
-import org.carewebframework.common.StrUtil;
+import org.fujion.common.StrUtil;
 
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;

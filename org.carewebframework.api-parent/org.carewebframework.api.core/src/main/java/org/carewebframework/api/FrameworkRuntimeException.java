@@ -26,7 +26,7 @@
 package org.carewebframework.api;
 
 import org.apache.commons.lang.ObjectUtils;
-import org.carewebframework.common.StrUtil;
+import org.fujion.common.StrUtil;
 import org.springframework.core.NestedRuntimeException;
 
 /**

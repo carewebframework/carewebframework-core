@@ -25,13 +25,13 @@
  */
 package org.carewebframework.ui.test;
 
-import org.carewebframework.web.test.MockConfig;
-import org.carewebframework.web.test.MockTest;
+import org.fujion.test.MockConfig;
+import org.fujion.test.MockTest;
 import org.junit.BeforeClass;
 
 public class MockUITest extends MockTest {
     
-    private static final String[] ROOT_CONFIG_LOCATIONS = { "classpath:/META-INF/cwf-dispatcher-servlet.xml",
+    private static final String[] ROOT_CONFIG_LOCATIONS = { "classpath:/META-INF/fujion-dispatcher-servlet.xml",
             "classpath*:**/META-INF/*-spring.xml" };
 
     private static final String[] ROOT_PROFILES = { "root", "root-test" };

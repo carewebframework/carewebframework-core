@@ -28,9 +28,9 @@ package org.carewebframework.shell.elements;
 import org.carewebframework.shell.designer.PropertyEditorTreeView;
 import org.carewebframework.shell.property.PropertyTypeRegistry;
 import org.carewebframework.theme.ThemeUtil;
-import org.carewebframework.web.annotation.WiredComponent;
-import org.carewebframework.web.component.Div;
-import org.carewebframework.web.component.Pane;
+import org.fujion.annotation.WiredComponent;
+import org.fujion.component.Div;
+import org.fujion.component.Pane;
 
 /**
  * A tree view consists of a selector pane on the left containing a treeview component and a view

@@ -33,7 +33,7 @@ import org.apache.commons.digester.SimpleRegexMatcher;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import org.carewebframework.common.StrUtil;
+import org.fujion.common.StrUtil;
 
 /**
  * Represents a specific alias type (e.g., property or authority aliases).

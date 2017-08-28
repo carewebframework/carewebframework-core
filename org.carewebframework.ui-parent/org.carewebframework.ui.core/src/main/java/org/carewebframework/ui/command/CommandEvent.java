@@ -26,8 +26,8 @@
 package org.carewebframework.ui.command;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.event.Event;
+import org.fujion.component.BaseComponent;
+import org.fujion.event.Event;
 
 /**
  * Event object for sending commands to components.

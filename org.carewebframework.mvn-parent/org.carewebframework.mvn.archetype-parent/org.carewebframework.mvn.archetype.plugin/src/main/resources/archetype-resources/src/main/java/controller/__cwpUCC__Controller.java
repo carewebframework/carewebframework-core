@@ -36,8 +36,8 @@ import org.apache.commons.logging.LogFactory;
 import org.carewebframework.shell.plugins.PluginContainer;
 import org.carewebframework.shell.plugins.PluginController;
 
-import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.component.Label;
+import org.fujion.component.BaseComponent;
+import org.fujion.component.Label;
 
 /**
  * This is a sample controller that extends the PluginController class which provides some
@@ -56,7 +56,7 @@ public class ${cwpUCC}Controller extends PluginController {
     private Label lblDate; // This value will be injected automatically by the parent class
 
     /**
-     * @see org.carewebframework.ui.FrameworkController${symbol_pound}afterInitialized(org.carewebframework.web.component.BaseComponent)
+     * @see org.carewebframework.ui.FrameworkController${symbol_pound}afterInitialized(org.fujion.component.BaseComponent)
      */
     @Override
     public void afterInitialized(BaseComponent comp) {

@@ -29,8 +29,8 @@ import org.carewebframework.api.ManifestIterator;
 import org.carewebframework.help.HelpContext;
 import org.carewebframework.help.viewer.HelpUtil;
 import org.carewebframework.ui.action.ActionRegistry;
-import org.carewebframework.web.client.ExecutionContext;
-import org.carewebframework.web.component.BaseUIComponent;
+import org.fujion.client.ExecutionContext;
+import org.fujion.component.BaseUIComponent;
 
 /**
  * Static utility methods.

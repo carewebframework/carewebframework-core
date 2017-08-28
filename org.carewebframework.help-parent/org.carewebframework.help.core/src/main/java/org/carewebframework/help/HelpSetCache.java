@@ -25,7 +25,7 @@
  */
 package org.carewebframework.help;
 
-import org.carewebframework.common.AbstractCache;
+import org.fujion.common.AbstractCache;
 
 /**
  * Maintains a cache of all known help sets. This is a singleton class.

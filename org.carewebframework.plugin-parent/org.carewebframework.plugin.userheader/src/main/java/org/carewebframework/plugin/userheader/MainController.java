@@ -34,10 +34,10 @@ import org.carewebframework.api.security.SecurityUtil;
 import org.carewebframework.shell.CareWebUtil;
 import org.carewebframework.shell.elements.ElementPlugin;
 import org.carewebframework.shell.plugins.PluginController;
-import org.carewebframework.web.annotation.EventHandler;
-import org.carewebframework.web.annotation.WiredComponent;
-import org.carewebframework.web.component.Hyperlink;
-import org.carewebframework.web.component.Label;
+import org.fujion.annotation.EventHandler;
+import org.fujion.annotation.WiredComponent;
+import org.fujion.component.Hyperlink;
+import org.fujion.component.Label;
 
 /**
  * Controller for user header plugin.

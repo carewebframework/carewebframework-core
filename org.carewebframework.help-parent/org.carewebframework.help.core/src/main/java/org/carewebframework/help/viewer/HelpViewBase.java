@@ -25,16 +25,16 @@
  */
 package org.carewebframework.help.viewer;
 
-import org.carewebframework.common.MiscUtil;
+import org.fujion.common.MiscUtil;
 import org.carewebframework.help.HelpTopic;
 import org.carewebframework.help.HelpViewType;
 import org.carewebframework.help.IHelpView;
 import org.carewebframework.help.viewer.HelpHistory.ITopicListener;
-import org.carewebframework.web.ancillary.IAutoWired;
-import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.component.BaseUIComponent;
-import org.carewebframework.web.component.Namespace;
-import org.carewebframework.web.page.PageUtil;
+import org.fujion.ancillary.IAutoWired;
+import org.fujion.component.BaseComponent;
+import org.fujion.component.BaseUIComponent;
+import org.fujion.component.Namespace;
+import org.fujion.page.PageUtil;
 
 /**
  * Abstract base class for all help tabs. It descends from Tab.

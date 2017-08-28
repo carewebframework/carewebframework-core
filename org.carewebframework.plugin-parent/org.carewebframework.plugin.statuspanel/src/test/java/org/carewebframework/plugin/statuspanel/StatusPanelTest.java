@@ -33,8 +33,8 @@ import org.carewebframework.shell.CareWebShell;
 import org.carewebframework.shell.elements.ElementPlugin;
 import org.carewebframework.ui.controller.FrameworkController;
 import org.carewebframework.ui.test.MockUITest;
-import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.component.Label;
+import org.fujion.component.BaseComponent;
+import org.fujion.component.Label;
 import org.junit.Test;
 
 public class StatusPanelTest extends MockUITest {

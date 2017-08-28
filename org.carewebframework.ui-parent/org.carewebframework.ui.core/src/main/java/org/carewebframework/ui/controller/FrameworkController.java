@@ -38,11 +38,11 @@ import org.carewebframework.api.thread.IAbortable;
 import org.carewebframework.ui.Constants;
 import org.carewebframework.ui.thread.ThreadEx;
 import org.carewebframework.ui.thread.ThreadEx.IRunnable;
-import org.carewebframework.web.ancillary.IAutoWired;
-import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.component.BaseUIComponent;
-import org.carewebframework.web.event.Event;
-import org.carewebframework.web.event.IEventListener;
+import org.fujion.ancillary.IAutoWired;
+import org.fujion.component.BaseComponent;
+import org.fujion.component.BaseUIComponent;
+import org.fujion.event.Event;
+import org.fujion.event.IEventListener;
 import org.springframework.context.ApplicationContext;
 
 /**

@@ -27,9 +27,9 @@ package org.carewebframework.shell.elements;
 
 import org.carewebframework.shell.designer.PropertyEditorTabView;
 import org.carewebframework.shell.property.PropertyTypeRegistry;
-import org.carewebframework.web.component.Tabview;
-import org.carewebframework.web.component.Tabview.TabPosition;
-import org.carewebframework.web.event.ChangeEvent;
+import org.fujion.component.Tabview;
+import org.fujion.component.Tabview.TabPosition;
+import org.fujion.event.ChangeEvent;
 
 /**
  * Wraps the Tabview component. This UI element can only accept ElementTabPane elements as children

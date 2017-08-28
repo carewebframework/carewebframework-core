@@ -28,21 +28,21 @@ package org.carewebframework.ui.dialog;
 import java.util.Date;
 
 import org.apache.commons.lang.time.DateUtils;
-import org.carewebframework.common.DateUtil;
-import org.carewebframework.common.StrUtil;
+import org.fujion.common.DateUtil;
+import org.fujion.common.StrUtil;
 import org.carewebframework.ui.util.DateTimeUtil;
-import org.carewebframework.web.ancillary.IAutoWired;
-import org.carewebframework.web.ancillary.INamespace;
-import org.carewebframework.web.annotation.EventHandler;
-import org.carewebframework.web.annotation.OnFailure;
-import org.carewebframework.web.annotation.WiredComponent;
-import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.component.BaseUIComponent;
-import org.carewebframework.web.component.Datebox;
-import org.carewebframework.web.component.Popup;
-import org.carewebframework.web.component.Popupbox;
-import org.carewebframework.web.component.Timebox;
-import org.carewebframework.web.event.Event;
+import org.fujion.ancillary.IAutoWired;
+import org.fujion.ancillary.INamespace;
+import org.fujion.annotation.EventHandler;
+import org.fujion.annotation.OnFailure;
+import org.fujion.annotation.WiredComponent;
+import org.fujion.component.BaseComponent;
+import org.fujion.component.BaseUIComponent;
+import org.fujion.component.Datebox;
+import org.fujion.component.Popup;
+import org.fujion.component.Popupbox;
+import org.fujion.component.Timebox;
+import org.fujion.event.Event;
 
 /**
  * Presents a date/time input element.

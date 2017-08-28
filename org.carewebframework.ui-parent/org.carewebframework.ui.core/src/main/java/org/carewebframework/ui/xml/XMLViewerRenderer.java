@@ -25,11 +25,11 @@
  */
 package org.carewebframework.ui.xml;
 
-import org.carewebframework.common.XMLUtil;
-import org.carewebframework.common.XMLUtil.TagFormat;
-import org.carewebframework.web.component.Treenode;
-import org.carewebframework.web.event.IEventListener;
-import org.carewebframework.web.model.IComponentRenderer;
+import org.fujion.common.XMLUtil;
+import org.fujion.common.XMLUtil.TagFormat;
+import org.fujion.component.Treenode;
+import org.fujion.event.IEventListener;
+import org.fujion.model.IComponentRenderer;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 

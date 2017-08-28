@@ -27,7 +27,7 @@ package org.carewebframework.api.spring;
 
 import java.io.IOException;
 
-import org.carewebframework.common.MiscUtil;
+import org.fujion.common.MiscUtil;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;

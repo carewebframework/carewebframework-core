@@ -30,7 +30,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.carewebframework.api.spring.ScopeContainer;
-import org.carewebframework.web.core.RequestUtil;
+import org.fujion.core.RequestUtil;
 
 /**
  * Abstract Spring scope for session-dependent scopes.

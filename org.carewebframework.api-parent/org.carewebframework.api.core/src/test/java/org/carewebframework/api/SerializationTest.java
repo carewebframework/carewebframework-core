@@ -37,7 +37,7 @@ import org.carewebframework.api.messaging.Message;
 import org.carewebframework.api.messaging.PublisherInfo;
 import org.carewebframework.api.messaging.Recipient;
 import org.carewebframework.api.messaging.Recipient.RecipientType;
-import org.carewebframework.common.JSONUtil;
+import org.fujion.common.JSONUtil;
 import org.junit.Test;
 
 public class SerializationTest {

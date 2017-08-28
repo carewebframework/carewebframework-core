@@ -11,7 +11,7 @@
 	<beans profile="root">
 		
 		<cwp:plugin id="cwfSandboxPlugin" name="CWF Sandbox" 
-			url="web/org/carewebframework/plugin/sandbox/main.cwf">
+			url="web/org/carewebframework/plugin/sandbox/main.fsp">
 		</cwp:plugin>
 				
 	</beans>

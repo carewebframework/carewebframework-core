@@ -33,25 +33,25 @@ import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 
 import org.apache.commons.lang.StringUtils;
-import org.carewebframework.common.StrUtil;
+import org.fujion.common.StrUtil;
 import org.carewebframework.shell.elements.ElementBase;
 import org.carewebframework.shell.plugins.PluginDefinition;
 import org.carewebframework.ui.controller.FrameworkController;
 import org.carewebframework.ui.dialog.DialogUtil;
 import org.carewebframework.ui.manifest.ManifestViewer;
 import org.carewebframework.ui.util.CWFUtil;
-import org.carewebframework.web.annotation.EventHandler;
-import org.carewebframework.web.annotation.WiredComponent;
-import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.component.Button;
-import org.carewebframework.web.component.Cell;
-import org.carewebframework.web.component.Image;
-import org.carewebframework.web.component.Label;
-import org.carewebframework.web.component.Row;
-import org.carewebframework.web.component.Rowcell;
-import org.carewebframework.web.component.Rows;
-import org.carewebframework.web.component.Window;
-import org.carewebframework.web.page.PageUtil;
+import org.fujion.annotation.EventHandler;
+import org.fujion.annotation.WiredComponent;
+import org.fujion.component.BaseComponent;
+import org.fujion.component.Button;
+import org.fujion.component.Cell;
+import org.fujion.component.Image;
+import org.fujion.component.Label;
+import org.fujion.component.Row;
+import org.fujion.component.Rowcell;
+import org.fujion.component.Rows;
+import org.fujion.component.Window;
+import org.fujion.page.PageUtil;
 
 /**
  * Displays an "about" dialog for a given UI element.
@@ -204,7 +204,7 @@ public class AboutDialog extends FrameworkController {
     private static void showDialog(AboutParams params) {
         try {
             Map<String, Object> args = Collections.singletonMap("params", params);
-            Window dlg = (Window) PageUtil.createPage(Constants.RESOURCE_PREFIX + "aboutDialog.cwf", null, args).get(0);
+            Window dlg = (Window) PageUtil.createPage(Constants.RESOURCE_PREFIX + "aboutDialog.fsp", null, args).get(0);
             dlg.modal(null);
         } catch (Exception e) {
             DialogUtil.showError(CWFUtil.formatExceptionForDisplay(e));

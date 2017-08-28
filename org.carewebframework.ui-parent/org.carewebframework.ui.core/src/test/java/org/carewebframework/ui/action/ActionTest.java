@@ -27,8 +27,8 @@ package org.carewebframework.ui.action;
 
 import static org.junit.Assert.assertTrue;
 
-import org.carewebframework.web.script.ScriptRegistry;
-import org.carewebframework.web.script.groovy.GroovyScript;
+import org.fujion.script.ScriptRegistry;
+import org.fujion.script.groovy.GroovyScript;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;

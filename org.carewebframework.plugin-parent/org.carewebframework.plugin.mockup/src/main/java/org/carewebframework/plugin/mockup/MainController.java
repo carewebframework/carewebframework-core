@@ -30,8 +30,8 @@ import java.io.IOException;
 import org.apache.commons.lang.StringUtils;
 import org.carewebframework.shell.elements.ElementPlugin;
 import org.carewebframework.shell.plugins.PluginController;
-import org.carewebframework.web.annotation.WiredComponent;
-import org.carewebframework.web.component.Iframe;
+import org.fujion.annotation.WiredComponent;
+import org.fujion.component.Iframe;
 
 /**
  * Simple component to display third-party UI mockups.

@@ -26,15 +26,15 @@
 package org.carewebframework.shell.designer;
 
 import org.carewebframework.shell.property.PropertyInfo;
-import org.carewebframework.web.annotation.EventHandler;
-import org.carewebframework.web.component.Combobox;
-import org.carewebframework.web.component.Comboitem;
-import org.carewebframework.web.event.ChangeEvent;
-import org.carewebframework.web.event.EventUtil;
-import org.carewebframework.web.event.IEventListener;
-import org.carewebframework.web.event.KeyCode;
-import org.carewebframework.web.event.KeyEvent;
-import org.carewebframework.web.event.KeycaptureEvent;
+import org.fujion.annotation.EventHandler;
+import org.fujion.component.Combobox;
+import org.fujion.component.Comboitem;
+import org.fujion.event.ChangeEvent;
+import org.fujion.event.EventUtil;
+import org.fujion.event.IEventListener;
+import org.fujion.event.KeyCode;
+import org.fujion.event.KeyEvent;
+import org.fujion.event.KeycaptureEvent;
 import org.springframework.util.StringUtils;
 
 /**

@@ -30,18 +30,18 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.carewebframework.common.StrUtil;
+import org.fujion.common.StrUtil;
 import org.carewebframework.ui.dialog.DialogUtil;
 import org.carewebframework.ui.dialog.PopupDialog;
 import org.carewebframework.ui.util.CWFUtil;
-import org.carewebframework.web.annotation.EventHandler;
-import org.carewebframework.web.annotation.WiredComponent;
-import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.component.BaseUIComponent;
-import org.carewebframework.web.component.Button;
-import org.carewebframework.web.event.Event;
-import org.carewebframework.web.event.EventUtil;
-import org.carewebframework.web.event.IEventListener;
+import org.fujion.annotation.EventHandler;
+import org.fujion.annotation.WiredComponent;
+import org.fujion.component.BaseComponent;
+import org.fujion.component.BaseUIComponent;
+import org.fujion.component.Button;
+import org.fujion.event.Event;
+import org.fujion.event.EventUtil;
+import org.fujion.event.IEventListener;
 
 /**
  * Base controller for creating/editing a domain object.

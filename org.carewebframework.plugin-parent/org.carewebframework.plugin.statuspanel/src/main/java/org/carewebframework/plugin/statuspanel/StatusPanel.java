@@ -27,11 +27,11 @@ package org.carewebframework.plugin.statuspanel;
 
 import org.carewebframework.api.event.EventUtil;
 import org.carewebframework.api.event.IGenericEvent;
-import org.carewebframework.common.StrUtil;
+import org.fujion.common.StrUtil;
 import org.carewebframework.shell.plugins.PluginController;
-import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.component.Label;
-import org.carewebframework.web.component.Pane;
+import org.fujion.component.BaseComponent;
+import org.fujion.component.Label;
+import org.fujion.component.Pane;
 
 /**
  * Controller for status panel plugin.

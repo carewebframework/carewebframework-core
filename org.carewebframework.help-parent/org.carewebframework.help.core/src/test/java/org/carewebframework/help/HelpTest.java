@@ -34,8 +34,8 @@ import java.util.List;
 import java.util.Locale;
 
 import org.apache.commons.io.IOUtils;
-import org.carewebframework.common.MiscUtil;
-import org.carewebframework.common.StrUtil;
+import org.fujion.common.MiscUtil;
+import org.fujion.common.StrUtil;
 import org.junit.Test;
 
 public class HelpTest {

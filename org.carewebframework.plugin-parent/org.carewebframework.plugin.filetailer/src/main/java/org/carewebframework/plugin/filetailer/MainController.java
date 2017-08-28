@@ -38,17 +38,17 @@ import org.apache.commons.logging.LogFactory;
 import org.carewebframework.api.logging.ILogManager;
 import org.carewebframework.api.logging.LogFileTailer;
 import org.carewebframework.api.logging.LogFileTailerListener;
-import org.carewebframework.common.StrUtil;
+import org.fujion.common.StrUtil;
 import org.carewebframework.shell.plugins.PluginController;
-import org.carewebframework.web.annotation.EventHandler;
-import org.carewebframework.web.annotation.WiredComponent;
-import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.component.Button;
-import org.carewebframework.web.component.Combobox;
-import org.carewebframework.web.component.Comboitem;
-import org.carewebframework.web.component.Label;
-import org.carewebframework.web.component.Memobox;
-import org.carewebframework.web.component.Timer;
+import org.fujion.annotation.EventHandler;
+import org.fujion.annotation.WiredComponent;
+import org.fujion.component.BaseComponent;
+import org.fujion.component.Button;
+import org.fujion.component.Combobox;
+import org.fujion.component.Comboitem;
+import org.fujion.component.Label;
+import org.fujion.component.Memobox;
+import org.fujion.component.Timer;
 
 /**
  * Controller class for log file tailer.

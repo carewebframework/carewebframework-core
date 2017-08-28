@@ -28,13 +28,13 @@ package org.carewebframework.ui.wonderbar;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.carewebframework.common.StrUtil;
-import org.carewebframework.web.ancillary.ComponentException;
-import org.carewebframework.web.annotation.Component.PropertyGetter;
-import org.carewebframework.web.annotation.Component.PropertySetter;
-import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.component.BaseInputboxComponent;
-import org.carewebframework.web.event.EventUtil;
+import org.fujion.common.StrUtil;
+import org.fujion.ancillary.ComponentException;
+import org.fujion.annotation.Component.PropertyGetter;
+import org.fujion.annotation.Component.PropertySetter;
+import org.fujion.component.BaseComponent;
+import org.fujion.component.BaseInputboxComponent;
+import org.fujion.event.EventUtil;
 
 /**
  * This is the main UI component for the wonder bar. It supports both server-side searching for

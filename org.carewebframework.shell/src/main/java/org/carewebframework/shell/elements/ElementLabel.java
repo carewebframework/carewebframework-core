@@ -26,7 +26,7 @@
 package org.carewebframework.shell.elements;
 
 import org.carewebframework.theme.ThemeUtil;
-import org.carewebframework.web.component.Label;
+import org.fujion.component.Label;
 
 /**
  * Simple button stock object.

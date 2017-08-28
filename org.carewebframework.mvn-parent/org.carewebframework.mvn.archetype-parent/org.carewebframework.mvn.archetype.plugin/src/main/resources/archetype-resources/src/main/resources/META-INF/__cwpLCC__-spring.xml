@@ -17,7 +17,7 @@
 		
 		<!-- This is the sample definition for a CareWeb plugin -->
 		<cwp:plugin id="${cwpLCC}" name="${cwpName}" 
-			url="web/${packageInPathFormat}/${cwpLCC}.cwf">
+			url="web/${packageInPathFormat}/${cwpLCC}.fsp">
 			<cwp:resource>
 				<cwp:button-resource caption="${symbol_dollar}{labels.${cwpLC}.button.caption}" 
 					action='groovy:Messagebox.show("${symbol_dollar}{labels.${cwpLC}.button.click.msg}");'/>

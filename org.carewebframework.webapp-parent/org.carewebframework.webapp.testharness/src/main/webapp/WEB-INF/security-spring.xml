@@ -22,7 +22,7 @@
 		<sec:form-login 
 			login-processing-url="/security/login" 
 			login-page="/security/login" 
-			default-target-url='/index.cwf'
+			default-target-url='/index.fsp'
 			authentication-details-source-ref="securityAuthenticationDetailsSource" />
 		<sec:logout 
 			logout-url="/security/logout"

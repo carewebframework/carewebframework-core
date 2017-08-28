@@ -10,7 +10,7 @@
 		<init-param>
 			<param-name>contextConfigLocation</param-name>
 			<param-value>
-				classpath:/META-INF/cwf-dispatcher-servlet.xml
+				classpath:/META-INF/fujion-dispatcher-servlet.xml
 				/WEB-INF/security-spring.xml
 			</param-value>
 		</init-param>
@@ -32,13 +32,8 @@
 	</servlet-mapping>
 
 	<context-param>
-		<param-name>cwf.debug</param-name>
+		<param-name>fujion.debug</param-name>
 		<param-value>true</param-value>
 	</context-param>
-	
-	
-	<welcome-file-list>
-		<welcome-file>index.cwf</welcome-file>
-	</welcome-file-list>
 	
 </web-app>

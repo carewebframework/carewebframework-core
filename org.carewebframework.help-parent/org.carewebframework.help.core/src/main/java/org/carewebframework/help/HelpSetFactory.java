@@ -31,9 +31,9 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import org.carewebframework.common.MiscUtil;
-import org.carewebframework.common.RegistryMap;
-import org.carewebframework.common.RegistryMap.DuplicateAction;
+import org.fujion.common.MiscUtil;
+import org.fujion.common.RegistryMap;
+import org.fujion.common.RegistryMap.DuplicateAction;
 
 /**
  * Factory class for creating help sets using registered implementations.

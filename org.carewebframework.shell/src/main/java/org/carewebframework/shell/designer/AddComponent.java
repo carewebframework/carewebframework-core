@@ -32,7 +32,7 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.carewebframework.api.property.PropertyUtil;
-import org.carewebframework.common.StrUtil;
+import org.fujion.common.StrUtil;
 import org.carewebframework.shell.elements.ElementBase;
 import org.carewebframework.shell.elements.ElementLayout;
 import org.carewebframework.shell.elements.ElementPlugin;
@@ -42,20 +42,20 @@ import org.carewebframework.shell.plugins.PluginDefinition;
 import org.carewebframework.shell.plugins.PluginRegistry;
 import org.carewebframework.ui.icon.IconUtil;
 import org.carewebframework.ui.util.TreeUtil;
-import org.carewebframework.web.ancillary.IAutoWired;
-import org.carewebframework.web.ancillary.IResponseCallback;
-import org.carewebframework.web.annotation.EventHandler;
-import org.carewebframework.web.annotation.WiredComponent;
-import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.component.Button;
-import org.carewebframework.web.component.Treenode;
-import org.carewebframework.web.component.Treeview;
-import org.carewebframework.web.component.Window;
-import org.carewebframework.web.event.ClickEvent;
-import org.carewebframework.web.event.DblclickEvent;
-import org.carewebframework.web.event.EventUtil;
-import org.carewebframework.web.event.IEventListener;
-import org.carewebframework.web.page.PageUtil;
+import org.fujion.ancillary.IAutoWired;
+import org.fujion.ancillary.IResponseCallback;
+import org.fujion.annotation.EventHandler;
+import org.fujion.annotation.WiredComponent;
+import org.fujion.component.BaseComponent;
+import org.fujion.component.Button;
+import org.fujion.component.Treenode;
+import org.fujion.component.Treeview;
+import org.fujion.component.Window;
+import org.fujion.event.ClickEvent;
+import org.fujion.event.DblclickEvent;
+import org.fujion.event.EventUtil;
+import org.fujion.event.IEventListener;
+import org.fujion.page.PageUtil;
 
 /**
  * Dialog for adding new component to UI.
@@ -162,7 +162,7 @@ public class AddComponent implements IAutoWired {
         Map<String, Object> args = new HashMap<>();
         args.put("parentElement", parentElement);
         args.put("createChild", createChild);
-        Window dlg = (Window) PageUtil.createPage(DesignConstants.RESOURCE_PREFIX + "addComponent.cwf", null, args).get(0);
+        Window dlg = (Window) PageUtil.createPage(DesignConstants.RESOURCE_PREFIX + "addComponent.fsp", null, args).get(0);
         dlg.modal(callback);
     }
 

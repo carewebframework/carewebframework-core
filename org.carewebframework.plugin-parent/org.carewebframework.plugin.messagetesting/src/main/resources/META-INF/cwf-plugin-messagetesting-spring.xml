@@ -11,7 +11,7 @@
 
 		<cwp:plugin id="cwfMessageTesting" name="Messaging Test Plugin" 
 			category="${@msg.cwf.shell.plugin.category.system}"
-			url="web/org/carewebframework/plugin/messagetesting/main.cwf">
+			url="web/org/carewebframework/plugin/messagetesting/main.fsp">
 			<cwp:security requiresAll="false">
 				<cwp:authority name="PRIV_MONITOR_SYSTEM" />
 			</cwp:security>

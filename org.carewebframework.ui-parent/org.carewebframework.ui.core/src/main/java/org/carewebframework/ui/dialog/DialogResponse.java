@@ -8,7 +8,7 @@ import java.util.List;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.ObjectUtils;
-import org.carewebframework.common.StrUtil;
+import org.fujion.common.StrUtil;
 
 /**
  * Wrapper for response object used by dialog for displaying and returning responses.

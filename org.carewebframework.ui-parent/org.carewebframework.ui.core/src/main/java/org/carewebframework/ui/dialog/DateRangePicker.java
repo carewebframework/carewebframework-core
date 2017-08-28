@@ -30,18 +30,18 @@ import java.util.Date;
 import java.util.List;
 
 import org.carewebframework.api.property.PropertyUtil;
-import org.carewebframework.common.DateRange;
-import org.carewebframework.web.annotation.Component;
-import org.carewebframework.web.annotation.Component.ChildTag;
-import org.carewebframework.web.annotation.Component.PropertyGetter;
-import org.carewebframework.web.annotation.Component.PropertySetter;
-import org.carewebframework.web.annotation.EventHandler;
-import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.component.Combobox;
-import org.carewebframework.web.component.Comboitem;
-import org.carewebframework.web.event.ChangeEvent;
-import org.carewebframework.web.event.Event;
-import org.carewebframework.web.event.EventUtil;
+import org.fujion.common.DateRange;
+import org.fujion.annotation.Component;
+import org.fujion.annotation.Component.ChildTag;
+import org.fujion.annotation.Component.PropertyGetter;
+import org.fujion.annotation.Component.PropertySetter;
+import org.fujion.annotation.EventHandler;
+import org.fujion.component.BaseComponent;
+import org.fujion.component.Combobox;
+import org.fujion.component.Comboitem;
+import org.fujion.event.ChangeEvent;
+import org.fujion.event.Event;
+import org.fujion.event.EventUtil;
 
 /**
  * Generic component for choosing date ranges.
@@ -209,7 +209,7 @@ public class DateRangePicker extends Combobox {
     /**
      * Need to update visual appearance of selection when it is changed.
      * 
-     * @see org.carewebframework.web.component.Combobox#setSelectedItem(Comboitem)
+     * @see org.fujion.component.Combobox#setSelectedItem(Comboitem)
      */
     @Override
     public void setSelectedItem(Comboitem item) {

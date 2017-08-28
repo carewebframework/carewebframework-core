@@ -25,7 +25,7 @@
  */
 package org.carewebframework.shell.elements;
 
-import org.carewebframework.web.component.Pane;
+import org.fujion.component.Pane;
 
 /**
  * A child of the ElementSplitterView.

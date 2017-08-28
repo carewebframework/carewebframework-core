@@ -27,7 +27,7 @@ package org.carewebframework.plugin.chat;
 
 import org.carewebframework.api.event.IEventManager;
 import org.carewebframework.api.messaging.IPublisherInfo;
-import org.carewebframework.common.StrUtil;
+import org.fujion.common.StrUtil;
 
 /**
  * Services for a single chat session.

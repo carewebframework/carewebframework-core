@@ -28,7 +28,7 @@ package org.carewebframework.shell.plugins;
 import org.carewebframework.shell.CareWebShell;
 import org.carewebframework.shell.elements.ElementBase;
 import org.carewebframework.shell.elements.ElementPlugin;
-import org.carewebframework.web.component.BaseMenuComponent;
+import org.fujion.component.BaseMenuComponent;
 
 /**
  * Resource for declaring items to appear on the common menu.

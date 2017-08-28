@@ -34,15 +34,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import org.carewebframework.common.StrUtil;
-import org.carewebframework.common.XMLUtil;
+import org.fujion.common.StrUtil;
+import org.fujion.common.XMLUtil;
 import org.carewebframework.help.HelpModule;
 import org.carewebframework.help.HelpSetBase;
 import org.carewebframework.help.HelpTopic;
 import org.carewebframework.help.HelpTopicNode;
 import org.carewebframework.help.HelpViewType;
 import org.carewebframework.help.IHelpView;
-import org.carewebframework.web.client.ExecutionContext;
+import org.fujion.client.ExecutionContext;
 import org.w3c.dom.Node;
 
 public class HelpSet_CHMHelp extends HelpSetBase {

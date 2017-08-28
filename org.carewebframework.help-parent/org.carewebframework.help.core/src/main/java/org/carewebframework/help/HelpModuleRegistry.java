@@ -26,7 +26,7 @@
 package org.carewebframework.help;
 
 import org.carewebframework.api.spring.BeanRegistry;
-import org.carewebframework.common.Localizer;
+import org.fujion.common.Localizer;
 
 /**
  * Registry of all known help modules.

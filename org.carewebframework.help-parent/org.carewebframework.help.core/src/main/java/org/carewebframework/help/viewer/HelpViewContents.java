@@ -33,11 +33,11 @@ import org.carewebframework.help.HelpTopicNode;
 import org.carewebframework.help.HelpViewType;
 import org.carewebframework.help.IHelpView;
 import org.carewebframework.ui.util.TreeUtil;
-import org.carewebframework.web.annotation.EventHandler;
-import org.carewebframework.web.annotation.WiredComponent;
-import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.component.Treenode;
-import org.carewebframework.web.component.Treeview;
+import org.fujion.annotation.EventHandler;
+import org.fujion.annotation.WiredComponent;
+import org.fujion.component.BaseComponent;
+import org.fujion.component.Treenode;
+import org.fujion.component.Treeview;
 
 /**
  * Tab for displaying the table of contents. This is displayed as a tree of topics.
@@ -58,7 +58,7 @@ public class HelpViewContents extends HelpViewBase {
      * @param viewType The view type.
      */
     public HelpViewContents(HelpViewer viewer, HelpViewType viewType) {
-        super(viewer, viewType, "helpContentsTab.cwf");
+        super(viewer, viewType, "helpContentsTab.fsp");
     }
     
     /**

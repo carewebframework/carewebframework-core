@@ -30,7 +30,7 @@ import java.util.List;
 import org.carewebframework.api.event.EventManager;
 import org.carewebframework.api.event.IEventManager;
 import org.carewebframework.api.event.IGenericEvent;
-import org.carewebframework.common.StrUtil;
+import org.fujion.common.StrUtil;
 import org.carewebframework.shell.elements.ElementPlugin;
 
 /**

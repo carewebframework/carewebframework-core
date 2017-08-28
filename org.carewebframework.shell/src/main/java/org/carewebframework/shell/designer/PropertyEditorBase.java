@@ -27,10 +27,10 @@ package org.carewebframework.shell.designer;
 
 import org.carewebframework.shell.property.PropertyInfo;
 import org.carewebframework.ui.util.CWFUtil;
-import org.carewebframework.web.annotation.EventHandler;
-import org.carewebframework.web.component.BaseUIComponent;
-import org.carewebframework.web.event.ChangeEvent;
-import org.carewebframework.web.page.PageUtil;
+import org.fujion.annotation.EventHandler;
+import org.fujion.component.BaseUIComponent;
+import org.fujion.event.ChangeEvent;
+import org.fujion.page.PageUtil;
 
 /**
  * All property editors must descend from this abstract class.

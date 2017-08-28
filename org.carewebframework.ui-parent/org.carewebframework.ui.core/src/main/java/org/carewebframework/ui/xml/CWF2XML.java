@@ -38,9 +38,9 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringUtils;
-import org.carewebframework.common.XMLUtil;
-import org.carewebframework.web.annotation.ComponentDefinition;
-import org.carewebframework.web.component.BaseComponent;
+import org.fujion.common.XMLUtil;
+import org.fujion.annotation.ComponentDefinition;
+import org.fujion.component.BaseComponent;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;

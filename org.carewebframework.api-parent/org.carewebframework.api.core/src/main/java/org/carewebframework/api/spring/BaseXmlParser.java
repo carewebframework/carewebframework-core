@@ -28,7 +28,7 @@ package org.carewebframework.api.spring;
 import java.io.IOException;
 
 import org.carewebframework.api.spring.SpringUtil;
-import org.carewebframework.common.XMLUtil;
+import org.fujion.common.XMLUtil;
 
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;

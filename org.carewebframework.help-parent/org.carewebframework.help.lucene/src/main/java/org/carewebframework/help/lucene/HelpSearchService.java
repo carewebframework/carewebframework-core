@@ -66,8 +66,8 @@ import org.apache.lucene.util.Version;
 import org.apache.tika.Tika;
 import org.apache.tika.parser.html.HtmlParser;
 
-import org.carewebframework.common.MiscUtil;
-import org.carewebframework.common.StrUtil;
+import org.fujion.common.MiscUtil;
+import org.fujion.common.StrUtil;
 import org.carewebframework.help.HelpModule;
 import org.carewebframework.help.HelpSearchHit;
 import org.carewebframework.help.HelpTopic;

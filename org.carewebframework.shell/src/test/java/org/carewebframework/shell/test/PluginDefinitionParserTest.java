@@ -34,7 +34,7 @@ import org.carewebframework.shell.plugins.PluginResourceHelp;
 import org.carewebframework.shell.plugins.PluginResourcePropertyGroup;
 import org.carewebframework.shell.plugins.PluginXmlParser;
 import org.carewebframework.ui.test.MockUITest;
-import org.carewebframework.web.test.MockTest;
+import org.fujion.test.MockTest;
 import org.junit.Test;
 
 public class PluginDefinitionParserTest extends MockUITest {

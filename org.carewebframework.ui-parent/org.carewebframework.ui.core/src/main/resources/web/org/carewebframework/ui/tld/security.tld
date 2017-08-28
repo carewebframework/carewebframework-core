@@ -9,7 +9,7 @@
 	<short-name>CWF Security EL Functions</short-name>
 	<uri>http://www.carewebframework.org/tld/security</uri>
 	<description>
-	EL functions to simulate spring security taglib.  (i.e. Useful for a cwf page, which cannot use the spring security taglib).
+	EL functions to simulate spring security taglib.  (i.e. Useful for an fsp page, which cannot use the spring security taglib).
 	</description>
 	
 	<function>

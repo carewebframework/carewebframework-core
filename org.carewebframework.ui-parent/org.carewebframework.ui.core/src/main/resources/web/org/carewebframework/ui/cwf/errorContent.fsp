@@ -1,4 +1,4 @@
-<div name="errorContent" controller="${@exceptionController}" class="cwf-layout-vertical">
+<div name="errorContent" controller="${@exceptionController}" class="fujion-layout-vertical">
 	<html content="${@msg.cwf.error.dialog.message}" />
 	<detail name="detail" label="${@msg.cwf.error.dialog.detail.closed.label}">
 		<grid>

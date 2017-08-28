@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.carewebframework.api.property.IPropertyProvider;
-import org.carewebframework.common.MiscUtil;
+import org.fujion.common.MiscUtil;
 import org.carewebframework.shell.plugins.PluginDefinition;
 import org.w3c.dom.Element;
 

@@ -26,8 +26,8 @@
 package org.carewebframework.plugin.messagetesting;
 
 import org.carewebframework.api.messaging.IMessageProducer;
-import org.carewebframework.web.component.Listitem;
-import org.carewebframework.web.model.IComponentRenderer;
+import org.fujion.component.Listitem;
+import org.fujion.model.IComponentRenderer;
 
 public class MessageProviderRenderer implements IComponentRenderer<Listitem, IMessageProducer> {
     

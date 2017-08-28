@@ -1,6 +1,6 @@
 package org.carewebframework.ui.action;
 
-import org.carewebframework.web.client.ClientUtil;
+import org.fujion.client.ClientUtil;
 
 public class ActionTypeJavascript extends ActionTypeBase<String> {
 

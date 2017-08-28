@@ -10,18 +10,18 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.lang.reflect.FieldUtils;
-import org.carewebframework.common.MiscUtil;
-import org.carewebframework.web.ancillary.IDisable;
-import org.carewebframework.web.client.ExecutionContext;
-import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.component.BaseInputboxComponent;
-import org.carewebframework.web.component.Cell;
-import org.carewebframework.web.component.Html;
-import org.carewebframework.web.component.Hyperlink;
-import org.carewebframework.web.component.Page;
-import org.carewebframework.web.event.Event;
-import org.carewebframework.web.event.EventUtil;
-import org.carewebframework.web.event.IEventListener;
+import org.fujion.common.MiscUtil;
+import org.fujion.ancillary.IDisable;
+import org.fujion.client.ExecutionContext;
+import org.fujion.component.BaseComponent;
+import org.fujion.component.BaseInputboxComponent;
+import org.fujion.component.Cell;
+import org.fujion.component.Html;
+import org.fujion.component.Hyperlink;
+import org.fujion.component.Page;
+import org.fujion.event.Event;
+import org.fujion.event.EventUtil;
+import org.fujion.event.IEventListener;
 
 public class CWFUtil {
 

@@ -1,4 +1,4 @@
 <page>
-	<import src="web/org/carewebframework/web/sandbox/main.cwf"
+	<import src="web/org/fujion/sandbox/main.fsp"
 		controller="org.carewebframework.plugin.sandbox.MainController" />
 </page>

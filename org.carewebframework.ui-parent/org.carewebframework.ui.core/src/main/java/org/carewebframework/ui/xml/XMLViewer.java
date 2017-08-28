@@ -29,9 +29,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.carewebframework.ui.dialog.PopupDialog;
-import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.component.BaseUIComponent;
-import org.carewebframework.web.component.Window;
+import org.fujion.component.BaseComponent;
+import org.fujion.component.BaseUIComponent;
+import org.fujion.component.Window;
 import org.w3c.dom.Document;
 
 /**

@@ -1,6 +1,6 @@
 package org.carewebframework.ui.action;
 
-import org.carewebframework.web.client.ClientUtil;
+import org.fujion.client.ClientUtil;
 
 /**
  * URL action type causes navigation to URL in a separate viewport.

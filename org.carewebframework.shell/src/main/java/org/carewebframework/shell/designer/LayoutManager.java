@@ -43,36 +43,36 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.carewebframework.api.FrameworkUtil;
-import org.carewebframework.common.StrUtil;
+import org.fujion.common.StrUtil;
 import org.carewebframework.shell.layout.Layout;
 import org.carewebframework.shell.layout.LayoutIdentifier;
 import org.carewebframework.shell.layout.LayoutParser;
 import org.carewebframework.shell.layout.LayoutUtil;
 import org.carewebframework.ui.dialog.DialogUtil;
 import org.carewebframework.ui.dialog.PopupDialog;
-import org.carewebframework.web.ancillary.IAutoWired;
-import org.carewebframework.web.ancillary.IResponseCallback;
-import org.carewebframework.web.annotation.EventHandler;
-import org.carewebframework.web.annotation.WiredComponent;
-import org.carewebframework.web.client.ClientUtil;
-import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.component.BaseUIComponent;
-import org.carewebframework.web.component.Button;
-import org.carewebframework.web.component.Label;
-import org.carewebframework.web.component.Listbox;
-import org.carewebframework.web.component.Listitem;
-import org.carewebframework.web.component.Radiobutton;
-import org.carewebframework.web.component.Radiogroup;
-import org.carewebframework.web.component.Upload;
-import org.carewebframework.web.component.Window;
-import org.carewebframework.web.event.ClickEvent;
-import org.carewebframework.web.event.DblclickEvent;
-import org.carewebframework.web.event.IEventListener;
-import org.carewebframework.web.event.UploadEvent;
-import org.carewebframework.web.event.UploadEvent.UploadState;
-import org.carewebframework.web.model.IComponentRenderer;
-import org.carewebframework.web.model.IModelAndView;
-import org.carewebframework.web.model.ListModel;
+import org.fujion.ancillary.IAutoWired;
+import org.fujion.ancillary.IResponseCallback;
+import org.fujion.annotation.EventHandler;
+import org.fujion.annotation.WiredComponent;
+import org.fujion.client.ClientUtil;
+import org.fujion.component.BaseComponent;
+import org.fujion.component.BaseUIComponent;
+import org.fujion.component.Button;
+import org.fujion.component.Label;
+import org.fujion.component.Listbox;
+import org.fujion.component.Listitem;
+import org.fujion.component.Radiobutton;
+import org.fujion.component.Radiogroup;
+import org.fujion.component.Upload;
+import org.fujion.component.Window;
+import org.fujion.event.ClickEvent;
+import org.fujion.event.DblclickEvent;
+import org.fujion.event.IEventListener;
+import org.fujion.event.UploadEvent;
+import org.fujion.event.UploadEvent.UploadState;
+import org.fujion.model.IComponentRenderer;
+import org.fujion.model.IModelAndView;
+import org.fujion.model.ListModel;
 
 /**
  * Supports selection and management of existing layouts.
@@ -172,7 +172,7 @@ public class LayoutManager implements IAutoWired {
         Map<String, Object> args = new HashMap<>();
         args.put("manage", manage);
         args.put("deflt", deflt);
-        PopupDialog.show(RESOURCE_PREFIX + "layoutManager.cwf", args, true, true, true, closeListener);
+        PopupDialog.show(RESOURCE_PREFIX + "layoutManager.fsp", args, true, true, true, closeListener);
     }
     
     /**

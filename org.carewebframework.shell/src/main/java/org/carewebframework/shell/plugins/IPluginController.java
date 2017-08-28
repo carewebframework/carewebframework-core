@@ -25,7 +25,7 @@
  */
 package org.carewebframework.shell.plugins;
 
-import org.carewebframework.web.ancillary.IAutoWired;
+import org.fujion.ancillary.IAutoWired;
 
 /**
  * May be implemented by a bean plugin resource that will be used as a controller for the plugin.

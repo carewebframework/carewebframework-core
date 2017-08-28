@@ -36,22 +36,22 @@ import org.carewebframework.api.messaging.IPublisherInfo;
 import org.carewebframework.ui.controller.FrameworkController;
 import org.carewebframework.ui.dialog.PopupDialog;
 import org.carewebframework.ui.util.CWFUtil;
-import org.carewebframework.web.ancillary.IResponseCallback;
-import org.carewebframework.web.annotation.EventHandler;
-import org.carewebframework.web.annotation.WiredComponent;
-import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.component.Button;
-import org.carewebframework.web.component.Checkbox;
-import org.carewebframework.web.component.Listbox;
-import org.carewebframework.web.component.Listitem;
-import org.carewebframework.web.model.ListModel;
+import org.fujion.ancillary.IResponseCallback;
+import org.fujion.annotation.EventHandler;
+import org.fujion.annotation.WiredComponent;
+import org.fujion.component.BaseComponent;
+import org.fujion.component.Button;
+import org.fujion.component.Checkbox;
+import org.fujion.component.Listbox;
+import org.fujion.component.Listitem;
+import org.fujion.model.ListModel;
 
 /**
  * Controller for inviting participants to a chat session.
  */
 public class InviteController extends FrameworkController {
     
-    private static final String DIALOG = CWFUtil.getResourcePath(InviteController.class) + "invite.cwf";
+    private static final String DIALOG = CWFUtil.getResourcePath(InviteController.class) + "invite.fsp";
     
     private static final String ATTR_HIDE = InviteController.class.getName() + ".HIDE_ACTIVE";
     

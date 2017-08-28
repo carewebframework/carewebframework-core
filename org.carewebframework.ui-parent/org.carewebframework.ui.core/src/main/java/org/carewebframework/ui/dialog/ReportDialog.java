@@ -28,15 +28,15 @@ package org.carewebframework.ui.dialog;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.carewebframework.web.ancillary.IAutoWired;
-import org.carewebframework.web.annotation.EventHandler;
-import org.carewebframework.web.annotation.WiredComponent;
-import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.component.Button;
-import org.carewebframework.web.component.Cell;
-import org.carewebframework.web.component.Html;
-import org.carewebframework.web.component.Window;
-import org.carewebframework.web.event.IEventListener;
+import org.fujion.ancillary.IAutoWired;
+import org.fujion.annotation.EventHandler;
+import org.fujion.annotation.WiredComponent;
+import org.fujion.component.BaseComponent;
+import org.fujion.component.Button;
+import org.fujion.component.Cell;
+import org.fujion.component.Html;
+import org.fujion.component.Window;
+import org.fujion.event.IEventListener;
 
 /**
  * A simple dialog for displaying text information modally or amodally.
@@ -59,7 +59,7 @@ public class ReportDialog implements IAutoWired {
         args.put("text", text);
         args.put("title", title);
         args.put("allowPrint", allowPrint);
-        Window dialog = PopupDialog.show(DialogConstants.RESOURCE_PREFIX + "reportDialog.cwf", args, true, true, false,
+        Window dialog = PopupDialog.show(DialogConstants.RESOURCE_PREFIX + "reportDialog.fsp", args, true, true, false,
             null);
 
         if (asModal) {

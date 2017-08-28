@@ -30,8 +30,8 @@ import org.carewebframework.shell.elements.ElementPlugin;
 import org.carewebframework.shell.elements.ElementPlugin.PluginContainer;
 import org.carewebframework.shell.elements.ElementUI;
 import org.carewebframework.ui.controller.FrameworkController;
-import org.carewebframework.web.ancillary.IAutoWired;
-import org.carewebframework.web.component.BaseComponent;
+import org.fujion.ancillary.IAutoWired;
+import org.fujion.component.BaseComponent;
 
 /**
  * Base controller for plugins. Offers convenience methods for determining activation state,

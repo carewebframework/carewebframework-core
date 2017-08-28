@@ -25,9 +25,9 @@
  */
 package org.carewebframework.ui.wonderbar;
 
-import org.carewebframework.web.annotation.Component.PropertyGetter;
-import org.carewebframework.web.annotation.Component.PropertySetter;
-import org.carewebframework.web.component.BaseUIComponent;
+import org.fujion.annotation.Component.PropertyGetter;
+import org.fujion.annotation.Component.PropertySetter;
+import org.fujion.component.BaseUIComponent;
 
 /**
  * Base class for wonder bar item and group.

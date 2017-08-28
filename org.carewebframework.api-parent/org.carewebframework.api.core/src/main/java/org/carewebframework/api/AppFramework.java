@@ -29,8 +29,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.carewebframework.common.MiscUtil;
-import org.carewebframework.common.WeakList;
+import org.fujion.common.MiscUtil;
+import org.fujion.common.WeakList;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.DestructionAwareBeanPostProcessor;
 import org.springframework.context.ApplicationContext;

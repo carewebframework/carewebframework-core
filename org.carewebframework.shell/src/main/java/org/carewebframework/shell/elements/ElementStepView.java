@@ -28,13 +28,13 @@ package org.carewebframework.shell.elements;
 import org.carewebframework.shell.designer.PropertyEditorStepView;
 import org.carewebframework.shell.property.PropertyTypeRegistry;
 import org.carewebframework.theme.ThemeUtil;
-import org.carewebframework.web.annotation.EventHandler;
-import org.carewebframework.web.annotation.WiredComponent;
-import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.component.BaseUIComponent;
-import org.carewebframework.web.component.Div;
-import org.carewebframework.web.component.Hyperlink;
-import org.carewebframework.web.component.Label;
+import org.fujion.annotation.EventHandler;
+import org.fujion.annotation.WiredComponent;
+import org.fujion.component.BaseComponent;
+import org.fujion.component.BaseUIComponent;
+import org.fujion.component.Div;
+import org.fujion.component.Hyperlink;
+import org.fujion.component.Label;
 
 /**
  * A step-oriented UI Element. This is implemented as a window component with a top toolbar

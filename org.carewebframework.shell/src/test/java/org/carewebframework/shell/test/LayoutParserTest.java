@@ -31,7 +31,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.carewebframework.common.StrUtil;
+import org.fujion.common.StrUtil;
 import org.carewebframework.shell.CareWebShell;
 import org.carewebframework.shell.elements.ElementBase;
 import org.carewebframework.shell.elements.ElementDesktop;
@@ -54,9 +54,9 @@ import org.carewebframework.shell.property.PropertyInfo;
 import org.carewebframework.shell.triggers.TriggerConditionActivate;
 import org.carewebframework.ui.controller.FrameworkController;
 import org.carewebframework.ui.test.MockUITest;
-import org.carewebframework.web.event.ClickEvent;
-import org.carewebframework.web.event.EventUtil;
-import org.carewebframework.web.test.MockTest;
+import org.fujion.event.ClickEvent;
+import org.fujion.event.EventUtil;
+import org.fujion.test.MockTest;
 import org.junit.Test;
 
 public class LayoutParserTest extends MockUITest {

@@ -34,7 +34,7 @@ public class XMLConstants {
 
     protected static final String RESOURCE_PATH = CWFUtil.getResourcePath(XMLConstants.class);
 
-    protected static final String VIEW_DIALOG = RESOURCE_PATH + "xmlViewer.cwf";
+    protected static final String VIEW_DIALOG = RESOURCE_PATH + "xmlViewer.fsp";
 
     protected static final String STYLE_TAG = "cwf-xml-tag";
 

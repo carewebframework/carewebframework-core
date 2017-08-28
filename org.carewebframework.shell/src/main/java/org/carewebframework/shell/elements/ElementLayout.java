@@ -33,7 +33,7 @@ import org.carewebframework.shell.layout.LayoutIdentifier;
 import org.carewebframework.shell.layout.LayoutParser;
 import org.carewebframework.shell.layout.LayoutUtil;
 import org.carewebframework.shell.plugins.PluginDefinition;
-import org.carewebframework.web.component.Div;
+import org.fujion.component.Div;
 import org.springframework.util.StringUtils;
 
 /**

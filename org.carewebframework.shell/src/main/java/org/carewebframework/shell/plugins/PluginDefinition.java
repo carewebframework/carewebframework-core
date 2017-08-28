@@ -34,7 +34,7 @@ import org.apache.commons.logging.LogFactory;
 import org.carewebframework.api.ManifestIterator;
 import org.carewebframework.api.property.IPropertyProvider;
 import org.carewebframework.api.security.SecurityUtil;
-import org.carewebframework.common.MiscUtil;
+import org.fujion.common.MiscUtil;
 import org.carewebframework.shell.ancillary.CWFException;
 import org.carewebframework.shell.elements.ElementBase;
 import org.carewebframework.shell.elements.ElementPlugin;

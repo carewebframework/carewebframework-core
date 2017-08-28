@@ -1,8 +1,8 @@
 package org.carewebframework.ui.action;
 
-import org.carewebframework.web.script.IScriptLanguage;
-import org.carewebframework.web.script.IScriptLanguage.IParsedScript;
-import org.carewebframework.web.script.ScriptRegistry;
+import org.fujion.script.IScriptLanguage;
+import org.fujion.script.IScriptLanguage.IParsedScript;
+import org.fujion.script.ScriptRegistry;
 import org.springframework.util.Assert;
 
 /**

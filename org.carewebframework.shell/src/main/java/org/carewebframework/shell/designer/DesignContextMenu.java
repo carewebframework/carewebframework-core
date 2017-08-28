@@ -25,24 +25,24 @@
  */
 package org.carewebframework.shell.designer;
 
-import org.carewebframework.common.StrUtil;
+import org.fujion.common.StrUtil;
 import org.carewebframework.shell.elements.ElementBase;
 import org.carewebframework.shell.elements.ElementUI;
 import org.carewebframework.shell.layout.Layout;
 import org.carewebframework.shell.layout.LayoutParser;
-import org.carewebframework.web.ancillary.IAutoWired;
-import org.carewebframework.web.ancillary.IDisable;
-import org.carewebframework.web.annotation.EventHandler;
-import org.carewebframework.web.annotation.WiredComponent;
-import org.carewebframework.web.client.ExecutionContext;
-import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.component.BaseUIComponent;
-import org.carewebframework.web.component.Menuheader;
-import org.carewebframework.web.component.Menuitem;
-import org.carewebframework.web.component.Menupopup;
-import org.carewebframework.web.component.Page;
-import org.carewebframework.web.event.Event;
-import org.carewebframework.web.page.PageUtil;
+import org.fujion.ancillary.IAutoWired;
+import org.fujion.ancillary.IDisable;
+import org.fujion.annotation.EventHandler;
+import org.fujion.annotation.WiredComponent;
+import org.fujion.client.ExecutionContext;
+import org.fujion.component.BaseComponent;
+import org.fujion.component.BaseUIComponent;
+import org.fujion.component.Menuheader;
+import org.fujion.component.Menuitem;
+import org.fujion.component.Menupopup;
+import org.fujion.component.Page;
+import org.fujion.event.Event;
+import org.fujion.page.PageUtil;
 
 /**
  * Context menu for designer.
@@ -105,7 +105,7 @@ public class DesignContextMenu implements IAutoWired {
      * @return New design context menu.
      */
     public static DesignContextMenu create() {
-        return PageUtil.createPage(DesignConstants.RESOURCE_PREFIX + "designContextMenu.cwf", ExecutionContext.getPage())
+        return PageUtil.createPage(DesignConstants.RESOURCE_PREFIX + "designContextMenu.fsp", ExecutionContext.getPage())
                 .get(0).getAttribute("controller", DesignContextMenu.class);
     }
 

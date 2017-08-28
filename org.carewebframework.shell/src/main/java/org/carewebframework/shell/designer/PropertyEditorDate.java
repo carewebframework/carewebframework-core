@@ -27,9 +27,9 @@ package org.carewebframework.shell.designer;
 
 import java.util.Date;
 
-import org.carewebframework.common.DateUtil;
+import org.fujion.common.DateUtil;
 import org.carewebframework.shell.property.PropertyInfo;
-import org.carewebframework.web.component.Datebox;
+import org.fujion.component.Datebox;
 
 /**
  * Editor for dates.

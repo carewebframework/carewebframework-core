@@ -32,7 +32,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.carewebframework.api.event.EventManager;
 import org.carewebframework.api.event.IEventManager;
-import org.carewebframework.common.MiscUtil;
+import org.fujion.common.MiscUtil;
 import org.carewebframework.shell.AboutDialog;
 import org.carewebframework.shell.CareWebShell;
 import org.carewebframework.shell.CareWebUtil;
@@ -47,7 +47,7 @@ import org.carewebframework.shell.plugins.PluginDefinition;
 import org.carewebframework.shell.plugins.PluginRegistry;
 import org.carewebframework.shell.property.PropertyInfo;
 import org.carewebframework.ui.dialog.DialogUtil;
-import org.carewebframework.web.component.BaseUIComponent;
+import org.fujion.component.BaseUIComponent;
 
 /**
  * This is the base class for all layout elements supported by the CareWeb framework.

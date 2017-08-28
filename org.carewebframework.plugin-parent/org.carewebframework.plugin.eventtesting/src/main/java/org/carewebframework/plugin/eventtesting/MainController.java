@@ -35,19 +35,19 @@ import org.carewebframework.api.event.IEventManager;
 import org.carewebframework.api.event.IGenericEvent;
 import org.carewebframework.api.messaging.Recipient;
 import org.carewebframework.api.messaging.Recipient.RecipientType;
-import org.carewebframework.common.JSONUtil;
-import org.carewebframework.common.StrUtil;
+import org.fujion.common.JSONUtil;
+import org.fujion.common.StrUtil;
 import org.carewebframework.shell.plugins.PluginController;
-import org.carewebframework.web.annotation.EventHandler;
-import org.carewebframework.web.annotation.WiredComponent;
-import org.carewebframework.web.client.ClientUtil;
-import org.carewebframework.web.component.Checkbox;
-import org.carewebframework.web.component.Label;
-import org.carewebframework.web.component.Listbox;
-import org.carewebframework.web.component.Listitem;
-import org.carewebframework.web.component.Memobox;
-import org.carewebframework.web.component.Textbox;
-import org.carewebframework.web.event.ChangeEvent;
+import org.fujion.annotation.EventHandler;
+import org.fujion.annotation.WiredComponent;
+import org.fujion.client.ClientUtil;
+import org.fujion.component.Checkbox;
+import org.fujion.component.Label;
+import org.fujion.component.Listbox;
+import org.fujion.component.Listitem;
+import org.fujion.component.Memobox;
+import org.fujion.component.Textbox;
+import org.fujion.event.ChangeEvent;
 
 /**
  * Plug-in to test remote events.

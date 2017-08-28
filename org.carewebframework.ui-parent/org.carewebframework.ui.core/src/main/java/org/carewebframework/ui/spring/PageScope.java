@@ -26,12 +26,12 @@
 package org.carewebframework.ui.spring;
 
 import org.carewebframework.api.spring.ScopeContainer;
-import org.carewebframework.web.client.ExecutionContext;
-import org.carewebframework.web.component.Page;
-import org.carewebframework.web.websocket.ISessionLifecycle;
-import org.carewebframework.web.websocket.Session;
-import org.carewebframework.web.websocket.SessionInitException;
-import org.carewebframework.web.websocket.Sessions;
+import org.fujion.client.ExecutionContext;
+import org.fujion.component.Page;
+import org.fujion.websocket.ISessionLifecycle;
+import org.fujion.websocket.Session;
+import org.fujion.websocket.SessionInitException;
+import org.fujion.websocket.Sessions;
 
 /**
  * Implements a custom Spring scope based on the CWF page.

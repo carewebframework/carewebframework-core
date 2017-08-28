@@ -25,7 +25,7 @@
  */
 package org.carewebframework.help;
 
-import org.carewebframework.common.NumUtil;
+import org.fujion.common.NumUtil;
 
 /**
  * Represents a single topic hit from a search operation.

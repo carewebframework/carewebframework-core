@@ -26,7 +26,7 @@
 package org.carewebframework.shell.plugins;
 
 import org.carewebframework.shell.elements.ElementPlugin;
-import org.carewebframework.web.event.Event;
+import org.fujion.event.Event;
 
 /**
  * Event for all plugin-related actions.

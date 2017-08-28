@@ -28,10 +28,10 @@ package org.carewebframework.shell.elements;
 import org.carewebframework.shell.designer.PropertyEditorOrderedChildren;
 import org.carewebframework.shell.property.PropertyTypeRegistry;
 import org.carewebframework.ui.action.ActionUtil;
-import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.component.BaseUIComponent;
-import org.carewebframework.web.component.Toolbar;
-import org.carewebframework.web.component.Toolbar.Alignment;
+import org.fujion.component.BaseComponent;
+import org.fujion.component.BaseUIComponent;
+import org.fujion.component.Toolbar;
+import org.fujion.component.Toolbar.Alignment;
 
 /**
  * Implements a shared toolbar.

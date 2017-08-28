@@ -2,7 +2,7 @@ package org.carewebframework.security.controller;
 
 import org.carewebframework.api.domain.IUser;
 import org.carewebframework.api.security.SecurityUtil;
-import org.carewebframework.common.StrUtil;
+import org.fujion.common.StrUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;

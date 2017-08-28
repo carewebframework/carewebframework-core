@@ -28,8 +28,8 @@ package org.carewebframework.ui.xml;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.carewebframework.web.model.IListModel;
-import org.carewebframework.web.model.NestedModel;
+import org.fujion.model.IListModel;
+import org.fujion.model.NestedModel;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 

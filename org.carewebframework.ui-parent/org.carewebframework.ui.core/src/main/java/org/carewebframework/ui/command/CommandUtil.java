@@ -29,8 +29,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.carewebframework.ui.action.IAction;
-import org.carewebframework.web.component.BaseUIComponent;
-import org.carewebframework.web.event.KeyCode;
+import org.fujion.component.BaseUIComponent;
+import org.fujion.event.KeyCode;
 
 /**
  * Static utility class.

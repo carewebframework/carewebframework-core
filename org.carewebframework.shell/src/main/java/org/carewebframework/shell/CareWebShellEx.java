@@ -30,7 +30,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.carewebframework.api.property.IPropertyProvider;
 import org.carewebframework.api.property.PropertyUtil;
-import org.carewebframework.common.MiscUtil;
+import org.fujion.common.MiscUtil;
 import org.carewebframework.shell.ancillary.CWFException;
 import org.carewebframework.shell.elements.ElementBase;
 import org.carewebframework.shell.elements.ElementMenuItem;
@@ -45,8 +45,8 @@ import org.carewebframework.shell.layout.LayoutParser;
 import org.carewebframework.shell.plugins.PluginDefinition;
 import org.carewebframework.shell.plugins.PluginException;
 import org.carewebframework.shell.plugins.PluginRegistry;
-import org.carewebframework.web.annotation.Component;
-import org.carewebframework.web.annotation.Component.ChildTag;
+import org.fujion.annotation.Component;
+import org.fujion.annotation.Component.ChildTag;
 
 /**
  * This class is provided primarily for backward compatibility with the old fixed layout of tab

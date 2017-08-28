@@ -34,16 +34,16 @@ import org.carewebframework.plugin.infopanel.model.IInfoPanel;
 import org.carewebframework.shell.elements.ElementPlugin;
 import org.carewebframework.shell.plugins.PluginController;
 import org.carewebframework.ui.util.MenuUtil;
-import org.carewebframework.web.annotation.WiredComponent;
-import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.component.BaseUIComponent;
-import org.carewebframework.web.component.Grid;
-import org.carewebframework.web.component.Label;
-import org.carewebframework.web.component.Menuitem;
-import org.carewebframework.web.component.Rows;
-import org.carewebframework.web.component.Toolbar;
-import org.carewebframework.web.event.DropEvent;
-import org.carewebframework.web.event.Event;
+import org.fujion.annotation.WiredComponent;
+import org.fujion.component.BaseComponent;
+import org.fujion.component.BaseUIComponent;
+import org.fujion.component.Grid;
+import org.fujion.component.Label;
+import org.fujion.component.Menuitem;
+import org.fujion.component.Rows;
+import org.fujion.component.Toolbar;
+import org.fujion.event.DropEvent;
+import org.fujion.event.Event;
 
 /**
  * Controller for the main info panel.

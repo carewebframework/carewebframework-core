@@ -38,20 +38,20 @@ import org.carewebframework.shell.elements.ElementPlugin;
 import org.carewebframework.shell.plugins.PluginController;
 import org.carewebframework.ui.dialog.DialogUtil;
 import org.carewebframework.ui.util.CWFUtil;
-import org.carewebframework.web.annotation.EventHandler;
-import org.carewebframework.web.annotation.WiredComponent;
-import org.carewebframework.web.component.Button;
-import org.carewebframework.web.component.Checkbox;
-import org.carewebframework.web.component.Combobox;
-import org.carewebframework.web.component.Comboitem;
-import org.carewebframework.web.component.Grid;
-import org.carewebframework.web.component.Listbox;
-import org.carewebframework.web.component.Listitem;
-import org.carewebframework.web.component.Memobox;
-import org.carewebframework.web.event.ChangeEvent;
-import org.carewebframework.web.event.Event;
-import org.carewebframework.web.event.IEventListener;
-import org.carewebframework.web.model.ListModel;
+import org.fujion.annotation.EventHandler;
+import org.fujion.annotation.WiredComponent;
+import org.fujion.component.Button;
+import org.fujion.component.Checkbox;
+import org.fujion.component.Combobox;
+import org.fujion.component.Comboitem;
+import org.fujion.component.Grid;
+import org.fujion.component.Listbox;
+import org.fujion.component.Listitem;
+import org.fujion.component.Memobox;
+import org.fujion.event.ChangeEvent;
+import org.fujion.event.Event;
+import org.fujion.event.IEventListener;
+import org.fujion.model.ListModel;
 
 /**
  * Controller class for ActiveMQ Tester.
@@ -64,7 +64,7 @@ public class MainController extends PluginController {
             received.add((Message) event.getData());
 
             if (!chkScrollLock.isChecked()) {
-                org.carewebframework.web.event.EventUtil.post("scrollToBottom", root, null);
+                org.fujion.event.EventUtil.post("scrollToBottom", root, null);
             }
         };
 

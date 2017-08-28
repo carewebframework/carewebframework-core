@@ -12,9 +12,9 @@
 	
 	<dependencies>
 		<dependency>
-			<groupId>org.carewebframework</groupId>
-			<artifactId>org.carewebframework.web.core</artifactId>
-			<version>${org.carewebframework.web.version}</version>
+			<groupId>org.fujion</groupId>
+			<artifactId>fujion-core</artifactId>
+			<version>${org.fujion.version}</version>
 		</dependency>
 		<!-- Tests -->
 		<dependency>

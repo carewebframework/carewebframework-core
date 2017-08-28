@@ -28,14 +28,14 @@ package org.carewebframework.plugin.currentdatetime;
 import java.util.Calendar;
 
 import org.apache.commons.lang.time.FastDateFormat;
-import org.carewebframework.common.DateUtil;
+import org.fujion.common.DateUtil;
 import org.carewebframework.shell.elements.ElementPlugin;
 import org.carewebframework.shell.plugins.PluginController;
-import org.carewebframework.web.annotation.EventHandler;
-import org.carewebframework.web.annotation.WiredComponent;
-import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.component.Label;
-import org.carewebframework.web.component.Timer;
+import org.fujion.annotation.EventHandler;
+import org.fujion.annotation.WiredComponent;
+import org.fujion.component.BaseComponent;
+import org.fujion.component.Label;
+import org.fujion.component.Timer;
 
 /**
  * Simple component to display the current date and time.

@@ -28,10 +28,10 @@ package org.carewebframework.shell.test;
 import org.carewebframework.shell.elements.ElementPlugin;
 import org.carewebframework.shell.plugins.IPluginController;
 import org.carewebframework.shell.plugins.PluginController;
-import org.carewebframework.web.annotation.EventHandler;
-import org.carewebframework.web.annotation.WiredComponent;
-import org.carewebframework.web.component.Button;
-import org.carewebframework.web.component.Menu;
+import org.fujion.annotation.EventHandler;
+import org.fujion.annotation.WiredComponent;
+import org.fujion.component.Button;
+import org.fujion.component.Menu;
 
 public class TestPluginController extends PluginController implements IPluginController {
     

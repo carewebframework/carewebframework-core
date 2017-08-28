@@ -29,9 +29,9 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.carewebframework.common.AbstractRegistry;
-import org.carewebframework.web.client.ExecutionContext;
-import org.carewebframework.web.component.Page;
+import org.fujion.common.AbstractRegistry;
+import org.fujion.client.ExecutionContext;
+import org.fujion.component.Page;
 
 /**
  * Global (shared across application instances) and local (restricted to current desktop) registry

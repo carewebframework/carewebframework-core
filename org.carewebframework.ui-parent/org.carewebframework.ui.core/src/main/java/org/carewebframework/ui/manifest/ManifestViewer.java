@@ -36,21 +36,21 @@ import org.apache.commons.lang.StringUtils;
 import org.carewebframework.api.ManifestIterator;
 import org.carewebframework.ui.dialog.PopupDialog;
 import org.carewebframework.ui.util.CWFUtil;
-import org.carewebframework.web.ancillary.IAutoWired;
-import org.carewebframework.web.annotation.EventHandler;
-import org.carewebframework.web.annotation.WiredComponent;
-import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.component.Column;
-import org.carewebframework.web.component.Label;
-import org.carewebframework.web.component.Row;
-import org.carewebframework.web.component.Grid;
-import org.carewebframework.web.component.Textbox;
-import org.carewebframework.web.component.Window;
-import org.carewebframework.web.event.ChangeEvent;
-import org.carewebframework.web.event.Event;
-import org.carewebframework.web.model.IListModel;
-import org.carewebframework.web.model.IModelAndView;
-import org.carewebframework.web.model.ListModel;
+import org.fujion.ancillary.IAutoWired;
+import org.fujion.annotation.EventHandler;
+import org.fujion.annotation.WiredComponent;
+import org.fujion.component.BaseComponent;
+import org.fujion.component.Column;
+import org.fujion.component.Label;
+import org.fujion.component.Row;
+import org.fujion.component.Grid;
+import org.fujion.component.Textbox;
+import org.fujion.component.Window;
+import org.fujion.event.ChangeEvent;
+import org.fujion.event.Event;
+import org.fujion.model.IListModel;
+import org.fujion.model.IModelAndView;
+import org.fujion.model.ListModel;
 
 /**
  * Displays a dialog showing all known manifests or details about a single manifest.
@@ -98,7 +98,7 @@ public class ManifestViewer implements IAutoWired {
     private static void execute(ManifestItem manifestItem) {
         Map<String, Object> args = new HashMap<>();
         args.put("manifestItem", manifestItem);
-        PopupDialog.show(CWFUtil.getResourcePath(ManifestViewer.class) + "manifestViewer.cwf", args, true, false, true,
+        PopupDialog.show(CWFUtil.getResourcePath(ManifestViewer.class) + "manifestViewer.fsp", args, true, false, true,
             null);
     }
     

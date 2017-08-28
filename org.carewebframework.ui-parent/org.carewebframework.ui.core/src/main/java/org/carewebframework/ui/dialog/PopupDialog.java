@@ -29,13 +29,13 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.carewebframework.web.client.ExecutionContext;
-import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.component.Page;
-import org.carewebframework.web.component.Window;
-import org.carewebframework.web.event.IEventListener;
-import org.carewebframework.web.event.ResizeEvent;
-import org.carewebframework.web.page.PageUtil;
+import org.fujion.client.ExecutionContext;
+import org.fujion.component.BaseComponent;
+import org.fujion.component.Page;
+import org.fujion.component.Window;
+import org.fujion.event.IEventListener;
+import org.fujion.event.ResizeEvent;
+import org.fujion.page.PageUtil;
 
 /**
  * Base class for a popup window.

@@ -34,26 +34,26 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.carewebframework.common.MiscUtil;
-import org.carewebframework.common.StrUtil;
+import org.fujion.common.MiscUtil;
+import org.fujion.common.StrUtil;
 import org.carewebframework.ui.dialog.DialogControl.ChoiceFormat;
-import org.carewebframework.web.ancillary.IAutoWired;
-import org.carewebframework.web.annotation.WiredComponent;
-import org.carewebframework.web.client.ExecutionContext;
-import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.component.BaseUIComponent;
-import org.carewebframework.web.component.Button;
-import org.carewebframework.web.component.Cell;
-import org.carewebframework.web.component.Checkbox;
-import org.carewebframework.web.component.Listbox;
-import org.carewebframework.web.component.Listitem;
-import org.carewebframework.web.component.Toolbar;
-import org.carewebframework.web.component.Window;
-import org.carewebframework.web.event.ClickEvent;
-import org.carewebframework.web.event.DblclickEvent;
-import org.carewebframework.web.event.Event;
-import org.carewebframework.web.event.IEventListener;
-import org.carewebframework.web.page.PageUtil;
+import org.fujion.ancillary.IAutoWired;
+import org.fujion.annotation.WiredComponent;
+import org.fujion.client.ExecutionContext;
+import org.fujion.component.BaseComponent;
+import org.fujion.component.BaseUIComponent;
+import org.fujion.component.Button;
+import org.fujion.component.Cell;
+import org.fujion.component.Checkbox;
+import org.fujion.component.Listbox;
+import org.fujion.component.Listitem;
+import org.fujion.component.Toolbar;
+import org.fujion.component.Window;
+import org.fujion.event.ClickEvent;
+import org.fujion.event.DblclickEvent;
+import org.fujion.event.Event;
+import org.fujion.event.IEventListener;
+import org.fujion.page.PageUtil;
 
 /**
  * Implements a simple, generic dialog to prompt for specified responses.
@@ -80,7 +80,7 @@ public class PromptDialog implements IAutoWired {
         try {
             Map<String, Object> args = Collections.singletonMap("control", control);
             root = (Window) PageUtil
-                    .createPage(DialogConstants.RESOURCE_PREFIX + "promptDialog.cwf", ExecutionContext.getPage(), args)
+                    .createPage(DialogConstants.RESOURCE_PREFIX + "promptDialog.fsp", ExecutionContext.getPage(), args)
                     .get(0);
             root.modal(null);
         } catch (Exception e) {

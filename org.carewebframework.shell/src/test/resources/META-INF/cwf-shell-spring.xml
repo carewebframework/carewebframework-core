@@ -11,7 +11,7 @@
 	<beans profile="root-test">
 
 		<cwp:plugin id="testplugin1" name="Test Plugin 1"
-			url="web/org/carewebframework/shell/test/testplugin1.cwf"
+			url="web/org/carewebframework/shell/test/testplugin1.fsp"
 			description="Plugin for unit tests">
 			<cwp:serialization>
 				<cwp:property id="prop1" name="Test Property #1"

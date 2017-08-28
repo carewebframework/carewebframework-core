@@ -35,7 +35,7 @@ import org.carewebframework.help.HelpTopicNode;
 import org.carewebframework.help.HelpViewType;
 import org.carewebframework.help.IHelpSet;
 import org.carewebframework.help.IHelpView;
-import org.carewebframework.web.test.MockTest;
+import org.fujion.test.MockTest;
 import org.junit.Test;
 
 public class TestCHM extends MockTest {

@@ -26,8 +26,8 @@
 package org.carewebframework.shell.designer;
 
 import org.carewebframework.shell.elements.ElementBase;
-import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.event.Event;
+import org.fujion.component.BaseComponent;
+import org.fujion.event.Event;
 
 /**
  * Event signaling that a change to the layout has occurred.

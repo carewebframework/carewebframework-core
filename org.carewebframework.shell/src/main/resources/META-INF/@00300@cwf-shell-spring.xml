@@ -4,7 +4,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	xmlns:cwp="http://www.carewebframework.org/schema/plugin"
 	xmlns:cwt="http://www.carewebframework.org/schema/theme"
-	xmlns:cwc="http://www.carewebframework.org/schema/component"
+	xmlns:ffc="http://www.fujion.org/schema/component"
 	xsi:schemaLocation="
 		http://www.springframework.org/schema/beans
 		http://www.springframework.org/schema/beans/spring-beans.xsd
@@ -12,12 +12,12 @@
 		http://www.carewebframework.org/schema/plugin/plugin-extensions.xsd
 		http://www.carewebframework.org/schema/theme
 		http://www.carewebframework.org/schema/theme/theme-extensions.xsd
-		http://www.carewebframework.org/schema/component
-		http://www.carewebframework.org/schema/component/component-extensions.xsd">
+		http://www.fujion.org/schema/component
+		http://www.fujion.org/schema/extensions/component-extensions.xsd">
 
 	<beans profile="root">
 		<!-- Register shell components -->
-		<cwc:component-scan package="org.carewebframework.shell" />
+		<ffc:component-scan package="org.carewebframework.shell" />
 		
 		<!-- A registry of all known CareWeb plugins. -->
 		<bean id="pluginRegistry" class="org.carewebframework.shell.plugins.PluginRegistry"
@@ -262,7 +262,7 @@
 					name="${@msg.cwf.shell.plugin.toolbar.alignment.name}"
 					description="${@msg.cwf.shell.plugin.toolbar.alignment.description}">
 					<cwp:config>
-						<cwp:entry key="class">org.carewebframework.web.component.Toolbar$Alignment</cwp:entry>
+						<cwp:entry key="class">org.fujion.component.Toolbar$Alignment</cwp:entry>
 					</cwp:config>
 				</cwp:property>
 				<cwp:property id="" type="children"
@@ -279,7 +279,7 @@
 					name="${@msg.cwf.shell.plugin.toolbar.alignment.name}"
 					description="${@msg.cwf.shell.plugin.toolbar.alignment.description}">
 					<cwp:config>
-						<cwp:entry key="class">org.carewebframework.web.component.Toolbar$Alignment</cwp:entry>
+						<cwp:entry key="class">org.fujion.component.Toolbar$Alignment</cwp:entry>
 					</cwp:config>
 				</cwp:property>
 				<cwp:property id="" type="children"
@@ -378,7 +378,7 @@
 				<cwp:property id="position" type="enum"
 					name="${@msg.cwf.shell.plugin.button.position.name}" description="${@msg.cwf.shell.plugin.button.position.description}">
 					<cwp:config>
-						<cwp:entry key="class">org.carewebframework.web.component.BaseLabeledComponent$LabelPositionHorz</cwp:entry>
+						<cwp:entry key="class">org.fujion.component.BaseLabeledComponent$LabelPositionHorz</cwp:entry>
 					</cwp:config>
 				</cwp:property>
 				<cwp:property id="icon" type="icon"
@@ -412,7 +412,7 @@
 				<cwp:property id="position" type="enum"
 					name="${@msg.cwf.shell.plugin.link.position.name}" description="${@msg.cwf.shell.plugin.link.position.description}">
 					<cwp:config>
-						<cwp:entry key="class">org.carewebframework.web.component.BaseLabeledComponent$LabelPositionHorz</cwp:entry>
+						<cwp:entry key="class">org.fujion.component.BaseLabeledComponent$LabelPositionHorz</cwp:entry>
 					</cwp:config>
 				</cwp:property>
 				<cwp:property id="color" type="color"

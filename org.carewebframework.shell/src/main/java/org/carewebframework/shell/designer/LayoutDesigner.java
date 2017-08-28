@@ -30,37 +30,37 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.carewebframework.common.StrUtil;
+import org.fujion.common.StrUtil;
 import org.carewebframework.shell.elements.ElementBase;
 import org.carewebframework.shell.elements.ElementUI;
 import org.carewebframework.shell.layout.Layout;
 import org.carewebframework.shell.layout.LayoutParser;
 import org.carewebframework.shell.plugins.PluginDefinition;
 import org.carewebframework.ui.dialog.DialogUtil;
-import org.carewebframework.web.ancillary.IAutoWired;
-import org.carewebframework.web.annotation.EventHandler;
-import org.carewebframework.web.annotation.WiredComponent;
-import org.carewebframework.web.client.ExecutionContext;
-import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.component.BaseUIComponent;
-import org.carewebframework.web.component.Button;
-import org.carewebframework.web.component.Page;
-import org.carewebframework.web.component.Treenode;
-import org.carewebframework.web.component.Treeview;
-import org.carewebframework.web.component.Window;
-import org.carewebframework.web.component.Window.CloseAction;
-import org.carewebframework.web.event.ClickEvent;
-import org.carewebframework.web.event.DblclickEvent;
-import org.carewebframework.web.event.DropEvent;
-import org.carewebframework.web.event.EventUtil;
-import org.carewebframework.web.event.IEventListener;
+import org.fujion.ancillary.IAutoWired;
+import org.fujion.annotation.EventHandler;
+import org.fujion.annotation.WiredComponent;
+import org.fujion.client.ExecutionContext;
+import org.fujion.component.BaseComponent;
+import org.fujion.component.BaseUIComponent;
+import org.fujion.component.Button;
+import org.fujion.component.Page;
+import org.fujion.component.Treenode;
+import org.fujion.component.Treeview;
+import org.fujion.component.Window;
+import org.fujion.component.Window.CloseAction;
+import org.fujion.event.ClickEvent;
+import org.fujion.event.DblclickEvent;
+import org.fujion.event.DropEvent;
+import org.fujion.event.EventUtil;
+import org.fujion.event.IEventListener;
 
 /**
  * Controller for dialog for managing the current layout.
  */
 public class LayoutDesigner implements IAutoWired {
     
-    private static final String DIALOG = DesignConstants.RESOURCE_PREFIX + "layoutDesigner.cwf";
+    private static final String DIALOG = DesignConstants.RESOURCE_PREFIX + "layoutDesigner.fsp";
     
     private static final String ATTR_BRING_TO_FRONT = DIALOG + ".BTF";
     

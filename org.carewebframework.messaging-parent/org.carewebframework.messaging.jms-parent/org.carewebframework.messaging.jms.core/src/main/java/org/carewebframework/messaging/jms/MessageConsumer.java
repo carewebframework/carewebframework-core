@@ -40,7 +40,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.carewebframework.api.messaging.IMessageConsumer;
 import org.carewebframework.api.messaging.Message;
-import org.carewebframework.common.MiscUtil;
+import org.fujion.common.MiscUtil;
 
 /**
  * JMS-based message consumer.

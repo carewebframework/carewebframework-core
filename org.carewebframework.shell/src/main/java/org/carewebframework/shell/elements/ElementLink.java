@@ -26,7 +26,7 @@
 package org.carewebframework.shell.elements;
 
 import org.carewebframework.theme.ThemeUtil;
-import org.carewebframework.web.component.Hyperlink;
+import org.fujion.component.Hyperlink;
 
 /**
  * Simple hyperlink stock object.

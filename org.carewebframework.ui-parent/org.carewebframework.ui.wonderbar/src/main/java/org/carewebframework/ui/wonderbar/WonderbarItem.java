@@ -25,8 +25,8 @@
  */
 package org.carewebframework.ui.wonderbar;
 
-import org.carewebframework.web.annotation.Component.PropertyGetter;
-import org.carewebframework.web.annotation.Component.PropertySetter;
+import org.fujion.annotation.Component.PropertyGetter;
+import org.fujion.annotation.Component.PropertySetter;
 
 /**
  * A selectable wonder bar search item.

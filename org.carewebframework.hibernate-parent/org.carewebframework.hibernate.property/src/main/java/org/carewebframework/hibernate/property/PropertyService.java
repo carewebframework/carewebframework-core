@@ -31,7 +31,7 @@ import org.carewebframework.api.domain.IUser;
 import org.carewebframework.api.property.IPropertyService;
 import org.carewebframework.api.security.ISecurityService;
 import org.carewebframework.api.security.SecurityUtil;
-import org.carewebframework.common.StrUtil;
+import org.fujion.common.StrUtil;
 
 /**
  * H2-based implementation of a property service.

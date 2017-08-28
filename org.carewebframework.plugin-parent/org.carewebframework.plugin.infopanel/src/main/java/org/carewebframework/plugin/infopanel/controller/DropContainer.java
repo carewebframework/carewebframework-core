@@ -30,13 +30,13 @@ import java.util.List;
 import org.carewebframework.plugin.infopanel.model.IActionTarget;
 import org.carewebframework.plugin.infopanel.model.IInfoPanel.Action;
 import org.carewebframework.plugin.infopanel.service.InfoPanelService;
-import org.carewebframework.web.annotation.EventHandler;
-import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.component.Window;
-import org.carewebframework.web.dragdrop.DropUtil;
-import org.carewebframework.web.dragdrop.IDropRenderer;
-import org.carewebframework.web.event.DropEvent;
-import org.carewebframework.web.page.PageUtil;
+import org.fujion.annotation.EventHandler;
+import org.fujion.component.BaseComponent;
+import org.fujion.component.Window;
+import org.fujion.dragdrop.DropUtil;
+import org.fujion.dragdrop.IDropRenderer;
+import org.fujion.event.DropEvent;
+import org.fujion.page.PageUtil;
 
 /**
  * Container for receiving components rendered by drop renderer.
@@ -45,7 +45,7 @@ public class DropContainer extends Window implements IActionTarget {
 
     private static final String SCLASS = "cwf-infopanel-container";
 
-    private static final String TEMPLATE = "web/org/carewebframework/plugin/infopanel/dropContainer.cwf";
+    private static final String TEMPLATE = "web/org/carewebframework/plugin/infopanel/dropContainer.fsp";
 
     private List<ActionListener> actionListeners;
 

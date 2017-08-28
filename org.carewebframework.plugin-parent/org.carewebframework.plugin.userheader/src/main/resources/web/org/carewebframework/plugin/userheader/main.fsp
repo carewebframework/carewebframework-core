@@ -1,10 +1,10 @@
 <page>
-	<div controller="${@cwfUserHeaderController}" class="cwf-layout-vertical" 
+	<div controller="${@cwfUserHeaderController}" class="fujion-layout-vertical" 
 		height="100%" width="100%">
-		<div class="cwf-layout-horizontal" flex="1">
+		<div class="fujion-layout-horizontal" flex="1">
 			<label name="userHeader" />
 		</div>
-		<div class="cwf-layout-horizontal" flex="1">
+		<div class="fujion-layout-horizontal" flex="1">
 			<link name="password" label="${@msg.cwf.userheader.password.label}"
 				hint="${@msg.cwf.userheader.password.hint}" visible="true" />
 			<div flex="1" />

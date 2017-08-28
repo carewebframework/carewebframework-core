@@ -40,7 +40,7 @@ import org.carewebframework.api.messaging.IPublisherInfo;
 import org.carewebframework.api.messaging.Recipient;
 import org.carewebframework.api.messaging.Recipient.RecipientType;
 import org.carewebframework.api.spring.SpringUtil;
-import org.carewebframework.common.StrUtil;
+import org.fujion.common.StrUtil;
 import org.carewebframework.plugin.chat.ParticipantListener.IParticipantUpdate;
 import org.carewebframework.plugin.chat.SessionService.ISessionUpdate;
 import org.carewebframework.shell.CareWebShell;
@@ -281,7 +281,7 @@ public class ChatService implements IParticipantUpdate {
             recipients.add(new Recipient(RecipientType.SESSION, invitee.getSessionId()));
         }
         
-        String eventData = sessionId + (cancel ? "" : StrUtil.U + self.getUserName());
+        String eventData = sessionId + (cancel ? "" : "^" + self.getUserName());
         Recipient[] recips = new Recipient[recipients.size()];
         eventManager.fireRemoteEvent(EVENT_INVITE, eventData, recipients.toArray(recips));
     }

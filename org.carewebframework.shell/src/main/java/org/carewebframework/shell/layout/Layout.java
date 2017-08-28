@@ -27,8 +27,8 @@ package org.carewebframework.shell.layout;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.carewebframework.common.MiscUtil;
-import org.carewebframework.common.XMLUtil;
+import org.fujion.common.MiscUtil;
+import org.fujion.common.XMLUtil;
 import org.carewebframework.shell.designer.IClipboardAware;
 import org.carewebframework.shell.elements.ElementBase;
 import org.carewebframework.shell.elements.ElementDesktop;

@@ -28,16 +28,16 @@ package org.carewebframework.ui.icon;
 import java.util.List;
 
 import org.carewebframework.ui.Constants;
-import org.carewebframework.web.annotation.EventHandler;
-import org.carewebframework.web.annotation.OnFailure;
-import org.carewebframework.web.annotation.WiredComponent;
-import org.carewebframework.web.component.Combobox;
-import org.carewebframework.web.component.Comboitem;
-import org.carewebframework.web.component.ImagePicker;
-import org.carewebframework.web.component.ImagePicker.ImagePickeritem;
-import org.carewebframework.web.component.Namespace;
-import org.carewebframework.web.event.ChangeEvent;
-import org.carewebframework.web.page.PageUtil;
+import org.fujion.annotation.EventHandler;
+import org.fujion.annotation.OnFailure;
+import org.fujion.annotation.WiredComponent;
+import org.fujion.component.Combobox;
+import org.fujion.component.Comboitem;
+import org.fujion.component.ImagePicker;
+import org.fujion.component.ImagePicker.ImagePickeritem;
+import org.fujion.component.Namespace;
+import org.fujion.event.ChangeEvent;
+import org.fujion.page.PageUtil;
 
 /**
  * Extends the icon picker by adding the ability to pick an icon library from which to choose.
@@ -61,7 +61,7 @@ public class IconPicker extends Namespace {
     public IconPicker() {
         addStyle("overflow", "visible");
         addStyle("display", "inline-block");
-        PageUtil.createPage(Constants.RESOURCE_PREFIX + "cwf/iconPicker.cwf", this);
+        PageUtil.createPage(Constants.RESOURCE_PREFIX + "cwf/iconPicker.fsp", this);
         wireController(this);
 
         for (IIconLibrary lib : iconRegistry) {

@@ -32,15 +32,15 @@ import java.util.List;
 import org.carewebframework.api.event.EventManager;
 import org.carewebframework.api.event.IGenericEvent;
 import org.carewebframework.ui.util.CWFUtil;
-import org.carewebframework.web.client.ExecutionContext;
-import org.carewebframework.web.component.Label;
-import org.carewebframework.web.component.Page;
-import org.carewebframework.web.component.Window;
-import org.carewebframework.web.component.Window.Mode;
-import org.carewebframework.web.event.Event;
-import org.carewebframework.web.event.IEventListener;
-import org.carewebframework.web.page.PageDefinition;
-import org.carewebframework.web.page.PageParser;
+import org.fujion.client.ExecutionContext;
+import org.fujion.component.Label;
+import org.fujion.component.Page;
+import org.fujion.component.Window;
+import org.fujion.component.Window.Mode;
+import org.fujion.event.Event;
+import org.fujion.event.IEventListener;
+import org.fujion.page.PageDefinition;
+import org.fujion.page.PageParser;
 
 /**
  * Displays a popup message when a POPUP generic event is received.
@@ -164,7 +164,7 @@ public class PopupSupport implements IGenericEvent<Object>, IEventListener {
      */
     private synchronized Window getPopupWindow() throws Exception {
         if (popupDefinition == null) {
-            popupDefinition = PageParser.getInstance().parse(RESOURCE_PREFIX + "popupWindow.cwf");
+            popupDefinition = PageParser.getInstance().parse(RESOURCE_PREFIX + "popupWindow.fsp");
         }
         
         Window window = (Window) popupDefinition.materialize(null);

@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.carewebframework.help.HelpTopic;
-import org.carewebframework.web.model.IListModel;
+import org.fujion.model.IListModel;
 
 /**
  * This class manages the history of selected topics. There are methods for adding new topics,

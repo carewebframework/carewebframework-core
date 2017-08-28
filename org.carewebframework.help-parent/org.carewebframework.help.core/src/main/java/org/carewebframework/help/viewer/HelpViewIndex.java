@@ -36,17 +36,17 @@ import org.carewebframework.help.HelpTopic;
 import org.carewebframework.help.HelpTopicNode;
 import org.carewebframework.help.HelpViewType;
 import org.carewebframework.help.IHelpView;
-import org.carewebframework.web.annotation.EventHandler;
-import org.carewebframework.web.annotation.WiredComponent;
-import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.component.Listbox;
-import org.carewebframework.web.component.Listitem;
-import org.carewebframework.web.component.Textbox;
-import org.carewebframework.web.event.ChangeEvent;
-import org.carewebframework.web.model.IComponentRenderer;
-import org.carewebframework.web.model.IModelAndView;
-import org.carewebframework.web.model.ListModel;
-import org.carewebframework.web.model.ModelAndView;
+import org.fujion.annotation.EventHandler;
+import org.fujion.annotation.WiredComponent;
+import org.fujion.component.BaseComponent;
+import org.fujion.component.Listbox;
+import org.fujion.component.Listitem;
+import org.fujion.component.Textbox;
+import org.fujion.event.ChangeEvent;
+import org.fujion.model.IComponentRenderer;
+import org.fujion.model.IModelAndView;
+import org.fujion.model.ListModel;
+import org.fujion.model.ModelAndView;
 
 /**
  * Tab for displaying the keyword index. This tab consists of two list boxes: one that displays the
@@ -86,7 +86,7 @@ public class HelpViewIndex extends HelpViewBase {
      * @param viewType The help view type.
      */
     public HelpViewIndex(HelpViewer viewer, HelpViewType viewType) {
-        super(viewer, viewType, "helpIndexTab.cwf");
+        super(viewer, viewType, "helpIndexTab.fsp");
     }
     
     @Override

@@ -39,7 +39,7 @@ import javax.jms.TopicSubscriber;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.carewebframework.common.MiscUtil;
+import org.fujion.common.MiscUtil;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jmx.export.annotation.ManagedResource;
 

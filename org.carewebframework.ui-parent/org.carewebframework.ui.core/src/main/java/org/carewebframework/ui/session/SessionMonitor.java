@@ -36,28 +36,28 @@ import org.apache.commons.logging.LogFactory;
 import org.carewebframework.api.domain.IUser;
 import org.carewebframework.api.event.IGenericEvent;
 import org.carewebframework.api.security.ISecurityService;
-import org.carewebframework.common.DateUtil;
-import org.carewebframework.common.DateUtil.TimeUnit;
-import org.carewebframework.common.StrUtil;
+import org.fujion.common.DateUtil;
+import org.fujion.common.DateUtil.TimeUnit;
+import org.fujion.common.StrUtil;
 import org.carewebframework.ui.controller.FrameworkController;
 import org.carewebframework.ui.dialog.DialogUtil;
-import org.carewebframework.web.ancillary.ConvertUtil;
-import org.carewebframework.web.annotation.EventHandler;
-import org.carewebframework.web.annotation.WiredComponent;
-import org.carewebframework.web.client.ClientInvocation;
-import org.carewebframework.web.client.ClientRequest;
-import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.component.BaseUIComponent;
-import org.carewebframework.web.component.Label;
-import org.carewebframework.web.component.MessagePane;
-import org.carewebframework.web.component.MessageWindow;
-import org.carewebframework.web.component.Page;
-import org.carewebframework.web.component.Textbox;
-import org.carewebframework.web.component.Timer;
-import org.carewebframework.web.event.EventUtil;
-import org.carewebframework.web.event.TimerEvent;
-import org.carewebframework.web.websocket.ISessionListener;
-import org.carewebframework.web.websocket.Session;
+import org.fujion.ancillary.ConvertUtil;
+import org.fujion.annotation.EventHandler;
+import org.fujion.annotation.WiredComponent;
+import org.fujion.client.ClientInvocation;
+import org.fujion.client.ClientRequest;
+import org.fujion.component.BaseComponent;
+import org.fujion.component.BaseUIComponent;
+import org.fujion.component.Label;
+import org.fujion.component.MessagePane;
+import org.fujion.component.MessageWindow;
+import org.fujion.component.Page;
+import org.fujion.component.Textbox;
+import org.fujion.component.Timer;
+import org.fujion.event.EventUtil;
+import org.fujion.event.TimerEvent;
+import org.fujion.websocket.ISessionListener;
+import org.fujion.websocket.Session;
 
 /**
  * Session inactivity timeout controller. Used to notify user regarding impending inactivity timeout
@@ -197,7 +197,7 @@ public class SessionMonitor extends FrameworkController {
                     break;
                 
                 case SHUTDOWN_PROGRESS:
-                    updateShutdown(NumberUtils.toLong(StrUtil.piece((String) eventData, StrUtil.U)) * 1000);
+                    updateShutdown(NumberUtils.toLong(StrUtil.piece((String) eventData, "^")) * 1000);
                     break;
 
                 case LOCK:

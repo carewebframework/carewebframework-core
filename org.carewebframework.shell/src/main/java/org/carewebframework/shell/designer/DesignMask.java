@@ -26,8 +26,8 @@
 package org.carewebframework.shell.designer;
 
 import org.carewebframework.shell.elements.ElementUI;
-import org.carewebframework.web.component.BaseUIComponent;
-import org.carewebframework.web.component.Menupopup;
+import org.fujion.component.BaseUIComponent;
+import org.fujion.component.Menupopup;
 
 /**
  * Implements the mask that covers components when design mode is active.

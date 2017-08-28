@@ -27,8 +27,8 @@ package org.carewebframework.shell.elements;
 
 import org.carewebframework.shell.designer.PropertyEditorSplitterView;
 import org.carewebframework.shell.property.PropertyTypeRegistry;
-import org.carewebframework.web.component.Paneview;
-import org.carewebframework.web.component.Paneview.Orientation;
+import org.fujion.component.Paneview;
+import org.fujion.component.Paneview.Orientation;
 
 /**
  * A splitter view has either a vertical or horizontal orientation and can contain any number of

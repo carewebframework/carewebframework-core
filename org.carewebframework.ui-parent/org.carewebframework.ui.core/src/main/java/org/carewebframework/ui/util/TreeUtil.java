@@ -25,11 +25,11 @@
  */
 package org.carewebframework.ui.util;
 
-import org.carewebframework.common.MiscUtil;
+import org.fujion.common.MiscUtil;
 import org.carewebframework.ui.util.CWFUtil.MatchMode;
-import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.component.Treenode;
-import org.carewebframework.web.component.Treeview;
+import org.fujion.component.BaseComponent;
+import org.fujion.component.Treenode;
+import org.fujion.component.Treeview;
 
 /**
  * Useful tree functions.

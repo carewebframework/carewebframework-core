@@ -36,18 +36,18 @@ import org.carewebframework.shell.plugins.PluginResourceHelp;
 import org.carewebframework.theme.ThemeUtil;
 import org.carewebframework.ui.action.ActionUtil;
 import org.carewebframework.ui.util.MenuUtil;
-import org.carewebframework.web.annotation.EventHandler;
-import org.carewebframework.web.annotation.WiredComponent;
-import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.component.BaseMenuComponent;
-import org.carewebframework.web.component.BaseUIComponent;
-import org.carewebframework.web.component.Cell;
-import org.carewebframework.web.component.Image;
-import org.carewebframework.web.component.Menu;
-import org.carewebframework.web.component.Menuitem;
-import org.carewebframework.web.component.Menuseparator;
-import org.carewebframework.web.component.Span;
-import org.carewebframework.web.component.Toolbar;
+import org.fujion.annotation.EventHandler;
+import org.fujion.annotation.WiredComponent;
+import org.fujion.component.BaseComponent;
+import org.fujion.component.BaseMenuComponent;
+import org.fujion.component.BaseUIComponent;
+import org.fujion.component.Cell;
+import org.fujion.component.Image;
+import org.fujion.component.Menu;
+import org.fujion.component.Menuitem;
+import org.fujion.component.Menuseparator;
+import org.fujion.component.Span;
+import org.fujion.component.Toolbar;
 
 /**
  * This is the topmost component of the layout.

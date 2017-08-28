@@ -27,11 +27,11 @@ package org.carewebframework.plugin.sessiontracker;
 
 import java.util.Date;
 
-import org.carewebframework.web.client.ExecutionContext;
-import org.carewebframework.web.component.Cell;
-import org.carewebframework.web.component.Row;
-import org.carewebframework.web.model.IComponentRenderer;
-import org.carewebframework.web.websocket.Session;
+import org.fujion.client.ExecutionContext;
+import org.fujion.component.Cell;
+import org.fujion.component.Row;
+import org.fujion.model.IComponentRenderer;
+import org.fujion.websocket.Session;
 
 /**
  * RowRenderer to define rows within the Session/Desktop Tracking Grid

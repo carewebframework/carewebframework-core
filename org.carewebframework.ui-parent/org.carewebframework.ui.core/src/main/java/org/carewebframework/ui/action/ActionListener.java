@@ -25,9 +25,9 @@
  */
 package org.carewebframework.ui.action;
 
-import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.event.Event;
-import org.carewebframework.web.event.IEventListener;
+import org.fujion.component.BaseComponent;
+import org.fujion.event.Event;
+import org.fujion.event.IEventListener;
 
 /**
  * An event listener associated with an invokable action.

@@ -26,12 +26,12 @@
 package org.carewebframework.plugin.messagetesting;
 
 import org.carewebframework.api.messaging.Message;
-import org.carewebframework.web.component.Cell;
-import org.carewebframework.web.component.Grid;
-import org.carewebframework.web.component.Label;
-import org.carewebframework.web.component.Row;
-import org.carewebframework.web.event.DblclickEvent;
-import org.carewebframework.web.model.IComponentRenderer;
+import org.fujion.component.Cell;
+import org.fujion.component.Grid;
+import org.fujion.component.Label;
+import org.fujion.component.Row;
+import org.fujion.event.DblclickEvent;
+import org.fujion.model.IComponentRenderer;
 
 public class ReceivedMessageRenderer implements IComponentRenderer<Row, Message> {
     

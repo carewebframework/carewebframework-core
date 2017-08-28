@@ -28,7 +28,7 @@ package org.carewebframework.plugin.settings;
 import org.apache.commons.lang.StringUtils;
 import org.carewebframework.shell.designer.PropertyGrid;
 import org.carewebframework.shell.plugins.PluginController;
-import org.carewebframework.web.component.BaseComponent;
+import org.fujion.component.BaseComponent;
 
 /**
  * Controller for settings plugin. The settings plugin is a generic plugin for managing settings of

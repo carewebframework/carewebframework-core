@@ -1,7 +1,7 @@
 /*
  * CareWeb Framework JavaScript Library
  */
-cwf = {};  // Use as namespace
+cwf = cwf || {};  // Use as namespace
 
 cwf.printStyles = [];
 

@@ -25,7 +25,7 @@
  */
 package org.carewebframework.api.spring;
 
-import org.carewebframework.common.StrUtil;
+import org.fujion.common.StrUtil;
 import org.springframework.core.env.PropertySource;
 
 /**

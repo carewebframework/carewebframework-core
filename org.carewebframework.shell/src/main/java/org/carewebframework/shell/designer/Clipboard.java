@@ -29,9 +29,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.event.Event;
-import org.carewebframework.web.event.EventUtil;
+import org.fujion.component.BaseComponent;
+import org.fujion.event.Event;
+import org.fujion.event.EventUtil;
 
 /**
  * Emulates a clipboard on the server.

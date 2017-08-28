@@ -27,14 +27,14 @@ package org.carewebframework.ui.xml;
 
 import java.util.Iterator;
 
-import org.carewebframework.web.ancillary.IAutoWired;
-import org.carewebframework.web.annotation.EventHandler;
-import org.carewebframework.web.annotation.WiredComponent;
-import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.component.Label;
-import org.carewebframework.web.component.Textbox;
-import org.carewebframework.web.component.Treenode;
-import org.carewebframework.web.component.Treeview;
+import org.fujion.ancillary.IAutoWired;
+import org.fujion.annotation.EventHandler;
+import org.fujion.annotation.WiredComponent;
+import org.fujion.component.BaseComponent;
+import org.fujion.component.Label;
+import org.fujion.component.Textbox;
+import org.fujion.component.Treenode;
+import org.fujion.component.Treeview;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 

@@ -28,9 +28,9 @@ package org.carewebframework.ui.util;
 import java.util.Calendar;
 import java.util.Date;
 
-import org.carewebframework.common.DateUtil;
-import org.carewebframework.web.component.Datebox;
-import org.carewebframework.web.component.Timebox;
+import org.fujion.common.DateUtil;
+import org.fujion.component.Datebox;
+import org.fujion.component.Timebox;
 
 /**
  * Utility functions related to datebox and timebox components.

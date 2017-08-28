@@ -27,11 +27,11 @@ package org.carewebframework.ui.util;
 
 import java.util.List;
 
-import org.carewebframework.common.MiscUtil;
-import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.component.BaseMenuComponent;
-import org.carewebframework.web.component.Menu;
-import org.carewebframework.web.component.Menuitem;
+import org.fujion.common.MiscUtil;
+import org.fujion.component.BaseComponent;
+import org.fujion.component.BaseMenuComponent;
+import org.fujion.component.Menu;
+import org.fujion.component.Menuitem;
 
 /**
  * Useful menu functions.

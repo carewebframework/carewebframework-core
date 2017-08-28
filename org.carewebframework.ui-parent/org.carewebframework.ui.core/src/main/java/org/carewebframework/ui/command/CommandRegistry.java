@@ -30,9 +30,9 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.carewebframework.api.spring.SpringUtil;
-import org.carewebframework.web.component.BaseUIComponent;
-import org.carewebframework.web.event.Event;
-import org.carewebframework.web.event.KeyEvent;
+import org.fujion.component.BaseUIComponent;
+import org.fujion.event.Event;
+import org.fujion.event.KeyEvent;
 
 /**
  * Registry for commands.
@@ -54,7 +54,7 @@ public class CommandRegistry implements Iterable<Command> {
      * Creates the command registry using the specified shortcut mappings.
      * 
      * @param shortcuts A map of shortcut mappings, where the key is the command name and the value
-     *            contains the associated shortcut(s) in CWF format.
+     *            contains the associated shortcut(s) in Fujion format.
      */
     public CommandRegistry(Map<Object, Object> shortcuts) {
         super();

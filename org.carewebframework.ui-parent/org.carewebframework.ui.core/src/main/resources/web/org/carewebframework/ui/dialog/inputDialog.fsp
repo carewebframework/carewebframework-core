@@ -15,12 +15,12 @@
 			text-align: center;
 		}
 		
-		.cwf_inputdialog > .cwf_cell {
+		.cwf_inputdialog > .fujion_cell {
 			display: block;
 			white-space: pre-wrap;
 		}
 		
-		.cwf_inputdialog > .cwf_textbox {
+		.cwf_inputdialog > .fujion_textbox {
 			width: 200pt;
 			margin: 5px 0 5px;
 		}

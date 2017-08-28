@@ -25,14 +25,14 @@
  */
 package org.carewebframework.shell.designer;
 
-import org.carewebframework.common.MiscUtil;
-import org.carewebframework.common.StrUtil;
+import org.fujion.common.MiscUtil;
+import org.fujion.common.StrUtil;
 import org.carewebframework.shell.property.PropertyInfo;
-import org.carewebframework.web.component.Popup;
-import org.carewebframework.web.component.Popupbox;
-import org.carewebframework.web.event.CloseEvent;
-import org.carewebframework.web.event.OpenEvent;
-import org.carewebframework.web.page.PageUtil;
+import org.fujion.component.Popup;
+import org.fujion.component.Popupbox;
+import org.fujion.event.CloseEvent;
+import org.fujion.event.OpenEvent;
+import org.fujion.page.PageUtil;
 
 /**
  * Allows registration of custom editors for complex property types.

@@ -29,7 +29,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.Map;
 
-import org.carewebframework.web.core.WebUtil;
+import org.fujion.core.WebUtil;
 import org.junit.Test;
 
 public class UtilTest {

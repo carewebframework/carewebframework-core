@@ -36,19 +36,19 @@ import org.carewebframework.shell.elements.ElementProxy;
 import org.carewebframework.shell.plugins.PluginDefinition;
 import org.carewebframework.shell.property.PropertyInfo;
 import org.carewebframework.ui.util.TreeUtil;
-import org.carewebframework.web.annotation.EventHandler;
-import org.carewebframework.web.annotation.WiredComponent;
-import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.component.Button;
-import org.carewebframework.web.component.Popup;
-import org.carewebframework.web.component.Textbox;
-import org.carewebframework.web.component.Treenode;
-import org.carewebframework.web.component.Treeview;
-import org.carewebframework.web.event.ChangeEvent;
-import org.carewebframework.web.event.DblclickEvent;
-import org.carewebframework.web.event.Event;
-import org.carewebframework.web.event.EventUtil;
-import org.carewebframework.web.event.IEventListener;
+import org.fujion.annotation.EventHandler;
+import org.fujion.annotation.WiredComponent;
+import org.fujion.component.BaseComponent;
+import org.fujion.component.Button;
+import org.fujion.component.Popup;
+import org.fujion.component.Textbox;
+import org.fujion.component.Treenode;
+import org.fujion.component.Treeview;
+import org.fujion.event.ChangeEvent;
+import org.fujion.event.DblclickEvent;
+import org.fujion.event.Event;
+import org.fujion.event.EventUtil;
+import org.fujion.event.IEventListener;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.Assert;
 
@@ -211,7 +211,7 @@ public class PropertyEditorCustomTree<T extends ElementBase> extends PropertyEdi
      *            elements.
      */
     public PropertyEditorCustomTree(Class<T> childClass, String labelProperty, boolean hierarchical) {
-        super(DesignConstants.RESOURCE_PREFIX + "propertyEditorCustomTree.cwf");
+        super(DesignConstants.RESOURCE_PREFIX + "propertyEditorCustomTree.fsp");
         this.childClass = childClass;
         this.labelProperty = labelProperty;
         this.hierarchical = hierarchical;

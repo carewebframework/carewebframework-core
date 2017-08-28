@@ -25,7 +25,7 @@
  */
 package org.carewebframework.ui.wonderbar;
 
-import org.carewebframework.web.component.BaseUIComponent;
+import org.fujion.component.BaseUIComponent;
 
 /**
  * Wonder bar component that serves as a parent for all search results.

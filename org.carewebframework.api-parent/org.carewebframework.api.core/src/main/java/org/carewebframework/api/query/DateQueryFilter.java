@@ -27,8 +27,8 @@ package org.carewebframework.api.query;
 
 import java.util.Date;
 
-import org.carewebframework.common.DateRange;
-import org.carewebframework.common.DateUtil;
+import org.fujion.common.DateRange;
+import org.fujion.common.DateUtil;
 
 public class DateQueryFilter<T> extends AbstractQueryFilter<T> {
     

@@ -1,7 +1,7 @@
 package org.carewebframework.ui.manifest;
 
-import org.carewebframework.web.component.Row;
-import org.carewebframework.web.component.Grid;
+import org.fujion.component.Row;
+import org.fujion.component.Grid;
 
 public class AttributeItemRenderer extends BaseRenderer<AttributeItem> {
     

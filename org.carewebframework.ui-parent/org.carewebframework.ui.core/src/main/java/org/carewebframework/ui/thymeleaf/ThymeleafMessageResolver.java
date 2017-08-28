@@ -25,7 +25,7 @@
  */
 package org.carewebframework.ui.thymeleaf;
 
-import org.carewebframework.common.Localizer;
+import org.fujion.common.Localizer;
 import org.thymeleaf.context.ITemplateContext;
 import org.thymeleaf.messageresolver.AbstractMessageResolver;
 

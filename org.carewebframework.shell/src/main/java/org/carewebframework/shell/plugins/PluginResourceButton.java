@@ -25,12 +25,12 @@
  */
 package org.carewebframework.shell.plugins;
 
-import org.carewebframework.common.StrUtil;
+import org.fujion.common.StrUtil;
 import org.carewebframework.shell.CareWebShell;
 import org.carewebframework.shell.elements.ElementBase;
 import org.carewebframework.shell.elements.ElementPlugin;
 import org.carewebframework.ui.action.ActionUtil;
-import org.carewebframework.web.component.Button;
+import org.fujion.component.Button;
 
 /**
  * Resource for declaring buttons to appear on common toolbar.

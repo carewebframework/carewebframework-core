@@ -26,8 +26,8 @@
 package org.carewebframework.plugin.sandbox;
 
 import org.carewebframework.shell.plugins.PluginController;
-import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.event.EventUtil;
+import org.fujion.component.BaseComponent;
+import org.fujion.event.EventUtil;
 
 /**
  * Plugin to facilitate testing of cwf layouts.

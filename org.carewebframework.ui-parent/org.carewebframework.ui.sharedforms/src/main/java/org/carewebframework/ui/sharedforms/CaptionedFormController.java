@@ -27,11 +27,11 @@ package org.carewebframework.ui.sharedforms;
 
 import java.util.Arrays;
 
-import org.carewebframework.common.StrUtil;
+import org.fujion.common.StrUtil;
 import org.carewebframework.shell.elements.ElementPlugin;
 import org.carewebframework.shell.plugins.PluginController;
-import org.carewebframework.web.annotation.WiredComponent;
-import org.carewebframework.web.component.Window;
+import org.fujion.annotation.WiredComponent;
+import org.fujion.component.Window;
 
 /**
  * Controller for captioned form.

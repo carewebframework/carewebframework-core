@@ -29,7 +29,7 @@ import java.util.Collections;
 import java.util.Map;
 
 import org.carewebframework.api.security.SecurityUtil;
-import org.carewebframework.common.StrUtil;
+import org.fujion.common.StrUtil;
 import org.carewebframework.shell.CareWebShell;
 import org.carewebframework.shell.elements.ElementDesktop;
 import org.carewebframework.shell.layout.Layout;
@@ -37,15 +37,15 @@ import org.carewebframework.shell.layout.LayoutIdentifier;
 import org.carewebframework.shell.layout.LayoutParser;
 import org.carewebframework.ui.dialog.DialogUtil;
 import org.carewebframework.ui.xml.XMLViewer;
-import org.carewebframework.web.ancillary.IAutoWired;
-import org.carewebframework.web.annotation.EventHandler;
-import org.carewebframework.web.annotation.WiredComponent;
-import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.component.BaseUIComponent;
-import org.carewebframework.web.component.Menu;
-import org.carewebframework.web.component.Menuitem;
-import org.carewebframework.web.core.WebUtil;
-import org.carewebframework.web.page.PageUtil;
+import org.fujion.ancillary.IAutoWired;
+import org.fujion.annotation.EventHandler;
+import org.fujion.annotation.WiredComponent;
+import org.fujion.component.BaseComponent;
+import org.fujion.component.BaseUIComponent;
+import org.fujion.component.Menu;
+import org.fujion.component.Menuitem;
+import org.fujion.core.WebUtil;
+import org.fujion.page.PageUtil;
 
 /**
  * This is the controller for the design menu that appears in the desktop's menu bar.
@@ -73,7 +73,7 @@ public class DesignMenu implements IAutoWired {
      */
     public static void create(ElementDesktop owner, BaseUIComponent parent) {
         Map<String, Object> args = Collections.singletonMap("owner", owner);
-        PageUtil.createPage(DesignConstants.RESOURCE_PREFIX + "designMenu.cwf", parent, args).get(0);
+        PageUtil.createPage(DesignConstants.RESOURCE_PREFIX + "designMenu.fsp", parent, args).get(0);
     }
     
     /**

@@ -39,7 +39,7 @@ import javax.persistence.Transient;
 
 import org.carewebframework.api.domain.IUser;
 import org.carewebframework.api.security.ISecurityDomain;
-import org.carewebframework.common.StrUtil;
+import org.fujion.common.StrUtil;
 
 @Entity
 @Table(name = "CWF_USER")

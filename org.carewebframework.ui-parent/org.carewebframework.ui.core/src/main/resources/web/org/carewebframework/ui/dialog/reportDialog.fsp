@@ -23,7 +23,7 @@
 			width: 100%;
 		}
 		
-		.cwf_reportdialog > .cwf_pane:first-child {
+		.cwf_reportdialog > .fujion_pane:first-child {
 			flex: 1;
 			overflow: auto;
 			max-height: 400px;
@@ -31,7 +31,7 @@
 			white-space: pre;
 		}
 		
-		.cwf_reportdialog .cwf_toolbar {
+		.cwf_reportdialog .fujion_toolbar {
 			border: none;
 		}
 	</style>

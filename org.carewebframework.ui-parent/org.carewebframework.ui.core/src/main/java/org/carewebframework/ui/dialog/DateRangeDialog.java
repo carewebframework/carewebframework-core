@@ -29,16 +29,16 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.carewebframework.common.DateRange;
-import org.carewebframework.common.DateUtil;
-import org.carewebframework.web.ancillary.IAutoWired;
-import org.carewebframework.web.ancillary.IResponseCallback;
-import org.carewebframework.web.annotation.EventHandler;
-import org.carewebframework.web.annotation.WiredComponent;
-import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.component.Datebox;
-import org.carewebframework.web.component.Window;
-import org.carewebframework.web.page.PageUtil;
+import org.fujion.common.DateRange;
+import org.fujion.common.DateUtil;
+import org.fujion.ancillary.IAutoWired;
+import org.fujion.ancillary.IResponseCallback;
+import org.fujion.annotation.EventHandler;
+import org.fujion.annotation.WiredComponent;
+import org.fujion.component.BaseComponent;
+import org.fujion.component.Datebox;
+import org.fujion.component.Window;
+import org.fujion.page.PageUtil;
 
 /**
  * Presents a date range dialog.
@@ -78,7 +78,7 @@ public class DateRangeDialog implements IAutoWired {
     public static void show(DateRange dateRange, IResponseCallback<DateRange> callback) {
         Map<String, Object> args = new HashMap<>();
         args.put("dateRange", dateRange);
-        Window dlg = (Window) PageUtil.createPage(DialogConstants.RESOURCE_PREFIX + "dateRangeDialog.cwf", null, args)
+        Window dlg = (Window) PageUtil.createPage(DialogConstants.RESOURCE_PREFIX + "dateRangeDialog.fsp", null, args)
                 .get(0);
         dlg.modal((event) -> {
             callback.onComplete((DateRange) dlg.getAttribute("result"));

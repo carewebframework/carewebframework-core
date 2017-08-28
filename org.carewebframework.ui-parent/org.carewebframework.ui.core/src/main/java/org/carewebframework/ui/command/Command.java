@@ -30,13 +30,13 @@ import java.util.Set;
 
 import org.carewebframework.ui.action.ActionUtil;
 import org.carewebframework.ui.action.IAction;
-import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.component.BaseUIComponent;
-import org.carewebframework.web.component.Div;
-import org.carewebframework.web.event.Event;
-import org.carewebframework.web.event.EventUtil;
-import org.carewebframework.web.event.IEventListener;
-import org.carewebframework.web.event.KeyEvent;
+import org.fujion.component.BaseComponent;
+import org.fujion.component.BaseUIComponent;
+import org.fujion.component.Div;
+import org.fujion.event.Event;
+import org.fujion.event.EventUtil;
+import org.fujion.event.IEventListener;
+import org.fujion.event.KeyEvent;
 
 /**
  * Represents an intermediary between an event handler and a keyboard shortcut. A command provides
@@ -170,7 +170,7 @@ public class Command {
     /**
      * Unbind a keyboard shortcut from this command.
      * 
-     * @param shortcut Shortcut specifier in CWF format.
+     * @param shortcut Shortcut specifier in Fujion format.
      */
     /*package*/void unbind(String shortcut) {
         if (shortcutBindings.remove(shortcut)) {

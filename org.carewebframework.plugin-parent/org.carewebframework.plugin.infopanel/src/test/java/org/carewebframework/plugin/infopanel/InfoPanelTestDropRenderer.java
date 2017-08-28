@@ -25,10 +25,10 @@
  */
 package org.carewebframework.plugin.infopanel;
 
-import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.component.Label;
-import org.carewebframework.web.component.Listitem;
-import org.carewebframework.web.dragdrop.IDropRenderer;
+import org.fujion.component.BaseComponent;
+import org.fujion.component.Label;
+import org.fujion.component.Listitem;
+import org.fujion.dragdrop.IDropRenderer;
 
 /**
  * This is the drop renderer for the test component. It expects a list item whose value is set to a

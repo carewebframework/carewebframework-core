@@ -25,11 +25,11 @@
  */
 package org.carewebframework.ui.wonderbar;
 
-import org.carewebframework.web.annotation.EventType;
-import org.carewebframework.web.annotation.EventType.EventParameter;
-import org.carewebframework.web.annotation.OnFailure;
-import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.event.Event;
+import org.fujion.annotation.EventType;
+import org.fujion.annotation.EventType.EventParameter;
+import org.fujion.annotation.OnFailure;
+import org.fujion.component.BaseComponent;
+import org.fujion.event.Event;
 
 /**
  * Fired when a search request is received from the client.

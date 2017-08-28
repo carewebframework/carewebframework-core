@@ -29,19 +29,19 @@ import static org.junit.Assert.assertEquals;
 
 import org.carewebframework.shell.elements.ElementPlugin;
 import org.carewebframework.ui.test.MockUITest;
-import org.carewebframework.web.ancillary.ILabeled;
-import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.component.Column;
-import org.carewebframework.web.component.Grid;
-import org.carewebframework.web.component.Rows;
-import org.carewebframework.web.page.PageUtil;
+import org.fujion.ancillary.ILabeled;
+import org.fujion.component.BaseComponent;
+import org.fujion.component.Column;
+import org.fujion.component.Grid;
+import org.fujion.component.Rows;
+import org.fujion.page.PageUtil;
 import org.junit.Test;
 
 public class TestForms extends MockUITest {
     
     @Test
     public void testForm() throws Exception {
-        BaseComponent root = PageUtil.createPage("web/org/carewebframework/ui/sharedforms/listviewForm.cwf", null).get(0);
+        BaseComponent root = PageUtil.createPage("web/org/carewebframework/ui/sharedforms/listviewForm.fsp", null).get(0);
         TestController controller = new TestController();
         root.wireController(controller);
         ElementPlugin dummy = new ElementPlugin();

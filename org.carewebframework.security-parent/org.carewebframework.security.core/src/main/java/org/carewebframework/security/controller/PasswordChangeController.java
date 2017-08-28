@@ -29,23 +29,23 @@ import org.apache.commons.lang.StringUtils;
 import org.carewebframework.api.context.UserContext;
 import org.carewebframework.api.domain.IUser;
 import org.carewebframework.api.security.ISecurityService;
-import org.carewebframework.common.StrUtil;
+import org.fujion.common.StrUtil;
 import org.carewebframework.ui.dialog.DialogUtil;
 import org.carewebframework.ui.util.CWFUtil;
-import org.carewebframework.web.ancillary.IAutoWired;
-import org.carewebframework.web.annotation.EventHandler;
-import org.carewebframework.web.annotation.WiredComponent;
-import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.component.Label;
-import org.carewebframework.web.component.Textbox;
-import org.carewebframework.web.component.Window;
+import org.fujion.ancillary.IAutoWired;
+import org.fujion.annotation.EventHandler;
+import org.fujion.annotation.WiredComponent;
+import org.fujion.component.BaseComponent;
+import org.fujion.component.Label;
+import org.fujion.component.Textbox;
+import org.fujion.component.Window;
 
 /**
  * Controller for the password change dialog.
  */
 public class PasswordChangeController implements IAutoWired {
     
-    private static final String DIALOG = CWFUtil.getResourcePath(PasswordChangeController.class, 1) + "passwordChange.cwf";
+    private static final String DIALOG = CWFUtil.getResourcePath(PasswordChangeController.class, 1) + "passwordChange.fsp";
     
     private final String MESSAGE_PASSWORD_RULES = StrUtil.getLabel("security.password.rules.label");
     

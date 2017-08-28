@@ -28,7 +28,7 @@ package org.carewebframework.security.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.carewebframework.common.StrUtil;
+import org.fujion.common.StrUtil;
 import org.carewebframework.security.Constants;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;

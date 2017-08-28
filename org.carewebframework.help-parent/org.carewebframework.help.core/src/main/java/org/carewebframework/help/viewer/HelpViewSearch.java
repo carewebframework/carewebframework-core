@@ -30,27 +30,27 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.carewebframework.common.StrUtil;
+import org.fujion.common.StrUtil;
 import org.carewebframework.help.HelpSearchHit;
 import org.carewebframework.help.HelpTopic;
 import org.carewebframework.help.HelpViewType;
 import org.carewebframework.help.IHelpSearch.IHelpSearchListener;
 import org.carewebframework.help.IHelpSet;
-import org.carewebframework.web.annotation.EventHandler;
-import org.carewebframework.web.annotation.WiredComponent;
-import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.component.Cell;
-import org.carewebframework.web.component.Grid;
-import org.carewebframework.web.component.Image;
-import org.carewebframework.web.component.Label;
-import org.carewebframework.web.component.Listitem;
-import org.carewebframework.web.component.Row;
-import org.carewebframework.web.component.Textbox;
-import org.carewebframework.web.event.Event;
-import org.carewebframework.web.event.EventUtil;
-import org.carewebframework.web.model.IComponentRenderer;
-import org.carewebframework.web.model.IModelAndView;
-import org.carewebframework.web.model.ListModel;
+import org.fujion.annotation.EventHandler;
+import org.fujion.annotation.WiredComponent;
+import org.fujion.component.BaseComponent;
+import org.fujion.component.Cell;
+import org.fujion.component.Grid;
+import org.fujion.component.Image;
+import org.fujion.component.Label;
+import org.fujion.component.Listitem;
+import org.fujion.component.Row;
+import org.fujion.component.Textbox;
+import org.fujion.event.Event;
+import org.fujion.event.EventUtil;
+import org.fujion.model.IComponentRenderer;
+import org.fujion.model.IModelAndView;
+import org.fujion.model.ListModel;
 
 /**
  * Tab supporting the help system search function. Consists of a text box into which the user may
@@ -85,7 +85,7 @@ public class HelpViewSearch extends HelpViewBase implements IComponentRenderer<L
      * @param viewType The view type.
      */
     public HelpViewSearch(HelpViewer viewer, HelpViewType viewType) {
-        super(viewer, viewType, "helpSearchTab.cwf");
+        super(viewer, viewType, "helpSearchTab.fsp");
     }
 
     @Override

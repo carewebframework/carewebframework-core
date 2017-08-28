@@ -26,7 +26,7 @@
 package org.carewebframework.shell.plugins;
 
 import org.carewebframework.api.spring.BeanRegistry;
-import org.carewebframework.common.AbstractRegistry;
+import org.fujion.common.AbstractRegistry;
 import org.carewebframework.shell.elements.ElementBase;
 
 /**

@@ -11,7 +11,7 @@
 
 		<cwp:plugin id="cwfSessionTracker" name="Session Tracker" 
 			category="${@msg.cwf.shell.plugin.category.system}"
-			url="web/org/carewebframework/plugin/sessiontracker/main.cwf">
+			url="web/org/carewebframework/plugin/sessiontracker/main.fsp">
 			<cwp:security requiresAll="false">
 				<cwp:authority name="PRIV_MONITOR_SYSTEM" />
 			</cwp:security>

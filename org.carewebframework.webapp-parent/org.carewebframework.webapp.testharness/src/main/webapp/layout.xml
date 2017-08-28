@@ -10,9 +10,6 @@
 				<element _type="tabpane" label="Test Harness">
 					<element _type="treeview" caption="Plugins:" open="true" />
 				</element>
-				<element _type="tabpane" label="Logout">
-					<element _type="cwfUserHeader" />
-				</element>
 			</element>
 		</element>
 		<element _type="splitterpane" size="17" relative="false">

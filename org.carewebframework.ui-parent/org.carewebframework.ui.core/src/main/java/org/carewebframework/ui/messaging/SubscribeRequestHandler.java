@@ -30,11 +30,11 @@ import java.util.Map;
 
 import org.carewebframework.api.messaging.ConsumerService;
 import org.carewebframework.api.messaging.IMessageConsumer.IMessageCallback;
-import org.carewebframework.web.client.ClientInvocation;
-import org.carewebframework.web.client.ClientRequest;
-import org.carewebframework.web.client.ExecutionContext;
-import org.carewebframework.web.websocket.IRequestHandler;
-import org.carewebframework.web.websocket.WebSocketHandler;
+import org.fujion.client.ClientInvocation;
+import org.fujion.client.ClientRequest;
+import org.fujion.client.ExecutionContext;
+import org.fujion.websocket.IRequestHandler;
+import org.fujion.websocket.WebSocketHandler;
 import org.springframework.web.socket.WebSocketSession;
 
 /**

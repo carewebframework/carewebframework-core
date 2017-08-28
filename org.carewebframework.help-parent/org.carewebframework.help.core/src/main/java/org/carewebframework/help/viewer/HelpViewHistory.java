@@ -27,16 +27,16 @@ package org.carewebframework.help.viewer;
 
 import org.carewebframework.help.HelpTopic;
 import org.carewebframework.help.HelpViewType;
-import org.carewebframework.web.annotation.EventHandler;
-import org.carewebframework.web.annotation.WiredComponent;
-import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.component.Listbox;
-import org.carewebframework.web.component.Listitem;
-import org.carewebframework.web.component.Tab;
-import org.carewebframework.web.event.ChangeEvent;
-import org.carewebframework.web.model.IListModel;
-import org.carewebframework.web.model.IModelAndView;
-import org.carewebframework.web.model.ListModel;
+import org.fujion.annotation.EventHandler;
+import org.fujion.annotation.WiredComponent;
+import org.fujion.component.BaseComponent;
+import org.fujion.component.Listbox;
+import org.fujion.component.Listitem;
+import org.fujion.component.Tab;
+import org.fujion.event.ChangeEvent;
+import org.fujion.model.IListModel;
+import org.fujion.model.IModelAndView;
+import org.fujion.model.ListModel;
 
 /**
  * Tab that implements a view of the current topic selection history. Unlike other help tabs, this
@@ -58,7 +58,7 @@ public class HelpViewHistory extends HelpViewBase {
      * @param viewType The view type.
      */
     public HelpViewHistory(HelpViewer viewer, HelpViewType viewType) {
-        super(viewer, viewType, "helpHistoryTab.cwf");
+        super(viewer, viewType, "helpHistoryTab.fsp");
     }
 
     @Override

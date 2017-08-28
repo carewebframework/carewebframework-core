@@ -31,36 +31,36 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.carewebframework.common.StrUtil;
+import org.fujion.common.StrUtil;
 import org.carewebframework.shell.ancillary.CWFException;
 import org.carewebframework.shell.elements.ElementBase;
 import org.carewebframework.shell.plugins.PluginDefinition;
 import org.carewebframework.shell.property.PropertyInfo;
 import org.carewebframework.shell.property.PropertyType;
 import org.carewebframework.ui.util.CWFUtil;
-import org.carewebframework.web.ancillary.IAutoWired;
-import org.carewebframework.web.ancillary.INamespace;
-import org.carewebframework.web.annotation.EventHandler;
-import org.carewebframework.web.annotation.WiredComponent;
-import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.component.BaseUIComponent;
-import org.carewebframework.web.component.Button;
-import org.carewebframework.web.component.Cell;
-import org.carewebframework.web.component.Column;
-import org.carewebframework.web.component.Grid;
-import org.carewebframework.web.component.Label;
-import org.carewebframework.web.component.Pane;
-import org.carewebframework.web.component.Row;
-import org.carewebframework.web.component.Rows;
-import org.carewebframework.web.component.Window;
-import org.carewebframework.web.event.ChangeEvent;
-import org.carewebframework.web.event.ClickEvent;
-import org.carewebframework.web.event.EventUtil;
-import org.carewebframework.web.model.IComponentRenderer;
-import org.carewebframework.web.model.IListModel;
-import org.carewebframework.web.model.IModelAndView;
-import org.carewebframework.web.model.ListModel;
-import org.carewebframework.web.page.PageUtil;
+import org.fujion.ancillary.IAutoWired;
+import org.fujion.ancillary.INamespace;
+import org.fujion.annotation.EventHandler;
+import org.fujion.annotation.WiredComponent;
+import org.fujion.component.BaseComponent;
+import org.fujion.component.BaseUIComponent;
+import org.fujion.component.Button;
+import org.fujion.component.Cell;
+import org.fujion.component.Column;
+import org.fujion.component.Grid;
+import org.fujion.component.Label;
+import org.fujion.component.Pane;
+import org.fujion.component.Row;
+import org.fujion.component.Rows;
+import org.fujion.component.Window;
+import org.fujion.event.ChangeEvent;
+import org.fujion.event.ClickEvent;
+import org.fujion.event.EventUtil;
+import org.fujion.model.IComponentRenderer;
+import org.fujion.model.IListModel;
+import org.fujion.model.IModelAndView;
+import org.fujion.model.ListModel;
+import org.fujion.page.PageUtil;
 
 /**
  * Dialog for managing property values of UI elements within the designer. Each editable property of
@@ -164,7 +164,7 @@ public class PropertyGrid implements IAutoWired {
         Map<String, Object> args = new HashMap<>();
         args.put("target", target);
         args.put("embedded", embedded);
-        Window window = (Window) PageUtil.createPage(DesignConstants.RESOURCE_PREFIX + "propertyGrid.cwf", parent, args)
+        Window window = (Window) PageUtil.createPage(DesignConstants.RESOURCE_PREFIX + "propertyGrid.fsp", parent, args)
                 .get(0);
         
         if (parent == null) {

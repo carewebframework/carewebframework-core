@@ -30,7 +30,7 @@ import java.util.Date;
 import java.util.Iterator;
 
 import org.carewebframework.api.spring.SpringUtil;
-import org.carewebframework.common.MiscUtil;
+import org.fujion.common.MiscUtil;
 
 /**
  * Base class for property serialization support. Contains a number of preconfigured serializers.

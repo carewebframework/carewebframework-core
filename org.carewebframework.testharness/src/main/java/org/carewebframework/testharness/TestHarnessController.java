@@ -31,7 +31,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.carewebframework.common.MiscUtil;
+import org.fujion.common.MiscUtil;
 import org.carewebframework.shell.CareWebShellEx;
 import org.carewebframework.shell.plugins.PluginDefinition;
 import org.carewebframework.shell.plugins.PluginRegistry;
@@ -40,7 +40,7 @@ import org.carewebframework.ui.action.ActionRegistry.ActionScope;
 import org.carewebframework.ui.controller.FrameworkController;
 import org.carewebframework.ui.util.CWFUtil;
 import org.carewebframework.ui.action.IAction;
-import org.carewebframework.web.component.BaseComponent;
+import org.fujion.component.BaseComponent;
 
 /**
  * Creates a default UI based on all detected plugins.

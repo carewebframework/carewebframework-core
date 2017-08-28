@@ -25,8 +25,8 @@
  */
 package org.carewebframework.shell.elements;
 
-import org.carewebframework.web.component.Div;
-import org.carewebframework.web.component.Image;
+import org.fujion.component.Div;
+import org.fujion.component.Image;
 
 /**
  * Simple button stock object.

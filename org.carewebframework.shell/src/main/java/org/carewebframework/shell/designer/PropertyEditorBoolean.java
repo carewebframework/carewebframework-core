@@ -26,10 +26,10 @@
 package org.carewebframework.shell.designer;
 
 import org.carewebframework.shell.property.PropertyInfo;
-import org.carewebframework.web.annotation.WiredComponent;
-import org.carewebframework.web.component.Radiobutton;
-import org.carewebframework.web.component.Radiogroup;
-import org.carewebframework.web.event.ChangeEvent;
+import org.fujion.annotation.WiredComponent;
+import org.fujion.component.Radiobutton;
+import org.fujion.component.Radiogroup;
+import org.fujion.event.ChangeEvent;
 
 /**
  * Editor for boolean values.
@@ -46,7 +46,7 @@ public class PropertyEditorBoolean extends PropertyEditorBase<Radiogroup> {
      * Create property editor.
      */
     public PropertyEditorBoolean() {
-        super(DesignConstants.RESOURCE_PREFIX + "propertyEditorBoolean.cwf");
+        super(DesignConstants.RESOURCE_PREFIX + "propertyEditorBoolean.fsp");
     }
 
     @Override

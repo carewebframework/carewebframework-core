@@ -25,10 +25,10 @@
  */
 package org.carewebframework.shell.elements;
 
-import org.carewebframework.web.component.BaseUIComponent;
-import org.carewebframework.web.component.Div;
-import org.carewebframework.web.component.Iframe;
-import org.carewebframework.web.component.Import;
+import org.fujion.component.BaseUIComponent;
+import org.fujion.component.Div;
+import org.fujion.component.Iframe;
+import org.fujion.component.Import;
 
 /**
  * UI element that encapsulates an iframe or an include (as determined by URL).
@@ -66,7 +66,7 @@ public class ElementFrame extends ElementUI {
             child = null;
         }
 
-        if (url.startsWith("http") || !url.endsWith(".cwf")) {
+        if (url.startsWith("http") || !url.endsWith(".fsp")) {
             child = new Iframe();
             ((Iframe) child).setSrc(url);
         } else {

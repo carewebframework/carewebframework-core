@@ -28,8 +28,8 @@ package org.carewebframework.plugin.chat;
 import java.util.Collection;
 
 import org.carewebframework.api.messaging.IPublisherInfo;
-import org.carewebframework.web.component.Listitem;
-import org.carewebframework.web.model.IComponentRenderer;
+import org.fujion.component.Listitem;
+import org.fujion.model.IComponentRenderer;
 
 /**
  * Renderer for participant list.

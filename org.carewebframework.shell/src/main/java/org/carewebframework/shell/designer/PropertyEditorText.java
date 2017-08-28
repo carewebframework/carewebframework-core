@@ -26,11 +26,11 @@
 package org.carewebframework.shell.designer;
 
 import org.carewebframework.shell.property.PropertyInfo;
-import org.carewebframework.web.annotation.EventHandler;
-import org.carewebframework.web.annotation.WiredComponent;
-import org.carewebframework.web.component.Popupbox;
-import org.carewebframework.web.component.Textbox;
-import org.carewebframework.web.event.ChangeEvent;
+import org.fujion.annotation.EventHandler;
+import org.fujion.annotation.WiredComponent;
+import org.fujion.component.Popupbox;
+import org.fujion.component.Textbox;
+import org.fujion.event.ChangeEvent;
 
 /**
  * Editor for simple text.
@@ -41,7 +41,7 @@ public class PropertyEditorText extends PropertyEditorBase<Popupbox> {
     private Textbox textbox;
 
     public PropertyEditorText() {
-        super(DesignConstants.RESOURCE_PREFIX + "propertyEditorText.cwf");
+        super(DesignConstants.RESOURCE_PREFIX + "propertyEditorText.fsp");
     }
 
     @Override

@@ -30,10 +30,10 @@ import java.util.List;
 import org.carewebframework.plugin.infopanel.model.IActionTarget;
 import org.carewebframework.plugin.infopanel.model.IInfoPanel.Action;
 import org.carewebframework.plugin.infopanel.service.InfoPanelService;
-import org.carewebframework.web.ancillary.INamespace;
-import org.carewebframework.web.component.BaseComponent;
-import org.carewebframework.web.component.Row;
-import org.carewebframework.web.event.EventUtil;
+import org.fujion.ancillary.INamespace;
+import org.fujion.component.BaseComponent;
+import org.fujion.component.Row;
+import org.fujion.event.EventUtil;
 
 /**
  * Container for receiving components rendered by drop renderer.

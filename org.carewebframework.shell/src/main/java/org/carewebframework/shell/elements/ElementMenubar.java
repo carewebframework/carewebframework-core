@@ -27,7 +27,7 @@ package org.carewebframework.shell.elements;
 
 import org.carewebframework.shell.designer.PropertyEditorMenubar;
 import org.carewebframework.shell.property.PropertyTypeRegistry;
-import org.carewebframework.web.component.Span;
+import org.fujion.component.Span;
 
 /**
  * Base implementation of a menu bar.

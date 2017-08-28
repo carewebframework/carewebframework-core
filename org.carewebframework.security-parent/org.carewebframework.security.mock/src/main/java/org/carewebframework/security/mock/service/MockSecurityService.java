@@ -26,8 +26,8 @@
 package org.carewebframework.security.mock.service;
 
 import org.carewebframework.api.domain.IUser;
-import org.carewebframework.web.client.ClientUtil;
-import org.carewebframework.web.client.ExecutionContext;
+import org.fujion.client.ClientUtil;
+import org.fujion.client.ExecutionContext;
 
 public class MockSecurityService extends org.carewebframework.api.security.mock.MockSecurityService {
     

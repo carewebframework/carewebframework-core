@@ -25,7 +25,7 @@
  */
 package org.carewebframework.ui.action;
 
-import org.carewebframework.common.StrUtil;
+import org.fujion.common.StrUtil;
 import org.springframework.util.Assert;
 
 /**

@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.apache.commons.lang.math.NumberUtils;
 import org.carewebframework.api.property.PropertyUtil;
-import org.carewebframework.common.StrUtil;
+import org.fujion.common.StrUtil;
 
 public class DialogControl<T> {
     

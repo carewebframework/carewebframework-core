@@ -26,7 +26,7 @@
 package org.carewebframework.shell.designer;
 
 import org.carewebframework.shell.property.PropertyInfo;
-import org.carewebframework.web.component.Integerbox;
+import org.fujion.component.Integerbox;
 
 /**
  * Editor for integer values.

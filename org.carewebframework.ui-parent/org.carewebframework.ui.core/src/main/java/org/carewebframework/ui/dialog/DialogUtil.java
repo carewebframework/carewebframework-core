@@ -14,9 +14,9 @@ import java.util.Map;
 
 import org.carewebframework.ui.dialog.InputDialog.IInputCallback;
 import org.carewebframework.ui.util.CWFUtil;
-import org.carewebframework.web.ancillary.IResponseCallback;
-import org.carewebframework.web.component.Window;
-import org.carewebframework.web.event.IEventListener;
+import org.fujion.ancillary.IResponseCallback;
+import org.fujion.component.Window;
+import org.fujion.event.IEventListener;
 
 /**
  * Static convenience methods for displaying dialogs.
@@ -35,7 +35,7 @@ public class DialogUtil {
      * @param callback Callback to receive dialog response.
      */
     public static void confirm(String message, IConfirmCallback callback) {
-        confirm(message, "@cwf.prompt.confirm.title", callback);
+        confirm(message, "@fujion.prompt.confirm.title", callback);
     }
     
     /**
@@ -103,7 +103,7 @@ public class DialogUtil {
      * @param message Text message
      */
     public static void showInfo(String message) {
-        showInfo(message, "@cwf.prompt.info.title");
+        showInfo(message, "@fujion.prompt.info.title");
     }
     
     /**
@@ -122,7 +122,7 @@ public class DialogUtil {
      * @param message Text message
      */
     public static void showWarning(String message) {
-        showWarning(message, "@cwf.prompt.warning.title");
+        showWarning(message, "@fujion.prompt.warning.title");
     }
     
     /**
@@ -141,7 +141,7 @@ public class DialogUtil {
      * @param message Text message
      */
     public static void showError(String message) {
-        showError(message, "@cwf.prompt.error.title");
+        showError(message, "@fujion.prompt.error.title");
     }
     
     /**
@@ -233,37 +233,37 @@ public class DialogUtil {
     /**
      * Opens any arbitrary page in a modal window.
      *
-     * @param cwfPage Url of page.
+     * @param fspPage Url of page.
      * @return Reference to the opened window, if successful.
      */
-    public static Window popup(String cwfPage) {
-        return popup(cwfPage, true, true, true);
+    public static Window popup(String fspPage) {
+        return popup(fspPage, true, true, true);
     }
     
     /**
      * Can be used to popup any page as a modal dialog.
      *
-     * @param cwfPage Url of page.
+     * @param fspPage Url of page.
      * @param closable If true, window closure button appears.
      * @param sizable If true, window sizing grips appear.
      * @return Reference to the opened window, if successful.
      */
-    public static Window popup(String cwfPage, boolean closable, boolean sizable) {
-        return popup(cwfPage, closable, sizable, true);
+    public static Window popup(String fspPage, boolean closable, boolean sizable) {
+        return popup(fspPage, closable, sizable, true);
     }
     
     /**
      * Can be used to popup any page as a modal dialog.
      *
-     * @param cwfPage Url of page.
+     * @param fspPage Url of page.
      * @param closable If true, window closure button appears.
      * @param sizable If true, window sizing grips appear.
      * @param show If true, the window is displayed modally. If false, the window is created but not
      *            displayed.
      * @return Reference to the opened window, if successful.
      */
-    public static Window popup(String cwfPage, boolean closable, boolean sizable, boolean show) {
-        return PopupDialog.show(cwfPage, null, closable, sizable, show, null);
+    public static Window popup(String fspPage, boolean closable, boolean sizable, boolean show) {
+        return PopupDialog.show(fspPage, null, closable, sizable, show, null);
     }
     
     private DialogUtil() {

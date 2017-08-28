@@ -25,7 +25,7 @@
  */
 package org.carewebframework.help.chm;
 
-import org.carewebframework.common.XMLUtil;
+import org.fujion.common.XMLUtil;
 import org.carewebframework.help.HelpTopic;
 import org.carewebframework.help.HelpTopicNode;
 

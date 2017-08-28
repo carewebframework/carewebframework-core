@@ -25,8 +25,8 @@
  */
 package org.carewebframework.shell.elements;
 
-import org.carewebframework.web.component.Tab;
-import org.carewebframework.web.component.Tabview;
+import org.fujion.component.Tab;
+import org.fujion.component.Tabview;
 
 /**
  * Wraps the Tab component.

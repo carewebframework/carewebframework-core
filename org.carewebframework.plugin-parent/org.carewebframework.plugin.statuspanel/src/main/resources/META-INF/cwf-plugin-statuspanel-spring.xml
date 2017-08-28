@@ -11,7 +11,7 @@
 	<beans profile="root">
 
 		<cwp:plugin id="cwfStatusPanel" name="Application Status Panel"
-			url="web/org/carewebframework/plugin/statuspanel/main.cwf">
+			url="web/org/carewebframework/plugin/statuspanel/main.fsp">
 			<cwp:serialization>
 				<cwp:property name="Background Color" id="color" type="color"
 					description="Sets the background color." />

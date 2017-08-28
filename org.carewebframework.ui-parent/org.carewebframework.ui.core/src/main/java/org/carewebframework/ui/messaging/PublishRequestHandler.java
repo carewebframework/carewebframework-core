@@ -27,8 +27,8 @@ package org.carewebframework.ui.messaging;
 
 import org.carewebframework.api.messaging.Message;
 import org.carewebframework.api.messaging.ProducerService;
-import org.carewebframework.web.client.ClientRequest;
-import org.carewebframework.web.websocket.IRequestHandler;
+import org.fujion.client.ClientRequest;
+import org.fujion.websocket.IRequestHandler;
 
 /**
  * Handler for servicing publication requests from the browser client.

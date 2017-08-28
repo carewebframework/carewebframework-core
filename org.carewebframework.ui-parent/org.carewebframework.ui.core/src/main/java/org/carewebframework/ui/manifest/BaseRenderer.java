@@ -1,13 +1,13 @@
 package org.carewebframework.ui.manifest;
 
 import org.carewebframework.ui.util.CWFUtil;
-import org.carewebframework.web.component.Cell;
-import org.carewebframework.web.component.Column;
-import org.carewebframework.web.component.Row;
-import org.carewebframework.web.component.Span;
-import org.carewebframework.web.component.Grid;
-import org.carewebframework.web.model.IComponentRenderer;
-import org.carewebframework.web.model.Sorting.SortOrder;
+import org.fujion.component.Cell;
+import org.fujion.component.Column;
+import org.fujion.component.Row;
+import org.fujion.component.Span;
+import org.fujion.component.Grid;
+import org.fujion.model.IComponentRenderer;
+import org.fujion.model.Sorting.SortOrder;
 
 /**
  * Base renderer.
