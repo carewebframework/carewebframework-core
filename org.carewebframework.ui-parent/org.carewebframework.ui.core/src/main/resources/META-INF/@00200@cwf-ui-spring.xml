@@ -9,7 +9,7 @@
 		http://www.carewebframework.org/schema/spring
 		http://www.carewebframework.org/schema/spring/spring-extensions.xsd
 		http://www.fujion.org/schema/component
-		http://www.fujion.org/schema/extensions/component-extensions.xsd">
+		http://www.fujion.org/schema/component-extensions.xsd">
 
 	<beans profile="root">
 

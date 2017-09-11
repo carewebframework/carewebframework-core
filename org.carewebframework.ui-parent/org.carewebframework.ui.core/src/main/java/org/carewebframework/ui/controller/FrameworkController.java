@@ -52,21 +52,21 @@ import org.springframework.context.ApplicationContext;
  * context change interfaces.
  */
 public class FrameworkController implements IAutoWired {
-
+    
     private ApplicationContext appContext;
-
+    
     private AppFramework appFramework;
-
+    
     private IEventManager eventManager;
-
+    
     protected BaseUIComponent root;
-
+    
     private BaseUIComponent comp;
-
+    
     private final List<IAbortable> threads = new ArrayList<>();
-
+    
     private final IEventListener threadCompletionListener = new IEventListener() {
-
+        
         /**
          * Background thread completion will be notified via this event listener. The listener will
          * in turn invoke either the threadFinished or threadAborted methods, as appropriate.
@@ -76,10 +76,10 @@ public class FrameworkController implements IAutoWired {
         @Override
         public void onEvent(Event event) {
             ThreadEx thread = (ThreadEx) event.getData();
-
+            
             if (thread != null) {
                 removeThread(thread);
-
+                
                 if (thread.isAborted()) {
                     threadAborted(thread);
                 } else {
@@ -87,13 +87,13 @@ public class FrameworkController implements IAutoWired {
                 }
             }
         }
-
+        
     };
-
+    
     private final IGenericEvent<Object> refreshListener = (eventName, eventData) -> {
         refresh();
     };
-
+    
     /**
      * Returns the controller associated with the specified component, if any.
      *
@@ -103,7 +103,7 @@ public class FrameworkController implements IAutoWired {
     public static Object getController(BaseComponent comp) {
         return getController(comp, false);
     }
-
+    
     /**
      * Returns the controller associated with the specified component, if any.
      *
@@ -114,7 +114,31 @@ public class FrameworkController implements IAutoWired {
     public static Object getController(BaseComponent comp, boolean recurse) {
         return recurse ? comp.findAttribute(Constants.ATTR_COMPOSER) : comp.getAttribute(Constants.ATTR_COMPOSER);
     }
-
+    
+    /**
+     * Locates and returns a controller of the given type by searching up the component tree
+     * starting at the specified component.
+     *
+     * @param <T> The type of controller sought.
+     * @param comp Component for start of search.
+     * @param type The type of controller sought.
+     * @return The controller instance, or null if not found.
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> T getController(BaseComponent comp, Class<T> type) {
+        while (comp != null) {
+            Object controller = getController(comp);
+            
+            if (type.isInstance(controller)) {
+                return (T) controller;
+            }
+            
+            comp = comp.getParent();
+        }
+        
+        return null;
+    }
+    
     /**
      * Returns the application context associated with the active desktop.
      *
@@ -123,7 +147,7 @@ public class FrameworkController implements IAutoWired {
     public ApplicationContext getAppContext() {
         return appContext;
     }
-
+    
     /**
      * Returns the application framework associated with the active desktop.
      *
@@ -132,7 +156,7 @@ public class FrameworkController implements IAutoWired {
     public AppFramework getAppFramework() {
         return appFramework;
     }
-
+    
     /**
      * Returns the event manager associated with the active desktop.
      *
@@ -141,7 +165,7 @@ public class FrameworkController implements IAutoWired {
     public IEventManager getEventManager() {
         return eventManager;
     }
-
+    
     /**
      * Override the doAfterCompose method to set references to the application context and the
      * framework and register the controller with the framework.
@@ -159,21 +183,21 @@ public class FrameworkController implements IAutoWired {
         eventManager = EventManager.getInstance();
         initialize();
     }
-
+    
     /**
      * Process a refresh event.
      */
     public void onRefresh() {
         refresh();
     }
-
+    
     /**
      * Override to respond to a refresh request.
      */
     public void refresh() {
-
+        
     }
-
+    
     /**
      * Override to perform additional cleanup.
      */
@@ -181,7 +205,7 @@ public class FrameworkController implements IAutoWired {
         eventManager.unsubscribe(Constants.REFRESH_EVENT, refreshListener);
         appFramework.unregisterObject(FrameworkController.this);
     }
-
+    
     /**
      * Override to perform additional initializations.
      */
@@ -192,7 +216,7 @@ public class FrameworkController implements IAutoWired {
             cleanup();
         });
     }
-
+    
     /**
      * Abort background thread if it is running.
      */
@@ -201,7 +225,7 @@ public class FrameworkController implements IAutoWired {
             abortBackgroundThread(threads.get(0));
         }
     }
-
+    
     /**
      * Abort background thread if it is running.
      *
@@ -210,7 +234,7 @@ public class FrameworkController implements IAutoWired {
     protected void abortBackgroundThread(IAbortable thread) {
         removeThread(thread).abort();
     }
-
+    
     /**
      * Add a thread to the active list.
      *
@@ -221,7 +245,7 @@ public class FrameworkController implements IAutoWired {
         threads.add(thread);
         return thread;
     }
-
+    
     /**
      * Remove a thread from the active list.
      *
@@ -232,7 +256,7 @@ public class FrameworkController implements IAutoWired {
         threads.remove(thread);
         return thread;
     }
-
+    
     /**
      * Returns true if any active threads are present.
      *
@@ -241,7 +265,7 @@ public class FrameworkController implements IAutoWired {
     protected boolean hasActiveThreads() {
         return !threads.isEmpty();
     }
-
+    
     /**
      * Starts a background thread.
      *
@@ -254,7 +278,7 @@ public class FrameworkController implements IAutoWired {
         thread.start();
         return thread;
     }
-
+    
     /**
      * Called when a background thread has completed.
      *
@@ -263,7 +287,7 @@ public class FrameworkController implements IAutoWired {
     protected void threadFinished(ThreadEx thread) {
         removeThread(thread);
     }
-
+    
     /**
      * Called when a background thread has aborted.
      *
@@ -272,5 +296,5 @@ public class FrameworkController implements IAutoWired {
     protected void threadAborted(ThreadEx thread) {
         removeThread(thread);
     }
-
+    
 }

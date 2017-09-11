@@ -3,7 +3,7 @@
 	<treeview name="tree" flex="1" />
 	<toolbar alignment="end" width="100%">
 		<label name="lblNotFound" label="Text not found" style="color: gray" visible="false" />
-		<textbox name="txtSearch" width="350px" focus="true" forward="enter=btnSearch.click"/>
+		<textbox name="txtSearch" flex="1" focus="true" forward="enter=btnSearch.click"/>
 		<button name="btnSearch" label="Search" />
 	</toolbar>
 	<style src="web/org/carewebframework/ui/xml/xmlViewer.css" />

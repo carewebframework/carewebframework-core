@@ -13,7 +13,7 @@
 		http://www.carewebframework.org/schema/theme
 		http://www.carewebframework.org/schema/theme/theme-extensions.xsd
 		http://www.fujion.org/schema/component
-		http://www.fujion.org/schema/extensions/component-extensions.xsd">
+		http://www.fujion.org/schema/component-extensions.xsd">
 
 	<beans profile="root">
 		<!-- Register shell components -->
