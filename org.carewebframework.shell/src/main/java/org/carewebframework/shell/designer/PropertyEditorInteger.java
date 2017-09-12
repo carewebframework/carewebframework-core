@@ -32,28 +32,28 @@ import org.fujion.component.Integerbox;
  * Editor for integer values.
  */
 public class PropertyEditorInteger extends PropertyEditorBase<Integerbox> {
-
+    
     public PropertyEditorInteger() {
         super(new Integerbox());
     }
-
+    
     @Override
     protected void init(Object target, PropertyInfo propInfo, PropertyGrid propGrid) {
         super.init(target, propInfo, propGrid);
         editor.setMaxLength(9);
-        editor.setMinvalue(propInfo.getConfigValueInt("min", null));
-        editor.setMaxvalue(propInfo.getConfigValueInt("max", null));
+        editor.setMinValue(propInfo.getConfigValueInt("min", null));
+        editor.setMaxValue(propInfo.getConfigValueInt("max", null));
     }
-
+    
     @Override
     protected String getValue() {
         return Integer.toString(editor.getValue());
     }
-
+    
     @Override
     protected void setValue(Object value) {
         editor.setValue(value == null ? null : (Integer) value);
         updateValue();
     }
-
+    
 }

@@ -45,12 +45,12 @@ import org.fujion.model.ListModel;
  * its list model, the list box contents changes dynamically as the history changes.
  */
 public class HelpViewHistory extends HelpViewBase {
-
+    
     @WiredComponent
     private Listbox lstHistory;
-
+    
     private HelpHistory history;
-
+    
     /**
      * Create the help tab for the specified viewer and viewType.
      *
@@ -60,7 +60,7 @@ public class HelpViewHistory extends HelpViewBase {
     public HelpViewHistory(HelpViewer viewer, HelpViewType viewType) {
         super(viewer, viewType, "helpHistoryTab.fsp");
     }
-
+    
     @Override
     public void afterInitialized(BaseComponent comp) {
         super.afterInitialized(comp);
@@ -71,20 +71,20 @@ public class HelpViewHistory extends HelpViewBase {
         mv.setRenderer(new HelpTopicRenderer());
         getViewer().setHelpHistory(history);
     }
-
+    
     /**
      * Set the history position to correspond to the new list box selection.
-     * 
+     *
      * @param event The change event.
      */
     @EventHandler(value = "change", target = "@lstHistory")
     private void onChange$lstHistory(ChangeEvent event) {
-
+        
         if (event.getValue() == Boolean.TRUE) {
             history.setPosition(lstHistory.getSelectedIndex());
         }
     }
-
+    
     /**
      * Sets focus to the list box when the tab is selected.
      *
@@ -95,7 +95,7 @@ public class HelpViewHistory extends HelpViewBase {
         super.onSelect();
         lstHistory.setFocus(true);
     }
-
+    
     /**
      * Updated the list box selection when the history selection changes.
      *
@@ -105,11 +105,11 @@ public class HelpViewHistory extends HelpViewBase {
     public void onTopicSelected(HelpTopic topic) {
         Listitem item = (Listitem) lstHistory.getChildAt(history.getPosition());
         lstHistory.setSelectedItem(item);
-
+        
         if (item != null) {
             getContainer().getAncestor(Tab.class).setVisible(true);
-            item.scrollIntoView(false);
+            item.scrollIntoView();
         }
     }
-
+    
 }
