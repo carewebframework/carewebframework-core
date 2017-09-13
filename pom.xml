@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>org.carewebframework</groupId>
@@ -7,14 +8,14 @@
 	<packaging>pom</packaging>
 	<name>CareWeb Framework Root POM</name>
 	<description>CareWeb Framework Root POM</description>
-	
+
 	<scm>
 		<connection>scm:git:https://github.com/carewebframework/carewebframework-core</connection>
 		<developerConnection>scm:git:https://github.com/carewebframework/carewebframework-core</developerConnection>
 		<url>https://github.com/carewebframework/carewebframework-core</url>
 		<tag>HEAD</tag>
 	</scm>
-	
+
 	<properties>
 		<org.fujion.version>1.0.7-SNAPSHOT</org.fujion.version>
 		<org.springframework.version>4.3.10.RELEASE</org.springframework.version>
@@ -27,7 +28,7 @@
 		<project.name>${project.artifactId}</project.name>
 
 	</properties>
-	
+
 	<modules>
 		<module>org.carewebframework.mvn-parent</module>
 		<module>org.carewebframework.api-parent</module>
@@ -42,7 +43,7 @@
 		<module>org.carewebframework.testharness</module>
 		<module>org.carewebframework.webapp-parent</module>
 	</modules>
-	
+
 	<dependencyManagement>
 		<dependencies>
 			<!-- Apache Libraries -->
@@ -307,7 +308,7 @@
 				<artifactId>thymeleaf-spring4</artifactId>
 				<version>${org.thymeleaf.version}</version>
 			</dependency>
-			<!--  Unit Test -->
+			<!-- Unit Test -->
 			<dependency>
 				<groupId>org.carewebframework</groupId>
 				<artifactId>org.carewebframework.api.test</artifactId>
@@ -325,7 +326,7 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
-	
+
 	<build>
 		<pluginManagement>
 			<plugins>
@@ -776,5 +777,12 @@
 				</plugin>
 			</plugins>
 		</pluginManagement>
+
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>buildnumber-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
 	</build>
 </project>
