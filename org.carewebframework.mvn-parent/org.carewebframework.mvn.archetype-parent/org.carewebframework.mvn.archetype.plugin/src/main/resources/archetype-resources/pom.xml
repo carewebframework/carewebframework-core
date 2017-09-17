@@ -15,10 +15,10 @@
 	<name>${cwpName}</name>
 	
 	<properties>
-		<!-- Uncomment and update maven.carewebframework.help.x properties when your plugin has help content -->
+		<!-- Uncomment and update these properties if your plugin has help content -->
 		<!-- <maven.carewebframework.help.moduleId>${cwpLC}Help</maven.carewebframework.help.moduleId> -->
 		<!-- <maven.carewebframework.help.moduleName>${cwpLCC} Help</maven.carewebframework.help.moduleName> -->
-		<!-- <maven.carewebframework.help.moduleSource>${cwpLCC}-Help.jar</carewebframework.careweb.help.moduleSource> -->
+		<!-- <maven.carewebframework.help.moduleSource>${cwpLCC}-help.jar</carewebframework.careweb.help.moduleSource> -->
 		<!-- <maven.carewebframework.help.moduleFormat>javahelp</carewebframework.careweb.help.moduleFormat> -->
 	</properties>
 	
