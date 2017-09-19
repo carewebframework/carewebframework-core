@@ -13,18 +13,6 @@
 
 	<beans profile="root">
 
-		<!-- Allows access to a page-scoped bean in root context. -->
-		
-		<bean class="org.springframework.beans.factory.config.CustomScopeConfigurer">
-			<property name="scopes">
-				<map>
-					<entry key="page">
-						<bean class="org.carewebframework.ui.spring.PageScope" />
-					</entry>
-				</map>
-			</property>
-		</bean>
-
 		<!-- Allows the application to locate the Spring application context. -->
 		
 		<bean id="appContextFinder" class="org.carewebframework.ui.spring.AppContextFinder"

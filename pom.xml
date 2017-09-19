@@ -17,7 +17,7 @@
 	</scm>
 
 	<properties>
-		<org.fujion.version>1.0.7-SNAPSHOT</org.fujion.version>
+		<org.fujion.version>1.0.8-SNAPSHOT</org.fujion.version>
 		<org.springframework.version>4.3.10.RELEASE</org.springframework.version>
 		<org.springframework.security.version>4.2.3.RELEASE</org.springframework.security.version>
 		<org.thymeleaf.version>3.0.7.RELEASE</org.thymeleaf.version>

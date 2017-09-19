@@ -39,6 +39,10 @@ import org.carewebframework.api.spring.LabelPropertySource;
 import org.fujion.client.ExecutionContext;
 import org.fujion.component.Page;
 import org.fujion.spring.ClasspathMessageSource;
+import org.fujion.websocket.ISessionLifecycle;
+import org.fujion.websocket.Session;
+import org.fujion.websocket.SessionInitException;
+import org.fujion.websocket.Sessions;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.web.context.support.XmlWebApplicationContext;
@@ -90,9 +94,35 @@ public class AppContextInitializer implements ApplicationContextInitializer<XmlW
             env.setDefaultProfiles(Constants.PROFILE_ROOT_DEFAULT);
             ctx.setConfigLocations((String[]) ArrayUtils.addAll(Constants.DEFAULT_LOCATIONS, ctx.getConfigLocations()));
             ClasspathMessageSource.getInstance().setResourceLoader(ctx);
+            registerSessionListener();
         }
         
         env.setActiveProfiles(aps.toArray(new String[aps.size()]));
+    }
+
+    /**
+     * Manages creation/destruction of child contexts.
+     */
+    private void registerSessionListener() {
+        ISessionLifecycle sessionTracker = new ISessionLifecycle() {
+            
+            @Override
+            public void onSessionCreate(Session session) {
+                try {
+                    AppContextFinder.createAppContext(session.getPage());
+                } catch (Exception e) {
+                    throw new SessionInitException(e);
+                }
+            }
+            
+            @Override
+            public void onSessionDestroy(Session session) {
+                AppContextFinder.destroyAppContext(session.getPage());
+            }
+            
+        };
+
+        Sessions.getInstance().addLifecycleListener(sessionTracker);
     }
     
 }
