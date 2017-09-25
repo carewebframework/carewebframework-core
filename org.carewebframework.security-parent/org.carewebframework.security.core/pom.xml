@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>org.carewebframework</groupId>
 		<artifactId>org.carewebframework.security-parent</artifactId>
-		<version>6.0.0-SNAPSHOT</version>
+		<version>6.0.0-RC1</version>
 	</parent>
 	
 	<artifactId>org.carewebframework.security.core</artifactId>
