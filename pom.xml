@@ -7,6 +7,7 @@
 	<packaging>pom</packaging>
 	<name>CareWeb Framework Root POM</name>
 	<description>CareWeb Framework Root POM</description>
+	<url>http://www.carewebframework.org</url>
 
 	<scm>
 		<connection>scm:git:https://github.com/carewebframework/carewebframework-core</connection>
@@ -14,6 +15,39 @@
 		<url>https://github.com/carewebframework/carewebframework-core</url>
 		<tag>6.0.0-RC1</tag>
 	</scm>
+
+	<developers>
+		<developer>
+			<name>CareWeb Development Team</name>
+			<email>support@carewebframework.org</email>
+		</developer>
+	</developers>
+
+	<organization>
+		<name>Regenstrief Center for Biomedical Informatics</name>
+		<url>http://www.carewebframework.org/</url>
+	</organization>
+
+	<licenses>
+		<license>
+			<name>Apache Software License 2.0</name>
+			<url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<comments>
+				This Source Code Form is subject to the terms of the Apache License, v. 2.0. 
+				If a copy of the license was not distributed with this file, You can obtain one at 
+				http://www.apache.org/licenses/LICENSE-2.0.
+			</comments>
+		</license>
+		<license>
+			<name>Health-Related Additional Disclaimer of Warranty and Limitation of Liability</name>
+			<url>http://www.carewebframework.org/licensing/disclaimer</url>
+			<comments>
+				This Source Code Form is also subject to the terms of the Health-Related Additional
+				Disclaimer of Warranty and Limitation of Liability available at
+				http://www.carewebframework.org/licensing/disclaimer.
+			</comments>
+		</license>
+	</licenses>
 
 	<properties>
 		<org.fujion.version>1.0.8</org.fujion.version>
