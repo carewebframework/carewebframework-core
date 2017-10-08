@@ -13,7 +13,6 @@
 	<modules>
 		<module>org.carewebframework.mvn.plugin.core</module>
 		<module>org.carewebframework.mvn.plugin.helpconverter</module>
-		<module>org.carewebframework.mvn.plugin.themegenerator</module>
 	</modules>
 	
 	<dependencyManagement>

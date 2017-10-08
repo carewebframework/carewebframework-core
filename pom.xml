@@ -50,7 +50,7 @@
 	</licenses>
 
 	<properties>
-		<org.fujion.version>1.0.8</org.fujion.version>
+		<org.fujion.version>1.0.10</org.fujion.version>
 		<org.springframework.version>4.3.10.RELEASE</org.springframework.version>
 		<org.springframework.security.version>4.2.3.RELEASE</org.springframework.security.version>
 		<org.thymeleaf.version>3.0.7.RELEASE</org.thymeleaf.version>
@@ -68,7 +68,6 @@
 		<module>org.carewebframework.api-parent</module>
 		<module>org.carewebframework.ui-parent</module>
 		<module>org.carewebframework.help-parent</module>
-		<module>org.carewebframework.theme-parent</module>
 		<module>org.carewebframework.shell</module>
 		<module>org.carewebframework.security-parent</module>
 		<module>org.carewebframework.messaging-parent</module>

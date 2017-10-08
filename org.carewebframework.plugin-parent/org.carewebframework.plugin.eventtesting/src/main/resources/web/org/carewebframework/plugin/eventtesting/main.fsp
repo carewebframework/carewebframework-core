@@ -13,7 +13,7 @@
 					<button name="btnSend" label="Send" class="size:btn-xs flavor:btn-success"/>
 					<div width="15px"/>
 				</toolbar>
-				<grid width="100%">
+				<grid>
 					<columns>
 						<column class="text-align:right"/>
 						<column class="text-align:left" flex="1"/>
@@ -33,7 +33,7 @@
 								<div height="30px"/>
 								<checkbox name="chkAutoGenerate" label="Auto generate"/>
 							</div>
-							<memobox name="tboxEventData" width="100%" height="300px"/>
+							<memobox name="tboxEventData" width="100%" height="200px"/>
 						</row>
 					</rows>
 				</grid>

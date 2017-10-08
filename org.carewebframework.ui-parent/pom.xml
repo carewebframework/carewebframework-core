@@ -17,6 +17,5 @@
 		<module>org.carewebframework.ui.test</module>
 		<module>org.carewebframework.ui.popupsupport</module>
 		<module>org.carewebframework.ui.sharedforms</module>
-		<module>org.carewebframework.ui.wonderbar</module>
 	</modules>
 </project>
