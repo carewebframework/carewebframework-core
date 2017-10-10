@@ -1,6 +1,3 @@
-#set( $symbol_pound = '#' )
-#set( $symbol_dollar = '$' )
-#set( $symbol_escape = '\' )
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
@@ -16,15 +13,10 @@
 	<beans profile="root">
 		
 		<!-- This is the sample definition for a CareWeb plugin -->
-		<cwp:plugin id="${cwpLCC}" name="${cwpName}" 
-			url="web/${packageInPathFormat}/${cwpLCC}.fsp">
+		<cwp:plugin id="${pluginId}" name="${pluginName}" 
+			url="web/${packageInPathFormat}/${pluginId}.fsp">
 			<cwp:resource>
-				<cwp:button-resource caption="${symbol_dollar}{labels.${cwpLC}.button.caption}" 
-					action='groovy:Messagebox.show("${symbol_dollar}{labels.${cwpLC}.button.click.msg}");'/>
-				<cwp:help-resource module="${cwpLCC}Help"/>
-				<cwp:menu-resource path="${symbol_dollar}{labels.${cwpLC}.menu.resource.path}" 
-					action='groovy:Messagebox.show("${symbol_dollar}{labels.${cwpLC}.menu.click.msg}");'/>
-				<cwp:property-resource group="${cwpLCC}PropGroupName"/>
+				<cwp:help-resource module="${pluginId}Help"/>
 			</cwp:resource>
 			<!-- You may specify plugin level security constraints here:
 			<cwp:security requiresAll="false">
@@ -36,12 +28,12 @@
 		
 	</beans>
 	
-<!-- This profile is processed for each managed desktop. -->
+<!-- This profile is processed for each managed page. -->
 
 	<beans profile="child">
 
-		<bean id="${cwpLCC}Controller" 
-			class="${package}.controller.${cwpUCC}Controller" 
+		<bean id="${pluginId}Controller" 
+			class="${package}.controller.${PluginId}Controller" 
 			scope="prototype"/>
 	
 	</beans>

@@ -1,5 +1,13 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+#set( $PLUGINID = $pluginId.toUpperCase() )
+#set( $pluginid = $pluginId.toLowerCase() )
+#set( $PluginId = $pluginId.substring(0,1).toUpperCase() + $pluginId.substring(1) )
+#set( $pluginId = $pluginId.substring(0,1).toLowerCase() + $pluginId.substring(1) )
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
@@ -12,13 +20,13 @@
 	<groupId>${groupId}</groupId>
 	<artifactId>${artifactId}</artifactId>
 	<version>${version}</version>
-	<name>${cwpName}</name>
+	<name>${pluginName}</name>
 	
 	<properties>
 		<!-- Uncomment and update these properties if your plugin has help content -->
-		<!-- <maven.carewebframework.help.moduleId>${cwpLC}Help</maven.carewebframework.help.moduleId> -->
-		<!-- <maven.carewebframework.help.moduleName>${cwpLCC} Help</maven.carewebframework.help.moduleName> -->
-		<!-- <maven.carewebframework.help.moduleSource>${cwpLCC}-help.jar</carewebframework.careweb.help.moduleSource> -->
+		<!-- <maven.carewebframework.help.moduleId>${pluginid}Help</maven.carewebframework.help.moduleId> -->
+		<!-- <maven.carewebframework.help.moduleName>${pluginId} Help</maven.carewebframework.help.moduleName> -->
+		<!-- <maven.carewebframework.help.moduleSource>${pluginId}-help.jar</carewebframework.careweb.help.moduleSource> -->
 		<!-- <maven.carewebframework.help.moduleFormat>javahelp</carewebframework.careweb.help.moduleFormat> -->
 	</properties>
 	
