@@ -830,32 +830,6 @@
 						</archive>
 					</configuration>
 				</plugin>
-				<plugin>
-					<groupId>org.carewebframework</groupId>
-					<artifactId>org.carewebframework.mvn.plugin.themegenerator</artifactId>
-					<version>6.0.0-SNAPSHOT</version>
-					<executions>
-						<execution>
-							<goals>
-								<goal>prepare</goal>
-							</goals>
-							<phase>prepare-package</phase>
-						</execution>
-					</executions>
-					<configuration>
-						<archive>
-							<manifestEntries>
-								<Implementation-Version>${project.version}.${buildNumber}
-								</Implementation-Version>
-								<Implementation-URL>${project.scm.url}</Implementation-URL>
-								<Implementation-Title>${project.name} Themes
-								</Implementation-Title>
-								<Implementation-Vendor>${project.organization.name}
-								</Implementation-Vendor>
-							</manifestEntries>
-						</archive>
-					</configuration>
-				</plugin>
 			</plugins>
 		</pluginManagement>
 
