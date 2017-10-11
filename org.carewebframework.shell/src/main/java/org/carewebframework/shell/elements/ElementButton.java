@@ -25,7 +25,7 @@
  */
 package org.carewebframework.shell.elements;
 
-import org.carewebframework.theme.ThemeUtil;
+import org.carewebframework.ui.util.ThemeUtil;
 import org.fujion.component.BaseLabeledComponent.LabelPositionHorz;
 import org.fujion.component.Hyperlink;
 

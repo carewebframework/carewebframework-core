@@ -27,7 +27,7 @@ package org.carewebframework.shell.elements;
 
 import org.carewebframework.shell.designer.PropertyEditorStepView;
 import org.carewebframework.shell.property.PropertyTypeRegistry;
-import org.carewebframework.theme.ThemeUtil;
+import org.carewebframework.ui.util.ThemeUtil;
 import org.fujion.annotation.EventHandler;
 import org.fujion.annotation.WiredComponent;
 import org.fujion.component.BaseComponent;
