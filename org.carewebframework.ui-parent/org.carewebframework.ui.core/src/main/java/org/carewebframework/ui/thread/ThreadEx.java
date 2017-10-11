@@ -7,15 +7,15 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  * This Source Code Form is also subject to the terms of the Health-Related
  * Additional Disclaimer of Warranty and Limitation of Liability available at
  *
@@ -33,6 +33,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.carewebframework.api.thread.IAbortable;
 import org.carewebframework.api.thread.ThreadUtil;
+import org.fujion.client.ExecutionContext;
 import org.fujion.component.BaseComponent;
 import org.fujion.component.Page;
 import org.fujion.event.Event;
@@ -59,7 +60,7 @@ public class ThreadEx implements IAbortable {
         
         /**
          * Run method
-         * 
+         *
          * @param thread The thread.
          * @throws Exception Unspecified exception.
          */
@@ -84,11 +85,14 @@ public class ThreadEx implements IAbortable {
         public void run() {
             watch.start();
             
-            try {
-                target.run(ThreadEx.this);
-            } catch (Throwable e) {
-                exception = e;
-            }
+            ExecutionContext.invoke(page.getId(), () -> {
+                try {
+                    target.run(ThreadEx.this);
+                } catch (Throwable e) {
+                    exception = e;
+                }
+            });
+
             watch.stop();
             ThreadEx.this.done();
         }
@@ -114,7 +118,7 @@ public class ThreadEx implements IAbortable {
     /**
      * Creates a thread for executing a background operation, using the default event name for
      * callback.
-     * 
+     *
      * @param target Target operation.
      * @param requester The component requesting the operation.
      */
@@ -124,7 +128,7 @@ public class ThreadEx implements IAbortable {
     
     /**
      * Creates a thread for executing a background operation.
-     * 
+     *
      * @param target Target operation.
      * @param requester The component requesting the operation.
      * @param eventName Name of the event used to notify requester of completion. When fired, the
@@ -162,7 +166,7 @@ public class ThreadEx implements IAbortable {
     
     /**
      * Returns true if the thread execution was aborted.
-     * 
+     *
      * @return boolean true if aborted
      */
     public boolean isAborted() {
@@ -184,7 +188,7 @@ public class ThreadEx implements IAbortable {
     
     /**
      * Returns the execution time in milliseconds of the thread.
-     * 
+     *
      * @return long elapsed
      */
     public long getElapsed() {
@@ -193,7 +197,7 @@ public class ThreadEx implements IAbortable {
     
     /**
      * Returns the named attribute associated with this thread object.
-     * 
+     *
      * @param name Name of the attribute.
      * @return Value of the attribute, or null if not found.
      */
@@ -205,7 +209,7 @@ public class ThreadEx implements IAbortable {
     
     /**
      * Sets the named attribute to the specified value.
-     * 
+     *
      * @param name Name of the attribute.
      * @param value Value to associate with the attribute.
      */
@@ -217,7 +221,7 @@ public class ThreadEx implements IAbortable {
     
     /**
      * Returns the exception thrown by the background thread, or null if there was none.
-     * 
+     *
      * @return Throwable
      */
     public Throwable getException() {
@@ -227,7 +231,7 @@ public class ThreadEx implements IAbortable {
     /**
      * Throws the saved exception in the current thread. If there is no saved exception, no action
      * is taken.
-     * 
+     *
      * @throws Throwable when exception was thrown via IRunnable target
      */
     public void rethrow() throws Throwable {
