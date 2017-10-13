@@ -14,7 +14,7 @@
 	
 	<function>
 		<name>getCookie</name>
-		<function-class>org.carewebframework.ui.FrameworkWebSupport</function-class>
+		<function-class>org.fujion.core.WebUtil</function-class>
 		<function-signature>java.lang.String getCookieValue(java.lang.String)</function-signature>
 		<description>
 			Gets a cookie.
