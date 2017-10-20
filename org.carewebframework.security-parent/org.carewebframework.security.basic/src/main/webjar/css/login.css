@@ -21,6 +21,7 @@
 }
 
 #cwf-title-img {
+	max-height: 90px;
 	padding: 5px;
 	float: left;
 	text-align: right;
