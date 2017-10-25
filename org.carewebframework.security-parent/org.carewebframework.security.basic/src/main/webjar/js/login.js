@@ -46,6 +46,7 @@ define('cwf-login', ['jquery', 'lodash', 'cwf-login-css', 'bootstrap-css'], func
 				return;
 			}
 			
+			$('#cwf-submit').prop('disabled', true);
 			var domain = $('#cwf-domain').val();
 			username = domain ? domain + '\\' + username : username;
 			$('#cwf-username-real').val(username);
