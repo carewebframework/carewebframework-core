@@ -40,7 +40,7 @@
 						<goals>
 							<goal>install-file</goal>
 						</goals>
-						<phase>install</phase>
+						<phase>validate</phase>
 						<configuration>
 							<groupId>com.oracle</groupId>
 							<artifactId>help-share</artifactId>

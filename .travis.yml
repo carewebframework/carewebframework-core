@@ -1,6 +1,8 @@
 language: java
 jdk:
 - oraclejdk8
+before_install:
+- mvn validate
 after_success:
 - chmod +x ./travis/deploy.sh
 - ./travis/deploy.sh
