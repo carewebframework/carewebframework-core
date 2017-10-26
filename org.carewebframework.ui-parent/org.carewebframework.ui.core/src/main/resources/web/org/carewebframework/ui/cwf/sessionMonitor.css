@@ -1,6 +1,7 @@
 .cwf-sessionmonitor {
 	position: fixed;
 	display: none;
+	overflow: hidden;
 	background: none;
 	z-index: 9999 !important;
 	top: 0;
