@@ -27,7 +27,6 @@ package org.carewebframework.shell.layout;
 
 import java.io.InputStream;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.ObjectUtils;
 import org.carewebframework.shell.ancillary.CWFException;
@@ -49,22 +48,22 @@ import org.w3c.dom.Node;
  * Parses an XML layout. A number of data sources are supported.
  */
 public class LayoutParser {
-
+    
     private static final LayoutParser instance = new LayoutParser();
-
+    
     private enum Tag {
         LAYOUT(false), ELEMENT(true), TRIGGER(true), CONDITION(false), ACTION(false);
-        
+
         private final boolean allowMultiple;
-        
+
         Tag(boolean allowMultiple) {
             this.allowMultiple = allowMultiple;
         }
-        
-    }
-    
-    private final Version newVersion = new Version("4.0");
 
+    }
+
+    private final Version newVersion = new Version("4.0");
+    
     /**
      * Loads a layout from the specified resource, using a registered layout loader or, failing
      * that, using the default loadFromUrl method.
@@ -74,26 +73,26 @@ public class LayoutParser {
      */
     public static Layout parseResource(String resource) {
         int i = resource.indexOf(":");
-        
+
         if (i > 0) {
             String loaderId = resource.substring(0, i);
             ILayoutLoader layoutLoader = LayoutLoaderRegistry.getInstance().get(loaderId);
-            
+
             if (layoutLoader != null) {
                 String name = resource.substring(i + 1);
                 return layoutLoader.loadLayout(name);
             }
         }
-        
-        InputStream strm = ExecutionContext.getSession().getServletContext().getResourceAsStream(resource);
 
+        InputStream strm = ExecutionContext.getSession().getServletContext().getResourceAsStream(resource);
+        
         if (strm == null) {
             throw new CWFException("Unable to locate layout resource: " + resource);
         }
-
+        
         return parseStream(strm);
     }
-    
+
     /**
      * Parse the layout from XML content.
      *
@@ -107,23 +106,21 @@ public class LayoutParser {
             throw MiscUtil.toUnchecked(e);
         }
     }
-    
+
     /**
      * Parse layout from an input stream.
      *
-     * @param strm The input stream.
+     * @param stream The input stream.
      * @return The root layout element.
      */
-    public static Layout parseStream(InputStream strm) {
-        try {
-            return parseDocument(XMLUtil.parseXMLFromStream(strm));
+    public static Layout parseStream(InputStream stream) {
+        try (InputStream is = stream) {
+            return parseDocument(XMLUtil.parseXMLFromStream(is));
         } catch (Exception e) {
             throw MiscUtil.toUnchecked(e);
-        } finally {
-            IOUtils.closeQuietly(strm);
         }
     }
-    
+
     /**
      * Parse the layout from a stored layout.
      *
@@ -133,7 +130,7 @@ public class LayoutParser {
     public static Layout parseProperty(LayoutIdentifier layoutId) {
         return parseText(LayoutUtil.getLayoutContent(layoutId));
     }
-
+    
     /**
      * Parse the layout associated with the specified application id.
      *
@@ -143,7 +140,7 @@ public class LayoutParser {
     public static Layout parseAppId(String appId) {
         return parseText(LayoutUtil.getLayoutContentByAppId(appId));
     }
-
+    
     /**
      * Parse the layout from an XML document.
      *
@@ -153,7 +150,7 @@ public class LayoutParser {
     public static Layout parseDocument(Document document) {
         return new Layout(instance.parseChildren(document, null, Tag.LAYOUT));
     }
-
+    
     /**
      * Parse the layout from the UI.
      *
@@ -163,109 +160,109 @@ public class LayoutParser {
     public static Layout parseElement(ElementBase root) {
         return new Layout(instance.parseUI(root));
     }
-
+    
     private LayoutParser() {
     }
-
+    
     private LayoutRoot parseChildren(Node parentNode, LayoutNode parent, Tag... tags) {
         Element node = getFirstChild(parentNode);
-
+        
         while (node != null) {
             Tag tag = getTag(node, tags);
-
+            
             switch (tag) {
                 case LAYOUT:
                     return parseLayout(node);
-
+                
                 case ELEMENT:
                     parseElement(node, (LayoutElement) parent);
                     break;
-
+                
                 case TRIGGER:
                     parseTrigger(node, (LayoutElement) parent);
                     break;
-                
+
                 case ACTION:
                     parseAction(node, (LayoutTrigger) parent);
                     break;
-                
+
                 case CONDITION:
                     parseCondition(node, (LayoutTrigger) parent);
                     break;
             }
-
+            
             node = getNextSibling(node);
         }
-
+        
         return null;
     }
-
+    
     private boolean isElementNode(Node node) {
         return node.getNodeType() == Node.ELEMENT_NODE;
     }
-
+    
     private Element getFirstChild(Node parent) {
         Node child = parent.getFirstChild();
         return child == null ? null : isElementNode(child) ? (Element) child : getNextSibling(child);
     }
-
+    
     private Element getNextSibling(Node node) {
         Node sib = node;
-
+        
         do {
             sib = sib.getNextSibling();
         } while (sib != null && !isElementNode(sib));
-        
+
         return (Element) sib;
     }
-
+    
     private LayoutRoot parseLayout(Element node) {
         LayoutRoot root = new LayoutRoot();
         LayoutUtil.copyAttributes(node, root.getAttributes());
         Version version = new Version(getRequiredAttribute(node, "version"));
-
+        
         if (version.compareTo(newVersion) >= 0) {
             parseChildren(node, root, Tag.ELEMENT);
         } else {
             parseLegacy(node, root);
         }
-        
+
         return root;
     }
-    
+
     private void parseLegacy(Element node, LayoutElement parent) {
         Element child = getFirstChild(node);
-        
+
         while (child != null) {
             LayoutElement ele = newLayoutElement(child, parent, child.getTagName());
             parseLegacy(child, ele);
             child = getNextSibling(child);
         }
-        
-    }
 
+    }
+    
     private LayoutElement newLayoutElement(Element node, LayoutElement parent, String type) {
         PluginDefinition pluginDefinition = getDefinition(type, node);
         LayoutElement layoutElement = new LayoutElement(pluginDefinition, parent);
-
+        
         if (node != null) {
             LayoutUtil.copyAttributes(node, layoutElement.getAttributes());
         }
-
+        
         return layoutElement;
     }
-
+    
     private PluginDefinition getDefinition(String type, Element node) {
         type = type != null ? type : getRequiredAttribute(node, "_type");
         PluginDefinition pluginDefinition = PluginRegistry.getInstance().get(type);
-        
+
         if (pluginDefinition == null) {
             throw new IllegalArgumentException("Unrecognized " + node.getTagName() + " type: " + type);
         }
-        
+
         return pluginDefinition;
     }
-    
+
     /**
      * Parse a layout element node.
      *
@@ -278,7 +275,7 @@ public class LayoutParser {
         parseChildren(node, layoutElement, Tag.ELEMENT, Tag.TRIGGER);
         return layoutElement;
     }
-    
+
     /**
      * Returns the value of the named attribute from a DOM node, throwing an exception if not found.
      *
@@ -288,14 +285,14 @@ public class LayoutParser {
      */
     private String getRequiredAttribute(Element node, String name) {
         String value = node.getAttribute(name);
-
+        
         if (value.isEmpty()) {
             throw new IllegalArgumentException("Missing " + name + " attribute on node: " + node.getTagName());
         }
-
+        
         return value;
     }
-
+    
     /**
      * Parse a trigger node.
      *
@@ -307,7 +304,7 @@ public class LayoutParser {
         parent.getTriggers().add(trigger);
         parseChildren(node, trigger, Tag.CONDITION, Tag.ACTION);
     }
-
+    
     /**
      * Parse a trigger condition node.
      *
@@ -317,7 +314,7 @@ public class LayoutParser {
     private void parseCondition(Element node, LayoutTrigger parent) {
         new LayoutTriggerCondition(parent, getDefinition(null, node));
     }
-
+    
     /**
      * Parse a trigger action node.
      *
@@ -327,7 +324,7 @@ public class LayoutParser {
     private void parseAction(Element node, LayoutTrigger parent) {
         new LayoutTriggerAction(parent, getDefinition(null, node));
     }
-
+    
     /**
      * Return and validate the tag type, throwing an exception if the tag is unknown or among the
      * allowable types.
@@ -339,43 +336,43 @@ public class LayoutParser {
     private Tag getTag(Element node, Tag... tags) {
         String name = node.getTagName();
         String error = null;
-
+        
         try {
             Tag tag = Tag.valueOf(name.toUpperCase());
             int i = ArrayUtils.indexOf(tags, tag);
-            
+
             if (i < 0) {
                 error = "Tag '%s' is not valid at this location";
             } else {
                 if (!tag.allowMultiple) {
                     tags[i] = null;
                 }
-                
+
                 return tag;
             }
         } catch (IllegalArgumentException e) {
             error = "Unrecognized tag '%s' in layout";
         }
-        
+
         throw new IllegalArgumentException(getInvalidTagError(error, name, tags));
     }
-    
+
     private String getInvalidTagError(String message, String tagName, Tag... tags) {
         message = String.format(message, tagName);
         StringBuilder sb = new StringBuilder();
         int tagCount = 0;
-        
+
         for (Tag tag : tags) {
             if (tag != null) {
                 sb.append(tagCount == 0 ? "" : ", ").append("'").append(tag.name().toLowerCase()).append("'");
                 tagCount++;
             }
         }
-        
+
         sb.insert(0, tagCount == 0 ? "no tags were expected" : tagCount == 1 ? "expected " : "expected one of ");
         return message + "; " + sb.toString();
     }
-
+    
     /**
      * Parse the layout from the UI element tree.
      *
@@ -384,15 +381,15 @@ public class LayoutParser {
      */
     private LayoutRoot parseUI(ElementBase root) {
         LayoutRoot ele = new LayoutRoot();
-        
+
         if (root instanceof ElementDesktop) {
             copyAttributes(root, ele);
         }
-        
+
         parseChildren(root, ele);
         return ele;
     }
-    
+
     private void parseChildren(ElementBase parentNode, LayoutElement parent) {
         for (ElementBase child : parentNode.getSerializableChildren()) {
             LayoutElement ele = new LayoutElement(child.getDefinition(), parent);
@@ -400,7 +397,7 @@ public class LayoutParser {
             parseChildren(child, ele);
         }
     }
-    
+
     /**
      * Copy attributes from a UI element to layout element.
      *
@@ -411,11 +408,11 @@ public class LayoutParser {
         for (PropertyInfo propInfo : src.getDefinition().getProperties()) {
             Object value = propInfo.isSerializable() ? propInfo.getPropertyValue(src) : null;
             String val = value == null ? null : propInfo.getPropertyType().getSerializer().serialize(value);
-
+            
             if (!ObjectUtils.equals(value, propInfo.getDefault())) {
                 dest.getAttributes().put(propInfo.getId(), val);
             }
         }
     }
-    
+
 }
