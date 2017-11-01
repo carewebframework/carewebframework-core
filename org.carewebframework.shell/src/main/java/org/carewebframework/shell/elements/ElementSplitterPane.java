@@ -31,65 +31,83 @@ import org.fujion.component.Pane;
  * A child of the ElementSplitterView.
  */
 public class ElementSplitterPane extends ElementUI {
-
+    
     static {
         registerAllowedParentClass(ElementSplitterPane.class, ElementSplitterView.class);
         registerAllowedChildClass(ElementSplitterPane.class, ElementUI.class, 1);
     }
-
+    
     private final Pane pane = new Pane();
-
+    
     private int size = 1;
-
+    
     private boolean relative = true;
+    
+    private boolean resizable = true;
 
     public ElementSplitterPane() {
         super();
-        pane.setSplittable(true);
+        setResizable(resizable);
         setOuterComponent(pane);
         updateSize(true);
     }
-
+    
+    public int getSize() {
+        return size;
+    }
+    
     public void setSize(int size) {
         this.size = size;
         updateSize();
     }
-
-    public int getSize() {
-        return size;
-    }
-
+    
     @Override
     public String getInstanceName() {
         return "Pane #" + (getParent().indexOfChild(this) + 1);
     }
-
+    
     public void setRelative(boolean relative) {
         this.relative = relative;
         updateSize();
     }
-
+    
     public boolean isRelative() {
         return relative;
     }
-
+    
     public String getCaption() {
         return pane.getTitle();
     }
-
+    
     public void setCaption(String caption) {
         pane.setTitle(caption);
     }
-
+    
     /*package*/ void updateSize(boolean isHorizontal) {
         pane.setFlex(relative ? Integer.toString(size) : null);
         pane.setHeight(relative || isHorizontal ? null : size + "px");
         pane.setWidth(relative || !isHorizontal ? null : size + "px");
     }
-
+    
     private void updateSize() {
         if (getParent() != null) {
             updateSize(((ElementSplitterView) getParent()).isHorizontal());
         }
     }
+    
+    public boolean isResizable() {
+        return resizable;
+    }
+    
+    public void setResizable(boolean resizable) {
+        this.resizable = resizable;
+        pane.setSplittable(resizable || isDesignMode());
+    }
+    
+    @Override
+    public void setDesignMode(boolean designMode) {
+        super.setDesignMode(designMode);
+        setResizable(resizable);
+    }
+    
 }

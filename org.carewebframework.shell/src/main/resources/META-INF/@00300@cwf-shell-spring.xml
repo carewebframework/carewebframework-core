@@ -198,6 +198,8 @@
 				</cwp:property>
 				<cwp:property id="size" type="integer" editable="false"
 					name="${@msg.cwf.shell.plugin.splitterpane.size.name}" description="${@msg.cwf.shell.plugin.splitterpane.size.description}" />
+				<cwp:property id="resizable" type="boolean" 
+					name="${@msg.cwf.shell.plugin.splitterpane.resizable.name}" description="${@msg.cwf.shell.plugin.splitterpane.resizable.description}" />
 			</cwp:serialization>
 		</cwp:plugin>
 
