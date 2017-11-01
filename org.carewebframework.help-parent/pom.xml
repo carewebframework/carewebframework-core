@@ -15,7 +15,7 @@
 		<module>org.carewebframework.help.core</module>
 		<module>org.carewebframework.help.lucene</module>
 		<module>org.carewebframework.help.javahelp</module>
-		<module>org.carewebframework.help.ohj-parent</module>
+		<module>org.carewebframework.help.ohj</module>
 		<module>org.carewebframework.help.chm</module>
 	</modules>
 </project>
