@@ -33,8 +33,8 @@ import org.carewebframework.api.security.ISecurityDomain;
 import org.carewebframework.api.security.ISecurityService;
 import org.carewebframework.api.security.SecurityDomainRegistry;
 import org.fujion.common.StrUtil;
-import org.fujion.client.WebJarLocator;
 import org.fujion.core.RequestUtil;
+import org.fujion.webjar.WebJarLocator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -45,10 +45,10 @@ import org.springframework.web.bind.annotation.GetMapping;
  */
 @Controller
 public class LoginController {
-
+    
     @Autowired
     private ISecurityService securityService;
-
+    
     @GetMapping(path = "security/login", produces = "text/html")
     public String login(ModelMap model, HttpServletRequest request) {
         Collection<ISecurityDomain> domains = SecurityDomainRegistry.getInstance().getAll();
@@ -59,11 +59,11 @@ public class LoginController {
         model.addAttribute("domains", domains);
         model.addAttribute("disabled", securityService.loginDisabled());
         model.addAttribute("action", "security/login");
-        
+
         String error = request.getParameter("error");
         model.addAttribute("error",
             error == null ? null : error.isEmpty() ? StrUtil.getLabel("security.login.error") : error);
         return "classpath:/web/org/carewebframework/security/basic/login.htm";
     }
-
+    
 }
