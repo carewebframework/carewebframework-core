@@ -1,0 +1,13 @@
+<fsp xmlns="http://www.fujion.org/schema/fsp"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:attr="http://www.fujion.org/schema/fsp/attr"
+    xmlns:on="http://www.fujion.org/schema/fsp/on"
+    xsi:schemaLocation="
+        http://www.fujion.org/schema/fsp 
+        http://www.fujion.org/schema/fsp.xsd">
+        
+    <page title="${displayName}"> 
+        	<label label="Welcome to CareWeb!"/>
+    </page>
+    
+</fsp>

@@ -12,5 +12,7 @@
 	
 	<modules>
 		<module>org.carewebframework.mvn.archetype.plugin</module>
+		<module>org.carewebframework.mvn.archetype.webapp</module>
+		<module>org.carewebframework.mvn.archetype.testharness</module>
 	</modules>
 </project>

@@ -1,0 +1,19 @@
+<layout name="TestHarness" title="Test Harness" version="4.0">
+	<element _type="_menubar" />
+	<element _type="_toolbar" />
+	<element _type="splitterview" orientation="vertical">
+		<element _type="splitterpane" size="47" relative="false">
+			<element _type="cwfUserHeader" />
+		</element>
+		<element _type="splitterpane" size="90" relative="true">
+			<element _type="tabview" orientation="top">
+				<element _type="tabpane" label="Test Harness">
+					<element _type="treeview" caption="Plugins:" open="true" />
+				</element>
+			</element>
+		</element>
+		<element _type="splitterpane" size="17" relative="false">
+			<element _type="cwfStatusPanel" />
+		</element>
+	</element>
+</layout>

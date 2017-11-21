@@ -1,5 +1,6 @@
 <?taglib uri="http://www.carewebframework.org/tld/security" prefix="sec"?>
 <?taglib uri="http://www.carewebframework.org/tld/core" prefix="rc"?>
 
-	<div controller="${symbol_dollar}{${pluginId}Controller}">
+	<div controller="${symbol_dollar}{@${pluginId}Controller}">
+		<label label="Hello World!"/>
 	</div>
