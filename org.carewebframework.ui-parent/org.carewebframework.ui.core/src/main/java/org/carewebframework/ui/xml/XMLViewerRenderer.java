@@ -37,7 +37,7 @@ import org.w3c.dom.Node;
  * Renderer for xml tree.
  */
 class XMLViewerRenderer implements IComponentRenderer<Treenode, Node> {
-    
+
     /**
      * Open event listener for tree items in XML viewer.
      */
@@ -45,50 +45,45 @@ class XMLViewerRenderer implements IComponentRenderer<Treenode, Node> {
         Treenode tnode = (Treenode) event.getTarget();
         boolean open = !tnode.isCollapsed();
         Treenode sib = (Treenode) tnode.getNextSibling();
-
-        if (sib != null) {
+        
+        if (sib != null && sib.hasAttribute("closing")) {
             sib.setVisible(open);
         }
     };
-    
+
     @Override
     public Treenode render(Node node) {
         Treenode tnode = new Treenode();
-        
+
         if (node.getNodeType() == Node.TEXT_NODE) {
             setLabel(tnode, node.getNodeValue(), XMLConstants.STYLE_CONTENT);
-            return tnode;
-        }
-        
-        if (node.getNodeType() == Node.COMMENT_NODE) {
+        } else if (node.getNodeType() == Node.COMMENT_NODE) {
             setLabel(tnode, "<!--" + node.getNodeValue() + "-->", XMLConstants.STYLE_COMMENT);
-            return tnode;
-        }
-
-        if (node.getParentNode() == null) { // Closing tag
+        } else if (node.getParentNode() == null) { // Closing tag
+            tnode.setAttribute("closing", true);
             setLabel(tnode, XMLUtil.formatNodeName(node, TagFormat.CLOSING), XMLConstants.STYLE_TAG);
-            return tnode;
-        }
-        
-        boolean leaf = !node.hasChildNodes();
-        String label = "<" + node.getNodeName();
-        NamedNodeMap attrs = node.getAttributes();
-        
-        if (attrs != null) {
-            for (int i = 0; i < attrs.getLength(); i++) {
-                Node attr = attrs.item(i);
-                label += " " + attr.getNodeName() + "='" + attr.getNodeValue() + "'";
+        } else {
+            boolean leaf = !node.hasChildNodes();
+            String label = "<" + node.getNodeName();
+            NamedNodeMap attrs = node.getAttributes();
+
+            if (attrs != null) {
+                for (int i = 0; i < attrs.getLength(); i++) {
+                    Node attr = attrs.item(i);
+                    label += " " + attr.getNodeName() + "='" + attr.getNodeValue() + "'";
+                }
             }
+
+            setLabel(tnode, label + (leaf ? " />" : ">"), XMLConstants.STYLE_TAG);
+            tnode.addEventListener("toggle", nodeListener);
         }
         
-        setLabel(tnode, label + (leaf ? " />" : ">"), XMLConstants.STYLE_TAG);
-        tnode.addEventListener("toggle", nodeListener);
         return tnode;
     }
-    
+
     private void setLabel(Treenode node, String text, String sclass) {
         node.setLabel(text);
         node.addClass(sclass);
     }
-    
+
 }

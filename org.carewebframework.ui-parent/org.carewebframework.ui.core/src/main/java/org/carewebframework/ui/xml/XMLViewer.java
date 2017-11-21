@@ -25,7 +25,7 @@
  */
 package org.carewebframework.ui.xml;
 
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.Map;
 
 import org.carewebframework.ui.dialog.PopupDialog;
@@ -38,7 +38,7 @@ import org.w3c.dom.Document;
  * Static utility class for XML viewing functions.
  */
 public class XMLViewer {
-    
+
     /**
      * Show the dialog, loading the specified document.
      *
@@ -48,7 +48,7 @@ public class XMLViewer {
     public static Window showXML(Document document) {
         return showXML(document, null);
     }
-    
+
     /**
      * Show the dialog, loading the specified document.
      *
@@ -57,18 +57,17 @@ public class XMLViewer {
      * @return The dialog.
      */
     public static Window showXML(Document document, BaseUIComponent parent) {
-        Map<String, Object> args = new HashMap<>();
-        args.put("document", document);
+        Map<String, Object> args = Collections.singletonMap("document", document);
         boolean modal = parent == null;
         Window dialog = PopupDialog.show(XMLConstants.VIEW_DIALOG, args, modal, modal, modal, null);
-
+        
         if (parent != null) {
             dialog.setParent(parent);
         }
-
+        
         return dialog;
     }
-    
+
     /**
      * Display the CWF markup for the component tree rooted at root.
      *
@@ -77,9 +76,9 @@ public class XMLViewer {
      */
     public static Window showCWF(BaseComponent root) {
         return showCWF(root, XMLConstants.EXCLUDED_PROPERTIES);
-        
+
     }
-    
+
     /**
      * Display the CWF markup for the component tree rooted at root.
      *
@@ -92,7 +91,7 @@ public class XMLViewer {
         window.setTitle("CWF Markup");
         return window;
     }
-    
+
     /**
      * Enforce static class.
      */
