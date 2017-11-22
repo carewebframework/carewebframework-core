@@ -32,6 +32,10 @@
 			<constructor-arg value="${org.carewebframework.location.shortcuts}" />
 		</bean>
 
+		<!-- Theme support -->
+		
+		<bean class="org.carewebframework.ui.spring.PropertyThemeResolver" />
+		
 		<!-- Default controller for framework-aware applications. -->
 		
 		<bean id="frameworkController" class="org.carewebframework.ui.controller.FrameworkController"
