@@ -246,7 +246,7 @@
 }
 
 *.cwf-designmode-active {
-	outline: 1px dotted gray;
+	outline: 2px dotted lightgray;
 	position: relative;
 }
 

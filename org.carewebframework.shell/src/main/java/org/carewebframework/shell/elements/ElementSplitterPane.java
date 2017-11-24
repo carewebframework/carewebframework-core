@@ -26,6 +26,7 @@
 package org.carewebframework.shell.elements;
 
 import org.fujion.component.Pane;
+import org.fujion.event.ResizeEvent;
 
 /**
  * A child of the ElementSplitterView.
@@ -39,24 +40,27 @@ public class ElementSplitterPane extends ElementUI {
     
     private final Pane pane = new Pane();
     
-    private int size = 1;
+    private double size = 100.0;
     
     private boolean relative = true;
     
     private boolean resizable = true;
-
+    
     public ElementSplitterPane() {
         super();
         setResizable(resizable);
         setOuterComponent(pane);
+        pane.addEventListener("resize", (event) -> {
+            resize((ResizeEvent) event);
+        });
         updateSize(true);
     }
     
-    public int getSize() {
+    public double getSize() {
         return size;
     }
     
-    public void setSize(int size) {
+    public void setSize(double size) {
         this.size = size;
         updateSize();
     }
@@ -84,17 +88,27 @@ public class ElementSplitterPane extends ElementUI {
     }
     
     /*package*/ void updateSize(boolean isHorizontal) {
-        pane.setFlex(relative ? Integer.toString(size) : null);
-        pane.setHeight(relative || isHorizontal ? null : size + "px");
-        pane.setWidth(relative || !isHorizontal ? null : size + "px");
+        pane.setFlex(!isDesignMode() && relative ? Double.toString(size) : null);
+        pane.setHeight(isHorizontal ? null : size + "px");
+        pane.setWidth(!isHorizontal ? null : size + "px");
     }
     
+    private void resize(ResizeEvent event) {
+        if (getParent() != null) {
+            size = isHorizontal() ? event.getWidth() : event.getHeight();
+        }
+    }
+
     private void updateSize() {
         if (getParent() != null) {
-            updateSize(((ElementSplitterView) getParent()).isHorizontal());
+            updateSize(isHorizontal());
         }
     }
     
+    private boolean isHorizontal() {
+        return getParent() != null && ((ElementSplitterView) getParent()).isHorizontal();
+    }
+
     public boolean isResizable() {
         return resizable;
     }
@@ -108,6 +122,7 @@ public class ElementSplitterPane extends ElementUI {
     public void setDesignMode(boolean designMode) {
         super.setDesignMode(designMode);
         setResizable(resizable);
+        updateSize();
     }
     
 }
