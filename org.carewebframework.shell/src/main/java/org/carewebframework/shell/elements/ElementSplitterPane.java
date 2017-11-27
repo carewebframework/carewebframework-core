@@ -93,18 +93,19 @@ public class ElementSplitterPane extends ElementUI {
         pane.setWidth(!isHorizontal ? null : size + "px");
     }
     
-    private void resize(ResizeEvent event) {
-        if (getParent() != null) {
-            size = isHorizontal() ? event.getWidth() : event.getHeight();
-        }
-    }
-
     private void updateSize() {
         if (getParent() != null) {
             updateSize(isHorizontal());
         }
     }
     
+    private void resize(ResizeEvent event) {
+        if (getParent() != null) {
+            size = isHorizontal() ? event.getWidth() : event.getHeight();
+            updateSize();
+        }
+    }
+
     private boolean isHorizontal() {
         return getParent() != null && ((ElementSplitterView) getParent()).isHorizontal();
     }
@@ -122,7 +123,7 @@ public class ElementSplitterPane extends ElementUI {
     public void setDesignMode(boolean designMode) {
         super.setDesignMode(designMode);
         setResizable(resizable);
-        updateSize();
+        pane.invoke("reportSize");
     }
     
 }

@@ -50,7 +50,7 @@
 	</licenses>
 
 	<properties>
-		<org.fujion.version>1.1.0</org.fujion.version>
+		<org.fujion.version>1.1.2</org.fujion.version>
 		<org.thymeleaf.version>3.0.8.RELEASE</org.thymeleaf.version>
 		<org.springframework.security.version>4.2.3.RELEASE</org.springframework.security.version>
 		<node.version>v7.9.0</node.version>
