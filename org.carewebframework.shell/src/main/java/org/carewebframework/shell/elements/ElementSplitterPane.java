@@ -25,6 +25,7 @@
  */
 package org.carewebframework.shell.elements;
 
+import org.apache.commons.lang.StringUtils;
 import org.fujion.component.Pane;
 import org.fujion.event.ResizeEvent;
 
@@ -32,20 +33,20 @@ import org.fujion.event.ResizeEvent;
  * A child of the ElementSplitterView.
  */
 public class ElementSplitterPane extends ElementUI {
-    
+
     static {
         registerAllowedParentClass(ElementSplitterPane.class, ElementSplitterView.class);
         registerAllowedChildClass(ElementSplitterPane.class, ElementUI.class, 1);
     }
-    
+
     private final Pane pane = new Pane();
-    
+
     private double size = 100.0;
-    
+
     private boolean relative = true;
-    
+
     private boolean resizable = true;
-    
+
     public ElementSplitterPane() {
         super();
         setResizable(resizable);
@@ -55,75 +56,76 @@ public class ElementSplitterPane extends ElementUI {
         });
         updateSize(true);
     }
-    
+
     public double getSize() {
         return size;
     }
-    
+
     public void setSize(double size) {
         this.size = size;
         updateSize();
     }
-    
+
     @Override
     public String getInstanceName() {
         return "Pane #" + (getParent().indexOfChild(this) + 1);
     }
-    
+
     public void setRelative(boolean relative) {
         this.relative = relative;
         updateSize();
     }
-    
+
     public boolean isRelative() {
         return relative;
     }
-    
+
     public String getCaption() {
         return pane.getTitle();
     }
-    
+
     public void setCaption(String caption) {
         pane.setTitle(caption);
     }
-    
+
     /*package*/ void updateSize(boolean isHorizontal) {
-        pane.setFlex(!isDesignMode() && relative ? Double.toString(size) : null);
-        pane.setHeight(isHorizontal ? null : size + "px");
-        pane.setWidth(!isHorizontal ? null : size + "px");
+        String sz = StringUtils.removeEnd(Double.toString(size), ".0");
+        pane.setFlex(!isDesignMode() && relative ? sz : null);
+        pane.setHeight(isHorizontal ? null : sz + "px");
+        pane.setWidth(!isHorizontal ? null : sz + "px");
     }
-    
+
     private void updateSize() {
         if (getParent() != null) {
             updateSize(isHorizontal());
         }
     }
-    
+
     private void resize(ResizeEvent event) {
         if (getParent() != null) {
             size = isHorizontal() ? event.getWidth() : event.getHeight();
             updateSize();
         }
     }
-
+    
     private boolean isHorizontal() {
         return getParent() != null && ((ElementSplitterView) getParent()).isHorizontal();
     }
-
+    
     public boolean isResizable() {
         return resizable;
     }
-    
+
     public void setResizable(boolean resizable) {
         this.resizable = resizable;
         pane.setSplittable(resizable || isDesignMode());
     }
-    
+
     @Override
     public void setDesignMode(boolean designMode) {
         super.setDesignMode(designMode);
         setResizable(resizable);
         pane.invoke("reportSize");
     }
-    
+
 }
