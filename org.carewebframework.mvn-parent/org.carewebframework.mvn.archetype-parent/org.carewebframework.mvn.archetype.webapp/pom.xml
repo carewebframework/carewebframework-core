@@ -31,7 +31,7 @@
 		<resources>
 			<!-- copy all -->
 			<resource>
-				<directory>src\main\resources</directory>
+				<directory>src/main/resources</directory>
 			</resource>
 			<!-- filter archetype-metadata.xml -->
 			<resource>
