@@ -3,7 +3,7 @@
 
 	<groupId>org.carewebframework</groupId>
 	<artifactId>org.carewebframework-parent</artifactId>
-	<version>6.0.1-SNAPSHOT</version>
+	<version>6.1.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>CareWeb Framework Root POM</name>
 	<description>CareWeb Framework Root POM</description>
@@ -640,7 +640,7 @@
 				<plugin>
 					<groupId>org.carewebframework</groupId>
 					<artifactId>org.carewebframework.mvn.plugin.helpconverter</artifactId>
-					<version>6.0.1-SNAPSHOT</version>
+					<version>6.1.0-SNAPSHOT</version>
 					<executions>
 						<execution>
 							<goals>
