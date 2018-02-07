@@ -19,5 +19,4 @@
 		<toolbar name="toolbar1" alignment="end" />
 	</div>
 	<div name="desktopInner" class="panel-body" />
-	<style src="web/org/carewebframework/shell/careweb.css" />
 </div>

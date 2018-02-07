@@ -1,6 +1,6 @@
-
-<window closable="true" controller="org.carewebframework.ui.dialog.InputDialog">
-	<div class="cwf_inputdialog">
+<window closable="true" class="cwf-inputdialog"
+	controller="org.carewebframework.ui.dialog.InputDialog">
+	<div>
 		<cell name="prompt"/>
 		<textbox name="textbox" synchronized="true" focus="true"/>
 	</div>
@@ -9,21 +9,4 @@
 		<button name="btnOK" label="${@msg.cwf.btn.ok.label}" class="flavor:btn-success"
 			disabled="true"/>
 	</toolbar>
-	
-	<style>
-		.cwf_inputdialog {
-			text-align: center;
-		}
-		
-		.cwf_inputdialog > .fujion_cell {
-			display: block;
-			white-space: pre-wrap;
-		}
-		
-		.cwf_inputdialog > .fujion_textbox {
-			width: 200pt;
-			margin: 5px 0 5px;
-		}
-	</style>
-	
 </window>

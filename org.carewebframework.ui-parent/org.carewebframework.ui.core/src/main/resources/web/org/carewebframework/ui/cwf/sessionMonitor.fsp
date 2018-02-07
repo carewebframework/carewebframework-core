@@ -1,6 +1,5 @@
 <div class="cwf-sessionmonitor fujion-layout-vertical" visible="false"
 	controller="${@sessionMonitorController}">
-	<style src="web/org/carewebframework/ui/cwf/sessionMonitor.css"/>
 	<timer name="timer" />
 	<div name="timeoutPanel" class="cwf-sessionmonitor-countdown-panel alert">
 		<label name="lblDuration" class="alert-link"/>

@@ -10,6 +10,17 @@
 	<artifactId>org.carewebframework.shell</artifactId>
 	<name>CWF Shell</name>
 
+	<properties>
+		<webjar.name>cwf-shell</webjar.name>
+        <systemjs>
+        {	'map': {
+				'cwf-shell': 'js/cwf-shell',
+				'cwf-shell-css': 'css/cwf-shell'
+			}
+		}
+        </systemjs>
+	</properties>
+
 	<build>
 		<plugins>
 			<plugin>

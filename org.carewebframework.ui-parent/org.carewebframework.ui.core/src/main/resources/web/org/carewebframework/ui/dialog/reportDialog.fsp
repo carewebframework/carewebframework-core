@@ -1,7 +1,7 @@
 
 <window class="flavor:panel-primary"
 	controller="org.carewebframework.ui.dialog.ReportDialog">
-	<paneview class="cwf_reportdialog" orientation="vertical">
+	<paneview class="cwf-reportdialog" orientation="vertical">
 		<pane name="printRoot">
 			<cell name="cmpText" />
 			<html name="cmpHtml" />
@@ -16,23 +16,4 @@
 			</toolbar>
 		</pane>
 	</paneview>
-	
-	<style>
-		.cwf_reportdialog {
-			height: 100%;
-			width: 100%;
-		}
-		
-		.cwf_reportdialog > .fujion_pane:first-child {
-			flex: 1;
-			overflow: auto;
-			max-height: 400px;
-			font-family: monospace; 
-			white-space: pre;
-		}
-		
-		.cwf_reportdialog .fujion_toolbar {
-			border: none;
-		}
-	</style>
 </window>

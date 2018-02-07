@@ -1,6 +1,7 @@
 
-<window closable="true" controller="org.carewebframework.ui.dialog.PromptDialog">
-	<span class="cwf_promptdialog">
+<window closable="true" class="cwf-promptdialog"
+	controller="org.carewebframework.ui.dialog.PromptDialog">
+	<span>
 		<span name="icon" class="glyphicon" />
 		<cell name="message" />
 		<div>
@@ -10,23 +11,4 @@
 		</div>
 	</span>
 	<toolbar name="toolbar" alignment="center" width="100%" />
-	<style>
-		.cwf_promptdialog > .glyphicon {
-			float: left;
-			margin: 0 10px 10px;
-			cursor: default;
-			font-size: 26px;
-			background: transparent;
-		}
-		
-		.cwf_promptdialog > div:first-of-type {
-			white-space: pre-wrap;
-		}
-		
-		.cwf_promptdialog > div:last-of-type {
-			clear: both;
-			margin: 10px 0 5px 0;
-			text-align: center;
-		}
-	</style>
 </window>

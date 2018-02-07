@@ -11,6 +11,17 @@
 	<artifactId>org.carewebframework.ui.core</artifactId>
 	<name>CWF UI Core Support</name>
 
+	<properties>
+		<webjar.name>cwf-core</webjar.name>
+        <systemjs>
+        {	'map': {
+				'cwf-core': 'js/cwf-core',
+				'cwf-core-css': 'css/cwf-core'
+			}
+		}
+        </systemjs>
+	</properties>
+
 	<dependencies>
 		<!-- CareWeb Framework -->
 		<dependency>

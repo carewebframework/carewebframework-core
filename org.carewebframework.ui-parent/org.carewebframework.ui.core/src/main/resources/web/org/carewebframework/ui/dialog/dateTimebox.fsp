@@ -1,6 +1,6 @@
 <popupbox impl="org.carewebframework.ui.dialog.DateTimebox" controller="self">
 	<popup name="popup">
-		<grid class="cwf_datetimebox" width="350px">
+		<grid class="cwf-datetimebox" width="350px">
 			<rows>
 				<row>
 					<datebox name="datebox" />
@@ -24,27 +24,5 @@
 				</row>
 			</rows>
 		</grid>
-		
-		<style>
-			.cwf_datetimebox {
-				border: 1px solid lightgray;
-				border-radius: 6px;
-			}
-			
-			.cwf_datetimebox td {
-				text-align: center;
-			}
-			
-			.cwf_datetimebox .fujion_div {
-				display: flex;
-				width: 100%;
-			}
-			
-			.cwf_datetimebox a,
-			.cwf_datetimebox button {
-				flex: 1;
-			}
-		</style>
 	</popup>
-	
 </popupbox>

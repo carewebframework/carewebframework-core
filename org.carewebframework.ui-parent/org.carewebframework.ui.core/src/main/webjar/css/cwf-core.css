@@ -1,3 +1,83 @@
+.cwf-promptdialog {
+	max-height: 75%;
+	max-width: 50%;
+}
+
+.cwf-promptdialog > span > .glyphicon {
+	float: left;
+	margin: 0 10px 10px;
+	cursor: default;
+	font-size: 26px;
+	background: transparent;
+}
+
+.cwf-promptdialog > span > div:first-of-type {
+	white-space: pre-wrap;
+}
+
+.cwf-promptdialog > span > div:last-of-type {
+	clear: both;
+	margin: 10px 0 5px 0;
+	text-align: center;
+}
+
+.cwf-inputdialog {
+	max-width: 50%;
+	max-height: 75%;
+}
+
+.cwf-inputdialog > div {
+	text-align: center;
+}
+
+.cwf-inputdialog .fujion_cell {
+	display: block;
+	white-space: pre-wrap;
+}
+
+.cwf-inputdialog .fujion_textbox {
+	width: 200pt;
+	margin: 5px 0 5px;
+}
+
+
+.cwf-reportdialog {
+	height: 100%;
+	width: 100%;
+}
+
+.cwf-reportdialog > .fujion_pane:first-child {
+	flex: 1;
+	overflow: auto;
+	max-height: 400px;
+	font-family: monospace; 
+	white-space: pre;
+}
+
+.cwf-reportdialog .fujion_toolbar {
+	border: none;
+}
+
+.cwf-xml-tag > a {
+	color: black;
+}
+
+.cwf-xml-attrname {
+	color: red;
+}
+
+.cwf-xml-attrvalue {
+	color: green;
+}
+
+.cwf-xml-content > a {
+	color: blue;
+}
+
+.cwf-xml-comment > a {
+	color: lightgray;
+}
+
 .cwf-sessionmonitor {
 	position: fixed;
 	display: none;
@@ -36,7 +116,7 @@
     display: none;
 }
 
-.cwf-sessionmonitor-lock-panel .cwf_toolbar {
+.cwf-sessionmonitor-lock-panel .cwf-toolbar {
 	border: none;
 }
 
@@ -105,4 +185,33 @@
 	display: none;
 }
 
+.cwf-daterangedialog .fujion_div {
+	display: flex;
+	width: 100%;
+	overflow: hidden;
+}
+.cwf-daterangedialog .fujion_datebox {
+	flex: 1;
+}
+.cwf-daterangedialog .glyphicon {
+	margin-top: 3px;
+}
 
+.cwf-datetimebox {
+	border: 1px solid lightgray;
+	border-radius: 6px;
+}
+
+.cwf-datetimebox td {
+	text-align: center;
+}
+
+.cwf-datetimebox .fujion_div {
+	display: flex;
+	width: 100%;
+}
+
+.cwf-datetimebox a,
+.cwf-datetimebox button {
+	flex: 1;
+}

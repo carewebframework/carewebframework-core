@@ -1,5 +1,5 @@
 <window title="${@msg.cwf.date.range.win.title}" width="200px"
-	class="cwf_daterangedialog"
+	class="cwf-daterangedialog"
 	controller="org.carewebframework.ui.dialog.DateRangeDialog">
 	<label class="flavor:label-info"
 		label="${@msg.cwf.date.range.start.date.label}" />
@@ -25,17 +25,4 @@
 		<button name="btnCancel" class="flavor:btn-danger"
 			label="${@msg.cwf.date.range.btn.cancel.label}" />
 	</toolbar>
-	<style>
-		.cwf_daterangedialog .fujion_div {
-			display: flex;
-			width: 100%;
-			overflow: hidden;
-		}
-		.cwf_daterangedialog .cwf_datebox {
-			flex: 1;
-		}
-		.cwf_daterangedialog .glyphicon {
-			margin-top: 3px;
-		}
-	</style>
 </window>
