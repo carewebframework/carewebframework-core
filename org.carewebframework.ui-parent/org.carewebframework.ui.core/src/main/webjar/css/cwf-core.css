@@ -1,3 +1,7 @@
+@CHARSET "UTF-8";
+
+/* Prompt Dialog */
+
 .cwf-promptdialog {
 	max-height: 75%;
 	max-width: 50%;
@@ -21,6 +25,8 @@
 	text-align: center;
 }
 
+/* Input Dialog */
+
 .cwf-inputdialog {
 	max-width: 50%;
 	max-height: 75%;
@@ -41,6 +47,8 @@
 }
 
 
+/* Report Dialog */
+
 .cwf-reportdialog {
 	height: 100%;
 	width: 100%;
@@ -57,6 +65,8 @@
 .cwf-reportdialog .fujion_toolbar {
 	border: none;
 }
+
+/* XML Viewer */
 
 .cwf-xml-tag > a {
 	color: black;
@@ -77,6 +87,8 @@
 .cwf-xml-comment > a {
 	color: lightgray;
 }
+
+/* Session Monitor */
 
 .cwf-sessionmonitor {
 	position: fixed;
@@ -185,6 +197,8 @@
 	display: none;
 }
 
+/* Date Range Dialog */
+
 .cwf-daterangedialog .fujion_div {
 	display: flex;
 	width: 100%;
@@ -196,6 +210,8 @@
 .cwf-daterangedialog .glyphicon {
 	margin-top: 3px;
 }
+
+/* Date Time Box */
 
 .cwf-datetimebox {
 	border: 1px solid lightgray;
@@ -215,3 +231,4 @@
 .cwf-datetimebox button {
 	flex: 1;
 }
+
