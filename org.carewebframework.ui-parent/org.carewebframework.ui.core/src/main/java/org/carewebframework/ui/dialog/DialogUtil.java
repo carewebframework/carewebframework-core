@@ -35,7 +35,7 @@ public class DialogUtil {
      * @param callback Callback to receive dialog response.
      */
     public static void confirm(String message, IConfirmCallback callback) {
-        confirm(message, "@fujion.prompt.confirm.title", callback);
+        confirm(message, "@cwf.prompt.confirm.title", callback);
     }
     
     /**
@@ -103,7 +103,7 @@ public class DialogUtil {
      * @param message Text message
      */
     public static void showInfo(String message) {
-        showInfo(message, "@fujion.prompt.info.title");
+        showInfo(message, "@cwf.prompt.info.title");
     }
     
     /**
@@ -122,7 +122,7 @@ public class DialogUtil {
      * @param message Text message
      */
     public static void showWarning(String message) {
-        showWarning(message, "@fujion.prompt.warning.title");
+        showWarning(message, "@cwf.prompt.warning.title");
     }
     
     /**
@@ -141,7 +141,7 @@ public class DialogUtil {
      * @param message Text message
      */
     public static void showError(String message) {
-        showError(message, "@fujion.prompt.error.title");
+        showError(message, "@cwf.prompt.error.title");
     }
     
     /**
