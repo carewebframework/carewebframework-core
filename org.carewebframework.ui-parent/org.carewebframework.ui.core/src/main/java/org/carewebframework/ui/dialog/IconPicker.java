@@ -23,7 +23,7 @@
  *
  * #L%
  */
-package org.carewebframework.ui.icon;
+package org.carewebframework.ui.dialog;
 
 import java.util.List;
 
@@ -37,117 +37,119 @@ import org.fujion.component.ImagePicker;
 import org.fujion.component.ImagePicker.ImagePickeritem;
 import org.fujion.component.Namespace;
 import org.fujion.event.ChangeEvent;
+import org.fujion.icon.IIconLibrary;
+import org.fujion.icon.IconLibraryRegistry;
 import org.fujion.page.PageUtil;
 
 /**
  * Extends the icon picker by adding the ability to pick an icon library from which to choose.
  */
 public class IconPicker extends Namespace {
-
+    
     private final IconLibraryRegistry iconRegistry = IconLibraryRegistry.getInstance();
-
+    
     @WiredComponent
     private Combobox cboLibrary;
-
+    
     @WiredComponent
     private ImagePicker imgPicker;
-    
+
     private IIconLibrary iconLibrary;
-    
+
     private boolean selectorVisible;
-
+    
     private String dimensions = "16x16";
-
+    
     public IconPicker() {
         addStyle("overflow", "visible");
         addStyle("display", "inline-block");
         PageUtil.createPage(Constants.RESOURCE_PREFIX + "cwf/iconPicker.fsp", this);
         wireController(this);
-
+        
         for (IIconLibrary lib : iconRegistry) {
             Comboitem item = new Comboitem(lib.getId());
             item.setData(lib);
             cboLibrary.addChild(item);
         }
-
+        
         setSelectorVisible(true);
     }
-
+    
     public IIconLibrary getIconLibrary() {
         return iconLibrary;
     }
-
+    
     public void setIconLibrary(String iconLibrary) {
         setIconLibrary(iconRegistry.get(iconLibrary));
     }
-
+    
     public void setIconLibrary(IIconLibrary iconLibrary) {
         this.iconLibrary = iconLibrary;
         Comboitem item = (Comboitem) cboLibrary.findChildByData(iconLibrary);
-
+        
         if (item != null) {
             cboLibrary.setSelectedItem(item);
             libraryChanged();
         }
     }
-
+    
     public String getDimensions() {
         return dimensions;
     }
-
+    
     public void setDimensions(String dimensions) {
         this.dimensions = dimensions;
     }
-
+    
     public boolean isSelectorVisible() {
         return selectorVisible;
     }
-
+    
     public void setSelectorVisible(boolean visible) {
         selectorVisible = visible;
         cboLibrary.setVisible(visible && cboLibrary.getChildCount() > 1);
     }
-
+    
     public String getValue() {
         return imgPicker.getValue();
     }
-
+    
     public void setValue(String value) {
         imgPicker.setValue(value);
     }
-
+    
     public ImagePicker getImagePicker() {
         return imgPicker;
     }
-
+    
     private void libraryChanged() {
         imgPicker.clear();
         imgPicker.destroyChildren();
         imgPicker.addChild(new ImagePickeritem());
-
+        
         for (String lib : iconLibrary.getMatching("*", dimensions)) {
             imgPicker.addChild(new ImagePickeritem(lib));
         }
-        
+
         fireEvent(ChangeEvent.TYPE);
     }
-
+    
     public void addIconByUrl(String url) {
         ImagePickeritem item = new ImagePickeritem(url);
         imgPicker.addChild(item);
     }
-
+    
     public void addIconsByUrl(List<String> urls) {
         for (String url : urls) {
             addIconByUrl(url);
         }
     }
-
+    
     @EventHandler(value = "change", target = "@imgPicker", onFailure = OnFailure.IGNORE)
     private void onChange$imgPicker(ChangeEvent event) {
         fireEvent(event);
     }
-
+    
     @EventHandler(value = "change", target = "@cboLibrary", onFailure = OnFailure.IGNORE)
     private void onChange$cboLibrary() {
         iconLibrary = (IIconLibrary) cboLibrary.getSelectedItem().getData();

@@ -50,15 +50,16 @@
 	</licenses>
 
 	<properties>
-		<org.fujion.version>1.1.6</org.fujion.version>
-		<org.thymeleaf.version>3.0.8.RELEASE</org.thymeleaf.version>
-		<org.springframework.security.version>4.2.3.RELEASE</org.springframework.security.version>
+		<org.fujion.version>2.0.0-SNAPSHOT</org.fujion.version>
+		<org.thymeleaf.version>3.0.9.RELEASE</org.thymeleaf.version>
+		<org.springframework.security.version>5.0.4.RELEASE</org.springframework.security.version>
 		<node.version>v7.9.0</node.version>
 		<npm.version>4.2.0</npm.version>
 		<ehcache.version>2.10.4</ehcache.version>
 		<java.version>1.8</java.version>
 		<project.name>${project.artifactId}</project.name>
 		<webjar.version>${project.version}</webjar.version>
+		<webjar.name>${project.artifactId}</webjar.name>
 	</properties>
 
 	<modules>
@@ -137,7 +138,7 @@
 			<dependency>
 				<groupId>org.apache.commons</groupId>
 				<artifactId>commons-dbcp2</artifactId>
-				<version>2.1.1</version>
+				<version>2.2.0</version>
 			</dependency>
 			<dependency>
 				<groupId>commons-digester</groupId>
@@ -145,14 +146,19 @@
 				<version>2.1</version>
 			</dependency>
 			<dependency>
+				<groupId>commons-beanutils</groupId>
+				<artifactId>commons-beanutils</artifactId>
+				<version>1.9.3</version>
+			</dependency>
+			<dependency>
 				<groupId>org.apache.commons</groupId>
 				<artifactId>commons-compress</artifactId>
-				<version>1.14</version>
+				<version>1.16.1</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.xbean</groupId>
 				<artifactId>xbean-spring</artifactId>
-				<version>4.5</version>
+				<version>4.7</version>
 			</dependency>
 			<!-- Spring Security -->
 			<dependency>

@@ -42,6 +42,11 @@
 			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>org.fujion</groupId>
+			<artifactId>fujion-icons-core</artifactId>
+			<version>${org.fujion.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
 		</dependency>

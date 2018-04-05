@@ -26,33 +26,33 @@
 package org.carewebframework.shell.designer;
 
 import org.carewebframework.shell.property.PropertyInfo;
-import org.carewebframework.ui.icon.IconLibraryRegistry;
-import org.carewebframework.ui.icon.IconPicker;
-import org.carewebframework.ui.icon.IconUtil;
+import org.carewebframework.ui.dialog.IconPicker;
+import org.fujion.icon.IconLibraryRegistry;
+import org.fujion.icon.IconUtil;
 
 /**
  * Property editor for icon properties. If the associated property has defined choices, the icon
  * picker will be limited to those values only. Otherwise, all registered icons will be available.
  */
 public class PropertyEditorIcon extends PropertyEditorBase<IconPicker> {
-
+    
     public PropertyEditorIcon() {
         super(new IconPicker());
     }
-
+    
     @Override
     protected void init(Object target, PropertyInfo propInfo, PropertyGrid propGrid) {
         super.init(target, propInfo, propGrid);
         String[] values = propInfo.getConfigValueArray("values");
         editor.getImagePicker().setReadonly(true);
         editor.getImagePicker().setShowText(false);
-
+        
         if (values == null) {
             String dflt = IconLibraryRegistry.getInstance().getDefaultLibrary();
             editor.setIconLibrary(dflt);
         } else {
             editor.setSelectorVisible(false);
-
+            
             for (String choice : values) {
                 if (choice.startsWith("web/")) {
                     editor.addIconByUrl(choice);
@@ -66,16 +66,16 @@ public class PropertyEditorIcon extends PropertyEditorBase<IconPicker> {
             }
         }
     }
-
+    
     @Override
     protected String getValue() {
         return editor.getValue();
     }
-
+    
     @Override
     protected void setValue(Object value) {
         editor.setValue((String) value);
         updateValue();
     }
-
+    
 }

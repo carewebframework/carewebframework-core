@@ -37,6 +37,11 @@
 		</dependency>
 		<dependency>
 			<groupId>org.fujion</groupId>
+			<artifactId>fujion-icons-core</artifactId>
+			<version>${org.fujion.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.fujion</groupId>
 			<artifactId>fujion-script-groovy</artifactId>
 			<version>${org.fujion.version}</version>
 		</dependency>

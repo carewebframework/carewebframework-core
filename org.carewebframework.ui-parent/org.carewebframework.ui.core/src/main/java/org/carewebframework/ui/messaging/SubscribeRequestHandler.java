@@ -44,7 +44,7 @@ public class SubscribeRequestHandler implements IRequestHandler {
 
     private enum RequestType {
         SUBSCRIBE, UNSUBSCRIBE
-    };
+    }
     
     private static final String ATTR_SUBSCRIBERS = "messaging-subscribers";
 
@@ -68,7 +68,7 @@ public class SubscribeRequestHandler implements IRequestHandler {
             case SUBSCRIBE:
                 if (callback == null) {
                     subscribers.put(subid, callback = (chan, message) -> {
-                        ClientInvocation invocation = new ClientInvocation("cwf-shell", "messageCallback", id, chan,
+                        ClientInvocation invocation = new ClientInvocation("cwf-shell", "messageCallback", null, id, chan,
                                 message);
                         WebSocketHandler.send(socket, invocation);
                     });

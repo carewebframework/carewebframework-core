@@ -25,7 +25,6 @@
  */
 package org.carewebframework.ui.spring;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -72,23 +71,22 @@ public class AppContextInitializer implements ApplicationContextInitializer<XmlW
     public void initialize(XmlWebApplicationContext ctx) {
         ctx.setAllowBeanDefinitionOverriding(true);
         ConfigurableEnvironment env = ctx.getEnvironment();
-        Set<String> aps = new LinkedHashSet<>();
-        Collections.addAll(aps, env.getActiveProfiles());
-        
+
         if (page != null) {
             page.setAttribute(AppContextFinder.APP_CONTEXT_ATTRIB, ctx);
             ServletContext sc = ExecutionContext.getSession().getServletContext();
             ctx.setDisplayName("Child XmlWebApplicationContext " + page);
             ctx.setParent(AppContextFinder.rootContext);
             ctx.setServletContext(sc);
-            // Set up profiles (remove root profiles merged from parent)
-            aps.removeAll(Arrays.asList(Constants.PROFILES_ROOT));
-            Collections.addAll(aps, testConfig ? Constants.PROFILES_CHILD_TEST : Constants.PROFILES_CHILD_PROD);
+            env.setActiveProfiles(testConfig ? Constants.PROFILES_CHILD_TEST : Constants.PROFILES_CHILD_PROD);
             env.setDefaultProfiles(Constants.PROFILE_CHILD_DEFAULT);
             ctx.setConfigLocations(DEFAULT_LOCATIONS);
         } else {
             AppContextFinder.rootContext = ctx;
+            Set<String> aps = new LinkedHashSet<>();
+            Collections.addAll(aps, env.getActiveProfiles());
             Collections.addAll(aps, testConfig ? Constants.PROFILES_ROOT_TEST : Constants.PROFILES_ROOT_PROD);
+            env.setActiveProfiles(aps.toArray(new String[aps.size()]));
             env.getPropertySources().addFirst(new LabelPropertySource());
             env.getPropertySources().addLast(new DomainPropertySource(ctx));
             env.setDefaultProfiles(Constants.PROFILE_ROOT_DEFAULT);
@@ -96,8 +94,6 @@ public class AppContextInitializer implements ApplicationContextInitializer<XmlW
             ClasspathMessageSource.getInstance().setResourceLoader(ctx);
             registerSessionListener();
         }
-        
-        env.setActiveProfiles(aps.toArray(new String[aps.size()]));
     }
 
     /**

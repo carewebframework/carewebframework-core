@@ -125,8 +125,13 @@ public class MainController extends PluginController {
         gridReceived.getRows().setRenderer(new ReceivedMessageRenderer(gridReceived));
         //channels.setMultiple(true);
         lboxSubscriptions.setModel(channels);
-        lboxSubscriptions.setRenderer(new SubscriptionRenderer());
+        lboxSubscriptions.setRenderer((String channel) -> {
+            return new Listitem(channel);
+        });
         cboxChannels.setModel(channels2);
+        cboxChannels.setRenderer((String channel) -> {
+            return new Comboitem(channel);
+        });
     }
     
     private Collection<IMessageProducer> getProviders() {

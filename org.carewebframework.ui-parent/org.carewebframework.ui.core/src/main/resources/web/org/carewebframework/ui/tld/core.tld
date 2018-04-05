@@ -21,24 +21,5 @@
 		</description>
 	</function>
 	
-	<function>
-		<name>getIconPath</name>
-		<function-class>org.carewebframework.ui.icon.IconUtil</function-class>
-		<function-signature>java.lang.String getIconPath(java.lang.String)</function-signature>
-		<description>
-			Returns the path to the icon resource.
-			For example: getIconPath("help.png") returns web/org/carewebframework/ui/icons/16x16/silk/help.png
-		</description>
-	</function>
-	
-	<function>
-		<name>getIconPathEx</name>
-		<function-class>org.carewebframework.ui.icon.IconUtil</function-class>
-		<function-signature>java.lang.String getIconPath(java.lang.String, java.lang.String, java.lang.String)</function-signature>
-		<description>
-			Returns the path to the icon resource.
-			For example: getIconPath("help.png", "16x16", "silk") returns web/org/carewebframework/ui/icons/16x16/silk/help.png
-		</description>
-	</function>
 	
 </taglib>

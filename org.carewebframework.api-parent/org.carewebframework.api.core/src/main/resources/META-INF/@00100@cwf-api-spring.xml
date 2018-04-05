@@ -106,7 +106,7 @@
 			class="org.springframework.jmx.export.annotation.AnnotationMBeanExporter">
 			<property name="server" ref="mbeanServer" />
 			<property name="namingStrategy" ref="mbeanNamingStrategy" />
-			<property name="registrationBehaviorName" value="REGISTRATION_IGNORE_EXISTING" />
+			<property name="registrationPolicy" value="IGNORE_EXISTING" />
 		</bean>
 
 		<!-- Default NamingStrategy -->

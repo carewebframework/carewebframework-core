@@ -1,4 +1,4 @@
-<?taglib uri="http://www.carewebframework.org/tld/core" prefix="rc"?>
+<?taglib uri="http://www.fujion.org/tld/icons-core" prefix="icons"?>
 
 <paneview orientation="horizontal" height="400px" width="600px">
 	<pane flex="3">
@@ -8,27 +8,27 @@
 			<button name="btnUp" class="flavor:btn-link"
 				hint="${@msg.cwf.shell.designer.propedit.custom.btn.up.hint}" 
 				style="background:transparent"
-				image="${rc.getIconPath('carewebframework:16x16:arrowU.png')}" />
+				image="${icons.getIconPath('carewebframework:arrowU')}" />
 			<button name="btnDown" class="flavor:btn-link"
 				hint="${@msg.cwf.shell.designer.propedit.custom.btn.down.hint}"
 				style="background:transparent" 
-				image="${rc.getIconPath('carewebframework:16x16:arrowD.png')}" />
+				image="${icons.getIconPath('carewebframework:arrowD')}" />
 			<button name="btnLeft" class="flavor:btn-link"
 				hint="${@msg.cwf.shell.designer.propedit.custom.btn.promote.hint}"
 				style="background:transparent" 
-				image="${rc.getIconPath('carewebframework:16x16:arrowL.png')}" />
+				image="${icons.getIconPath('carewebframework:arrowL')}" />
 			<button name="btnRight" class="flavor:btn-link"
 				hint="${@msg.cwf.shell.designer.propedit.custom.btn.demote.hint}"
 				style="background:transparent" 
-				image="${rc.getIconPath('carewebframework:16x16:arrowR.png')}" />
+				image="${icons.getIconPath('carewebframework:arrowR')}" />
 			<button name="btnAdd" class="flavor:btn-link"
 				hint="${@msg.cwf.shell.designer.propedit.custom.btn.add.hint}"
 				style="background:transparent" 
-				image="${rc.getIconPath('carewebframework:16x16:add.png')}" />
+				image="${icons.getIconPath('carewebframework:add')}" />
 			<button name="btnDelete" class="flavor:btn-link"
 				hint="${@msg.cwf.shell.designer.propedit.custom.btn.delete.hint}"
 				style="background:transparent" 
-				image="${rc.getIconPath('carewebframework:16x16:delete.png')}" />
+				image="${icons.getIconPath('carewebframework:delete')}" />
 		</toolbar>
 		<treeview name="tree" flex="1" />
 		<popup name="popLabel">

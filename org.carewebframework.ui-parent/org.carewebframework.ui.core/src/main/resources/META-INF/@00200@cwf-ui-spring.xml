@@ -18,14 +18,6 @@
 		<bean id="appContextFinder" class="org.carewebframework.ui.spring.AppContextFinder"
 			cwf:override="always" />
 
-		<!-- Registry for shared icon libraries. -->
-		
-		<bean id="iconLibraryRegistry" class="org.carewebframework.ui.icon.IconLibraryRegistry"
-			factory-method="init">
-			<constructor-arg value="${org.carewebframework.icon.library.default}" />
-			<constructor-arg value="${org.carewebframework.icon.dimensions.default}" />
-		</bean>
-
 		<!-- List of shortcut bindings for commands. -->
 		
 		<bean id="commandShortcuts" class="org.carewebframework.ui.command.CommandShortcuts">

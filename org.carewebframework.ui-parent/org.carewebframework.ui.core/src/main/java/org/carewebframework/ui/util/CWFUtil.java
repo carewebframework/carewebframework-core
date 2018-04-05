@@ -10,9 +10,9 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.lang.reflect.FieldUtils;
-import org.fujion.common.MiscUtil;
 import org.fujion.ancillary.IDisable;
 import org.fujion.client.ExecutionContext;
+import org.fujion.common.MiscUtil;
 import org.fujion.component.BaseComponent;
 import org.fujion.component.BaseInputboxComponent;
 import org.fujion.component.Cell;
@@ -24,7 +24,7 @@ import org.fujion.event.EventUtil;
 import org.fujion.event.IEventListener;
 
 public class CWFUtil {
-
+    
     /**
      * Possible match modes for hierarchical tree search.
      */
@@ -33,12 +33,12 @@ public class CWFUtil {
         INDEX, // By node index.
         CASE_SENSITIVE, // Case sensitive by node label.
         CASE_INSENSITIVE // Case insensitive by node label.
-    };
-
+    }
+    
     private static final IEventListener deferredDelivery = (event) -> {
         EventUtil.send(event);
     };
-
+    
     /**
      * Fires an event, deferring delivery if the desktop of the target is not currently active.
      *
@@ -47,7 +47,7 @@ public class CWFUtil {
     public static void fireEvent(Event event) {
         fireEvent(event, deferredDelivery);
     }
-
+    
     /**
      * Fires an event to the specified listener, deferring delivery if the page of the target is not
      * currently active.
@@ -57,7 +57,7 @@ public class CWFUtil {
      */
     public static void fireEvent(Event event, IEventListener listener) {
         Page page = event.getTarget() == null ? null : event.getTarget().getPage();
-
+        
         if (page != null && page != ExecutionContext.getPage()) {
             page.getEventQueue().queue(event);
         } else {
@@ -68,7 +68,7 @@ public class CWFUtil {
             }
         }
     }
-
+    
     /**
      * Returns the CWF resource path for the specified class.
      *
@@ -78,7 +78,7 @@ public class CWFUtil {
     public static final String getResourcePath(Class<?> clazz) {
         return getResourcePath(clazz.getPackage());
     }
-
+    
     /**
      * Returns the CWF resource path for the specified class.
      *
@@ -89,7 +89,7 @@ public class CWFUtil {
     public static final String getResourcePath(Class<?> clazz, int up) {
         return getResourcePath(clazz.getPackage(), up);
     }
-
+    
     /**
      * Returns the CWF resource path for the specified package.
      *
@@ -99,7 +99,7 @@ public class CWFUtil {
     public static final String getResourcePath(Package pkg) {
         return getResourcePath(pkg.getName());
     }
-
+    
     /**
      * Returns the CWF resource path for the specified package.
      *
@@ -110,7 +110,7 @@ public class CWFUtil {
     public static final String getResourcePath(Package pkg, int up) {
         return getResourcePath(pkg.getName(), up);
     }
-
+    
     /**
      * Returns the CWF resource path for the package name.
      *
@@ -120,7 +120,7 @@ public class CWFUtil {
     public static final String getResourcePath(String name) {
         return getResourcePath(name, 0);
     }
-
+    
     /**
      * Returns the CWF resource path for the package name.
      *
@@ -130,10 +130,10 @@ public class CWFUtil {
      */
     public static final String getResourcePath(String name, int up) {
         String path = StringUtils.chomp(name.replace('.', '/'), "/");
-
+        
         while (up > 0) {
             int i = path.lastIndexOf("/");
-
+            
             if (i <= 0) {
                 break;
             } else {
@@ -141,10 +141,10 @@ public class CWFUtil {
                 up--;
             }
         }
-
+        
         return "web/" + path + "/";
     }
-
+    
     /**
      * Formats an exception for display.
      *
@@ -155,7 +155,7 @@ public class CWFUtil {
         Throwable root = ExceptionUtils.getRootCause(exc);
         return exc == null ? null : ExceptionUtils.getMessage(root == null ? exc : root);
     }
-
+    
     /**
      * Returns a component of a type suitable for displaying the specified text. For text that is a
      * URL, returns a hyperlink. For text that begins with &lt;html&gt;, returns an HTML component.
@@ -166,21 +166,21 @@ public class CWFUtil {
      */
     public static BaseComponent getTextComponent(String text) {
         String frag = text == null ? "" : StringUtils.substring(text, 0, 20).toLowerCase();
-
+        
         if (frag.contains("<html>")) {
             return new Html(text);
         }
-
+        
         if (frag.matches("^https?:\\/\\/.+$")) {
             Hyperlink link = new Hyperlink();
             link.setHref(text);
             link.setTarget("_blank");
             return link;
         }
-
+        
         return new Cell(text);
     }
-
+    
     /**
      * Wires variables from a map into a controller. Useful to inject parameters passed in an
      * argument map.
@@ -192,11 +192,11 @@ public class CWFUtil {
         if (map == null || map.isEmpty() || controller == null) {
             return;
         }
-
+        
         for (Entry<?, ?> entry : map.entrySet()) {
             String key = entry.getKey().toString();
             Object value = entry.getValue();
-
+            
             try {
                 PropertyUtils.setProperty(controller, key, value);
             } catch (Exception e) {
@@ -204,10 +204,10 @@ public class CWFUtil {
                     FieldUtils.writeField(controller, key, value, true);
                 } catch (Exception e1) {}
             }
-
+            
         }
     }
-
+    
     /**
      * Sets focus to first input element under the parent that is capable of receiving focus.
      *
@@ -218,27 +218,27 @@ public class CWFUtil {
     public static BaseInputboxComponent<?> focusFirst(BaseComponent parent, boolean select) {
         for (BaseComponent child : parent.getChildren()) {
             BaseInputboxComponent<?> ele;
-
+            
             if (child instanceof BaseInputboxComponent) {
                 ele = (BaseInputboxComponent<?>) child;
-
+                
                 if (ele.isVisible() && !ele.isDisabled() && !ele.isReadonly()) {
                     ele.focus();
-
+                    
                     if (select) {
                         ele.selectAll();
                     }
-
+                    
                     return ele;
                 }
             } else if ((ele = focusFirst(child, select)) != null) {
                 return ele;
             }
         }
-
+        
         return null;
     }
-
+    
     /**
      * Returns the node associated with the specified \-delimited path.
      *
@@ -255,13 +255,13 @@ public class CWFUtil {
                                                              boolean create, MatchMode matchMode) {
         String[] pcs = path.split("\\\\");
         BaseComponent node = null;
-
+        
         try {
             for (String pc : pcs) {
                 if (pc.isEmpty()) {
                     continue;
                 }
-
+                
                 BaseComponent parent = node == null ? root : node;
                 node = null;
                 int index = matchMode == MatchMode.INDEX || matchMode == MatchMode.AUTO ? NumberUtils.toInt(pc, -1) : -1;
@@ -269,34 +269,34 @@ public class CWFUtil {
                         : index >= 0 ? MatchMode.INDEX : MatchMode.CASE_INSENSITIVE;
                 List<BaseComponent> children = parent.getChildren();
                 int size = children.size();
-
+                
                 if (mode == MatchMode.INDEX) {
-
+                    
                     if (index < 0) {
                         index = size;
                     }
-
+                    
                     int deficit = index - size;
-
+                    
                     if (!create && deficit >= 0) {
                         return null;
                     }
-
+                    
                     while (deficit-- >= 0) {
                         parent.addChild(nodeClass.newInstance());
                     }
                     node = children.get(index);
-
+                    
                 } else {
                     for (BaseComponent child : children) {
                         String label = BeanUtils.getProperty(child, "label");
-
+                        
                         if (mode == MatchMode.CASE_SENSITIVE ? pc.equals(label) : pc.equalsIgnoreCase(label)) {
                             node = child;
                             break;
                         }
                     }
-
+                    
                     if (node == null) {
                         if (!create) {
                             return null;
@@ -306,7 +306,7 @@ public class CWFUtil {
                         BeanUtils.setProperty(node, "label", pc);
                     }
                 }
-
+                
                 if (node == null) {
                     break;
                 }
@@ -314,10 +314,10 @@ public class CWFUtil {
         } catch (Exception e) {
             throw MiscUtil.toUnchecked(e);
         }
-
+        
         return (NODE) node;
     }
-
+    
     public static void disableChildren(BaseComponent parent, boolean disable) {
         for (BaseComponent child : parent.getChildren()) {
             if (child instanceof IDisable) {
@@ -325,7 +325,7 @@ public class CWFUtil {
             }
         }
     }
-
+    
     private CWFUtil() {
     }
 }
