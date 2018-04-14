@@ -62,7 +62,7 @@
 		<!-- Thymeleaf template configuration -->
 		
 		<bean id="thymeleafTemplateResolver"
-			class="org.thymeleaf.spring4.templateresolver.SpringResourceTemplateResolver">
+			class="org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver">
 			<property name="prefix" value="" />
 			<property name="suffix" value="" />
 			<property name="templateMode" value="HTML" />
@@ -72,12 +72,12 @@
 			class="org.carewebframework.ui.thymeleaf.ThymeleafMessageResolver" />
 		
 		<bean id="thymeleafTemplateEngine"
-			class="org.thymeleaf.spring4.SpringTemplateEngine">
+			class="org.thymeleaf.spring5.SpringTemplateEngine">
 			<property name="templateResolver" ref="thymeleafTemplateResolver" />
 			<property name="messageResolver" ref="thymeleafMessageResolver" />
 		</bean>
 		
-		<bean class="org.thymeleaf.spring4.view.ThymeleafViewResolver">
+		<bean class="org.thymeleaf.spring5.view.ThymeleafViewResolver">
 			<property name="templateEngine" ref="thymeleafTemplateEngine" />
 			<property name="order" value="-99" />
 			<property name="viewNames" value="*.htm,*.html" />

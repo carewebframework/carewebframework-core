@@ -50,7 +50,7 @@
 	</licenses>
 
 	<properties>
-		<org.fujion.version>2.0.0-SNAPSHOT</org.fujion.version>
+		<org.fujion.version>2.0.0-RC3</org.fujion.version>
 		<org.thymeleaf.version>3.0.9.RELEASE</org.thymeleaf.version>
 		<org.springframework.security.version>5.0.4.RELEASE</org.springframework.security.version>
 		<node.version>v7.9.0</node.version>
@@ -225,7 +225,7 @@
 			</dependency>
 			<dependency>
 				<groupId>org.thymeleaf</groupId>
-				<artifactId>thymeleaf-spring4</artifactId>
+				<artifactId>thymeleaf-spring5</artifactId>
 				<version>${org.thymeleaf.version}</version>
 			</dependency>
 			<!-- Unit Test -->
