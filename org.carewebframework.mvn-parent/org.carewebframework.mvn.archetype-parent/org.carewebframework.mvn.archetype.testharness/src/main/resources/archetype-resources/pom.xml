@@ -60,9 +60,14 @@
 			<artifactId>fujion-themes</artifactId>
 			<version>${org.fujion.version}</version>
 		</dependency>
+		<!-- Logging -->
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-jcl</artifactId>
 		</dependency>
 	</dependencies>
 </project>

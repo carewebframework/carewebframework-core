@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Configuration>
+
+	<Properties>
+		<Property name="log-path">${java.io.tmpdir}/log/</Property>
+		<Property name="pattern-layout">%d{yyyy-MM-dd HH:mm:ss.SSS} %p %t %c - %m%n</Property>
+	</Properties>
+
+	<Appenders>
+		<RollingFile name="exc"
+			filePattern="${log-path}/fujion-exception-%d{yyyy-MM-dd}.log"
+			fileName="${log-path}/fujion-exception.log">
+			<PatternLayout pattern="${pattern-layout}" />
+			<Policies>
+				<TimeBasedTriggeringPolicy />
+				<SizeBasedTriggeringPolicy size="10 MB" />
+			</Policies>
+		</RollingFile>
+		<RollingFile name="other" 
+			filePattern="${log-path}/fujion-%d{yyyy-MM-dd}.log"
+			fileName="${log-path}/fujion.log">
+			<PatternLayout pattern="${pattern-layout}" />
+			<Policies>
+				<TimeBasedTriggeringPolicy />
+				<SizeBasedTriggeringPolicy size="10 MB" />
+			</Policies>
+		</RollingFile>
+		<Console name="stdout">
+			<PatternLayout pattern="${pattern-layout}" />
+		</Console>
+	</Appenders>
+
+	<Loggers>
+		<Logger name="EXCEPTION_LOG" additivity="false" level="info">
+			<AppenderRef ref="exc" />
+		</Logger>
+		<Logger name="org.fujion" level="trace">
+		</Logger>
+		<Logger name="org.springframework" level="error">
+		</Logger>
+		<Root level="info">
+			<AppenderRef ref="other" />
+			<AppenderRef ref="stdout" />
+		</Root>
+	</Loggers>
+
+</Configuration>
