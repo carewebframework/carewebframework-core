@@ -35,14 +35,16 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.carewebframework.api.spring.SpringUtil;
 import org.fujion.common.StrUtil;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.io.Resource;
 
 /**
  * Service that provides access to manifests for all components on the class path.
  */
-public class ManifestIterator implements Iterable<Manifest> {
+public class ManifestIterator implements Iterable<Manifest>, ApplicationContextAware {
 
     private static class ManifestEx extends Manifest {
 
@@ -78,6 +80,8 @@ public class ManifestIterator implements Iterable<Manifest> {
 
     private static final String[] README_FILES = { "README.TXT", "readme.txt", "README", "readme" };
 
+    private ApplicationContext applicationContext;
+    
     private Manifest primaryManifest;
 
     private List<Manifest> manifests;
@@ -105,17 +109,19 @@ public class ManifestIterator implements Iterable<Manifest> {
     public void init() {
         if (manifests == null) {
             manifests = new ArrayList<>();
+            
             try {
-                primaryManifest = addToList(SpringUtil.getResource(MANIFEST_PATH));
-                Resource[] resources = SpringUtil.getResources("classpath*:/" + MANIFEST_PATH);
+                primaryManifest = addToList(applicationContext.getResource(MANIFEST_PATH));
+                Resource[] resources = applicationContext.getResources("classpath*:/" + MANIFEST_PATH);
 
                 for (Resource resource : resources) {
-                    addToList(resource);
+                    Manifest manifest = addToList(resource);
+                    
+                    if (primaryManifest == null) {
+                        primaryManifest = manifest;
+                    }
                 }
 
-                if (primaryManifest == null) {
-                    primaryManifest = manifests.get(0);
-                }
             } catch (Exception e) {
                 log.error("Error enumerating manifests.", e);
             }
@@ -180,6 +186,11 @@ public class ManifestIterator implements Iterable<Manifest> {
         }
 
         return null;
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
     }
 
 }
