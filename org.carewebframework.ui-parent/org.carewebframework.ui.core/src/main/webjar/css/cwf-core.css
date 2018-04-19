@@ -7,19 +7,19 @@
 	max-width: 50%;
 }
 
-.cwf-promptdialog > span > .glyphicon {
-	float: left;
+.cwf-promptdialog > .panel-body > span > .glyphicon {
 	margin: 0 10px 10px;
 	cursor: default;
 	font-size: 26px;
 	background: transparent;
 }
 
-.cwf-promptdialog > span > div:first-of-type {
+.cwf-promptdialog > .panel-body > span > div:first-of-type {
 	white-space: pre-wrap;
+	display: inline;
 }
 
-.cwf-promptdialog > span > div:last-of-type {
+.cwf-promptdialog > .panel-body > span > div:last-of-type {
 	clear: both;
 	margin: 10px 0 5px 0;
 	text-align: center;
