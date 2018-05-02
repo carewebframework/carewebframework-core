@@ -73,14 +73,13 @@ public class AbstractDAO<T> {
         doOperation(Operation.DELETE, entity);
     }
     
-    @SuppressWarnings("unchecked")
     public T get(Class<T> clazz, Serializable id) {
         Session session = getSession();
         Transaction tx = session.beginTransaction();
         T result = null;
         
         try {
-            result = (T) getSession().get(clazz, id);
+            result = getSession().get(clazz, id);
             tx.commit();
             return result;
         } catch (Exception e) {
