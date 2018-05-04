@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.carewebframework</groupId>
 		<artifactId>org.carewebframework.help-parent</artifactId>
-		<version>6.1.0-RC1</version>
+		<version>6.1.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>org.carewebframework.help.chm</artifactId>
@@ -29,7 +29,7 @@
 		<dependency>
 			<groupId>org.carewebframework</groupId>
 			<artifactId>org.carewebframework.help.chm.test-jar</artifactId>
-			<version>6.1.0-RC1</version>
+			<version>6.1.0-SNAPSHOT</version>
 			<scope>system</scope>
 			<systemPath>${basedir}/src/test/resources/test-help.jar</systemPath>
 		</dependency>
