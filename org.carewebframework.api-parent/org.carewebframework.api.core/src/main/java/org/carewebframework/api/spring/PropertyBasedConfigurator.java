@@ -44,9 +44,9 @@ import org.springframework.core.convert.support.DefaultConversionService;
  * field-based annotations.
  */
 public abstract class PropertyBasedConfigurator implements ApplicationContextAware {
-
+    
     private static final String NULL_VALUE = "@@null@@";
-
+    
     /**
      * Used to annotate fields for injection.
      */
@@ -54,21 +54,21 @@ public abstract class PropertyBasedConfigurator implements ApplicationContextAwa
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.FIELD)
     public @interface Param {
-
+        
         /**
          * Name of the property containing the value.
          *
          * @return The property name.
          */
         String property();
-
+        
         /**
          * True if the property is required.
          *
          * @return True if the property is required.
          */
         boolean required() default false;
-        
+
         /**
          * The default value if no property exists.
          *
@@ -76,7 +76,7 @@ public abstract class PropertyBasedConfigurator implements ApplicationContextAwa
          */
         String defaultValue() default NULL_VALUE;
     }
-
+    
     /**
      * Forms the full property name. The default implementation simply returns the original name.
      * Override if the provided name needs to be transformed in some way.
@@ -84,10 +84,10 @@ public abstract class PropertyBasedConfigurator implements ApplicationContextAwa
      * @param name The property name specified in the annotation.
      * @return The expanded property name.
      */
-    protected String expandPropertyName(String name) {
+    public String expandPropertyName(String name) {
         return name;
     }
-
+    
     /**
      * Inject all annotated class members.
      *
@@ -98,25 +98,29 @@ public abstract class PropertyBasedConfigurator implements ApplicationContextAwa
         PropertyProvider propertyProvider = new PropertyProvider(applicationContext);
         ConversionService conversionService = DefaultConversionService.getSharedInstance();
         Class<?> clazz = getClass();
-
+        
         while (clazz != PropertyBasedConfigurator.class) {
             for (Field field : clazz.getDeclaredFields()) {
                 field.setAccessible(true);
                 Param annot = field.getAnnotation(Param.class);
-
+                
                 if (annot != null) {
                     String propName = expandPropertyName(annot.property());
                     String value = propertyProvider.getProperty(propName);
-                    
+
                     if (value == null || value.isEmpty()) {
                         value = annot.defaultValue();
                         value = NULL_VALUE.equals(value) ? null : value;
                     }
-                    
-                    if (annot.required() && value == null) {
-                        throw new RuntimeException("Required configuration property not specified: " + propName);
-                    }
 
+                    if (value == null) {
+                        if (annot.required()) {
+                            throw new RuntimeException("Required configuration property not specified: " + propName);
+                        } else {
+                            continue;
+                        }
+                    }
+                    
                     try {
                         field.set(this, conversionService.convert(value, field.getType()));
                     } catch (Exception e) {
@@ -124,9 +128,19 @@ public abstract class PropertyBasedConfigurator implements ApplicationContextAwa
                     }
                 }
             }
-
+            
             clazz = clazz.getSuperclass();
         }
-    }
 
+        afterInitialized();
+    }
+    
+    /**
+     * Called after all properties have been injected. Override to provide specialized
+     * initialization.
+     */
+    protected void afterInitialized() {
+        // NOP
+    }
+    
 }
