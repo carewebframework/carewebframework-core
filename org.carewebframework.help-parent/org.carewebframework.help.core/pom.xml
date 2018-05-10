@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.carewebframework</groupId>
 		<artifactId>org.carewebframework.help-parent</artifactId>
-		<version>6.1.0-RC3</version>
+		<version>6.1.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>org.carewebframework.help.core</artifactId>
