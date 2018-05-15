@@ -52,7 +52,7 @@
 	<properties>
 		<org.fujion.version>2.0.0-RC5</org.fujion.version>
 		<org.thymeleaf.version>3.0.9.RELEASE</org.thymeleaf.version>
-		<org.springframework.security.version>5.0.4.RELEASE</org.springframework.security.version>
+		<org.springframework.security.version>5.0.5.RELEASE</org.springframework.security.version>
 		<node.version>v7.9.0</node.version>
 		<npm.version>4.2.0</npm.version>
 		<ehcache.version>2.10.4</ehcache.version>
