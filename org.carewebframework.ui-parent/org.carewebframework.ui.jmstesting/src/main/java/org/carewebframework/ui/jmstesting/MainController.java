@@ -158,7 +158,7 @@ public class MainController extends PluginController {
                 sb.append(',');
             }
             
-            sb.append(item.getValue());
+            sb.append((String) item.getValue());
         }
         
         return sb.toString();
