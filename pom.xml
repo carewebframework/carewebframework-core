@@ -616,33 +616,6 @@
 						</execution>
 					</executions>
 				</plugin>
-				<plugin>
-					<groupId>org.carewebframework</groupId>
-					<artifactId>org.carewebframework.mvn.plugin.helpconverter</artifactId>
-					<version>${webjar.version}</version>
-					<executions>
-						<execution>
-							<goals>
-								<goal>prepare</goal>
-							</goals>
-							<phase>process-sources</phase>
-						</execution>
-					</executions>
-					<configuration>
-						<ignoreMissingSource>true</ignoreMissingSource>
-						<archive>
-							<manifestEntries>
-								<Implementation-Version>${project.version}.${buildNumber}
-								</Implementation-Version>
-								<Implementation-URL>${project.scm.url}</Implementation-URL>
-								<Implementation-Title>${project.name} Help Module
-								</Implementation-Title>
-								<Implementation-Vendor>${project.organization.name}
-								</Implementation-Vendor>
-							</manifestEntries>
-						</archive>
-					</configuration>
-				</plugin>
 			</plugins>
 		</pluginManagement>
 
